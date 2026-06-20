@@ -184,8 +184,6 @@ def build_html(row: dict) -> str:
       border-radius: 8px;
       padding: 1rem;
       border: 1px solid #e2e8f0;
-      max-height: 300px;
-      overflow-y: auto;
     }}
     .grid-2 {{ display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }}
     .grid-3 {{ display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }}
