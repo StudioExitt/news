@@ -35,7 +35,7 @@ git add .
 git commit -m "$COMMIT_MSG"
 
 # Pull
-git pull origin "$BRANCH"
+git pull origin "$BRANCH" --rebase
 
 # Push
 git push origin "$BRANCH"
