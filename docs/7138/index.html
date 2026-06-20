@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 사상 최고점 근접했으나 대부분 종목 하락, 반도체 업종 쏠림 심화</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/138/0002231514' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7138" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 사상 최고점 근접했으나 대부분 종목 하락, 반도체 업종 쏠림 심화</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">삼성전자와 SK하이닉스 등의 반도체 대형주가 강한 상승세를 보이며 코스피 지수가 사상 최고치에 근접하고 있으나, 대부분의 종목은 하락하며 극심한 시장 양극화 현상이 나타났다. 이는 반도체 업종으로 자금 쏠림이 가속화된 결과로 분석되며, 장기적으로는 자본시장 전반에 부정적 영향을 줄 수 있다는 우려가 제기되고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업종으로의 자금 쏠림 심화와 시장 양극화가 구조적 문제로 부각되면서 투자심리가 위축되고 장기적인 추세에 대한 경계감이 커짐.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주식시장양극화</span> <span class="tag tag-hash">#반도체쏠림</span> <span class="tag tag-hash">#코스피</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 삼성전자와 SK하이닉스 주도의 기록적인 상승세에 힘입어 1만 고지를 눈 앞에 두고 있다. 그러나 이와 동시에 대부분의 종목이 하락하고 있어 개미 투자자들의 체감지수는 오히려 냉각되고 있다.
+
+20일 금융투자업계에 따르면 전날(19일) 마감한 코스피 지수는 전장보다 11.42포인트(0.13%) 내린 9052.42에 거래를 마감했다.
+
+지수는 225.05포인트(2.48%) 오른 9288.89에 출발한 뒤 장중 한때 9385.59까지 오르며 사상 최고치를 경신했다. 오후 들어 하락 전환해 8831.72까지 밀리기도 했지만 매수세가 다시 유입돼 9000선 사수에 성공했다.
+
+장 초반만 놓고 봤을 때 삼성전자는 37만4500원까지 오르며 사상 최고가를 갈아치웠다. SK하이닉스와 SK스퀘어 역시 289만1000원, 189만1000원을 기록해 신고가를 경신했다.
+
+하지만 여기까지다. 코스피가 1만을 향해 질주하고 있지만 대부분의 종목이 하락을 거듭하면서 양극화가 심화됐다.
+
+실제 이날 코스피 시장에서 상승 종목은 115개에 불과했다. 하락 종목이 787개에 달했다. 앞서 지난 18일 또한 상승 종목이 112개인 반면 하락 종목은 791개로 집계됐다.
+
+중소형주 비중이 높은 코스닥의 경우는 상황이 더 나빴다. 코스닥 지수는 18일과 19일 각각 3.01%, 3.43% 내리며 급락을 거듭했다. 일각에선 사실상 하락장에 돌입한 것이 아니냐는 우려도 나온다.
+
+전문가들의 의견을 종합해 보면, 특별한 악재없이 이처럼 국내 증시가 극단적인 대비를 이룬 데는 수급의 반도체 업종 쏠림 현상이 가속화되고 있기 때문이다. 메모리 호황에 따라 국내외 기관 및 외국인 투자자금이 대형 반도체 기업들에만 몰리고 있는 것이 현실이다.
+
+한지영 키움증권 연구원은 “전날에 이어 이날도 반도체 대장주 쏠림 현상이 나타났다”며 “그 여파로 코스피·코스닥 시장 내 주력 업종에서 반도체 갈아타기 수요가 나타났다”고 설명했다.
+
+d만 이같은 흐름이 장기적으론 자본시장에 부정적인 영향을 끼칠 수밖에 없다는 게 업계 중론이다.
+
+정치권도 양극화 현상을 예의주시하고 있다. 이재명 대통령은 19일 청와대 춘추관에서 “주식시장 양극화도 사실은 심각한 자산 양극화를 부른다”며 “그걸 완화하기 위해서 정말 많은 노력을 해야 한다. 주가지수가 외형적으로 느는 것보다는 한꺼번에 성장하면 좋겠는데 잘 안된다”고 토로했다.
+
+금융투자업계 한 관계자는 “정치권에서도 반도체 쏠림 현상을 예의주시하고 있는 만큼 하반기부터는 지금보다는 수급이 2차전지, 조선, 자동차, 바이오 등으로 분산되지 않을까 한다”고 내다봤.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/138/0002231514' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/138/0002231514</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
