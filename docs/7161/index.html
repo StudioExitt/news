@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>보안 패러다임, 네트워크서 신원 검증으로 전환
+유니온바이오메트릭스·엑스페릭스 등 관심 확대</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.21</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014018077' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7161" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>보안 패러다임, 네트워크서 신원 검증으로 전환
+유니온바이오메트릭스·엑스페릭스 등 관심 확대</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 에이전트의 확산에 따라 보안 패러다임이 네트워크 중심에서 '사용자의 신원(Identity) 검증' 중심으로 급격히 전환되고 있다. 이에 따라 생체인식 기반의 강력한 인증 및 접근 권한 관리 솔루션을 보유한 기업들(유니온바이오메트릭스, 엑스페릭스 등)에 새로운 성장 기회가 예상된다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 에이전트의 발전은 보안 산업 전체의 패러다임 전환(네트워크 -> 신원)을 예고하며, 이는 생체인증 및 디지털 ID 솔루션을 제공하는 기업들(유니온바이오메트릭스, 엑스페릭스 등)에 구조적이고 강력한 성장 모멘텀을 부여한다. 장기적인 트렌드 변화에 따른 수혜가 예상되므로 매우 높은 영향도를 가진다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">유니온바이오메트릭스</span> <span class="tag stock-tag">엑스페릭스</span> <span class="tag stock-tag">슈프리마</span> <span class="tag stock-tag">라온시큐어</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">생체인식</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">보안장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI에이전트</span> <span class="tag tag-hash">#신원보안</span> <span class="tag tag-hash">#생체인식</span> <span class="tag tag-hash">#패러다임전환</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[서울=뉴시스] 홍효식 기자 = 코스피가 전 거래일(9063.84)보다 11.42포인트(0.13%) 내린 9052.42에 마감한 19일 오후
+서울 중구 하나은행 딜링룸 전광판에 지수가 표시되고 있다.코스닥 지수는 전
+[서울=뉴시스] 홍효식 기자 = 코스피가 전 거래일(9063.84)보다 11.42포인트(0.13%) 내린 9052.42에 마감한 19일 오후
+서울 중구 하나은행 딜링룸 전광판에 지수가 표시되고 있다.코스닥 지수는 전 거래일(1000.93)보다 34.34포인트(3.43%) 하락한
+966.59에 거래를 마쳤다. 서울 외환시장에서 원·달러 환율은 전 거래일(1527.1원)보다 0.1원 내린 1527.0원에 주간 거래를
+마감했다. 2026.06.19. yesphoto@newsis.com[서울=뉴시스] 김경택 기자 = 인공지능(AI)이 단순한 업무 보조를 넘어
+스스로 판단하고 행동하는 ‘AI 에이전트(Agentic AI)’ 시대로 진화하면서 보안 산업의 중심축이 과거 네트워크와 단말기 보호 중심에서
+'누가 시스템에 접근하고 권한을 행사하는가'를 검증하는 신원(Identity) 보안으로 옮겨가고 있다.
+
+이에 시장에서는 유니온바이오메트릭스를 비롯해 엑스페릭스, 슈프리마, 라온시큐어 등 생체인증 관련 상장사들에게 새로운 성장 기회가 될 수 있다는
+관측이 나오고 있다.
+
+21일 관련 업계에 따르면 최근 AI 에이전트가 이메일을 보내고 데이터베이스를 조회하며 결재를 요청하는 시대가 되면서 단순히 외부 공격을 막는
+것만으로는 충분하지 않게 됐다. AI가 수행하는 행위의 최종 책임이 누구에게 있는지 실제 권한을 가진 사용자가 승인한 것인지 검증하는 문제가
+새로운 보안 과제로 떠오르고 있다.
+
+보안 전문가들은 AI 에이전트 시대 보안이 단순 해킹을 막는 문제가 아니라 사람과 AI를 포함한 모든 행위 주체의 신원을 검증하는 문제로
+진화하고 있다는 평가를 내놓고 있다. AI가 결제를 요청하거나 기업 데이터에 접근하는 상황에서 실제 권한을 가진 사용자가 승인한 행위인지
+확인하는 과정이 필수적이라는 설명이다.
+
+시장에서는 이를 두고 신원 확인과 권한 관리 기술력을 갖춘 국내 생체인증 관련 상장 기업에게 새로운 성장 기회가 될 수 있다는 관측이 이어지고
+있다.
+
+대표적인 수혜 후보로는 유니온바이오메트릭스가 거론된다. 유니온바이오메트릭스는 지문 및 얼굴인식 기반 생체인증 기술을 바탕으로 출입통제와 접근권한
+관리를 연계하는 통합 인증 플랫폼 사업을 확대하고 있다.
+
+특히 유니온바이오메트릭스는 생체인증 기반으로 사용자의 물리적 출입 권한과 시스템 접근 권한을 연계 관리하는 기술을 보유하고 있다는 점이 강점으로
+꼽힌다. AI 데이터센터와 국가 중요시설, 금융기관 등 고보안 환경에서 생체인증 수요가 확대될 경우 직접적인 수혜가 기대된다는 분석이다.
+
+엑스페릭스 역시 국내 대표 생체인증 전문기업으로 평가받는다. 회사는 지문·얼굴 인식 등 바이오인식 기술을 기반으로 공공·정부 프로젝트를 수행해
+왔으며 전자주민등록증, 전자여권 등 글로벌 프로젝트를 통해 디지털 신원확인 분야에서 입지를 구축해온 기업이다
+
+특히 글로벌 전자여권 시장과 디지털 ID 시장 성장에 맞춰 신원확인 솔루션 공급을 확대하고 있어 AI 시대 신원 보안 수요 증가의 수혜 가능성이
+높아지고 있다.
+
+i밖에도 얼굴인식 기반 출입통제 솔루션을 공급하는 슈프리마, 지문인식 센서 및 모바일 보안 기술을 보유한 드림텍, 보안인증 및 핀테크 사업을
+영위하는 라온시큐어 등도 관련 수혜주로 분류된다.
+
+슈프리마는 글로벌 출입보안 시장에서 경쟁력을 확보하고 있으며 얼굴인식과 지문인식 기술을 기반으로 AI 데이터센터, 공항, 공공시설 등 고신뢰
+보안 환경에 대한 공급 확대를 추진하고 있다.
+
+라온시큐어는 모바일 신분증과 디지털 인증 플랫폼 사업을 확대하고 있으며 블록체인 기반 분산신원인증(DID) 기술을 통해 디지털 신원 생태계
+구축에 참여하고 있다. AI 에이전트 확산에 따라 사용자 인증과 권한 검증 수요가 늘어날 경우 수혜가 예상된다는 평가다.
+
+시장에서는 AI가 업무를 수행하는 환경이 확산될수록 보안 산업의 패러다임 역시 네트워크 중심에서 신원 중심으로 전환될 것으로 보고 있다.
+결국
+AI 시대의 경쟁력은 ‘누가 시스템을 사용하고 있는가’를 얼마나 정확하게 증명할 수 있는지에 달려 있다는 평가다.
+
+업계 관계자는 "AI 에이전트가 직원처럼 업무를 수행하는 환경에서는 사람과 AI를 포함한 모든 행위 주체의 신원을 검증하는 체계가 필수"
+라며
+"생체인증과 디지털 신원관리 기술을 보유한 기업들의 역할이 더욱 중요해질 것"이라고 말했다．</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014018077' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014018077</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
