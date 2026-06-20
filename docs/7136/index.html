@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>버블 랠리 후반에 주도주 쏠림현상 발생
+삼성전자, SK하이닉스 쏠림 당분간 지속될듯</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005779084' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7136" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>버블 랠리 후반에 주도주 쏠림현상 발생
+삼성전자, SK하이닉스 쏠림 당분간 지속될듯</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">전문가 보고서에 따르면, 역사적으로 버블 랠리 후반부에는 주도주로의 자금 쏠림 현상이 반복되어 왔으며 현재 AI 중심 장세에서 이 패턴이 재현되고 있다고 분석했습니다. 다만, 과거와 달리 AI 관련주는 실적까지 뒷받침되므로, 이러한 쏠림 현상을 두려워하기보다 기회로 활용해야 한다는 투자 전략을 제시했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">전문가 분석을 통해 현재의 강력한 AI 테마 주도주 쏠림 현상이 역사적 사이클로 반복됨을 경고하며, 이 흐름을 활용해야 한다는 구체적인 투자 시점 전략(Investment Thesis)을 제시했기 때문에 영향도가 매우 높습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#AI</span> <span class="tag tag-hash">#주도주</span> <span class="tag tag-hash">#투자전략</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">우리 증시 상승의 핵심 요인인 삼성전자와 SK하이닉스의 쏠림 현상이 당분간 지속될 것이라는 전망이 나왔다.
+
+20일 이은택 KB증권 연구원은 '역사가 말하는 주도주 쏠림' 보고서에서 "역사적으로 버블 랠리 후반부에는 주도주 쏠림 현상이 반복적으로 나타났다"며 "향후 이런 현상이 더 강화될 것"이라고 예상했다.
+
+이 연구원은 "현재의 인공지능(AI) 중심 장세가 30년 전 닷컴버블 후반부와 매우 유사한 흐름을 보이고 있다"며 "1995년부터 1998년까지 미국 증시는 헬스케어, 금융, IT 등 3대 업종이 함께 이끌었으나 버블 랠리 후반부인 1999년에 접어들면서 오직 '닷컴 관련주'만 급등하는 극단적인 쏠림이 나타났다"고 설명했다.
+
+당시 금융과 헬스케어 업종은 견조한 실적을 기록하고도 닷컴이 아니라는 이유로 시장에서 완전히 외면받았다는 것이다.
+
+"이런 투자 행태는 현재 시장에서도 고스란히 재연되고 있다"고 이 연구원은 밝혔다. 지난해 상법 개정과 신약 모멘텀 등으로 강세를 보였던 금융 및 헬스케어 업종은 올해도 양호한 실적 성장이 기대되지만, 최근 AI 랠리에서는 소외돼 부진한 주가 흐름을 이어가고 있다.
+
+반면 AI나 로봇 관련 사업을 추진한다는 소문만 돌아도 실적과 무관하게 주가가 급등하는 현상이 반복되고 있다. "30년 전 닷컴버블 당시 '새롬기술'이 무료 인터넷 전화 기대감으로 100배 이상 급등했던 것과 판박이"라고 이 연구원은 지적했다.
+
+그는 "많은 투자자가 기대하는 '종목 확산(다양한 업종이 골고루 오르는 것)'이 일어날 때를 오히려 경계해야 한다"고 조언했다. 2000년 3월 닷컴버블 붕괴 직전의 사례처럼, 시장의 수급이 다른 종목으로 확산하는 현상은 '건강한 순환매'가 아니라 오히려 상승 랠리가 막바지에 진입해 끝남을 알리는 위험 신호였다는 것이다.
+
+그러면서 "현재의 AI 관련주들은 과거 닷컴버블 시기보다 실적까지 뒷받침되고 있어 쏠림이 더욱 강화되기 좋은 조건"이라며 "버블 랠리 후반부에는 주도주 쏠림이 반복적으로 나타나는 만큼, 지금은 쏠림 현상을 두려워하기보다 활용해야 할 때"라고 제언했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005779084' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005779084</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
