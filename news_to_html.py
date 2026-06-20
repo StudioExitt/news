@@ -366,8 +366,10 @@ def read_processed_ids() -> set:
 
 
 def append_processed_id(news_id: int) -> None:
-    with ID_FILE.open("a") as f:
-        f.write(f"{news_id}\n")
+    existing = read_processed_ids()
+    if news_id not in existing:
+        with ID_FILE.open("a") as f:
+            f.write(f"{news_id}\n")
 
 
 def fetch_recent(client, limit: int = 10) -> list[dict]:
