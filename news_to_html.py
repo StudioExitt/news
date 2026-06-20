@@ -327,7 +327,9 @@ def build_html(row: dict) -> str:
     </div>
   </div>
 
-  <div class="footer">분석일시: {created_at[:19].replace("T", " ") if created_at else "—"}</div>
+  <div class="footer">
+    자료제공: 분석 자료는 스튜디오엑싯에 의해 제공되었습니다. ( <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#94a3b8;text-decoration:underline;">https://studioexitt.net</a> )
+  </div>
 </div>
 </body>
 </html>"""
