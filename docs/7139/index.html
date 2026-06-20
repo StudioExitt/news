@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>월드컵 특수와 AI 마케팅의 만남</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/057/0001954769' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7139" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>월드컵 특수와 AI 마케팅의 만남</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">가전업계가 월드컵 기간을 활용하여 침체된 TV 시장 활성화를 꾀하고 있다. AI를 접목한 개인화 기능 강화와 대규모 할인 경쟁이 특징이며, 이는 내구소비재 시장의 돌파구가 될 것으로 기대된다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 기술의 접목을 통한 제품 차별화와 대규모 할인 경쟁이 결합하며 내구소비재 시장(TV)에 대한 소비 심리를 자극하고 판매 증가를 이끌 수 있기 때문이다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">LG전자</span> <span class="tag stock-tag">디스플레이 관련주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">가전제품</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">소매업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#가전마케팅</span> <span class="tag tag-hash">#AI기술</span> <span class="tag tag-hash">#내구소비재</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">【 앵커멘트 】
+요즘 TV보다 모바일로 월드컵 경기 보시는 분들 많으시죠.
+그래서 TV 업계에서는 '월드컵 특수'는 옛말이라는 이야기도 나오는데요.
+AI 기능을 대폭 강화해 월드컵 팬심 잡기에 나서고 있습니다.
+정설민 기자가 보도합니다.
+
+【 기자 】
+월드컵 기간 대대적인 TV 프로모션 행사가 한창인 한 삼성전자 매장입니다。
+
+▶ 스탠딩 : 정설민 / 기자
+- "축구 경기 시청을 위한 특별한 AI 기능도 추가됐습니다." 
+AI가 화면을 분석해 선수 유니폼과 잔디 색깔을 더 선명하게 만들어주고,
+해설자 음성은 줄이는 대신 관중 함성을 키워 현장감을 극대화합니다.
+
+LG전자 TV는 AI가 응원 팀 정보를 실시간으로 제공합니다.
+경기 일정과 점수는 물론, 최근 기록을 바탕으로 한 승부 예측까지 해주기도 합니다.
+
+AI 경쟁 못지 않게 할인 경쟁도 뜨겁습니다.
+삼성전자의 구매금액 20% 환급 행사에 LG전자도 온라인에서 20% 할인으로 맞불을 놓은 상황.
+
+▶ 인터뷰 : 한명숙 / 서울 신월동
+- "워낙 월드컵, 축구를 좋아해서 안방에서 편하게 보려고 TV를 바꾸려고 왔는데 요즘 또 고객들한테 행사한다고 하고…." 
+여기에 월드컵 공식 파트너인 중국 하이센스까지 최대 35% 할인 혜택을 내걸고 경쟁에 합류했습니다.
+
+가전업계가 이렇게 공격적인 마케팅에 나선 건 모바일로 시청 환경이 옮겨가면서 줄어든 월드컵 특수 불씨를 다시 되살리기 위해서입니다.
+
+▶ 인터뷰 : 서용구 / 숙명여대 경영학부 교수
+- "AI 기능을 추가해서 개인 맞춤화 서비스가 가능해졌기 때문에 TV에 대한 수요가 더 커질 수 있다." 
+똑똑해진 AI에 할인까지 더한 가전업계의 총력전이 침체된 TV 시장을 깨우는 돌파구가 될 수 있을지 주목됩니다.
+MBN뉴스 정설민입니다.
+
+영상취재 : 김진성 기자
+영상편집 : 최형찬
+그래픽 : 안현수
+원문링크: https://n.news.naver.com/mnews/article/057/0001954769</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/057/0001954769' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/057/0001954769</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
