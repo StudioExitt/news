@@ -236,13 +236,6 @@ def build_html(row: dict) -> str:
       border-color: #bfdbfe;
     }}
     .empty {{ color: #cbd5e1; font-size: .9rem; }}
-    a.source-link {{
-      color: #3b82f6;
-      text-decoration: none;
-      font-size: .9rem;
-      word-break: break-all;
-    }}
-    a.source-link:hover {{ text-decoration: underline; }}
     .divider {{
       border: none;
       border-top: 1px solid #f1f5f9;
@@ -337,13 +330,12 @@ def build_html(row: dict) -> str:
         <div class="news-content">{news_content}</div>
       </div>
 
-      {"<hr class='divider'><div class='section'><div class='section-label'>출처</div><div class='section-content'><a class='source-link' href='" + source_url + "' target='_blank' rel='noopener'>" + source_url + "</a></div></div>" if source_url else ""}
-
     </div>
   </div>
 
   <div class="footer">
-    자료제공: 분석 자료는 스튜디오엑싯에 의해 제공되었습니다. ( <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#94a3b8;text-decoration:underline;">https://studioexitt.net</a> )
+    {"출처: <a href='" + source_url + "' target='_blank' rel='noopener' style='color:#94a3b8;text-decoration:underline;'>" + source_url + "</a> &nbsp;|&nbsp;" if source_url else ""}
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다. <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
   </div>
 </div>
 </body>
