@@ -34,6 +34,9 @@ git add .
 # Commit
 git commit -m "$COMMIT_MSG"
 
+# Pull
+git pull origin "$BRANCH"
+
 # Push
 git push origin "$BRANCH"
 
