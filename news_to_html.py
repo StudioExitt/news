@@ -139,6 +139,22 @@ def build_html(row: dict) -> str:
       margin-bottom: .75rem;
       flex-wrap: wrap;
     }}
+    .more-btn {{
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      background: #fff;
+      color: {config["color"]};
+      border: 1.5px solid {config["color"]};
+      font-size: .78rem;
+      font-weight: 700;
+      padding: .25rem .75rem;
+      border-radius: 999px;
+      text-decoration: none;
+      white-space: nowrap;
+    }}
+    .more-btn:hover {{ background: {config["bg"]}; }}
     .sentiment-badge {{
       display: inline-flex;
       align-items: center;
@@ -261,6 +277,7 @@ def build_html(row: dict) -> str:
         <span class="meta-text">ID #{news_id}</span>
         {"<span class='meta-text'>·</span><span class='meta-text'>" + published_at + "</span>" if published_at else ""}
         {"<span class='meta-text'>·</span><span class='meta-text'>" + author + "</span>" if author else ""}
+        <a class="more-btn" href="https://studioexitt.net/news/{news_id}" target="_blank" rel="noopener">More ↗</a>
       </div>
       <h1>{title}</h1>
     </div>
