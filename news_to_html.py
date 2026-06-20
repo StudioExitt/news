@@ -335,24 +335,40 @@ def build_html(row: dict) -> str:
 </html>"""
 
 
-PAGE_SIZE = 1000
+
+ID_FILE = Path("id.txt")
 
 
-def fetch_all(client, news_id: Optional[int]) -> list[dict]:
-    table = client.table("bs_news_sentiment")
-    if news_id is not None:
-        result = table.select("*").eq("id", news_id).execute()
-        return result.data or []
+def read_processed_ids() -> set:
+    if not ID_FILE.exists():
+        return set()
+    ids = set()
+    for line in ID_FILE.read_text().splitlines():
+        line = line.strip()
+        if line.isdigit():
+            ids.add(int(line))
+    return ids
 
-    rows, offset = [], 0
-    while True:
-        result = table.select("*").order("id").range(offset, offset + PAGE_SIZE - 1).execute()
-        batch = result.data or []
-        rows.extend(batch)
-        if len(batch) < PAGE_SIZE:
-            break
-        offset += PAGE_SIZE
-    return rows
+
+def append_processed_id(news_id: int) -> None:
+    with ID_FILE.open("a") as f:
+        f.write(f"{news_id}\n")
+
+
+def fetch_recent(client, limit: int = 10) -> list[dict]:
+    result = (
+        client.table("bs_news_sentiment")
+        .select("*")
+        .order("id", desc=True)
+        .limit(limit)
+        .execute()
+    )
+    return list(reversed(result.data or []))
+
+
+def fetch_one(client, news_id: int) -> list[dict]:
+    result = client.table("bs_news_sentiment").select("*").eq("id", news_id).execute()
+    return result.data or []
 
 
 def write_news(row: dict, output_dir: Path) -> Path:
@@ -368,26 +384,38 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="bs_news_sentiment → {id}/index.html 생성")
-    parser.add_argument("id", nargs="?", type=int, help="특정 뉴스 ID (생략 시 전체)")
+    parser.add_argument("id", nargs="?", type=int, help="특정 뉴스 ID (생략 시 최근 10개 중 미처리 항목)")
     parser.add_argument("-o", "--output-dir", default="docs", help="출력 루트 디렉토리 (기본: docs)")
     args = parser.parse_args()
 
     client = create_client(SUPABASE_URL, SUPABASE_KEY)
     output_dir = Path(args.output_dir)
 
-    print("데이터 조회 중..." if args.id is None else f"ID {args.id} 조회 중...")
-    rows = fetch_all(client, args.id)
-
-    if not rows:
-        print("해당하는 뉴스가 없습니다.")
-        sys.exit(1)
-
-    print(f"총 {len(rows)}건 처리 시작")
-    for i, row in enumerate(rows, 1):
-        path = write_news(row, output_dir)
-        print(f"[{i}/{len(rows)}] {path}")
-
-    print(f"\n완료: {len(rows)}개 파일 생성 → {output_dir.resolve()}")
+    if args.id is not None:
+        print(f"ID {args.id} 조회 중...")
+        rows = fetch_one(client, args.id)
+        if not rows:
+            print("해당하는 뉴스가 없습니다.")
+            sys.exit(1)
+        for i, row in enumerate(rows, 1):
+            path = write_news(row, output_dir)
+            append_processed_id(row["id"])
+            print(f"[{i}/{len(rows)}] {path}")
+        print(f"\n완료: {len(rows)}개 파일 생성 → {output_dir.resolve()}")
+    else:
+        processed = read_processed_ids()
+        print(f"최근 10개 조회 중... (처리 완료 ID {len(processed)}개 스킵)")
+        recent = fetch_recent(client, limit=10)
+        rows = [r for r in recent if r["id"] not in processed]
+        if not rows:
+            print("처리할 새 뉴스가 없습니다.")
+            sys.exit(0)
+        print(f"처리 대상: {len(rows)}건")
+        for i, row in enumerate(rows, 1):
+            path = write_news(row, output_dir)
+            append_processed_id(row["id"])
+            print(f"[{i}/{len(rows)}] {path}")
+        print(f"\n완료: {len(rows)}개 파일 생성 → {output_dir.resolve()}")
 
 
 if __name__ == "__main__":
