@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스닥 반도체 소부장 시총, 바이오 역전 임박</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.21</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005696723' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7180" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스닥 반도체 소부장 시총, 바이오 역전 임박</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 발반도체 호황에 힘입어, 코스닥 시장 주도주가 기존 바이오에서 소부장(소재·부품·장비)으로 이동하고 있습니다. 특히 HBM 등 첨단 기술 난이도가 높은 패키징 및 테스트 공정의 병목현상이 부각되면서, 해당 분야 기업들의 실적과 시총 급등을 이끌며 구조적인 상승장이 예상됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 산업발 수요 증가에 따른 반도체(HBM)의 패키징 및 테스트 공정 병목현상은 구조적인 공급 부족을 유발하며, 소부장 기업들의 실적 개선과 시가총액 급등세를 뒷받침하는 핵심 동인임. 대형 메모리사 증설 계획은 추가 호재로 작용할 전망.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">주성엔지니어링</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#소부장</span> <span class="tag tag-hash">#HBM</span> <span class="tag tag-hash">#AI</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스닥 반도체 소부장 시총, 바이오 역전 임박
+반도체 전·후공정 대표기업
+올해 주가 세자릿수 상승률
+주성엔지니어링 597% 1위
+코스닥 시총20위내 바이오株
+연초 12곳서 7개로 줄어들고
+반도체는 4곳서 10개사로 쑥
+삼전닉스·마이크론 증설효과
+구조적 실적개선 이어질 전망
+
+"이젠 '헬스닥'(헬스케어+코스닥)이 아니라 '반스닥'(반도체+코스닥)이다." 
+
+전 세계적인 인공지능(AI)발 반도체 호황 속에 낙수효과가 기대되는 국내 소부장(소재·부품·장비) 기업들이 주목받고 있다. 특히 코스닥 내 관련기업들의 주가 약진이 두드러지면서 기존 시장을 이끌던 바이오(헬스케어)주들을 제치고 소부장이 새로운 주도주로 급부상하는 모습이다.
+
+◆ 반도체 소부장, 코스닥 주도주로
+
+21일 매일경제가 한국 고대역폭메모리(HBM) 밸류체인을 전공정(산화·포토·식각·박막·배선)과후공정(EDS·TSV·백그라인딩·다이싱·본딩·패키지 조립·테스트) 12개 공정으로 나눠 대표 기업 주가를 연초 이후 지난 19일까지 분석한 결과
+거의 모든 공정에서 코스닥 소부장주가 세 자릿수 상승률을 기록한 것으로 나타났다. 반도체 전공정에서는 주성엔지니어링(박막)이 지난해 종가 대비597.11% 급등해 가장 가파른 상승률을 보였다. 식각 공정주 피에스케이(347.15%)와 브이엠(192.72%), 산화 공정의테스(273.06%)도 세 자릿수 상승률을 기록했다. 후공정에서 본딩의피에스케이홀딩스(142.98%), 백그라인딩의케이씨텍(115.13%)도전공정 못지않은 강세를 보이는 등 반도체 밸류체인 전반에 걸쳐 관련 기업 주가가 동반 상승하는 모습이다.
+
+반도체 소부장 기업들의 약진 속에 연초 이후 코스닥 시가총액 순위에도 지각변동이 나타나고 있다. 바이오 대장주인 알테오젠과 2차전지 대표 주자인에코프로비엠, 에코프로는 여전히 코스닥 시총 1~3위 자리를 지키고 있다. 하지만 코스닥 시총 상위 20위 내 바이오 기업의 비중은 올해 초60%(12개)에서지난 19일 기준 35%(7개)로 반 토막 났다.
+
+반면 반도체 소부장 기업의 경우 연초 시총 20위 이내에 4개 기업만 이름을 올렸지만 현재는 절반인 10개 기업이 포진하는 등 반년 새 두 배 이상 늘었다. 특히 연초 20위권에도 이름을 못 올렸던 주성엔지니어링이 5위로 껑충 뛰었고 원익IPS, 리노공업도 순위를 각각 8계단, 3계단끌어올리며 10위권에 안착했다.
+
+◆ 패키징·테스트 공정서 병목현상
+
+올해 코스닥 반도체 소부장 종목 중심의 강세는 2023년 HBM 초기 시장 확대 국면에서 발생한 패키징·테스트 병목현상과 유사하다는 평가가나온다. 2016~2018년 메모리 슈퍼사이클이 증설 자체에 주목한 전형적인 설비투자(CAPEX) 사이클이었던 것과 달리 2023년에는 HBM초기 진입에 따른 패키징·테스트 병목이 부각됐다. 당시 한미반도체, ISC, 리노공업처럼 병목 공정을 보유한 기업이 가장 높은 초과수익률을기록했다.
+
+최근에는 첨단 패키징과 HBM 테스트가 가장 큰 병목으로 꼽힌다. 차세대 HBM4부터는 로직다이 비중이 커지며 패키징·테스트 난도가 더 올라갈전망이다. 열압착(TC) 본딩, 인터포저 기반 패키징, 고대역폭 검증 공정은 기술 난도가 높고 증설 리드타임이 길어 단기간 공급 확대가 어려운상황이어서 AI 서버 수요가 늘수록 병목 구간의 몸값이 뛰는 구조가 마련됐다.
+
+과거 메모리 산업에서 증설 발표는 반도체 소부장 업황의 정점 신호로 해석됐지만오늘날은 다르다는 평가도 나온다. AI 모델이 커질수록그래픽처리장치(GPU)당 HBM 탑재량이 늘고 추론 시장까지 확대되면서 수요 증가 속도가 증설 속도를 앞지르고 있기 때문이다.
+
+삼성전자(평택 P5 1단계), SK하이닉스(용인 반도체클러스터 Y1), 마이크론(미국 아이다호 ID1) 등 메모리 3사 모두 2027년을 전후로신규 생산능력 확대를 위한 증설에 나서고 있다.
+
+이에 따라 메모리 3사의 증설이 오히려 소부장에 추가 호재로 작용한다는 게 과거 사이클과의 가장 큰 차이점으로꼽힌다. 
+
+◆ 글로벌 패시브 자금 추가 유입 기대
+
+반도체 소부장 업황은 수출 데이터로도 입증되고 있다.하나증권에 따르면 이달 1~10일 영업일 평균 메모리 반도체 수출액은 전년 동기 대비159% 증가한 11억2000만달러를 기록했다. D램은 308% 늘어난 4억9000만달러였고 낸드는 151% 증가했다.
+
+메모리 가격 상승세가 이어지면서 코스닥 소부장주 강세가 실적이 뒷받침되는 '구조적 리레이팅'이라고 주장하는 의견에 힘이 실리는 대목이다.
+
+코스닥 반도체 소부장을 향한 글로벌 패시브 자금의 추가 유입 가능성도 제기된다. 
+
+올해 들어 대만·한국 증시가 강세를 보이면서 20여 년 만에 모건스탠리캐피털인터내셔널(MSCI) 신흥국 지수 내 국가 순위에서 대만이 중국을제치고 1위, 한국이 2위로 올라섰다.
+
+신흥국 지수 상위 10개 종목 가운데 TSMC(14.46%), 삼성전자(7.78%), SK하이닉스(6.6%) 등 반도체 기업이 상위권을 차지하고있다.
+
+이상연 신영증권 연구원은 "이는 외국인 패시브 자금 유입에도 영향을미친다"며 "지수를 추종하는 자금이 국가별 비중에 맞춰 기계적으로리밸런싱하기 때문"이라고 설명했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005696723' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005696723</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
