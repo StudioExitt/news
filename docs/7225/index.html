@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>중견기업 진단] 에스엘①</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/648/0000048204' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7225" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>중견기업 진단] 에스엘①</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SL은 자동차 헤드램프 및 FEM 등을 납품하는 국내외 점유율 1위의 자동차 부품사로, 꾸준한 매출과 영업이익 성장을 기록하며 재무 건전성을 확보했습니다. 특히, 주가와 시총이 급등했으며, 철저한 장자 승계 원칙에 따라 안정적인 4대(代) 체제를 준비하고 있어 장기적 성장 기대감이 높습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">높은 매출 성장률과 안정적인 재무 건전성, 그리고 강력한 후계 구도 확립으로 기업가치(밸류에이션) 상승 기대감이 매우 높음. 단기 주가 흐름은 시장 상황에 따라 변동 가능함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">에스엘</span> <span class="tag stock-tag">현대모비스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자동차부품</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#자동차부품</span> <span class="tag tag-hash">#기업가치</span> <span class="tag tag-hash">#장자승계</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[중견기업 진단] 에스엘①
+사사 72년…자산 4조, 매출 5조대 차부품사
+go 이해준→이충곤 이어 이성엽 ‘장자 승계’
+gㅏ족회사 동원 종손 이주환 위시 4대 준비 사주(社主) 집안의 지배구조 형성 스토리에 관한 한, 매출 5조원대 자동차 부품
+중견그룹 에스엘(SL)은 얘깃거리가 좀 되는 집안이다. 무엇보다 비상장 가족회사 ‘3종 세트’, 이른바 ‘테·라·미’를 동원해 손쉽게 재산을 불린 것은 물론 어느덧 4대(代) 승계 기반까지 깔아놓고 있다.
+
+이충곤 에스엘그룹 총괄회장
+이충곤 에스엘그룹 총괄회장시총 3.1조…6년 전의 7배
+
+e스엘㈜가 모태사이자 사업 중추사다. 국내 점유율 1위인 자동차 헤드램프를 비롯해 전동화, 미러, FEM(Front End Module·차량 전방 부품들을 한 번에 조립하는 시스템) 등을 완성차 메이커 현대차·기아차·GM·포드 등에 OEM(주문자상표부착생산)으로 납품하는 업체다.
+
+대구(본사) 및 경북 진량, 경기 안산, 충남 천안 등 국내 6곳과 미국, 인도, 중국, 폴란드 등 해외 6개국에 생산거점을 두고 있다. 
+지주사격으로서 자동차 백미러 제조업체 에스엘미러텍, 외국 합작사 에스에이치비(독일 HBPO), 케이디에스(미국 Inteva) 등 국내 6개, 해외 14개 등 총 21개 계열사를 거느리고 있다. 
+
+매출(연결)이 2018년 1조6000억원에서 해마다 증가해 작년에는 5조2400억원을 찍었다. 영업이익 또한 46억원에서 7년간 매년 예외 없이 전년 기록을 갈아치웠다. 2023년 이후로는 7.8%~8.0%의 이익률을 보이며 적어도 3860억원, 많게는 4071억원을 벌었다. 
+
+올해 들어서도 1~3월 매출이 1년 전보다 12.5%(1540억원) 신장한 1조3880억원을 나타냈다. 영업이익은 1440억원으로 20.5%(245억원) 늘어났다. 이익률은 10.4% 두 자릿수로 뛰었다. 
+
+몸집은 커졌고, 곳간에는 현금이 차고 넘친다. 2018년 말 1조7100억원에 머물던 총자산이 올해 3월 말 4조3600억원으로 불어났다. 이 중 현금성자산(유동금융자산 포함)이 1조450억원, 23.9%를 차지한다. 
+
+안정적인 재무 건전성을 유지하고 있는 배경이다. 순차입금이 마이너스(-) 7026억원에 달한다. 2023년 이후 줄곧 사실상 무차입 기조다.
+차입금의존도 7.9%, 부채비율은 62.3%에 머문다. 
+
+2020년 3월 4430억원에 불과했던 시가총액은 현재 3조840억원으로 치솟았다. 6년 전 1만원을 밑돌며 9200원(종가기준)까지 밀렸던 주가가 현재 6만6400원(19일)으로 뛰어서다.
+
+e스엘(주) 재무실적상장사 에스엘-체시스 형제기업
+
+1954년 5월 고(故) 이해준 창업주(1920~2003)가 대구에 창립한 삼화자동차공업에 뿌리를 두고 있다. 1968년 11월삼립산업(三立産業)으로 법인 전환했다. 1976년 현대차가 출시한 국내 최초 독자 모델 ‘포니’에 헤드램프를 독점 공급하며 자동차 부품사로 자리 잡았다.
+
+2대 체제가 본격적으로 막이 오른 시기는 2002년 6월이다. 당시 팔순(八旬·80)을 훌쩍 넘긴 이 창업주가 삼립산업 대표 및 이사회에서 물러났다. 2003년 10월 작고하기 1년여 전이다.
+
+후계구도는 명확했다. 일찌감치 ‘장자 승계’를 못박은 터라 2남4녀 중 장남 이충곤(82) 현 총괄회장이 모태사의 적통을 이었다. 58세 때다.
+연세대 기계공학과 출신으로 1983년 대표에 오른 지 19년만이다. 2004년 11월에 가서는 현 에스엘㈜로 간판을 바꿔 달았다. 
+
+그렇다고 차남 몫이 아예 없지는 않았다. 삼립정공(三立精工)이다. 1989년 8월 설립된 뒤 현대차 ‘엘란트라’ 리어액슬(REAR AXLE·뒤차축)을 시작으로 자동차 서스펜션 부품에 주력하는 업체다. 에스엘㈜에 비할 바 못되지만, 총자산 946억원에 작년 매출 938억원, 영업이익 75억원 규모의 현 체시스(CHASYS)다. 
+
+사주가 이 회장의 남동생 이명곤(69) 회장이다. 한양대 경영학과를 졸업한 뒤 1994년 7월 형의 뒤를 이어 삼립정공 대표 자리에 앉았다. 
+이어 2000년 6월 에스엘㈜ 개인지분을 모두 이 총괄회장에게 매각하고, 2002년 12월에는 삼립정공의 사명을 체시스로 교체해 독자경영하고있다. 
+
+e스엘그룹 주요 계열사 지배구조에스엘그룹 주요 계열사 지배구조창업주-장손 이사회 ‘바통 터치’
+
+2002년 6월 창업주의 퇴진은 1~2세 세대교체에서 한 발 더 나아가 3세 체제 준비를 위한 신호탄이기도 했다. 창업주가 에스엘㈜ 이사회자리를 물려준 이가 장손이자 이 회장의 2남1녀 중 장남 이성엽(56) 현 부회장이다. 
+
+미국 위스콘신 주립대 경제학과, 드렉셀 대학원 경영학석사(MBA) 학위를 받은 뒤 현대증권 국제기획팀을 거쳐 2000년 에스엘㈜에 입사한 지 2년여 만에 이사회에 합류했다. 4년 뒤인 2006년 4월에는 각자대표로서 경영 일선에 등장했다. 
+
+이어 2021년 3월 51살 때 실권(實權)을 쥐었다. 팔순을 바라보던 이 회장이 대표와 사내이사직을 모두 내려놓은 게 이 때다. 바꿔 말하면 이 회장이 여태껏 회장 자리만 넘겨주지 않았을 뿐, 지금의 에스엘은 3대 체제로 전환한지 오래고, 매출 5조원대 성장의 중심에는 이 부회장이 자리하고 있다는 의미다. 
+
+이 회장의 차남도 한때 경영에 참여했지만 2018년 무렵 손을 <0xEB><0x97><0x90>다. 이승훈(53) 전 사장이다. 미국 하이델베르크대 경제학과를 졸업한 뒤 2001년 가업에 발을 들였다. 주된 활동무대는 2011년 8월 대표에 오른 에스엘미러텍이다.
+
+하지만 2018년 8월 물러났다. 아울러 2017년 3월 이사회에 합류했던 에스엘㈜에서 중도 퇴임한 것도 이 무렵이다. 이에 따라 이 회장의 맏딸 이지원(54)씨처럼, 차남 역시 경영에서 배제된 채 주주로만 존재감을 가지고 있을 따름이다. 
+
+올해로 사사(社史) 72년. 에스엘은 어느덧 4대 체제를 준비하고 있다. 이(李)씨 집안을 관통하는 철저한 장자 승계 원칙에 따라 4대 후계자로 유력시되는 종손 이주환(29)씨와 이동환(27), 이건호(24), 이정민(22)씨 등 4세들이 에스엘㈜의 주주로 자리 잡고 있어서다. 과정을 들춰보면 더 흥미로워 진다. (▶ [거버넌스워치] 에스엘 ②편으로 계속)
+원문링크: https://n.news.naver.com/mnews/article/648/0000048204</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/648/0000048204' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/648/0000048204</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
