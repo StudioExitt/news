@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피는 새 지평 개척했으나 코스닥은 하락, 격차에 따른 수급·이익·금리 문제 분석</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.21</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002659392' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7167" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피는 새 지평 개척했으나 코스닥은 하락, 격차에 따른 수급·이익·금리 문제 분석</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 사상 최고치를 경신했음에도 코스닥이 1000포인트 지지선마저 무너지는 등 역대급 격차를 보였습니다. 증권가는 코스닥의 부진 원인을 개인 자금 이탈(수급), 제한적인 기업 실적 개선 속도(이익), 그리고 고금리 환경에 따른 금융 취약성(금리)으로 진단했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">코스닥의 단기 하락 및 구조적 약세(수급 이탈, 실적 격차, 고금리 민감성)를 종합적으로 분석하며 투자심리를 위축시킴. 중장기적인 추세 전환까지 시간이 필요하다는 전망이 시장에 큰 영향을 미칠 수 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">제약</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥 #주식시장분석 #금리리스크</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">19일 서울 중구 하나은행 본점 딜링룸 전광판. 이날 코스닥은 3.43% 내린 966.59로 마감했다. [연합]
+
+ 코스피가 사상 처음으로 9000선에 도달하며, 한국 증시가 새 지평을 열었지만 코스닥은 1000포인트 아래로 하락, 사실상 제자리걸음을 면치 못하고 있다.
+
+역대급으로 벌어진 코스피와 코스닥 격차를 두고 증권가에서 수급, 이익, 금리 세 가지 문제가 코스닥의 발목을 잡고 있다고 분석했다.
+
+금융투자업계에 따르면 지난 18일 코스피 지수는 사상 최초로 9000선을 돌파한 데 이어 전날 9052.42포인트에 마감됐다.
+
+반면 전날 코스닥 지수는 3.43% 하락한 966.59로 마감, 심리적 지지선인 ‘1000선’마저 허무하게 내줬다. 장 중에는 946.15까지 지수가 밀리기도 했다.
+
+지난해 말 대비 전날까지 코스피 지수는 무려 114.8% 폭등했지만, 코스닥은 같은 기간 4.4% 상승에 그쳤다.
+
+코스피 시가총액은 3477조원에서 7398조원으로 두배 넘게 불어났지만, 코스닥 시총은 4974억원에서 5427억원으로 453억원 증가하는 데 그쳤다.
+
+코스피는 이번 주 미국과 이란의 종전 업무협약(MOU) 체결을 기점으로, 그간 시장을 짓누르던 과도한 공포 심리가 정상화되면서 가파른 상승세를 보였다.
+
+전쟁, 유가, 금리, 인공지능(AI) 투자 우려 등 굵직한 악재가 완화되고, ‘스페이스X’ 상장 등 글로벌 대형 이벤트가 마무리되자, 투자자들의 매수세가 코스피 대형주로 블랙홀처럼 빨려 들어갔다.
+
+반면, 이 같은 훈풍은 코스닥으로 전이되지 못했다. 가장 뼈아픈 것은 ‘수급의 이탈’이다. 코스닥 시장의 든든한 버팀목이었던 개인 투자자들은 올해 들어 시장을 떠나는 분위기다.
+
+한국거래소에 따르면 올해 들어 개인 투자자들은 코스피 시장에서 72조9371억원어치를 순매수한 반면, 코스닥 시장에서는 8조2384억원을 순매도했다.
+
+g동안 코스닥 지수의 방향성을 결정짓는 장기 순매수 주체가 개인이었다는 점을 고려하면, 썰물처럼 빠져나간 개인 자금의 공백이 지수 폭락으로 직결된 셈이다.
+
+이재원 유안타증권 연구원은 “코스닥의 부진은 단순한 낙폭 과대의 문제가 아니다”라며 “장기 순매수 주체였던 개인 자금이 이탈하고 있는 데다 코스닥 기업들의 이익 개선 속도도 제한적”이라고 지적했다.
+
+또 “금리 인상 시사 이후 고 주가수익비율(PER) 성장주 비중이 높은 코스닥은 할인율 상승에 더 취약할 수밖에 없는 구조”라고 덧붙였다.
+
+기업의 펀더멘털(기초체력)을 보여주는 실적 전망치 격차도 극심하다. 유안타증권에 따르면 지난 코스피의 올해 당기순이익 컨센서스(전망치)는 727조원에 달하지만, 코스닥은 10조원에 그쳤다.
+
+미국 연방준비제도가 연내 금리 인상 가능성을 시사한 점도 코스닥에 악재다. 코스닥 내 시총 비중이 큰 제약·바이오 기업들의 경우 금리에 영향을 크게 받는다. 통상 신약 개발에는 막대한 자금이 필요해 금리가 인상되면 제약·바이오 기업이 자금 조달에 난항을 겪을 우려가 커진다.
+
+이 연구원은 당분간 코스닥의 극적인 반등을 기대하기는 어려울 것으로 전망했다. 그는 “빼앗긴 수급이 복귀하려면 현재의 코스피 대형주 랠리가 끝나야 하는데, 호수출과 호실적이 지속되는 상황에서 코스닥으로의 순환매는 어렵다”며 “개인 수급 복귀와 코스닥 이익 추정치 반등이 확인되기 전까지는 상대적 열위가 이어질 가능성이 높은 만큼, 포트폴리오를 확산하기보다는 압축 대응할 필요가 있다”고 조언했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002659392' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002659392</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
