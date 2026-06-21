@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3년간 순이자보상배율 1배 미만, 차입금 비율 50% 상회 종목 선별</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005301150' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7216" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>3년간 순이자보상배율 1배 미만, 차입금 비율 50% 상회 종목 선별</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국, 한국 등 주요국의 금리 인상 기조가 이어지며 시중 유동성 축소 우려가 커지고 있습니다. 이에 따라 3년간 순이자보상배율이 낮고 차입금이 많은 재무적으로 불안정한 종목에 대한 경계가 필요하다는 분석이 나왔습니다.
+주요 기업들(엘앤에프, 이마트 등)의 사례를 통해 높은 부채 비율과 이자 비용 증가 위험을 지적하며 투자자들에게 주의를 당부하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 중앙은행들의 금리 인상 기조와 유동성 축소 경고는 전반적인 자본 시장 위험 신호를 보내므로 투자심리에 부정적 영향을 미칩니다. 특히 재무구조가 취약한 종목에 대한 경고는 특정 섹터의 리스크를 부각합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">엘앤에프</span> <span class="tag stock-tag">롯데케미칼</span> <span class="tag stock-tag">HLB</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">화학</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오/제약</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#금리인상 #거시경제 #재무구조위험</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">3년간 순이자보상배율 1배 미만
+1분기 말 차입금 비율 50% 상회 종목 선별
+엘앤에프, LFP 양산 투자…차입금 비율 250% 웃돌아
+사진=게티이미지뱅크
+사진=게티이미지뱅크한국은행과 미국 중앙은행(Fed)이 나란히 통화 긴축 신호를 시장에 내놨다. 유럽중앙은행(ECB)과 일본은행(BOJ)의 기준금리 인상에 이어 미국과 한국도 기준금리 인상 시계가 '카운트다운'에 들어간 모습이다. 이런 상황에서 전문가들은 금리 인상으로 시중 유동성이 줄어들면 차입금이 많거나 실적이 부진한 탓에 과도한 이자 부담을 감당해온 종목들에 대한 경계가 필요하다고 조언한다.
+22일 금융정보업체 에프앤가이드에 따르면 작년 3년(2023~2025년) 동안 △순이자보상배율이 1배 미만이고 △순이자비용을 지출했으며 △올해 1분기 말 기준 차입금 비율이 50% 이상인 코스피200지수·코스닥150지수 편입 종목은 15개로 추려졌다.
+순이자는 기업의 이자비용에서 이자수익을 뺀 금액을, 차입금은 기업의 전체 부채에서 이자를 물어야 하는 빚만 따로 추린 금액을 각각 뜻한다. 
+순이자보상배율은 기업의 영업이익을 금융비용으로 나눈 값으로 해당 기업의 부채에 대한 이자 지급 능력을 판단할 수 있는 지표다.
+자료=에프앤가이드 데이터가이드
+자료=에프앤가이드 데이터가이드
+선별된 종목 중 차입금 비율이 가장 높은 종목은 2차전지 양극재 기업 엘앤에프다. 올해 1분기 말 기준 252.97%에 달했다. 자본금의 2.5배에 달하는 빚에 대해 이자를 물고 있다는 뜻이다. 문제는 엘앤에프가 이익도 내지 못하고 있었다는 점이다. 2023년부터 작년까지 3년 내내 순이자보상배율이 마이너스였다. 작년 한 해 동안 지출한 순이자비용은 1156억원이었다.
+엘앤에프는 테슬라 협력업체로 유명하다. 다만 테슬라로부터 발생하는 매출 비중이 80%를 웃도는 점은 약점이다. 이에 기존 니켈·코발트·망간(NCM) 양극재에 더해 리튬인산철(LFP) 양극재를 양산하기 위한 투자를 이어오면서 재무부담이 커졌다. 엘앤에프가 구축한 LFP 양극재 공장은 올해 4분기부터 가동될 예정이다.
+엘앤에프 외에도 SKC, 차바이오텍, 롯데케미칼, HLB 등이 지난 3년 모두 순이자보상배율이 마이너스였다. 계속 적자였다는 뜻이다.
+특히 HLB의 차입금 비율이 가파르게 높아진 점이 눈길을 끈다. 2023년 말에는 10.76%에 불과했지만, 올해 1분기 말에는 54.58%까지 뛰었다. 순이자 비용도 2023년 39억원, 2024년 75억원, 작년 98억원으로 증가했다. 다만 적자 규모가 줄어 순이자보상배율은 2023년 -32.44배, 2024년 -15.73배, 작년 -10.59배로 개선된 것으로 나타났다.
+화학 시황 악화에 시달려온 롯데케미칼역시 3년 동안 매년 순이자비용이 증가하고, 차입금 비율은 높아졌다. 작년에 2838억원의 순이자비용을 지출했고, 올해 1분기 말 기준 차입금 비율은 57.02%다.
+이마트도 재무구조가 불안한 종목으로 꼽혔다. 2023년에는 적자를 기록했으며, 흑자 전환한 2024년과 작년에도 각각 순이자보상배율이 0.13배와 0.81배에 그쳤다. 개선되긴 했지만, 영업이익이 이자도 감당하지 못할 규모라는 뜻이다. 이마트의 작년 연간 영업이익은 3225억원이지만, 순이자비용은 3977억원이다.
+이마트는 최근 몇 년 동안 가양점·성수점의 매각 후 재임대(세일앤리스백), 스타필드 관련 법인 투자금 회수, SSG닷컴 김포 물류센터 매각, 신세계푸드 급식사업부 매각 등 재무구조 개선 작업을 하고 있지만, 차입금 비율은 80~90%대로 제자리걸음을 하고 있다.
+사진=게티이미지뱅크
+사진=게티이미지뱅크상장사의 재무구조에 관심을 둬야 하는 이유는 금리다. 최근 들어 주요국 중앙은행이 긴축 기조를 강화하면서 하반기 금리 상승에 따른 이자 부담 확대 가능성이 짙어지고 있다.
+자본시장연구원은 최근 보고서를 통해 한국 국고채 10년물 금리가 작년 5월 연 2.68%에서 올해 5월 연 4.04%로 1년 만에 1.36%포인트 높아졌다고 전하며, 상방 위험이 더 크다고 진단했다. 앞으로도 금융시장 참여자들이 장기 채권 보유에 요구하는 추가 수익률인 ‘기간 프리미엄’ 확대 중심의 국고채 금리 상승 가능성을 점친다.
+한국은행도 기준금리를 인상할 전망이다. 지난 4월 취임한 신현송 한은 총재는 지속적으로 기준금리 인상을 예고해왔다. 그는 지난 12일 한은 창립 제76주년 기념사에서 “물가안정에 중점을 두고 늦지 않게 금리를 인상해나갈 필요가 있다”고 말했다. 현재 한국의 기준금리는 연 2.50%다.
+금융투자시장에선 다음달 16일 열리는 금융통화위원회에서 기준금리가 0.25%포인트 인상될 가능성에 무게를 싣고 있다.
+미 Fed도 통화정책 방향을 긴축에 맞출 조짐이다. 지난 16~17일(현지시간) 열린 6월 연방공개시장위원회(FOMC) 정례회의에서 기준금리를 동결했지만, 향후 금리 수준에 대한 Fed 위원들의 기준금리 전망치인 점도표의 중간값은 기존 연 3.4%에서 연 3.8%로 크게 높아졌다. 이에 시장에서는 이번 FOMC 결과에 대해 ‘매파(통화 긴축정책 선호론자)적 동결’이라는 평가가 나왔다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005301150' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005301150</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
