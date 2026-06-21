@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>노예해방의 날을 맞아 미 증시 휴장한 가운데 반도체를 중심으로 아시아 증시 살펴보겠습니다.</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001256121' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7249" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>노예해방의 날을 맞아 미 증시 휴장한 가운데 반도체를 중심으로 아시아 증시 살펴보겠습니다.</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 수요 폭발과 기술 혁신에 힘입어 코스피는 전년 대비 115% 이상 급등하며 세계 시장에서 주목받고 있습니다. 특히 삼성전자와 SK하이닉스를 필두로 한 반도체 업황 강세가 아시아 증시를 주도하고 있으며, 일본과 중국 역시 AI 및 기술 기업들의 상장 기대감으로 추가 상승 여력을 높게 평가받고 있습니다.
+다만, 미 국방부의 대중국 첨단기술 제재와 지정학적 리스크는 여전히 시장 변동성(롤러코스터 장세)을 키우는 요인으로 작용하고 있어 주의가 필요합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 혁명 주도 상승 사이클과 강력한 반도체 섹터의 독점적 우위가 확인되면서, 다수의 해외 기관(골드만삭스, JP모건 등)이 목표가를 상향 조정하며 장기적인 강세를 예고함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">키옥시아</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI랠리</span> <span class="tag tag-hash">#반도체호황</span> <span class="tag tag-hash">#KOSPI상승전망</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">노예해방의 날을 맞아 미 증시 휴장한 가운데 반도체를 중심으로 아시아 증시 살펴보겠습니다. 올해 에너지 충격과 금리 인상이라는 파도가 몰아쳤지만
+AI 랠리가 증시 방어막 역할을 톡톡히 해냈습니다. 우선 소프트뱅크와 도쿄일렉트론 등 일본판 M7을 앞세운 닛케이지수는 연초 대비 40%가량
+급등하며 6만엔선을 돌파한지 두 달 만에 7만 1,000엔선을 돌파했습니다. 그리고 자동차의 나라 일본에서도 지각변동이 일어나고 있습니다.
+1년전 시총 159위였던 키옥시아는 AI 열풍과 함께 지난주 도요타를 제치고 시총 1위에 등극했습니다. 글로벌 AI 공급망을 움켜쥔 대만
+가권지수역시 60%에 육박하는 거침없는 상승률을 선보였습니다. 중국 상해종합지수는 올해 상승률이 눈에 띄지는 않지만 테크주로의 자금 이동을
+보여줬습니다. 하지만 올해 상반기 가장 뜨겁게 불타오른 주인공은 바로 코스피입니다. 최근 9,000선까지 뚫어내면서 1년 만에 무려 3배로
+몸집을 키우는 등 올해 115%가 넘는 그야말로 폭등세를 기록했습니다. 물론 중동발 지정학적 위기 속에서 시장이 요동쳤고, 사이드카가 무려
+20차례나 발동되는 롤러코스터 장세를 보이기도 했습니다. 하지만 폭발적인 AI 수요와 함께 삼성전자와 SK하이닉스가 질주하면서 코스피의 전체
+시가총액은 이제 5조 달러 수준까지 무섭게 불어났고, 대만 뒤를 바짝 추격하며 세계 7위 자리에 이름을 올렸습니다.
+
+스페이스X에 이어 앤트로픽과 오픈AI의 상장이 주목받고 있는 가운데, 하반기 중국 증시 역시 대형 IPO기대감이 가득합니다. 올해 하반기 중국판
+나스닥으로 불리는 커<0xEC><0xB4><0xB9>반에 테크 기업들이 줄지어 상장 랠리를 펼칩니다. 특히 글로벌 D램 점유율 4위인 창신메모리가 이르면 이달이나 늦어도 7월
+중에 상장합니다. 적자에 허덕이던 창신메모리는 1년만에 매출이 719% 증가해 흑자 전환에 성공하며, 중국 반도체 생태계가 장비 국산화 단계로
+진화했음을 보여주는 퍼즐로 꼽히고 있습니다. 여기에 중국 최대 낸드플레시 업체 양쯔메모리도 연내 상장을 정조준하고 있습니다.
+이러한 움직임들이
+장기적으로는 중국내 장비 밸류체인 전반의 상승 사이클을 이끌 것이란 분석입니다. 다만, 일각에서는 이번 상장이 메기 역할을 할 순 있지만 오히려
+삼성전자와 SK하이닉스의 기술 격차와 독점적 지위를 재확인하는 계기가 될 수 있다는 시각도 나오고 있습니다. 그리고 젠슨 황 엔비디아 CEO가
+직접 언급한 휴머노이드 로봇 기업 유니트리가 초고속 상장 승인을 받았습니다.
+로봇 산업이 본격적인 대량 양산 시대로 접어드는 변곡점이 될
+전망이라는 목소리가 나오고 있습니다. 블룸버그는 “중국 당국이 자금 조달 문턱을 낮추는 등 첨단 기술 기업의 발전과 투자 독려에 대한 기조를
+분명히 하고 있다”고 전했습니다. 한편, 지난주 미 국방부가 알리바바와 비야디 등 중국의 간판 테크 기업들을 중국 군사지원 기업 명단, 이른바
+무역 블랙리스트에 대거 추가했습니다. 특히 지난 2월 명단에서 빠졌던 창신메모리와 양쯔메모리 그리고 유니트리까지 모두 제재 대상에 이름을
+올렸습니다. 이후 며칠 만에 등재 절차를 보류하긴 했지만, 중국의 AI 굴기를 차단하려는 기술과 안보 분야를 둘러싼 미국의 제재 압박은 계속
+이어질 전망입니다.
+
+마지막으로 하반기에도 한국을 중심으로 한 아시아 증시의 강세가 지속될 것이라는 낙관론이 지배적입니다. 아직 중동 리스크가 완전히 해결되지 않은
+가운데 결국 하반기 시장의 열쇠는 막연한 기대감이 아닌 '숫자'입니다. 월가에서는 한국의 반도체가 인프라 산업으로 완전히 자리매김했다는 분석이
+쏟아지고 있습니다. 그중 골드만삭스의 전망이 파격적입니다. 코스피 목표치를 무려 1만 2,000선으로 파격 상향하며 아시아 시장의 '원픽'
+으로 한국을 꼽았습니다. 상반기 급등에도 불구하고 우리 반도체 기업들의 몸값이 여전히 저평가 되어있고 독보적인 이익 성장세 덕분에,
+앞으로 33%는 더 오를 힘이 남았다는 진단입니다. JP모건의 분석도 결을 같이 합니다. 반도체의 수급 불균형과 든든한 이익 체력이 하반기에도 우리 증시를 계속
+밀어 올릴 수밖에 없다는 진단입니다. 글로벌 신용평가사 S&P도 메모리 반도체 호황이 최소 2028년까지 이어질 것으로 내다봤습니다. 특히 AI
+시장이 추론 중심으로 진화하면서 서버용 D램 등의 수요가 폭발하고 있어, 시장을 지배하는 삼성전자와 SK하이닉스가 향후 수년간 독점적 수혜를
+누릴 것이기 때문에 코스피 상승 저력에 대해 호평했습니다. 다만, 특정 종목과 기업에 대한 의존도가 너무 높다는 점은 계속해서 지적되고
+있습니다. 그리고 일본 닛케이 지수 역시 장밋빛 전망이 나오고 있습니다. 과거 버블기와 달리 AI 혁명에 기반한 기업들의 실적 개선이 뚜렷한
+데다, 다카이치 사나에 정권의 성장 전략이 자금을 다시 불러들이고 있다고 합니다. 여기에 모건스탠리는 중국 증시 역시 실적 개선와 위안화 국제화
+의지에 힘입어 추가 상승할 것으로 전망했습니다. 이에 따라 내년 2분기까지 중국 증시가 11%가량의 추가 상승 여력이 있다고 내다봤습니다.
+월스트리트저널도 중국의 AI 대형 기술주들이 미국 동종 기업 대비 현저히 낮은 밸류에이션에 거래되고 있다며, 리스크를 충분히 인지하고 접근한다면
+매력적인 투자 기회가 될 수 있다고 평가했습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001256121' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001256121</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

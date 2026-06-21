@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>단기변동성 커질 수 있지만 상승추세 유효</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014019028' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7251" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>단기변동성 커질 수 있지만 상승추세 유효</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국과 이란의 후속 종전 논의 및 중동 정세에 따라 단기적인 극심한 변동성이 예상되나, 전반적으로 실적 모멘텀에 기반한 상승 추세는 여전히 유효하다는 것이 전문가들의 분석입니다. 투자자들은 미국 PCE 물가 지수와 반도체 업황 관련 마이크론 실적 발표를 주요 관전 포인트로 삼아야 합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">미국-이란 지정학적 리스크와 PCE 물가 지수 발표 등 거시 경제 변수가 결합되어 단기적인 높은 변동성을 예고하지만, 전문가들은 실적 및 경기 모멘텀에 기반한 중장기 상승 추세는 여전히 유효하다고 보고 있어 긍정적 신호를 제공함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#지정학적위험</span> <span class="tag tag-hash">#거시경제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">
+[재판매 및 DB 금지]
+[서울=뉴시스] 박주연 기자 = 코스피는 22일 미국과 이란 간 후속 종전 논의와 중동 정세를 주시하며 방향성 탐색에 나설 전망이다.
+
+지난 19일 미국 뉴욕증시가 노예해방일인 '준틴스데이(Juneteenth)'로 휴장하며 국내 증시는 방향성 지표 없이 미국·이란 협상 관련 뉴스 흐름에 민감하게 반응할 것으로 보인다.
+
+코스피는 지난 19일 전 거래일보다 0.13% 내린 9052.42에 거래를 마치며 9000선을 지켜냈다. 장중 9385.59까지 치솟았던 지수는 미국과 이란 간 핵 협상후속 논의가 지연되고 있다는 소식에 8831.72까지 밀리는 등 극심한 변동성을 나타냈다. 이후 코스피200 야간선물은 0.16% 오르며 장을 닫았다.
+
+시장은 미국과 이란의 종전 후속 협상을 주시하고 있다.
+
+미국과 이란 대표단은 21일(현지시간) 스위스에서 대면협상에 나섰다. 하지만 도널드 트럼프 미국 대통령이 이란이 헤즈볼라를 통제하지 못하면 공습에 나설 수 있다고 경고하고, 이란이 이에 반발해 협상장을 이탈하며 80분 만에 회의가 중단됐다. 이란은 '호르무즈 재봉쇄' 카드도 꺼내들었다.
+
+다만 협상이 완전히 파행된 것은 아닌 것으로 전해졌다. 미국과 대면 회담 종료 후 카타르와 양자 회담을 통해 자국 입장을 전달했고, 카타르 대표단은 이후 협상장으로 복귀해 물밑 조율에 나선 것으로 알려졌다.
+
+협상이 재개될 경우 양국은 호르무즈 해협 개방, 핵 문제 및 제재 해제 관련 추가 논의를 이어갈 전망이다. 미국은 이날 협상을 통해 유엔 사찰단의 핵 시설 사찰을 관철시키고, 그 대가로 동결자산을 일부 해제하는 방안을 준비해온 것으로 알려졌다.
+
+양국이 이미 이란 동결자산 해제를 협의했다는 이란 측 주장도 나왔다. 이란 대표단 관계자는 파르스통신에 "협상에서 동결자산 문제 및 해제 방안을 논의했다"며 "이란산 원유 및 파생상품 관련 미국 제재를 일시 면제하는 내용의 합의 초안 작성이 완료됐다"고 주장했다.
+
+이번 주 발표되는 미국 5월 개인소비지출(PCE) 물가지수와 마이크론 실적도 관심사다.
+
+이경민 대신증권 연구원은 "미국 이란 평화협정 파기 우려, 호르무즈해협 재봉쇄 부담 등이 가세하고 있고 불안심리를 자극할 변수들이 많다"며 "다양한 노이즈가 중첩되면서 단기 변동성이 커질 수 있지만 실적, 경기 모멘텀에 근거한 상승추세는 아직 유효하다"고 평가했다.
+
+이 연구원은 "현재는 실적·매크로 장세이고, 실적이 꺾이지 않는 한 상승추세는 지속된다"며 "미국과 이란 간 평화협상은 최종 타결까지 가는 과정에서 노이즈"라고 설명했다. 이어 "유가흐름을 살펴보면 고점이 낮아지고 있다"며 "이번주 PCE는 상승하고, 마이크론 실적 모멘텀은 강할 것이"라고 전망했다.
+
+아울러 "2분기 실적시즌이 대기하고 있는데 수출 모멘텀, 환율 효과, 원자재 가격 상승 등을 감안할 때 예상보다 양호한 실적을 예상한다"며 "단기 변동성이 커질 수 있지만 주식 비중이 많으면 홀딩, 버티기 전략, 현금 비중이 많으면 비중확대 기회"라고 언급했다.
+
+한지영 키움증권 연구원은 "이번주 최대 이벤트는 미국 마이크론 실적으로, 이번 실적 결과에 따라 반도체의 주도력 강화 여부를 가늠할 것"이라며 "국내 증시에서는 반도체, IT하드웨어 쏠림 현상이 주된 관심사이며, 이번주에도 펀더멘털과 무관한 주가 및 수급 변동성에 대비할 필요가 있다"고 전망했다.
+
+한 연구원은 "MSCI의 연례 시장 재분류 결과도 관건"이라며 "다만 실제 한국이 선진지수 관찰 대상국에 등재되지 못하더라도 실질적인 외국인 수급 충격은 크지 않을 것"이라고 내다봤．</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014019028' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014019028</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
