@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>국민연금 등 연기금의 국내 주식 매도세가 거세지고 있다.</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/021/0002799260' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7222" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>국민연금 등 연기금의 국내 주식 매도세가 거세지고 있다.</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국민연금 등 연기금이 국내 주식 시장에서 대규모 순매도를 지속하고 있으며, 이는 기금 운영상 유예 기간 종료가 다가오면서 선제적으로 비중을 줄이고 있기 때문으로 분석됩니다. 실질 허용 상단을 초과한 상태를 방치하기 어려워지면서 향후 매물 출회 가능성이 시장의 주요 관심사입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">국민연금 등 거대 기관의 매매 패턴은 시장 전체에 즉각적인 변동성과 하방 압력을 가하는 구조적 이슈이므로 중요도가 높습니다. 특히 운용 원칙과 관련된 문제로 장기적인 시장 심리에 영향을 미칩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#연기금</span> <span class="tag tag-hash">#국민연금</span> <span class="tag tag-hash">#자산배분</span> <span class="tag tag-hash">#매도세</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">연합뉴스
+국민연금 등 연기금의 국내 주식 매도세가 거세지고 있다. 특히 연기금은 최근 4거래일 동안에만 시장에 1조2250억 원어치를 내던졌다. 국내주식 리밸런싱 유예 종료가 이달 말로 다가온 가운데 선제적 비중 조절에 들어갔다는 분석이 나온다.
+
+21일 한국거래소에 따르면 연기금은 지난 16일부터 19일까지 4거래일 연속 유가증권시장에서 순매도했다. 일별 순매도액은 16일 70억 원, 17일 2470억 원, 18일 3820억 원, 19일 5890억 원으로 증가했다. 이를 두고 금융투자업계에서는 단기 차익 실현이 아니라 방향성을띤 비중 축소로 봐야 한다는 해석이 나온다.
+
+시장 관계자는 “국민연금은 지난 1월 기금운용위원회 결정에 따라 국내 주식 비중이 운용 허용 범위를 벗어나더라도 기계적으로 매도하지 않아도 되는 유예를 6월 말까지 적용받고 있다”면서 “7월부터 자산 배분 기준이 다시 적용되는 만큼 유예 종료 직후 한꺼번에 매물을 내놓기보다 미리 국내 주식 비중을 낮춰 향후 매도 부담을 분산하고 있는 것으로 보인다”고 전했다.
+
+앞선 지난달 기금위는 국내 주식 목표 비중을 기존 14.9%에서 20.8%로 5.9%포인트 높였다. 전략적자산배분(SAA) 허용 범위도 기존 ±3%포인트에서 ±6%포인트로 확대했다. 전술적자산배분(TAA) 범위까지 고려한 국내 주식의 실질 허용 상단은 종전 19.9%에서 28.8%로 높아졌다. 국민연금발 대규모 매도가 증시 상승세를 꺾지 않도록 운용 한도를 대폭 늘린 것으로 풀이된다.
+
+그러나 코스피지수가 8000대 후반을 넘어서면 보유 중인 주식을 강제로 팔아야 한다. 시장에서는 국민연금의 국내 주식 비중이 이미 30%에 근접해 실질 허용 상단을 넘어선 것으로 보고 있다.
+
+국내외 주식과 채권, 대체투자 등 다른 자산 가격과 환율에 따라 정확한 비중은 달라질 수 있다. 그러나 코스피지수가 현 수준을 유지하거나 추가로 상승하면 국내 주식 매도는 불가피하다. 매도를 계속 미루면 장기 자산 배분 원칙이 흔들릴 수 있기 때문이다.
+
+시장 관계자는 “국민연금발 ‘폭탄 매물’이 단기간에 증시로 쏟아질지는 불확실하다”면서도 “국민연금이 당장 대규모 매물을 쏟아낼 가능성은 작지만 국내 주식 비중이 허용 상단을 넘어선 상태를 계속 방치하기도 어렵다”고 전했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/021/0002799260' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/021/0002799260</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
