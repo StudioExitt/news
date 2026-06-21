@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상승세 지속 여부 가늠 지표 관심
+PCE 물가지수·韓선진국지수도 변수</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001256112' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7213" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>상승세 지속 여부 가늠 지표 관심
+PCE 물가지수·韓선진국지수도 변수</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 지정학적 리스크 해소와 외국인 순매수 유입으로 9000선을 돌파하며 상승세를 이어가고 있다.
+다만, 향후 증시의 변수는 마이크론의 실적 발표를 통한 반도체 업황 검증과 미국의 PCE 물가지수, 그리고 한국의 MSCI 선진국 지수 편입 여부가 될 전망이다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 인프라 확대에 따른 반도체 슈퍼사이클 기대감과 더불어, MSCI 선진국 지수 등재와 미국의 물가 지표(PCE) 발표라는 대형 거시경제 변수가 맞물려 주가의 장기적 재평가(밸류에이션 리레이팅) 촉매로 작용할 수 있어 시장 영향력이 매우 크다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">마이크론</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #AI인프라 #MSCI</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">상승세 지속 여부 가늠 지표 관심
+PCE 물가지수·韓선진국지수도 변수
+코스피가 사상 처음으로 9000선을 돌파하며 1만 포인트 달성이 가능할지 관심이 쏠리고 있다. 반도체 슈퍼사이클이 국내 증시를 이끌어온 가운데,
+시장의 시선은 인플레이션 지표의 향방과 반도체 대장주들의 실적 가시성으로 옮겨가고 있다.
+
+22일 한국거래소에 따르면 지난주(15~19일) 지난주 코스피는 전주 대비 928.80포인트(11.43%) 오른 9052.43에 거래를 마쳤다.
+
+코스피는 미국과 이란의 종전 협상 타결 소식이 전해진 직후부터 연일 상승세를 이어오면서 지난 18일에는 사상 처음으로 9,000포인트를
+돌파했다.
+
+이후 지난 19일에도 종전 기대감이 반영되며 장중 9,300선을 돌파하는 등 가파른 상승 곡선을 그리다가 미국과 이란의 협상 지연 소식이
+전해지며 하락 마감했지만 9,000선은 사수했다.
+
+최근 미국과 이란의 종전 양해각서(MOU) 체결 소식이 전해지면서 지정학적 리스크가 해소되는 모습을 보인 데다, 지난 11일까지 24거래일 연속
+순매도를 이어온 외국인이 '사자'로 돌아서면서 지수 상승을 이끌었다. 외국인은 지난주(15~19일) 5거래일간 2조5,587억 원을 순매수했다.
+반면 개인과 기관은 1조9,389억원과 2,432억원을 순매도하며 차익을 실현했다.
+
+이번 주 증시의 핵심 변수는 오는 24일 발표될 마이크론 실적이다. 인공지능(AI) 인프라 투자 확대 속에 고대역폭메모리(HBM) 수요가
+급증하며 반도체 슈퍼사이클 기대감이 증시를 이끌어온 만큼 삼성전자, SK하이닉스와 함께 시장을 이끌어온 마이크론의 실적이 이를 뒷받침할지가 주요
+관심사다.
+
+한국 시간으로 오는 24일 새벽 발표될 MSCI 연례 시장분류 리뷰에서 한국이 선진국 워치리스트에 등재될지와 25일 미국 개인소비지출(PCE)물가지수 발표도 주목할 변수다. 관찰대상국 등재만으로 글로벌 자금 유입에 증권주, 시총 상위종목 중심의 강세가 예상되지만, 앞서 MSCI가
+한국의 시장 접근성 개선이 무르익지 않았다 평한 만큼 올해 도전도 쉽지 않을 것이란 분석이 나온다.
+
+실제 편입까지는 최소 수년이 소요되지만, 등재된다면 국내 증시의 고질적인 디스카운트를 해소하는 중장기적 밸류에이션 리레이팅 촉매제로 작용할
+공산이 크다. 현재 코스피의 12개월 선행 주가수익비율(PER)은 8.47배 수준으로 극단적인 저평가 구간은 탈출했으나 여전히 주가의 절대적인
+가치는 낮다는 평가다.
+
+증권가는 이번 주 코스피 예상 밴드를 8200~9500선으로 보고 있지만 현재의 흐름이라면 '1만피' 달성도 가능하다는 예측을 내놓고 있다.
+
+서상영 미래에셋증권 연구원은 "이번 주 시장은 물가 지표를 통해 금리 방향을 확인하는 동시에 마이크론 실적을 통해 반도체 업황에 대한 자신감
+지속 여부 등을 검증하는 시기"라며 "여기에 한국은 MSCI 리뷰, 미국은 러셀 리밸런싱이라는 수급 이벤트가 더해지며 변동성은 지속될 것으로
+예상된다"
+고,
+이경민 대신증권 연구원은 "과거 평균치인 선행 PER 9.5배를 적용하면 코스피는 1만166포인트, 10배 적용 시 1만700포인트까지 상방이
+열린다"며 "기초체력의 정상화 과정만으로도 충분히 코스피 1만 시대 진입이 가능한 국면"
+이라고 분석했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001256112' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001256112</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
