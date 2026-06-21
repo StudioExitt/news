@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상반기 유럽 증시는 'AI 반도체에 얼마나 올라탔느냐'가 승패를 갈랐습니다.</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001256124' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7256" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>상반기 유럽 증시는 'AI 반도체에 얼마나 올라탔느냐'가 승패를 갈랐습니다.</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">유럽 증시는 상반기 AI 반도체 경쟁력에 따라 국가별 차이가 뚜렷했으며, 이탈리아와 네덜란드가 강세를 보였습니다. 하반기 전망은 중동 정세(유가), ECB 금리 정책 변화, 그리고 기업의 실적 개선이라는 세 가지 주요 변수에 달려있으며, IB마다 의견이 극명하게 갈리고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 반도체 사이클에 따른 업종별 차별화(이탈리아 금융/ST마이크로, 네덜란드 ASML)와 더불어, 유가 및 ECB 금리라는 거시경제 변수의 영향을 크게 받을 전망이라 불확실성이 높고 주목할 만한 내용이 많음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">ST마이크로일렉트로닉스</span> <span class="tag stock-tag">ASML</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">에너지 시설 및 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#유럽증시</span> <span class="tag tag-hash">#AI반도체</span> <span class="tag tag-hash">#거시경제변수</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">상반기 유럽 증시는 'AI 반도체에 얼마나 올라탔느냐'가 승패를 갈랐습니다. AI 시대가 본격화되면서 반도체 경쟁력에 따른 국가별 증시 격차가
+유럽 시장에서도 고스란히 드러났는데요. 지난주 금요일 종가 기준으로 이탈리아가 17.59%의 수익률를 내며 가장 앞서가고 있죠. 그다음 네덜란드
+13.34%, 스페인이 11.78% 순입니다. 반대로 유럽 대표국가하면 가장 먼저 떠올리시는 영국과 프랑스, 독일이 하위권이었는데요.
+프랑스가
+3.33%, 독일은 2.02%에 그치며 상반기 부진한 모습을 보이고 있습니다.
+
+이유도 짚어 봐야겠죠? 먼저 이탈리아의 경우 시가총액 1, 2위가 모두 은행일 만큼 금융 비중이 큰데요. 올해 대형 은행 인수합병이 잇따른
+데다, 애플과 테슬라 등에 칩을 공급하는 ST마이크로일렉트로닉스 같은 반도체주까지 가세하면서 힘을 받았습니다. 상승률 2위 네덜란드는 사실상
+ASML 효과라고 봐도 과언이 아닌데요. AI 반도체 투자 붐으로 ASML의 주가가 올 들어 68% 급등했고, 이 흐름이 곧 네덜란드 증시의
+강세로 이어진 겁니다.
+
+반대로 반도체 비중이 작은 국가들은 소외됐습니다. 프랑스가 대표적인데요. 세계 최대 명품기업 LVMH의 경우 중국 수요 둔화로 주가가 올해
+20% 넘게 하락했죠. 명품주의 비중이 큰 프랑스 증시 역시 동반 약세를 보일 수밖에 없었습니다.
+또 유럽 국가들 중 가장 부진했던 독일은 두
+가지 악재가 겹쳤는데요. 자동차와 산업재 중심이라 반도체 랠리의 수혜를 거의 받지 못했고,
+경기 자체도 흔들린 겁니다. 독일경제연구소에선 중동전쟁발 에너지 공급난으로 독일이 2분기와 3분기 모두 소폭 위축되며,
+기술적 경기침체에 빠질 거라 전망하기도 했습니다.
+
+한편 영국의 경우 키어 스타머 총리가 이르면 오늘 중으로 사임 의사를 표명할 거란 보도가 나왔는데요.
+경제 정책 실패와 지방선거 참패로 입지가
+크게 좁아진 게 결정적 원인이 됐단 분석이고요.
+간밤 트럼프 대통령도 스타머 총리가 이민과 에너지라는 두 가지 핵심 사안에서 크게 실패했다며
+사퇴설에 힘을 실었습니다.
+
+하반기 유럽 증시 변수는 크게 세 가지 포인트로 정리해봤는데요. 가장 먼저 빼놓을 수 없는 변수는 중동 정세겠죠.
+미국과 이란의 스위스 1차회담 소식에 브렌트유가 3월 초 이후 최저까지 내려왔는데요.
+유럽은 원유를 대부분 수입에 의존하는 지역이거든요. 그래서 유가가 떨어지면 기업의 비용
+부담과 가계의 연료비가 줄어, 미국보다 상대적으로 더 큰 수혜를 봅니다.
+JP모간에서도 “이란 문제가 잦아들고 유가가 내려가기 시작하면 유럽 스토리가 폭발할 거”라 전망했고요.
+
+첫 번째 변수와 연결되는 두 번째 변수는 바로 ECB 금리인데요.
+ECB가 지난 6월 통화정책회의에서 금리 인상을 단행했죠. 중동 전쟁 여파로
+에너지 가격이 급등하고 물가 상승 압력이 확대되자, 2023년 9월 이후 2년 9개월 만에 금리를 올린 건데요.
+실제로 지난 5월 유로존 소비자
+물가 상승률은 ECB의 목표치 2%를 훌쩍 상회한 3.2%를 기록했습니다.
+라가르드 총재는 “인플레이션 파급 효과가 이미 시작됐다”고 평가한
+상황인데요. 다행히 그 뒤로 미국과 이란의 휴전 회담이 진전되며 유가가 내려왔지만, 여전히 하반기 추가 금리인상 가능성도 배제할 순 없겠습니다.
+
+마지막 변수는 기업들의 실적입니다. 시장에선 유럽 기업들의 이익이 2분기 13%, 3분기 16%, 4분기 23%로 갈수록 가팔라질 거라 보고
+있는데요. 참고로 지난 1분기 실적에선 전년 동기 대비 이익이 7% 증가한 바 있습니다.
+다시 말해 시장의 기대가 상당히 높다는 건데요.
+매출
+성장과 비용 효율화가 기업 실적을 뒷받침할 거란 설명입니다.
+
+유럽증시에 대한 주요 IB들의 의견은 팽팽하게 엇갈리고 있는데요.
+가장 낙관적인 건 바클레이즈와 HSBC입니다.
+둘 다 스톡스 유럽 600지수
+연말 목표치를 670으로 제시했는데요. 현재보다 약 5% 더 오를 수 있다고 본 거죠.
+특히 바클레이즈는 유가 급등과 금리 충격이 장기화될
+위험이 크게 줄었다면서, 그동안 미국 기술주에 쏠려 있던 자금이 유럽으로 넘어올 거라 전망했습니다.
+골드만삭스도 목표치 660을 제시하면서,
+실적 가시성이 높은 구조적 성장 테마에 집중할 것을 조언했는데요.
+기술주와 은행주, 항공우주와 방산, 그리고 재생에너지 관련 종목을 유망
+업종으로 꼽았습니다.
+
+반면 신중론도 만만치 않은데요.
+UBS는 630을 목표가로 제시하며,
+올해 유럽 이익을 끌어온 에너지와 은행, 이 두 축의 실적 상향이 이미
+정점을 지나서 오히려 하향 조정될 위험이 있다고 경고했습니다.
+소시에테제네랄의 경우 미국 중간선거를 앞둔 무역 갈등을 우려하며,
+현재보다 소폭
+낮은 수준인 600선으로 내려갈 거라 봤고요.
+가장 비관적인 TFS는 585포인트로, 8% 넘는 하락을 점<0xA0>봤습니다.
+
+정리해보자면 하반기에도 유럽증시는 다른 국가 대비 드라마틱한 상승이나 하락을 기대하긴 어려울 것으로 보이고요.
+유가와 금리의 압박을 기업들의
+실적이 얼마나 잘 방어해내는지 주목해 보실 필요가 있겠습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001256124' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001256124</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
