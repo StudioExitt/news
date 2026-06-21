@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>미국과 이란 간 협상 경과에 따른 아시아 증시 영향 분석</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001256117' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7227" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>미국과 이란 간 협상 경과에 따른 아시아 증시 영향 분석</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">스위스에서 진행된 미국-이란 간 고위급 협상이 잠정적으로 이어지고 있으나, '호르무즈 해협 재봉쇄' 등 긴장 요인이 여전히 존재합니다. 국제 유가 변동과 중동 리스크의 불확실성이 아시아 증시에 단기적 영향을 줄 것으로 예상됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">중동 지역의 지정학적 리스크가 국제 유가 및 글로벌 무역 경로(호르무즈 해협)에 직접적인 영향을 미치기 때문에, 시장 변동성 확대 요인으로 강력하게 작용합니다. 결과 발표 전까지 불확실성이 높습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">에너지 시설 및 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">무역</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#지정학적리스크</span> <span class="tag tag-hash">#미중동갈등</span> <span class="tag tag-hash">#국제유가</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미 증시 살펴보며 한국 증시 투자아이디어까지 찾는 마켓 무버입니다.
+
+오늘 시장의 움직임을 이해하려면 주말 사이 일어난 사건들의 타임라인을 잘 파악하는 일이 필요할 것 같습니다. 투자자들의 눈길을 사로잡을 헤드라인이 한꺼번에 쏟아졌죠. 노예해방 기념일(준틴스 데이)로 하루 쉰 뉴욕 증시 종가보다 주목할 것들이 많은 날입니다.
+
+이번주로 예정된 마이크론의 실적이나 미국 5월 개인소비지출(PCE) 물가지수, 한국 증시의 MSCI 선진국 지수 예비명단 편입 등 주간 일정보다도, 당장 스위스에서 일어나고 있는 미국과 이란 간 협상에서 나오는 문제와 맥락들이 오늘 아시아 증시를 어떻게 움직일지가 관건입니다.
+
+관련해 브렌트유와 서부텍사스산중질유(WTI) 선물 등 국제유가 벤치마크는 전거래일 대비 각각 1.44%, 2.49% 가량 상승 중입니다. 이 정도 상승은 급등이라고는 보기 어렵겠지요. 다만 미-이란 관련 일어난 일들의 순서 파악도 투자 관점에선 중요하겠습니다.
+
+미국과 이란 간 대면 협상이 현지시간 21일, 그러니까 한국시간 오늘(22일) 새벽까지 스위스에서 진행됐습니다.
+
+카타르 소유의 스위스 산악 휴양지 뷔르겐슈토크에서 열린 이번 협상은 4자 회담의 형식을 띄었습니다. 미국과 이란, 그리고 카타르와 파키스탄이 중재국 자격으로 참석했습니다.
+
+협상 중 파열음도 있었습니다. 앞서 이스라엘의 레바논 공습이 계속되자, 양해각서에 레바논의 안정까지 포함시켰던 ①이란은 '호르무즈 재봉쇄'라는 강한 카드를 꺼내들며 시장에 충격을 줬습니다.
+
+②도널드 트럼프 미 대통령은 맞불을 놓았습니다. 소셜미디어에 "이란은 레바논에서 문제를 일으키고 있는, 막대한 자금을 지원받는 자신들의 대리세력(proxies)을 즉시 멈추게 해야 한다"며 그렇지 않으면 미국은 이란을 다시 타격할 수 있다고 했지요.
+
+양국의 대면 회담 시작 즈음에 올린 이 글에 대해 ③이란 측의 강한 항의가 있었고, 이란에선 협상단이 회담장을 떠났다는 보도까지도 나왔었습니다.
+
+이후 이란 타스님 통신에선 트럼프 미 대통령의 위협 이후 ④이란 대표단이 4자 회담 재개를 거부했고, 카타르와 파키스탄 중재팀을 통해 메시지를 교환하는 방식으로 논의가 진행됐다는 소식이 전해졌습니다.
+
+이 가운데 미국측 외교 관계자는 인터넷 매체 악시오스를 통해 "미국은 해협이 완전히 개방된 상태로 유지되기를 바란다는 점을 분명히 했으며 이 부분에서 상당한 진전을 이루었다"고 밝혔습니다.
+
+⑤관련해 중재국인 파키스탄과 카타르가 협상을 지속중이고, 최종 결과는 한국시간 22일 오전 7시 30분 현재 미정입니다.
+
+결국 지금까지의 상황을 정리해보면, 미국과 이란은 대면 협상 아닌 대면 협상을 하고 있는 형국이 되었습니다. 단 스위스에서 파열음이 들리고는 있지만, 레바논의 무장정파 헤즈볼라가 이틀 동안 이스라엘 진지를 집중 공격한 뒤 현지시간 일요일에는 공습 등의 사건이 보고되지 않았다는 점도 참고해야 할 부분입니다. 이 협상이 삐걱거리면서도 결론을 향해 갈 수 있다는 희망은 아직 남아있는 상황인 겁니다.
+
+이번 고위급 정치 회담은 우리 시간으로 하루 뒤인 미국 시간 월요일에 마무리될 예정입니다. 스위스로 급파된 J.D. 밴스 미 부통령이나 재러드 쿠슈너 백악관 특사 등 '빅샷' 들이 떠난 뒤에 실무팀들은 스위스에서 협상을 계속하겠지요. 이후 시차를 두고 아시아 증시에 영향을 끼칠 내용들이 어떻게 나올지를 주목해야겠습니다.
+
+간밤 미 증시 움직임이 오늘 우리 증시에 어떤 영향을 줄까요? 궁금하신 점과 의견 댓글로 남겨주세요.
+원문링크: https://n.news.naver.com/mnews/article/215/0001256117</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001256117' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001256117</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
