@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>직상장 쏠림에 흔들리는 스팩 시장</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005779297' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7244" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>직상장 쏠림에 흔들리는 스팩 시장</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SPAC 시장은 합병 성공률 급락과 상장폐지 증가로 위축되고 있으며, 과거의 '우회 상장 통로' 역할이 약화되고 있습니다. 투자자 보호 및 제도 개선이 시급하며, 단기 차익을 노린 투기성 거래가 만연해 시장 불안정성이 매우 높은 상황입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">SPAC 시장의 구조적 위기 및 투기성 거래 확대로 인해 중소형 성장 기업의 자금 조달 경로에 대한 신뢰도가 하락하고 있습니다. 이는 장기적으로 IPO 시장 전체의 투자 심리에 부정적인 영향을 미칠 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">창업투자 및 종금</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#스팩시장</span> <span class="tag tag-hash">#기업인수목적회사</span> <span class="tag tag-hash">#IPO위기</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">기업인수목적회사(SPAC·스팩)는 한때 비상장기업의 새로운 상장 통로이자 벤처투자 회수시장 보완재로 주목받았지만, 최근 들어 합병 실패와
+상장폐지가 급증하며 시장 위축 우려가 커지고 있다. 반면 시장 일각에서는 스팩이 여전히 중소형 성장기업의 상장 창구 역할을 하고 있다는 반론도
+나온다. 아시아경제는 3회에 걸쳐 스팩 시장의 현주소와 VC 회수시장 구조, 투자자 보호와 시장 활성화 사이의 제도 개편 과제를 짚어본다.
+"처음 스팩(SPAC·기업인수목적회사) 제도가 나왔을 땐 심사가 직상장 대비 간결했는데, 지금은 거의 차이가 없습니다." 
+올해 스팩 발기인 투자(설립 단계에서 최대주주로 참여하는 것)를 검토했다가 철회한 국내 중견 벤처캐피털(VC) 대표의 말이다. 스팩은 비상장사
+인수·합병(M&A)을 목적으로 증시에 먼저 상장하는 페이퍼컴퍼니를 말한다. 통상 3년 안에 합병 대상을 찾지 못하면 청산 절차를
+밟는다.
+그는 "예전엔 스팩이 직상장의 대안처럼 여겨졌지만, 지금은 굳이 선택할 이유가 많이 줄었다"며 "증시도 호황인 상황에서 직상장 대비 기업가치를
+제대로 인정받지 못한다는 인식이 많다. 스팩 기존 주주들도 일정 수준의 수익을 기대하다 보니, 합병 비율과 기업가치 산정 협상도 훨씬
+까다로워졌다"
+go
+직상장 쏠림에 흔들리는 스팩 시장
+
+한때 비상장기업의 우회 상장 통로이자 벤처투자 회수시장 보완재로 주목받았던 스팩 시장에 경고등이 켜지고 있다. 합병 성공률은 급락하고 상장폐지
+사례는 빠르게 늘어나는 반면, 단기 급등락을 노린 투기성 거래는 오히려 확대되는 양상이다.
+
+금융감독원이 지난 3월 발간한 '우리나라 스팩 시장 투자 백서'에 따르면 2025년 스팩 합병 성공률은 38.5%로 전년(68.0%) 대비
+30%포인트 가까이 급락했다. 반면 합병 실패로 상장폐지된 스팩은 24건으로 전년(8건)의 세 배 수준으로 늘었다. 특히 장기간 합병 대상을
+찾지 못한 스팩도 빠르게 쌓였다. 2025년 말 기준 합병 대상을 탐색 중인 스팩 78개 가운데 상장 후 27개월을 넘긴
+스팩이 14개에 달했다.
+
+우려는 올해 들어 현실이 되고 있다. 합병 시한 만기 6개월 전까지 합병상장예비심사 청구서를 내지 못하면 관리종목으로 지정되는데,
+한국제13호스팩(5월)과 IBKS제23호스팩(6월)이 잇따라 이 명단에 올랐다. 올해 들어 이달까지 합병에 실패해 상장폐지된 스팩은 17개로,
+지난해 같은 기간(12개)보다 늘었다. 반면 합병에 성공한 스팩은 4개로 지난해 동기(8개)의 절반에 그쳤다. 합병 시한에 
+쫓긴 스팩이 청산으로 떠밀리는 흐름이 뚜렷해진 것이다.
+
+시장에서는 스팩의 경쟁력이 과거보다 크게 약해졌다고 보고 있다. 과거에는 일반 IPO 대비 상대적으로 빠르고 유연한 상장 통로라는 인식이
+있었지만, 최근에는 거래소 심사 수준이 사실상 비슷해졌다는 지적이다. 실제 흥국증권에 따르면 2020년부터 올해 4월까지 스팩 합병 상장의 평균
+심사 승인 소요 기간은 110일로, 일반 코스닥 IPO 평균(117일)과 큰 차이가 없었다. 코스닥 신규상장에선 기술성평가 특례상장의 심사승인
+소요기간이 상대적으로 길기 때문에, 특례상장이 없는 스팩 합병 상장의 심사승인이 오히려 까다롭다고도 해석할 수 있다.
+
+스팩 신규 상장도 감소세다. 지난해 신규 상장된 스팩은 25개로 2022년(45개) 대비 절반 가까이 줄었다. 전체 IPO 시장에서 스팩이
+차지하는 비중도 감소 흐름을 보이고 있다.
+
+투기성 거래 확대…합병 가능성은 되레 하락
+
+단기 수급 중심 거래는 확대되는 모습이다. 금감원은 상장 첫날 스팩 주가가 공모가(2000원) 대비 두 배 이상 급등하는 현상이 반복되고 있다고
+분석했다. 지난해 스팩들의 상장일 평균 장중 고가는 4067원으로 공모가 대비 203% 수준까지 치솟했다.
+
+실제 합병 이후 성과는 부진했다. 금감원에 따르면 지난해 합병에 성공한 스팩 14개는 상장 후 9개월이 지나 주가가 평균 26.6% 떨어졌고,
+시간이 지날수록 낙폭은 더 커지는 경향을 보였다. 올해 상황도 비슷하다. 지난달 상장한 케이피항공산업이 한 달여 만에 기준가 대비 60~70%
+급락하는 등 스팩 합병으로 코스닥에 입성한 5곳 모두 상장 기준가를 밑돌고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005779297' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005779297</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
