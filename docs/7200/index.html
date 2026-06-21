@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>영문 지분 공시 시스템의 오역 문제로 시장 혼선 우려</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/005/0001856286' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7200" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>영문 지분 공시 시스템의 오역 문제로 시장 혼선 우려</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금융감독원 DART의 영문 공시 시스템에서 주식 보유 목적에 대한 설명이 '경영권에 영향을 주기 위함'과 정반대로 노출되는 오역 문제가 발견되었습니다. 이는 외국인 투자자들이 기업의 지배구조 및 주주 행보를 잘못 해석하게 만드는 심각한 오류로, 금융당국의 공시 시스템 전반적인 검수체계 점검이 요구되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주식 투자의 핵심 정보인 '경영권 관련 지분 보유 목적'에 대한 외국어 공시 오류가 발견되어 시장의 투명성과 신뢰도에 의문을 제기하며 단기적인 시장 혼란을 야기할 수 있기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#공시오류</span> <span class="tag tag-hash">#지배구조</span> <span class="tag tag-hash">#외국인투자</span> <span class="tag tag-hash">#DART</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">연합뉴스
+
+금융감독원 전자공시시스템(DART)의 영문 지분 공시가 한동안 정반대 의미로 표시됐던 것으로 파악됐다. ‘경영권에 영향을 주기 위한 목적의 주식 보유 사실’을 알리는 공시가 영어로는 ‘경영권에 영향을 주기 위한 목적이 아님’으로 적혀 있었다. 이런 오역은 이달 초 슬그머니 바로잡혔다.
+
+21일 금융권에 따르면 문제가 된 것은 영문 DART에 올라오는 ‘주식 등의 대량 보유 상황 보고서’ 일반 서식의 제목 아래 설명 문구다. 국문 공시는 자본시장법 제147조에 따른 보고 중 ‘경영권에 영향을 주기 위한 목적’이라고 돼 있다. 그러나 영문으로는 같은 공시에 ‘not to exercise influence’, 즉 ‘영향력을 행사하기 위한 것이 아니다’라는 취지의 문구가 붙었다. 회사 경영에 개입하기 위해 주식을 보유하고 있다는 공시를 외국인 투자자는 반대로 읽고 있었던 셈이다.
+
+영문 공시는 보고자가 금감원의 DART 공통 서식을 통해 제출하는 구조로 게재된다. 개별 회사가 영문 문구를 잘못 만들어 올린 것이 아니라 금감원이 제공한 서식 자체가 잘못돼서 생긴 문제다. 금감원이 지난해 2월 영문 공시 서비스를 시작한 점을 고려하면 지분 공시는 1년 4개월가량 반대로 노출된 것으로 추정된다.
+
+오류 서식은 지난달 22일 올라온 삼성전자 공시에도 쓰였다. 삼성전자는 외국인 투자자의 관심이 집중되는 시가 총액 1위 기업이다. 이런 종목의 영문 공시에서조차 주식 보유 목적이 반대로 읽혔다면 시장 혼선 가능성이 더 커진다. 특히 대량 보유 보고서는 주식 투자의 성격과 향후 행보를 가늠하는 자료라 번역 오류의 파장이 작지 않다는 지적이다.
+
+금융권 관계자는 “경영권에 영향을 주는지는 지분 공시의 핵심 정보인데 영문 공시에서 이를 반대로 읽히게 한 것은 단순한 오탈자로 보기 어렵다”면서 “다른 실수는 없는지 공시 검수 체계를 다시 점검해야 한다”고 말했다.
+원문링크: https://n.news.naver.com/mnews/article/005/0001856286</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/005/0001856286' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/005/0001856286</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
