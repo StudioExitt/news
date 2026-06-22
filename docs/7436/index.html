@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>과도한 저평가 국면 진입</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005779900' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7436" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>과도한 저평가 국면 진입</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">글로벌 풍력 타워 시장의 과점화와 견고한 중장기 성장세가 예상됨에 따라, 씨에스윈드의 현재 주가는 과도하게 저평가된 상태라는 증권가의 분석이 나왔습니다. 2분기 실적 호조 및 미국/유럽 정책 환경 변화 가능성을 바탕으로 장기적인 투자 매력이 부각되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 산업(풍력)의 구조적 성장과 경쟁 구도를 분석하여 해당 기업의 독점적 지위 및 중장기 실적 안정성을 강조했기 때문에, 장기적인 관점에서 주가 방향성에 대한 중요한 시사점을 제공합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">씨에스윈드</span> <span class="tag stock-tag">풍력발전장비주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">기계</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전력산업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">건설자재</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#풍력발전</span> <span class="tag tag-hash">#밸류에이션</span> <span class="tag tag-hash">#과점체제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">과도한 저평가 국면 진입
+미국·유럽 과점 체제 고착화
+중장기 성장동력 확보국내 최대 풍력 타워 제조사 씨에스윈드의 최근 주가 하락이 과도한 만큼, 향후 상승 여력에 주목해야 할 시기라는 증권가분석이 나왔다.
+
+23일 유진투자증권에 따르면 한병화 연구원은 전날 씨에스윈드에 대해 "해외 풍력 업체들 대비 주가수익비율(PER)은 58%,주가순자산비율(PBR)은 73% 할인된 상태"라며 이같이 분석했다. 또한 투자의견 'BUY(매수)'와 목표주가 8만원을 유지했다.
+
+글로벌 지위 견고…풍력 타워 과점 체제 고착화
+한 연구원은 최근 4만원대로 하락한 주가와 관련해 단기 실적이나 업황의 문제가 아니라 반도체 포모(FOMO·소외 공포)에서 유발된 것이라고짚었다.그러면서 "해외 풍력 업체들과의 밸류에이션(기업가치 대비 주가 수준) 할인 폭이 사상 최대 수준으로 확대된 것을 고려하면 현 상태에서의주가 낙폭은 제한적"이라고 진단했다.
+
+특히 풍력 타워 사업의 과점 체제에 주목했다. 미국과 유럽의 풍력 타워 제조업체는 대륙별로 2~3개 업체가 주도하는 구조로 전환되는 상황이다.중국 타워 업체들은 자국과 일부 신흥국들에만 진입하는 형태이며, 미국과 유럽 시장에는 다양한 장벽으로 진출이 제한된 상태다. 중소형 업체들은원재료 수급 불안, 인플레이션, 정책 변동성 등을 극복하기 어려워 사업을 포기하고 있다.
+
+한 연구원은 "최근 미국의 3위 업체인 브로드윈드(Broad Wind)가 타워 제조사업에서 철수를 발표했다"며 "중국을 제외하고 글로벌 1위업체인 씨에스윈드의 중장기 사업 지위는 더욱 견고해지고 있다"고 강조했다.
+
+내년까지 탄탄한 실적…2분기 영업이익 32% 증가 전망
+씨에스윈드의 올해 2분기 매출액은 7360억원, 영업이익은 780억원으로 전년 동기 대비 각각 13%, 32% 증가할 것으로 추정했다. 올해와내년 연간 실적도 탄탄한 흐름을 이어갈 것으로 보인다. 또한 미국 육상 타워의 설치 증가와 유럽의 해상풍력 타워 수요 확대로 인해 연간 매출액약 3조원, 영업이익 약 3000억원 수준이 유지될 것으로 내다봤다.
+
+한 연구원은 "2028년부터는 미국의 보조금 축소 여파로 외형과 이익이 감소할 가능성이 있다"면서도 "민주당이 중간선거에서 하원을 탈환한다면육상 풍력 보조금의 재도입 가능성이 커지고 야당이 예산권을 확보하게 되면 트럼프 정부도 일정 수준의 타협이 불가피할 것"이라고 말했다.
+
+씨에스윈드 역시 이를 대비해 사업 다각화와 신규 성장 거점 확보를 위해 노력할 것이란 판단이다.
+
+이에 따라 밸류에이션 매력 역시 더욱 부각될 전망이다. 주가순자산비율(PBR) 기준으로도 씨에스윈드는 1.6배에 불과해 비교업체 평균인 6.1배대비 73%나 낮은 수준이다. 한 연구원은 "선두 기자재업체인 씨에스윈드의 성장은 아직 반환점도 돌지 않은 상태"라며 중장기적인 성장 동력이 여전히 유효하다고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005779900' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005779900</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
