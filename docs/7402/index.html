@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>인수·합병(M&A)과 주가의 상관관계 4만건 분석</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005697312' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7402" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>인수·합병(M&A)과 주가의 상관관계 4만건 분석</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">본 기사는 4만 건의 M&A 사례 분석을 통해 M&A 발표 뉴스가 단기적인 주가 예측이나 실제 기업 가치 창출에 직접적이고 강력한 상관관계를 갖지 않는다는 연구 결과를 소개합니다. 투자자는 M&A 헤드라인에 과도하게 반응하기보다, 기업의 근본적인 펀더멘털을 분석해야 함을 시사하는 학술 논문을 다룹니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">M&A와 같은 단발성 뉴스에 의해 주가 움직임이 과도하게 예측되거나 왜곡될 수 있음을 학술적인 근거(JOF 논문)를 들어 경고하고 있어 투자 전략 관점에서 매우 중요한 정보를 제공함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">SK텔레콤</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#M&A분석</span> <span class="tag tag-hash">#주가예측</span> <span class="tag tag-hash">#재무분석</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">인수·합병(M&A)과 주가의 상관관계 4만건 분석
+
+최근 시장이 뜨겁게 달아오르며, 코스피를 이끄는 기업들의 인수합병(M&A) 역사도 집중조명 받고 있습니다.
+
+‘한국 역사상 최고의 M&A’ 자리를 갈아치운 SK하이닉스 이야기는 다들 익숙하실 겁니다. SK하이닉스의 시작은 정주영 현대자동차그룹 창업회장이 설립한 현대전자입니다. 외환위기 당시 재벌간 빅딜로 LG반도체를 인수했는데, 이후 자금난 탓에 현대그룹에서 분리되는 아픔을 겪기도 했습니다. 그로부터 10여년이 지난 2012년 SK에 인수돼 오늘날에 이르렀죠.
+
+[이미지 설명: 지난 2012년 SK하이닉스 청주 제3공장의 M12라인 준공식에 참석한 최태원 SK그룹 회장이 머리띠를 한 모습으로 직원들과 함께 축하 건배를 하고 있다[SK]]
+오늘날에는 당연히 영광의 서막으로 칭송받지만, SK가 인수전에 뛰어든 2011년 당시 시장평가는 부정적이었는데요. 국제 신용평가기관 스탠더드 앤드 푸어스(S&P)도 “핵심 사업과 연관성이 없는 하이닉스를 인수하기 위해 인수의향서를 제출한 것은 신용등급 평가 시 지배구조 항목에 부정적인 요소로 판단될 수 있다”고 평가한 바 있습니다.
+
+시장평가를 단적으로 드러내는 것은 당시 SK텔레콤 주가입니다. SK텔레콤은 SK그룹의 맏형이자 하이닉스 인수자금을 마련해야 했던 기업이죠.
+
+2011년 7월 6일자 매일경제신문에 ‘하이닉스 인수 SK·STX 2파전 되나(문일호 기자)’란 기사가 보도되자 SK텔레콤 주가는 6영업일 연속 하락하며 2만7000원 선에서 2만4000원대로 내려앉았습니다. 시가총액은 조 단위로 사라졌습니다.
+
+[이미지 설명: 김형규 디자이너]
+온 국민이 SK하이닉스 열병에 시달리고 있는 지금 돌이켜보면 작게나마 웃음을 머금게 하는 그래프죠. 들고 계신 분들은 미소를, 기자처럼 없는 분들은 쓴웃음을 짓게 합니다.
+
+당시 SK텔레콤이나 하이닉스 주식을 매도하셨던 분들이라면 유심히 살펴볼 만한 논문이 세계적 재무관리·금융경제 학술지인 The Journal of Finance (저널 오브 파이낸스) 최신 호에 실렸습니다. 이런 경우가 아니라도 M&A 뉴스에 관심이 많은 투자자분이라면 누구나 일독해볼 만한 내용인데요.
+
+매일경제의 프리미엄 재테크 플랫폼 ‘매경플러스’가 해당 논문을 알기 쉽게 해설하고, 실제 투자에 어떻게 적용할지 연구해봤습니다.
+
+“M&A 뉴스 본 시장 반응, 성과 예측에 도움 안 된다”
+국제학술지에 소개된, 투자에 도움 될만한 논문을 소개하는 ‘너드의 투자법’ 이번 회차에서는 전미경제연구소(NBER) 연구로 The Journal of Finance 6월호에 실린 ‘M&A 발표 직후 주가 반응과 실제 기업가치 창출간 상관관계 사라져 [The (Missing) Relation Between Acquisition Announcement Returns And Value Creation]’를 다룹니다.
+
+각종 뉴스에 주가가 어떻게 반응했는지를 나타내는 ‘누적비정상수익률(CAR)’이 연구 대상인데요. CAR은 뉴스가 없었을 경우 주가 추이를 추산한 뒤, 뉴스 보도 후 실제 주가 추이와 비교한 값으로 생각하시면 됩니다. 예를 들어 앞서 소개한 SK의 하이닉스 인수는 뉴스 보도이후 주가가 크게 하락하며 CAR이 음의 값을 나타내는 식이죠.
+
+기사 전문은 매일경제신문의 프리미엄 재테크 콘텐츠 플랫폼 매경플러스에서 확인할 수 있습니다. 네이버에서 ‘매경플러스’를 검색하거나 아래 QR코드를 스마트폰 카메라로 찍으면 연결됩니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005697312' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005697312</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

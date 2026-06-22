@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>증시 호황 속 커지는 온도차
+중소형주 많은 코스닥 '소외'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005538164' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7405" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>증시 호황 속 커지는 온도차
+중소형주 많은 코스닥 '소외'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 대형주(반도체)로의 자금 집중과 과도한 이익 개선이 지속되면서, 중소형주의 중심 코스닥은 지수 및 거래대금 측면에서 소외되는 '온도차'가 확대되고 있습니다. 특히 금리 상승 우려와 개인 투자자 이탈로 인해 코스닥의 반등 동력이 약화될 수 있다는 분석과 함께 구조적 개선이 요구됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">대형주 중심의 시장 과열과 중소형주의 상대적 소외 현상 심화는 단기적인 투자심리 위축을 야기하며, 이는 코스닥 전반에 대한 부정적 영향을 미칠 수 있다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥소외</span> <span class="tag tag-hash">#대형주쏠림</span> <span class="tag tag-hash">#증시온도차</span> <span class="tag tag-hash">#반도체주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">국내 증시 강세에도 코스피와 코스닥 간 온도차가 좀처럼 좁혀지지 않고 있다. 코스피는 반도체 대형주를 중심으로 연초 이후 두 배 넘게 상승한
+반면 코스닥은 한 자릿수 상승률에 머물렀다. 지수 상승이 일부 초대형주에 집중되면서 개별 종목의 체감온도 역시 낮게 나타나고 있다.
+
+22일 한국거래소에 따르면 지난 19일 기준 코스피는 연초 대비 114.81% 상승했다. 같은 기간 코스닥 상승률은 4.44%에 그쳤다. 두
+시장의 수익률 격차는 110.37%p에 달했다.
+
+코스피와 코스닥의 온도차는 대형주 중심의 쏠림 장세와 맞물리면서 한층 커졌다. 삼성전자와 SK하이닉스의 합산 시가총액은 지난 19일 기준 4161조1939억원으로 코스피 전체 시가총액의 56.24%를 차지했다. 연초 35.22%였던 것과 비교하면 두 종목의 비중이 21.02%p
+확대된 것이다. 반도체 초대형주가 지수 상승을 주도하면서 상대적으로 중소형주 비중이 높은 코스닥은 지수와 거래 측면에서 소외되는 양상이
+나타났다는 평가다.
+
+코스피도 하락 종목이 상승 종목보다 많았지만, 코스닥은 그 비중이 더 높았다. 연초 대비 코스피 전체 945개 종목 가운데 상승 종목은
+340개로 36.0%에 그쳤고, 하락 종목은 589개로 62.3%를 차지했다. 코스닥은 전체 1795개 종목 중 상승 종목이 491개로
+27.4%에 그친 반면 하락 종목은 1251개로 69.7%에 달했다. 코스피는 일부 초대형주가 지수를 끌어올린 반면, 코스닥은 하락 종목 확산을
+막아낼뚜렷한 주도주가 부족했던 것으로 풀이된다.
+
+이 같은 대형주 쏠림은 거래대금에도 그대로 반영됐다. 이달 1~19일 코스피 일평균 거래대금은 50조5498억원으로 5월보다 0.7% 늘었지만,
+코스닥은 11조35억원으로 29.3% 감소했다. 코스피·코스닥 합산 거래대금에서 코스닥이 차지하는 비중도 17.9%까지 낮아졌다.
+반도체대형주로 자금이 몰리면서 코스닥의 상대적 유동성이 약해진 것으로 풀이된다.
+
+수급만 놓고 보면 코스닥이 일방적으로 외면받은 것은 아니다. 연초 이후 지난 19일까지 코스닥에서는 외국인과 기관이 각각 5조2222억원, 
+8조298억원을 순매수한 반면 개인은 8조1634억원을 순매도했다. 외국인·기관 자금이 유입됐음에도 장기 매수 주체였던 개인이 이탈한 데다
+코스피와의 이익 격차와 금리 부담까지 겹치면서 코스닥의 반등 동력이 약해진 것으로 풀이된다.
+
+i재원 유안타증권 연구원은 "코스닥 부진은 장기 순매수 주체였던 개인 자금이 이탈한 데다 이익개선 속도가 제한적인 점이 원인"이라며
+"연방공개시장위원회(FOMC) 이후 금리 우려가 커진 상황에서 성장주 비중이 높은 코스닥은 할인율 상승에 더 취약하다"고 설명했다.
+
+코스피의 반도체 중심 이익개선이 이어지는 동안 코스닥의 상대적 열위도 지속될 가능성이 높다는 분석이다.
+개인 수급 복귀와 이익 추정치 반등이
+확인되기 전까지는 중소형주 전반으로의 확산보다 실적과 수급이 뒷받침되는 코스피 대형주 중심의 압축 대응이 유효하다는 설명이다.
+
+코스닥 반등을 위해서는 체질개선도 병행돼야 한다는 지적이다. 부실기업 정리와 상장폐지 기준 강화, 기술특례상장 신뢰 제고, 스몰캡 리서치 확대
+etc 등이 대표적인 과제로 꼽힌다. 국민성장펀드와 기금 운용 평가기준 변경 등을 통한 장기 기관 자금 유입도 코스닥 시장의 수급 기반을 넓힐 변수다.
+
+윤재홍 미래에셋증권 연구원은 "최근 코스닥의 약점으로 지적되던 개인 위주 시장 구성이 다각화되고 있다"며 "올해 2·4분기 중 기금 운용 평가
+내 '대형·중소형 평가'에 코스닥150지수가 포함될 예정으로, 이를 통해 기관투자자의 장기 자금이 안정적이고 지속적으로 유입되는 효과가
+기대된다"</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005538164' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005538164</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
