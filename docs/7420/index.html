@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>한때 코스닥 시총 1위 바이오, 액티브 ETF서 퇴출</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/005/0001856505' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7420" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>한때 코스닥 시총 1위 바이오, 액티브 ETF서 퇴출</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">과거 코스닥 시총 1위의 삼천당제약이 여러 바이오 액티브 ETF에서 전격적으로 퇴출되면서 전문 기관 투자자들의 관심도가 급락했음을 보여줍니다. 주가 또한 급락세를 이어가며 시장 신뢰도 하락에 대한 우려를 키우고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">대표 바이오 종목이 주요 액티브 ETF에서 대규모로 퇴출되고 기관 분석 공백까지 발생하면서 시장의 신뢰도가 급격히 하락한 것이 가장 큰 우려 요인입니다. 이는 해당 기업뿐 아니라 관련 업종 전반의 투자심리에 부정적인 영향을 미칠 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">제약</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#삼천당제약</span> <span class="tag tag-hash">#액티브ETF퇴출</span> <span class="tag tag-hash">#바이오주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">한때 코스닥 시총 1위 바이오, 액티브 ETF서 퇴출
+삼천당제약 주가 추이 (자료: 구글)
+바이오 액티브 상장지수펀드(ETF)가 코스닥 바이오 기업 중 네 번째로 시가총액이 큰 삼천당제약을 손절한 것으로 나타났다. 22일 기준
+삼천당제약에 투자한 바이오 액티브 ETF는 단 한 개도 없었다. 액티브 ETF는 운용역의 자율로 종목 편입을 결정할 수 있다. 시장에서는
+삼천당제약의 낮은 시장 신뢰도를 보여준다는 평가가 나온다.
+금융투자업계에 따르면 이날 기준 삼천당제약에 투자한 바이오 액티브 ETF는 1개도 없었다. 3월 한때 시가총액 20조원을 돌파하며 알테오젠을
+제치고 코스닥 시총 1위에 올랐고, 여전히 시총 12위의 주요 기업이지만 전문 기관 투자자의 투자 대상에서 배제됐다.
+당초 삼천당제약은 모든 바이오 액티브 ETF가 빠트리지 않고 편입한 인기 종목이었다. ‘RISE(라이즈) 바이오TOP10액티브’
+‘TIGER(타이거) 기술이전바이오액티브’ ‘KoAct(코액트) 바이오헬스케어액티브’ ‘TIME(타임) K바이오액티브’ ‘TIME
+글로벌바이오액티브’ 등은 물론 코스닥 액티브 ETF에도 담겨있었으나 이날 기준 단 한주도 편입되지 않은 것으로 나타났다.
+이들 ETF 모두 삼천당제약 투자로 상당한 손실을 봤을 것으로 추정된다. 삼천당제약은 3월 30일 종가(118만4000원)를 고점으로
+이날(24만1500원)까지 유의미한 반등을 하지 못하고 79.60% 폭락했다. 삼천당제약은 주가가 폭락하는 중에도 기관의 분석 대상에 이름을
+올리지 못했다. 삼천당제약을 분석한 증권사는 한국투자증권뿐이다. 이마저도 3월 20일이 마지막으로 석 달 넘게 분석 공백 상태다.
+삼천당제약은 황반변성 치료제 아일리아 바이오시밀러를 개발하면서 시장의 주목을 받은 회사다. 황반변성 노인 실명의 가장 주요한 원인으로 꼽힌다.
+또 보유 중인 자체 기술 경구용 약물 흡수 플랫폼 ‘S-PASS’(에스패스)을 통해 경구용 인슐린과 비만치료제를 개발 중이다. 특히 현재까지까지 상용화된 경구용 인슐린과 비만치료제 제품이 없기에, 한때 주당 100만원이 넘는 황제주로 등극하며 시장 관심을 모았다.
+삼천당제약은 지난 17일 유럽의약품청(EMA)으로부터 임상시험계획(CTA)을 승인받은 임상 첫 환자 투약을 최근 개시했다고 밝히기도 했다. 이날
+삼천당제약은 전 거래일보다 4.34% 오르며 시장 기대감이 되살아나는 듯했으나 다음날 상승분을 고스란히 반납하며 이날 기준 올해 들어 가장 낮은
+가격인 24만1500원에 거래를 마쳤다. 시총은 5조6650억원.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/005/0001856505' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/005/0001856505</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
