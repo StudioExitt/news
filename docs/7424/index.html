@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>알파벳 5%·스페이스X 16% 급락에 나스닥 1.3%↓</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006312597' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7424" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>알파벳 5%·스페이스X 16% 급락에 나스닥 1.3%↓</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국과 이란 간 평화 협상 진전으로 지정학적 위험은 완화되었고 국제유가도 안정세를 보였으나, 대형 기술주(알파벳 등)의 AI 투자 수익성 의구심 및 스페이스X 급락 여파로 나스닥은 하락 마감했습니다. 시장 관심은 연준의 향후 정책 경로를 결정할 25일 PCE 물가지수로 집중되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 과열에 따른 빅테크 기술주의 단기적인 급락과 거시경제 지표(PCE)에 대한 높아진 관심이 복합적으로 작용하며 투자 심리를 위축시키고 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">알파벳</span> <span class="tag stock-tag">스페이스X</span> <span class="tag stock-tag">마이크론테크놀로지</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">에너지 시설 및 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI위기</span> <span class="tag tag-hash">#기술주하락</span> <span class="tag tag-hash">#PCE물가지수</span> <span class="tag tag-hash">#금리인상</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">뉴욕증시가 22일(현지시간) 미국과 이란 간 평화협상 진전에 따른 지정학적 위험 완화에도 불구하고 대형 기술주와 스페이스X 급락 여파로 하락 마감했다. 최근 중동 전쟁 종식 기대와 인공지능(AI) 열풍을 바탕으로 사상 최고치 부근까지 반등했던 증시는 AI 투자 수익성에 대한 의구심과 금리 상승 부담이 겹치면서 숨 고르기에 들어갔다.
+
+이날 뉴욕증권거래소(NYSE)에서 스탠더드앤드푸어스(S&P)500지수는 전 거래일보다 0.37% 하락한 7472.79에 거래를 마쳤다. 기술주 중심의 나스닥종합지수는 1.33% 떨어진 2만6166.60을 기록했다. 반면 다우존스30산업평균지수는 캐터필러를 비롯한 산업재 업종 강세에 힘입어 0.29% 상승한 5만1712.71에 마감했다.
+
+시장은 이날 중동 정세 안정이라는 호재보다 기술주 부진에 더 민감하게 반응했다. 미국과 이란은 스위스에서 열린 첫 고위급 회담에서 60일 이내 최종 평화협정 체결을 위한 로드맵 마련에 합의했다. 미국은 이에 맞춰 이란산 원유 판매를 60일간 허용하는 한시적 제재 면제 조치를 발표했다.
+
+다만 이란 측은 핵사찰 복귀 합의는 사실이 아니라고 반박했다. 그럼에도 시장은 양측이 대화를 이어가고 있다는 점에 주목했고, 그 결과 최근 급등했던 국제유가는 큰 폭으로 하락했다. 8월물 브렌트유는 전 거래일보다 3.31% 하락한 배럴당 77.90달러에 거래를 마쳤고, 서부텍사스산원유(WTI) 7월물도 2.32% 내린 배럴당 74.82달러에 마감했다. 이란의 호르무즈 해협 봉쇄 위협과 중동 전쟁 확산 우려로 배럴당 90달러 안팎까지 치솟았던 유가는 평화협상 진전과 원유 공급 정상화 기대 속에 빠르게 안정되는 모습이다.
+
+그러나 증시는 오히려 약세를 나타냈다. 최근 랠리를 이끌었던 AI 관련 종목들에 대한 경계심이 커졌기 때문이다.
+
+특히 알파벳은 핵심 AI 연구인력 이탈 소식이 전해지면서 5.1% 급락했다. 최근 노벨 화학상 수상자인 존 점퍼와 AI 분야 핵심 인물인 노엄 셰이저가 경쟁 연구소로 이직한다는 소식이 알려지면서 AI 경쟁력 약화 우려가 제기됐다. 아마존은 4.8%, 메타플랫폼스는 2.3%, 마이크로소프트는 3.2% 각각 하락하며 대형 기술주 전반이 약세를 보였다.
+
+스페이스X의 급락도 시장에 부담을 줬다. 스페이스X는 이날 16.4% 폭락하며 상장 첫날 종가 밑으로 내려앉았다. 이로써 스페이스X는 3거래일 연속 하락세를 기록했다. 회사는 최근 AI 사업 확대를 위해 사상 처음으로 투자등급 회사채 발행에 나선 것으로 알려졌다. 블룸버그는 스페이스X가 최소 200억달러 규모 자금 조달을 추진하고 있다고 보도한다.
+
+시장은 이를 단순히 스페이스X만의 문제가 아니라 AI 산업 전반의 투자 부담을 보여주는 신호로 해석하고 있다. 실제 알파벳과 아마존, 마이크로소프트, 메타 등 주요 빅테크 기업들은 지난해 말 이후 AI 인프라 구축을 위해 3000억달러가 넘는 자금을 채권시장에서 조달했다. AI 투자 규모는 계속 확대되고 있지만 실제 투자수익률(ROI)이 기대에 미치지 못하고 있다는 우려도 커지고 있다.
+
+밀러 타박의 매트 말리 수석 시장전략가는 “초대형 기술기업들이 AI에 천문학적인 자금을 투입하고 있지만 투자수익률은 여전히 낮다”며 “기업들이 서로 투자하고 동시에 상대방의 서비스를 구매하는 이른바 ‘순환 투자(circular investment)’ 구조에 대한 의문도 제기되고 있다”고 말했다.
+
+반면 AI 투자 사이클이 아직 초기 단계라는 분석도 계속 나온다. 콜럼비아 스레드니들 인베스트먼트의 티파니 웨이드는 “AI 인프라 투자는 지난 2년보다 더 빠른 속도로 확대되고 있다”며 “기술주 강세가 최소 몇 개 분기 더 이어질 가능성이 있다”고 전망했다.
+
+기술주 약세 속에서도 반도체주는 비교적 선방했다. 마이크론테크놀로지는 오는 24일 장 마감 후 예정된 실적 발표를 앞두고 6.8% 급등했다. AMD는 2.7%, 인텔은 5.2% 각각 올랐다. AI 서버용 메모리 수요 확대에 대한 기대가 여전히 유지되고 있기 때문이다.
+
+투자자들의 관심은 이제 오는 25일 발표되는 5월 개인소비지출(PCE) 물가지수로 향하고 있다. PCE는 연방준비제도(Fed·연준)가 가장 중시하는 물가 지표다. 시장에서는 식품과 에너지를 제외한 근원 PCE 상승률이 전월보다 높아질 것으로 예상하고 있다.
+
+지난주 연방공개시장위원회(FOMC) 회의 이후 시장에서는 추가 금리 인상 시점이 이르면 10월로 앞당겨질 수 있다는 전망이 확산한 상태다. 이에 따라 이번 PCE 결과가 연준의 향후 정책 경로를 결정할 핵심 변수로 꼽힌다.
+
+UBS 글로벌자산운용의 울리케 호프만-부르샤르디는 “중동 정세는 당분간 시장 변동성의 중요한 변수로 남겠지만 AI 랠리의 지속 가능성에 대한 투자자들의 신뢰 변화 역시 향후 증시 방향을 결정할 핵심 요인”이라고 진단했다.
+
+다만 월가에서는 미국 경제와 증시에 대한 낙관론도 여전히 유지되고 있다. US뱅크 자산운용그룹의 톰 헤인린 수석 투자전략가는 “중동 분쟁이 완전히 종료된 것은 아니지만 미국 경제의 기초체력은 여전히 견조하다”며 “고용과 소비, 기업 투자 흐름이 유지되는 한 미국 대형주를 둘러싼 환경은 여전히 우호적”이라고 평가했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006312597' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006312597</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
