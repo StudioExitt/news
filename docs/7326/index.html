@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>장 중 시황</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005375225' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7326" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>장 중 시황</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피는 개장 후 강세를 보였으나, SK하이닉스가 시총 1위를 차지하는 등 시장 주도주의 변동성과 외국인의 순매도세로 인해 약보합권에서 마감했다. 코스닥 역시 전반적인 하락 흐름을 나타냈다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">지수와 시장별 흐름을 상세히 보고하는 일일 시황으로, 대규모의 외국인 순매도세가 지수의 상승 동력을 약화시키고 기술주 중심의 움직임에 차익 실현 매물이 출회되면서 투자심리가 위축된 하루를 보여줌.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주식시장 #시황분석 #반도체주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">장 중 시황
+(서울=뉴스1) 최지환 기자 = 22일 서울 중구 하나은행 본점 딜링룸 전광판에 개장 시황이 나오고 있다. 이날 코스피는 전 거래일 대비 97.99포인트(p)(1.08%) 내른 8954.43에 개장했다. 2026.
+(서울=뉴스1) 최지환 기자 = 22일 서울 중구 하나은행 본점 딜링룸 전광판에 개장 시황이 나오고 있다. 이날 코스피는 전 거래일 대비 97.99포인트(p)(1.08%) 내른 8954.43에 개장했다. 2026.6.22/뉴스1 Copyright (C) 뉴스1. All rights reserved. 무단 전재 및 재배포, AI학습 이용 금지. /사진=(서울=뉴스1) 최지환 기자
+2% 넘게 강세를 보이며 장 중 9250대까지 회복했던 코스피가 약보합권으로 내려갔다. 삼성전자가 치열한 경쟁 끝에 SK하이닉스에 시가총액 1위를 내준 직후 다시 하락 전환하면서 코스피도 약세로 돌아선 모습이다.
+
+22일 오후 2시 기준 코스피는 전 거래일 대비 8.85포인트(0.10%) 내린 9043.57을 나타낸다. 이날 코스피는 97.99포인트(1.08%) 내린 8954.43에서 출발해 장 중 한 때 강세 전환해 9253.00까지 올랐으나, 오후 들어 다시 약세로 돌아섰다.
+
+코스피 시장에서는 개인이 1조6079억원, 기관이 4202억원을 순매수하고 있고, 외국인이 2조975억원을 순매도 중이다.
+
+업종별로는 유통이 2%대, 의료·정밀기기, 전기·전자 1%대 강세고, 제조, 전기·가스, 금융이 약보합이다. 건설, 비금속, 통신은 1%대, 금속, 화학, 부동산, 종이·목재, 음식료·담배, IT서비스, 기계·장비는 2%대, 오락·문화, 운송장비·부품는 3%대, 섬유·의류, 제약, 운송·창고는 4%대, 증권은 5%대, 보험은 6%대 약세다.
+
+시가총액 상위종목에서는 지각변동이 발생했다. 25년7개월만에 삼성전자가 시가총액 1위에서 내려온 것. 코스피 시총 1위는 SK하이닉스가 차지했다.
+
+시가총액 상위종목에서는 SK스퀘어가 7%대, 삼성물산이 6%대, SK하이닉스가 4%대, 한화에어로스페이스가 1%대 강세고, KB금융은 약보합이다. 삼성전자, 기아는 1%대, 삼성전기는 2%대, 두산에너빌리티는 3%대, HD현대중공업, LG에너지솔루션, 현대차는 4%대, 삼성바이오로직스는 5%대, 삼성생명은 7%대 약세다.
+
+같은 시각 코스닥은 전 거래일 대비 14.32포인트(1.48%) 내린 952.27에 거래되고 있다.
+
+코스닥 시장에서는 외국인이 2561억원, 기관이 853억원을 순매수 중이고, 개인이 3467억원을 순매도 중이다.
+
+업종별로는 출판·매체가 8%대 강세고, 비금속, 기계·장비는 강보합, 기타제조, 유통, 전기·전자 약보합이다. 제조, 화학, 통신, 음식료·담배는 1%대 약세, 운송·창고, 금융, 의료·정밀기기, 제약, IT서비스, 섬유·의류 2%, 일반서비스, 건설은 3%대, 운송장비·부품, 종이·목재, 금속은 4%대 약세다.
+
+시가총액 상위종목에서는 파두가 12%대, 원익IPS가 8%대, 피에스케이가 7%대 강세고, HLB은 강보합, 이오테크닉스는 약보합이다.
+
+에코프로, 코오롱티슈진은 1%대, 리노공업, 주성엔지니어링, 에코프로비엠은 2%대, 레인보우로보틱스, 알테오젠은 3%대, 에이비엘바이오는 4%대, 삼천당제약은 6%대 약세다.
+
+원문링크: https://n.news.naver.com/mnews/article/008/0005375225</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005375225' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005375225</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
