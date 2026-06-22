@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>최근 강세를 이어가던 코스피가 22일 장 초반 약세를 보이고 있다. 반면 코스닥은 외국인과 기관의 동반 매수세에 힘입어 1%대 상승세를 나타내고 있다.</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/138/0002231573' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7274" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>최근 강세를 이어가던 코스피가 22일 장 초반 약세를 보이고 있다. 반면 코스닥은 외국인과 기관의 동반 매수세에 힘입어 1%대 상승세를 나타내고 있다.</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피는 외국인의 순매도세에 힘입어 약세를 보였으며, 시가총액 상위 종목들도 전반적인 부진을 겪었습니다. 반면 코스닥 시장은 외국인과 기관의 동반 매수세 덕분에 상승 반전하는 모습을 나타냈습니다. 원/달러 환율도 강세(상승) 흐름을 보였습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">코스피와 코스닥의 상반된 흐름 및 외국인 매매 동향 등 수급 지표를 제공하여 단기적인 투자심리 변화를 파악하는 데 중요함. 개별 종목이나 거시 경제 지표(환율)까지 포함하여 분석 범위를 넓힘.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성물산</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주식시장</span> <span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#외국인매매</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">최근 강세를 이어가던 코스피가 22일 장 초반 약세를 보이고 있다. 반면 코스닥은 외국인과 기관의 동반 매수세에 힘입어 1%대 상승세를 나타내고 있다.
+
+한국거래소에 따르면 이날 오전 9시 7분 현재 코스피 지수는 전 거래일보다 57.39포인트(0.63%) 내린 8995.03을 기록하고 있다.
+지수는 전장보다 97.99포인트 하락한 8954.43으로 출발한 뒤 장중 8943.60까지 밀렸다.
+
+유가증권시장에서는 외국인이 5827억원어치를 순매도하며 지수를 끌어내리고 있다. 개인과 기관은 각각 5489억원, 236억원 매수 우위다.
+프로그램 매매는 차익거래가 73억원 매수 우위, 비차익거래가 5248억원 매도 우위를 보이며 전체적으로 5175억원 순매도를 기록 중이다.
+
+시가총액 상위 종목도 대체로 부진하다. 대장주 삼성전자는 전 거래일보다 1.41% 내린 34만9000원에 거래되고 있다. 현대차(-3.75%),
+삼성생명(-5.94%), 삼성전기(-2.47%), LG에너지솔루션(-0.87%) 등도 약세다. 반면 SK스퀘어(2.30%)와
+SK하이닉스(0.54%)는 오르고 있으며, 삼성물산은 7.22% 급등한 52만7000원에 거래 중이다.
+
+코스닥은 반등에 성공했다. 같은 시각 코스닥 지수는 전 거래일보다 10.46포인트(1.08%) 오른 977.05를 나타내고 있다. 지수는
+전장보다 9.10포인트 내린 957.49로 출발했지만 외국인과 기관 매수세에 힘입어 상승 전환했다.
+
+코스닥 시장에서는 외국인과 기관이 각각 407억원, 218억원어치를 순매수하고 있다. 개인은 601억원 순매도 중이다.
+
+시가총액 상위 종목 중에서는 원익IPS(4.42%), 이오테크닉스(3.51%), HLB(1.46%), 주성엔지니어링(1.40%),
+코오롱티슈진(1.08%) 등이 상승세다. 에코프로비엠(0.06%)과 에코프로(0.26%)도 소폭 오르고 있다.
+반면 알테오젠(-0.99%)과
+레인보우로보틱스(-0.51%)는 하락세다.
+
+파생상품 시장에서는 코스피200 선물 2026년 9월물이 전 거래일보다 9.90포인트(0.67%) 내린 1465.60을 기록 중이다. 외국인과
+기관이 각각 490계약, 91계약을 순매수하고 있고 개인은 556계약을 순매도하고 있다.
+
+이날 서울 외환시장에서 원·달러 환율은 전장보다 3.9원 오른 1530.9원으로 출발했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/138/0002231573' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/138/0002231573</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
