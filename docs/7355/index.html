@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>제미나이
+제미나이‘비트코인 대통령’을 자처하는 도널드 트럼프 미국 대통령이 취임한 이후 미국 테마 코인이 오히려 더 하락한 것으로 나타났다.</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005697115' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7355" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>제미나이
+제미나이‘비트코인 대통령’을 자처하는 도널드 트럼프 미국 대통령이 취임한 이후 미국 테마 코인이 오히려 더 하락한 것으로 나타났다.</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">트럼프 대통령 취임 이후 미국 테마 코인(솔라나, XRP 등)이 급락하는 등 암호화폐 시장 전반의 부진을 겪고 있다. 특히 규제 명확성 확보를 위한 클래리티 법안 통과 지연 및 제도권 내에서 토큰은 외면받는 현상이 두드러진다. 한편, 비트코인 채굴 기업들이 자산을 AI/HPC 인프라로 전환하며 상대적으로 강세를 보이기도 했다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">미국 가상자산 시장의 규제 불확실성 및 거시적 부진에도 불구하고, 채굴 기업들이 AI/HPC 인프라 전환이라는 명확한 성장 동력을 확보하며 섹터 내 차별화된 강세를 보였기 때문.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">인공지능(AI)</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전력</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#가상화폐</span> <span class="tag tag-hash">#규제리스크</span> <span class="tag tag-hash">#AI인프라</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">제미나이
+제미나이‘비트코인 대통령’을 자처하는 도널드 트럼프 미국 대통령이 취임한 이후 미국 테마 코인이 오히려 더 하락한 것으로 나타났다.
+
+현재 기준 시가총액 상위 10개 코인 중 미국 테마 코인으로 분류되는 솔라나와 XRP의 하락폭이 가장 컸다.
+
+트럼프가 비트코인 대통령을 외쳤지만 기대에 비해 코인들이 얻는 기회가 부족했고 특히 제도화 흐름 속에서 블록체인은 채택됐지만 코인들은 외면받는 일이 지속되고 있기 때문으로 보인다.
+
+22일 트레이딩뷰에 따르면 도널드 트럼프 미국 대통령 취임일인 지난해 1월 20일 이후 이날까지 현재 시총 상위 10개 코인 중 가장 크게 하락한 건 69.57% 급락한 솔라나인 것으로 나타났다.
+
+솔라나에 이어 XRP가 63.49% 하락했고, 이더리움이 47.21%, 비트코인이 37.49% 하락했다.
+
+반면 하이퍼리퀴드는 같은 기간 89.87% 급등했고, 트론도 37.91% 상승했다. 두개의 코인을 제외한 나머지는 모두 스테이블코인 USDT, USDC보다 저조한 성적을 기록했다.
+
+흥미로운 점은 소위 미국 코인으로 불렸던 솔라나와 XRP가 가장 많이 하락했다는 점이다. 솔라나는 우크라이나계 미국인 아나톨리 야코벤코가 설립했으며, 코인의 이름부터 캘리포니아의 솔라나 비치에서 따온 것이다. 트럼프의 공식 밈코인 오피셜트럼프도 솔라나체인에서 발행됐다.
+
+XRP의 경우 리플이 샌프란시스코에 본사를 두고 있고, CEO들이 모두 실리콘밸리와 월가에서 성장한 미국인들이다.
+
+이들과 반대로 급등한 하이퍼리퀴드와 TRX는 명백히 미국 규제밖에 있는 코인들 하이퍼리퀴드는 탈중앙화 거래소이며 트론은 중국계 저스틴 선이 창업했다.
+
+최근 제도화가 지속되면서 오히려 토큰들이 외면받고 있는게 이같은 성적으로 나타난 것으로 보인다. 최근 미국을 중심으로 많은 기관들이 블록체인을 채택하고 있다. 그러나 규제와 가격 변동성 등의 이유로 토큰은 사용하지 않고 블록체인만 채택하는 흐름이 반복되고 있다.
+
+힘못쓰는 비트코인에 미국 증시에 상장된 가상자산 관련 주식들도 약세를 겪오 있다. 22일 나스닥에 따르면 미국 최대 가상자산거래소 코인베이스는 지난달 21일부터 지난 18일까지 한달간 34.14% 급락했다.
+
+비트코인이 최근 한달간 18%가량 급락하는 등 부진을 이어가고 있고, 무엇보다 기대했던 미국 가상자산 시장구조 법안인 클래리티 법안(CLARITY Act)의 통과가 지연되고 있기 때문이다.
+
+이 법은 디지털자산의 증권·상품 구분 기준과 미국 증권거래위원회(SEC), 상품선물거래위원회(CFTC)의 감독 권한을 명확히 하는 내용이다.
+
+트럼프 대통령 일가의 가상자산 사업을 둘러싼 이해충돌 문제와 관련해 민주당이 윤리 조항 강화를 요구하면서 협상이 난항을 겪고 있다.
+
+시장 부진이 이어지면서 세계 최대 비트코인 보유기업 스트레티지와 세계 최대 이더리움 보유기업 비트마인도 같은 기간 31.74%, 17.70% 급락했다. 스테이블코인 USDC의 발행사 서클도 30.16% 급락했다.
+
+반면 비트코인 채굴기업들은 양호한 성적을 이어가고 있다. 이들은 비트코인 채굴 중심에서 인공지능(AI)·고성능 컴퓨팅(HPC) 인프라 기업으로의 변화했기 때문이다.
+
+올해 초 라이엇은 ‘비트코인 채굴 자산의 AI 및 고성능 컴퓨팅(HPC)용 자산으로의 전환’ 관련 사업을 시작했다. 라이엇플랫폼스는 이에 힙입어 지난 한달간 14.83% 올랐다.
+
+라이엇과 비슷하게 AI 인프라 기업으로 전환한 마라홀딩스 또한 같은 기간 4.94% 올랐다. 이는 ‘전기 부족 문제’ 때문이다.
+
+미국에서는 수백 메가와트(MW)의 전력을 중단 없이 공급받을 수 있는 권리를 얻기가 매우 힘든데 채굴주들은 비트코인 채굴을 위해 이미 수백 메가와트 단위의 전력 공급 계약을 합법적으로 확보하고 부지내 전력공급 시설까지 완비했다. 
+
+채굴주들은 부지내 채굴장비를 걷어내고, 엔비디아 GPU를 넣어서 이를 데이터센터로 개량한 것이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005697115' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005697115</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
