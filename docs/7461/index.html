@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>중견기업 진단] 에스엘②</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='기사 URL 없음 (원본 기사를 출처로 함)' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7461" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>중견기업 진단] 에스엘②</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">에스엘은 모회사의 합병과 계열사 간의 높은 내부거래를 통해, 특정 오너 일가가 그룹 전체의 지배력을 강화하고 재산을 증식시키는 과정을 거쳤습니다. 이는 전형적인 '지분 승계용 디딤돌'을 활용한 기업 구조 변화 사례로 분석됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">본 기사는 직접적인 시장 예측이나 실적 발표가 아닌, 오랜 기간 누적된 기업의 지배구조 및 내부거래 구조를 분석합니다. 오너 일가의 재산 증식 과정과 승계 방식을 폭로하는 내용은 투자자들에게 '고위험 지배구조 리스크'라는 경고 신호를 보내므로 장기적인 관점에서 매우 중요하게 다뤄집니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자동차부품</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">지주회사</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">기업금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#기업분석</span> <span class="tag tag-hash">#지배구조</span> <span class="tag tag-hash">#내부거래</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[중견기업 진단] 에스엘②
+이성엽 53% 등 지분 91% 3세 소유 車부품사
+내부매출 80%↑ 성장 비결…연평균 순익 105억
+2007년 에스엘에 흡수…몸값 1560억 vs 1250억
+통합하자 이성엽 에스엘 지분 10%→29% 껑충<0xC2><0xA0>25.31%→14.68%.
+
+중견 자동차 부품업체 에스엘(SL) 2대 사주(社主)의 2003년 말 이후 현재까지 모태기업 지분율과 주식수 추이다. 지분은 감소했지만, 주식은
+2017년 10일 모교 대학에 11억원어치 5만주를 출연했을 때 말고는 줄어든 적이 없다. 그런데도 3세 경영권 승계를 사실상 매듭지었고, 4대 세습 기반까지 깔아 놨다.
+
+비결은 딴 게 아니다. 3·4세 중심의 가족사를 만들어 적잖은 내부거래를 뒷배 삼아 키운 뒤, 손쉽게 재산 증식은 물론 모회사로 갈아타는 디딤돌로 이용했다. 에스엘 이(李)씨 집안의 대물림용 비상장 ‘3종 세트’ 중 첫 번째가 ‘에스엘테크(SL TECH)’다.
+
+이성엽 에스엘그룹 부회자국내외 관계사가 먹여 살리는 구조
+
+2007년 10월 모태 주력사이자 지주사격인 에스엘㈜과 에스엘테크의 합병이 그 시작이다. 즉, 고(故) 이해준 창업주(1920~2003)의 장손이자 3대 후계자를 단박에 ㈜에스엘의 최대주주로 올려놓는 지렛대로 활용했던 게 에스엘테크다.
+
+당시 에스엘㈜의 대주주 지분은 51.22%다. 2대 오너 이충곤(82) 현 총괄회장이 1대주주로서 보유하던 지분이 25.31%다. 이외 부인 유정숙(78)씨와 세 자녀 소유의 16.17%, 에스엘테크 9.27%, 에스엘서봉재단(현 에스엘이충곤재단) 0.47%다.
+
+이 회장의 2남1녀 중 장남이자 후계자인 이성엽(56) 현 부회장은 9.57%에 머물렀다. 앞서 2006년 4월 각자대표로서 경영 일선에 등장했지만, 그때만 해도 지배기반은 미흡했다. 이외 차남 이승훈(53) 전 에스엘미러텍 대표 4.93%, 장녀 이지원(54)씨 0.43%다.
+
+반면 이 부회장은 에스엘테크 지분 52.75%를 소유한 단일 1대주주였다. 남동생 32.25%, 여동생도 6.0%를 보유했다. 3남매 주식이 91%에 달했다. 나머지는 이 회장 7.5%, 에스엘라이팅 1.5%다. 아울러 전문경영인을 대표이사로 두고, 이 회장 내외와 이 부회장이 이사회 멤버로서 경영하던 곳이다.
+
+허투루볼 회사가 아니다. 합병 당시 주당평가액이 에스엘㈜ 9950원(액면가 500원)에 에스엘테크는 41만5848원(액면가 1만원)이나 됐다.
+즉, 에스엘테크는 자본금 30억원(발행주식 30만주)에 기업가치가 1248억원으로 에스엘㈜(1565억원)의 80%에 육박했다.
+
+에스엘㈜를 비롯한 국내외 관계사들이 먹여 살리다시피 하는 노나는 사업구조를 갖고 있다 보니 그럴 만 했다. 이를 비용 절감 등 경영 효율성을 명분으로 에스엘㈜과 합친 것이다.
+
+에스엘(주), 에스엘테크 합병 후 최대주주 변동
+내부거래 이용 장손 승계 지렛대
+
+에스엘테크는 1995년 12월 설립된 세양엔지니어링으로 출발한 자동차 부품 와이어링 하네스(Wiring harness) 제조 및 금형 제작 업체다. 즉, 에스엘테크는 자동차 전조등, 조향장치, 샤시 부품 등을 주로 생산하던 ㈜에스엘을 비롯해 계열사, 해외 제조법인으로부터 대부분의 매출을 올렸다. 
+
+확인 가능한 범위로만 봐도, 1999년 이후 내부매출 비중이 줄곧 80%가 넘었다. 2006년에는 전체 매출(별도) 780억원 중 85.2%(665억원)가 에스엘㈜(151억원)와 14개 관계사로 부터 나왔다. 특히 8년간 순이익이 10.9%~25.2%의 이익률로 한 해 평균 105억원에 달했다. 
+
+수혜가 거의 전적으로 사실상의 주인 이 회장의 3남매에게 돌아갔음은 두 말할 나위가 없다. 우선 에스엘테크는 2000년 이후 매년 30억원을 배당금으로 풀었다. 특히 최대주주인 이 부회장의 경우, 주주 등재 사실이 확인되는 2003년 이후로만 보더라도 총 63억원의 배당수입을 챙겼다. 
+
+이뿐만 아니다. 에스엘라이팅이 에스엘테크 지분 1.5%의 가지고 있던 것은 이 회장의 맏딸이 당초 지분 7.5% 중 1.5%를 매각한 데서 비롯됐다. 이를 통해 장녀는 주당 30만원에 14억원을 손에 쥐기도 했다. 
+
+백미는 모태사 에스엘㈜로의 갈아타기다. 양사가 합병하자 이 부회장은 에스엘㈜ 지분이 28.72%로 수직상승했다. 단일 1대주주로 올라섰다.
+에스엘㈜의 80%에 해당하는 기업가치만큼 에스엘테크 주주에게 신주(1주당 41.8주)가 주어졌던 터라 19.15%p나 치솟은 것이다.
+
+아울러 차남은 17.06%, 장녀는 2.9%로 높아졌다. 합병 전 14.94%에 머물던 3남매의 에스엘㈜ 지분이 48.68%로 3배 넘게 폭증한 셈이다. 반면 이 회장은 17.41%로 축소되며 2대주주로 내려왔다.
+
+오너 지배구조 측면에서 볼 때, 에스엘테크는 결과적으로 차고 넘치는 내부 일감을 뒷배삼아 이 부회장을 위시해 오너 3세의 재산 증식과 지분 승계용으로 이용하려고 준비해 둔 카드였다. (▶ [거버넌스워치] 에스엘 ③편으로 계속)</div><div class='news-src'>원문링크: <a href='기사 URL 없음 (원본 기사를 출처로 함)' style='color:#64748b;word-break:break-all'>기사 URL 없음 (원본 기사를 출처로 함)</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
