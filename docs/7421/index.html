@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>리플렉션AI와 컴퓨팅 공급 계약 체결</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005779878' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7421" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>리플렉션AI와 컴퓨팅 공급 계약 체결</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">스페이스X가 AI 스타트업과의 대규모 컴퓨팅 계약을 체결하며 AI 인프라 기업으로 영역을 확장했습니다. 하지만 IPO 직후 회사채 발행 계획과 막대한 초기 투자 비용(CapEx)에 대한 신용평가사의 경고로 인해 시장의 높은 자금 조달 부담감이 드러나며 주가가 급락했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">스페이스X가 대규모 컴퓨팅 계약 체결로 미래 성장 동력(AI)을 확보했으나, 이를 뒷받침하기 위해 거액의 회사채를 발행해야 하는 상황이 투자자들의 단기적인 자금 조달 부담감과 결합하며 주가를 하락시키고 있어 단기적으로 부정적 영향을 미칠 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">AI 인프라 기업</span> <span class="tag stock-tag">데이터센터 REITs</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#스페이스X</span> <span class="tag tag-hash">#AI인프라</span> <span class="tag tag-hash">#회사채</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">리플렉션AI와 컴퓨팅 공급 계약 체결
+AI 인프라 사업 장기 매출원 확보
+스페이스X 장중 12% 하락 중일론 머스크의 스페이스X가 기업공개(IPO) 직후 회사채 시장에 뛰어들며 대규모 자금 조달에 나선다. 이와 함께
+인공지능(AI) 스타트업과 수십억달러 규모의 컴퓨팅 계약을 체결하면서 AI 인프라 기업으로 보폭을 넓히고 있다.
+
+22일(현지시간) 월스트리트저널(WSJ)에 따르면 스페이스X가 사상 첫 회사채 발행을 통해 최소 200억달러(약 31조원)를 조달할 계획이다.
+스페이스X는 이날 투자자들과 콜을 진행했으며, 채권 가격 결정과 발행은 이르면 23일 이뤄질 전망이다.
+
+이번 회사채 발행은 스페이스X가 IPO를 통해 850억달러(약 131조원) 이상을 조달한 직후 추진되는 것이다. WSJ에 따르면 조달 자금은
+올해 초 은행권으로부터 받은 브리지론을 상환하는 데 우선 사용된다. 추가 조달분은 일반 기업 운영자금으로 활용될 예정이다.
+
+스페이스X는 주요 신용평가사로부터 '투자등급'을 받았다. 무디스는 스페이스X에 'Baa1', S&P 글로벌은 'BBB' 등급을 부여했다고
+WSJ는 보도했다. 이는 스페이스X가 고위험 성장기업 이미지에서 벗어나 대형 우량 회사채 발행사로도 평가받기 시작했다는 의미다.
+
+다만 신용평가사들은 스페이스X의 AI 사업을 가장 큰 불확실성으로 보고 있다. S&P는 최근 보고서에서 스페이스X의 로켓 사업은 "견조하다"고
+평가했고, 위성 인터넷 사업도 "역량을 갖췄다"고 분석했다.
+
+반면 AI 사업에 대해서는 막대한 초기 투자와 불명확한 수익화 경로 때문에 세 사업 부문 가운데 가장 위험하다고 지적했다. 높은 자본지출로 인해
+스페이스X의 잉여현금흐름은 2029년까지 마이너스를 이어갈 수 있다는 전망도 했다.
+
+AI 스타트업 '리플랙션 AI'와 컴퓨팅 공급 계약 체결
+이런 가운데 블룸버그통신은 스페이스X가 AI 스타트업 리플랙션 AI와 수십억달러 규모의 컴퓨팅 자원 공급 계약을 체결했다고 보도했다.
+
+이번 계약은 스페이스X가 AI 기업에 데이터센터 컴퓨팅 용량을 판매하는 사업을 키우려는 흐름에서 나왔다. 블룸버그통신은 스페이스X가 월가 데뷔를
+앞둔 몇 주 사이 구글, 앤스로픽과도 데이터센터 컴퓨팅 용량 임대 계약을 체결했다고 전했다.
+
+리플렉션 AI는 오는 7월부터 2029년까지 스페이스X의 AI 부문인 스페이스X AI에 매달 1억5000만달러(약 2307억원)를 지급하고,
+테네시주 멤피스에 있는 스페이스X의 '콜로서스2' 데이터센터 하드웨어를 이용할 예정이다. 양사는 90일 전 통보를 통해 계약을 해지할 수 있는
+권리도 갖는다.
+
+리플랙션 AI는 구글 딥마인드 출신 연구자 2명이 설립한 오픈 AI 모델 개발사다. 엔비디아 등이 투자자로 참여하고 있으며, 최근
+250억달러(약 39조원) 기업가치로 25억달러(약 4조원) 조달을 논의해온 것으로 알려졌다.
+
+스페이스X 입장에서는 AI 컴퓨팅 계약을 통해 새로운 장기 매출원을 창출한다는 이점이 있다. 블룸버그통신은 머스크가 AI 개발 경쟁에서는
+고전해왔지만, 스페이스X가 대규모 반도체와 데이터센터 인프라를 확보해 AI 기업에 컴퓨팅 용량을 판매하는 사업을 키우고 있다고 분석했다.
+
+문제는 막대한 투자 부담이다. WSJ에 따르면 S&P는 스페이스X의 높은 자본지출이 2029년까지 잉여현금흐름을 마이너스로 만들 수 있으며,
+이에 따라 회사가 주식과 부채 발행을 통해 추가 자금을 조달해야 할 것으로 전망했다. 스페이스X가 IPO 직후 곧바로 채권시장에 나서는 것도 이
+같은 자금 수요를 보여준다.
+
+한편, 스페이스X 주가는 이날 장중 10% 넘게 급락하며 상장 이후 최대 낙폭을 기록했다. IPO 직후 단기 급등에 따른 차익실현 압력이 커진
+가운데, 최소 200억달러 규모의 회사채 발행 계획과 AI 인프라 투자비 부담이 투자자들의 경계심을 자극한 것으로 풀이된다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005779878' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005779878</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
