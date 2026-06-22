@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>하이닉스 시총 어떻게 삼전 제쳤나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/023/0003983472' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7419" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>하이닉스 시총 어떻게 삼전 제쳤나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 반도체 호황에 힘입어 SK하이닉스가 HBM 선점 효과와 높은 영업이익률을 바탕으로 코스피 시가총액 1위에 올랐습니다. 이는 엔비디아, TSMC 등 글로벌 강자들과의 삼각 동맹과 미국 상장 기대감이 주요 배경입니다. 다만, 반도체 사이클 위험과 미국의 대중국 규제는 투자자들이 주목해야 할 리스크 요인으로 작용합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 산업의 폭발적인 성장세와 HBM 시장에서의 독보적 선점 효과는 SK하이닉스의 가치를 극대화하며 주가 상승을 강력하게 견인하는 핵심 동력으로 작용합니다. 또한 미국 상장 기대감은 대규모 자금 유입과 밸류에이션 재평가를 예고하여 매우 높은 투자 매력을 갖추었습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#HBM</span> <span class="tag tag-hash">#AI반도체</span> <span class="tag tag-hash">#코스피1위</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">하이닉스 시총 어떻게 삼전 제쳤나
+
+인공지능(AI) 반도체 호황에 힘입어 22일 SK하이닉스가 처음으로 삼성전자를 제치고 코스피 시가총액 1위에 올랐다. 지난 2일 대만 타이베이에서 열린 ‘컴퓨텍스 2026′ 전시회 SK하이닉스 부스에 SK하이닉스와 인공지능(AI) 반도체 호황에 힘입어 22일 SK하이닉스가 처음으로 삼성전자를 제치고 코스피 시가총액 1위에 올랐다. 지난 2일 대만 타이베이에서 열린 ‘컴퓨텍스 2026′ 전시회 SK하이닉스 부스에 SK하이닉스와 엔비디아의 칩이 나란히 전시돼 있다. /로이터 연합뉴스
+국내 시가총액 1위 종목 자리 다툼에서 SK하이닉스가 삼성전자를 처음으로 제친 데에는 HBM(고대역폭 메모리) 선점 효과, 글로벌 자금 유입 기대, 메모리 반도체 집중 등 투자자들이 주목한 몇 가지 원인이 작용했다.
+
+SK하이닉스는 AI(인공지능) 칩에 필수인 HBM 시장에 먼저 뛰어들어 선점 효과를 누렸다. 또 미국 증시 상장을 추진하면서 투자자들 사이에서 글로벌 자금이 더 들어올 것이란 기대감이 커진 것도 한몫했다.
+
+한편, 현재 종목 시가총액 순위에는 삼성전자 외에도 삼성전자 우선주가 4위에 올라와 있다. 우선주는 의결권이 없는 대신 배당을 더 주는 주식으로, 개별 종목이 아닌 기업 전체의 시가총액을 계산할 때 이를 포함해 계산한다. 이에 우선주까지 합한 기업 전체 시가총액으로는 삼성전자가 약 2240조원으로, SK하이닉스보다 여전히 약 160조원 많다. 삼성전자는 과거 반도체 투자 자금 조달을 위해 우선주를 발행했다. 반면 SK하이닉스는 현재 상장된 우선주가 없다.
+
+HBM 시장 선점
+SK하이닉스는 2013년 미국의 반도체 설계사 AMD와 함께 HBM을 세계 최초로 개발했다. 칩을 여러 층으로 쌓는 HBM의 발열 문제를 잡는 독자 기술을 개발하기도 했다.
+그 결과 엔비디아, TSMC와 반도체 삼각 동맹을 구축했다. 엔비디아는 반도체 설계, TSMC는 반도체 위탁생산(파운드리) 부문에서 세계 1위 업체들이다. SK하이닉스 역시 HBM 시장 점유율이 1분기(1~3월) 기준 58%로 1위다.
+
+선점은 실적으로 증명됐다. SK하이닉스의 올 1분기 영업이익은 37조6000억원으로, 작년 한 해 영업이익(47조2000억원)을 80% 가까이 따라잡았다. 영업이익률은 72%로 창사 이래 최고이자, 엔비디아(65%)마저 넘어섰다. 100원짜리 반도체를 팔아 인건비 등을 빼고 72원 남겼다는 뜻이다.
+
+증권가에선 SK하이닉스의 올해 영업이익을 최대 280조원으로 전망한다. 작년의 5배가 넘는다. 마이크로소프트(MS)·구글의 연간 전망치도 웃돈다. 이세철 씨티그룹글로벌마켓증권 전무는 “AI 산업 성장세에 올라탄 SK하이닉스의 매출과 이익이 주가를 뒷받침하고 있다”고 했다.
+
+그래픽=백형선
+그래픽=백형선
+
+미국 상장 기대감
+미국 상장도 호재다. SK하이닉스는 지난 3월 미국 증권거래위원회(SEC)에 미국 증시에서 자사 주식을 거래할 수 있는 ‘주식예탁증서(ADR)’ 상장을 위한 등록 신청서를 냈다. 나스닥 상장은 7월 말에서 8월 초쯤 이뤄질 것으로 전망된다.
+
+여기엔 최태원 SK그룹 회장의 문제 의식이 작용한 것으로 전해진다. 최 회장은 얼마 전 임원들과 전문가를 불러 회의를 열고 SK하이닉스 주가의 저평가 해결 방안을 논의했다. 이 자리에서 미국 상장이 거론됐다는 것이다.
+
+로이터는 SK하이닉스가 전체 발행 주식의 약 2.5%를 공모해 최대 140억달러(약 21조원)를 조달할 것으로 보도했다. 조달된 자금으로 용인 반도체 클러스터에 2050년까지 600조원을 들여 4개 공장(<0xED><0x8C><0xB9>)을 가동한다는 것이다.
+
+만약 미국에 상장하면 비슷한 다른 주식과 가격 키맞추기가 이뤄질 전망이다. 증권사들은 마이크론의 주가 수준을 적용하면 산술적으로 59%의 상승 여력이 나올 것으로 분석한다. 현재 주가의 1.6배까지 오를 수 있다는 말이다.
+
+반도체 집중은 오히려 독 될 수도
+그러나 1등의 장점이 독으로 작동할 가능성도 있다. SK하이닉스는 매출의 90% 이상이 메모리 반도체에 쏠려 있다. AI발 반도체 슈퍼사이클(초호황)에서 투자가 폭발적으로 집중되지만, 사이클이 꺾이면 충격도 그만큼 크다.
+
+HBM 분야에서 삼성전자의 추격도 만만치 않다. 삼성전자는 2월 업계 최초로 HBM4 양산 출하에 성공했다. AMD는 차세대 AI 칩의 HBM4 주 공급사로 삼성전자를 지명했다.
+
+미국의 대중국 규제도 리스크 요인이다. SK하이닉스는 중국 우시·다<0xEB><0xA1><0x84> 공장이 전체 메모리 생산의 약 30%를 맡는다. 미국에 상장되면 미국 정부의 수출 통제 감시가 더 직접적으로 미치게 된다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/023/0003983472' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/023/0003983472</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
