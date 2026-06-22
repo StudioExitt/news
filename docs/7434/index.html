@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NH證 100세시대연구소, 근로자 퇴직연금 분석</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006312616' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7434" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>NH證 100세시대연구소, 근로자 퇴직연금 분석</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 퇴직연금 적립금이 500조원에 육박하며 구조적 성장이 진행되고 있으며, 가입자들의 자산운용 방식이 개인의 수익률 격차(최대 19.5% vs 0.5%)를 키우고 있음이 분석되었다.
+이는 퇴직연금 시장이 단순한 노후 대비 계좌를 넘어 장기 자본시장 자금원으로 기능하고 있음을 의미하며, 증권사 등 투자상품을 제공하는 금융기관의 중요성을 부각했다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">퇴직연금이 자본시장의 중요한 장기 자금원으로 기능하며, 적극적인 투자 상품(ETF, 펀드) 활용이 증가하는 구조적 변화를 제시함. 특히 증권사의 역할과 위상이 강조되어 관련 금융 업종에 긍정적인 영향을 미칠 것으로 예상됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#퇴직연금</span> <span class="tag tag-hash">#자산운용</span> <span class="tag tag-hash">#ETF</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">NH證 100세시대연구소, 근로자 퇴직연금 분석
+상위 10% 평균 수익률 19.5%·하위 10% 0.5%
+실적배당형 활용 여부 따라 성과 차이 뚜렷
+“장기 투자자산 관점서 운용 성과 개선해야” 국내 퇴직연금 시장이 500조원 시대에 진입하며 노후자산의 핵심 축으로 커지고 있다. 적립금 규모가 빠르게 불어난 데다 확정기여형(DC)과 개인형 퇴직연금(IRP)을 중심으로 가입자가 직접 운용하는 자금도 늘고 있다.
+다만 운용 방식에 따라 근로자별 수익률 격차가 크게 벌어지면서 퇴직연금이 장기적인 노후자산 격차로 이어질 수 있다는 분석이 나왔다.
+22일 정호철 NH투자증권 100세시대연구소 연구위원이 작성한 THE100리포트 127호 ‘2025년 대한민국 근로자들의 퇴직연금은?’에 따르면
+지난해 말 기준 국내 퇴직연금 적립금은 501조 4000억원으로 집계됐다. 전년 말 431조 7000억원보다 69조 7000억원 늘어난 규모다.
+연간 증가율은 16.1%로, 400조원을 넘어선 지 1년 만에 500조원을 돌파했다.
+(표=NH투자증권 100세시대연구소)
+
+퇴직연금 적립금은 2020년 255조 5000억원에서 5년 만에 두 배 가까이 불어났다. 정 연구위원은 퇴직연금이 단순한 노후 대비 계좌를 넘어 국내 자본시장의 장기 자금원으로 존재감을 키우고 있다고 평가했다. 경제 규모 확대와 임금 상승에 더해 연금계좌 세액공제 확대, 기업 퇴직급여 부채의 사외 적립 의무 강화 등도 시장 성장에 영향을 미쳤다는 분석이다.
+
+제도 유형별로는 확정급여형(DB)이 228조 9000억원으로 전체의 45.7%를 차지해 여전히 가장 큰 비중을 보였다. 확정기여형(DC)은 141조 6000억원으로 28.2%, 개인형 IRP는 130조 9000억원으로 26.1%를 차지했다. 특히 개인형 IRP는 2024년 98조 7000억원에서 2025년 130조 9000억원으로 32.6% 늘며 2년 연속 30%대 성장률을 기록했다.
+
+DC와 IRP의 확대는 퇴직연금 운용 방식의 변화로 이어지고 있다. 기업이 운용 책임을 지는 DB와 달리 DC와 IRP는 가입자가 직접 상품을 고르고 운용 성과를 부담한다. 퇴직연금이 커질수록 가입자의 자산 배분과 상품 선택이 노후자산 규모에 미치는 영향도 함께 커지는 구조다.
+
+실제 원리금보장형 중심이던 퇴직연금 자금은 점차 투자상품으로 이동하고 있다. 전체 적립금 중 원리금보장형은 378조 1000억원으로 75.4%를 차지했지만, 실적배당형 비중도 24.6%까지 올라섰다. DC형의 실적배당형 비중은 33.0%, IRP는 44.3%에 달했다.
+
+실적배당형 확대의 중심에는 상장지수펀드(ETF)가 있다. 퇴직연금 계좌를 통한 ETF 투자 잔액은 지난해 말 48조 7000억원으로 집계됐다. 2023년 9조원, 2024년 21조원에서 다시 1년 만에 131.9% 증가했다. 실적배당형 적립금 123조 3000억원 가운데 ETF가 차지하는 비중은 39.6%로 높아졌다.
+
+생애주기펀드(TDF)도 주요 투자 수단으로 부상했다. 퇴직연금 내 TDF 적립금은 21조 5000억원으로 전년보다 60% 늘었다. TDF는 가입자의 예상 은퇴 시점에 맞춰 위험자산과 안전자산 비중을 조정하는 상품으로, 직접 포트폴리오를 관리하기 어려운 근로자들의 대안으로 활용되고 있다.
+
+투자상품 활용이 늘면서 금융권역별 경쟁 구도도 바뀌고 있다. 지난해 말 기준 은행은 260조 5000억원으로 전체 적립금의 52.0%를 차지해 1위를 유지했다. 다만 증권사 적립금은 131조 5000억원으로 시장점유율 26.2%를 기록했다. 증권사의 점유율은 2023년 22.7%, 2024년 24.1%, 2025년 26.2%로 매년 확대되고 있다.
+
+실적배당형 운용 규모에서도 증권사가 앞섰다. 증권사의 실적배당형 운용 규모는 59조 4000억원으로 금융권역 가운데 가장 컸다. 정 연구위원은 ETF와 펀드 등 투자상품 라인업, 디지털 인프라, 자산관리 역량 차이가 퇴직연금 계약 이전과 자금 이동에 영향을 미치고 있다고 봤다.
+
+그러나 투자상품 확대는 곧바로 모든 가입자의 성과 개선으로 이어지지는 않았다. 지난해 퇴직연금 전체 연간 수익률은 6.47%로 양호했지만 가입자별 편차는 컸다. 수익률 상위 10% 가입자의 평균 수익률은 19.5%에 달한 반면, 하위 10% 가입자는 0.5%에 그쳤다.
+
+차이는 자산 구성에서 갈렸다. 상위 10% 가입자는 DC·IRP 합산 기준 실적배당형 투자 비중이 84.0%에 달했다. 반면 하위 10% 가입자는 원리금보장형과 현금성 대기자금 비중이 74.0%를 차지했다. 같은 시장 환경에서도 운용 방식에 따라 성과가 크게 달라진 셈이다.
+
+리포트는 이 같은 격차가 단순한 단기 성과 차이를 넘어 장기적인 노후자산 격차로 이어질 수 있다고 봤다. 자산시장 상승기에 실적배당형 상품을 활용한 가입자는 운용수익을 통해 적립금을 불렸지만, 예·적금이나 대기성 자금에 머문 가입자는 물가 상승률을 감안할 때 실질 자산가치가 줄어들 수 있다는 설명이다.
+
+김동익 NH투자증권 100세시대연구소장은 “퇴직연금자산은 노후를 지탱하기 위한 투자자산이라는 시각을 갖고 장기적인 관점에서 실적배당형 상품 투자에 관심을 가지는 등 퇴직연금 운용 성과를 개선시키는 노력이 필요하다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006312616' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006312616</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
