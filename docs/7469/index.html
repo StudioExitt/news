@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>언론사: 이데일리</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006312669' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7469" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>언론사: 이데일리</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">스페이스X의 대규모 회사채 발행 계획과 알파벳의 AI 핵심 인재 이탈 우려로 기술주 전반에 조정 압력이 발생하며 뉴욕 증시는 혼조세를 보였습니다. 반면, 미·이란 간 협상 진전 기대는 에너지 공급망 불확실성 완화에 긍정적 영향을 주었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 및 첨단기술 기업들(스페이스X, 알파벳)에 대한 시장의 재평가와 대규모 자금 조달 부담 이슈가 주요 투자 위험 요인으로 작용했습니다. 기술주 전반의 조정 압력이 높게 관측됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">알파벳</span> <span class="tag stock-tag">스페이스X</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">에너지 시설 및 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI기술주 #자본조달리스크 #지정학적리스크</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">다우 0.29%↑ S&P 0.37%↓ 나스닥 1.33%↓
+스페이스X, 200억달러 회사채 추진에 주가 16%대↓
+알파벳, AI 핵심 인재 이탈 우려에 5% 가까이 하락
+미·이란 후속 협상 진전…호르무즈 해협 개방 유지 주목 뉴욕증시 주요 지수가 혼조세로 마감했다. 스페이스X의 대규모 회사채 발행 추진으로 차입 확대와 고평가 부담이 부각된 데다, 구글 모회사 알파벳도 핵심 AI 연구진 이탈 소식에 약세를 보이면서 기술주 전반에 조정 압력이 커졌다. 반면 미국과 이란 간 종전 협상 진전 기대에 에너지 공급 차질 우려가 완화되면서 투자심리 위축은 일부 제한됐다.
+국내에선 내년도 최저임금 논의가 본격화하고, 주택가격과 임금 상승 기대가 다시 높아지는 등 물가와 소비심리에 영향을 줄 변수들도 주목된다.
+다음은 23일 개장 전 주목할 주요 뉴스다.
+
+일론 머스크와 스페이스X (사진=로이터)
+
+뉴욕증시, 기술주 약세에 혼조 마감
+-지난 22일(현지시간) 다우존스30산업평균지수는 전 거래일보다 148.01포인트(0.29%) 오른 5만1712.71에 거래를 마침.
+스탠더드앤드푸어스(S&P)500지수는 27.79포인트(0.37%) 내린 7472.79, 나스닥지수는 351.33포인트(1.33%) 하락한
+2만6166.60에 장을 마감.
+
+-미국과 이란 간 종전 협상 진전이라는 호재에도 스페이스X의 대규모 채권 발행 추진과 빅테크주 약세가 맞물리며 지수별 등락이 엇갈렸음. 특히
+최근 기업공개(IPO)로 투자자 관심을 모았던 우주기업 스페이스X가 나스닥 하락을 주도함.
+
+스페이스X, 200억달러 회사채 발행 추진에 급락
+-일론 머스크가 이끄는 항공우주 기업 스페이스X가 사상 최대 규모 기업공개(IPO)를 진행한 지 약 열흘 만에 채권시장에 뛰어듬. 발행 규모는 최소 200억달러(약 30조7000억원)로, 5년물부터 30년물까지 다양한 만기의 회사채를 발행할 예정이라는 보도.
+
+-인공지능(AI) 인프라 구축 자금 마련을 위해 처음으로 최소 200억달러 규모의 투자등급 회사채 발행에 나선다는 소식이 전해지면서 스페이스X 주가는 16.4% 급락. 대규모 차입 확대에 따른 재무 부담과 상장 직후 고평가 논란이 동시에 부각된 영향.
+
+알파벳, AI 인재 이탈 우려에 5% 하락
+-구글 모회사 알파벳 주가는 인공지능(AI) 핵심 인재들의 잇따른 이탈 소식에 전 거래일보다 4.99% 하락. 불과 일주일 사이 간판 연구원 두 명이 경쟁사로 옮기면서 구글이 AI 인재 확보 경쟁에서 뒤처지고 있다는 우려가 커졌음.
+
+-월가에선 이번 인재 유출을 단순한 이직 이상의 신호로 해석하고 있음. 길 루리아 DA데이비슨 기술리서치 책임자는 블룸버그에 “구글이 AI 최전선(frontier AI) 인재 전쟁에서 밀리고 있다는 우려가 커지고 있다”고 말했음.
+
+구글, 美 독립영화사 A24에 7500만달러 투자
+-구글이 영화 ‘미나리’와 ‘백룸’ 등을 제작한 미국 독립 영화 스튜디오 A24에 7500만달러(약 1153억원)를 투자하고 인공지능(AI) 연구 파트너십을 맺었음. 구글이 영화 스튜디오 지분을 취득하는 것은 이번이 처음.
+
+-월스트리트저널(WSJ)은 22일(현지시간) 구글 모회사 알파벳의 딥마인드 AI 부문과 A24가 수년간의 비독점적 파트너십 계약을 체결했다고 보도. 양측은 영화 제작과 배급 과정에 활용할 수 있는 새로운 AI 도구 개발을 목표로 협력할 예정.
+
+내년 최저임금 논의 본격화…노동계 1만 2000원 요구
+-내년도 최저임금을 얼마로 정할지를 두고 노동계와 경영계의 줄다리기가 본격화. 최저임금위원회는 이날 오후 3시 정부세종청사에서 제8차 전원회의를 열고 내년도 최저임금 인상률 논의에 들어감.
+
+-앞서 노동계는 최저임금 최초 요구안으로 올해 시급 1만 320원보다 16.3% 오른 1만 2000원을 제시. 월 209시간 기준으로는 250만8000원 수준. 경영계는 아직 최초 요구안을 내놓지 않았지만, 소상공인 부담 등을 이유로 동결 또는 소폭 인상안을 제시할 것으로 예상.
+
+집값·임금 기대심리 상승…주택가격전망지수 120
+-삼성전자와 SK하이닉스의 대규모 성과급 지급, 증시 호조 등이 맞물리며 집값과 임금이 오를 것이라는 소비자 기대심리가 높아졌음. 한국은행이 23일 발표한 소비자동향조사 결과에 따르면 6월 주택가격전망지수는 120으로 전월보다 8포인트 상승.
+
+-이 지수는 올해 1월 124에서 2월 108, 3월 96으로 낮아지며 100을 밑돌았지만, 4월 104, 5월 112, 6월 120으로 빠르게 반등. 6월 임금수준전망지수도 124로 2포인트 올라 지난해 7월 이후 최고 수준을 기록.
+
+트럼프 “이란 협상 잘 진행…약속 어기면 공격 가능”
+-도널드 트럼프 미국 대통령은 22일(현지시간) 이란과의 협상이 잘 진행되고 있다면서도, 이란이 약속을 지키지 않을 경우 공격에 나설 수 있다는 뜻을 거듭 밝힘.
+
+-트럼프 대통령은 호르무즈 해협이 완전히 개방돼 있다고 주장. 또 대이란 제재가 완화되더라도 관련 자금이 미국으로 흘러들어올 것이라고 강조.
+
+미국과 이란은 21일 스위스에서 종전 양해각서(MOU)를 체결한 뒤 첫 고위급 후속 협상을 진행했으며, 실무 협상을 이어감.
+
+밴스 “호르무즈 개방 유지 체계 마련”
+-JD 밴스 미국 부통령은 22일(현지시간) 미국과 이란 간 후속 협상과 관련해 “호르무즈 해협이 개방된 상태를 유지할 수 있도록 하는 체계를 마련했다”고 밝힘. 그는 약 1500만 배럴의 석유가 해협을 통해 시장에 풀린 것으로 파악된다고 설명.
+
+-밴스 부통령은 미국과 이란 간 양해각서(MOU)에 따른 후속 협상 성과로 호르무즈 해협 개방 유지 메커니즘 구축과 함께 △역내 휴전 유지 체계 마련 △이란의 핵 사찰 수용 △후속 기술 협상 진전 등을 꼽았음.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006312669' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006312669</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
