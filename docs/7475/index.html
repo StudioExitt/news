@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MBK “2000억원 지원해야” vs 메리츠 “대주주 책임 먼저”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/023/0003983497' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7475" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>MBK “2000억원 지원해야” vs 메리츠 “대주주 책임 먼저”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">홈플러스의 회생계획 인가 시한을 앞두고 최대주주 MBK와 주요 채권자인 메리츠 간에 책임 범위 및 추가 자금 확보 문제로 첨예한 대립이 벌어지고 있다. 양측의 공방으로 인해 회생 계획안 실행 동력이 약화되고 있으며, 법원의 최종 판단을 기다리는 가운데 청산 절차 가능성까지 제기되며 불확실성이 커지고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 유통 기업의 회생 과정에 대한 법적 분쟁은 공급망 전체와 관련 금융 기관에 영향을 미치므로 중요도가 높다. 다만 최종 결과가 불확실하다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">유통업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">건설자재</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#기업회생</span> <span class="tag tag-hash">#홈플러스</span> <span class="tag tag-hash">#부도위기</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">홈플러스 매대에 채워진 빈 쇼핑백
+홈플러스 매대에 채워진 빈 쇼핑백
+기업회생 절차를 밟고 있는 홈플러스의 회생계획 인가 시한이 열흘 앞으로 다가왔다. 다음달 3일이면 홈플러스의 회생계획안이 법원에서 받아들여질지,
+추가 연장될지 아니면 청산 절차에 들어갈지 결정난다.
+
+이해관계자들은 각자 감당해야 할 부담을 놓고 마지막 협상 국면을 펼치고 있다. 향후 1∼2주가 홈플러스 회생 절차의 중대 분기점이 될 것으로 보이다.
+
+현재까지는 홈플러스 회생계획안의 핵심 변수인 추가 자금 조달과 채권단 설득 작업이 진전을 보지 못하고 있다. 최대주주 MBK파트너스와 최대 채권자인 메리츠금융그룹 간 책임 공방이 이어지면서 회생 여부는 여전히 안갯속이다. 법원의 판단을 앞두고 불확실성이 커지고 있다.
+
+회생계획 인가는 법원이 채무자가 제출한 회생계획안을 최종적으로 승인하고 확정하는 절차다. 회생절차(법정관리)의 핵심 단계로, 채무자가 어떻게 빚을 갚고 회사를 살릴지 제시한 계획을 법원이 공식적으로 인정하는 것이다.
+
+열흘 남았는데 책임 공방만, 자금은 오리무중
+홈플러스 회생계획 인가 시한은 다음달 3일이다. 업계에서는 이날이 사실상 홈플러스의 향후 운명을 가를 분수령이 될 것으로 보고 있다.
+
+현재 가장 큰 쟁점은 홈플러스의 회생 가능성을 뒷받침할 자금 조달 방안과 대주주 책임 범위다. 대주주인 MBK파트너스는 홈플러스 회생이 채권단과협력업체, 임직원 모두를 위한 최선의 선택이라며 최대 채권자인 메리츠에 2000억원의 자금 지원을 요청하고 있다. 2000억원이 있어야 회생계획안의 실행이 가능하다는 설명이다.
+
+메리츠 측은 1000억원 긴급운영자금(DIP) 지원 가능성을 언급하면서도 경영진 책임이 전제돼야 한다고 주장한다. 대주주의 책임 있는 자금 투입이 우선돼야 한다는 것이다.
+
+그러면서 “작금의 홈플러스 위기는 지난 10년간 MBK가 투자금 회수에만 몰두한 결과”라며 MBK가 대주주로서 책임을 지지 않고 있다고 비판한다. 회생 성공을 자신한다면 메리츠가 요구하는 김병주 회장의 보증을 제공하지 못할 이유가 없지 않냐는 것이다.
+
+이에 대해 MBK파트너스는 회생절차 개시 이후 이미 대출 보증과 김 회장의 개인 증여 등을 통해 수천억원 규모의 자금과 신용을 직간접적으로 부담했다며 맞서고 있다.
+
+또, 선순위 채권자인 메리츠가 담보권을 무기로 실실익을 챙기기 위해 고의로 협상을 지연시키고 있다며 의혹을 제기한다. 홈플러스 부동산을 담보로 잡은 메리츠는 홈플러스가 파산할 경우 부동산 매각을 통해 5000억원이 넘는 이익을 얻게 된다는 게 MBK의 주장이다.
+
+회생계획안 인가 시한이 다가오면서 양측의 공방은 감정적으로까지 치닫는 모양새다. 이처럼 양측의 기싸움이 평행선을 달리면서, 정작 회생계획안의 핵심인 신규 자금 조달과 구체적인 채권 변제 방안은 뚜렷한 돌파구를 찾지 못하고 있다는 지적이 나온다.
+
+회생·추가 연장·청산 분수령
+홈플러스는 회생계획 인가 전 M&A를 추진해왔다. 홈플러스는 NS쇼핑 인수 결정 후 지급보증을 통해 상품 공급이 재개된 홈플러스 익스프레스를 언급하며 “상품 공급만 원활하면 매출 회복과 영업 정상화가 가능하다”고 강조한다.
+
+하지만, 회사 측이 회생계획안에 적시한 필요 자금 2000억원을 확보하지 못한 상태에서 법원과 채권단을 설득하기는 쉽지 않을 것이라는 관측이 나온다. 2000억원은 물품 대금과 임금, 구조조정 등에 소요될 거라며 홈플러스 측이 제시하는 최소한의 비용이다.
+
+이에 따라 법원이 회생계획안 실행 가능성을 조금 더 지켜보기 위해 시한을 한 차례 더 연장할 가능성이 언급된다. 채무자회생법상 인가 시한을 넘길 수 없는 ‘최종’ 시한은 9월 3일이다. 
+
+홈플러스 익스프레스 매각을 통한 자금이 유입됐고, 메리츠의 추가 자금 투입 가능성이 남아있는 만큼 추가 시간을 부여할 수 있다는 것이다. 이 경우 MBK와 메리츠에 지원을 요구하는 정부와 정치권의 압박이 더욱 강해질 것으로 보인다.
+
+반면 법원이 회생계획안의 실현 가능성이 없다고 판단할 경우 청산 절차로 넘어갈 가능성도 배제할 수 없다. 홈플러스가 파산할 경우 직원과협력·납품업체, 임대 소상공인 등 수만 명이 영향을 받을 것으로 예상된다. 이 경우 대규모 고용 불안과 협력업체들의 연쇄 경영난 등 큰 후폭풍이 우려된다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/023/0003983497' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/023/0003983497</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
