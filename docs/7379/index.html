@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>펀드·외인 주도 장세 가고 ‘금융투자·ETF’가 시장 지배</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006312260' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7379" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>펀드·외인 주도 장세 가고 ‘금융투자·ETF’가 시장 지배</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 증시가 과거 외국인 주도나 환율 위기론에 의존하던 구조에서 벗어나, 국내 금융투자 기관과 ETF를 통한 내부 자금 유동성 변화로 시장을 재편하고 있다.
+환율 변수는 더 이상 악재가 아닌 수출 기업 이익의 완충재 역할을 하며, 금리보다 실적 펀더멘털이 주가 상승의 핵심 동력으로 부상할 전망이다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">국내 증시가 구조적 변화를 겪으며 시장 주도권이 외국인에서 국내 기관/ETF로 이동했고, 거시경제 변수(환율, 금리)에 대한 인식 자체가 바뀌어 장기적인 성장 동력과 하방 경직성이 높아졌다고 분석했음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융투자</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증시패러다임변화</span> <span class="tag tag-hash">#ETF주도</span> <span class="tag tag-hash">#실적장세</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">펀드·외인 주도 장세 가고 ‘금융투자·ETF’가 시장 지배
+금리 변동성 속 실적 장세로 패러다임 전환
+ 역사상 처음으로 코스피 9000포인트 시대가 개막했으나, 시장의 시선은 환율과 금리 변동성이라는 거시경제적변수에 쏠리고 있다. 단기 급등에 따른 차익 실현 매물이 쏟아지며 지수는 약보합세로 돌아섰고, 코스닥은 채권 금리 반등 압박에 1000선이 무너지는 등 변동성이 확대되는 양상이다.
+
+이경민 대신증권 리서치센터 부장은 19일 ‘어쨌든 경제’ 방송에 출연해 외형적 지수 상승률에 가려져 있던 국내 증시의 구조적 패러다임 변화를 추적했다. 이 부장은 과거의 ‘외국인 주도 장세’와 ‘1500원대 환율 위기론’은 더 이상 유효하지 않다고 단언하며, 금융투자와 ETF 중심의 수급 구조 재편과 수출 기업의 이익 체력 강화를 통해 한국 증시가 거대한 체질 개선을 이뤄내고 있다고 분석했다.
+
+고환율의 패러다임 전환… ‘위기의 시그널’에서 ‘실적 완충재’로
+
+일반 투자자들에게 ‘원·달러 환율 1500원 돌파’는 과거 외환위기의 트라우마를 자극하는 거시적 악재로 인식된다. 그러나 최근 코스피가 고환율 기조 속에서도 거침없는 랠리를 이어간 현상은 환율을 바라보는 시장의 상수(상시 존재하는 변수) 개념이 바뀌었음을 시사한다.
+
+이경민 대신증권 리서치센터 부장은 “현재의 1500원대 고환율은 한국 경기의 펀더멘탈 결함 때문이 아니다. 엔화 약세와의 동조화, 기업들의 활발한 해외 투자로 인한 국내 달러 유입 둔화, 그리고 미국 스페이스X 상장 등 글로벌 수급 불균형이 낳은 결과물이다. 구조적으로 올해 연말까지 환율은 1400원~1550원 선의 높은 박스권을 형성할 가능성이 크다. 이제 시장은 이를 뉴노멀(New Normal)로 받아들이고 있으며, 오히려 수출 기업들에게는 강력한 환율 효과에 따른 이익 모멘텀으로 작용하며 증시 하단을 지지하는 완충재가 되고 있다”고 강조했다.
+
+이 부장은 환율 변수가 시장을 흔드는 절대적 악재가 아닌 중립적 변수로 제자리를 찾았으며, 7~8월 중 미국 물가 둔화와 유가 안정세가 맞물리면 환율이 1500원 선 아래로 완만하게 하향 안정화되며 증시에 탄력을 더할 것으로 내다봤어.
+
+수급 대전환...‘바이코리아’ 공식 깨고 시장 주도권 잡은 ETF·금융투자
+증시 유동성의 내부 구조적 변화도 목격된다. 올해 들어 외국인 투자자들이 140조 원에 달하는 매도 폭탄을 던졌음에도 코스피 지수가 도리어 두 배 이상 폭등한 배경에는 국내 수급의 대전환이 자리 잡고 있다.
+
+과거 1990년대 바이코리아 펀드나 2000년대 적립식 펀드 붐이 파편화된 개인 자금을 모아 대세 상승을 이끌었다면, 현재 9000선 돌파의 일등 공신은 ‘ETF 매매의 활성화와 금융투자 기관의 유동성’이다. 흩어져 있던 개인 자금이 ETF라는 제도권 수단을 통해 결집하면서 시장의 주도권이 외국인에게서 국내 금융투자 세력으로 완전히 이동했다는 분석이다. 이제 외국인 수급은 시장의 방향성을 결정하는 절대 지표가 아니라 지수의 상승 폭을 더하거나 덜어내는 부차적 변수에 불과하다는 평가가 나온다.
+
+단기 지지선 8000선...매파적 금리 동결은 ‘노이즈’일 뿐
+
+대신증권은 미국 연방공개시장위원회(FOMC)의 매파적 금리 동결 조치나 트럼프 행정부의 압박 등 통화정책 변수가 시장에 미치는 영향력은 점차 둔화될 것으로 전망했다. 시장의 무게추가 ‘금리’에서 ‘실적’으로 완전히 옮겨갔기 때문이다. 역사적으로도 금리 인상기 속에서 경기와 기업 실적이 탄탄할 때 증시는 우상향 흐름을 보였다.
+
+단기적으로는 마이크론 실적 발표와 미국 PCE 물가 지표에 따라 기술적 조정이 올 수 있으나, 코스피 8000선 초반은 주가수익비율(PER)이 8배 미만으로 떨어지는 ‘딥 밸류(극단적 저평가)’ 구간이므로 강력한 하방 경직성을 제공할 것으로 보인다. 아주 비관적인 상황을 가정해도 7500~7600선은 견고하게 지켜질 것이라는 관측이다.
+
+쏠림 완화와 코스닥 순환매, 3분기 정상화 경로의 핵심
+
+그동안 대한민국 증시는 삼성전자와 SK하이닉스 등 초대형 반도체 종목으로의 극단적인 자금 쏠림 현상에 시달려 왔다. 그러나 9000선 안착 과정에서 2차전지와 자동차 등 소외되었던 대형주로 매수세가 유입되는 순환매가 시작된 점은 증시의 건강성을 회복하는 중요한 신호다.
+
+고밸류에이션 부담과 채권 금리 상승으로 대폭 조정을 받은 코스닥 시장 역시 7~8월 중 국채 금리가 정점을 통과하고 ‘코스닥 프리미엄 지수’ 가이드라인이 가시화되면 실적 우량주를 중심으로 반등 기회를 잡을 것으로 기대된다.
+
+5월 일평균 수출 증가율이 1970년 이후 최고치인 60%를 돌바하고 26개 주요 업종 중 19개 업종의 이익 전망이 개선되는 등 거시적 실적 데이터는 명확하다. 단기적인 매물 소화와 금리 변동성에 따른 노이즈를 극복하고 나면, 펀더멘탈의 정상화 과정 속에서 코스피는 3분기 중 만선(10,000p)을 넘어 대망의 11,000선까지 상단을 넓혀갈 것으로 전망한다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006312260' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006312260</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
