@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>미 증시 살펴보고 한국 증시 투자아이디어까지 찾는 마켓 무버</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001256250' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7465" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>미 증시 살펴보고 한국 증시 투자아이디어까지 찾는 마켓 무버</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">간밤 뉴욕증시에서 빅테크 주가 하락세에도 불구하고, 반도체 및 장비주들이 강한 상승세를 보였습니다. 마이크론 등의 목표주가 상향은 높은 밸류에이션을 정당화하며 AI발(發)반도체 수요를 기대하게 했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 장비주와 메모리 반도체의 가격 상승세가 강하게 부각되면서 업황 개선에 대한 기대감을 높이고 있습니다. 이는 단기적인 투자 심리에 매우 긍정적이나, 빅테크 기업의 비용 부담 문제나 기타 개별 종목(스페이스X)의 신용 이슈로 인해 전반적인 불안 요소도 존재합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">마이크론</span> <span class="tag stock-tag">램 리서치</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#AI투자</span> <span class="tag tag-hash">#미국증시</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미 증시 살펴보며 한국 증시 투자아이디어까지 찾는 마켓 무버입니다.
+
+간밤 뉴욕증시는 섹터별 등락이 뚜렷했습니다. 기술주 내에서는 엔비디아와 마이크로소프트, 아마존 등 M7으로 묶이는 주요 빅테크들의 주가 하락이 크다습니다. 구글의 모회사 알파벳은 연중 가장 깊은 수준의 낙폭(-5.08%)을 보이며 장을 마감했습니다.
+
+알파벳의 경우엔 AI 모델 제미나이의 공동 책임자였던 노엄 샤지어가 오픈 AI로 이직하는 등의 악재가 있었습니다만, 개별 뉴스가 없었던 빅테크들의 주가 하락의 동인을 생각해볼 수 있는 움직임이 한편에 있었습니다. 뉴욕증시에 상장한 반도체와 장비주들이 강한 상승세를 보인 겁니다.
+
+현지시간 24일 실적 발표를 앞둔 마이크론의 주가는 6.82% 상승한 뒤 시간외 거래에서도 2.4% 오르고 있습니다. 램 리서치(+5.27%)와 어플라이드 머티리얼즈(3.74%), KLA(3.7%) 등 반도체 장비주 주가도 뛰었지요.
+
+기관들이 마이크론의 목표가를 다시 높여잡았다는 소식이 마이크론과 반도체주 투자심리에 긍정적으로 작용했습니다. 미국의 투자은행 니덤은 마이크론에 대한 목표주가를 기존 500달러에서 1,550달러로 높여잡았습니다. 또다른 투자은행 번스타인도 1,300달러로 이 회사 목표주가를 상향했지요.
+
+마이크론의 현재 주가는 1,200달러 수준입니다. 1년 전 이 회사의 주가보다 10배 높아졌지요. 그래서 고평가 우려가 끊임없이 나왔었는데, 증권사들의 목표가가 현재 주가보다 높아지면서 지금의 가격을 정당화해주고 있습니다. 예상보다 강력한 반도체 가격 상승세, 내년까지 HBM 가격을 고려하면 이 정도 가격이 무리가 아니라는 게 월가의 보고서에서 나오는 주장들입니다.
+
+이것은 한편으로 반도체를 주문해서 AI 투자를 해내야 하는 빅테크들의 입장에선 비용 부담 문제가 오래 갈 수 있다는 뜻도 되겠지요. 반도체가 잘 버는 만큼, 반도체를 써서 서비스를 하는 회사들이 잘 벌지 못하면 어떡할까에 대한 우려와 데이터들이 최근 뉴욕증시의 변동성을 설명해주줄 수 있는 한 단면입니다.
+
+국내 투자자들의 관심이 높은 스페이스X도 오늘 큰 폭의 주가 하락을 겪었습니다. 하루 만에 주가가 16.43% 하락했지요. 스페이스X와 관련한 뉴스는 200억 달러 규모의 회사채 발행 추진이었는데, 발행 목적 가운데 은행권의 브릿지론 상환이 들어있어서, 즉 빚 갚으려 빚 내는 구조라 시장의 걱정이 좀 커졌습니다. 스페이스X는 회사 자체에 돈이 없는 것은 아니다, 현금성 자산만 1천억 달러 넘게 있다, 라고 설명하고 있고요. 회사채를 낸다는 것 자체가 채권시장에서 스페이스X가 신뢰받을 수 있는 기업이라는 점에 방점을 찍을 수도 있겠습니다.
+
+단 기업 시가총액 크기에 비해 신용등급이 높아보이지는 않는다는 점은 살펴볼 부분입니다. 시가총액 2조 달러, 스페이스X에 대한 S&P글로벌의 투자등급은 'BBB'입니다. 한때 스페이스X에 시총을 추월당하기도 했던 아마존의 투자등급이 'AA'으로 책정된 것과 비교해 보면, 아직은 스페이스X가 증명해야 할 것들이 많다고 월가에서는 본다는 뜻이겠습니다.
+
+간밤 미 증시 움직임이 오늘 우리 증시에 어떤 영향을 줄까요? 궁금하신 점과 의견 댓글로 남겨주세요.
+원문링크: https://n.news.naver.com/mnews/article/215/0001256250</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001256250' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001256250</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
