@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK하이닉스, 시가총액 2000조 돌파하며 삼성전자 추격세</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #6b7280; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026-06-22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001256154' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7294" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>SK하이닉스, 시가총액 2000조 돌파하며 삼성전자 추격세</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">미분류</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">—</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 산업 확산과 HBM 시장의 강세가 반도체 업황에 대한 기대감을 높이며 관련주들의 주가를 견인하고 있다. 특히 SK하이닉스는 시총 2000조원을 돌파하며 삼성전자를 빠르게 추격 중이며, 이는 차별화된 포트폴리오 덕분으로 풀이된다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#AI</span> <span class="tag tag-hash">#HBM</span> <span class="tag tag-hash">#증시대장주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">사진=연합뉴스
+사진=연합뉴스
+SK하이닉스가 22일 장중 시가총액 2000조원을 돌파하며 국내 증시 대장주인 삼성전자를 바짝 추격하고 있다.
+
+유가증권시장에서 SK하이닉스는 오전 11시 전 거래일 대비 5.46% 오른 291만 5000원에 거래되고 있다. 이날 1.30% 내린 272만 원에 거래를 시작한 SK하이닉스는 이후 상승 전환해 상승폭을 키우고 있다.
+
+한국거래소에 따르면 이날 오전 10시 3분 기준 SK하이닉스 시가총액은 2050조884억원으로 집계됐다. 같은 시각 삼성전자 시가총액(2087조1,215억원)의 98.23% 수준이다. 두 종목 시가총액 격차는 37조331억원까지 줄어들었다.
+
+국내 증시를 대표하는 반도체 기업인 삼성전자와 SK하이닉스는 최근 AI 산업 확산에 따른 반도체 수요 증가를 바탕으로 동반 상승세를 보이고 있다. 다만 SK하이닉스가 고대역폭메모리(HBM) 시장 강세의 직접적인 수혜를 입으며 삼성전자보다 가파른 주가 상승률을 기록하고 있다.
+
+22일 서울 중구 하나은행 본점 딜링룸 현황판에 원/달러 환율, 코스피, 코스닥 지수가 표시돼 있다. 사진=연합뉴스
+22일 서울 중구 하나은행 본점 딜링룸 현황판에 원/달러 환율, 코스피, 코스닥 지수가 표시돼 있다. 사진=연합뉴스
+실제로 이날 SK하이닉스 주가는 5%대 상승률을 보인 반면 삼성전자는 1%대 상승에 그쳤다.
+
+삼성전자는 1999년 7월 29일 처음으로 국내 주식시장 시가총액 1위를 기록, 등락을 거듭했으나 2000년 11월 21일 이후로줄곧 국내 시가총액 1위 자리를 지켜왔다.
+
+1990년대에는 한국전력이 시총 1위를 장기간 유지했고, 1999년에는 KT가 선두에 올랐다. 삼성전자는 당시 한국전력과 포스코에 이어 시총 3위에 머물렀지만 이후 빠르게 몸집을 키우며 2000년부터 국내 증시 왕좌를 차지했다. 이후 약 27년 동안 단 한 차례도 1위 자리를 내준 적이 없다.
+
+d만 삼성전자 우선주까지 포함하면 격차는 여전히 크다. 이날 기준 삼성전자와 삼성전자우의 합산 시가총액은 2268조8,585억원으로 SK하이닉스보다 약 10% 이상 많았다.
+
+삼성전자와 삼성전자우의 합산 시가총액은 2268조8,585억원으로 SK하이닉스 시총의 110.67% 수준이다.
+
+삼성전자 주가는 올해 들어 197.7% 급등, SK하이닉스는 같은 기간 341.9%나 오르면서 더 가파른 상승률을 나타내고 있다.
+
+상승률 격차의 주된 배경으로는 인공지능(AI) 붐에 따른 글로벌 주식시장 전반의 '반도체 쏠림' 심화가 꼽힌다.
+
+SK하이닉스는 고대역폭메모리(HBM) 등 반도체 집중도가 높은 반면, 삼성전자는 반도체 외에도 스마트폰, 가전, 디스플레이 등 방대한 포트폴리오를 지닌 탓에 최근의 반도체 초강세 수혜를 온전히 받지 못하고 있다는 것이 시장의 대체적 시각이다.
+
+이밖에 올해 하반기 SK하이닉스의 미국주식 예탁증서(ADR) 상장이 이뤄질 것이란 기대감도 SK하이닉스 주가를 끌어올리는 요인이다. ADR은 외국 기업이 미국 증시에서 자사 주식을 거래할 수 있도록 발행하는 증권으로, 글로벌 투자자 접근성을 확대하는 수단으로 활용된다. SK하이닉스는 지난 3월 미국 ADR 상장을 위한 공모 등록신청서(Form F-1)를 미국 증권거래위원회(SEC)에 제출했다.
+
+증권가에서는 SK하이닉스에 대한 눈높이를 계속 올려잡고 있다. 이날 한화투자증권은 SK하이닉스에 대한 보고서를 내고 목표주가를 기존 163만원에서 430만원으로 대폭 상향 조절했다. 국내 증권사가 제시한 목표주가 중 가장 높은 금액으로, ADR은 재평가 받을 수 있는 절호의 기회가 될 것이라고 분석했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001256154' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001256154</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
