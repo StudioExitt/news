@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 10% 급락에 증권주 동반 약세</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004634254' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7671" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 10% 급락에 증권주 동반 약세</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 반도체 차익실현 매물 및 거시적 우려로 10% 가까이 급락하며 역대 낙폭을 기록했습니다. 이에 따라 증권주를 포함한 금융주 전반의 약세장이 관찰되었으며, 시장 전문가들은 과도한 조정 과정으로 보는 시각과 고점 신호로 보는 상반된 분석이 나오고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단일 거래일 내 코스피 10% 급락은 시장 구조적 위험과 투자 심리 위축을 강하게 반영합니다. 당장 단기적인 투매와 공포가 지배적이므로, 이는 중대한 영향을 미치는 신호입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">미래에셋증권</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피급락</span> <span class="tag tag-hash">#차익실현</span> <span class="tag tag-hash">#금융주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 10% 가까이 빠지며 역대급 낙폭을 기록하자 증권주도 줄하락했다.
+24일 한국거래소에 따르면 전날 미래에셋증권은 전 거래일 대비 8.57% 내린 4만 2150원에 장을 마쳤다. 부국증권은 8.33% 하락한 5만
+교보증권은 8.29% 떨어진 9400원에 마감했다.
+이외에도 NH투자증권(-6.66%), 한화투자증권(-6.70%), 유진투자증권(-6.94%), 현대차증권(-5.51%), 대신증권(-5.79%), 삼성증권(-5.26%) 등 줄줄이 하락했다.
+국내 증시가 대형 반도체주 차익실현 매물 출회와 함께 모건스탠리캐피털인터내셔널(MSCI) 선진국(DM)지수 편입 무산, 연기금 매도 등이 맞물리며 급락한 영향으로 풀이된다. 전날 코스피지수는 910.71포인트(9.99%) 내린 8203.84, 코스닥지수는 76.88포인트(7.94%) 떨어진 891.52에 장을 마무리했다.
+최근 국내 증시와 증권주 간 괴리가 커지고 있는 점도 우려를 키우는 요인 중 하나다. LS증권은 보고서를 통해 3개월간 코스피 상승률이 60%에 달한 반면 증권업지수는 15% 하락했다고 분석했다. 괴리 확대의 배경으로는 반도체 업종 독주에 따른 코스피 상승 폭 확대, 3차 상법개정 통과 이후 증시 부양정책 모멘텀 약화 등이 꼽혔다.
+여기에 증권업 실적 개선 여력이 제한적이라는 우려도 주가에 선반영된 것으로 풀이된다. 거래대금은 늘었지만 시가총액 회전율은 과거 고점 수준에서 추가 상승이 제한되고 있고 국내외 금리 인상 기조는 유동성 증가율 둔화와 금융시장 변동성 확대로 이어질 수 있다는 진단이다.
+한편 전날 역대급 ‘현기증’ 장세를 연출한 국내 증시는 유가증권시장과 코스닥시장에서 프로그램매도호가 일시효력정지(사이드카)가 잇따라 발동됐다. 유가증권시장에서는 거래를 일시적으로 중단하는 서킷브레이커까지 걸렸다. 유가증권시장에서 매도 사이드카와 서킷브레이커가 발동된 것은 올해 들어 각각 13번째, 4번째다.
+이재원 유안타증권 연구원은 이번 급락에 대해 “현재 펀더멘털과 매크로에서 코스피 상승 추세 훼손할 문제가 발견되지 않았다”며 “5000~8000포인트 돌파 이후 늘 있어왔던 차익실현 매물 출회로 결국 ‘많이 올랐기 때문에 많이 빠지는 것이며 9000피 돌파 이후 생겨야 할 통과 의례’ 수준이다”라고 짚었다.
+다만 일각에서는 ‘증시 고점’에 대한 우려의 목소리도 나오고 있다. 특히 이달 22일 26년 만에 국내 증시 시가총액 1위가 바뀐 것을 두고 닷컴 버블 붕괴 당시와 유사하다는 시각도 적지 않다. 한지영 키움증권 연구원은 “닷컴 버블 당시 시스코의 시총 1위 등극 사례가 버블 붕괴의 신호 중 하나였다”고 분석하기를 했음.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004634254' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004634254</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
