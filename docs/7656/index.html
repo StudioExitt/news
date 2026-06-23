@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>안전자산 선호에 미국채 수익률 상승</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005780435' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7656" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>안전자산 선호에 미국채 수익률 상승</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">기술주 매도세와 반도체 업종의 급락으로 뉴욕증시 전반이 약세를 보였습니다. 이는 안전자산 선호 심리가 강하게 작용하며 발생했으며, 미국 국채 가격 상승과 주요 통화의 강세로 나타났습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업종의 급락과 안전자산 선호 심리가 복합적으로 작용하며 시장 전반의 투자심리를 위축시켰기 때문입니다. 이는 단기적인 위험 회피 국면을 반영합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">마이크론테크놀로지</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #안전자산선호 #기술주하락 #미국채권</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">안전자산 선호에 미국채 수익률 상승
+국제유가는 하락 중23일(현지시간) 미국의 3대 지수는 일제히 하락 출발 후 혼조세로 돌아섰다. 마이크론테크놀러지(마이크론) 주가가 급락하면서
+나스닥 지수를 끌어내리고 있다. 다우지수만 강보합으로 돌아섰다.
+
+뉴욕증권거래소(NYSE)에서 오전 10시 15분 현재 다우존스30산업평균지수(다우지수)는 전 거래일보다 7.26포인트(0.01%) 상승한
+5만1719.97을 가리키고 있다. 대형주 중심의 S&P500지수는 56.43포인트(0.76%) 떨어진 7416.36, 기술주 중심의
+나스닥지수는 295.23포인트(1.13%) 내린 2만5866.89를 기록 중이다.
+
+뉴욕증권거래소 모습. 뉴욕(미국)=황윤주 특파원
+
+이날 증시는 전날 시작된 기술주 매도세가 밤새 가속화되면서 전반적으로 약세를 보이고 있다. 마이크론이 전 거래일 대비 8.5% 급락하며 관련
+업종과 지수를 끌어내리는 모습이다.
+
+이밖에 샌디스크 9.94%, 시게이트테크놀로지 6.09%, 인텔 2.64%, AMD 5.00%, 퀄컴 6.87% 등 반도체 업종이 대부분 하락
+중이다. 스페이스X는 154달러 수준에서 공방을 벌이는 모습이다.
+
+최근 기업공개(IPO)를 실시한 세레브라스는 오늘 장 마감 후 실적을 발표할 예정이며, 마이크론은 수요일 장 마감 후 실적을 발표한다.
+
+뉴욕증시의 하락세는 지정학적 긴장 완화, 견조한 기업 실적, AI 관련 투자의 부활에 힘입어 상반기를 대폭 상승세로 마감하려는 움직임을 보이는
+가운데 나타났다고 블룸버그는 전했다.
+
+FHN 파이낸셜의 크리스 로우는 "위험 회피 심리가 반영된 이번 거래는 AI에 대한 과도한 낙관론이 과도할 수 있다는 우려를 보여준다"고
+지적했다.
+
+시장 분석가들은 차입금으로 거래하던 개인 투자자들이 강제로 자금을 청산해야 했던 상황과 SK하이닉스 및 삼성전자 주가를 추종하는 레버리지
+상장지수펀드(ETF)에 대한 대규모 매도세가 복합적으로 작용한 것이 하락세의 원인으로 지목했다.
+
+한편, 안전자산 선호 심리가 작용하면서 미국 국채 가격이 상승했고, 일본 엔화와 스위스 프랑을 비롯한 안전자산 통화도 주요 통화 대비 강세를
+보였다. 반면 가상자산 시장은 타격을 입어 비트코인 ??가격이 3.5% 가까이 하락했다.
+
+뉴욕상품거래소에서 8월 인도분 미 서부텍사스산원유(WTI)는 전장 대비 1.54% 하락한 배럴당 72.72달러를 기록 중이다.
+ICE선물거래소에서 8월 인도분 브렌트유는 전장보다 1.50% 떨어진 배럴 당 76.68달러를 가리키고 있다.
+원문링크: https://n.news.naver.com/mnews/article/277/0005780435</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005780435' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005780435</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
