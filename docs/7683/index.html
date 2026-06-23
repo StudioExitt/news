@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 사이클에 MLCC·FC-BGA 성장</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005780495' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7683" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>AI 사이클에 MLCC·FC-BGA 성장</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 인프라의 핵심 부품인 고사양 MLCC와 FC-BGA 기판의 수요 폭증에 힘입어 삼성전기가 높은 성장 모멘텀을 받고 있습니다. 공급 부족 심화에 따른 가격 상승 사이클이 예상되며, 증권가에서는 목표주가를 300만원까지 상향 조정하며 강력한 긍정적 전망을 내놓고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 서버의 필수 부품인 고사양 MLCC와 FC-BGA 시장에서 수요가 공급을 초과하며 품귀 현상(쇼티지)이 구조적으로 발생하고 있다는 분석은 강력한 상승 동력입니다. 이는 단기적 모멘텀을 넘어 중장기적인 사이클 확대를 예고하며, 다수의 증권사 목표주가 상향으로 이어져 투자 심리를 극대화시키고 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI사이클</span> <span class="tag tag-hash">#MLCC</span> <span class="tag tag-hash">#FC-BGA</span> <span class="tag tag-hash">#반도체소재</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">연초 대비 773.73% 상승해 1위
+AI 사이클에 MLCC·FC-BGA 성장
+목표주가 '300만원'까지 등장인공지능(AI) 사이클을 타고 핵심 인프라인 고사양 MLCC(적층세라믹콘덴서)를 생산하는 삼성전기의 주가가 가파르게 오르고 있다. 이미 올해 가장 많이 오른 종목이지만, 증권가에서는 공급 부족 등 상황을 토대로 목표주가를 연이어 상향하고 있다.
+
+올해만 773% 성장한 삼성전기
+삼성전기는 지난 22일 기준 전장 대비 1.85% 내린 222만8000원으로 장을 마쳤다. 앞서 지난 19일에는 장중 241만7000원까지 올라 52주 신고가를 경신한 바 있다. 삼성전기의 시가총액은 166조원으로 불어나며 국내에서 시총 기준 다섯 손가락 안에 드는 기업이 됐다.
+
+올해 삼성전기 주가 상승 추이는 유가증권시장의 쌍두마차인 삼성전자, SK하이닉스를 능가하는 수준이다. 올해 초 25만5000원이었던 주가는 지난 22일 기준 773.73% 상승하며 코스피 종목 중 가장 많이 오른 종목으로 기록됐다. 2위 역시 삼성전기우로 같은 기간 722.41% 올랐다.
+SK하이닉스(+348.39%), 삼성전자(+194.83%) 대비 상승률이 2~4배다.
+
+삼성전기의 올해 1분기 매출은 3조2091억원으로 전년 동기 대비 17.2% 증가했으며, 영업이익은 2806억원으로 같은 기간 39.9% 성장했다. 영업이익 기준 시장 전망치 2734억원에 부합한 것으로 평가된다.
+
+MLCC·FC-BGA가 쌍끌이…목표가 '300만원' 전망도
+삼성전기는 올해 더 큰 성장이 기대되고 있다. 그 배경에는 AI 인프라의 필수 요소가 된 적층세라믹콘덴서(MLCC)가 있다. MLCC는 전기를 저장했다가 반도체 등 부품이 필요로 하는 만큼 안정적으로 공급해 주는 역할을 하는 부품이다. 일반 서버에 수천개의 MLCC가 들어갔다면, 학습과 추론을 해야 하는 AI 서버에는 2만여개의 고용량 MLCC가 필요하다. 삼성전기는 이같은 고성능 MLCC를 생산할 수 있는 손에 꼽히는 기업 중 하나다.
+
+AI 수요 폭증으로 MLCC 품귀 현상과 가격 상승이 이어지는 구조도 삼성전기의 성장을 뒷받침한다. 양승수 메리츠증권 연구원은 "최근 AI용 초소형·고용량 MLCC는 탑재량 증가와 적층 수 증가에 따른 생산 난이도 상승이 맞물리며 쇼티지가 심화하고 있다"며 "수요 증가 대비 공급 확대가 제한적인 상황에서 해당 제품군에 대해서 엔드 고객사들 사이 물량 선점 경쟁이 본격화되고 있으며, 메모리와 유사한 가격 상승 사이클이 전개될 가능성이 높다고 판단된다"고 설명했다. 지난 22일 시장조사업체 트렌드포스 역시 AI 수요 확대에 따라 공급업체의 생산 능력 확장이 수요를 따라가지 못하며 올해 하반기 구조적 공급 부족 사태가 발생할 가능성이 커지고 있다고 진단했다.
+
+FC-BGA(ABF) 기판도 삼성전기의 몸값을 올리는 요소 중 하나다. FC-BGA 기판은 GPU나 CPU를 메인보드와 연결해 주는 최첨단 반도체 패키징 기판이다. 이 역시 일반 칩보다 크기가 큰 AI칩에서 훨씬 많이 소요되기 때문에 중요성이 커지고 있다. 박준서 미래에셋증권 연구원은 "AI 반도체의 핵심 부품으로 부상한 FC-BGA가 지정학적 리스크발 글로벌 공급망 재편의 직접 수혜처로 부각됐다"며 "북미 빅테크 고객사들의 비중국 조달 수요가 삼성전기로 집중되며 중장기 물량, 판가 상승이 가시화됐다"고 했다.
+
+다만 진입장벽이 높은 HBM과 다르게 MLCC의 경우 여러 업체가 시장을 점유하고 있어 메모리반도체 공급 부족과는 별개로 봐야 한다는 시각도 있다. 지난해 글로벌 MLCC 시장 점유율은 일본 무라타가 40%대로 1위, 삼성전기는 20%대로 2위, 일본 타이요유덴이 10%가량으로 3위로 추정된다. 이 때문에 '슈퍼 을'로 여겨지는 HBM 생산사와 달리 MLCC는 경쟁사의 가격 정책, 설비 투자 계획 등에 따라 영향을 받게 된다. 고사양 MLCC에 집중할 경우 스마트폰 등 범용 제품에서 점유율을 빼앗길 수 있다는 위험도 있다.
+
+AI 서버에 사용되는 고사양 제품의 경우 무라타와 삼성전기가 사실상 시장을 양분하고 있다. 두 업체가 투자 경쟁을 벌일 경우 공급 부족에 따른 가격 상승 구조가 희미해질 수 있다는 관측도 나온다. 박형우 SK증권 연구원은 "선도 업체 무라타와 삼성전기의 경쟁적인 무리한 투자집행만 발생하지 않는다면, 미래에 MLCC는 부족할 것"이라며 "아직 시작되지 않은 쇼티지라는 것은 앞으로 경험할 가격 상승 사이클이 그만큼 클 수 있다는 의미"라고 전했다.
+
+증권사들은 삼성전기의 목표주가를 더 높게 올려잡고 있다. 메리츠증권은 지난 10일 삼성전기의 목표주가를 240만원으로 제시했으나 22일 280만원으로 상향했다. KB증권 역시 지난달 27일 목표주가 220만원을 제시한 뒤 지난 19일 300만원으로 올렸다. DB증권 또한 삼성전기의 목표주가를 300만원으로 제시했다.
+
+이창민 KB증권 연구원은 목표주가 상향 배경에 대해 "MLCC와 패키징 기판의 초호황기 진입에 따른 성장 여력 확대를 고려해 향후 5년 영업이익 연평균 성장률 추정치를 기존 68%에서 73%로 상향 조정했다"며 "목표주가 도달 가정 시 12개월 선행 주가수익비율(PER)은 117.3배, 주가순자산비율(PBR)은 19.64배"라고 전했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005780495' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005780495</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
