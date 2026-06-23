@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주요 커버드콜 ETF 최근 한 달 간 순자산 증감/그래픽=윤선정</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005375949' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7582" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>주요 커버드콜 ETF 최근 한 달 간 순자산 증감/그래픽=윤선정</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">변동성이 높아지는 시장 상황에서 하락 방어와 안정적인 현금 흐름을 기대하며 커버드콜 ETF에 대한 투자 관심이 증가하고 있습니다. 최근 신규 상품들이 출시되며 액티브, 테마별 등 다양한 전략의 커버드콜 ETF가 주목받고 있으며, 장기 투자를 위해서는 기초자산 전망 분석이 중요합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">변동성 확대에 따른 투자자들의 안정적 현금 흐름(배당) 및 하락장 방어 상품 수요 급증을 반영함. 단기적인 자금 유입 촉매제로 작용할 수 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#커버드콜ETF</span> <span class="tag tag-hash">#변동성장세</span> <span class="tag tag-hash">#현금흐름</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">주요 커버드콜 ETF 최근 한 달 간 순자산 증감/그래픽=윤선정
+시장이 극심한 변동성 장세를 이어가면서 커버드콜 ETF(상장지수펀드)에 대한 관심이 높아진다. 코스피 지수가 9000을 넘어서면서 차익실현 수요가 늘어난 상황에서 하락 위험에 대응하면서 분배금 등 현금 흐름을 만들 수 있는 커버드콜 ETF가 투자 대안으로 떠오른다.
+
+23일 금융투자업계 등에 따르면 국내 상장 커버드콜 ETF 58개 종목의 순자산은 약 28조7000억원으로 최근 한달 새 2조9000억원이 증가했다. 최근 시장 변동성이 높아지면서 커버드콜 ETF에 대한 관심이 높아진 것으로 분석된다. 커버드콜 ETF란 각 기초자산에 투자하면서 콜옵션을 매도해 분배금으로 활용하는 전략으로 상단이 제한돼 상승장에서 불리할 수 있지만 하락장을 방어하고 높은 분배금을 받을 수 있다는 장점이 있다.
+
+최근 코스피지수가 9000선을 돌파했지만 이날 9%대 급락하는 등 불안한 장세가 이어지고 있다. 당분간 이같은 변동성 장세가 이어질 전망인 가운데 배당 등 안정적인 수익을 기대할 수 있는 커버드콜 ETF로 투자 수요가 몰리고 있다는 평가다. 아울러 변동성이 높아지면 옵션 프리미엄도 높아져 분배금이 늘어날 수 있는 장점도 있다.
+
+커버드콜 ETF 인기에 다양한 기초자산과 전략을 가미한 커버드콜 신규 상품 출시도 이어지고 있다. 이날 주식시장에는 PLUS 200커버드콜액티브가 신규 상장했다. PLUS 200커버드콜액티브는 코스피 200 종목을 기초자산으로 투자하면서 콜옵션을 활용하는 액티브 ETF다. 액티브 전략을 취해 시장 국면에 따라 옵션 매도 비중, 행사가, 만기를 동적으로 조절한다는 게 가장 큰 특징이다.
+
+앞서 이달 초에도 ACE 고배당주Plus커버드콜액티브, PLUS 200위클리커버드콜채권혼합 등이 출시된 바 있다. 지난달 KODEX 반도체카겟위클리커버드콜, TIGER 반도체TOP10커버드콜액티브 등 최근 상승장을 이끌었던 반도체 종목에 집중된 커버드콜 ETF 출시도 잇따르는 테마별, 옵션만기별 다양한 커버드콜 ETF가 시장에서 선을 보이고 있다.
+
+다양한 기초자산 커버드콜 ETF가 상장하고 있는 상황에서 기초자산 별로 수익률이 천차만별인 만큼 기초자산에 대한 전망이 투자 결정에 주요한 요인이 된다. 아울러 분배율 등도 선택 요인 중 하나다. 강송철 유진투자증권 연구원은 "커버드콜 ETF 투자에 가장 중요한 것은 ETF가 투자하는 기초자산의 전망"이라며 "아울러 과거 배당 증가율, 현재 배당 수익률 등을 감안해 적립식 투자를 한다면 장기적으로 성공 가능성을 높일 수 있다."고 했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005375949' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005375949</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
