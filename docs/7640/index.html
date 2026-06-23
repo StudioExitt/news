@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마이크론 실적발표 전까지는 존버(보유 유지)해 보려고요" "이제 믿을 건 마이크론 밖에 없네요"</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/031/0001037099' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7640" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>마이크론 실적발표 전까지는 존버(보유 유지)해 보려고요" "이제 믿을 건 마이크론 밖에 없네요"</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">삼성전자와 SK하이닉스가 대폭락하며 코스피가 급락하는 '검은 화요일'이 발생했다.
+시장의 관심은 이제 메모리 반도체 기업 마이크론의 실적 발표에 집중되고 있으며, 이 결과가 국내 반도체주의 향후 방향성을 결정할 핵심 동력으로 작용할 전망이다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 기술주(반도체)의 급락과 시장 전반의 하락이 발생했으나, 핵심 산업 주체인 마이크론의 실적 발표가 단기적인 반전 기대감을 조성하며 다음 투자 전략을 제시하고 있다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체주 #마이크론실적 #코스피폭락</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">그 동안 증시를 주도했던 삼성전자와 SK하이닉스가 12%대 폭락하고, 코스피지수도 10% 가까이 폭락한 '검은 화요일'. 시장은 이제 미국
+반도체 업체 마이크론의 실적 발표 결과에 촉각을 곤두세우고 있다.
+
+23일 코스피는 전날보다 910.71포인트(9.99%) 폭락한 8203.84로 장을 마쳤다.
+
+이란 전쟁 발발 직후인 올해 3월 4일(698.37포인트·12.06%)에 이어 올해들어 두번째로 큰 하락률이다. 전일 종가 대비로는 역대 최대
+하락 폭이다.
+
+특히 천장을 뚫고 질주하던 삼성전자와 SK하이닉스가 이날 각각 12.31%, 12.47% 폭락하는 등 반도체주가 고꾸라진 것에 충격이 컸다.
+
+증권사 앱 커뮤니티에서 투자자들은 "이제 더 물탈(추가매수) 돈도 없어 멍하니 바라만 봅니다" "보유중인 주식들이 다 돌아가면서 조정을 맞아서
+3000만원 손해봤네요" "돈 천만원이 한번에 날아갔네요. 돌아버리겠네요" "내 돈 1300만원이 증발했어요" 등으로 허탈함을 표시했다.
+
+시장은 약 이틀 앞으로 다가온 미국 메모리 반도체 기업 마이크론 테크놀로지의 실적 발표가 반등 실마리가 될 수 있을지 촉각을 곤두세우고 있다.
+
+마이크론은 오는 24일(현지시간) 회계연도 3분기(3~5월) 실적을 발표하는데, 최근 금융정보업체 팩트셋이 집계한 컨센서스(증권사 평균
+추정치)에 따르면 마이크론의 3분기 주당순이익(EPS)은 20.76달러, 매출은 357억5000만달러로 추정된다.
+
+이는 작년 동기 대비 각각 987%, 284% 증가한 수치다.
+
+당초 마이크론은 3분기 가이던스(전망치)로 EPS 19.15달러, 매출 335억달러를 전망했었는데, 최근 시장 눈높이는 이보다 크게 높아진
+것이다.
+
+증시 전문가들은 마이크론의 실적과 향후 가이던스가 좋게 나올 경우 국내 반도체주에도 호재가 될 것이라고 기대했다.
+
+황승택 하나증권 리서치센터장은 "마이크론 실적에서 메모리 가격과 출하량, HBM 수요 및 향후 가이던스(전망치)가 기대를 충족하는지가
+중요하다"며 "이를 바탕으로 국내 반도체 기업의 2분기 실적 추정치 상향이 이어진다면 23일 급락 이후에도 지수의 상승 추세는 재개될 수
+있다"고 내다봤.
+
+김대준 한국투자증권 연구원은 "지수 방향성이 바뀌기 위해서는 마이크론의 가이던스 상향과 미국 근원 개인소비지출(PCE) 물가 하락세 확인이
+필요하다"며 "단기 급락으로 투자 심리는 크게 위축되겠지만, 지수 밸류 부담은 완화되어 분할 매수로 접근하는 것을 고려해야 한다"고 조언했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/031/0001037099' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/031/0001037099</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
