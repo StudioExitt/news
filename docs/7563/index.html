@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>금융당국, 상장사 자기주식 보유·처분 공시 의무 대폭 강화</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/029/0003033217' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7563" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>금융당국, 상장사 자기주식 보유·처분 공시 의무 대폭 강화</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금융당국이 상장사의 자기주식 보유 및 처분 관련 공시 의무를 대폭 강화하는 법령을 개정했습니다. 이는 회사가 자기주식을 경영권 방어 수단으로 활용하는 것을 막고, 주주에게 환원(소각)하는 등 투명한 자본시장 운영을 유도하려는 목적입니다. 핵심 내용은 모든 상장사에 대한 공시 의무 확대, 자기주식 대상 EB 발행 금지, 그리고 신탁계약 운용 방식 규제 정비 등이 포함됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">상장사의 자기주식 활용에 대한 규제가 강화되어 경영진의 독점적 자금 활용 가능성이 차단되고, 주주환원 및 투명성 확보가 의무화되었기 때문에 장기적인 투자 심리 개선과 기업 지배구조 개선 기대감으로 긍정적인 영향을 미칠 것으로 예상됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#기업지배구조</span> <span class="tag tag-hash">#주주환원</span> <span class="tag tag-hash">#공시강화</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[연합뉴스]
+[연합뉴스]
+
+금융당국이 상장사의 자기주식 보유·처분 공시 의무를 대폭 강화한다. 자기주식을 활용한 교환사채(EB) 발행과 정규시장 장내 처분 등 그동안 경영권 방어수단이나 지배력 유지 수단으로 활용될 수 있다는 지적을 받아온 방식도 정비된다.
+
+금융위원회는 23일 자기주식 보유·처분 공시를 강화하는 내용의 자본시장과 금융투자업에 관한 법률 시행령 개정안이 국무회의에서 의결됐다고 밝혔다.
+이번 개정은 지난 3월 31일 개정된 상법의 취지에 맞춰 회사가 자기주식을 임의로 활용하지 못하도록 하기 위한 후속 조치다.
+
+개정안에 따라 기존에는 발행주식총수의 1% 이상 자기주식을 보유한 상장회사에만 부과되던 자기주식 보유현황, 향후 처리계획, 실제 처리현황 공시 의무가 자기주식을 보유한 모든 상장회사로 확대된다. 이에 따라 상장사는 주주총회에서 승인받은 자기주식 보유·처분계획을 보다 상세히 공시해야 한다.
+
+금융위는 주주와 투자자에게 제공되는 정보가 늘어나는 만큼 자기주식을 주주환원 목적으로 활용하는 상장회사는 시장에서 그에 합당한 평가를 받을 수 있을 것으로 기대하고 있다.
+
+자기주식을 대상으로 하는 교환사채 발행도 금지된다. 개정 상법에 따라 자기주식 대상 EB 발행이 전면 금지되면서 시행령과 하위규정에서도 관련 규정이 삭제된다. 그동안 자기주식 대상 EB는 긴급한 자금조달 필요성이 크지 않은 상황에서도 지배주주에 우호적인 제3자에게 발행돼 사실상 경영권 방어수단으로 쓰이거나 지배력 유지를 위한 수단으로 활용될 수 있다는 지적을 받아왔다.
+
+자기주식 취득을 위한 신탁계약 운용 방식도 정비된다. 개정 상법에 따라 신탁업자는 자기주식을 취득하는 신탁계약 기간 중 자기주식을 처분할 수 없고, 계약이 종료되거나 해지될 경우 자기주식을 지체 없이 위탁자인 회사에 반환해야 한다. 이에 따라 신탁계약 연장 등을 통해 자기주식을 계속 보유하거나 계약 기간 중 처분하는 방식으로 소각 의무를 우회하는 행위도 제한된다.
+
+주식매수청구권 행사에 따라 취득한 자기주식의 처분기간도 바뀐다. 기존에는 상장회사가 주식매수청구권 행사로 매수한 자기주식을 매수일로부터 5년 내 처분해야 했다. 앞으로는 주주총회 승인을 받은 자기주식 보유·처분계획상 보유기간을 처분기간으로 하되, 이 기간은 5년을 넘을 수 없도록 했다. 해당 기간 중 자기주식을 소각한 경우에는 처분이 이뤄진 것으로 간주한다.
+
+자기주식 장내 처분 관련 규정도 손질된다. 개정 상법이 자기주식 처분 방식을 기존 주주에게 균등하게 처분하는 방식과 기존 주주 외 제3자에게 처분하는 방식으로 제한함에 따라, 거래소 정규시장에서 불특정 다수를 대상으로 자기주식을 매도하는 방식 관련 내용은 하위규정에서 삭제된다. 자기주식 처분 상대방을 특정하도록 해 처분 과정의 투명성을 높이겠다는 취지다.
+
+금융감독원도 기업공시서식 작성기준을 정비한다. 사업보고서의 자기주식 보유현황 항목 등을 통해 주주총회에서 승인받거나 승인 예정인 자기주식 보유·처분계획을 확인할 수 있도록 자기주식 소각기한과 보유·처분계획 승인 내용 등을 추가한다. 또 자기주식 취득·처분·소각 관련 단기계획에는 당초 취득 목적을 기재하도록 해 주주들이 회사의 자기주식 처리계획 적정성을 판단할 수 있도록 할 방침이다.
+
+개정 시행령은 오는 30일 공포 즉시 시행된다. 증권의 발행 및 공시 등에 관한 규정과 기업공시서식 작성기준도 시행령 개정에 맞춰 동시에 시행된다.
+
+금융위 관계자는 “이번 제도 개선이 자기주식 소각 의무화라는 원칙 아래 자기주식이 주주환원이라는 본래 목적대로 활용되도록 유도하고, 그 과정이 투자자에게 투명하게 공개되는 데 의미가 있다”고 설명했다. 금융위에 따르면 올해 1~5월 상장사의 자기주식 소각 규모는 43조1000억원으로 지난해 연간 소각액 21조4000억원의 두 배를 넘어섰.
+원문링크: https://n.news.naver.com/mnews/article/029/0003033217</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/029/0003033217' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/029/0003033217</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
