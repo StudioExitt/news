@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>나스닥 선물, 대표적인 기술주 투자 지표</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001256371' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7655" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>나스닥 선물, 대표적인 기술주 투자 지표</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">나스닥 선물 지수는 전 세계 기술주에 대한 글로벌 투자 심리를 실시간으로 보여주는 핵심 지표입니다. 국내 주식, 특히 반도체와 IT 관련주는 미국 나스닥 시장과 높은 동조성을 가지므로, 이 선물의 방향성은 한국 증시 흐름을 예측하는 데 매우 중요합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">국내 반도체 및 IT 주식은 미국 기술주와 높은 상관관계(동조성)를 가지므로, 나스닥 선물 지수는 투자 심리와 시장 방향성을 예측하는 데 매우 중요한 기준이 됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">엔비디아(간접)</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#나스닥선물</span> <span class="tag tag-hash">#기술주</span> <span class="tag tag-hash">#투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">나스닥 선물, 대표적인 기술주 투자 지표
+국내 증시와 실시간으로 연계
+외국인 수급 직접적 영향
+인공지능 GEMINI로 제작
+인공지능 GEMINI로 제작
+매일 오전 9시 주식 시장이 열리면 가장 먼저 어떤 화면을 띄우시나요. 아마 보유한 종목이 오르는지 내리는지부터 확인하실 겁니다. 하지만 주식 고수들은 하나를 더 찾아봅니다. 한국 주식을 매매하면서도 모니터 한쪽에는 늘 '이것'을 띄워두고 분위기를 살피죠. 글로벌 기술주들의 흐름을 보여주는 '나스닥 선물' 지수입니다.
+
+▲ 나스닥 '선물'이 대체 뭘까요
+'선물'이라는 개념부터 짚고 가겠습니다. '먼저 선(先)'에 '물건 물(物)'을 씁니다. 물건은 나중에 받지만 현 시점에서 가격을 미리 정해서 계약하는 거래를 말합니다. 가을에 사과 가격이 폭등할 것 같은 상황이라고 가정해봅시다. 보통 가을철 사과 시세는 4천원입니다. 과일 유통업자는 '가을에 나올 사과를 하나당 5천원에 사겠다'고 봄부터 농부와 계약을 맺어둡니다. 과일값이 폭등할 거 같으니 미리 가격을 높여서 대량으로 계약을 맺어두는 거죠. 이게 선물계약입니다.
+
+'나스닥 선물'은 이런 계약을 미국 나스닥 시장에 적용한 겁니다. 애플, MS, 엔비디아 등 세계적인 기술 기업 100곳을 모아놓은 '나스닥100 지수'가 향후 오를지 내릴지를 두고 전 세계 투자자들이 끊임없이 거래하는 금융 상품이죠.
+
+미국 증시가 닫힌 시간에도 선물 지수는 계속 움직입니다. 오늘 코스피 지수가 9.9% 급락 마감했는데, 동시에 나스닥 100 선물 지수도 2.04% 하락세입니다. 전세계적으로 반도체를 포함한 기술주에 대한 의구심이 미국 증시가 닫힌 시간에도 선물 지수는 계속 움직입니다. 오늘 코스피 지수가 9.9% 급락 마감했는데, 동시에 나스닥 100 선물 지수도 2.04% 하락세입니다. 전세계적으로 반도체를 포함한 기술주에 대한 의구심이 커졌다고 해석할 수 있습니다. 사진=인베스팅닷컴
+▲ 하루 23시간 돌아가는 '글로벌 예보'
+한국 주식에 투자할 때 미국 선물 지수를 봐야 하는 이유는 시차 때문입니다. 미국 주식 시장은 한국 시간으로 밤에 열려서 새벽에 닫힙니다.
+하지만 선물은 하루 23시간 동안 돌아갑니다. 현재 글로벌 투자자들의 심리가 낙관적인지 비관적인지가 나스닥 선물 지수를 통해 실시간으로 드러납니다. 당연히 국내 주식으로도 흐름이 이어지죠.
+그렇다면 여러 지수 중에서 왜 굳이 '나스닥 선물'일까요. 한국 증시에서 절대적인 비중을 차지하는 건 반도체입니다. 보통 글로벌 투자 시장에서는 반도체를 '기술주'라는 분류로 묶습니다.
+
+미국 나스닥 시장에는 반도체, 빅테크 기업, 기술주가 대거 포진돼 있죠. 애플이 아이폰을 많이 팔아야 한국 부품사가 돈을 법니다. 엔비디아 GPU 수요가 폭발해야 SK하이닉스의 HBM도 잘 팔려나갑니다.
+
+나스닥 선물이 오르고 있다는 것은 실시간으로 기술주에 대한 투자 심리가 긍정적이라는 뜻입니다. 당연히 한국 기술주들의 주가도 덩달아 오를 확률이 높습니다.
+
+▲ 큰손 '외국인'의 기계적인 매매
+한국 증시의 강력한 주체는 외국인 투자자들입니다. 이들은 한주식을 사고팔 때 감각에만 의존하지 않습니다. 알고리즘을 활용한 기계적인 매매를 많이 활용하죠. 알고리즘이 중요하게 보는 지표가 실시간 나스닥 선물입니다.
+
+국내 증시가 열려있는 시간에 나스닥 선물이 갑자기 1% 급락한다고 가정해 볼까요. 외국인의 알고리즘은 '전 세계 기술주에 악재가 터졌다'고 인식합니다. 순식간에 한국 시장에서 주식을 내다 파는 매도 버튼을 누르게 되죠. 반대로 나스닥 선물이 폭등한다면 실시간으로 국내 증시에서도 반도체와 IT 관련주를 대거 사들일 가능성이 높죠.
+
+다시 말해 한국 증시가 갑자기 폭등·폭락하고 있다면 같은 시점에 나스닥 선물도 급변하고 있을 가능성이 높습니다. 
+글로벌 자본시장은 연결돼 있습니다. 반도체 같은 기술주 비중이 높은 국내 주식시장은 특히 미국 기술주와 동조되는 흐름이 자주 발견됩니다. 나스닥 선물 방향성에 따라 지수가 춤추는 이유도 여기에 있습니다. 인공지능 G
+글로벌 자본시장은 연결돼 있습니다. 반도체 같은 기술주 비중이 높은 국내 주식시장은 특히 미국 기술주와 동조되는 흐름이 자주 발견됩니다. 나스닥 선물 방향성에 따라 지수가 춤추는 이유도 있습니다. 인공지능 GEMINI로 제작된 이미지
+▲ 낮에는 뚝뚝 떨어지다가 '말아올리기'
+다만 주의할 지점도 있습니다. 한국 낮 시간에는 나스닥 선물이 폭락하다가 미국 정규장이 열리면 주가가 쑥쑥 오르는 경우입니다. 일부 투자자분들은 '이걸 말아 올린다'고 표현하죠.
+
+이런 엇박자가 나는 이유는 '거래량' 때문입니다. 한국 낮 시간은 미국에서는 새벽입니다. 선물 시장에 참여하는 투자자 수도 적고 거래량도 적습니다. 거대 자본이 조금만 물량을 던져도 선물 지수가 쉽게 출렁거리죠. 미국의 주요 경제지표 발표도 한몫을 합니다.
+
+미국의 경제지표는 보통 한국 시간 밤 9시 30분~10시 30분에 발표됩니다. 한국 낮 시간에는 '오늘 밤 경제 지표가 안 좋게 나올 것 같아'라며 지레 겁을 먹고 선물을 팔아치웁니다. 한국 증시도 곤두박질치는 나스닥 선물 흐름이 반영되며 하락하죠. 하지만 막상 밤에 경제지표를 보니 생각보다 나쁘지 않게 나왔다면? 주식을 대거 사들이며 순식간에 지수를 위로 말아 올립니다.
+
+한국과 미국의 시차로 인한 불가피한 엇갈림이죠. 나스닥 선물 지수가 떨어진다고해서 국내 주식을 함부로 매도하면 안되는 이유이기도 합니다.
+
+▲ MTS에서 관심지표로 추가해보세요
+정리하자면 나스닥 선물은 '글로벌 기술주 투자자들의 현재 심리'를 보여주는 지표입니다. 
+현재 이용하고 계신 증권사 앱 검색창에 '나스닥 선물'을 검색해 관심 지수에 등록해보시죠. 코스피 지수와 나스닥 선물 지수가 동조하면서 움직이는 것을 발견하실 수 있을 겁니다.
+
+성공적인 투자를 원하신다면 매매 버튼을 누르기 전에 다양한 글로벌 지수의 흐름을 먼저 확인하는 습관도 꼭 길러보시기 바랍니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001256371' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001256371</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
