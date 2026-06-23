@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 투자 과열론·연준 추가 인상 우려에 기술주 투매</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006313370' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7664" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>AI 투자 과열론·연준 추가 인상 우려에 기술주 투매</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 과열 우려와 금리 인상 재개 가능성이 겹치며 기술주 투매가 발생했습니다. 코스피발 충격이 미국 증시로 확산되는 과정에서 반도체 관련주는 전반적으로 대규모 차익실현 매도를 겪었으며, 시장은 AI 투자 지속성에 대한 근본적인 의문을 제기하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 과열 우려와 거시적 환경(금리/물가) 불확실성이 복합적으로 작용하며 반도체 중심의 기술주 대규모 투매를 유발함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">마이크론</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">엔비디아</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #AI과열 #기술주투매 #금리인상우려</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">AI 투자 과열론·연준 추가 인상 우려에 기술주 투매
+마이크론 13%↓·샌디스크 14%↓…반도체지수 8% 가까이 급락
+코스피 쇼크 글로벌 확산…공포지수 1주일여 만에 최고치
+마이크론 실적·PCE 물가 대기…AI 수요 지속성 시험대[뉴욕=이데일리 김상윤 특파원]
+미국 뉴욕증시가 23일(현지시간) 인공지능(AI) 관련 반도체주를 중심으로 대규모 매도세가 쏟아지면서 큰 폭으로 하락했다. 올해 들어 글로벌 증시를 이끌어온 AI 랠리가 지나치게 과열됐다는 우려가 커진 가운데 한국 증시 급락으로 촉발된 기술주 투매가 미국 시장으로 번졌고, 연방준비제도(Fed)의 추가 금리 인상 가능성까지 부각되면서 투자심리가 급격히 위축됐다.
+
+뉴욕증권거래소 (사진=AFP)
+
+이날 뉴욕증시에서 나스닥종합지수는 전장보다 2.22% 하락한 2만5587.04에 거래를 마감했다. 스탠더드앤드푸어스(S&P)500지수는 1.44% 내린 7365.46을 기록했고, 다우존스30산업평균지수는 0.09% 하락한 5만1666.8에 거래를 마쳤다. 나스닥과 S&P500은 모두 최근 1주일여 사이 가장 낮은 수준으로 밀려났다.
+
+코스피發 투매, 글로벌 증시 강타
+
+이번 조정의 진원지는 한국 증시였다. 올해 세계 주요 증시 가운데 가장 높은 상승률을 기록했던 코스피는 앞서 외국인 매도세와 레버리지 투자 청산물량이 겹치며 장중 사상 최고치 대비 약 10% 급락했다. AI 메모리 반도체 대표주인 SK하이닉스가 12.5% 넘게 폭락했고 삼성전자 관련레버리지 ETF에서도 대규모 환매가 발생했다.
+
+외국인 투자자들은 이날 코스피 시장에서 25억달러 이상을 순매도한 것으로 집계됐다. 시장에서는 개인투자자들의 신용거래 청산과 레버리지 ETF 매도가 하락폭을 확대시켰다는 분석이 나왔다.
+
+한국 증시에서 시작된 충격은 일본을 거쳐 미국으로 확산됐다. 일본 증시 역시 큰 폭의 조정을 받았고, 미국 투자자들은 글로벌 AI 공급망 전반에 대한 우려를 반영하며 반도체주를 대거 매도했다.
+
+이번 하락은 단순한 기술적 조정을 넘어 올해 시장을 지배해온 AI 투자 스토리에 대한 의문이 제기되기 시작했다는 점에서 주목된다. 지난해 말부터 이어진 AI 투자 붐은 엔비디아와 마이크론, SK하이닉스 등 반도체 기업은 물론 마이크로소프트, 아마존, 알파벳, 메타 등 빅테크 기업들의 대규모 설비투자 확대를 정당화해왔다. 그러나 최근 들어 AI 인프라 구축에 투입되는 천문학적 자금이 실제 수익으로 이어질 수 있는지에 대한 의문이 커지면서 투자자들이 차익실현에 나서기 시작했다.
+
+AI 투자 과열론에 반도체주 급락
+
+반도체주가 집중적으로 매도됐다. 필라델피아 반도체지수(SOX)는 7.9% 급락하며 지난해 이후 가장 큰 낙폭 중 하나를 기록했다. S&P500 정보기술(IT) 업종지수 역시 큰 폭으로 하락했다.
+
+종목별로는 마이크론테크놀로지가 13.2% 급락하며 낙폭을 키웠다. 샌디스크는 13.6% 떨어졌고, 인텔은 6.2%, AMD는 5.8%, 엔비디아는 4.1%, 퀄컴은 8.0% 각각 하락했다. 마벨테크놀로지 역시 큰 폭의 하락세(-9.3%)를 기록했다. 올해 들어 AI 투자 수혜주로 꼽히며 가파르게 상승했던 종목들이 일제히 차익실현 대상이 됐다.
+
+시장에서는 AI 투자 확대를 위해 빅테크 기업들이 공격적으로 자금을 조달하고 있다는 점도 부담으로 작용하고 있다. AI 데이터센터와 반도체 생산능력 확대를 위해 수백억 달러 규모의 설비투자가 이뤄지고 있지만 상당 부분이 부채를 통해 조달되고 있다는 점이 투자자들의 경계심을 자극했다.
+
+최근 상장한 우주기업 스페이스X도 회사채 시장을 통한 자금 조달에 나선 것으로 알려지면서 AI 인프라 투자 경쟁이 재무 부담으로 이어질 수있다는 우려가 커지고 있다.
+
+글로벌트의 토머스 마틴 선임 포트폴리오 매니저는 “최근 AI 관련 뉴스들은 반도체 생산능력 확대와 막대한 자본지출에 대한 의문을 제기하고있다”며 “시장은 이제 AI 투자에 들어가는 비용과 실제 수익성 사이의 균형을 따지기 시작했다”고 말했다. 그는 “AI에 대한 장기 전망 자체가 바뀐 것은 아니지만 현재의 투자 속도가 정당화될 수 있는지에 대한 질문이 제기되고 있다”고 덧붙였다.
+
+최근 AI 인재 유출 논란에 휩싸인 알파벳(-0.8%)도 약세를 이어갔다. 구글의 핵심 AI 연구진 이탈 소식이 전해지면서 AI 경쟁력 약화우려가 부각된 영향이다. 반면 최근 상장 이후 급락세를 보였던 스페이스X는 저가 매수세가 유입되며 반등(0.98%)에 성공했다.
+
+달러 강세·금리 인상 우려까지 겹쳐
+
+투자심리 악화는 외환시장과 채권시장으로도 번졌다. 월가의 공포지수로 불리는 시카고옵션거래소(CBOE) 변동성지수(VIX)는 12% 가량 급등하며 1주일여 만에 최고 수준까지 상승했다. 투자자들이 주가 하락 위험에 대비해 헤지 수요를 늘렸다는 의미다.
+
+연준의 추가 금리 인상 전망도 시장을 압박했다. 주요 6개국 통화 대비 달러 가치를 나타내는 달러인덱스(DXY)는 장중 101.43까지 오르며 지난해 5월 이후 최고치를 기록했다. 시장은 케빈 워시 연준 의장 체제에서 통화정책이 예상보다 매파적으로 전환됐다고 판단하며 추가 긴축 가능성을 빠르게 반영하고 있다.
+
+시카고상품거래소(CME) 페드워치에 따르면 7월 연방공개시장위원회(FOMC) 회의에서 0.25%포인트 금리 인상 가능성은 36%를 넘어섰고, 9월 인상 가능성은 70%에 육박했다. 채권시장 역시 2027년 초까지 두 차례에 가까운 추가 금리 인상을 가격에 반영하고 있다.
+
+달러 강세는 주요국 통화 약세로 이어졌다. 유로화는 1년 만의 최저 수준으로 떨어졌고, 일본 엔화는 달러당 161엔대를 기록하며 1986년 이후 최저 수준에 근접했다. 시장에서는 일본 정부의 외환시장 개입 가능성까지 다시 거론되고 있다. 원·달러 환율은 1532원 부근서 움직이고 있다.
+
+위험자산 회피 심리가 강해지면서 안전자산으로 자금이 이동하는 모습도 나타났다. 미국 국채 가격은 상승했고 일본 엔화와 스위스 프랑은 강세를 보였다. 반면 비트코인은 3%가량 하락하며 위험자산 회피 흐름을 반영했다.
+
+한편 국제유가는 미국과 이란의 평화협상 진전으로 공급 우려가 완화되면서 하락했다. 이날 ICE선물거래소에서 8월 인도분 브렌트유 선물 종가는 배럴당 77.08달러로 전장 대비 1.05% 하락했다. 뉴욕상품거래소에서 7월 인도분 미국 서부텍사스산원유(WTI) 선물 종가는 배럴당 73.21달러로 전장 대비 0.88% 내렸다. 미국은 첫 고위급 회담 이후 이란에 대한 제재를 60일간 유예하기로 했으며, 시장에서는 호르무즈 해협 통항 정상화 가능성에 주목하고 있다.
+
+마이크론 실적이 AI 랠리 운명 가른다
+
+이번 주 예정된 경제지표 역시 시장의 관심사다. 투자자들은 26일 발표되는 개인소비지출(PCE) 물가지수를 주목하고 있다. PCE는 연준이 가장 중요하게 여기는 물가 지표로 향후 금리 경로를 결정할 핵심 변수다. 시장 예상보다 높은 물가 상승률이 확인될 경우 추가 금리 인상 우려가 더욱 커질 수 있다.
+
+투자자들의 시선은 24일 장 마감 후 발표되는 마이크론 실적으로도 향하고 있다. 마이크론은 올해 AI 투자 붐의 최대 수혜주 가운데 하나로 꼽혀왔다. 시장에서는 이번 실적이 AI 데이터센터용 고대역폭메모리(HBM) 수요와 메모리 반도체 업황의 지속 가능성을 가늠할 중요한 시험대가 될 것으로 보고 있다.
+
+루이스 나벨리에 나벨리에앤드어소시에이츠 최고투자책임자(CIO)는 “마이크론 실적은 이번 어닝시즌의 대미를 장식할 이벤트가 될 것”이라며 “AI 투자 수요가 여전히 강하다는 점이 확인된다면 최근 조정은 오히려 매수 기회로 평가받을 수 있다”고 말했다.
+
+에버코어ISI의 줄리언 이매뉴얼 수석 전략가도 “최근 조정에도 결국 투자자들은 다시 대형 기술주로 돌아올 가능성이 높다”며 “올해 4~5월 증시 랠리를 이끌었던 것도 결국 기업 실적이었다. 이번에도 실적이 AI 투자 열풍의 지속 여부를 판가름하게 될 것”이라고 전망했다.
+
+월가에서는 이번 조정이 AI 투자 사이클 종료를 의미하기보다 과열됐던 기대가 조정받는 과정이라는 시각도 적지 않다. 브록 와이머 에드워드존스 투자전략가는 “미국 경제와 기업 실적 등 기초여건은 여전히 견조하다”며 “다만 기술주 비중이 지나치게 높아진 만큼 투자자들은 분산투자를 통해 변동성 확대에 대비할 필요가 있다”고 조언했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006313370' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006313370</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
