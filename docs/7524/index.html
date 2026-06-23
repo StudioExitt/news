@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VKOSPI 장중 한때 89.69까지 올라…삼전·닉스 시총 비중 55%</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        
+        <a class="more-btn" href="https://studioexitt.net/news/7524" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>VKOSPI 장중 한때 89.69까지 올라…삼전·닉스 시총 비중 55%</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">지정학적 불확실성과 단일종목 레버리지 ETF를 활용한 과도한 투기 수요가 복합적으로 작용하며 시장 변동성이 급격히 높아지고 있습니다. '한국형 공포지수'인 VKOSPI가 90선에 근접하고 있으며, 금융감독원은 투자자들의 경계심을 높이고 시스템적 위험성을 지적했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">금융감독원장이 시장의 불안정성과 레버리지 상품 과열에 대한 직접적인 경고를 표명했으며, 변동성 지수(VKOSPI)가 사상 최고치를 경신하며 투자심리 위축 및 시스템적 리스크가 고조되고 있기 때문.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#변동성지수</span> <span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#시장위험</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">김유향 기자 = 국내 증시가 23일 다시 급락하면서 이른바 '한국형 공포지수'로 불리는 코스피200 변동성지수(VKOSPI)가 다시 90선에 근접하고 있다.
+
+23일 VKOSPI는 장중 한때 89.69까지 치솟으며 90선에 바짝 다가섰다. 오전 11시 14분 현재는 전날 대비 0.48% 내린 86.94를 나타내고 있다.
+
+이날 코스피와 코스닥은 각각 4%대의 급락세를 보이고 있으며, 장중 급락에 따른 매도 사이드카가 발동되기도 했다.
+
+VKOSPI는 미국·이란 전쟁 발발 직후인 지난 3월 5일 장중 83.58까지 치솟은 뒤 한동안 진정세를 보였다. 4월 14일에는 장중 46.54까지 낮아지기도 했다.
+
+그러나 이달 들어 국내 증시가 한때 8%대의 급등락을 보인 가운데 VKOSPI도 다시 고공행진을 이어가고 있다. 지난 9일 91.23으로 마감하며 90선을 넘어섰고, 이후 6거래일 연속 80선을 웃돌았다. 지난 15일에는 장중 94.25까지 치솟아 사상 최고치를 경신했다.
+
+지난 17일에는 이를 끊고 종가 기준 79.65까지 내려갔지만, 이후 재차 상승세로 돌아섰다. 전날에는 장중 90.60까지 오르며 다시 90선을 넘나드는 흐름을 보였다.
+
+VKOSPI는 코스피200 옵션 가격에 반영된 향후 30일 기대 변동성을 연율화한 지표다.
+
+한국거래소의 '코스피200 변동성지수 방법론'에 따르면, 지수는 코스피200 옵션시장에 상장된 결제월종목을 이용해 잔존기간 30일로 하는 코스피200의 변동성을 산출하는 식이다.
+
+옵션 가격이 높아질수록 시장 참여자들이 향후 코스피200의 가격 변동 가능성을 크게 보고 있다는 의미로 해석된다.
+
+VKOSPI 90포인트는 연간 변동성 90% 수준을 의미한다. 이를 통상적인 252거래일 기준 일간 변동성으로 단순 환산하면 하루 약 ±5.7%의 예상 등락률에 해당한다.
+
+이달들어 미국과 이란 간 종전 양해각서(MOU) 협상을 둘러싼 불확실성이 이어진 가운데, 지난달 27일 처음 상장된 단일종목 레버리지 ETF(상장지수펀드)에 따른 수급 쏠림도 변동성을 키운 요인으로 거론된다.
+
+앞서 이찬진 금융감독원장은 전날 정례 기자간담회에서 최근 주식시장을 두고 "매매 회전율 등이 급등해 시장 불안정성과 변동성이 굉장히 심화한 상황"이라고 진단했다.
+
+특히 이 원장은 국내 단일종목 레버리지 ETF 투자 과열에 대한 우려를 표했다.
+
+그는 해당 상품의 회전율이 높을 때는 200%에 가까웠다고 짚으면서 "최근 금감원이 관련 소비자경보를 발령하기도 했지만 '쿨링다운'이 안 되고 있다"고 말했다.
+
+또 단일종목 레버리지 ETF의 도입 과정에 대해 말하며 "(관련) 증권신고서가 좀 일찍 들어왔다. 당시만 해도 환율문제가 조금씩 나아지는 상황이었고, 중동전쟁 직후 주식시장이 상당히 올라왔던 상황이라 우려가 많았다"면서 "어떻게든 그때 드러누워서 막았어야 했나 개인적으로 반성하는 상황이고, 후회를 많이 하고 있다"라고 말했다.
+
+현재 SK하이닉스(-5.38%)와 삼성전자(-4.67%)의 주가는 하락 중임에도 코스피 내 두 종목의 시가총액 비중은 각각 27.56%와 27.59%로 도합 55%를 넘어선다.
+
+한지영 키움증권 연구원은 "당분간 시가총액 1위를 놓고 두 종목 간 주도권 다툼이 벌어질 것으로 보이며, 그 과정에서 여타 업종 혹은 코스닥 시장의 수급 변동성이 높아질 수 있다는 점은 유의해야 할 듯하다"고 짚었다.
+
+익명의 금융투자업계 관계자는 "레버리지 및 인버스 ETF는 대규모 자금의 유출입이 발생하기에 시장 변동성을 높일 수밖에 없는 구조"
+
+특히 "레버리지 상품을 운용하는 자산운용사들은 자금 유출입에 맞춰 포지션을 조정해야 하는데 이 과정에서 선물시장 변동성이 커지고, 그 파급이 현물시장으로도 바로 넘어온다"고 설명.</div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
