@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>미국과 이란 간의 종전 협상 및 스페이스X 악재에 따른 비트코인 변동성 분석</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014021518' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7487" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>미국과 이란 간의 종전 협상 및 스페이스X 악재에 따른 비트코인 변동성 분석</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">대형 기술 기업의 대규모 자금 조달(스페이스X)과 연준의 통화정책 변수(PCE 지수)에 대한 우려가 겹치며 가상자산 시장 투자 심리가 전반적으로 위축되었다. 단기적으로는 부정적인 분위기가 지속될 가능성이 높다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">대형 기업의 신규 차입 확대 및 거시경제 핵심 지표(PCE) 발표 임박은 리스크 요인이 크며, 이는 가상자산 시장의 전반적인 투자 심리 위축을 야기하는 단기적 악재로 작용한다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">마이크로스트래티지</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#가상화폐</span> <span class="tag tag-hash">#비트코인</span> <span class="tag tag-hash">#스페이스X</span> <span class="tag tag-hash">#거시경제변수</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[서울=뉴시스] 김진아 기자 = 미국과 이란 간의 종전 협상이 진전을 보이고 있지만, 스페이스X의 대규모 채권 발행 등 악재가 겹치면서 비트코인 가격이 1억원 선을 하회하고 있다.
+
+23일 가상자산 거래소 빗썸에 따르면 이날 오전 8시32분 현재 비트코인 가격은 24시간 전보다 1.24% 하락한 9664만7000원에 거래되고 있다.
+같은 시각 달러 기준으로는 6만4000달러를 하회하고 있다. 글로벌 시황 사이트 코인마켓캡에서 비트코인은 24시간 전보다 0.9% 오른 6만3915달러에 거래 중이다.
+주요 알트코인은 혼조세를 나타내고 있다.
+코인마켓캡 기준 이더리움은 1.11%, 리플은 0.17% 상승한 반면 솔라나는 0.93% 내린 가격에 거래되고 있다.
+비트코인 가격은 미국과 이란 양국의 종전 협상이 난항을 겪다 진전되고 있다는 소식이 전해진 전날 오후 8시 이후 회복세를 보였다. 오후 11시 즈음에는 9800만원대를 회복하며 강세를 나타냈으나, 뉴욕증시 개장 후 스페이스X발 악재가 겹치며 다시 하락세로 돌아선 모습이다.
+스페이스X가 인공지능(AI) 인프라 구축 자금을 마련하기 위해 200억달러 규모의 투자등급 회사채 발행에 나선다는 소식이 전해지자 뉴욕증시는 일제히 타격을 받았다.
+대규모 차입 확대와 고평가 부담이 겹치면서 스페이스X 주가는 무려 16.4% 급락했다.
+다우존스30산업평균지수는 0.29% 상승 마감했지만, S&P500 지수와 기술주 중심의 나스닥 종합지수는 전장 대비 각각 0.37%, 1.33% 내린 채 거래를 마쳤다.
+시장에서는 향후 발표될 무가 지표가 투심을 움직일 추가적인 변수가 될 것으로 보고 있다.
+오는 25일에는 미국의 5월 개인소비지출(PCE) 가격 지수가 공개돌 예정인데, 이는 연방준비제도(Fed·연준)의 통화정책 결정 과정에 영향을 미치는 요인으로 시장의 관심이 큰 상황이다.
+전문가들은 PCE 지수가 시장 전망치를 웃돌 경우 통화정책에 대한 매파적 기조를 강화시키고, 가상자산 시장의 투자심리 역시 위축될 것으로 보고 있다.
+가상자산 시황 비교 플랫폼 크라이프라이스에 따르면 이날 비트코인 김치프리미엄은 -1.77%를 나타내고 있다. 김치프리미엄이 음(-)인 경우 국내에서 거래되는 비트코인 가격이 해외보다 낮은 가격에 유통되고 있다는 의미로 해석된다.
+가상자산 시장 심리를 나타내는 공포·탐욕 지수는 20점으로 '극단적 공포' 수준을 나타냈다. 지수가 0에 가까울수록 시장이 공포 상태로 투자자들이 과매도에 나설 가능성이 높고, 수치가 100에 가까울 경우 시장에 조정 가능성이 큰 것으로 해석된다.
+한편 세계 최대 비트코인 매집 기업인 마이크로스트래티지는 최근 약 3500만달러(약 538억원)를 들여 비트코인 520개를 추가 매입한 것으로 알려졌다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014021518' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014021518</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
