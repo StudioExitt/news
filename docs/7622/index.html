@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마이크론 실적 경계감</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005780399' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7622" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>마이크론 실적 경계감</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 지수가 금리 인상 우려와 마이크론 실적 경계감으로 급락했으나, 증권가에서는 단기 조정에 따른 차익실현 매물로 판단했다.
+반도체 등 핵심 산업의 펀더멘털은 견조하며, 중장기적으로는 업황 개선과 정책 동력에 힘입어 재차 우상향할 것이라는 분석이 지배적이다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단기적으로는 금리 인상 및 실적 경계감으로 인한 차익실현 매물 출회로 하락했으나, 보고서는 반도체 산업의 견조한 기초펀더멘털을 강조하며 중장기 우상향 추세를 강력하게 제시함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#증시</span> <span class="tag tag-hash">#투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">마이크론 실적 경계감
+금리 인상 우려 등 반영코스피가 23일 10% 가까이 급락한 것은 최근 급등에 따른 차익실현 매물이 나온 영향이며, 중기 우상향 추세는 여전히
+유효하다는 증권가 분석이 나왔다.
+
+이날 나정환 NH투자증권 연구원은 "현재 매물 출회는 실적 기대를 선반영해 오른 주가에 대한 차익실현 성격이 강하다"며 이같이 분석했다.
+
+금리·실적 경계감에 차익실현 매물 출회
+코스피 지수는 이날 금리 인상 가능성과 마이크론 실적 발표를 앞둔 경계감 등에 흔들리며 전날 대비 9.99% 고꾸라졌다. 코스피 시장에서
+외국인이 4조1000억원, 기관이 4조5000억원을 각각 팔아치웠고, 개인은 8조5000억원을 순매수했다. 코스닥 지수도 7.93% 하락
+마감했다.
+
+나 연구원은 "대외적으로는 뱅크오브아메리카(BofA)가 연내 3회 금리 인상 가능성을 전망하면서 시중금리 상승 부담이 재차 부각됐다"라며
+"여기에 메모리 반도체 업황의 가늠자인 마이크론의 실적 발표를 앞두고, 반도체 실적 상향 기대가 이미 주가에 선반영된 점이 차익실현의 빌미로
+작용했다"라고 설명했다.
+
+국내 정책 및 수급 변수도 투자 심리를 위축시켰다. 범여권 의원들이 주최한 토론회에선 주식·부동산 등 투자에 따른 미실현 이익도 소득으로 간주해
+포괄적으로 과세해야 한다는 취지의 주장이 나왔고, 한국 증시의 모건스탠리캐피털인터내셔널(MSCI) 선진국(DM)지수 편입이 재차 좌절됐다는
+보도도 함께 전해졌다.
+
+견조한 반도체 펀더멘털…과도한 FOMO는 변동성 요인
+다만 실적 동력 자체는 견조한 만큼, 시장의 펀더멘털(기초체력)은 여전히 튼튼하다는 평가다. 국내 반도체 기업들의 실적 전망치는 지속적으로 상향
+조정되고 있다.
+
+나 연구원은 "오는 25일 확인될 마이크론 실적도 예상치를 상회할 것으로 보이지만, 과도하게 선반영된 주가에 대한 부담이 더 크다"며 "실제
+지난 3월에도 실적 발표 후 우려가 커지며 주가가 단기 급락했다가 이후 실적 기대감이 살아나며 전일까지 162.4% 상승한 바 있다"라고 짚었다.
+
+그는 "이번 주가 조정은 기초체력 훼손이 아닌 만큼 중기 상승 추세는 여전히 유효하다"며 "시장 상승의 동력이 반도체를 중심으로 한 실적 개선에
+기반하고 있기 때문"이라고 강조했다.
+
+다만 투자자들이 반도체 등 일부 대형주에 대한 '포모'(FOMO·소외 공포) 현상이 확대되고 있어 당분간 변동성은 불가피할 것으로 보인다. 나
+연구원은 "삼성전자와 SK하이닉스를 제외한 코스피 순이익도 증가하고 있다"며 "실적 대비 낙폭이 과도한 업종은 오히려 투자 기회가 될 수
+있다"고 했다.
+
+아울러 "향후 국내 반도체 기업 실적 발표, SK하이닉스 ADR 상장, 외환시장 24시간 개방 등 상승 동력이 연이어 대기하고 있다"며 "단기
+변동성을 거친 뒤 지수는 재차 우상향할 것"이라고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005780399' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005780399</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
