@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 지수가 하루 만에 910p 폭락하며 역대 최대 낙폭을 기록한 가운데, 시장에선 '일시적 조정'에 무게를 두는 분위기</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005538808' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7692" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 지수가 하루 만에 910p 폭락하며 역대 최대 낙폭을 기록한 가운데, 시장에선 '일시적 조정'에 무게를 두는 분위기</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 전일 대비 9.99% 급락하며 역대급 폭락을 기록했으나, 시장에서는 이를 대형 악재보다는 단기적인 과열에 따른 '일시적 조정'으로 판단하고 있습니다. 전문가들은 거시경제 지표의 큰 변화가 없는 만큼, 실적 기반 상승세는 중장기적으로 지속될 것이라는 긍정적인 관측을 내놓고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단기 급락으로 인한 투자 심리는 위축되었으나, 전문가들은 이를 구조적 문제가 아닌 '과열에 따른 기술적 조정'으로 규정하고 실적 기반의 중장기 상승세는 지속될 것이라 전망하며 긍정적인 시각을 제시했습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피폭락</span> <span class="tag tag-hash">#일시적조정</span> <span class="tag tag-hash">#반도체주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 전 거래일(9114.55)보다 910.71포인트(9.99%) 하락한 8203.84에 장을 마감한 23일 오후 서울 중구 우리은행 딜링룸
+전광판에 지수가 표시되고 있다. 코스닥 지수는 전 거래일(968.40)
+코스피가 전 거래일(9114.55)보다 910.71포인트(9.99%) 하락한 8203.84에 장을 마감한 23일 오후 서울 중구 우리은행 딜링룸
+전광판에 지수가 표시되고 있다. 코스닥 지수는 전 거래일(968.40)보다 76.88포인트(7.94%) 내린 891.52에 거래를 마쳤다.
+2026.06.23. /사진=뉴시스
+[파이낸셜뉴스] 코스피 지수가 하루 만에 910p 폭락하며 역대 최대 낙폭을 기록한 가운데, 시장에선 최근 증시가 폭락한 경우 다음날 대부분 반등하는 경향을 보였다며 '일시적 조정'에 무게를 두는 분위기다.
+
+역대급 코스피 하락 10번 중 8번은 다음날 반등
+
+24일 한국거래소에 따르면 지난 23일 코스피는 전일 대비 910.71(-9.99%) 하락한 8203.84로 마감했다. 이날 하락폭은 기존 역대 1위였던 올해 3월 4일(698.37)을 크게 웃돌았으며, 하락률도 2008년 10월 24일(-10.57%)에 이어 역대 5위에 해당한다.
+
+그러나 이날 뉴스1에 따르면 시장에선 최근 코스피 하락폭이 컸을 경우 다음날 주로 반등하는 경향을 보였다는 데 주목하고 있다. 대세 상승장에 들어선 만큼, 투자자들은 일시적 요인으로 급락하더라도 주가가 다시 반등한다는 쪽에 믿음을 줬다는 것이다.
+
+실제로 역대 코스피 하락폭이 가장 컸던 1~10위 거래일 중 여덟 번은 다음날 상승으로 돌아섰고, 5%대 이상 폭등도 네 번이나 됐다. 폭락을 추가 매수의 기회로 여기고 다음날 즉시 매수세로 돌아섰다는 얘기다.
+
+뿐만 아니라 지난 3월 3일 452.22 하락(-7.2%), 3월 4일 698.37 하락(-12.1%)한 다음날인 3월 5일에는 490.36 상승(+9.63%)하며 폭등했고, 지난 6월 5일 478.82 하락(-5.5%), 6월 8일 676.18 하락(-8.3%)한 다음날에도 6월 9일 612.52(+8.18%)나 크게 올랐다. 폭락 후 다음날 또다시 하락한 나머지 두 번의 경우도 3일째에는 상승한 것이다.
+
+증권가 "단기 급등에 따른 차익실현" 일시조정 분석
+
+시장에선 지난 3월 중동 전쟁 같은 대형 매크로 악재로 인한 충격이 아닌 이상 한 번의 폭락이 지속적인 하락장으로 이어지진 않는다는 평가가 우세하다. 23일 역시 하락장 전환이 아니라, 최근 단기간에 폭등했던 반도체 업종의 과열 부담과 쏠림 현상에 대한 반작용 및 외국인을 중심으로 한 차익 실현 성격이 강하다는 설명이다.
+
+한지영 키움증권 연구원은 "유가, 미국 10년물 금리, 달러 등 매크로 지표들이 큰 변화가 없는 것으로 미뤄볼 때 휴전 협상 결렬, 연준 긴축 경계심리와 같은 악재가 다시 발현된 것으로 보기에는 어렵다"며 "속도와 쏠림이라는 기술적 문제에서 비롯된 것이지, 펀더멘털 악재는 아니라고 판단한다"고 말했다.
+
+단기 과열에 대한 부담감으로 투매가 발생하면서 급락했지만, 현재는 반도체 업종의 실적 폭등에 기반한 실적 장세인 만큼 당분간 코스피 상승세가 지속될 것이란 관측이 우세하다. 여기에 최근 증시를 떠받쳤던 개인 투자자들이 투자자 예탁금(139조6948억원)에 근접한 132조1857억원의 예탁금을 보유하고 있어 '실탄'도 여유있다는 평가다.
+
+김석환 미래에셋증권 연구원은 "이번 하락은 기업 실적 전망의 구조적 훼손보다는 기대 과열 이후 이벤트 실망감과 기술적 수급 부담이 맞물린 조정으로 판단된다"며 "단기 변동성 확대 가능성은 열어둘 필요가 있지만, 실적 가시성이 높은 주도 업종에 대한 중장기 긍정적 시각은 유지할 필요가 있다"
+</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005538808' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005538808</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
