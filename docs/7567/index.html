@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>퇴직연금 경쟁력, 안정성→수익성 중심으로 변화</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/366/0001173765' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7567" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>퇴직연금 경쟁력, 안정성→수익성 중심으로 변화</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">퇴직연금 자금이 안정성 중심에서 수익성 중심으로 변화하며, 예금식 저축 방식이 투자 방식으로 전환되고 있다.
+특히 가입자가 직접 운용하는 DC형과 IRP를 통한 ETF 투자가 급증하며 퇴직연금 시장의 구조적 패러다임 변화를 주도하고 있음.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">퇴직연금 자금이 원리금 보장형에서 수익성을 추구하는 투자 상품(ETF 등)으로 이동하는 구조적 변화가 확인됨. 이는 장기적으로 증권사 및 ETF 시장에 대규모의 안정적인 수요를 창출하며 업계 전반의 경쟁 구도를 '안전성'에서 '운용 전문성'으로 변화시키는 긍정적 신호입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">미국 S&P500 추종 ETF 관련주</span> <span class="tag stock-tag">반도체 ETF 관련주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권사</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">ETF</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#퇴직연금</span> <span class="tag tag-hash">#ETF투자</span> <span class="tag tag-hash">#구조적변화</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">NH투자증권 자산관리컨설팅센터 분석
+퇴직연금 경쟁력, 안정성→수익성 중심으로 변화
+NH투자증권 사옥. /NH투자증권 제공
+국내 증시가 역대급 상승 랠리를 펼치자 퇴직연금 시장의 판도도 바뀌고 있다. 그동안 원리금보장형 상품에 묶인 ‘잠자는 돈’이라는 인식이 강했던
+퇴직연금 자금이 실적배당형으로 빠르게 이동하면서 ‘예금의 시대’를 지나 ‘투자의 시대’로 들어서고 있는 것이다. 
+NH투자증권 자산관리컨설팅센터는 퇴직연금 투자 방향의 핵심은 ‘확정기여형(DC)·개인형 퇴직연금(IRP)과 상장지수펀드(ETF)로의 머니무브가속화’라고 분석했다. 예금처럼 묻어두던 돈이 수익을 추구하는 자금으로 성격을 바꾸고 있으며 그 중심에는 가입자가 직접 움직일 수 있는 DC·IRP와 ETF가 있다는 분석이다.
+
+고용노동부와 금융감독원이 발표한 ‘2025년 우리나라 퇴직연금 투자 백서’에 따르면 지난해 말 퇴직연금 적립금은 전년(431조7000억원)보다 69조7000억원 늘어난 501조4000억원으로 집계됐다. 2024년 처음 400조원을 돌파한 뒤 불과 1년 만에 500조원을 넘었다.
+
+DC·IRP 비중은 2024년 50.3%로 처음 DB를 넘어선 데 이어 2025년에는 54.3%로 커졌고, DB 비중은 45.7%로 낮아졌다.
+퇴직연금을 회사에 맡기는 대신 가입자가 직접 운용하는 구조로 바뀌면서 퇴직연금은 더 이상 ‘보관’하는 금융상품‘이 아니라 ‘운용’해야 할 금융상품이
+됐다.
+
+운용 방식의 변화도 가파르다. 실적배당형 적립금은 2024년 말 75조원에서 2025년 말 123조원으로 늘었다. 물론 아직까진 원리금보장형(378조원)이 전체의 75.4%를 차지하며 절대 우위에 있지만, 투자형 상품 비중이 점점 늘어나고 있다.
+
+퇴직연금 계좌를 통한 ETF 투자 추이. /NH투자증권 제공
+퇴직연금 변화의 중심에는 ETF가 있다. 퇴직연금 계좌를 통한 ETF 투자금액은 2025년 말 48조원으로 집계됐다. 연도별 ETF 잔액은 2023년 9조원, 2024년 21조원, 2025년 48조원으로 급증해 3년 연속 100% 이상 증가했다. 실적배당형 적립금 내 ETF 비중 역시 2023년 18.3%, 2024년 27.9%, 2025년 39.6%로 뛰었다.
+
+NH투자증권 자산관리센터는 낮은 보수, 쉬운 매매, 분산투자 효과, 지수 추종의 명확성이 퇴직연금의 장기 운용과 잘 맞기 때문에 ETF 투자금이 빠르게 늘었다고 분석했다. DC형과 IRP 구조상 가입자가 직접 상품을 고를 수 있다는 점도 ETF 투자 확산에 힘을 실었다.
+
+퇴직연금 자금 대부분은 미국 증시를 기본 투자축으로 삼고 있다. 다만 최근 새로 유입되는 자금은 국내 지수형 ETF와 반도체 테마, 삼성전자와 SK하이닉스 채권혼합50 등에 집중되고 있다.
+
+올해 5월말 기준 상품 유입 순위는 1위 미국 S&P500 추종 ETF(6669억원), 2위 미국 나스닥100 추종 ETF(5316억원), 3위 국내 코스피200 ETF(3725억원) 순이다. 장기 잔고는 미국 중심, 최근 매수는 국내 반도체와 안전자산 30% 비중을 채울 수 있는 채권혼합50으로 일부 이동하는 이중 흐름이 나타나고 있다.
+
+2025년 말 기준 퇴직연금 사업자 점유율은 은행이 52.0%로 절반을 차지하고 있고, 증권 26.2%, 생명보험 17.5%, 손해보험 3.4%등이다. 아직 은행 비중이 가장 크지만, 실적배당형과 ETF 운용 수요가 커질수록 증권사의 존재감이 커지고 있다. 퇴직연금 시장의 경쟁력이 ‘누가 더 안전한가’에서 ‘누가 더 잘 굴리게 도와주는가’로 바뀌고 있다는 의미다.
+
+NH투자증권 자산관리센터 관계자는 “퇴직연금 500조 돌파의 본질은 기업이 묻어두던 돈이 개인이 굴리는 돈으로, 예금에서 투자상품과 ETF로 이동하고 있다는 데 있다”며 “퇴직연금 시장에서 벌어지는 변화는 일시적 유행이 아니라 노후자금의 성격 자체를 바꾸는 구조적 이동에 가깝다”고
+말했다.
+원문링크: https://n.news.naver.com/mnews/article/366/0001173765</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/366/0001173765' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/366/0001173765</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
