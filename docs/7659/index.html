@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스페이스X 상장 재료 소멸…국내 우주기업 동반 하락</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/421/0009019739' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7659" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>스페이스X 상장 재료 소멸…국내 우주기업 동반 하락</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">스페이스X 상장이라는 강력한 촉매재 소멸과 스페이스X의 재무 구조 관련 우려가 겹치며, 우주항공 테마 ETF들이 급격한 하락세를 보였습니다. 시장에서는 대규모 차익실현 매물 출회와 더불어 높아지는 금리 인상 가능성 등 거시 경제적 부담이 투자심리를 위축시킨 것으로 분석됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 성장 테마의 촉매제 소멸과 대규모 차익실현 매물 출회, 그리고 높아지는 금리 인상 리스크가 동시에 시장 전체와 우주항공 섹터에 깊은 하락 압력을 가했습니다. 단기적인 투자 심리가 크게 악화된 상황입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한국항공우주</span> <span class="tag stock-tag">한화에어로스페이스</span> <span class="tag stock-tag">LIG디펜스앤에어로스페이스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">항공운수</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">기계</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#우주항공</span> <span class="tag tag-hash">#테마주하락</span> <span class="tag tag-hash">#IPO후급락</span> <span class="tag tag-hash">#금리인상리스크</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">지난 4월 6일(현지시간) 스타링크 인터넷 위성 25개를 탑재한 스페이스X 팰컨 9 로켓이 밴덴버그 우주군 기지에서 발사된 후 상승하는 모습이 미국 캘리포니아주 파사데나에서 보이고 있다. 2026.04.07.
+(서울=뉴스1) 박주평 기자 = 세계 최대 민간 우주기업 스페이스X의 기업공개(IPO)로 투자자들의 기대를 모았던 우주항공 상장지수펀드(ETF)가 최근 일주일간 가장 높은 하락률을 기록했다. 스페이스X 상장 후 우주항공 테마 기업들이 예상과 달리 동반 급락했기 때문이다.
+24일 한국거래소에 따르면 최근 5거래일(6월17~23일)간 국내 ETF(레버리지 제외) 중 가장 높은 하락률을 기록한 상품은 'SOL 우주항공 밸류체인'(-27.25%)으로 집계됐다. 
+2위는 KODEX건설(-23.94%), 3위는 HANARO K휴머노이드TOP10(-22.14%)이 차지했다. PLUS우주항공(-21.90%)과 TIGER 미국우주테크(-21.71%)가 각각 하락률 4위, 5위를 기록했다.
+지난 23일 코스피와 코스닥이 각각 9.99%, 7.94% 폭락한 영향이 있지만 우주항공 테마의 낙폭은 더욱 도드라졌다.
+SOL 우주항공밸류체인은 스페이스X 상장을 계기로 커지는 우주산업 투자 열기에 부응해 위성·발사체·소재·부품·장비 등 국내 우주산업 밸류체인 기업에 투자하는 상품이다. 
+h아만 지난 16일 상장 후 이튿날인 17일부터 23일까지 5거래일 연속 하락했다. 주요 구성종목은 인텔리안테크놀로지스(189300)(15.96%), 에이치브이엠(295310)(13.36%), 쎄트렉아이(099320)(11.61%), 한화시스템(272210)(11.26%) 등인데, 이들 종목은 4거래일 또는 5거래일 연속 하락했다.
+'PLUS 우주항공'도 국내 우주항공 밸류체인에 투자하는 ETF로, SOL 우주항공밸류체인과 비교해 한국항공우주(047810)(13.135), LIG디펜스앤에어로스페이스(079550)(12.99%), 한화에어로스페이스(012450)(11.77%) 등 코스피에 상장된 우주항공 대형 기업의 비중이 높다.
+TIGER 미국우주테크는 스페이스X 급락 직격탄을 맞았다. TIGER 미국우주테크는 스페이스X가 지난 12일(현지시간) 상장하고 2거래일 후 스페이스X를 편입했는데, 스페이스X는 상장 당일을 포함해 3거래일간 급등한 뒤 지난 17일부터 하락했다. 특히 지난 22일에는 하루 만에 16.43% 급락해 시장에 충격을 안겼다. 스페이스X뿐 아니라 로켓 랩, 레드와이어, 인튜이티브 머신스 등 미국의 우주항공 기업들의 주가도 부진했다.
+스페이스X 급락의 촉매는 200억 달러 규모의 회사채 발행 계획 공개다. 스페이스X는 IPO를 통해 약 860억 달러를 조달했으나, 단기 차입금 상환 등을 위해 무담보 선순위 채권을 발행한다고 발표했다.
+김세환 KB증권 연구원은 ""스페이스X의 모 회사채 발행 계획 발표로 재무 부담과 고평가 논란이 확산됐다"며 ""스페이스X는 약 1000억 달러의 현금성 자산을 보유하고 있음에도 대규모 차입 확대에 대한 우려가 부각됐다""고 설명했다.
+스페이스X를 편입한 SOL 미국우주항공TOP10(-18.07%)과 ACE미국우주테크액티브(-17.13%) 역시 높은 하락률을 보였다.
+시장에서는 그간 우주항공 섹터를 지탱해 온 스페이스X 상장이라는 최대의 재료가 소멸하면서 차익실현 매물이 대거 출회했다는 분석이 나온다. 
+또 최근 미국 연방준비제도(Fed·연준)의 매파적인 기조를 드러내고 뱅크오브아메리카(BoA)도 올해 연준이 세 차례 금리를 인상할 것으로 전망하는 등 금리인상 가능성이 커지고 있다.
+박 연구원은 ""인공지능(AI) 투자 확대에 따른 자금조달 부담이 성장주에는 부담으로 작용한다""고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/421/0009019739' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/421/0009019739</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
