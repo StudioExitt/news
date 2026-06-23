@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>금융위가 밀어붙인 단일종목 ETF…금감원장 "드러누워서라도 막았어야"</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000509738' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7516" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>금융위가 밀어붙인 단일종목 ETF…금감원장 "드러누워서라도 막았어야"</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금융위원회와 금융감독원 간의 상반된 규제 및 정책 시각차가 반복되며 시장 혼란을 키우고 있습니다. 특히 단일종목 레버리지 ETF 관련 금감원장의 공개 비판은, 정부가 자본시장 활성화를 위해 추진한 대표적 규제 완화 정책에 대한 문제 제기로 해석됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">금융위와 금감원 간의 정책 및 감독 기능에 대한 공개적인 이견 표명은 시장 참여자들에게 규제 불확실성과 신뢰 리스크를 높게 인식시킵니다. 특히 고위험 상품(레버리지 ETF)을 둘러싼 비판이 크므로, 단기적으로 투자심리가 위축되고 시장 전반의 제도적 안정성 우려가 높아질 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#금융규제</span> <span class="tag tag-hash">#ETF위험성</span> <span class="tag tag-hash">#시장불확실성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">이찬진(왼쪽) 금융감독원장이 삼성전자·SK하이닉스 단일종목 레버리지 ETF를 두고 "드러누워서라도 막았어야 했다"고 공개 비판하면서 금융위원회와
+금융감독원 간 시각차가 다시 부각되고 있다. 최근 특사경 인지수사권 놓고도 평행선…오랜 갈등 구조
+이찬진(왼쪽) 금융감독원장이 삼성전자·SK하이닉스 단일종목 레버리지 ETF를 두고 "드러누워서라도 막았어야 했다"고 공개 비판하면서 금융위원회와
+금융감독원 간 시각차가 다시 부각되고 있다. 최근 특사경 인지수사권 확대 논란과 스페이스X IPO 공모주 배정 사태까지 이어지며 당국 간
+엇박자가 투자자 혼란을 키우고 있다는 지적이 나온다. /금융위원회
+
+ 금융위원회와 금융감독원의 엇박자가 반복되고 있다. 금융위가 올해 초 적극 추진한 삼성전자·SK하이닉스 단일종목 레버리지
+상장지수펀드(ETF)를 두고 금감원장이 "드러누워서라도 막았어야 했다"고 공개 비판하면서다. 최근 금융감독원의 특별사법경찰(특사경) 인지수사권
+확대 논란과 미래에셋증권의 스페이스X 기업공개(IPO) 공모주 배정 논란까지 이어지면서 당국 간
+시각차의 부담이 고스란히 투자자들에게 전가되고
+있다는 지적이 나온다.
+
+23일 금융투자업계에 따르면 이찬진 금융감독원장은 전날 서울 여의도 금융감독원에서 열린 기자간담회에서 단일종목 레버리지 ETF와 관련해 "부작용이 너무 커진 부분에 대해 정부 입장에서도 고민이 많다"며 "지금 생각해보면 드러누워서라도 통과를 막았어야 하는 것 아닌가 개인적으로
+반성하고 있다"고 말했다.
+
+이 원장은 해당 상품의 높은 회전율과 개인투자자 비중을 문제로 지목했다. 현재 단일종목 레버리지 ETF 순자산 규모는 14조원을 넘어섰으며
+투자자의 약 92%가 개인투자자인 것으로 알려졌다. 평균 회전율은 130% 수준에 달한다.
+
+그는 "높은 위험성을 가진 상품인데도 대부분이 개인투자자"라며 "연속 하락장이 이어질 경우 큰 손실로 연결될 수 있다"고 우려했다. 이어
+"효과는 크지 않았는데 부작용은 훨씬 커졌다"고 평가했다.
+
+하지만 단일종목 레버리지 ETF는 금융위가 올해 초부터 추진한 대표적인 규제 완화 정책이다.
+
+이억원 금융위원장은 지난 1월 28일 출입기자단 간담회에서 "해외에는 출시돼 있지만 국내에서는 규제로 막혀 있는 상품들이 있어 투자 수요를
+충분히 충족하지 못하고 있다"며 "불합리한 규제를 신속히 개선해 자본시장 매력도를 높이겠다"
+고 밝혔다.
+
+당시 금융위는 해외 상장 레버리지 ETF로 향하는 투자 수요를 국내 시장으로 유인하고 국내 ETF 시장 경쟁력을 높이기 위해 단일종목 레버리지
+ETF 도입을 추진했다. 이후 관련 시행령 개정을 거쳐 지난 5월 삼성전자와 SK하이닉스를 기초자산으로 한 상품들이 상장됐다.
+
+결국 금융위가 '규제 비대칭 해소'와 '자본시장 경쟁력 강화'를 명분으로 허용한 상품을 두고 금감원장이 불과 수개월 만에 공개적으로 문제를
+제기한 셈이다.
+
+금융권에서는 이번 논란을 단순한 상품 평가를 넘어 금융위와 금감원 간 오랜 갈등 구조의 연장선으로 보는 시각도 있다.
+
+금융위와 금감원은 외환위기 이후 금융감독체계 개편 과정에서 각각 정책과 감독 기능을 담당하도록 역할이 나뉘었지만, 이후에도 주요 현안마다 크고
+작은 이견을 반복해왔다. 금융위는 정책 수립과 제도 설계를 담당하고 금감원은 검사·제재 등 감독 업무를 맡고 있지만, 정책 판단과 감독 집행
+과정에서 서로 다른 목소리가 나오는 경우가 적지 않았다는 평가다.
+
+실제로 금융소비자보호 조직 개편, 금융회사 제재 권한, 은행권 대출금리 산정 문제 등 주요 현안마다 양 기관이 시각차를 드러낸 바 있다. 최근
+특사경 인지수사권 확대 논란 역시 이 같은 갈등 구조가 재현된 사례로 꼽힌다.
+
+지난 1월 28일 이억원 금융위원장은 정부서울청사에서 열린 출입기자단 월례 간담회에서 "해외에서는 단일종목 레버리지 ETF가 이미 출시돼 있는데
+국내에서는 비대칭 규제로 투자 수요를 충족하지 못하는 문제가 있었다"며
+지난 1월 28일 이억원 금융위원장은 정부서울청사에서 열린 출입기자단 월례 간담회에서 "해외에서는 단일종목 레버리지 ETF가 이미 출시돼 있는데
+국내에서는 비대칭 규제로 투자 수요를 충족하지 못하는 문제가 있었다"며 "규제를 신속히 개선해 국내 자본시장의 매력도를 높이겠다"
+고 밝혔다.
+
+앞서 이 위원장은 지난 1월 기자간담회에서 금감원 특사경에 인지수사권을 부여하되 수사 범위는 자본시장 불공정거래와 불법사금융으로 제한하는 방향을
+제시했다. 반면 금감원은 불법사금융뿐 아니라 보이스피싱과 보험사기 등 민생금융 범죄까지 수사 범위를 확대해야 한다는 입장을 보여왔다.
+
+금융위는 권한 남용 우려를 이유로 신중론을 폈고, 금감원은 금융범죄 대응 역량 강화를 강조했다. 당시에도 금융소비자 보호라는 제도 도입 취지보다
+양 기관 간 권한 범위를 둘러싼 논쟁이 더 부각됐다는 평가가 나왔다.
+
+최근 미래에셋증권의 스페이스X IPO 공모주 '0주 배정' 사태 역시 당국 역할론을 둘러싼 논란으로 이어지고 있다.
+
+i 원장은 이날 "당연히 배정될 것으로 생각했다"며 미래에셋증권에 대한 검사 방침을 밝혔다. 해외 투자 자제 기조가 공모주 배정 실패에 영향을
+미쳤다는 지적에 대해서는 "공모주 배정이 안 된 게 금감원과 무슨 상관이 있겠느냐"고 선을 그었다.
+
+그러나 투자은행(IB)업계에서는 이번 사태를 미래에셋증권만의 문제로 보기 어렵다는 시각도 적지 않다.
+
+업계에 따르면 미래에셋증권은 스페이스X IPO 인수단에 참여했지만 국내 일반투자자 대상 공모 절차를 진행하지 못했다. 국내 자본시장법상
+일반투자자를 대상으로 해외 공모주를 판매하기 위해서는 증권신고서 제출 등의 절차가 필요하지만 미국 IPO 일정과 국내 규제 체계가 맞지 않으면서
+사실상 일반공모가 어려웠기 때문이다.
+
+한 IB업계 관계자는 "스페이스X IPO에서 미래에셋증권이 최종 배정을 받지 못한 배경에는 일반공모 절차를 진행하지 못한 점이 영향을 미쳤다는
+게 업계의 대체적인 시각"이라며 "글로벌 주관사 입장에서는 관련 승인 절차와 규제 문제가 정리되지 않은 상태에서 물량을 배정하는 데 부담을 느낄
+수밖에 없다"
+고 말했다.
+
+이어 "일본 미즈호증권은 일반공모가 가능한 제도적 기반을 활용해 최종적으로 약 22억달러 규모 물량을 배정받았다
+반면 국내 투자자들은 공모주를 한 주도 받지 못했다. 결국 해외 IPO를 자국 투자자에게 공급할 수 있는 제도와 규제 환경의 차이가 결과를 갈랐다는 평가가 나온다"
+고 설명했다.
+
+그러면서 "미래에셋증권의 투자자 설명 의무 여부는 별도로 따져봐야겠지만 이번 사태를 개별 증권사 책임만으로 설명하기는 어렵다"
+며 "국내 투자자들이 해외 IPO에 참여할 수 있는 제도적 기반과 당국의 사전 대응 역시 함께 점검할 필요가 있다"
+고 덧붙였다.
+
+시장에서는 단일종목 레버리지 ETF, 특사경, 스페이스X IPO 사태 모두에서 공통적으로 금융위와 금감원의 시각차가 반복적으로 노출되고 있다는
+점을 우려하고 있다.
+
+한 금융투자업계 관계자는 "금융위는 시장 활성화와 규제 개선을 강조하고 금감원은 투자자 보호와 리스크 관리를 강조하는 역할 차이가 있지만
+시장에서는 결국 같은 금융당국으로 인식한다"며 "정책을 추진할 때와 문제가 발생한 뒤의 메시지가 달라질 경우 투자자들의 혼란만 커질 수 있다"
+고 말했다.
+
+이어 "특사경은 권한 문제, 레버리지 ETF는 정책 평가 문제, 스페이스X는 투자자 보호 문제라는 차이는 있지만 모두 당국 간 시각차가 시장에
+그대로 노출된 사례"라며 "당국이 서로 다른 목소리를 내는 사이 그 부담은 결국 금융회사와 투자자, 금융소비자들이 떠안을 수밖에 없다"
+고 지적했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000509738' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000509738</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
