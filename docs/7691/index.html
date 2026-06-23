@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>화장품株 줄줄이 52주 신저가 기록</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005780493' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7691" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>화장품株 줄줄이 52주 신저가 기록</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">K뷰티 산업은 견조한 수출 증가와 높은 실적 전망 등 양호한 펀더멘털을 유지하고 있으나, 최근 반도체 관련주로의 수급 쏠림 현상이 심화되면서 주가 부진이 나타나며 여러 화장품 기업들이 52주 신저가를 기록했다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">수급 쏠림 현상으로 인해 견조한 실적 전망 및 수출 호황에도 불구하고 당장의 주가 반등이 어려우며, 이는 투자 심리를 위축시키는 요인이다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">아모레퍼시픽</span> <span class="tag stock-tag">LG생활건강</span> <span class="tag stock-tag">코스맥스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">개인생활용품</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">화장품제조</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#K뷰티</span> <span class="tag tag-hash">#주가하락</span> <span class="tag tag-hash">#수급쏠림</span> <span class="tag tag-hash">#펀더멘털</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">글로벌 시장에서 K뷰티의 인기가 높아지고 있지만 화장품주의 주가에는 반영되지 못하고 있는 모습이다. 화장품주들이 줄줄이 52주 신저가를 기록하는 등 주가 부진이 이어지고 있다. 양호한 수출 실적 등에도 수급 쏠림으로 주가 반등이 쉽지 않은 것으로 보인다.
+
+24일 한국거래소에 따르면 아모레퍼시픽은 전일 장중 9만5700원까지 하락하며 52주 신저가를 기록했다. 아모레퍼시픽은 전장 대비 4.47% 하락한 9만6200원에 마감하며 2023년 7월 이후 약 3년만에 주가가 10만원 아래로 내려왔다. LG생활건강도 장중 22만원을 기록하며 역시 52주 신저가를 다시 썼다. 이밖에 코스맥스, 한국화장품제조, 토니모리 등도 이날 52주 신저가를 기록했다.
+
+화장품주의 펀더멘털(기초체력)은 양호한 상황이다. 외국인들의 K화장품 선호가 여전하고 수출 실적도 호조세가 이어지고 있다. 한국투자증권에 따르면 올해 6월 1~20일 화장품 수출은 전년 동기 대비 23.5% 증가했다. 화장품 수출은 지난달에는 전년 동월 대비 24.2% 증가한 11억8000만달러로 5월 기준 최대 규모를 기록한 바 있고 4월에는 13억5400만달러로 올해 월간 최대를 기록한 바 있다.
+
+양호한 수출 흐름은 향후에도 이어질 것으로 전망된다. 김명주 한국투자증권 연구원은 "한국 화장품 브랜드의 미국 내 오프라인 침투가 이제 시작인 점을 고려하면 미국향 수출의 양호한 추세는 하반기까지 이어질 가능성이 높다"면서 "중국향 수출 또한 더이상 전년 동기 대비 하락하지 않고 반등세를 이어가는 점 또한 긍정적"이라고 설명했다.
+
+박현진 신한투자증권 연구원은 "한국 화장품 생산액 대비 수출 비중은 70%에 육박하고 무역수지 흑자폭은 12조원 규모로 커졌다"면서 "특히 선진 시장에서의 카테고리 확장, 지역 확장이 조화롭게 펼쳐지고 있어 한국 화장품의 수출 성장 추세는 중장기 성장 사이클임을 다시 한번 더 상기시킨다"고 분석했다.
+
+올해 2분기 실적 전망도 양호하다. 금융정보업체 에프앤가이드에 따르면 아모레퍼시픽의 2분기 영업이익 컨센서스(증권사 전망치 평균)는 959억원으로 전년 동기 대비 30.24% 증가할 것으로 예상된다. 에이피알은 2분기 영업이익이 1688억원으로 99.26% 급증할 것으로 전망된다. LG생활건강의 영업이익 컨센서스는 31.69% 증가한 722억원, 한국콜마 26.09% 증가한 926억원, 코스맥스는 14.23% 늘어난 695억원, 달바글로벌 47.31% 증가한 431억원이다.
+
+양호한 펀더멘털에도 주가가 부진한 이유는 수급 쏠림으로 소외되고 있기 때문이다. 최근 코스피가 9000선을 돌파하며 강세를 보였으나 반도체 쏠림 현상이 심화되며 관련주들이 주가 강세를 견인했다. 김 연구원은 "화장품 수출의 양호한 흐름에도 시장 내 주도 섹터 위주로의 수급 쏠림으로 최근 화장품 섹터의 주가는 아쉬운 흐름을 보이고 있다"고 분석했다.
+
+NH투자증권은 수급 쏠림 영향 등을 반영해 아모레퍼시픽의 목표주가를 기존 18만원에서 16만원으로 하향 조정했다. 정지윤 NH투자증권 연구원은 "올해 안정적인 실적에도 불구하고 수급 쏠림 영향으로 밸류에이션은 12개월 선행 주가수익비율(PER) 16.6배까지 하락했다"면서 "하반기 기존 서구권 오프라인 베이스에서 이커머스 채널 매출과 순위 향상이 주가 회복의 단초로 작용할 것"이라고 설명했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005780493' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005780493</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
