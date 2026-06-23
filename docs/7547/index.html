@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피가 사상 첫 9000을 돌파하며 한국 자본시장 역사를 새로 썼다.</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004633997' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7547" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피가 사상 첫 9000을 돌파하며 한국 자본시장 역사를 새로 썼다.</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 사상 최고치인 9000을 돌파하며 역사적인 마일스톤을 기록했습니다. 고액 자산가들 역시 AI 및 반도체 관련주에 자산을 집중적으로 배치하며 증시의 구조적 강세를 입증했습니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피9000</span> <span class="tag tag-hash">#반도체슈퍼사이클</span> <span class="tag tag-hash">#고액자산가투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 사상 첫 9000을 돌파하며 한국 자본시장 역사를 새로 썼다. 18일 서울 중구 하나은행 본점 하나인피니티서울에서 직원들이 코스피
+9000 돌파 기념 타종 세리머니를 하고 있다. 오승현 기자국내 증시 강세가 이어지면서 30억원 이상 자산을 보유한 고액 자산가가 1년 새 3배
+넘게 늘어났다. 이들이 가장 많이 담은 종목은 SK하이닉스와 삼성전자 등 인공지능(AI)·반도체 관련주였다.
+
+미래에셋증권에 따르면 지난달 말 기준 자사 30억원 이상 고액 자산가 고객 수는 약 9500명으로 집계됐다고 23일 밝혔다. 지난해 5월
+3000명대와 비교하면 200% 이상 증가한 수치다. 전월 대비 증가율도 26%에 달했다.
+
+100억원 이상 초고액 자산가 고객 수도 빠르게 늘었다. 지난달 말 기준 1400여명으로 지난해 같은 기간 600명대의 두 배를 넘어섰다.
+
+미래에셋증권은 AI 붐과 반도체 슈퍼사이클에 힘입어 국내 증시가 급등한 데다 은행 예금 자금이 증권사로 이동하는 ‘머니무브’ 현상도 영향을
+미친 것으로 분석했다.
+
+미래에셋증권은 “단순 시장 상승에 따른 자산 증가 효과를 넘어, 글로벌 투자 기회와 차별화된 자산관리 서비스를 찾는 고액자산가들이 미래에셋증권을
+선택하고 있는 것으로 분석된다”고 설명했다.
+
+초고액 자산가들이 가장 많이 보유한 국내 주식은 현대차·SK하이닉스·삼성전자·한미반도체·산일전기 순이었다. 해외 주식은
+브로드컴·엔비디아·마이크론·테슬라 등이 상위권에 이름을 올렸다.
+
+미래에셋증권은 이들이 AI 반도체와 데이터센터, 모빌리티 등 구조적 성장 산업에 선제적으로 투자하며 수익 기회를 포착한 것으로 분석했다.
+
+주요 보유 종목의 수익률을 살펴보면 2024년 12월부터 올해 5월까지 기준으로 SK하이닉스는 1241.6%의 수익률을 기록했다. 
+이어 마이크론(1058%), 삼성전자(495.9%), 산일전기(260.1%) 순으로 수익률이 높았다.
+
+미래에셋증권 관계자는 “디지털 플랫폼과 글로벌 네트워크를 기반으로 성장 산업을 선별한 투자 판단이 높은 수익률로 이어졌다”
+면서 “특히 박현주
+글로벌 전략가(GSO)가 일관되게 강조해 온 미래 성장 산업 중심의 글로벌 투자 철학이 고객 자산관리 전반에 반영됐다”고 말했다.
+
+이어 “고액 자산가 고객이 1년 사이 3배로 증가한 건 미래에셋증권의 투자철학과 관리 역량이 인정받았다는 의미”라며 “고객의 성공이 기업의
+성과라는 고객동맹 철학을 바탕으로 VIP 자산관리 시장의 표준을 새롭게 써 가겠다”고 밝혔다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004633997' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004633997</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
