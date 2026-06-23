@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 급락에 서킷브레이커 발동...AI 수익성 의구심 및 외국인 차익실현 매도세 영향</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005375885' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7565" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 급락에 서킷브레이커 발동...AI 수익성 의구심 및 외국인 차익실현 매도세 영향</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 수익성에 대한 의구심, 외국인의 차익실현 매도세, 그리고 주요 해외 지수 편입 불발 기대감 등의 복합적인 요인으로 코스피가 장중 급락하며 서킷브레이커가 발동되는 등 큰 변동성을 보였습니다. 전문가들은 단기 조정이라 평가하며, 이번 기회를 주도주 비중을 확대하는 전략적 기회로 활용할 것을 제언했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">당일 서킷브레이커 발동 및 8% 이상 급락이라는 극심한 변동성 자체가 가장 큰 영향 요인이며, 이는 투자 심리 위축과 직결됩니다. 다만 분석가의 낙관적 전망(주도주 비중 확대)이 단기 반등 가능성을 시사합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#서킷브레이커</span> <span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">구윤성 기자 = 23일 서울 중구 하나은행 본점 딜링룸 전광판에 코스피 등 시황이 나오고 있다. 이날 코스피와 코스닥은 반도체 쏠림 현상에 외국인의 차익실현 매도세가 더해지면서 프로그램매도호가 일시효력정지(사이드카)에 이어 서킷브레이커(매매중단조치)가 발동됐다.  코스피가 장중 8% 이상 급락하며 8000대로 미끄러지고, 서킷브레이커가 발동됐다. AI(인공지능) 수익성 의구심 부각과 차익 실현 매물 출회 등이 지수를 끌어내리고 있다는 분석이 나온다.
+
+23일 오후 3시2분 현재 코스피는 전 거래일 대비 739.24포인트(8.11%) 내린 8375.31에 거래되고 있다. 이날 오후 2시33분 서킷브레이커 1단계가 발동됐고, 2시53분에 해제됐다.
+
+증시 하락 원인에 대해 조아인 삼성증권 연구원은 "지난밤 빅테크 주가 하락으로 투자 심리가 위축됐고, 최근 AI 기업들의 대규모 자금조달 움직임이 이어지면서 AI 투자의 수익성에 대한 의구심이 재차 부각됐기 때문"이라고 분석했다.
+
+조 연구원은 미국 증권거래위원회(SEC)의 SK하이닉스 ADR(주식예탁증서) 상장 심사 결과가 예상보다 지연되고, 한국 증시의 MSCI(모간스탠리캐피털인터내셔널) 선진국 지수 편입이 불발된 점도 영향을 끼쳤다고 봤다.
+
+그는 "시장에서는 여전히 이번 주 내 ADR 승인 가능성을 높게 평가하고 있으나, 해당 기대감으로 전일 급등했던 SK하이닉스와 SK스퀘어 주가는 약세를 보이고 있다"며 "한국의 MSCI 선진국 지수 관찰 대상국 편입이 무산되면서 관련 기대감도 후퇴했다"고 말했다.
+
+그동안 코스피가 급등했던 만큼 차익실현 매물도 나오고 있다. 조 연구원은 "코스피가 가파른 상승세를 보였던 만큼 차익 실현 압력 역시 상대적으로 크게 나타나고 있다"며 "특히 한국 시간 목요일 새벽 예정된 마이크론 테크놀로지의 실적 발표에 앞서 선제적 매도 수요가 유입되고 있는 것으로 보인다"
+
+다만, 밸류에이션 측면에서 코스피는 여전히 안정적인 선택지라고 평가했다.
+
+조 연구원은 "코스피 8600 기준 12개월 예상 PER(주가수익비율)은 8.3배, PBR(주가순자산비율)은 2배 수준"이라며 "최근 변동성 장세가 지속되고 있지만, 단기 급락 이후에는 주도주를 중심으로 가장 빠른 반등이 나타났다는 점을 기억할 필요가 있다"
+
+이어 "AI 성장세와 반도체 이익 모멘텀이 유지되고 있는 만큼, 이번 조정을 추세 훼손으로 해석하기보다는 주도주 비중 확대 기회로 활용하는 전략이 유효하다고 판단한다"고 했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005375885' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005375885</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
