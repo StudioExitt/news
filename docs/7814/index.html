@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>종목선별 쉬운 액티브ETF
+시장수익률 따라잡기 위해
+비반도체 테마 내건 상품도
+둘중 하나는 삼전닉스 담아
+시장 양극화 더 심해질 우려</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005698319' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7814" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>종목선별 쉬운 액티브ETF
+시장수익률 따라잡기 위해
+비반도체 테마 내건 상품도
+둘중 하나는 삼전닉스 담아
+시장 양극화 더 심해질 우려</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 주식형 액티브 ETF들이 시장 수익률을 따라잡기 위해 삼성전자와 SK하이닉스 등 소수 대형 반도체주에 과도하게 편중되는 현상이 관찰되었습니다. 심지어 로봇이나 ESG 같은 비반도체 테마의 상품들까지 주요 종목들의 비중을 늘리고 있어, 시장 양극화 심화 및 ETF의 본래 목적인 종목 선별 기능 약화에 대한 전문가들의 우려를 낳고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단기적으로 반도체 강세장이 매수세를 이끌고 있으나, ETF들이 특정 대형주에 과도하게 집중되면서 시장 전체의 구조적 불안정성(양극화 심화)과 제도권 리스크를 노출시키므로 장기적인 투자 전략 및 규제 관점에서 부정적 영향을 미칠 수 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">ETF</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#액티브ETF</span> <span class="tag tag-hash">#시장양극화</span> <span class="tag tag-hash">#반도체주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">종목선별 쉬운 액티브ETF
+시장수익률 따라잡기 위해
+비반도체 테마 내건 상품도
+둘중 하나는 삼전닉스 담아
+시장 양극화 더 심해질 우려
+국내 주식형 액티브 상장지수펀드(ETF) 2개 중 1개는 삼성전자와 SK하이닉스를 최대 편입 종목으로 담고 있는 것으로 나타났다. 펀드매니저의
+종목 선별이 비교적 자유로운 액티브 ETF에서도 '삼전닉스'가 최선호 종목으로 주목받는 것이다. 로봇·비메모리 반도체 ETF까지 상품 전략과
+무관하게 두 종목 비중을 늘리면서 증시 쏠림을 키운다는 지적도 나온다.
+
+24일 한국거래소에 따르면 국내 주식형 액티브 ETF 상품 76개 가운데 35개의 상위 2개 편입 종목이 삼성전자와 SK하이닉스인 것으로
+집계됐다. 이 같은 현상은 최근 국내 증시를 반도체 대형주가 주도하면서 두드러지고 있다.
+
+시장 수익률을 따라가기 위해 비반도체 테마의 액티브 ETF마저 삼성전자·SK하이닉스 비중을 높이는 모습이다. 순자산 1조4000억원 규모의
+'KODEX 로봇액티브'는 삼성전자(11%)와 SK하이닉스(7%)를 가장 크게 담고 있다. 로보티즈(7%), 현대모비스(7%) 등 대표 로봇
+기업보다 비중이 높다. 'ACE ESG액티브' 'TIME K신재생에너지액티브' 등에서도 삼전닉스 비중이 가장 높았다.
+
+메모리 반도체 대표 기업인 SK하이닉스가 비메모리 반도체 ETF에 편입된 사례도 있다. 'RISE 비메모리반도체액티브'의 SK하이닉스 비중은
+22%다. 투자설명서에는 개별 종목 최대 편입 비중을 15%로 제시하고 있음에도 최근 삼전닉스 비중이 각각 20%대까지 커졌다.
+
+곽찬 KB자산운용 액티브ETF운용실장은 "SK하이닉스의 파운드리 사업을 고려하면 비메모리와 무관한 기업은 아니다"면서도 "수익률 방어를 위한
+판단도 반영됐다"고 설명했다.
+
+일부 ETF는 수익률을 좇아 삼성전자와 SK하이닉스 비중을 늘리면서 기초지수와 괴리가 커지기도 했다.
+
+소프트웨어·인공지능(AI) 기업에 투자하는 'UNICORN 생성형AI강소기업액티브'는 SK하이닉스를 약 20% 편입하고 있다. 수익률 제고를
+위해 반도체 비중을 높인 것이다. 다만 지난 19일부터 상관계수 기준 미달 공시가 이어지자 SK하이닉스 비중을 줄인다는 방침이다.
+
+액티브 ETF는 기초지수를 70%까지 따라야 한다. 최근 국내에서 상관계수 미달을 이유로 상장폐지 절차에 들어간 첫 사례가 나오면서 운용사들도
+신중을 기하는 분위기다.
+
+g럼에도 업계에서는 최근과 같은 반도체 강세장에서 삼전닉스 편입이 불가피하다고 설명한다. 실제 최근 두 종목 비중이 높은 ETF의 성과가
+좋았다. 24일 한국거래소에 따르면 국내 주식형 액티브 ETF 중 1개월 수익률이 가장 높은 'TIGER 반도체TOP10커버드콜액티브'는 두
+종목 비중이 40%를 웃돈다. 한 달간 개인 자금도 약 6000억원 유입됐다.
+
+전문가들은 액티브 ETF까지 삼성전자·SK하이닉스에 집중되는 현상에 우려를 표한다. 종목 발굴 기능이 약화할 수 있다는 지적이다. 이효섭
+자본시장연구원 연구위원은 "자금이 대형 반도체주로만 몰릴 경우 시장 양극화가 심화될 수 있다"고 말했다. 금융감독원 관계자는 "초과 수익을
+목표로 하는 액티브 ETF는 운용 재량이 인정된다"면서도 "투자설명서와 실제 운용 간 괴리 등 투자자 보호 관련 사안은 면밀히 들여다볼
+것"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005698319' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005698319</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

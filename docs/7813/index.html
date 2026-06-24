@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>시장 흔드는 단일종목 레버리지</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004634574' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7813" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>시장 흔드는 단일종목 레버리지</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">단일 종목 레버리지 ETF의 거래 활성화로 인해 반도체 등 특정 종목에 투자 자금이 지나치게 집중되면서 시장 변동성이 최고조에 달하고 있습니다. 전문가들은 현행 규제 하에서 쏠림을 완화하기 위해 ETF 허용 대상을 확대하는 방안 등을 대안으로 제시하고 있으나, 금융 당국은 면밀한 모니터링을 지속할 계획입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업황 기대감과 결합된 단일 종목 레버리지 ETF 사용으로 과도한 자금 쏠림 현상 및 구조적 변동성 위험이 부각되어 투자자들에게 경고 신호를 주고 있습니다. 이는 시장의 트레이딩 방식과 규제에 대한 논의를 촉발시킵니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#단일종목집중</span> <span class="tag tag-hash">#반도체변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">24일 서울 중구 하나은행 딜링룸 현황판에 8400선을 회복한 코스피·코스닥 종가가 표시돼있다. 이날 코스피는 전 거래일 대비 267.18포인트(3.26%) 오른 8471.02, 코스닥 지수는 전장 대비 17.79포인트(2.00%) 오른 909.31로 장을 마감하며 900선을 회복했다. 연합뉴스지난달 27일 단일 종목 레버리지 상장지수펀드(ETF) 출시 후 특별한 악재 없이도 주가가 급락했다가 빠르게 반등하는 ‘플래시 크래시’ 현상이 반복되고 있다. 전문가들은 레버리지 상품 자체보다 삼성전자와 SK하이닉스 두 종목에만 투자 수요가 집중되는 구조가 더 큰 문제라고 지적했다. 오히려 단일 종목 레버리지 ETF 대상을 확대해 자금을 분산시키는 것이 변동성을 완화시키는 방법이라는 목소리가 나온다.
+
+24일 금융투자 업계에 따르면 ‘한국형 공포지수’로 불리는 코스피200 변동성지수(VKOSPI)는 전장보다 6.04% 급등한 94.81로 장을 마감해 사상 최고 수준을 기록했다. 주가 등락을 떠나 삼성전자·SK하이닉스 단일 종목 레버리지 ETF가 나온 뒤 상승 추세는 이어졌다. 
+
+23일 코스피 급락 과정에서도 단일 종목 레버리지 ETF에 따른 이른바 ‘쇼트 감마’ 현상이 낙폭 확대 요인으로 거론됐다. 이날 코스피는 전 거래일 대비 9.99% 하락했고 SK하이닉스 주가는 12.47% 급락했다. 단일 종목 레버리지 ETF는 주가 하락 시 운용사와 유동성공급자(LP)가 목표 레버리지 비율을 유지하기 위해 현물과 선물을 추가 매도하게 되고 이 과정에서 하락 압력이 다시 커지는 악순환이 발생한다. 주가가 큰 폭으로 빠지는 상황에서도 투자자들은 SK하이닉스 단일 종목 레버리지 ETF 7종을 총 1조 365억 원어치 순매수했다.
+
+업계에서는 이미 단일 종목 레버리지 ETF가 시장에 안착한 만큼 판매 중단이나 신규 상품 제한보다 자금 쏠림을 완화하는 접근이 필요하다고 보고 있다. 현재의 극심한 변동성은 시간이 지날수록 안정화될 것이라는 판단에서다. 특정 두 종목에 집중된 투자 수요를 분산시키기 위해서는 오히려 단일 종목 레버리지 ETF 허용 대상을 확대하는 방안이 대안으로 거론된다. 한 자산운용사 ETF본부장은 “단일 종목 레버리지가 최근 증시 변동성의 유일한 원인이라고 볼 수는 없지만 삼성전자와 SK하이닉스 두 종목만 출시할 수 있게 된 것이 오히려 문제였다”며 “20~30개 종목에 상품이 출시됐다면 자금이 분산됐겠지만 현재는 반도체 슈퍼사이클 기대감이 두 종목으로만 집중되면서 쏠림 현상이 심화됐다”고 말했다. 애초에 금융 당국이 변동성 극대화를 우려해 시가총액 상위 2종목으로 제한한 것이 증시 급등 속에 역효과를 불러왔다는 지적이다.
+
+금융 당국은 단일 종목 레버리지 ETF가 시장 전체를 흔드는 ‘<0xEC><0x99><0x9D>더독’ 현상이라는 주장에는 선을 긋고 있다. 금융위원회는 ETF 규모가 기초자산 시가총액에 비해 아직 제한적인 수준이라고 보고 있으며 한국거래소도 현재까지 별도의 규제 강화 계획은 없다는 입장이다.
+
+다만 금융 당국의 경우 레버리지 ETF 출시 이후 거래 규모 확대와 변동성 간의 연관성은 살펴보고 있다. 금융 당국은 자본시장연구원 등과 함께 관련 데이터를 분석하며 시장 의견을 수렴하고 있는 것으로 전해졌다. 금융 당국의 한 고위 관계자는 “상품 출시 초기이다 보니 괴리율이나 변동성 확대는 나타날 수밖에 없다”면서도 “거래액이 늘어나는 게 정상적인지에 대해서는 정부가 모니터링할 필요가 있다는 취지”라고 말했다.
+
+실제 업계에서도 최근 증시 변동성의 원인을 단일 종목 레버리지 ETF 하나로 지목하는 것은 무리라는 시각이다. 강대권 라이프자산운용 대표는 “단일 종목 레버리지 ETF가 변동성을 키우는 요소 중 하나인 것은 맞지만 최근 시장 변동성은 반도체 업황에 대한 기대와 우려, 인공지능(AI) 투자 지속 가능성 논란 등 여러 요인이 복합적으로 작용한 결과”라며 “단일 종목 레버리지 ETF만을 문제 삼는 것은 지나친 해석”이라고 설명했다.
+
+업계에서는 향후 대책이 투자자 규제보다 증권사와 운용사 관리 강화에 초점이 맞춰질 것으로 보고 있다. 투자자 교육 강화나 예탁금 상향 조정보다는 상품 광고 제한, 판매 절차 개선 등이 가능할 것이라는 관측이다. 또 다른 금융 당국의 고위 관계자는 “전 세계적으로 AI 반도체 쏠림이 심해지면서 투자자들이 삼성전자와 SK하이닉스 거래를 활발히 하고 있다”며 “변동성을 낮추는 데 필요한 시장의 다양한 목소리도 들어볼 것”이라고 했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004634574' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004634574</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
