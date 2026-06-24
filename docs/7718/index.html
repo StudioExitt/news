@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>언론사명 생략 가능 제목</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004634352' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7718" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>언론사명 생략 가능 제목</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">엔화의 최저가 기록과 미·일 재무 당국의 개입 가능성 논의 등 거시경제적 변동성이 커지고 있습니다. 한편, 스페이스X의 대규모 회사채 발행은 국채 금리에 충격을 주었으며, 즈푸AI 같은 AI 기업들은 폭발적인 성장세를 보여 시장의 관심이 분산되는 양상입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">거시경제(환율, 금리)와 빅테크 기업의 대규모 자금 조달 및 AI 섹터의 폭발적 성장이 혼재되어 시장 전체에 높은 변동성을 유발할 것으로 예상됩니다. 특히 채권시장 충격과 고평가 논란은 중장기 투자 계획에 신중한 검토를 요구합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">AI 개발사</span> <span class="tag stock-tag">대형 기술주</span> <span class="tag stock-tag"></span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#글로벌재무리스크</span> <span class="tag tag-hash">#환율전망</span> <span class="tag tag-hash">#인공지능밸류에이션</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■AI 프리즘 [글로벌 뉴스]
+미·일 재무 당국 심야 긴급 협의
+스페이스X IPO 열흘 만에 31조 회사채 발행
+즈푸AI 홍콩 상장 6개월 만에 주가 20배
+▲ AI 프리즘* 맞춤형 경제 브리핑
+*
+[주요 이슈 브리핑]
+■ 엔화 최저와 미·일 긴급 협의: 엔·달러 환율이 161.93엔까지 치솟으며 2024년 7월 이후 최저치를 기록했다. 가타야마 사쓰키 일본 재무상과 스콧 베선트 미국 재무장관이 심야 온라인 협의를 진행한 것으로 알려졌으며, 협의 시간대와 환율 안정 시점이 맞물리면서 환율 개입 가능성이 제기됐다.
+■ 스페이스X 회사채와 금리 충격: 스페이스X가 IPO 직후 200억 달러(약 31조 원) 규모의 회사채 발행을 선언하자 10년물 미국 국채금리가 4.51%로 심리적 상한선인 4.5%를 재돌파했다. 회사채 발행 당일 스페이스X 주가는 하루 만에 16.43% 급락해 시가총액 4000억 달러(약 615조 원)가 증발했다.
+■ 중국 AI 즈푸AI 급부상: 즈푸AI가 신규 오픈소스 모델 ‘GLM-5.2’를 공개하며 글로벌 AI 평가 기관 아티피셜애널리시스 종합 순위 4위에 올랐다. 홍콩 증시에서 주가는 18.72% 급등해 시가총액이 1조 700억 홍콩달러(약 209조 원)를 넘어섰으며, 상장 이후 20배 이상 뛰었다.
+[글로벌 투자자 관심 뉴스]
+
+1. 엔화 가치 2년 만에 최저…美日 ‘심야 긴급회의’
+- 핵심 요약: 엔·달러 환율이 161.93엔까지 오르며 2024년 7월 이후 최저치를 기록했다. 엔화 가치가 이 수준 아래로 더 내려가면 버블 경제가 시작된 1986년 12월 수준까지 추락하는 것으로, 일본 당국은 161엔 후반대를 사실상 마지노선으로 설정하고 안정화에 총력을 기울이는 상황이다. 이 시간대에 가타야마 일본 재무상과 베선트 미국 재무장관이 온라인 협의를 진행한 것으로 알려지면서 환율 개입 또는 레이트 체크(rate check·환율 점검)가 이뤄졌다는 분석이 나온다. 한편 미국 연방준비제도(Fed·연준)의 기준금리 추가 인상 관측이 힘을 받는 가운데, 미·일 간 금리 차가 엔화 약세의 근본 원인으로 지목돼 당국 개입의 실효성은 제한적일 것이라는 시각이 지배적이다.
+
+2. 상장하자마자 31조 원 빌린다…리파이낸싱 바쁜 스페이스X
+- 핵심 요약: 스페이스X가 130조 원 규모의 IPO(기업공개)를 실시한 지 열흘 만에 5~30년 만기 200억 달러(약 31조 원) 규모의 회사채를 발행한다고 선언했다. 상장 직전 X(옛 트위터)와 xAI 부채 상환을 위해 사용한 브리지론(단기 임시 대출) 200억 달러를 갚는 것이 주된 목적이지만, 글로벌 투자은행 오펜하이머는 스페이스X가 2031년까지 4000억 달러의 순부채를 쌓을 것으로 예상했다. 회사채 발행 소식에 10년물 미국 국채금리는 4.51%로 오르고, 2년물 금리도 4.23%로 지난해 2월 이후 최고치를 기록하는 등 채권시장 전반에 충격이 번졌다. 무디스, 피치, S&P 등 주요 신용평가사들은 스페이스X에 ‘투자 적격’ 등급을 부여했으나, IPO 이후 확보한 현금성 자산 1000억 달러 이상만으로는 늘어나는 부채를 감당하기 어렵다는 게 월가(Wall Street)의 중론이다.
+
+3. 中 의존하던 이란에 ‘80억 달러 당근’…美, 에너지·달러 패권 유지 포석
+- 핵심 요약: 도널드 트럼프 미국 대통령 행정부가 이란 원유 판매 대금을 달러로 결제할 수 있도록 60일간 허용했다. 이에 따라 이란은 약 80억 달러(약 12조 원)의 수익을 얻을 것으로 추산되며, 연간으로 환산하면 약 600억 달러(약 92조 원)에 달한다. 이번 조치는 중국으로 80~90%가량이 집중됐던 이란 원유 수출 구조를 페트로 달러(petrodollar·달러 기반 석유 결제 시스템) 중심으로 재편해, 이란과 중국 사이에 차단막을 만들겠다는 전략적 포석으로 풀이된다. 다만 핵 협상 성과가 나오기도 전에 제재를 먼저 풀었다는 비판과 함께, 중국이 이미 막대한 비축유를 보유한 만큼 이란산 원유의 빈자리를 서둘러 채울 시급성이 낮다는 반론도 제기된다.
+
+[글로벌 투자자 참고 뉴스]
+
+4. 거대 IPO가 주는 은밀한 신호
+- 핵심 요약: 스페이스X의 사상 최대 IPO와 알파벳의 800억 달러 증자는 과거 자사주 매입을 통해 주주가치를 높이던 미국 빅테크(big tech·대형 기술기업)들이 대규모 자금 조달로 전략을 전환하고 있음을 보여준다. 올해 들어 매그니피센트7(M7)의 수익률은 정체된 반면 나머지 S&P500 기업들은 상대적으로 양호한 성과를 기록했으며, 수혜는 반도체·전력기기 등 관련 산업으로 확산되는 양상이다. 한편 대규모 회사채 발행으로 중소기업의 자금조달 공간이 잠식되고, 대형 IPO를 통해 창업자와 초기 투자자의 위험이 일반 투자자에게 전가되는 현상도 부각된다. 국내 증시는 코스피가 9000선을 돌파했지만 반도체와 비반도체 간 양극화가 심화되고 있으며, 코스닥은 1000선 회복도 버거운 상황이다.
+
+5. 마이크론, 앤스로픽과 메모리·AI 설계 ‘동맹’…순환거래 착시 우려도
+- 핵심 요약: 마이크론이 앤스로픽과 메모리·스토리지 기술 공동 연구, 제품 공급계약, 전략적 투자를 아우르는 포괄적 협약을 체결했다. 앤스로픽은 기업가치 9650억 달러(약 1484조 원)를 인정받으며 시리즈 H 라운드에서 650억 달러(약 100조 원)를 조달한 바 있다. 이번 협력은 토큰(AI 모델이 언어를 처리하는 최소 단위) 경제성 개선과 AI 인프라 전력효율 향상을 목표로 하며, AI 개발사와 반도체 공급업체 간 전략적 제휴가 업계 전반으로 확산되고 있음을 보여준다. 다만 마이크론이 투자한 자금이 다시 마이크론 제품 구매로 이어지는 구조인 만큼, 외부 수요를 부풀리는 순환 거래라는 비판도 일각에서 제기된다.
+
+6. 최신 모델 제미나이 3.5 성능 능가…즈푸AI 시총 200조 원 넘었다
+- 핵심 요약: 중국 AI 스타트업 즈푸AI가 홍콩 상장 6개월 만에 주가가 공모가 대비 20배 넘게 급등하며 시가총액 209조 원을 돌파했다. 신규 오픈소스 모델 ‘GLM-5.2’가 글로벌 AI 평가 기관 아티피셜애널리시스 종합 순위 4위에 오르고, 앤스로픽 ‘클로드’와 오픈AI ‘GPT’에 근접한 성능을 제시하면서 촉발됐다. 가격 경쟁력도 두드러진다. API(응용프로그램인터페이스) 호출 가격이 앤스로픽 페이블의 10분의 1, 오퍼스의 4분의 1 수준에 불과해 중국 개발자는 물론 실리콘밸리에서도 주목을 받는 모습이다. 다만 지난해 순손실이 47억 1800만 위안으로 전년 대비 59.5% 늘났고, 다음 달 8일 보호예수(lock-up·상장 직후 주식 매각 제한) 물량 2억 2000만 주가 해제되면 주가 하방 압력이 커질 수 있다는 경계감도 팽배하다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004634352' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004634352</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
