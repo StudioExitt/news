@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>미 증시 살펴보며 한국 증시 투자아이디어까지 찾는 마켓 무버입니다.</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001256512' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7868" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>미 증시 살펴보며 한국 증시 투자아이디어까지 찾는 마켓 무버입니다.</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">마이크론이 예상치를 크게 웃도는 실적과 높은 매출총이익률을 발표하며 반도체 업황의 긍정적인 흐름을 입증했습니다. 특히 장기 고객사들과 체결한 '테이크 오어 페이' 같은 전략적 협약은 메모리 반도체의 사이클 가치평가 패러다임을 바꾸고 있다는 평가입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">업계 최상위 기업의 압도적인 어닝 서프라이즈 실적 발표와 미래 수주 계약(SCA) 공개는 반도체 섹터 전체에 대한 강한 신뢰를 형성합니다. 이는 단기적으로 강력한 매수세 유입을 예상하게 합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">마이크론</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #실적발표 #AI수요 #SCA계약</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미 증시 살펴보며 한국 증시 투자아이디어까지 찾는 마켓 무버입니다.
+
+장 마감 후 나온 마이크론의 실적과 주가 상승세가 놀라운 수준입니다. 마이크론이 발표한 실적 헤드라인은 분기 매출 414억 달러, 주당순이익 25.1달러 수준입니다.
+
+그동안 실적 잘 나오고도 주가 떨어진 기술 기업이 많았습니다. 오라클이 그랬고, 브로드컴도 그랬습니다. 실적의 세부 지표든 전망의 한 부분이든 어느 한 곳에서 걱정거리가 발생하면, 시장은 결혼을 허락하기 직전의 완고한 장인어른처럼 굳은 표정을 짓고 주식을 팔아왔습니다(제 장인어른이 그렇다는 것은 전혀 아닙니다).
+
+마이크론은 이들과 뭐가 달랐을까요. 일단 실적과 전망에서 흠잡을 작은 부분도 찾기 어려웠습니다. 소위 말하는 '엄마친구아들'식 실적을 낸 겁니다.
+
+매출과 이익 모두 시장의 예상치를 크게 웃돌았고요. 3월에서 5월까지 마이크론이 번 돈에서 원가 빼고 남은 돈의 비율(매출총이익률, GPM)은 84.9%에 달했습니다. 남아도 너무 남는 장사로 보이지요.
+
+그런데 앞으로는 더 좋습니다. 다음 분기 마이크론이 예상한 매출총이익률은 86% 수준입니다. 매출 역시 500억 달러 정도는 해낼 수 있을 것이라 제시했습니다. 마이크론은 오전 7시 25분 기준 시간외 거래에서 주가가 14% 넘게 오르고 있습니다.
+
+어닝 서프라이즈를 기록한 마이크론의 이번 실적에 주목할 부분이 여럿 있습니다. 산제이 메흐토라 마이크론 CEO는 이번 분기 실적 발표 때 '비즈니스 모델을 근본적으로 변화시킬 수 있는 계약을 맺었다'고 했습니다.
+
+SCA라고 하는 전략적 고객 협약, 즉 장기적으로 우수한 고객 계약이 16곳이 있다고 밝힌 겁니다. 이들의 앞으로 마이크론의 매출 절반 이상을 차지할 것이고 D램의 20% 이상도 미리 샀다고 했지요. 계약 방식을 보면 제품을 구매하지 않아도 일단 돈을 내야 하는 구조입니다. 이것을 '테이크 오어 페이'라 표현하는데요. 반도체의 가격이 떨어지지 않도록 공급사가 막아두려는 방식으로 업계가 돌아가고 있는 겁니다.
+
+이것이 마이크론 뿐 아니라 다른 메모리 반도체 업체들에서 함께 일어나는 흐름이라면, 반도체는 때 되면 떨어지는 시클리컬 주식이라는 가치평가의 틀을 깨버리는 사건이 이번에 일어난 것으로도 볼 수 있겠습니다.
+
+함께 나온 마이크론의 반도체 업황 전망도 긍정적입니다. 미 증시 상장 계획을 내놓은 SK하이닉스를 비롯해, 국내 반도체 기업 투자자분들께도 좋은 소식이 될 수 있겠지요. 회사의 공식 가이던스를 살펴볼까요.
+
+마이크론은 디램과 낸드플래시를 만드는 기업입니다. 이번 분기 매출의 76%를 디램이, 24%를 낸드가 차지했습니다. 이 회사는 D램과 낸드 모두에 대한 수급 불균형이 2027년 이후에도 지속될 것으로 예상했습니다. 특히 D램의 경우, 올해 반도체 업계의 D램 비트 출하량이 20%대 초중반대로 성장할 것으로 예상했습니다. 이전 전망보다 높은 수치를 제시했다는 점이 중요하겠습니다.
+
+이렇게 메모리반도체 기업이 돈을 잘 번다면, 걱정할 건 없는 걸까요. 이 부분에 대해서도 생각해볼 점은 있겠습니다.
+
+반도체 기업의 마진이 늘어났다는 것은 그 만큼의 비용이 하이퍼스케일러에 전가된다는 뜻입니다. 엔비디아, 구글, 메타, 아마존 등의 부담이 커진 것이지요. 관건은 두 가지입니다. 이 비용을 기업들이 부담할 수 있느냐, 또 이 비용을 웃도는 만큼의 성과를 낼 수 있느냐.
+
+투자업계에서는 여러 논쟁 속에서도 적어도 첫 번째 문제, 즉 높아진 비용을 하이퍼스케일러들이 부담하는 데에는 문제가 없고, 경쟁 역시 치열해질 것이라는 관점이 있습니다. 우선 이들 기업들의 현금흐름에서 투자에 문제가 없고요. 지금의 상황은 AI 시대 매출의 '천장'을 알 수 없는 상황에서 투자를 많이 할수록 좋다, 적어도 경쟁사보다는 많이 해야 하지 않나 하는 기업들의 심리가 깔려있습니다.
+
+최일호 체슬리투자자문 부사장은 상대의 패를 알 수 없는데 돈은 많은, '죄수의 딜레마' 같은 상황이기에 기업들이 과잉으로 보일만큼 투자를 하는 상황이라고 보고 있고요.
+
+리스크 리버설 어즈바이저스의 설립자 댄 네이선은 "(마이크론의) 80%대의 마진율은 정말 놀랍지만, 동시에 이보다 더 좋아지기는 어렵다는 뜻일 수 있다"며 "앞으로 이 메모리를 사가야 하는 하이퍼스케일러들이 치러야 하는 비용이 더 커진다는 점도 생각해야 한다"고 말했습니다.
+
+AI의 자본지출 문제와 메모리의 고공행진이 언제까지 지속될지, 이 논쟁은 앞으로 지속되겠지만요. 적어도 마이크론의 이번 실적 이후 그동안 언급되어왔던 '조정'이라는 단어가 무대에 등장할 시점은 조금 더 뒤로 미뤄질 가능성이 높아졌습니다. 단기적인 승자는 어제 급락 시 반도체 주식을 매입한 투자자일 수 있겠지요.
+
+간밤 미 증시 움직임이 오늘 우리 증시에 어떤 영향을 줄까요? 궁금하신 점과 의견 댓글로 남겨주세요.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001256512' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001256512</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
