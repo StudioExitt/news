@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 폭락에 따른 레버리지 상품의 변동성과 위험성 부각</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002661148' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7836" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 폭락에 따른 레버리지 상품의 변동성과 위험성 부각</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 급락(9.99%)으로 인해 반도체 단일종목 레버리지 ETP의 누적수익률이 크게 떨어지며 높은 변동성과 위험성이 재조명되었습니다. 특히, 일일 수익률 2배 추종 구조는 주가 등락 반복 시 '음의 복리 효과'를 발생시켜 투자 손실을 가중시키는 것으로 나타났습니다. 이에 금융당국은 단일종목 레버리지 상품에 대한 안전장치 마련을 검토하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">시장 급락 상황에서 레버리지 상품의 구조적 위험성(음의 복리 효과)과 변동성이 극대화되어 투자 심리가 위축되고 규제 당국의 감시가 강화될 것이라는 우려를 키우고 있기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지상품</span> <span class="tag tag-hash">#변동성위험</span> <span class="tag tag-hash">#반도체섹터</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 9.99% 폭락한 23일 반도체 단일종목 레버리지 상품의 누적수익률도 하루 만에 크게 흔들렸다. 전날
+80%대 안팎이었던 SK하이닉스 레버리지 상장지수상품(ETP) 누적수익률은 30~40%대로 줄었고, 삼성전자 레버리지 상품은 수익률이 아예
+마이너스 전환됐다. 지난 달 27일 출시된 이래 만 한 달(20거래일을)을 앞두고 수익률이 급변하며 레버리지 상품의 변동성과 위험성이 다시금
+부각되고 있다.
+
+24일 코스콤에 따르면 SK하이닉스 단일종목 레버리지 ETP(ETF·ETN)는 지난달 27일 출시 이후 23일까지 누적수익률 29~41%대를
+기록했다. 직전 거래일인 22일 종가 기준 75~89%대였던 수익률이 하루 만에 크게 낮아진 것이다. 개별 상품 기준으로는 KODEX
+SK하이닉스단일종목레버리지의 누적수익률이 87.63%에서 39.82%로 낮아져 축소 폭이 47.81%포인트에 달했다.
+22일 유가증권시장 수익률
+상위 10개 중 8개를 차지했던 SK하이닉스 레버리지 상품들은 23일 상위 10위권에서 모두 빠졌다.
+
+단일 종목 레버리지 출시 이후 누적수익률
+단일 종목 레버리지 출시 이후 누적수익률
+
+같은 기간 SK하이닉스와 삼성전자 본주 누적수익률도 크게 낮아졌다. SK하이닉스 보통주는 42.25%에서 24.51%로, 삼성전자 보통주는 15.15%에서 0.98%로 줄었다. 이날 두 종목 모두 주가가 12%대 급락한 영향이다. 두 종목 모두 지난달 27일 대비 플러스 수익률은
+유지했지만, 일일 수익률 2배를 추종하는 레버리지 상품의 수익률 축소 폭은 더 컸다.
+
+SK하이닉스 레버리지 ETP의 경우 전날까지 수익률이 가장 높았던 미래에셋 레버리지 SK하이닉스 단일종목 ETN의 누적수익률이 89.03%에서
+41.95%로 낮아졌다. TIGER·KODEX 상품도 87%대에서 40% 안팎으로 내려왔다. RISE·ACE·SOL 상품은 84%대에서 37%대로 밀렸다. 선물형인 KIWOOM·1Q 상품은 각각 81.12%, 75.69%에서 33.97%, 29.22%로 내려앉았다.
+
+하루 만에 누적수익률이 반토막 수준으로 줄어든 것은 레버리지 상품의 일일 수익률 2배 추종 구조 때문이다. 단일종목 레버리지 상품은 기간
+수익률의 2배가 아니라 매일의 수익률을 2배로 따라간다. 하루 하락률은 20%대였지만, 이미 80% 넘게 오른 가격에 낙폭이 적용되면서 기준가
+대비 누적수익률은 더 크게 줄었다.
+
+그간 주가 상승폭이 상대적으로 적었던 삼성전자는 레버리지 상품의 누적수익률이 마이너스로 전환됐다. 22일 종가 기준 29~30%대 플러스
+수익률을 기록했던 PLUS·TIGER·KODEX·RISE 삼성전자단일종목레버리지는 23일 기준 마이너스 1~2%대로 바뀌었다. 주가가 오르고
+내리는 구간이 반복되면서 일일 수익률 2배 구조상 레버리지 상품의 누적성과가 본주보다 낮아진 상황이다.
+
+강소현 자본시장연구원 선임연구위원은 이 같은 누적성과 차이가 레버리지 상품의 일일 수익률 배수 구조에서 나타날 수 있다고 설명했다. 강
+연구위원은 “레버리지 상품은 일일 수익률을 배수로 따라가는 구조인 만큼 누적 수익률이 투자자가 생각한 기초자산 수익률의 단순 배수로 나타나지
+않을 수 있다”며 “주가가 오르고 내리는 과정이 반복되면 계산 방식상 음의 복리 효과가 발생해 기대한 만큼 성과가 나지 않을 수 있다”고
+말했다.
+
+금융당국도 단일종목 레버리지 상품 관련 투자자 안전장치 검토에 들어갔다. 금융위원회와 금융감독원은 단일종목레버리지 ETF의 쏠림 현상과 변동성
+확대를 모니터링하며 필요한 조치를 발굴하는 단계인 것으로 전해졌다. 앞서 이찬진 금융감독원장은 22일 기자간담회에서 단일종목 레버리지 상품을
+두고 “투자자 대부분이 중산층과 서민이 많은데 증시 변동성이 오면 가계에 큰 충격이 될 수 있어 별도의 안전조치를 고민하고 있다”고 밝혔다.
+시장에서는 기본예탁금 상향, 투자자 교육 강화, 관련 상품 수수료 인상, 추가 상장 제한 등이 가능한 방안으로 거론된다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002661148' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002661148</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
