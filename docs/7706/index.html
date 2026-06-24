@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>올해 들어 네 번째 서킷브레이커가 발동되며 코스피가 장중 10% 가까이 급락했지만, 증시의 기초 체력에는 큰 변화가 없는 만큼 이번 조정을 저가 매수 기회로 활용해야 한다는 분석이 제기됐다. 대신증권은 7~8월 국내 증시 강세 전망과 함께 3분기 코스피 목표치 1만1500포인트를 유지했다.</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002660658' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7706" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>올해 들어 네 번째 서킷브레이커가 발동되며 코스피가 장중 10% 가까이 급락했지만, 증시의 기초 체력에는 큰 변화가 없는 만큼 이번 조정을 저가 매수 기회로 활용해야 한다는 분석이 제기됐다. 대신증권은 7~8월 국내 증시 강세 전망과 함께 3분기 코스피 목표치 1만1500포인트를 유지했다.</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 급락했으나, 대신증권은 이번 하락을 기업 펀더멘털이나 장기 추세의 문제가 아닌 단기적인 수급 및 심리 위축으로 분석했습니다. 이에 따라 시장 조정 시점을 저가 매수 기회로 활용해야 하며, 향후 증시 강세와 높은 목표치(1만1500포인트)를 유지한다고 전망합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">급락 후 나온 전문가 분석을 통해 시장 하락의 근본 원인이 아닌 일시적인 수급 및 심리 요인으로 규정하며, 오히려 저가 매수 기회라는 강력한 반등론을 제시했기 때문에 높은 영향도를 가집니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">반도체 관련주</span> <span class="tag stock-tag">대신증권을 이용하는 모든 주식</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피분석</span> <span class="tag tag-hash">#저가매수</span> <span class="tag tag-hash">#기술적분석</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[연합]
+[연합]
+
+ 올해 들어 네 번째 서킷브레이커가 발동되며 코스피가 장중 10% 가까이 급락했지만, 증시의 기초 체력에는 큰 변화가 없는 만큼 이번 조정을 저가 매수 기회로 활용해야 한다는 분석이 제기됐다. 대신증권은 7~8월 국내 증시 강세 전망과 함께 3분기 코스피 목표치 1만1500포인트를 유지했다.
+
+이경민 대신증권 연구원은 24일 보고서에서 “투자심리와 수급 외에 변한 것은 없다”며 “1차 지지선인 8000선, 2차 지지선인 7700선을 염두에 둔 분할 매수 전략이 유효하다”고 밝혔다.
+
+대신증권은 전날 증시 급락의 원인으로 △뱅크오브아메리카(BOA)의 연내 세 차례 금리 인상 전망 △모건스탠리캐피털인터내셔널(MSCI) 선진국 관찰대상국 편입 불발 △SK하이닉스 미국주식예탁증서(ADR) 승인 지연 △국내외 연기금의 월말 리밸런싱 우려 등을 지목했다. 다만 이들 이슈는 투자심리와 수급에 영향을 미친 단기 변수일 뿐, 기업 실적이나 펀더멘털 자체를 훼손하는 요인은 아니라는 평가다.
+
+금리 인상 전망에 대해서도 회의적인 시각을 내놨다. 이 연구원은 “다소 과한 전망”이라며 “유가가 하락했고 6월 소비자물가지수(CPI) 및 개인소비지출(PCE)이 5월 대비 둔화될 것으로 예상되는 상황에서 급히 금리를 인상할 이유도 없다”고 반박했다. 이어 “미국 연방준비제도(Fed·연준의 점도표 또한 2026년 금리인상 가능성을 열어놨을 뿐 금리인상 사이클을 시사하지 않고 있다”고 설명했다.
+
+MSCI 선진국 지수 편입 불발에 대해서는 시장 심리에는 영향을 줄 수 있지만 실제 자금 유입 측면의 영향은 제한적이라고 진단했다. 그는 “MSCI 선진국 지수 관찰국 편입 여부에 따라 글로벌 유동성이 유입되지 않는다”며 “심리적 위축, 실망감 변수일뿐 직접적인 영향은 제한적”이라고 평가했다.
+
+SK하이닉스 ADR 승인 지연 이슈 역시 단기적인 기대와 실망의 반복에 가깝다고 분석했다. 이 연구원은 “지난 22일 급등을 야기한 기대감이 실망감으로 전환되며 매물이 출회됐을 뿐”이라며 “펀더멘털에 미치는 영향은 제한적이며 시간의 문제”라고 선을 그었다.
+
+연기금 매도 우려에 대해서도 과도한 해석을 경계했다. 그는 “6월 말 리밸런싱을 한다면 지금부터 매물을 쏟아내야 한다”며 “대기성 매물이 자리하고 있다는 점은 감안해야 하겠지만 일거에 매도 폭탄이 쏟아진다는 뉴스는 과도하다”고 꼬집었다.
+
+대신증권은 이번 조정으로 코스피의 밸류에이션 매력이 오히려 커졌다고 평가했다. 코스피 12개월 선행 주당순이익(EPS)은 1089포인트 수준으로 상승 흐름을 이어가고 있는 반면, 지수 급락으로 선행 주가수익비율(PER)은 7.53배까지 낮아졌다는 설명이다.
+
+수급 측면에서도 긍정적인 신호가 나타나고 있다는 분석이다. 외국인은 전날 장 마감 직전과 시간외 선물시장에서 3조3000억원 규모를 순매수하며 최종적으로 2조1400억원 순매수로 거래를 마쳤다.
+
+이 연구원은 “지난 8일 서킷브레이커 당시에도 유사한 패턴이 나타났다”며 “단기 등락이 있더라도 저점권에 근접했다는 신호”라고 해석했다.
+
+올해 세 차례 서킷브레이커 이후 증시가 빠르게 반등했던 점도 근거로 제시했다. 3월 4일(-12.06%), 3월 9일(-5.96%), 6월 8일(-8.39%) 급락 이후 모두 회복세가 이어졌다는 설명이다.
+
+그는 “지난 사례를 살펴보면 실적 모멘텀이 훼손되지 않는 상황에서 발생한 급락은 강한 반등으로 이어지는 경향이 뚜렷했다”며 “당시 반등은 미국·이란 간 지정학적 리스크 완화 기대와 실적 개선이 자리했고 그 결과 코스피는 9000선을 돌파했다”고 강조했다.
+
+이어 “전날 서킷브레이커는 앞선 경우와 달리 미국·이란 전쟁 리스크, 국제유가 급등, 미국 국채금리 상승 등 대외 악재가 없는 상황에서 발생한 것이라”며 “2분기 프리어닝 시즌을 앞두고 실적 전망 상향 조정 재개에 따른 펀더멘털 모멘텀은 강화될 전망”이라고 내다봤.
+
+이 연구원은 “주식 비중이 높은 투자자는 버티기 전략이 필요한 구간”이라며 “현금 비중이 높은 투자자는 코스피 1만 시대를 대비해 주도주를 분할 매수할 필요가 있다”고 말했다. 그러면서 “7~8월 증시 강세 전망과 3분기 중 코스피 목표치 1만1500포인트 전망을 유지한다”고 덧붙였다.
+
+시장에서는 이번 급락이 펀더멘털 악화보다는 단기 수급과 투자심리 위축에 따른 조정 성격이 강하다는 분석이 나온다. 특히 반도체를 중심으로 한 실적 개선 기대가 유지되고 있는 만큼 향후 기업들의 2분기 실적 발표가 증시 반등 여부를 가를 주요 변수로 주목받고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002660658' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002660658</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

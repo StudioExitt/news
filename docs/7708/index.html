@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FTSE는 가입했는데 MSCI만 번번이 미끄러지는 이유들 중 3가지가 주요 원인으로 꼽힌다.</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/023/0003983745' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7708" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>FTSE는 가입했는데 MSCI만 번번이 미끄러지는 이유들 중 3가지가 주요 원인으로 꼽힌다.</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">한국 주식시장이 MSCI 선진시장 지수 편입에 어려움을 겪는 주요 원인으로 외환 시장의 제약, 공매도 운영 부담, 그리고 국내 지수 데이터 사용권 관련 분쟁 세 가지가 꼽혔다.
+글로벌 자본 흐름과 관련된 구조적 문제들이 장기적인 걸림돌이 되고 있으며, 실제 편입까지는 최소 수년이 더 소요될 것으로 예상된다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 지수 편입 자체가 막대한 정책 모멘텀이나 자금 유입 기대감을 형성하지만, 현재 기사는 주요 장애물(외환 시장 규제, 공매도 시스템 문제, 데이터 주권)을 구체적으로 제시하며 목표 달성까지 수년이 걸릴 것이라는 부정적 전망을 담고 있어 장기적인 투자 심리를 위축시킬 수 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">외환 금융</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#MSCI편입</span> <span class="tag tag-hash">#국내금융시장</span> <span class="tag tag-hash">#거시경제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">①외환시장 제약 ②공매도 거래 부담 ③지수 데이터 사용 불허
+일러스트=조선디자인랩·Midjourney
+일러스트=조선디자인랩·Midjourney
+한국 주식시장이 모건스탠리캐피털인터내셔널(MSCI) 선진시장(DM) 지수 편입 문을 두드린 건 역사가 18년이나 된다. 한국은 1992년 신흥시장(EM) 지수에 편입됐고, 2008년 선진 지수 관찰대상(watch list) 명단에 올랐다.
+그러나 공교롭게 그해 글로벌 금융위기가 터졌다. 불똥이 유럽으로 옮겨붙어 가까스로 진화가 될 무렵인 2014년 위기에 시달리던 한국은 선진 지수 관찰대상 명단에서마저 제외됐다.
+
+정부는 2022년부터 편입 재도전을 공식화하며 제도 개선에 나섰다. 하지만 23일(현지시각) 발표된 MSCI 연례 시장 분류 리뷰에서 관찰대상 등재에 또 고배를 마셨다.
+
+한국은 MSCI와 함께 양대 글로벌 지수로 꼽히는 영국 파이낸셜타임스스탁익스체인지(FTSE) 선진 지수에는 2009년 9월 이미 편입을 완료한 상태다.
+
+FTSE는 가입했는데 MSCI만 번번이 미끄러지는 이유들 중 3가지가 주요 원인으로 꼽힌다.
+
+①국내 외환시장의 제약
+먼저 MSCI는 역외(域外) 외환시장에서 원화의 환전이 여전히 제한적이라는 점을 지적했다. MSCI는 “원화는 역외에서 실물 인도(delivery)가 불가능하다”고 지적했다. 원화는 한국 밖 외환시장에서 실물을 주고받으며 결제할 수 없는 통화라는 뜻이다.
+
+현재 원화는 역외 시장에서 실물 인도가 아닌 차액만 달러로 정산하는 역외차액결제선물환(NDF) 위주로 거래가 이뤄지고 있다. 1997년 IMF 외환위기의 트라우마 때문에 외환당국은 국내 외환시장 개방을 부담스러워 해왔다.
+
+하지만 최근 분위기는 바뀌었다. 한 고위 외환당국자는 “국내 외환시장을 개방해 거래 규모를 늘리는 게 더 이득이 될 수 있다”며 “한국의 경제 체력도 감당할 수준이 됐다”고 평가했다. 그릇의 물이 깊을수록 출렁임이 적어질 수 있다는 차원에서다.
+
+실제, 정부는 다음달 6일부터 원달러 외환거래를 24시간 무중단 거래 방식으로 운영하고, 내년부터는 외국 금융기관이 국내에 원화 계좌를 두고 직접 원화를 운용할 수 있도록 ‘역외 원화 결제망’을 본격 시행할 예정이다.
+
+②공매도 거래 부담
+다음으로 MSCI는 작년 3월 이후 공매도가 전면 재개된 것과 관련해서도 시장 참가자들이 새롭게 도입된 시장감시규정 체계하에서 상당한 운영상 부담에 직면해 있다고 지적했다.
+
+작년 도입된 공매도 전산화 체계에 대한 문제가 거론된다. 공매도 규제는 잔고 관리를 중심으로 이뤄지는데 예외가 적용되면서 혼란이 야기된다는 것이다.
+
+이에 따라 시장이 가장 우려하는 이른바 ‘유령주식’ 또는 무차입공매도 리스크를 실효적으로 잡아내는 데에 한계가 있다는 지적이 나온다.
+
+한 공매도 관계자는 “금융사에게는 세계적으로도 유례를 찾기 어려운 수준의 시스템 구축 부담이 부과된 반면, 제도의 실효성에는 여전히 의문이 남는 상황이다”며 “제도개선 안되면 MSCI 편입에 계속 걸림돌이 될 수 있을 것 같다”고 말했다.
+
+③지수 데이터 사용 둘러싼 기싸움
+몇년 전 미국 MSCI 본사에서 대표를 만나고 온 외환당국자는 “MSCI 측에서 한국 지수 데이터를 사용하게 해달라고 요구해 곤혹스러웠다”고 전했다. MSCI는 코스피200 등 한국 대표 지수의 역외 파생상품 거래 허용(지수 데이터 사용권)을 지속적으로 요구하고 있다.
+
+그러나 이는 국내 지수 주권 및 데이터 통제권과 직결된 사안이라 금융당국이 온전히 수용하기 어려운 핵심 쟁점으로 남아 있다. MSCI가 요구하는 역외 파생상품 허용 및 지수 데이터 사용권에 대해 금융당국과 한국거래소(KRX)는 수용하기 어렵다는 입장을 견지하고 있다.
+
+먼저, 시장 감독 권한이 상실되고 해외 파생상품 시장에서의 투기적 거래나 쏠림 현상이 국내 현물 증시의 급등락을 유발할 수 있다는 이유에서다.
+
+둘째, 외국인 투자자들이 규제가 엄격한 한국 시장 대신 해외 시장에서 역외 파생상품을 거래하면, 국내 시장의 유동성이 마르고 자본시장의 경쟁력이 구조적으로 약화될 우려도 제기된다.
+
+또, 코스피 지수 데이터는 한국거래소의 막대한 비용과 인프라 투자를 통해 산출되는 고유 자산인데 이를 글로벌 지수 사업자에게 무조건 개방하는 것은 국가의 데이터 주권을 포기하는 것과 같다는 것이 당국의 일관된 시각이다.
+
+④내년 3수해도 2029년에야 편입
+한국은 내년 6월 삼수에 도전해야 할 처지가 됐다. MSCI 선진 지수 편입을 위해선 후보군인 관찰대상에 1년 이상 올라야 한다. 이후 글로벌 기관 투자자들을 대상으로 시장 접근성 등에 대한 심층적인 의견 수렴 절차를 거친다.
+
+관찰대상에 등재돼도 최소 2년의 시간이 소요된다. 글로벌 자금들이 돈을 옮길 수 있도록 시간을 줘야 하기 때문이다. 내년 등재돼도 지수 편입 발표는 2028년 6월, 실제 편입은 2029년 5월말이 될 수 있다는 말이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/023/0003983745' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/023/0003983745</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
