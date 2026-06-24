@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마이크론 사상 최대 실적 공개 및 SK하이닉스 나스닥 ADR 상장 예정</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001256517' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7871" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>마이크론 사상 최대 실적 공개 및 SK하이닉스 나스닥 ADR 상장 예정</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">마이크론이 기록적인 실적과 강력한 장기 공급 계약(SCA)을 바탕으로 시장의 호평을 받으며 주가가 급등했습니다. 또한 SK하이닉스가 다음 달 나스닥에 ADR로 상장할 예정이라 반도체 산업 전반에 대한 기대감이 매우 높아지고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">마이크론의 사상 최대 실적과 장기 계약 구조 발표, SK하이닉스의 나스닥 상장 계획 등 반도체 업황의 근본적인 개선 기대감을 제공하며 강력한 상승 동력을 제시함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">마이크론</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">퀄컴</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체실적</span> <span class="tag tag-hash">#나스닥상장</span> <span class="tag tag-hash">#AI산업</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[마이크론 사상 최대 실적 공개...시간외 15%까지 상승]
+
+마이크론이 장 마감 후 드디어 실적을 공개했습니다.
+예상했던 대로 굉장히 강력한 실적을 확인할 수 있었는데요. 
+이번 실적에서 가장 중요한 포인트는 바로 향후 실적 전망이었죠.
+다음 분기 매출 전망도 490억 달러에서 510억 달러로 집계되며 예상치를 크게 뛰어넘었고 다음 분기 매출 총이익률은 약 86%로 집계되고
+있습니다.
+
+장기 계약과 관련해서도 확인해 볼 텐데요.
+중요한 점은 앞으로 3년에서 5년 동안 대기업들과 미리 장기 계약을 맺어 안정적인 수익 구조를 마련하고 있다는 것이었습니다.
+SCA라고 하는 전략적 고객 협약, 즉 장기적으로 계약을 맺은 단골 고객이 16곳이 있다는 뜻이고요.
+이들이 향후 마이크론의 매출 절반 이상을 차지할 것이며 디램의 20% 이상도 선점했다고 말하고 있습니다.
+
+또 계약 방식이 '테이크 오어 페이'이데요.
+쉽게 말해, 제품을 구매하지 않아도 일단 돈을 내야 하는 구조이기 때문에 반도체의 하단 가격을 제한해 둔 것이라 할 수 있고요.
+결국 이런 다년간의 전략적인 공급 협약이 마이크론의 재무 현황과 예측 실적을 높여줄 것이라고 마이크론의 CEO는 자신 있게 말하고 있습니다.
+
+현재 마이크론은 시간외에서 15% 오르고 있고요.
+또 조금 전 퀄컴의 데이터 센터 매출이 50억 달러에 달할 것이라는 전망이 나오면서 반도체주 전반을 강하게 밀어주고 있습니다.
+간밤 내림세를 기록하던 코스피 야간 선물도 상승으로 전환되면서 현재 5% 가까이 오르고 있습니다.
+
+[SK하이닉스, 내달 10일 ADR 나스닥 상장 예정]
+
+SK하이닉스가 티커명 SKHY로 다음 달 10일 미국 주식 예탁 증서, ADR 나스닥에 상장될 예정입니다.
+ADR은 외국 기업이 미국 증시에서 주식을 거래할 수 있도록 발행하는 증권인데요.
+SK하이닉스는 나스닥에서의 상장을 위해 최대 45조 4,500억 원 규모의 신주를 발행할 계획이고 구체적인 규모나 최종 발행 규모는 수요 예측에
+따라 확정될 예정입니다.
+
+SK하이닉스의 나스닥 입성은 현재 외신들의 헤드라인을 장식할 정도로 굉장히 뜨거운 소식입니다.
+SK하이닉스가 중장기적으로 필라델피아 반도체 지수에 편입될 가능성이 높을 것으로 보고 또 마이크론에 비해 그동안 저평가된 기업 가치가 다시
+주목받을 수 있다고 기대하는데요.
+
+블룸버그 통신에서는 이를 AI 업계에서 가장 극적인 성공 사례 중 하나라고 평가하기도 했습니다.
+싱가포르 픽텟 자산 운용사에서는 TSMC의 ADR 상장 사례가 SK하이닉스에 유용한 전략을 제공했다고 말했는데요.
+글로벌 투자자들이 쉽게 접근할 수 있고 ADR은 유동성이 높기 때문에 자국에서 거래되는 것보다 지속적으로 높은 프리미엄이 붙을 가능성이 높다고도
+설명했습니다.
+
+다만 최근 스페이스X가 시장의 유동성을 흡수했고 이제 곧 있으면 오픈AI와 앤트로픽의 상장도 기다리고 있다는 점이 주가의 발목을 잡을 수는
+있다는 의견이 함께 나오고 있는데요.
+
+이런 와중에 블룸버그 통신에서는 다시 한번 한국 증시를 밈 주식에 비유하는 기사를 공개했습니다.
+그런데 이번에는 조금 다른 모습인데요.
+역시나 레버리지 ETF의 변동성을 지적하고 나스닥 지수가 2% 움직이면 코스피는 10% 움직이는 변동성을 예시로 들고 있지만, 우리나라 시장의
+근본적인 요인은 변하지 않을 것이라고 전망하고 있습니다.
+즉, 반도체에 대한 수요가 계속해서 강력하게 이어질 것이기 때문에 기업들의 수익은 올라갈 것이고 우리나라 당에서는 주주를 보호하기 위한 방안을
+추진하거나 기업들도 주주환원 정책을 펼치고 있기 때문이라고 말하는데요.
+골드만삭스에서는 한국 증시의 매력적인 진입 시기는 단순히 주가가 크게 내린 날이 아니라 패닉셀이 진정되고 있다는 명확한 신호가 보일 때라고
+언급하기도 했습니다.[트럼프, 집권 2기 최저 지지율 기록...중간 선거 위기]
+
+미국과 이란의 전쟁이 종전을 향해 나아가고 있지만 트럼프 대통령의 지지율은 34%로 집권 2기 최저 수준을 기록하고 있습니다.
+특히 이번 지지율은 종전 MOU가 공개된 후에 집계됐기 때문에 11월 중간 선거를 앞두고 미국인들의 민심을 확인해 볼 수 있었는데요.
+그런데 여전히 미국과 이란은 협상과 관련해 엇갈린 입장을 연일 보이고 있고 심지어는 왜 전쟁을 일으킨 것이냐라는 목소리가 나오면서 전쟁 자체를
+시작해서는 안 됐다는 의견이 공화당 안에서도 나오고 있습니다.
+
+트럼프 대통령은 유가가 하락하고 있는데도 불구하고 휘발유 가격이 좀처럼 내리지 않는다며 법무부에 관련 문제를 조사하라는 지시를 내리기도
+했습니다.
+중간 선거를 앞두고 추락하고 있는 지지율에 대응하기 위한 전략이지만 이란은 호르무즈 해협을 지나는 선박들에게 통행료를 징수하겠다는 점을 공식화했죠.
+미국은 국제법을 거론하며 호르무즈의 통항권은 자유롭게 보장돼야 하고 트럼프 대통령 역시 비용을 받는다면 협상이 즉시 끝날 것이라고 말하면서
+여전히 협상에 대한 불협화음이 이어지고 있습니다.
+
+아직 중간선거가 5개월이 남아 있는 상황이지만, 오늘 선거가 치러질 경우 어디를 찍겠느냐는 여론조사에서 민주당 후보를 찍겠다는 응답이 34%, 공화당이 17%로 집계되기도 했고요.
+심지어는 이란의 전쟁이 재개되는 것을 막기 위한 결의안이 결국 어제 상원을 통과하면서 공화당 안에서도 트럼프 대통령에 반발하는 여론이 꽤
+극명하다는 점이 확인되고 있습니다.
+그렇기 때문에 트럼프 대통령은 지지 세력을 끌어모으기 위한 전략이라든지, 또 러우 전쟁이나 쿠바를 향한 제재, 또 북한까지 중간 선거를 앞두고
+이슈를 이슈로 덮는 전략이 계속 나올 예정이라고 시장은 전망하고 있습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001256517' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001256517</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

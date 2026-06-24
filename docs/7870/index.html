@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>뉴욕증시 혼조 마감…마이크론 실적 관망</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.25</span>
+        
+        <a class="more-btn" href="https://studioexitt.net/news/7870" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>뉴욕증시 혼조 마감…마이크론 실적 관망</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">마이크론의 어닝 서프라이즈 및 AI 수요 확대로 반도체 섹터에 강한 모멘텀이 형성된 가운데, 국제 유가 급락과 지정학적 긴장 완화 등 우호적인 매크로 환경이 조성되며 코스피 시장 전반의 상승 기대감이 커지고 있음.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">마이크론의 AI 관련 깜짝 실적 발표는 반도체 섹터의 구조적인 강점을 입증하며 강력한 상승 모멘텀을 제공함. 또한 국제 유가 급락과 지정학적 리스크 완화 등 거시 환경 개선 기대감이 더해져, 주 초반의 시장 조정 장세 속에서 전방위적인 반등을 예고하고 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">마이크론</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI반도체</span> <span class="tag tag-hash">#어닝서프라이즈</span> <span class="tag tag-hash">#거시경제안정</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">뉴욕증시 혼조 마감…마이크론 실적 관망
+마이크론, 어닝 서프라이즈…시간외 15%↑
+국제유가 4%대 급락…전쟁 발발 이후 최저
+"우호적인 매크로 환경…코스피, 폭락분 만회 기대" 뉴욕증시가 혼조세로 마감했다. 호르무즈 해협의 선박 통행이 정상화되면서 중동발 우려는 다소 완화됐지만 인공지능(AI) 관련 종목에 대한 경계심은 이어졌다. 다만 장 마감 후 실적을 발표한 마이크론이 시장 예상치를 웃도는 실적을 내놓으면서 투자심리 개선 기대도 커지고 있다.
+
+이에 국내 증시는 우호적인 매크로 환경 속 마이크론 어닝서프라이즈, 코스피200 야간선물 5%대 강세 등으로 상승 출발하면서 전일에 이어 주 초반의 폭락분을 만회해 나갈 것으로 예상한다.
+
+다음은 25일 개장 전 주목할 뉴스다.
+
+뉴욕 증권거래소의 트레이더. 사진=로이터/연합뉴스
+
+◇ 마이크론, AI 호황에 ‘깜짝실적’…시간외 15% ↑
+-24일(현지시간) 장 마감 후 마이크론 테크놀로지는 실적 발표에서 4분기 매출이 500억달러에 달할 것으로 전망. 이는 금융정보업체 LSEG가 집계한 시장 예상치 435억8000만달러를 크게 웃도는 수준.
+
+-주당순이익(EPS) 전망도 31달러(±1달러)로 시장 예상치 25.84달러를 상회. 이에 따라 마이크론 주가는 시간외 거래에서 15% 이상 급등.
+
+-이번 실적은 생성형 AI 확산으로 고대역폭메모리(HBM) 수요가 폭증하고 있음을 보여줘. HBM은 엔비디아의 AI 가속기와 대규모 데이터센터에 필수적으로 사용되는 핵심 부품. 마이크론은 엔비디아 AI 반도체용 메모리를 공급하는 주요 업체로 미국 내 유일의 첨단 메모리 생산업체.
+
+-산제이 메흐로트라 최고경영자(CEO)는 실적 발표 자료에서 “AI 수요 확대와 구조적인 공급 제약으로 인해 메모리 시장의 수급 긴장이 2027년 이후까지 이어질 것으로 예상한다”고 말해.
+
+◇ 코스피 상승 기대
+-WTI 70달러 하회, 미 10년물 금리 4.4%대 하회 등 우호적인 매크로 환경 속 마이크론 어닝서프라이즈, 코스피200 야간선물 5%대 강세 등으로 상승 출발하면서, 직전일에 이어 주 초반의 폭락분을 만회해 나갈 것으로 키움증권은 예상
+
+-마이크론 어닝 서프라이즈, SK하이닉스 ADR 발행 공시 등을 고려 시 금일에도 반도체 쏠림 현상이 나올 수 있기는 함. 다만, 현재 유가가 전쟁 직전 수준으로 회귀하면서 “고유가발 경기 부담”이 완화되고 있다는 점에 주목할 필요. 이는 증시 전반의 환경을 호전시킬 수 있는 요인이며, 이전보다 쏠림 현상의 빈도수가 덜해질 수 있음을 시사.
+
+따라서, 주도주인 반도체를 포트폴리오의 코어로 가져가는 전략은 여전히 유효하나, 그 밖에도 6월 이후 외국인 수급이 호전되고 있는 업종도 관심을 가져볼 만한 시점.
+
+대표적으로 기계(외국인 4거래일 연속 순매수, 이번주 수익률 -10.5%), 증권(6거래일 연속, -10.1%), 건강관리(6거래일 연속, -0.1%), 철강(5거래일 연속, -7.4%), 화학(5거래일 연속, -9.4%) 등이 외국인 수급을 활용한 트레이딩 아이디어가 될 수 있다고 판단.
+
+◇ 뉴욕증시 혼조 마감
+-뉴욕증권거래소(NYSE)에서 다우존스30산업평균지수(다우지수)는 전 거래일보다 0.35% 상승한 5만1848.90에 거래를 마쳐. 대형주 중심의 S&P500지수는 0.10% 내린 7358.22에, 기술주 중심의 나스닥지수는 0.43% 하락한 2만5476.64.
+
+-AI 관련 종목 등 빅테크 주식 전반이 약세. 시장은 마이크론의 실적 발표를 앞두고 관망세. 엔비디아와 애플, 마이크로소프트, 알파벳 주가는 일제히 약세. 샌디스크와 AMD, 인텔, 퀄컴 등 반도체 종목도 동반 하락. 세레브라스는 전날 시장 눈높이에 못 미친 실적발표로 이날 19% 급락.
+
+-릭 가드너 RGA인베스트먼트 최고투자책임자(CIO)는 “많은 기술주가 단기간에 과도하게 상승한 만큼 이번 하락은 건강한 조정”이라며 “7월 실적 시즌을 앞두고 높아진 실적 기대치를 재조정하는 과정”이라고 분석.
+
+◇ 오픈AI, 자체 칩 공개
+-오픈AI가 브로드컴과 함께 개발한 AI 모델 추론용 자체 칩 ‘할라페뇨’를 공개. 샘 올트먼 오픈AI 최고경영자(CEO)와 호크 탄 브로드컴 CEO는 이날 양사가 공동 개발한 AI용 반도체 할라페뇨를 공개하고 연내에 데이터선터에 배치할 것이라고 밝혀.
+
+-할라페뇨는 기존의 AI 칩을 개조하거나 개선한 범용 가속기가 아니라 챗GPT·코덱스 등을 운영한 경험을 바탕으로 처음부터 설계한 주문형반도체(ASIC). 할라페뇨는 다양한 용도로 사용할 수 있는 엔비디아의 그래픽처리장치(GPU)보다 확장성은 떨어지지만 저렴한 가격에 추론 작업에만 집중 투입할 수 있어.
+
+-브로드컴은 할라페뇨가 오픈AI의 모델 뿐 아니라 모든 대형언어모델(LLM)과 호환 가능할 뿐 아니라 현재 최첨단 기술과 견줘 단위 전력(W)당 성능이 더 우수하다고 밝히. 기존 AI 칩에서 병목으로 작용했던 데이터 이동을 줄이고, 연산·메모리·네트워킹 자원의 균형을 맞춰 최대 성능을 구현했다는 설명.
+
+◇ 연준 “美대형 은행들, 심각한 경기 침체 충분히 견뎌”
+-미국 최대 은행인 JP모건체이스, 뱅크오브아메리카(BofA)를 비롯한 주요 은행들이 미 연방준비제도(Fed, 연준)의 연례 스트레스 테스트를 모두 통과. 지난해부터 연준이 시험 시나리오와 평가 모델을 사전에 공개하기 시작한 만큼 시장에서는 이미 예상된 결과라는 반응.
+
+-연준은 주요 대형 은행들이 심각한 경기 침체 상황도 충분히 견딜 수 있는 재무 건전성을 갖추고 있다고 밝혀. 연준은 심각한 글로벌 경기침체로 인해 상업용 부동산과 주택 가격이 크게 하락하고 실업률이 급등하는 가상의 시나리오를 적용해 은행들을 평가한 결과, 은행들의 자본은 소폭 감소하는 데 그쳤으며 연준이 안전하다고 판단하는 최소 수준을 크게 웃돌았다고 설명.
+
+-이 같은 시나리오 아래 은행권 전체의 대출 손실 규모는 7080억달러(약 1092조원)로 추산. 자본 비율은 전체적으로 1.6%포인트 하락하는 데 그쳤는데, 이는 최근 7년간 실시된 스트레스 테스트 가운데 가장 작은 감소폭.
+
+-스트레스 테스트는 경제가 급격히 악화되는 상황에서 은행들이 얼마나 버틸 수 있는지를 점검하는 제도. 올해는 매년 평가 대상이 아닌 일부 대형 지역은행들을 포함해 총 32개 은행이 평가. 실업률 10%, 주택가격 30% 하락 등 올해 시나리오는 지난해와 유사.
+
+-연준은 현재 스트레스 테스트 제도 개편을 추진 중인 만큼 이번 테스트 결과가 은행들이 보유해야 할 자본 규모에 영향을 미치지 않는다고 사전에 밝히기도.
+
+◇ 국제 금값 4000달러 아래로
+-블룸버그 통신 등에 따르면 이날 뉴욕 시장에서 금 현물 가격은 전일 대비 3.0% 내린 온스당 3992.44달러에 거래를 마쳐. 장중에는 3천960달러 아래까지 밀리며 지난해 11월 이후 처음으로 4000달러 선이 무너져.
+
+-지난 3년 연속 두 자릿수 상승률을 기록했던 금값은 올해 1월 온스당 5594달러의 사상 최고가를 기록한 뒤 내리막. 이날 하락으로 고점 대비 낙폭은 28%. 통상 고점 대비 20% 이상 하락은 약세장 진입의 기준으로 통해. 
+
+-골드만삭스는 연말 금값 전망치를 500달러 내려 4900달러로 조정, 도이체방크는 4분기 전망치를 17% 하향. 국제 은값도 급락. 은 가격은 이날 6.9% 하락한 온스당 57.31달러에 거래돼 지난해 12월 이후 처음으로 60달러 선을 내줘.
+
+◇ 국제유가 4% 급락…전쟁 발발 이후 최저
+-호르무즈 해협에서 선박 통행이 재개되면서 국제유가는 이란 전쟁 발발 이후 최저 수준으로 하락. 8월 인도분 서부텍사스원유(WTI) 선물은 4% 하락해 배럴당 70달러까지 하락. 브렌트유 선물도 4.3% 내린 배럴당 73달러대에 마감.
+
+-이날 국제유가는 미국과 이란의 협상 진전 이후 호르무즈 해협 묶여 있던 원유 공급 물량이 다시 시장으로 풀릴 것이라는 기대가 커지면서 하락. 미국의 제재 유예로 이란의 원유 판매가 제개된 점도 유가 하방 압력을 키우고 있어. 미국과 이란이 이달 29일 또는 30일 실무회담을 개최한다는 소식에 지정학적 긴장이 완화하는 모양새.
+
+트럼프 미국 대통령은 이날 소셜미디어 트루스소셜을 통해 “사실과 반대로 보도하는 말썽꾼 가짜뉴스에도 불구하고, 이란은 ‘호르무즈 해협에서 요구·수령하는 통행료, 보험료, 그 밖의 어떤 종류의 비용도 없다’고 미국에 알려왔다”고 밝혀.</div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
