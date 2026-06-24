@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>알트라타 '2026 세계 초부유층 보고서'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.24</span>
+        
+        <a class="more-btn" href="https://studioexitt.net/news/7769" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>알트라타 '2026 세계 초부유층 보고서'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">글로벌 초부유층(UHNW)이 AI 산업 성장을 등에 업고 크게 증가하는 추세가 포착되었습니다. 세계 자산의 증가율은 상위 억만장자들에게 극도로 집중되고 있으며, 이는 기술 혁신과 고성장 기업에 대한 투기적 관심을 반영합니다. 한국 서울 역시 높은 증가율을 기록하며 주목받고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">보고서는 자본의 흐름과 부의 집중화라는 거시적인 구조 변화를 보여주며, 특히 AI 산업 성장을 통해 초고액 자산가들이 막대한 자산을 축적하고 있음을 강조합니다. 이는 고성장 기술 섹터(AI 관련주)에 대한 장기적인 투자 심리를 극대화시키는 요인입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">정보통신(통신장비)</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI</span> <span class="tag tag-hash">#초부유층</span> <span class="tag tag-hash">#자산격차</span> <span class="tag tag-hash">#거시경제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">알트라타 '2026 세계 초부유층 보고서'
+서울 36% 늘어… 주요 도시 중 증가율 최고
+전 세계로는 약 56만명… 2017년 이후 최대 증가
+전 세계에서 순자산이 3000만달러(약 460억원)를 넘는 부자들이 급증하고 있다. 이 같은 추세가 인공지능(AI) 산업 성장과 연관이 있다는 분석이 나온다.
+사진은 기사의 특정 내용과 관련 없음. 픽사베이
+사진은 기사의 특정 내용과 관련 없음. 픽사베이
+
+24일 연합뉴스 보도에 따르면 자산정보 분석업체 알트라타(Altrata)는 '2026 세계 초부유층 보고서(World Ultra Wealth Report)'에서 전 세계 순자산 3000만달러 이상의 고액 자산가(UHNW) 수가 1년간 14.4% 증가해 작년 말 기준 55만6850명에 이른 것으로 추산했다. 이는 2017년 이후 최대 증가폭이다.
+
+알트라타의 마야 임버그 수석 이사는 "지난 10년간 고액 자산가 수는 꾸준히 증가해 왔고 증가 속도도 빨라졌다"면서 낮은 인플레이션과 견조한 기업 실적, AI 투자 열풍이 고액 자산가 수와 이들의 자산 가치 증가에 기여했다고 분석했다.
+
+특히 순자산이 1억달러(약 1530억원)를 넘는 자산가들이 빠른 속도로 늘었다. 보고서는 이들이 급성장하는 기술기업을 설립하거나 여기에 투자해 자산을 불렸다고 설명했다.
+
+세계 주요 도시 가운데서는 서울의 증가세가 두드러졌다. 순자산 3000만달러 이상 자산가가 많은 세계 12대 도시 중 서울은 6220명으로 12위에 올랐다. 다만 증가율은 36.3%로 조사 대상 도시 가운데 가장 높았다.
+
+억만장자 자산 연 8.5% 증가…커지는 부의 격차
+
+'2026 세계 불평등 보고서(World Inequality Report 2026)'에 따르면 1995년부터 2025년까지 최상위 억만장자들의 자산은 연평균 8.5% 증가했다. 반면 자산 하위 50%의 자산 증가율은 연평균 3.4%에 그쳤다.
+
+보고서는 전 세계 상위 0.001%에 해당하는 고액 자산가 6만명의 평균 자산을 2억5400만달러(약 3800억원)로 추산했다. 이들은 미국(37%)에 가장 많고 중국(10%)과 독일(5%)이 뒤를 이었다.
+
+보고서 저자 리카르도 고메스-카레라는 "축구 경기장 하나에 들어갈 수 있는 인구가 전 세계 자산 하위 40억명의 자산을 합친 것보다 세 배나 많은 부를 소유하고 있다"고 지적했다.
+
+il론 머스크 테슬라 CEO는 1580억달러 규모의 보수 패키지로 압도적 1위에 올랐다. 연합뉴스
+
+머스크 보수 '1580억달러'…391명 합친 것의 16배
+
+미국에서 2025년 보수 패키지가 1억달러(약 1530억원)를 넘는 최고경영자(CEO)가 26명으로, 전년(12명)에 비해 크게 늘었다고 월스트리트저널(WSJ)이 보도했다. 이는 2021년 이후 가장 많은 수준이다.
+
+il론 머스크 테슬라 CEO가 단연 압도적이다. 머스크 CEO의 보수 패키지는 1580억달러로 평가돼 이 분야 신기록을 세웠다. 이는 순위에 오른 나머지 391명을 합친 것보다 약 16배 많다.
+
+WSJ는 미국의 대형 실버타운·요양원 기업인 웰타워의 임원 4명이 총 13억달러 규모의 보수를 받아 충격을 줬다고 전했다. 샹크 미트라 CEO는 8억2100만달러로 머스크 CEO에 이어 2위였다. 최고재무책임자(CFO)인 팀 맥휴도 1억6700만러로 미국 기업 역사상 CFO 최고 보수 패키지 기록을 경신했다.</div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
