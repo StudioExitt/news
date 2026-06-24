@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>운용업계 “16~18시 선물 헤지 공백…LP 리스크 확대”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006314101' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7826" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>운용업계 “16~18시 선물 헤지 공백…LP 리스크 확대”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">ETF의 시간외 거래 개장 목표가 알려지며 시장 관심이 높아지고 있으나, 실제 투자자 편익을 위해서는 가격 안정이 핵심 과제입니다. 특히 정규장과 파생시장 야간거래 사이에 발생하는 헤지 공백(오후 4시~6시)에서 괴리율 확대와 LP의 운영 부담 리스크가 주요 위험 요인으로 지적되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">ETF 시간외 거래 확대 자체는 투자자 편익 측면에서 긍정적이나, 기사는 헤지 환경, 괴리율 관리 등 기술적/운영적 위험 요인을 상세히 지적하며 신중론을 제기하고 있어, 시장의 즉각적인 큰 흐름보다는 구조적 인프라 개선이 선행되어야 함을 시사합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자산운용업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#시간외거래</span> <span class="tag tag-hash">#가격안정화</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">운용업계 “16~18시 선물 헤지 공백…LP 리스크 확대”
+LP업계 “호가 공급 별도 계산 필요…인력 운영도 부담”
+괴리율·재고 부담 커질 경우 중소형 ETF 유동성 변수 넥스트레이드(NXT)의 상장지수펀드(ETF) 거래 개시가 가시권에 들어오면서 시장의 관심은 실제 거래 품질로 옮겨가고 있다. 낮은 수수료와 긴 거래시간은 투자자 선택권을 넓히는 요인이지만, 정규장 밖 거래에서는
+유동성공급자(LP)의 호가 공급과 헤지 여건이 달라 가격 안정 장치가 중요하다는 지적이 나온다.
+
+상장지수펀드(ETF) 거래 연장 시간. (그래픽=이미나 기자)
+
+24일 금융투자업계에 따르면 NXT는 하반기 중 ETF 거래 전산 시스템 구축과 금융당국 본인가 심사를 거쳐 오는 11월 ETF 시장 개장을
+목표로 하고 있다. 계획대로라면 ETF도 NXT에서 오전 8시부터 오후 8시까지 거래할 수 있게 된다.
+
+다만 ETF 시간외 거래가 투자자 편익으로 이어지려면 가격 안정이 뒷받침돼야 한다. ETF는 시장가격과 순자산가치 간 괴리가 커질 경우 수수료
+절감 효과보다 스프레드·괴리율 부담이 더 커질 수 있다. 특히 시간외 시장에서는 정규장보다 기초자산 거래와 헤지 수단이 제한돼 LP가 호가를 보수적으로 낼 가능성이 있다.
+
+운용업계가 먼저 짚는 부분은 헤지 공백이다. ETF LP는 투자자 주문에 대응해 매수·매도 호가를 내는 동시에 기초자산이나 선물 등을 활용해
+가격 변동 위험을 관리한다. 그러나 국내 투자 ETF의 경우 장 마감 직후부터 파생시장 야간거래가 시작되기 전까지는 선물을 통한 즉각적인 헤지가
+어렵고, 현물 바스켓 거래 여건도 정규장과 다르다.
+
+한 자산운용업계 관계자는 “국내 투자 ETF는 거래소 파생시장 야간거래가 오후 6시부터 시작되기 때문에 오후 4시부터 6시까지는 선물을 통한
+헤지가 어렵다”며 “이 구간에서 애프터마켓 유동성이 충분하지 않으면 LP의 헤지 비용과 리스크가 커질 수밖에 없다”고 말했다.
+
+괴리율과 재고 부담도 커질 수 있다. 장 마감 이후 미국 경제지표, 주요 기업 실적, 환율 급변 등 이벤트가 발생하면 ETF 시장가격은 먼저
+움직일 수 있지만, LP가 즉각적으로 헤지하기 어렵다면 시장가격과 실제 가치 사이의 간극이 확대될 수 있다. 예탁결제원과 운용사 업무 마감
+이후에는 설정·해지도 정규장처럼 이뤄지기 어려워 시간외 수급을 LP가 자체 보유 물량으로 소화해야 하는 상황도 생길 수 있다.
+
+LP업계에서는 인력 운영과 호가 평가 기준도 부담으로 보고 있다. 프리·애프터마켓은 정규장과 거래 조건이 달라 기존 방식 그대로 호가를 내기
+어렵고, 평가 기준이 정규장 수준으로 적용될 경우 의무 스프레드 관리 부담도 커질 수 있다는 것이다.
+
+한 LP업계 관계자는 “프리·애프터마켓이 정규장과 다른 조건에서 운영되는 만큼 ETF 호가 공급에도 별도 계산과 세부 작업이 필요하다”며
+“프리·애프터마켓에서 ETF가 거래된다고 가정하면 현재 대응 인력이 일주일에 이틀만 해당 업무에 투입돼도 주52시간 규제를 넘기는 수준이라 운영
+부담이 커질 것”이라고 말했다.
+
+거래소와 NXT 간 시장 연계도 과제다. 한국거래소는 오는 9월 14일 애프터마켓을 우선 신설하고, 프리마켓은 2027년 말 도입을 목표로 하고
+있다. 거래소가 프리마켓을 열지 않는 상황에서 NXT만 정규장 전 ETF 거래를 제공할 경우, 오전 9시 정규장 개장 이후 시장 간 가격 연계와
+괴리율 관리가 쟁점이 될 수 있다.
+
+한 금융투자업계 관계자는 “ETF 시간외 거래는 투자자 편의성 측면에서는 긍정적일 수 있지만, 실제 시장에서는 LP가 어느 정도 위험을 안고
+호가를 낼 수 있느냐가 핵심”이라며 “헤지 환경과 설정·해지 인프라, 유동성 공급 체계가 함께 정비돼야 거래시간 확대가 투자자 편익으로 이어질
+수 있다”고 말했다.
+
+한편 NXT 측은 거래소의 프리마켓 도입 일정 변경이 ETF 거래 계획에 직접적인 영향을 주지는 않는다는 입장이다. NXT 관계자는 “같이
+진행했으면 조금 더 원활한 측면이 있을 수도 있지만, NXT는 당초부터 프리·애프터마켓 ETF 거래를 목표로 했기 때문에 저희 차원에서 크게
+달라지는 건 없다”라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006314101' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006314101</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
