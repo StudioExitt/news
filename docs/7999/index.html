@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>‘따따블’ 상장 후 주가 하락세…첫날 종가 대비 63%↓</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006315063' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7999" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>‘따따블’ 상장 후 주가 하락세…첫날 종가 대비 63%↓</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">상장 초기 급등세를 보였던 마키나락스가 스톡옵션 행사 물량 및 락업 해제 물량이 시장에 풀리면서 수급 부담이 가중되어 공모가 대비 큰 폭으로 주가가 하락했다.
+단기적으로는 이러한 대규모 물량 소화 여부가 중요하며, 장기적인 관점에서는 실적 개선과 성장성 입증이 주가 반등의 핵심 변수가 될 전망이다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">스톡옵션 행사 및 보호예수 해제에 따른 대규모 공급 물량 출회가 단기적인 강력한 하방 압력으로 작용하며 투자 심리를 위축시키고 있어 부정적입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag"></span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI</span> <span class="tag tag-hash">#스톡옵션</span> <span class="tag tag-hash">#주식수급</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">'따따블' 상장 후 주가 하락세…첫날 종가 대비 63%↓
+스톡옵션 신주 21만주 상장…1개월 보호예수도 해제
+잔여 스톱옵션 28만주도 변수…수급 부담 부각 가능성 상장 첫날 ‘따따블(공모가 대비 4배)’에 성공하며 시장의 주목을 받았던 마키나락스(477850)가 한 달여 만에 공모가를 밑도는 수준까지 밀렸다. 주가 하락 국면에서 상장 전 부여된 주식매수선택권 행사 물량이 신주로 상장된 데다 1개월 보호예수 물량까지 풀리면서 수급 부담이 부각되는 모습이다.
+
+25일 엠피닥터에 따르면 이날 마키나락스 종가는 1만6430원이다. 상장 첫날 종가(6만원) 대비 72.62% 하락한 수치다.
+
+마키나락스는 지난달 코스닥 시장에 상장한 산업 특화 인공지능(AI) 솔루션 기업이다. 상장 첫날 6만원까지 오르며 가격제한폭 상단을 기록하며 눈길을 끌었다. 하지만 이후 주가는 하락 곡선을 그리고 있다. 이달 23일과 24일 종가는 각각 1만3750원, 1만4050원으로 공모가(1만5000원)를 하회하기도 했다.
+
+주가 부진 국면에서 스톡옵션 행사와 보호예수 해제가 맞물리면서 하방 압력을 키운 것으로 풀이된다. 금융감독원 전자공시시스템에 따르면 마키나락스는 지난달 29일 총 21만3096주의 주식매수선택권이 행사됐다고 공시했다. 이는 공시 제출일 기준 총발행주식수 1754만1640주의 1.2%에 해당하는 규모다. 신주는 지난 18일 상장됐다.
+
+이번에 행사된 스톡옵션의 행사가격은 4062원과 1만3750원으로, 모두 1만5000원을 모두 밑도는 가격이다. 주가가 공모가에 근접하게 내려오면서 1만3750원 행사분의 차익 여지는 제한적이지만, 4062원 행사분은 현 주가와 비교해 여전히 낮은 가격에 취득한 물량이다.
+
+회차별로는 제7회차 주식매수선택권 5만696주가 4062원에 행사됐고, 제9회차 13만7400주와 제11회차 1만8400주는 각각 1만3750원에 행사됐다. 제4회차와 제6회차 행사 물량도 각각 1800주, 4800주로 행사가격은 4062원이다.
+
+통상 스톡옵션 행사 가격이 현재 주가보다 낮을수록 차익실현 유인이 커지는 만큼, 행사 주식이 신주로 상장되는 경우 기존 주주 입장에서 지분 희석과 잠재 매물 부담으로 받아들여질 수 있다. 실제로 이달 마키나락스 주가는 지난 17일 2만50원에서 신주 상장일인 18일을 기점으로 한 주(18~24일)새 30%가량 하락했다.
+
+여기에 상장 1개월 보호예수 해제 물량도 겹쳤다. 지난 15일 락업이 풀린 의무보유확약 물량은 총 8만3150주다. 전체 주식수 대비 0.47%에 해당하는 규모다.
+
+잔여 스톡옵션 물량도 변수다. 주식매수선택권 행사 공시에 따르면 행사 후 잔여 주식수는 27만9148주다. 이번에 21만여주가 행사됐지만 향후 추가 행사 가능 물량이 남아 있는 것이다. 주가가 공모가 부근에서 등락하는 상황에서 잔여 스톡옵션은 추가 수급 부담으로 인식될 수 있다.
+
+한편 실적 가시성에 대한 우려도 남아 있다. 마키나락스는 기술성장기업 특례로 코스닥 시장에 상장했다. 올해 1분기 연결 기준 영업수익은 30억원, 영업손실은 24억원을 기록했다. 단기 실적보다 성장성에 초점을 맞춘 기업인 만큼 향후 매출 확대와 수익성 개선 여부가 주가 반등의 관건으로 꼽힌다.
+
+업계 관계자는 “상장 초기 급등했던 주가가 공모가 아래까지 내려온 상황에서는 실제 매도 물량이 크지 않더라도 수급 관련 이슈가 투자심리에 더 크게 반영될 수 있다”며 “당분간은 해당 물량의 소화 여부와 거래량 변화가 주가 흐름을 가르는 변수가 될 것”이라고 말했다.
+원문링크: https://n.news.naver.com/mnews/article/018/0006315063</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006315063' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006315063</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
