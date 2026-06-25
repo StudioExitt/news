@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>美-이란 종전 진단 ④ 키신저 모델의 한계</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005698960' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8005" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>美-이란 종전 진단 ④ 키신저 모델의 한계</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국과 이란은 최종 평화 합의가 아닌 '성공적인 기초 마련'에 그치며 임시 합의를 도출했다. 미국이 주장하는 것과 달리, 핵 문제 해결보다 레바논 충돌 관리 등 주변 이슈에 초점이 맞춰져 있어 향후 핵 문제를 둘러싼 치열한 점진적 협상이 예상된다.
+이번 협상 방식은 적대 관계를 한 번에 끝내기보다 단계적으로 안보 부담을 줄이는 키신저의 '셔틀 외교' 모델과 유사하다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심적인 지정학적 불안정 요인(이란 핵 프로그램 및 중동 긴장)이 배경이며, 지역 안정화 시도는 장기적인 글로벌 에너지 및 무역 흐름에 영향을 미치나, 합의 내용 자체가 임시적이고 근본적 해결책이 아니기에 시장 영향은 모호한 관망세로 나타날 것임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">에너지 시설 및 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">해상운수</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">화학</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#지정학적위험</span> <span class="tag tag-hash">#중동안전</span> <span class="tag tag-hash">#원자력규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">美-이란 종전 진단 ④ 키신저 모델의 한계
+
+JD 밴스 미국 부통령은 6월 22일 스위스 루체른의 뷔르겐슈토크 리조트에서 기자들 앞에 섰다. 미국과 이란이 무박 2일, 18시간 협상을 마친 직후였다. 밴스 부통령은 협상 결과를 이렇게 설명했다.
+
+“최종 합의가 집이라면 우리는 아직 기초만 세웠다. 집을 짓지는 못했지만 성공적인 기초를 마련했다.”
+
+합의 내용을 보면 이 말의 의미가 분명해진다. 미국은 이란의 항복을 받아낸 것이 아니다. 핵시설 해체에도 합의하지 못했다. 대신 레바논 충돌 관리, 호르무즈 통항 유지, 국제원자력기구(IAEA) 핵사찰 복귀를 우선 합의했다.
+
+스위스 루체른 인근 엠멘 공군기지에서 JD 밴스 미국 부통령이 이란과 협상을 마친 뒤 기자들에게 결과를 설명하고 있다. [AFP 연합뉴스]
+스위스 루체른 인근 엠멘 공군기지에서 JD 밴스 미국 부통령이 이란과 협상을 마친 뒤 기자들에게 결과를 설명하고 있다. [AFP 연합뉴스]여기서 동결은 핵 포기가 아니다. 이란이 농축권을 포기하지 않은 상태에서 사찰단 복귀, 고농축우라늄 관리, 원심분리기 일부 봉인, 제재 완화를 맞바꾸는 임시 합의다.
+
+밴스 부통령은 이란이 IAEA 사찰단을 다시 받기로 한 것을 “미국 국민을 위한 중대한 이정표이자 이란 핵 프로그램을 영구히 끝내는 첫걸음”이라고 강조했다. 그러나 이란은 다르게 말했다. 에스마일 바가이 이란 외무부 대변인은 이란이 “새로운 약속을 하지 않았다”고 밝혔다.
+
+이란 국영방송은 18시간 협상이 주로 레바논 문제에 집중됐고 핵 프로그램의 미래는 다뤄지지 않았다고 전했다. 이는 미국과 이란이 핵을 둘러싸고 향후 점진적 협상과 타결을 목표로 치열한 샅바 싸움을 할 가능성이 크다는 것을 방증한다.
+
+이란 전쟁에서 소환된 키신저
+이와 같은 미국과 이란의 협상 방식은 1973년 중동전쟁 뒤 헨리 키신저가 쓴 ‘셔틀 외교’와 비슷하다. 당시 키신저는 이스라엘과 아랍권의 전쟁을 한 번에 끝내려 하지 않았다. 먼저 군사 충돌을 줄이고 감시 절차를 만든 뒤 평화조약으로 넘어가는 단계를 밟았다.
+
+그 배경에는 1967년 6일 전쟁과 1973년 욤키푸르 전쟁이 있었다. 이스라엘은 1967년 이집트와 시리아, 요르단을 상대로 크게 이겼다. 시나이반도와 골란고원, 서안지구, 동예루살렘을 장악했다. 이스라엘은 새로 얻은 땅을 안보 완충지대로 봤고 이집트와 시리아는 되찾아야 할 영토로 봤다.
+
+1975년 헨리 키신저 미국 국무장관이 안와르 사다트 이집트 대통령과 대화하고 있다. 키신저는 이른바 ‘셔틀 외교’로 중동 평화를 이뤄내면서 현실 외교의 대가로 칭송받았다. [위키피디아]
+1975년 헨리 키신저 미국 국무장관이 안와르 사다트 이집트 대통령과 대화하고 있다. 키신저는 이른바 ‘셔틀 외교’로 중동 평화를 이뤄내면서 현실 외교의 대가로 칭송받았다. [위키피디아]
+6년 뒤 이집트와 시리아는 다시 이스라엘을 공격했다. 1973년 전쟁에서 이집트군은 수에즈 운하를 건너 시나이반도에 진입했고 시리아군은 골란고원을 공격했다. 이스라엘은 전쟁 후반 반격에 성공했지만 1967년 같은 일방적 승리로 끝내지 못했다. 실제로 이집트는 완전히 무너지지 않았다. 이집트군은 수에즈 운하를 건<0xEB><0x84><0x9C>고 이스라엘 방어선을 돌파했다. 안와르 사다트 이집트 대통령은 이를 근거로 협상에 나설 수 있었다. 이집트는 패전국의 위치에서만 협상하지 않았다.
+
+키신저는 이 상황에서 바로 평화조약을 요구하지 않았다. 먼저 양쪽 군대를 떼어놓았다. 1974년 이스라엘과 이집트, 이스라엘과 시리아 사이에 병력 분리 협정이 나왔다. 1975년 시나이 임시협정은 단계적 철수와 미국의 보증을 결합했다. 완충지대와 감시단이 먼저였고 이집트와 이스라엘의 최종 평화조약은 1979년에 나왔다.
+
+베냐민 네타냐후 이스라엘 총리가 2023년 9월 헨리 키신저 전 미국 국무장관을 만났다. 키신저는 그 뒤로 두 달 뒤인 2023년 11월 세상을 떠났다. [네타냐후 엑스]
+베냐민 네타냐후 이스라엘 총리가 2023년 9월 헨리 키신저 전 미국 국무장관을 만났다. 키신저는 그 뒤로 두 달 뒤인 2023년 11월 세상을 떠났다. [네타냐후 엑스]키신저 방식의 핵심은 적대관계를 한 번에 끝내는 것이 아니었다. 병력을 분리하고 감시 체계를 붙여 전쟁 재발 가능성을 낮추는 것이었다. 사다트는 협상을 국내에 설명할 명분을 얻었다. 이스라엘도 최종 평화조약 전 단계에서 안보 부담을 줄였다.
+
+이번 미국과 이란 협상도 이러한 구조에서 벗어나지 않는다. 미국은 이란 핵시설 해체를 바로 받아내지 못했다. 이란은 농축권을 포기하지 않겠다고 말한다. 이스라엘은 합의의 직접 당사자가 아니다. 그래서 미국은 최종 핵 합의보다 레바논 충돌 관리, 호르무즈 통항 유지, 핵 사찰 복귀를 먼저 처리하려 한다.
+
+이번 회담에서 합의된 핵심도 이 세 가지다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005698960' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005698960</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
