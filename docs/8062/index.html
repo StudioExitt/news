@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>현대지에프홀딩스 목표주가 상향 조정 및 가치 분석</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006315220' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8062" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>현대지에프홀딩스 목표주가 상향 조정 및 가치 분석</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">현대백화점의 호조세와 높아진 지분 비중을 바탕으로, 최대주주인 현대지에프홀딩스의 가치 상승이 기대되어 목표주가가 상향 조정되었습니다. 자사주 매입 및 배당 증가 등 우호적 주주환원 정책과 구조적 변화가 긍정적으로 작용할 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">현대백화점이라는 핵심 자산의 실적이 개선되고(외부 호재), 최대주주의 지분 구조와 기업 활동 계획(자사주 소각, 합병 등)이 동시에 가치를 높여 주가에 반영될 여지가 크다는 분석을 제공함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">현대지에프홀딩스</span> <span class="tag stock-tag">현대백화점</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">도소매</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#기업가치재평가</span> <span class="tag tag-hash">#주주환원</span> <span class="tag tag-hash">#리테일</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">SK증권은 26일 현대지에프홀딩스(005440)에 대해 현대백화점 지분가치 상승과 우호적인 주주환원 정책이 주가에 반영될 것이라며 목표주가를 기존 1만8000원에서 2만원으로 11.1% 상향 조정했다. 투자의견은 ‘매수’를 유지했다.
+
+최관순 SK증권 연구원은 이날 보고서에서 “현대백화점 주가 상승이 현대지에프홀딩스 주가 상승으로 이어질 시점”이라며 이같이 밝혔다.
+
+현대백화점의 주가는 3월 말 이후 146.8% 상승하며 같은 기간 코스피 상승률 76.8%를 웃돌았다. 환율 상승에 따른 외국인 관광객 증가로 백화점 및 면세점 사업이 호조를 보인 영향이다. 이에 현대백화점 최대주주인 현대지에프홀딩스의 주가 상승이 기대된다는 설명이다.
+
+최 연구원은 “현대지에프홀딩스는 현대백화점에 대한 지분을 꾸준하게 확대해 오면서 지분율이 지난해 32.2%에서 현재 37.2%까지 상승했다”며 “현대백화점이 현대지에프홀딩스 순자산가치(NAV)에서 차지하는 비중도 38.7%에서 58.4%까지 상승했다”고 설명했다.
+
+이어 “현대백화점 지분 확대 및 주가 상승으로 현대지에프홀딩스의 NAV는 1조6000억원에서 2조5000억원으로 56.0% 증가했다”면서도 “주가는 동일 기간 7.9% 상승에 머물렀다”고 분석했다.
+
+주주환원에 대한 프리미엄도 주가에 반영될 것이라는 전망이다. 최 연구원은 “현대지에프홀딩스는 올해 1000억원의 자사주를 매입 예정”이라며 “지난 2월부터 4월까지 342만주(500억원, 2.2%)를 매입했으며 8월 이후 추가 500억원(현주가 대비 2.2%) 규모의 자사주를 매입할 예정이다. 하반기 자사주 매입이 완료되면 소각할 예정”이라고 말했다.
+
+그는 “현대지에프홀딩스는 현대홈쇼핑을 완전자회사로 편입하기 위한 포괄적 주식교환을 진행 중”이라며 “이 과정에서 현대홈쇼핑의 주당배당금(DPS)과 주식교환 비율을 고려해 2026년 주당 배당을 441원(시가배당률 3.0%)으로 할 예정”이라고 전했다. 그러면서 “2026년 자사주 매입과 배당을 포함한 총 주주환원은 7.4%에 달한다”며 “우호적인 주주환원 정책이 주가에 반영되지 못하고 있다”고 판단했다.
+
+최 연구원은 “현재 진행 중인 현대홈쇼핑과의 포괄적 주식교환은 마무리 단계로 이후 현대홈쇼핑의 인적분할, 인적분할 후 투자회사와 현대지에프홀딩스의 합병을 진행할 예정”이라며 “이를 통해 현대지에프홀딩스 유통주식 수 증가를 통한 유동성 확대, 현대퓨처넷, 한섬의 자회사 편입으로 배당수입 확대, 현대바이오랜드의 행위제한 요건도 해소 등의 긍정적 효과가 기대된다”고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006315220' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006315220</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
