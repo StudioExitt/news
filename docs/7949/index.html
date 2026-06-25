@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JP모건, 코스피 목표치 1만5000 상향 조정 및 최선호/비선호 종목 제시</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005539681' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7949" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>JP모건, 코스피 목표치 1만5000 상향 조정 및 최선호/비선호 종목 제시</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">JP모건이 한국 코스피의 낙관적 목표치를 1만5000선으로 상향 조정하며, 증시를 '승자가 이기는 구조'로 분석했습니다. 삼성전자, 현대차 등 모멘텀을 확보한 종목과 은행주 등 경기 회복 수혜 섹터에 대한 집중 투자를 권장했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 IB인 JP모건이 구체적인 목표치 상향과 함께 강세 섹터(반도체, 금융) 및 투자 전략을 제시하여 시장의 기대감을 높이고, 특정 산업에 대한 투자 아이디어를 제공했기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">현대차</span> <span class="tag stock-tag">KB증권</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#JP모건</span> <span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#목표치</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">글로벌 투자은행(IB) JP모건이 한국 코스피 지수의 낙관적 목표치를 1만5000선까지 상향 조정하며, 국내 증시에서 최선호 종목과 비선호
+종목을 제시했다. /사진=연합뉴스
+글로벌 투자은행(IB) JP모건이 한국 코스피 지수의 낙관적 목표치를 1만5000선까지 상향 조정하며, 국내 증시에서 최선호
+종목과 비선호 종목을 제시했다. /사진=연합뉴스
+[파이낸셜뉴스] 글로벌 투자은행(IB) JP모건이 한국 코스피 지수의 낙관적 목표치를 1만5000선까지 상향 조정하며, 국내 증시에서 최선호
+종목과 비선호 종목을 제시했다.
+
+"승자가 이기는 구조"... 카카오·포스코퓨처엠 '비선호군'
+
+25일 금융투자업계에 따르면 JP모건은 지난 24일(현지 시각) 발간한 보고서를 통해 코스피의 향후 12개월 목표치로 기본 시나리오 기준
+1만2500, 낙관적 시나리오 기준 1만5000을 각각 제시했다. 비관적인 상황을 가정한 하방 목표치는 8000이다。
+
+JP모건은 현재 한국 주식시장의 특성을 '승자가 계속 이기는 구조'로 규정하며, 모멘텀을 확보한 주식들이 강세를 이어가고 있다고 분석했다. 이에
+따라 올해 주가 상승세가 두드러졌던 삼성전자와 삼성전기, 현대차, 삼성생명 등을 주요 선호 종목으로 꼽았다. 이 외에도 한화에어로스페이스, 
+KB증권, SK, HD현대일렉트릭, 에이피알, 이수페타시스 등이 선호 명단에 이름을 올렸다.
+
+반면, 올해 들어 주가가 40% 이상 하락한 카카오는 대표적인 비선호 종목으로 분류됐다. 포스코퓨처엠과 현대해상도 비선호
+종목군에 함께 포함됐다.
+
+증시로 번 돈 흘러갈 백화점·여행사·건설 섹터 추천
+
+JP모건은 한국 증시가 분산 투자보다는 특정 종목에 집중 투자하는 전략이 유리한 환경이라고 진단하면서도, 시장의 쏠림 현상이 심화하는 상황에서
+적용할 수 있는 역발상 투자 아이디어를 함께 제안했다.
+
+보고서는 백화점, 화장품, 여행사, 증권사, 건설 섹터의 경우 자산 가격 상승에 따른 '부의 효과'가 아직 주가에 반영되지 않았다고 짚었다.
+바이오 섹터는 과매도 상태에 진입했다고 평가했으며, 보통주에 비해 우선주의 할인율이 과도하게 높은 수준이라고 진단했다.
+
+아울러 은행주에 대해서는 자산 가격 상승으로 인한 건전성 개선, 한국은행의 금리 인상 기조, 중개수수료 수익 증가라는 '3중 호재'
+를 맞이하고 있다고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005539681' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005539681</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
