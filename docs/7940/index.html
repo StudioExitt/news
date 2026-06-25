@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마이크론 깜짝 실적에 반도체주 상승</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006314734' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7940" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>마이크론 깜짝 실적에 반도체주 상승</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">마이크론 테크놀로지가 시장 예상치를 크게 상회하는 깜짝 실적을 발표하며 반도체 섹터의 투자 심리를 급격히 끌어올렸습니다. 이에 힘입어 코스피 지수는 9000선을 회복했고, SK와 SK하이닉스를 필두로 시가총액 상위 종목 및 반도체 관련 주식들이 큰 폭으로 상승했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 반도체 산업의 대표 기업인 마이크론이 시장 예상을 크게 상회하는 어닝 서프라이즈를 기록함으로써, 반도체 업황 전반과 IT 섹터의 투자 심리를 강력하게 개선시켰습니다. 이는 관련 주식(특히 HBM 등 고성장 분야)에 단기적, 중기적 상승 동인으로 작용합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#마이크론실적</span> <span class="tag tag-hash">#어닝서프라이즈</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">마이크론 깜짝 실적에 반도체주 상승
+장 초반 매수 사이드카…상승폭 키워 9000선 회복
+시총 상위 상승 우위…SK 21%·SK하이닉스 13%↑
+코스닥은 2%대 하락…주성엔지 8%↓ 코스피가 6% 넘게 뛰고 있다. 간밤 미국 메모리 반도체 업체 마이크론 테크놀로지가 시장 예상치를 웃도는 실적을 발표하면서 반도체주를 중심으로 투자심리가 개선된 영향이다.
+
+25일 엠피닥터에 따르면 오후 2시 25분 현재 코스피는 전 거래일 대비 6.29%(532.95포인트) 오른 9003.97을 기록 중이다.
+
+24일(현지시간) 마이크론은 장마감 후 회계연도 3분기(3~5월) 매출이 414억6000만달러, 조정 주당순이익(EPS)이 25.11달러를 기록했다고 밝혔다. 이는 시장조사기관 LSEG가 집계한 시장 예상치(매출 358억4000만달러, 조정 EPS 20.78달러)를 훨씬 웃돈다.
+
+매출은 전년 동기 93억달러와 비교해 4배 이상 늘어나 사상 최고 분기 매출을 기록했다. 같은 기간 순이익은 282억4000만달러를 기록, 전년 동기 대비 15배 가까이 늘어났다. 회사는 이번 4분기 매출이 약 500억달러에 이를 것으로 예상한다고 밝혔다. LSEG에 따르면 애널리스트들은 435억8000만달러의 매출 전망을 예상하고 있었다.
+
+AI 칩이 메모리 공급업체들의 생산능력을 대부분 흡수하면서 지난 몇 년간 메모리 가격은 급등했다. 스마트폰, 노트북, 기타 전자기기에 들어가는 메모리 가격도 오르고 있다. 산자이 메로트라 마이크론 최고경영자(CEO)는 콘퍼런스콜에서 “고객들은 메모리와 저장장치 공급 부족이 개선되기까지 상당한 시간이 걸릴 것이라는 점을 인식하고 있다”며 “업계 공급은 2028년에 점진적으로 개선될 것으로 예상한다”고 말했다.
+
+한지영 키움증권 연구원은 “장 마감 후 실적을 발표한 마이크론이 어닝 서프라이즈를 기록했다는 점은 긍정적”이라며 “ 주 초반 역대급 폭락을 겪었던 한국 등 주요국 증시의 투자심리를 호전시켜주는 요인”이라고 진단했다.
+
+y가증권시장에서 개인과 외국인이 각각 1조 7011억원, 1조 2464억원어치 팔고 있으나, 기관이 2조 9521억원어치 매수 우위를 보인다.
+프로그램 매매는 차익과 비차익을 합쳐 8675억원 순매수다.
+
+업종별로 전기·전자가 8% 이상 오르고 있고 유통, 제조업이 6%대 오름 폭을 보인다. 전기·가스, 금융, 보험 등은 4% 이상 상승하고 있고 증권은 3%대 오르고 있다. 반면 종이·목재는 3%대 밀리고 있고 오락·문화, 기계·장비, 금속, 화학 등은 1%대 낙폭을 보인다.
+
+시가총액 상위 종목은 상승이 우위인 가운데 SK(034730)가 21%대 급등하고 있다. SK하이닉스(000660)는 13% 넘게 뛰고 있고 삼성전자(005930)가 5%대 오름 폭을 보이며 각각 시총 2000조원을 회복했다. 이외 삼성물산(028260)이 9%대, SK스퀘어(402340)가 7% 이상 상승하고 있다. 반면 LG에너지솔루션(373220)은 3%대 밀리고 있고 두산에너빌리티(034020), 한화에어로스페이스(012450) 등이 2% 이상 빠지고 있다.
+
+코스닥 시장은 전 거래일 대비 2.56%(23.305포인트) 내린 886.01을 기록 중이다. 시가총액 상위 종목은 하락이 우위인 가운데 주성엔지니어링(036930)이 8%대 밀리고 있고 에코프로(086520), 에코프로비엠(247540)이 각각 5% 넘게 빠지고 있다.
+
+(사진=뉴시스)
+원문링크: https://n.news.naver.com/mnews/article/018/0006314734</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006314734' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006314734</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
