@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 반도체 급등세 지속 속 코스닥 부진…'쏠림 현상' 심화 및 시장 체질 개선 논의</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005699026' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8064" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 반도체 급등세 지속 속 코스닥 부진…'쏠림 현상' 심화 및 시장 체질 개선 논의</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 대형주(삼성전자, SK하이닉스)의 호실적과 AI 기대감에 힘입어 코스피가 급등했으나, 코스닥은 상대적 소외를 벗어나지 못하고 있습니다. 시장 전문가들은 반도체 쏠림 현상 심화와 함께 정부 주도의 코스닥 체질 개선 정책이 하반기 주요 변수로 작용할 것으로 전망합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업황 및 AI 모멘텀이 주가를 강력히 견인하며 시장을 상승시키고 있으나, 대형주 편중 현상이 심화되고 코스닥의 회복 탄력이 약한 구조적 이슈가 병존합니다. 정부 정책이 향후 중요한 변수입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">마이크론</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#AI랠리</span> <span class="tag tag-hash">#코스닥활성화</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">25일 서울 중구 하나은행 딜링룸 현황판에 코스피 등이 표시되고 있다. 이날 코스피는 전날보다 459.28포인트(5.42%) 오른 8,930.30, 코스닥지수는 21.50포인트(2.36%) 내린 887.81에 마감했다. [연합뉴스]코스피가 반도체 투톱 삼성전자와 SK하이닉스의 급등에 힘입에 9000피를 코앞에 두고 있다. 특히, 글로벌 투자은행 JP모건은 인공지능(AI) 랠리에 힘입어 코스피 전망치를 1만5000으로 파격 상향 조정했다.
+
+반면, 다음달 1일 30돌을 맞는 코스닥은 900 밑으로 떨어지며 소외 흐름을 벗어나지 못하고 있다. 업계에선 코스닥 부진 원인으로 코스피 대형주 쏠림 현상, 상대적으로 부실한 펀더멘털, 외국인·기관의 자금 유입 부족 등을 꼽는다.
+
+26일 한국거래소에 따르면, 코스피는 전 거래일보다 459.28포인트(5.42%) 오른 8930.30에 장을 마쳤다.
+
+코스피의 반등 배경은 삼성전자·SK하이닉스와 함께 글로벌 메모리 반도체 시장을 주도하는 기업인 마이크론의 호실적이 꼽힌다. 마이크론은 2026회계연도 3분기(3~5월) 매출 414억 5600만 달러에 매출총이익률이 85%에 달하는 ‘어닝서프라이즈’를 기록하며 AI 거품론을 잠재웠다. 이에 7월 초 삼성전자 잠정 실적, 중하순 SK하이닉스의 실적 발표까지 ‘실적 장세’가 펼쳐질 것이라는 기대감이 크다.
+
+김록호 하나증권 연구원은 “마이크론의 전략적 고객 계약(SCA) 발표가 시장 참여자들의 간지러운 곳을 긁어줬다”며 “메모리 산업의 실적 가시성을 높여주는 중요한 변화로 메모리 공급이 2027년 이후에도 빡빡할 가능성이 높다는 전망을 줬다.”
+
+물론, 코스피도 세부적으로 들여다보면 △삼성전자 △SK하이닉스 △SK스퀘어 △삼성전자우 △삼성전기 △삼성생명 △삼성물산 등 반도체 대장주나 삼성전자와 SK하이닉스 지분을 지닌 기업들이 급등하며 지수 상승을 견인하고 있다.
+
+한지영 키움증권 연구원은 “지난 23일 월간 두 번째 서킷브레이커(거래 일시중단)가 발동하며 대폭락을 맞았는데 삼성전자와 SK하이닉스 쏠림현상에서 비롯됐다”며 “이같은 일간 9%대 폭락은 주도주 보유자에게는 비중확대 기조를 유지하는 것에 대한 피로감과 불안감을, 반도체 비중이 낮은 투자자에게는 연쇄적인 소외현상 및 추가 폭락으로 인한 상실감을 초래했다.”고 지적했다.
+
+JP모건도 지난 24일(현지시간) AI 시대 메모리 반도체 기업들에 대한 낙관적 전망을 드러내며 기본 시나리오에서 삼성전자와 SK하이닉스가 주가 재평가(리레이팅)를 받을 것으로 전망했다. JP모건이 제시한 코스피의 12개월 목표치는 기본 시나리오에서 1만2500, 낙관 시나리오에서 1만5000, 비관 시나리오에서 8000이다.
+
+반면, 코스닥은 전장 대비 21.50포인트(2.36%) 내린 887.81에 거래를 마쳤다. 코스닥은 이달 초 코스피 대형 반도체 주들이 조정을 겪는 과정에서 일부 순환매가 나타나기도 했으나, 지속적인 상승세는 이어지지 못하는 모양새다.
+
+업계에선 코스피 반도체 쏠림 심화로 바이오, 2차 전지, 정보기술(IT) 등에 대한 투자심리가 상대적으로 약해졌다고 분석한다. 코스닥이 정체되면 성장 동력인 벤처·스타트업이 제대로 커나가기 힘들다.
+
+하지만, 정부가 코스닥 체질 개선을 통한 ‘코스닥 3000 시대’를 목표로 제시한 만큼, 하반기 예고된 코스닥 활성화 정책이 상승 동력으로 작용할 수 있다는 전망에 무게가 실린다.
+
+정부와 당국은 △코스닥 세그먼트(시장 등급 구분) 및 승강제 도입 △국민성장펀드 △부실기업 퇴출 강화 등을 추진하고 있다.
+
+1996년 7월1일 ‘한국의 나스닥’을 표방하며 출범한 코스닥은 7월 1일 개설 30주년을 맞는다. 이날부터 코스닥 상장사들의 생존경쟁도 본격화된다. 정부가 시장 체질개선을 통한 미래 도약을 위해 주가 ‘1000원’ 미만의 이른바 ‘동전주’를 대상으로 상장폐지 심사 요건을 강화했다.
+
+핵심 골자는 30거래일 연속 1000원 미만이면 관리종목으로 지정되고, 이후 90거래일 동안 45거래일 연속 1000원 이상을 회복하지 못하면 최종 상장폐지된다.
+
+단기적으로는 재무구조가 취약하거나 거래가 부진한 종목을 중심으로 투자심리가 위축될 수도 있다. 하지만 반대로 부실기업 정리가 진행되면 코스닥 신뢰 회복과 기관 자금 유입에 도움이 될 수 있다는 분석이다.
+
+김준영 iM증권 연구원은 “코스피 지수가 1만 1000포인트 전후 수준까지 도달하기 전에는 라지캡 주도주 중심의 랠리가 지속될 것”이라며 “주도주의 부러짐은 금리 하락 안정을 동반할 수 있기 때문에 이에 민감한 코스닥 섹터가 가장 강하게 반응할 것”이라고 분석했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005699026' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005699026</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
