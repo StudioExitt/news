@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>삼성전자와 SK하이닉스의 목표주가가 또 한 번 치솟았다.</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005539401' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7884" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>삼성전자와 SK하이닉스의 목표주가가 또 한 번 치솟았다.</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">노무라증권 등 주요 증권사들이 삼성전자와 SK하이닉스에 대한 목표주가를 상향 조정하며 투자자들의 관심을 높이고 있습니다. 이는 예상치를 웃도는 실적 전망과 HBM 효과가 주효했으며, 양사의 시가총액 선두 자리를 둘러싼 경쟁이 치열해질 것으로 예상됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 증권사들의 일제히 높은 목표주가 상향 조정은 업황 전반의 강력한 낙관론을 반영하며, 반도체 산업에 대한 기대감을 최고조로 끌어올리고 있습니다. 이는 단기적인 매수세 유입 및 투자심리 개선에 매우 긍정적입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#목표주가상향</span> <span class="tag tag-hash">#AI산업</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">사진=뉴스1
+사진=뉴스1
+[파이낸셜뉴스] 삼성전자와 SK하이닉스의 목표주가가 또 한 번 치솟았다. 반도체 업종을 둘러싸고 주가 변동성이 확대되는 상황에서도, 국내 대장주 자리를 둘러싼 삼성전자와 SK하이닉스의 경쟁이 나날이 뜨거워지는 분위기다.
+
+日 노무라 삼성전자 목표주가 59만→67만원 상향
+
+25일 뉴시스에 따르면 삼성전자와 SK하이닉스를 둘러싼 증권가 눈높이는 계속해서 높아지고 있다. 삼성전자의 주가가 현재보다 두 배 가까이 뛸 것이란 전망이 나오고, SK하이닉스도 '500만닉스'까지 갈 수 있다는 가능성이 거론되고 있다.
+
+삼성전자의 경우, 최근 노무라증권이 목표주가를 기존 59만원에서 67만원으로 상향 조정한 점이 눈에 띈다. 당초 예상보다 낮은 성과급 충당금 비용으로 인해 올해 2분기 실적이 예상치를 웃돌 것이란 점을 근거로, 전날 삼성전자 종가(34만500원) 기준 90% 이상 업사이드를 둔 셈이다.
+
+노무라증권은 앞서 SK하이닉스의 목표주가 역시 500만원으로 상향 제시한 바 있다. SK하이닉스의 주가가 258만원을 기록 중이라는 점을 고려하면 삼성전자와 마찬가지로 현 주가 대비 2배 가까이 뛸 것으로 내다본 셈이다.
+
+증권가의 잇따른 목표주가 상향과 함께 투자자들의 시선은 양사의 시가총액 경쟁에 집중된다. 전일 종가 기준 삼성전자의 시가총액(보통주 기준)은 1990조6579억원, SK하이닉스 시총은 1838조7721억원으로, 양사 시총 격차는 151조8858억원 수준이다.
+
+지난 22일 SK하이닉스가 처음으로 대장주 자리에 오르며 지각변동을 일으켰고, 이후 삼성전자가 이틀 만에 다시 1위 자리를 탈환하면서 시총에 대한 관심이 뜨겁게 달아올랐다. 일일 주가 변동에 따라 시총 순위가 뒤바뀔 수 있을 정도로 격차가 좁혀졌다는 뜻이기 때문이다.
+
+빅2 시가총액 선두자리 경쟁 더 치열해 질듯
+
+이에 향후 시가총액 선두 자리를 둘러싼 경쟁이 한층 치열해질 것이라는 전망이 나온다. 다만 두 기업 모두 국내 증시를 대표하는 만큼, 현재로서는 어느 한쪽의 일방적인 우위를 점치기가 쉽지 않다는 것이다. 국내 증권사들이 줄지어 목표주가를 올리고 있다는 점 역시 이러한 상황을 반영한다.
+
+이달 들어 다올투자증권, iM증권은 나란히 삼성전자와 SK하이닉스의 목표주가를 상향 조정했다. 하나증권 역시 삼성전자의 목표주가를 높였고, 한화투자증권, 현대차증권은 SK하이닉스의 주가를 상향 제시했다.
+
+삼성전자를 두고 국내 증권사 가운데 가장 높은 목표주가 58만5000원을 제시한 고영민 다올투자증권 연구원은 "삼성전자는 범용 가격 상승 구간에서 가장 유리한 구도인 동시에 HBM4 효과도 맞물리며 경쟁사들 가운데 이상적 이익 흐름이 부각될 수 있는 시점"이라며 "하반기 메모리 3사 중 가장 부각될 수 있는 구간임에도 최근 발생 중인 눌림은 적극 비중확대 전략으로 대응하는 것이 유효하다"고 설명했다.
+
+SK하이닉스의 목표주가를 430만원까지 높여잡은 박준영 한화투자증권 연구원은 "SK하이닉스는 더 이상 극심한 이익 변동성을 보이는 회사가 아닌 지속적으로 높은 수준의 이익을 창출할 수 있는 회사로 변모하고 있다"며 "SK하이닉스는 연내 ADR 상장을 목표로 하고 있으며 ADR의 상장과 함께 미 증시 내에서 유사 기업들과 비교 평가를 받을 수 있는 기회가 가까워지고 있다"라고 내다봤.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005539401' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005539401</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
