@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피, 5% 이상 급등하며 9,000선 탈환 시도</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016157713' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7908" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피, 5% 이상 급등하며 9,000선 탈환 시도</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">마이크론 테크놀로지의 예상치를 뛰어넘는 호실적과 긍정적인 가이던스가 발표되면서 반도체 업황에 대한 기대감이 급증했습니다. 이에 힘입어 삼성전자와 SK하이닉스를 중심으로 코스피가 급등하며 주요 기술주를 견인했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">메모리 반도체 글로벌 선두 기업의 예상치 상회 실적 및 강력한 가이던스 발표가 핵심 계기(Catalyst)로 작용하여 국내 증시 전반에 걸친 강한 상승 동력을 제공했습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#호실적</span> <span class="tag tag-hash">#코스피급등</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피, 5% 이상 급등하며 9,000선 탈환 시도 (서울=연합뉴스) 김인철 기자 = 25일 서울 중구 하나은행 딜링룸 현황판에 코스피 등이 표시되고 있다. 이날 코스피는 전 거래일 대비 232.40포인트(2.74%) 오른 8,703.42에, 코스닥은 14.35포인트(1.58%) 오른 923.66에 개장했다. 2026.6.25 yatoya@yna.co.kr
+
+(서울=연합뉴스) 임은진 기자 = 25일 코스피는 장 중 5%대 급등하며 9,000선 회복을 눈앞에 두고 있다.
+
+이날 오전 9시 22분 현재 코스피는 전 거래일 대비 458.97포인트(5.42%) 상승한 8,929.99다.
+
+지수는 전 거래일 대비 232.40p(2.74%) 오른 8,703.42로 시작한 뒤 상승 폭을 확대하고 있다.
+
+이 같은 급등에 유가증권시장에서 오전 9시 7분 3초께 프로그램 매수호가 일시 효력정지(매수 사이드카)가 발동되기도 했다.
+
+유가증권시장에서 개인 투자자와 기관이 각각 3천139억원, 6천231억원 순매수 중인데 반해 외국인은 9천913억원 순매도 중이다.
+
+외국인은 5거래일 연속 매도 우위를 보이고 있다.
+
+서울 외환시장에서 달러 대비 원화 환율은 전 거래일보다 1.2원 오른 1,543.0원에 거래를 시작했다.
+
+코스피는 미국 마이크론 테크놀로지의 예상을 뛰어넘는 실적과 가이던스 영향에 상승 출발했다. 
+주요 메모리 반도체 기업 중 실적 발표가 일러 반도체 업계의 '풍향계'로 불리는 마이크론은 회계연도 3분기(3∼5월) 매출이 전년 동기 대비 345.7% 늘어난 414억6천만 달러(약 64조원)라고 발표했다.
+
+영업이익률은 81.2%로 전 분기 대비 10%포인트 이상 높아졌고, 조정 주당순이익(EPS)도 25.11달러로 월가 컨센서스인 20.78달러를 크게 웃돌았다.
+
+특히 다음 분기(6∼8월) 매출액 가이던스를 시장 컨센서스(436억 달러)를 훌쩍 뛰어넘는 500억 달러로 제시하면서 그간 반도체 업황이 정점을 지난 것 아니냐는 시장 일각의 우려를 말끔히 씻어냈다.
+
+이에 마이크론 주가가 시간 외 거래에서 15% 이상 급등하면서 삼성전자와 SK하이닉스가 주도하는 코스피에 호재로 작용했다.
+
+한지영 키움증권 연구원은 "마이크론이 컨퍼런스콜에서 3∼5년 장기 계약 16건 체결, 향후 매출의 40% 차지 예상, 16건 중 14건에 대한 누적 매출액 1천억 달러 전망, 선급금 약 220억 달러 수령 예정, 타이트한 메모리 수급 2027년까지 지속 등을 언급했다는 점은 메모리 업체의 실적 안정성을 개선할 수 있는 요인"이라며 "이번 주 초반 폭락을 겪었던 한국 등 주요국 증시의 투자 심리를 호전시켜주는 요인"이라고 설명했다.
+
+삼성전자-SK하이닉스 다시 상승 (서울=연합뉴스) 김인철 기자 = 25일 서울 중구 하나은행 딜링룸 현황판에 삼성전자와 SK하이닉스 등 주가가 표시되고 있다.
+이날 코스피는 전 거래일 대비 232.40포인트(2.74%) 오른 8,703.42에, 코스닥은 14.35포인트(1.58%) 오른 923.66에 개장했다.
+
+마이크론의 깜짝 실적에 2분기 실적 발표를 앞둔 삼성전자(4.85%)와 SK하이닉스(8.91%)에 대한 기대감도 덩달아 커지면서 주가가 크게 오르고 있다.
+
+두 종목의 시가총액도 다시 2천조원을 각각 돌파했다.
+
+다른 시총 상위 종목도 일제히 올라 SK스퀘어(6.53%), 삼성전기(0.87%), 현대차(0.79%), 삼성생명(6.47%), 삼성물산(14.02%) 등이 상승 중이다.
+
+다만 한화에어로스페이스(-0.09%) 등은 내리고 있다.
+
+업종별로 유통(10.07%), 전기·전자(6.03%), 증권(5.47%), 제조(5.39%) 등이 오르고 종이·목재(-0.39%)는 내리고 있다.
+
+같은 시각 코스닥 지수는 전장보다 11.62포인트(1.28%) 상승한 920.93이다.
+
+지수는 전장보다 14.35포인트(1.58%) 오른 923.66으로 출발한 뒤 상승세를 유지하고 있다.
+
+코스닥 시장에서 개인이 2천51억원 순매수 중이고 외국인과 기관은 각각 1천453억원, 424억원 순매도 중이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016157713' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016157713</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
