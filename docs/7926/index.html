@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI CAPEX 본질은 ‘연산 수요’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006314505' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7926" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>AI CAPEX 본질은 ‘연산 수요’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 설비투자(CAPEX)의 본질은 '연산 수요'에 있으며, 이 연산 경쟁은 반도체 및 전력기기를 거쳐 2차전지, 소비재 등 여러 산업으로 확산될 것으로 전망됩니다. 또한, 자산효과와 관광객 증가가 백화점/호텔 등 전통 소비 업종에도 긍정적 영향을 미칠 것으로 분석했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 중심의 연산 수요를 핵심 동력으로 제시하며, 반도체, 전력기기, 2차전지 같은 하드웨어 인프라부터 자산효과에 기반한 소비재까지 넓은 범위에 걸쳐 강한 성장 모멘텀을 제공합니다. 섹터 확장이 명확하여 투자 방향성에 큰 영향을 줄 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">반도체/전력 관련주</span> <span class="tag stock-tag">배터리 제조사</span> <span class="tag stock-tag">유통 대형마트</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전력기기</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">2차전지</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">백화점</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">호텔 및 레저</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AICAPEX</span> <span class="tag tag-hash">#연산수요</span> <span class="tag tag-hash">#산업후광효과</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">NH투자증권 보고서
+AI CAPEX 본질은 ‘연산 수요’
+반도체·전력기기 변동성 장세 대응처
+자산효과·인바운드에 호텔·백화점도 주목 인공지능(AI) 투자 사이클의 후광이 반도체를 넘어 전력기기, 2차전지, 프리미엄 소비 업종으로 확산할 수 있다는 분석이 나왔다. AI 설비투자(CAPEX)의 본질이 단순한 데이터센터 증설이 아니라 더 높은 성능을 확보하기 위한 ‘연산 경쟁’에 있는 만큼, 연산 수요가 꺾이지 않는 한 관련 투자 흐름도 이어질 것이란 판단이다.
+
+나정환 NH투자증권 연구원은 25일 ‘AI 연산이 만드는 후광 효과’ 보고서에서 “AI CAPEX 투자의 본질은 연산 수요”라며 “더 많은 연산이 더 나은 성능으로 이어지는 한 멈추지 않는 연산 경쟁이 반도체, 전력기기, 2차전지를 거쳐 국내 자산효과와 프리미엄 소비까지 확산될 것이”라고 말했다.
+
+(표=NH투자증권)
+
+나 연구원은 최근 2분기 실적 시즌을 앞두고 주가 변동성이 커진 점에 주목했다. 변동성이 확대되는 국면에서는 실적 가시성이 높은 업종으로 자금이 몰리는 경향이 강해지는데, 이 과정에서 AI 인프라 사이클의 영향을 직접적으로 받는 반도체와 전력기기가 유효한 대응처가 될 수 있다는 설명이다.
+
+그는 “반도체 실적의 본질은 AI CAPEX”라며 “AI CAPEX가 지속되는 한 반도체 수요와 실적도 견조할 것”이라고 봤다. 시장 일각에서 제기되는 AI 과잉투자 우려에 대해서도 아직은 이르다고 판단했다. AI 투자가 둔화하려면 추가 연산 투입이 더 이상 성능 개선으로 이어지지 않는 국면이 와야 하는데, 현재는 오히려 추가 연산의 한계 효용이 유지되고 있다는 이유에서다.
+
+보고서는 알파고 사례를 들어 연산과 성능의 관계를 설명했다. 알파고 제로는 인간 기보 없이 AI 모델끼리 둔 대국만으로 학습했지만, 훈련 36시간 만에 이세돌 9단을 이긴 알파고 리 수준에 도달했고 40일 만에 기존 모든 알파고 모델을 넘어섰다. 나 연구원은 이를 두고 “실력을 끌어올린 변수는 인간의 지식이 아니라 투입된 연산량, 즉 훈련 시간이었다”고 설명했다.
+
+추론 비용 하락도 투자 축소 신호로 보기는 어렵다고 봤다. GPT-4 모델의 추론 비용은 지난 3년간 약 75배 하락했지만, 같은 기간 중국의 일일 토큰 처리량은 약 1800배 증가했다. 비용이 낮아질수록 AI 활용처가 늘고, 늘어난 사용량이 다시 연산 수요를 키우는 구조라는 분석이다.
+나 연구원은 “시장이 모니터링해야 할 지표는 AI 투자의 절대 규모가 아니라 추가 연산의 한계 효용이 유지되고 있는지 여부”라고 짚었다.
+
+AI 투자가 이어질 경우 다음 병목은 전력 인프라로 옮겨갈 가능성이 크다. 데이터센터 확장은 결국 전력망과 안정적 전력원 확보 문제로 연결되기 때문이다. NH투자증권은 미국 전력수요가 2050년까지 약 55% 증가하고, 2024~2037년 신규 수요 증가분의 38%가 데이터센터에서 발생할 것으로 봤다. 반면 발전 용량 증설은 이를 따라가지 못하면서 가스터빈·연료전지 기업의 수주잔고는 이미 2029~2030년까지 채워진 상황이라고 분석했다.
+
+전력설비 병목은 에너지저장장치(ESS) 수요로 이어질 수 있다. AI 데이터센터 증설로 피크 전력 부담이 커지면서 ESS 채택이 확대되고 있기 때문이다. 여기에 휴머노이드 로봇 시장이 커질수록 고에너지밀도와 안정성을 갖춘 배터리 수요도 늘어날 것으로 전망했다. 전력 병목과 로봇 확산이 2차전지 업종의 새로운 수요 동인으로 작용할 수 있다는 판단이다.
+
+정책 환경도 한국 2차전지 기업에 우호적이라고 봤다. 유럽에서 중국산 배터리에 대한 의존도를 낮추는 규제가 강화될 경우 한국 배터리 업체들이 반사 수혜를 볼 수 있고, 미국에서도 중간선거를 앞두고 전기차 보조금 등 정책 모멘텀이 다시 부각될 수 있다는 설명이다. 이에 나 연구원은 반도체, 전력기기, 2차전지 등 AI 인프라 업종을 선호 업종으로 제시했다.
+
+AI 후광 효과는 소비 업종으로도 번지고 있다. 주식시장 호황과 반도체 업황 개선에 따른 성과급 확대가 고소득층 중심의 자산효과로 이어지고 있어서다. 보고서에 따르면 한국의 주식 보유 비중은 소득 5분위에 64.5%가 집중돼 있다. 2020~2024년 평균 자본이득도 5분위 가계가 206만원으로 전체 평균 111만 8000원을 크게 웃돌았다.
+
+이 같은 자산효과는 명품과 프리미엄 가전, 백화점 등 고가 소비로 먼저 나타날 가능성이 크다. 실제 주요 3개 백화점의 VIP 매출 비중은 2년 연속 상승해 신세계 47%, 롯데와 현대가 각각 46% 수준까지 확대됐다. 백화점 매출 성장도 신세계 강남점과 현대 판교점 등 고소득 상권의 플래그십 점포에 집중되는 흐름을 보이고 있다.
+
+인바운드 소비도 호텔과 백화점 업종에 긍정적인 변수다. 원화 약세와 K-컬처 모멘텀이 맞물리면서 외국인 관광객 유입이 늘고, 한국 관광수지는 11년 만에 흑자로 전환했다. 나 연구원은 “자산효과와 인바운드 확대가 맞물리며 호텔과 백화점 업종에 우호적인 환경이 지속될 것”이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006314505' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006314505</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
