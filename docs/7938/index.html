@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSCI 선진국 지수 등재 불발, 외환 시장 제한 구조가 최대 원인</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/293/0000086774' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7938" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>MSCI 선진국 지수 등재 불발, 외환 시장 제한 구조가 최대 원인</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">한국 증시가 MSCI 선진국 지수 편입에 실패한 주요 원인은 제한적인 외환 시장 구조(역외 원화 결제 불가) 때문인 것으로 분석되었습니다. 정부는 제도를 점진적으로 개선 중이나, 완전한 글로벌 자유화에는 시간이 걸릴 전망이며, 2028년 이후 재도전을 예상하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 주요 지수 편입 실패는 외국인 자본 유입 통로의 한계를 보여주는 핵심 이벤트이며, 이는 중장기적인 시장 신뢰도와 투자 심리에 매우 강력한 영향을 미치는 거시적 이슈입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">미래에셋증권</span> <span class="tag stock-tag">한국투자증권</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#MSCI지수</span> <span class="tag tag-hash">#외환시장</span> <span class="tag tag-hash">#자본시장개혁</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">서울 여의도 증권가 전경 /사진=게티이미지뱅크
+한국 증시의 모건스탠리캐피털인터내셔널(MSCI) 선진국 지수 관찰대상국 등재가 불발된 주요 원인으로 제한적인 외환 시장 구조가 지목됐다. 해외 투자자들이 한국 외 지역에서 실물 원화를 자유롭게 조달할 수 없다는 점이다. 정부는 외환·자본시장 개혁을 점진적으로 추진하고 있어 2028년 이후에나 한국 증시의 MSCI 선진국 지수 편입을 다시 기대할 수 있을 것으로 보인다.
+
+25일 MSCI 글로벌 시장 접근성 평가 보고서를 보면, 한국 시장의 접근성을 제한하는 원인으로 △역외 원화 환전·결제 제한 △공매도 제도 운영 불확실성 △영문 공시 부족 △외국인 투자자 등록 체계 복잡성 △결제 과정 비효율성 등이 거론됐다.
+
+MSCI는 전 세계 주식 시장을 선진·신흥·프론티어·독립시장으로 분류한다. 한국은 중국, 인도 등과 함게 신흥시장에 포함됐다. 선진 시장에는 미국, 일본, 영국 등이 속했다. 선진국 시장에 등재되면 선진국 지수를 추종하는 글로벌 패시브 펀드들이 지수 구성 비율에 따라 주식을 기계적으로 매수하게 된다. 이는 외국인 투자 유입에 기여할 뿐만 아니라 해당 자금은 장기 투자 성격이 강해 증시 변동성을 완화할 것으로 기대된다.
+
+외환 시장 자유화 vs 환율 방어 '딜레마'
+MSCI 선진국 지수에 들어가기 위한 선제조건으로 외환 시장의 완전한 자유화가 꼽힌다. 미국 달러, 유로화, 일본 엔화 등 선진국 지수에 속한 국가들의 통화는 전 세계 어디서든 24시간 내내 실물 거래가 이뤄진다.
+
+반면 원화는 한국이 아닌 국가에서 실물 결제가 제한된다. 외국인 투자자가 뉴욕, 런던 등 글로벌 금융 중심지에서 원화를 거래하려면 환율 차이만 달러로 정산하는 차액결제선물환에 의존해야 한다. 실물 원화는 반드시 한국 내 외환시장에서만 오전 9시부터 다음날 오전 2시까지 환전할 수 있다.
+
+MSCI는 "한국이 올해 24시간 역내 외환 시장 출범, 역외 원화 결제 기관 시범 운영 등 추가적인 이니셔티브를 제시했다"면서도 "완전히 자유롭게 거래할 수 있는 역외 외환 시장은 아직 구축되지 않았다"고 설명했다.
+
+정부는 2027년 역외 원화 결제를 목표로 제도 개선을 추진하고 있지만, 환전 규제를 전면적으로 해지하는 데는 상당한 부담이 따른다. 1997년 외환위기를 겪으면서 환율 방어의 중요성이 높아졌고, 투기 자본 유입에 대한 경계심이 여전히 강하기 때문이다.
+
+외환위기 당시 외국 자본이 한국에서 대거 빠져나가자 외환보유액이 바닥났다. 이후 정부는 모든 원화 거래가 국내에서 이뤄지도록 했다. 한국은행과 정부가 외화 거래를 실시간으로 감시하면서 시장이 불안정하면 적극 개입해 환율을 통제하는 구조를 마련한 것이다.
+
+원화의 역외 거래 제한은 글로벌 투기 자본의 공격을 피하는 장치기도 하다. 만약 24시간 내내 한국이 아닌 곳에서 원화 실물이 거래되면 글로벌 헤지펀드가 막대한 자본력으로 원화를 공매도할 가능성을 배제할 수 없다.
+
+외국인 투자자에게 불친절한 제도 지적
+MSCI는 한국의 공매도 제도와 영문 공시 부족도 선진국 시장 불발에 영향을 미친 한계로 봤다. MSCI는 "2025년 초 공매도 금지 조치가 해제된 이후, 상당한 실무적 마찰, 규정 준수 부담이 나타났다"고 말했다. 공매도가 제도적으로 허용됐더라도 잦은 규정 변경이 실제 투자 현장에서 부담 요인이 됐다는 평가다.
+
+영문 공시 의무화는 점진적으로 확대되는 중이지만, 아직 전면 적용 이전이다. 이는 외국인 투자자에게 기업 정보가 동등하게 제공되지 않는 한계로 작용했다. 이 외에 MSCI는 외국인 투자자 등록 제도가 번거로운 점, 결제일 전 자금 확보 기준이 명확하지 않아 결제 효율성 문제가 남아있는 점을 명시했다.
+
+정상휘 교보증권 연구원은 "한국 시장은 결제 발전도, 증시 규모 및 유동성 요건 측면에서는 선진국 시장으로 분류될 수 있는 수준을 확보했지만, 시장 접근성 측면에서 결점들이 다수 있음을 이유로 선진국 시장으로 분류될 수 없었다"고 설명했다. 이어 "시장 접근성 리뷰에서 충분히 높은 평가를 받는 것이 선진국 시장에 편입하는 핵심 과제가 됐다"고 덧붙였다.
+
+시장에서는 정부가 외환·자본시장 제도 개선을 추진 중인 점을 고려해 한국이 2029년에 선진국 시장에 편입될 것이라는 예상이 나온다. 김규진 NH투자증권 연구원은 2027년 1분기 제도 개편 로드맵이 완료된 뒤 약 1년 반 동안 제도 지속성 검증을 거쳐 2028년6월 선진국 지수 편입 여부가 발표될 가능성이 있다고 내다봤다. 이 경우 2029년6월부터 실제 편입된다. 김 연구원은 "2028년 편입 발표 시, 리밸런싱 효과에 따른 대형주 편중 효과가 강화될 것"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/293/0000086774' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/293/0000086774</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
