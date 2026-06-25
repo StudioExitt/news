@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>국내 증권사 부채 급증과 유동성 리스크 경고</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005377272' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7991" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>국내 증권사 부채 급증과 유동성 리스크 경고</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 증권사들이 운용자산 증가와 개인 투자자의 빚투 수요 등을 배경으로 단기 조달 자금(CP, 전단채)을 급격히 늘리며 높은 부채 의존도를 보이고 있습니다. 이로 인해 발생한 구조적인 유동성 리스크는 자산과 부채의 만기 불일치를 심화시키고 있어 금융안정 측면에서 우려가 커지고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">증권사들의 과도한 단기 차입과 레버리지 확대는 시스템적인 유동성 위험을 높여 금융 시장 전체의 안정성에 대한 우려를 증폭시키고 있습니다. 이는 중장기적으로 투자심리 위축 및 자금 조달 비용(회사채 금리) 상승 압력으로 작용할 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">회사채 시장</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#유동성리스크</span> <span class="tag tag-hash">#부채비율</span> <span class="tag tag-hash">#금융안정</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">증권회사 영업실적/그래픽=김지영국내 증권사들이 운용자산 증가, 개인 투자자들의 빚투(빚내서 투자) 수요 등에 따라 자금조달을 확대하면서 올해
+1분기 부채를 자본보다 4배 빠른 속도로 늘린 것으로 나타났다. 빚투 수요 등에 따라 증권사가 단기 조달을 늘린 가운데 증권사 발행
+단기물(기업어음·전자단기사채) 잔액은 이달에 100조원을 넘어서면서 연초 대비 40% 가량 증가했다.
+
+25일 금융위원회에 따르면 국내 증권사 61곳의 자산총액은 2026년 3월말 1098조4000억원으로 전년 말 대비 16.3% 늘었다. 같은
+기간 부채총액은 991조5000억원으로 17.8% 증가했다. 반면 자기자본은 106조9000억원으로 4.4% 증가에 그쳤다. 평균 레버리지비율은
+718.3%로 24.6%포인트 상승했다.
+
+한국은행은 이달 금융안정보고서에서 RP(환매조건부채권)매도 활용, 운용자산 증가, 기업금융 확대에 따른 유동성 확보 수요 등이 증권사 단기차입을
+늘렸다고 분석했다. 시장에선 개인이 신용융자로 주식을 사면 증권사는 신용융자 자금을 마련하기 위해 만기가 짧은 단기시장에서까지 자금을 조달하는
+상황이 빈번해졌다고 본다. 신한투자증권은 증권사 신용융자 잔고가 지난달 말 기준 38조원으로 올 들어 39.2% 증가했다고 분석했다. 증권사의
+단기성 조달 자금인 CP(기업어음)·전자단기사채(전단채) 잔액은 지난 22일 100조원을 넘어선 것으로 추산됐다. 연초 대비 40여조원 증가한
+것이다.
+
+증권사의 단기차입 의존도가 높은 상황에서 기업금융·모험자본 투자까지 늘면 유동성 위험이 커질 수 있다는 우려가 나온다.
+한국은행 금융안정보고서는 ""최근 증권회사의 단기시장성 차입 의존도가 높은 상황에서 기업금융·모험자본 투자 확대 등으로 중장기·비유동성 자산투자가 늘어날 경우 자산·부채의
+만기불일치가 심화되며 유동성 리스크(위험)가 커질 수 있다는 우려가 제기된다"고 했다.
+
+회사채시장은 증권사 차입 확대 기조와 맞물려 금리도 상승 압력을 지속적으로 받을 것으로 관측됐다. 김상인 신한투자증권 연구원은 ""최근의 증권사
+외부 차입 급증은 구조적 증권업 성장과 주식시장 초호황이 야기한 결과로 판단한다"며 ""하반기 주식 중심 자금 쏠림이 지속될 수 있고, 기발행된
+단기 자금의 차환이 불가피한 상황이어서 하반기에도 예년 대비 높은 수준의 공급 기조가 이어질 것""이라고 했다.
+
+금융투자협회 채권정보센터 집계 기준 회사채 AA- 3년물과 BBB- 3년물 금리는 전날 집계 기준 각각 4.428%, 10.262%였다. 이는
+각각 올 들어 95.2bp(1bp=0.01%포인트), 95bp 오른 것이다. 하위등급 기업이 차환을 할 경우 연 10%가 넘는 이자를 물어야
+한다는 의미다. 일반적 기업이 버는 영업이익률을 크게 웃돈다. 한국은행 집계 기준 2024년 기업규모별 영업이익률은 대기업과 중소기업이 각각
+5.6%, 3.9%였다. 올 들어 중앙그룹 계열사들과 제이알글로벌리츠가 채무불이행(디폴트)에 직면하면서 하위등급 회사채 수요가 약화되고 있다는
+관측도 나온다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005377272' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005377272</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
