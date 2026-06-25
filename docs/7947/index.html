@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주식 시장 변동성 및 레버리지 ETF의 자산 양극화 문제점</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/138/0002232088' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7947" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>주식 시장 변동성 및 레버리지 ETF의 자산 양극화 문제점</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">레버리지 ETF의 활발한 이용이 코스피와 코스닥 간 극심한 자산 양극화를 초래하며 시장 변동성을 키우고 있다는 문제 제기. 금융당국과 정부가 이에 대한 부작용을 심각하게 인지하고 규제 강화에 나설 것이라는 예측.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">레버리지 ETF의 과도한 활용으로 인한 자산 양극화와 극심한 시장 변동성이 구조적 리스크로 지목됨. 금융당국의 공개적인 부작용 언급과 규제 우려 표명은 투자 심리를 위축시키고 전반적인 투기 경계심을 높임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#자산양극화</span> <span class="tag tag-hash">#금융규제</span> <span class="tag tag-hash">#변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">금융감독원 석판 [사진=연합뉴스]
+
+ 주식 투자 경력이 20년 이상 된다는 A씨는 요즘 같은 주식 시장이 처음이라고 혀를 내둘렀다. A씨는 “금융위기도 겪어보고 코로나 상승장도 겪어봤지만 지금과 같은 변동성은 처음 만나본다”고 말했다.
+
+실제 올해 유가증권시장에서 총 28번의 사이드카가 발동됐다. 한국거래소는 시장에 각각 매수 사이드카는 15번, 매도 사이드카는 13번 공시했다. 코스닥 또한 총 15번에 달한다.
+
+지난 5월 27일 단일종목 레버리지 상장지수펀드(ETF)를 출시한 후 변동성은 더 커졌다. 삼성전자, SK하이닉스 같은 대형주가 급등락을 거듭하는 일이 잦아졌다.
+
+문제는 레버리지 ETF가 양극화 현상을 불러일으키고 있다는 점이다. 상품 출시 이후 코스피는 1000포인트 이상 오르며 쾌속 질주하고 있다. 같은 기간 코스닥이 300포인트 가까이 빠진 것과 대조되는 모습이다.
+
+레버리지 ETF가 반도체를 제외한 코스피 중소형주와 대다수 코스닥 종목들의 수급을 흡수하고 있기 때문이다. 레버리지 ETF의 잦은 변동성이 투자심리를 자극하고 있는 것이다.
+
+정치권도 이 점을 인지하고 있다. 이재명 대통령은 23일 청와대에서 열린 비상경제점검회의에서 “반도체 호황으로 주식시장 급성장이라는 눈부신 성과가 나왔지만, 그 이면에는 자산 양극화라는 그늘도 짙게 드리우고 있다”라고 언급했다.
+
+금융당국 수장은 나아가 더 강한 표현을 사용했다. 이찬진 금융감독원장은 22일 기자간담회에서 “레버리지 ETF와 관련해 부작용이 너무 커져 고민이 많은 상태”라며 “어떻게든 드러누워서 막았어야 했나 개인적으로 반성하고 있다”고 밝혔다。
+
+지금이라도 심각성을 인지한 점은 다행이다. 그러나 처음부터 투자자 보호 장치를 강화한 뒤 상품을 도입했으면 어땠을까 하는 아쉬움이 든다. 시장 일각에선 아마도 금융당국은 MSCI(모건스탠리캐피털인터내셔널) 지수 편입을 염두에 두고 이번 대형주 레버러지 ETF를 서둘렀을 것이란 분석도 내놓는다.
+
+그러나 MSCI 지수 편입은 불발에 그쳤다. 지난 23일(현지시간) MSCI는 2026년 연례 시장 분류 결과에서 역외 외환시장에서 원화의 환전이 여전히 제한적이라는 점 등을 들어 한국증시를 선진국 지수 관찰대상국(워치리스트)로 포함시키지 않았다.
+
+i 금감원장은 지난 24일 증권사 리스크 담당 임원(CRO)을 소집해 투자자 보호를 강조했다. 변동성이 신용융자 증가를 야기하는 만큼 증권사가 직접 선제적으로 위험관리에 나서라는 취지다.
+
+다만 애<0xEA><0xBF><0x8E>은 증권사만 다그치는 것은 문제가 있다. 애초에 금융당국과 정치권이 처음부터 잘했으면 되는 일 아닌가. 지금부터라도 예탁금 상향 등 시장 젼동성을 줄일 수 있는 보완책을 내놓는 것이 순리다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/138/0002232088' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/138/0002232088</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
