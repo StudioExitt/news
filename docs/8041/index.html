@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상장 후 누적 순매수, 2위에 9배 달해…압도적 1위</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/421/0009024700' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8041" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>상장 후 누적 순매수, 2위에 9배 달해…압도적 1위</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">스페이스X는 상장 후 국내외 투자자들의 대규모 자금 유입으로 압도적인 관심을 받았으나, 공모가 대비 급등한 주가가 단기간에 큰 폭으로 폭락하며 높은 변동성을 보이고 있다. 극도로 높아진 밸류에이션과 재무 부담 우려로 인해 단기적인 '롤러코스터 장세'가 예상된다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단기적인 투자 심리(순매수액)는 극도로 뜨겁지만, 실제 주가는 급락하고 높은 차입 리스크와 과도한 밸류에이션이 명확히 지적되어 단기적으로 부정적 변동성 확대가 우세할 것으로 판단됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">우주산업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">AI 인프라</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#스페이스X</span> <span class="tag tag-hash">#레버리지리스크</span> <span class="tag tag-hash">#고밸류에이션</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">문창석 기자 = 미국의 우주기업 스페이스X가 상장 후 약 일주일 만에 국내 서학개미들의 투자금을 3조 원 가까이 대거 빨아들인 것으로 나타났다. 다만 상장 직후 폭등한 주가가 30% 이상 급락하고 있고, 향후 변동성도 심할 것으로 예상되는 만큼 신중한 투자가 필요하다는 지적이다.
+
+26일 한국예탁결제원에 따르면 지난 16일부터 24일까지(결제일 기준) 국내 투자자의 스페이스X 순매수 규모는 18억 7902만 달러(약 2조 8958억 원)으로 집계됐다. 이는 같은 기간 2위인 '라운드힐 메모리 ETF(2억 768만 달러)'의 9배에 달하는 압도적 1위다.
+
+범위를 넓혀 올해 전체 기준으로도 스페이스X의 순매수액은 2위인 마이크론(12억 7548만 달러)에 크게 앞선 1위다. 상장 후 단 7거래일 만에 반도체 호황의 한복판에 있는 마이크론의 매수세를 앞선 것이다. 스페이스X는 보관금액 기준으로도 16억 6400만 달러(약 2조 5637억 원)를 기록해 전체 해외주식 중 23위에 올랐다.
+
+국내 투자자들의 투자 열기는 본주에만 그치지 않고 있다. 지난 16~24일 스페이스X의 일일 수익률을 2배로 추종하는 '레버리지 셰어즈 2X 롱 SPCX 데일리 ETF(SPCH)'의 순매수액은 1억 3438만 달러로 전체 해외주식 중 5위다. 비슷한 레버리지 상품인 '프로셰어즈 울트라 스페이스X'도 43위(1151만 달러), 'T-REX 2X 롱 스페이스X 데일리 타깃 ETF'는 45위(1135만 달러)에 올랐다. 스페이스X 상장 이후 보통주와 이들 3개 레버리지 상품의 합산 순매수액은 20억 3626만 달러(약 3조 1386억 원)에 달한다.
+
+반면 최근 주가는 이런 열기를 뒷받침하지 못하고 있다. 지난 16일 장중 225.64달러까지 올랐던 스페이스X 주가는 지난 24일(현지시간) 154.54달러로 마감했다. 공모가(135달러) 대비 67% 치솟았다가 일주일 만에 32% 폭락한 것이다. 상장일(160.95달러) 다음날부터 진입해 아직 보유한 투자자는 손실 구간이다. 지난 22일에는 하루 만에 16.43%나 폭락하기도 했다. 전세계 5위까지 올랐던 시가총액도 이젠 2조 336억 달러(약 3134조 원)로 7위다.
+
+주가가 오를 땐 수익이 2배지만, 하락할 때 손실도 2배인 레버리지 상품의 수익률은 더 처참하다. 스페이스X 상장 후 전체 주식 중 순매수 5위인 SPCH의 경우 지난 16일 22.95달러(종가 기준)를 기록했지만 24일에는 12.66달러로 반토막이 났다. 고점에서 매수했을 경우 원금을 회복하려면 두 배 이상 반등해야 한다.
+
+최근의 주가 하락세는 높은 밸류에이션 부담이 부각된 것으로 해석된다. 이날 기준 스페이스X의 시가총액은 지난해 매출(187억 달러)의 무려 109배에 달한다. 여기에 최근 200억 달러(약 30조 8000억 원) 규모의 회사채 발행 추진 소식까지 전해지면서 대규모 차입 확대에 따른 재무 부담 우려가 확산된 영향도 컸다.
+
+시장에선 스페이스X 주가가 급등했다가 다시 급락하는 '롤러코스터 장세'가 당분간 이어질 것이기에 투자자들의 주의가 필요하다는 지적이 많다. 주요 지수 편입 및 장기 성장성에 대한 기대감에 주가가 일시적으로 상승할 수 있지만, 오는 8월부터 시작되는 보호예수 물량 해제 및 실적 발표마다 불거질 고점 논란 등에 다시 급락하는 등 주가가 출렁일 가능성이 높다는 것이다.
+
+박상현 iM증권 연구원은 "올해 들어 AI 기업들의 부채 붐이 본격화되는 상황에서 스페이스X마저 자금조달에 나섰다는 점에서 AI발 차입 리스크에 대한 시장의 우려를 다시 자극했다"며 "하이퍼스케일러 기업을 중심으로 한 대규모 투자는 결국 가격경쟁력을 격화시켜 치킨게임을 현실화될 리스크가 커질 수 있음을 경계해야 한다"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/421/0009024700' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/421/0009024700</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
