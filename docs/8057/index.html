@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>미 증시 살펴보며 한국 증시 투자아이디어까지 찾는 마켓 무버입니다.</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001256641' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8057" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>미 증시 살펴보며 한국 증시 투자아이디어까지 찾는 마켓 무버입니다.</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국의 GDP 확정치는 예상보다 높고 PCE 물가는 시장 전망을 하회하며 인플레이션 우려를 완화시켰습니다. 다만, 메모리반도체 가격 상승에 따른 기업들의 비용 부담이 수요자(최종 소비자)에게 얼마나 전가될 수 있을지가 시장의 주요 관심사입니다.
+AI 기업들은 높은 칩 구매 비용에도 불구하고 매출액이 감가상각비를 초과하며 수익성을 입증했고, 이는 반도체와 AI 섹터에 대한 강한 기대를 나타내고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">거시경제 지표가 인플레이션 완화 및 소득 증가를 보여주며 안도감을 주었으나, 공급자인 반도체 기업의 고비용 구조가 최종 수요자에게 미치는 영향에 대한 의문(메모리/AI 비용 전가 리스크)이 커지면서 투자 심리가 혼조세를 보이고 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">애플</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#거시경제지표</span> <span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#AI성장</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미 증시 살펴보며 한국 증시 투자아이디어까지 찾는 마켓 무버입니다.
+
+간밤 나온 경제지표 먼저 살펴보겠습니다. 미국의 1분기 국내총생산 GDP 증가율 확정치가 전기대비 연율 2.1%로 나왔습니다. 미국이라는 나라는
+땅이 넓어 나라 안의 생산을 제대로 집계하는 데에(엄밀히 말하면 집계라기보다는 추계라고 해야겠습니다) 시간이 걸려서 GDP 성장률을 속보치와 잠정치, 확정치로 세 번에 걸쳐 발표하는데요. 이번에 나온 GDP 확정치는 직전에 나온 잠정치 대비 0.5% 높아졌습니다.
+
+GDP 증가율은 흔히 경제성장률이라고 하지요. 계산방식 상 해외 수입이 줄어들면 GDP 증가율은 높아지는데, 이것이 이번 미국 1분기 GDP 확정치가 잠정치보다 높아진 요인입니다. 그러니까 미국은 1분기에 직전까지 알고 있었던 것보다 해외에서 물건을 덜 사온 거지요.
+
+미국의 5월 개인소비지출(PCE) 물가지수 데이터도 나왔습니다. 뉴스 헤드라인에는 '미국 물가상승률, 약 3년만에 최대폭 상승'이라는 문장이
+빠지지 않을 겁니다. 그러나 세부적으로 보면 이번에 나온 데이터는 오히려 미국의 물가가 정점을 지나고 있다는 안도를 줄 수 있습니다. 그것이 미
+장기 국채 수익률 하락 등으로 시장에 반영이 되었고요.
+
+이번에 나온 PCE 상승률은 전년 대비 4.1%, 전월 대비로는 0.3%입니다. 전월비로는 시장 전망을 하회하는 상승률을 기록한 것이요.
+미국과 이란 간 종전 협상 이후 유가가 내려가고 있는 것이 앞으로 반영될 테니, 적어도 물가 데이터는 시장에 걱정을 끼쳤다고 보기는
+어렵겠습니다.
+
+미 증시 3대 지수 혼조세로 마감했습니다. 다우지수는 강보합권에서 마감한 가운데 나스닥 지수는 4일 연속 하락했습니다.
+
+섹터 간 엇갈림이 컸습니다. 반도체 기업 마이크론은 15.74%, 샌디스크는 21.97% 올랐지만 애플은 6.12%, 마이크로소프트는 3.46%하락했습니다.
+메모리 공급난에 애플과 마이크로소프트가 제품가격 인상을 단행했다는 소식이 시장에 전해진 뒤 나온 흐름입니다.
+
+999달러였던 애플 아이패드 프로 가격이 1,199 달러로 20% 올랐습니다. 아이패드, 아이폰에 들어가는 메모리 가격이 너무 올라 가격을
+인상할 수 밖에 없었다는 게 애플의 설명입니다.
+
+그리고 이것이 마이크론의 급등 속 하락한 간밤 미 증시의 모습을 설명하는 단적인 장면이 됐습니다. 이제 시장은 새로운 질문에 주목하고 있습니다. 
+공급자인 메모리반도체 기업의 대단할 실적이, 반도체를 사서 제품과 서비스를 만들어내는 다른 기업들, 즉 수요자들에겐 역으로 얼마나 부담이
+되는지, 그래서 실물경제엔 얼마나 부담으로 작용할지. 정확히는 결국 최종 소비자들이 그 부담을 견딜 수 있는지가 되겠습니다.
+
+가까운 과거에도 이런 걱정이 있었습니다. 몇 년 전 코로나 시대 때는 많은 후폭풍 속에서도 소비지출이 인플레에 꺾이지 않으며 미국 기업들의
+호실적에 기여했습니다. 소비자들이 울며 겨자먹기로 비싸진 제품 사줬으니, 결국 기업들에 들어오는 돈이 더 늘어났었다는 뜻이죠.
+
+메모리발 인플레이션, 칩플레이션이라는 단어를 기사에 올리는 것이 아직 섣부를 수 도 있겠습니다만, 이번에는 어떨까가 미국 투자심리를 움직였다고
+보아야겠습니다. 관련해서 생각해 볼 지점이 크게 두 가지는 있을 겁니다.
+
+하나는 오르는 가격만큼 사람들이 사줄까, 혹은 살 여력이 있나 하는 점일 겁니다.
+
+오늘 나온 경제 지표를 잘 들여다보면 미국인들의 소득이 0.7% 증가하면서 올해 1월 이후 처음으로 상승세를 기록했고 또 미국인들의 임금도
+0.4% 올랐다는 것을 알 수 있습니다. 가처분 소득도 한 달 전보다 0.7% 늘었습니다.
+
+그동안 물가가 너무 올라서 미국인들의 소비력에 우려되는 부분이 있었는데, 이제 물가가 오르더라도 미국인들의 소비가 그만큼 받쳐주며 인플레이션을
+흡수할 수 있을지가 관건이 되겠고요.
+
+시장이 검증하고자 하는 또 하나의 질문은 비싸진 반도체를 이용하는 투자만큼 AI 기업들이 돈을 벌 수 있느냐 하는 점이겠습니다.
+
+이 질문에 대한 답의 최신 버전은 간밤 나온 블룸버그 통신의 보도입니다. 리서치 회사 익스포텐셜 부의 조사를 인용한 이 기사에 따르면, 올해 1분기 중국을 제외한 글로벌 기업들의 AI 매출이 250억 달러를 기록했습니다. 이 돈은 데이터 센터와 AI 칩을 구매하면서 발생하는 감가상각비
+210억 달러보다 높은 수치이니, 조사가 올바르다면 AI 기업들은 2분기 연속 감가상각비보다는 많은 돈을 벌고 있다는 점이 확인됐습니다.
+
+간밤 미 증시 움직임이 오늘 우리 증시에 어떤 영향을 줄까요? 궁금하신 점과 의견 댓글로 남겨주세요.
+원문링크: https://n.news.naver.com/mnews/article/215/0001256641</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001256641' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001256641</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
