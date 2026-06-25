@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>실적 기대감 주가 선반영
+결국 관건은 가이던스
+하이퍼스케일러 설비투자도 주목
+美 FOMC가 변수될 가능성도</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003104944' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8054" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>실적 기대감 주가 선반영
+결국 관건은 가이던스
+하이퍼스케일러 설비투자도 주목
+美 FOMC가 변수될 가능성도</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피는 AI 사이클에 힘입은 반도체 업종 수혜로 급등했으나, 시장 전문가들은 과거 실적보다 기업이 제시하는 '미래 가이던스'와 주요 클라우드 제공업체(하이퍼스케일러)의 설비투자(CAPEX) 지속 여부를 핵심 관전 포인트로 꼽았습니다. 또한, 연준의 금리 정책 변화 가능성도 시장 변수로 작용하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업황에 대한 낙관론과 AI CAPEX 확산은 매우 강력한 상승 동력이지만, 주가가 이미 실적 기대감으로 과열되어 있어 '미래 가이던스'와 '거시경제 지표(FOMC)'가 변수가 되어 단기 조정 가능성이 높음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#AI_CAPEX</span> <span class="tag tag-hash">#기업가이던스</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 전 거래일(8471.02)보다 459.28포인트(5.42%) 오른 8930.30에 마감한 25일 오후 서울 여의도 국민은행 본점 로비
+전광판에 지수가 나오고 있다. 
+코스피가 전 거래일(8471.02)보다 459.28포인트(5.42%) 오른 8930.30에 마감한 25일 오후 서울 여의도 국민은행 본점 로비
+전광판에 지수가 나오고 있다. 
+실적시즌에 대한 낙관론에 불을 지폈다.
+
+인공지능(AI) 사이클에 힘입은 반도체 업종 수혜가 실적시즌을 통해 재확인될 것으로 예상되지만, '과거 실적'보다는 '추가 성장 여부'를
+주목해야 한다는 지적이다.
+
+26일 한국거래소에 따르면, 전날 코스피 지수는 전 거래일 대비 459.28포인트(5.42%) 오른 8930.30에 거래를 마쳤다。
+
+간밤 호실적을 발표한 마이크론 훈풍에 힘입어 삼성전자(5.29%), SK하이닉스(13.06%)가 급등하는 등 반도체주 중심 상승장이 펼쳐졌다.
+
+증권가는 마이크론 바통을 넘겨받아 7월초 삼성전자, 7월 중순 TSMC 및 ASML, 7월 하순 SK하이닉스가 호실적을 발표할 것으로 기대하고
+있다.
+
+'반도체 투톱'이 국내증시에 절대적 영향력을 행사하는 만큼, 두 기업의 호실적이 증시 방향성을 결정지을 전망이다.
+
+다만 2분기 실적 기대감은 주가에 선반영 돼 있는 만큼, 가이던스(향후 전망)를 주목할 필요가 있다.
+
+마이크론 호실적 훈풍도 시장 예상치를 상회한 가이던스가 영향을 미친 결과로 풀이된다.
+
+실제로 마이크론은 시장 예상치(435억8000만 달러)를 크게 웃도는 4분기 매출 가이던스(500억 달러)를 제시했다.
+
+4분기 영업이익률 전망치(86%)도 3분기(81.2%)보다 높아질 것으로 전망했다.
+
+권범석 삼성증권 연구원은 "실적이 좋더라도 가이던스가 그저 그렇다면 매도 물량이 출회될 만큼 시장 기대치가 높아진 상황"이라며 "실적시즌 랠리를 위해서는 전망치를 상회하는 가이던스가 기본 조건"이라고 말했다.
+
+같은 맥락에서 반도체 수요를 결정지을 하이퍼스케일러들의 설비투자(CAPEX) 흐름도 눈여겨봐야 한다.
+
+AI 연산 능력과 직결되는 클라우드 서비스 제공업체인 구글, 마이크로소프트, 아마존, 메타 등의 설비투자 흐름이 꺾이지 않아야, 향후 반도체
+업종의 지속적 수혜로 이어질 거란 관측이다.
+
+나정환 NH투자증권 연구원은 "반도체 실적의 본질은 AI CAPEX"이라며 "AI CAPEX가 지속되는 한 반도체 수요와 실적도 견조할 것"이라고 말했다.
+
+미국 중앙은행 연방준비제도(연준·Fed)의 케빈 워시 의장이 지난 17일(현지시각) 미국 워싱턴DC에서 기자회견을 하고 있다(자료사진).
+
+높다.
+
+케빈 워시 신임 연준 의장 취임 이후 처음 개최됐던 이달 FOMC에서 예상보다 매파적인 메시지가 발신됐던 만큼, 시장 참가자들의 FOMC
+민감도는 어느 때보다 높아진 상황이다.
+
+미국·이란 핵 협상 결렬에 따른 증시 충격 가능성이 잔존하는 가운데 증권가는 낙관적 전망에 힘을 싣고 있다.
+
+호르무즈 해협 개방 등으로 최근 국제유가가 안정적 흐름을 보이고 있어 연준의 매파적 성향이 누그러질 수 있다는 전망이다.
+
+권 연구원은 "6월 FOMC가 매우 매파적 성격이었던 만큼, 7월 FOMC는 워시 의장의 물가 우려 코멘트와 같은 추가적인 시그널이 발견되지
+않는 이상 '논 이슈(non-issue)'로 끝날 가능성이 높다"고 내다봤.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003104944' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003104944</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
