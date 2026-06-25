@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 상승 마감-코스닥 하락 마감</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016159952' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/7982" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 상승 마감-코스닥 하락 마감</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">마이크론의 강력한 실적 발표와 긍정적인 전망에 힘입어 반도체주 중심의 코스피가 급등하며 장중 9,000선을 회복했습니다. 반면, 상대적으로 소외된 코스닥 시장은 하락 마감하는 모습을 보였습니다. 기관 투자자의 순매수가 지수 상승을 견인한 하루였습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 반도체 업황 회복 기대감(미국 마이크론 실적)이 가장 강력한 동인으로 작용하며 코스피를 견인했습니다. 섹터 리더십과 기관 매수세가 명확하게 포착된 하루였습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">SK</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#반도체사이클</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피 상승 마감-코스닥 하락 마감 (서울=연합뉴스) 이지은 기자 = 25일 서울 중구 하나은행 딜링룸 현황판에 코스피와 코스닥지수가 표시되고 있다.
+이날 코스피는 전날보다 459.28포인트(5.42%) 오른 8,930.30, 코스닥지수는 21.50포인트(2.36%) 내린 887.81에 마감했다. 2026.6.25
+
+(서울=연합뉴스) 임은진 기자 = 코스피는 25일 미국 마이크론 테크놀로지가 다시 불을 붙인 반도체 투자 심리에 급등하며 장 중 '9천피'(코스피 9,000)를 탈환하기도 했다.
+
+한국거래소와 연합인포맥스에 따르면 이날 코스피는 전 거래일 대비 459.28포인트(5.42%) 오른 8,930.30으로 장을 마감했다.
+종가 기준 9,000선까지 69.70포인트 남겨뒀다.
+지수는 전장 대비 232.40포인트(2.74%) 오른 8,703.42로 출발한 뒤 급등해 오전 9시 7분께 유가증권시장에서 프로그램 매수호가 일시 효력정지(매수 사이드카)가 발동되기도 했다.
+오후 들어서는 6% 넘는 상승률을 보이며 우상향해 한 때 9,044.04까지 오르며 장 중 9,000선을 회복하기도 했다.
+지수는 기관 투자자가 견인했다.
+유가증권시장에서 기관은 3조3천243억원 순매수했고 개인과 외국인은 각각 2조4천155억원, 8천782억원 순매도했다.
+외국인은 코스피200 선물 시장에서도 1조6천340억원 매도 우위를 보였다.
+
+이날 오후 3시 30분 기준 서울 외환 시장에서 달러 대비 원화 환율은 전 거래일보다 0.7원 오른 1,542.7원을 나타냈다.
+코스피는 미국 마이크론의 예상을 뛰어넘는 실적과 가이던스 영향에 크게 상승했다.
+주요 메모리 반도체 기업 중 실적 발표가 일러 반도체 업계의 '풍향계'로 불리는 마이크론이 깜짝 실적과 긍정적인 전망을 내놓으면서 그간 반도체 업황이 정점을 지난 것 아니냐는 시장 일각의 우려를 말끔하게 씻어냈다.
+
+이에 '반도체 투 톱'인 삼성전자(5.29%)와 SK하이닉스(13.06%)의 주가가 개장하자마자 급등하면서 지수를 밀어 올렸다.
+이 가운데 SK하이닉스는 장 중 15.78% 오른 298만8천원까지 치솟으면서 신고가를 경신했다.
+
+이들 두 종목의 주가 상승에는 기관 투자자의 힘이 컸다.
+기관은 SK하이닉스와 삼성전자를 각각 2조5천22억원, 1조2천284억원 순매수했다. 순매수 순위 1위, 2위다.
+
+수량 기준으로는 삼성전자를 343만 주, SK하이닉스는 87만 주 순매수했다. 각각 순매수 순위 1위, 3위다.
+
+이경민 대신증권 연구원은 "코스피는 마이크론 실적 발표 이후 반도체 투자 심리가 회복되며 상승했다"며 "특히 SK하이닉스는 ADR(미국주식 예탁증서) 발행 일정 확정 소식까지 더해지며 강세가 뚜렷했다"고 전했다.
+
+시총 상위주 중에서는 SK스퀘어(5.56%)와 삼성전기(1.68%), 삼성생명(3.23%), 삼성물산(7.79%) 등이 올랐다.
+특히 SK는 SK하이닉스와 SK스퀘어의 지분 가치 상승을 기대하며 몰린 매수세에 20.51% 상승하며 시가총액이 62조2천73억원까지 불어났다.
+
+이에 SK는 HD현대중공업 등을 제치고 단숨에 코스피 시총 순위 10위에 올라섰다.
+
+반면 현대차(-1.18%), LG에너지솔루션(-3.69%), HD현대중공업(-0.85%), 두산에너빌리티(-3.09%) 등은 내렸다.
+코스피 상승 종목 수는 291개, 하락은 589개, 보합은 36개다.
+
+업종별로는 반도체주 상승에 전기·전자(7.72%) 상승률이 가장 높았고 이어 제조(6.08%), 유통(4.98%), 전기·가스(4.21%) 등의 순이었다.
+종이·목재(-3.73%), 오락·문화(-2.11%), 금속(-2.02%) 등은 내렸다.
+
+코스닥 지수는 전장 대비 21.50포인트(2.36%) 내린 887.81로 장을 마감하며 다시 900선 아래로 주저앉았다.
+지수는 전장보다 14.35포인트(1.58%) 오른 923.66으로 출발했으나 반락한 뒤 오후에는 하락 폭을 확대했다.
+코스닥 시장에서는 개인이 1천477억원, 외국인이 321억원 순매수했고, 기관이 1천707억원 순매도했다.
+시총 상위주 중에서 알테오젠(0.94%), 레인보우로보틱스(0.19%), 원익IPS(2.72%) 등이 올랐고 에코프로비엠(-5.57%),
+에코프로(-5.29%), 코오롱티슈진(-0.79%) 등은 내렸다.
+
+코스닥 시장 내 상승 종목은 400개, 하락 종목은 1천280개였다. 57개는 보합이었다.
+
+이날 한국거래소의 유가증권시장과 코스닥시장 거래 대금은 각각 51조9천340억원, 7조270억원으로 집계됐다.
+대체 거래소인 넥스트레이드의 프리마켓과 메인마켓 거래 대금은 총 31조7천227억원이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016159952' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016159952</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
