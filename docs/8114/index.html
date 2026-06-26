@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이주에만 서킷브레이커 두 차례…코스피 장중 800P 넘게 급락</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014030498' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8114" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>이주에만 서킷브레이커 두 차례…코스피 장중 800P 넘게 급락</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 지수가 최근 며칠간 연이은 급락세를 보여, 이번 주에만 서킷브레이커가 두 번 발동되는 등 시장 변동성이 극대화되고 있습니다. 원인으로는 애플발 메모리 수요 둔화 우려와 지난 반도체주 급등 후 집중적인 차익실현 매물이 복합적으로 작용한 수급 요인이 지목되며, 개인 투자자들의 불안감이 확산되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단기적인 과대매수 이후 발생한 차익실현 과정과 특정 섹터(반도체)에 집중된 수급 변동성이 복합적으로 작용하여 급락을 유발했습니다. 이는 투자자들에게 심각한 패닉을 전파하며 단기 시장 불안정성을 극도로 높이고 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체급락</span> <span class="tag tag-hash">#서킷브레이커</span> <span class="tag tag-hash">#투자패닉</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[서울=뉴시스] 조성우 기자 = 코스피가 전 거래일(8930.30)보다 117.12포인트(1.31%) 하락한 8813.18에 개장한 26일 오전 서울 중구 하나은행 딜링룸 전광판에 지수가 표시되고 있다.코스닥 지수는 [서울=뉴시스] 조성우 기자 = 코스피가 전 거래일(8930.30)보다 117.12포인트(1.31%) 하락한 8813.18에 개장한 26일 오전 서울 중구 하나은행 딜링룸 전광판 전광판에 지수가 표시되고 있다.코스닥 지수는 전 거래일(887.81)보다 3.38포인트(0.38%) 내린 884.43에 거래를 시작했다. 원·달러 환율은 전 거래일 주간거래 종가(1542.7원)보다 4.6원 오른 1547.3원에 출발했다.
+2026.06.26. xconfind@newsis.com
+[서울=뉴시스]김민수 기자 = 코스피가 또다시 급락하며 이번 주에만 서킷브레이커가 두 번 발동됐다. 뚜렷한 원인을 찾기 어려운 상황에서 반복되는 폭락장에 개인 투자자들의 패닉 심리가 확산되고 있다.
+26일 한국거래소에 따르면 코스피는 장중 8.19% 급락하며 오전 12시10분께 서킷브레이커가 발동됐다. 지수는 1%대 약세로 출발해 낙폭을 점차 확대하며 8126.84까지 밀렸다. 코스닥도 5% 이상 하락하며 838.53까지 후퇴했다.
+지난 23일 910.71포인트(9.99%) 급락하며 하락폭 기준 사상 최대 기록을 세운 데 이어 불과 사흘 만에 또다시 800포인트 넘게 밀리면서 투자자들의 불안감도 커지고 있다.
+이번 급락 역시 대외 악재만으로 설명하기 어렵다. 간밤 뉴욕증시는 혼조세에 그쳤지만 국내 증시에 큰 영향을 미치는 반도체 업종은 오히려 강세를 나타냈다.
+마이크론 테크놀로지어는 3분기 호실적 발표 이후 15.74% 급등했고, 필라델피아 반도체지수도 3.59% 올랐다. MSCI 한국지수상장지수펀드(ETF)도 3.92% 상승했다.
+전문가들은 애플의 제품 가격 인상에 따른 메모리 수요 둔화 우려와 최근 반도체주 급등에 따른 차익실현 매물 등을 원인으로 꼽고 있다.
+다만 과거 급락장을 촉발했던 전쟁이나 코로나 팬데믹, 금융위기와 같은 충격과 비교하면 시장 전체가 800포인트 넘게 밀릴 정도의 단일 악재는 아니라는 평가가 나온다. 이 때문에 개인 투자자들의 혼란도 커지고 있다.
+이 같은 당혹감은 온라인 투자자 커뮤니티의 반응에서도 확인된다.
+주식 커뮤니티에서 한 투자자가 "도대체 왜 이렇게 폭락하는 것이냐"고 묻는 게시글에는 "그냥"이라는 답변이 가장 많은 공감을 받으며 투자자들의 허탈함을 보여줬다。
+또 다른 투자자는 "애플발 악재가 영향을 줄 수는 있겠지만, 이 정도까지 떨어질 수준은 아니다"며 "주식시장이 도박판이 된 것 같다"고 토로했다.
+수급 쏠림 현상에 대한 비판도 이어졌다.
+한 투자자는 "삼성전자·SK하이닉스 단일종목 레버리지 ETF 출시 이후 안 그래도 심했던 수급 쏠림이 더 심해졌다"며 "다른 업종은 철저히 소외되고 공매도만 판치는 상황이 정상적인 시장인지 의문"이라고 지적했다.
+증권가에서는 이번 급락이 단일 악재보다는 복합적인 수급 요인이 겹친 결과라는 분석이 나온다.
+한지영 키움증권 연구원은 "애플의 제품 가격 인상 이슈로 메모리 수요가 둔화될 수 있다는 우려가 제기되고 있지만, 이는 다소 과도한 측면이 있다"며 "실질적으로는 최근 반도체주 쏠림 현상과 이에 따른 수급 변동성 확대가 이날 급락의 대부분을 설명하고 있다"고 진단했다.
+이어 "지난 이틀간 코스피 반등 과정에서 반도체주만 독주했던 만큼 차익실현 매물이 집중됐고, 반도체 비중이 높은 패시브 자금까지 이탈하면서 대부분 업종에 매도 압력이 나타났다"고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014030498' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014030498</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
