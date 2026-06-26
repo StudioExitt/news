@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>시장이 지워버린 이름 코스닥</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005303329' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8165" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>시장이 지워버린 이름 코스닥</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 반도체 대형주의 급등세에 힘입어 수직 상승하는 사이, 코스닥은 소외되어 연고점 대비 큰 폭으로 하락하며 두 지수 간의 격차가 역대급으로 벌어지고 있습니다. 전문가들은 이러한 현상을 '반도체 독주'로 진단하고, 중소형 기술주의 성장 모멘텀 부재와 구조적 문제(부실기업 리스크 등)가 코스닥 발목을 잡고 있다고 분석했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 성장 동력인 반도체 대형주에 자금이 과도하게 쏠리면서, 중소형 성장주 시장(코스닥)의 투자 심리가 크게 위축되었고, 이는 구조적인 문제 제기와 정책적 우려를 동시에 불러일으켜 주가 전망에 부정적 영향을 미칩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">알테오젠</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오/제약</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥</span> <span class="tag tag-hash">#반도체독주</span> <span class="tag tag-hash">#증시분석</span> <span class="tag tag-hash">#투자심리위축</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">시장이 지워버린 이름 코스닥
+환호도 관심도 없는 '잊혀진 시장'
+모두가 삼전닉스 불장에 열광했지만 중소형주 소외…연고점 대비 30%↓
+코스피 9000 넘을때 900 밑에 갇혀 승강제 도입하면 '삼천닥' 과연 올까
+사진=게티이미지뱅크
+사진=게티이미지뱅크
+95% vs -10%. 
+국내 양대 증시 지수인 코스피지수와 코스닥지수의 올해 성적표다. 코스피지수가 올해 상반기 4000에서 8000으로 두 배 이상으로 수직 상승하며 축제를 벌일 때 코스닥지수는 900에서 800으로 미끄러지며 두 지수 간 격차가 역대급으로 벌어졌다. 반도체 대형주에만 자금이 쏠리는 ‘비대칭 증시 랠리’의 단면이다.
+
+26일 한국경제신문이 역대 코스피·코스닥지수 종가 추이를 분석한 결과, 이달 들어 두 지수의 격차가 무려 7000~8000포인트까지 벌어진 것으로 나타났다. 격차가 가장 컸던 날은 지난 22일로 코스피지수(9114.55·종가 기준)와 코스닥지수(968.40) 차이가 8146.15포인트로 벌어졌다. 1996년 7월 1일 코스닥시장이 문을 연 이후 가장 큰 격차다.
+
+올해 30주년을 맞은 코스닥은 ‘한국판 나스닥’을 꿈꾸며 화려하게 출범했다. 정보기술(IT) 호황기이던 2001년 닷컴 버블 직후만 해도 코스피지수를 최대 1900포인트가량 앞섰지만, 거품이 꺼진 뒤 줄곧 코스피지수 그늘에 가려졌다. 이날도 코스닥지수는 4.10% 내린 851.37에 마감했다. 표면적으로는 코스피지수(5.81%) 하락률이 더 높지만, 속내를 들여다보면 온도 차가 뚜렷하다. 코스피지수는 그간 가파른 수직 상승에 따른 차익 실현 성격이 짙지만, 상반기 랠리에서 철저히 소외된 코스닥지수는 반등 한 번 제대로 하지 못한 채 800대 중반으로 밀려났다.
+
+이날 종가 기준 코스닥지수는 지난 4월 말 연고점(1226.18) 대비 30.6% 하락했다. 고점 대비 30% 이상 폭락한 것은 2차전지 캐즘(일시적 수요 정체) 여파로 시장이 주저앉은 2024년 이후 약 2년 만이다. 투자자 사이에서 코스닥지수를 두고 “코스피지수가 오를 때는 못오르고, 떨어질 때는 같이 떨어진다”는 말이 나오는 이유다.
+
+전문가들은 코스닥 소외의 근본 원인을 ‘반도체 대형주의 독주’로 진단한다. 최근 증시 랠리가 삼성전자와 SK하이닉스 등 초대형 반도체주의 가파른 실적 성장에 기반하다 보니 코스닥 기둥인 바이오와 2차전지는 물론 중소형 반도체 소재·부품·장비주에까지 온기가 미치지 못하고 있다는 분석이다. 여기에 부실기업 리스크로 인한 신뢰 저하, 성장주 투자심리 위축 등도 코스닥의 발목을 잡고 있다.
+
+정부는 올 하반기 코스닥 승강제 도입과 동전주 퇴출 등을 통해 코스닥시장을 되살릴 계획이지만, 일각에선 규제에만 집중하다 성장주 시장이라는 본연의 목적이 훼손될 수 있다는 우려가 나온다. 한 상장사 대표는 “반도체 장세가 지나간 뒤 성장주들이 미래 대어로 자랄 수 있도록 지원해주는 부흥책이 동반돼야 한다”고 말했다.
+
+올해 첫 거래일 유가증권시장과 코스닥시장 가운데 한 곳의 시가총액 상위 10개 종목에 1000만원씩 투자했다고 가정해보자. 유가증권시장을 선택했다면 투자금 1억원은 반년 새 1억9294만원(26일 기준)이 된다. 올해 각각 183.15%, 310.6% 뛴 삼성전자와 SK하이닉스만으로 4937만원을 벌어들였다. 코스닥시장을 선택했다면 상황은 달라진다. 알테오젠(-23.58%), 에이비엘바이오(-55.65%) 등에서 대폭 손실을 봐 투자금 1억원이 8913만원으로 줄어든다. 최근 증시 활황에서 코스닥시장이 철저하게 소외된 것을 단적으로 보여주는 예시다.
+
+올해 코스닥지수 고점 대비 하락폭(30.6%)은 코로나19 위기로 증시가 요동친 2020년 3월(약 38%)에 버금갈 정도로 심각한 수준이다.
+
+◇ 반도체 랠리에서 소외된 코스닥
+한국 코스닥시장의 부진은 다른 나라와 비교해도 이례적이다. 미국에선 중소형주 중심인 러셀2000지수의 올해 누적 상승률(19.92%)이 대형 우량주 중심의 S&P500지수(7.28%)를 뛰어넘었다. 중국에서도 대표 지수인 CSI300이 3.19% 오르는 동안 중소 기술주 비중이 높은 <0xEC><0xB4><0xB9>예반지수는 27.31% 뛰었다.
+
+증권가에서는 코스닥시장 부진 이유로 업종 구조와 실적 모멘텀을 꼽는다. 최근 증시 랠리는 ‘인공지능(AI)·반도체 기반의 실적 장세’인데, 코스닥시장에선 여전히 알테오젠, 에코프로비엠 등 바이오·2차전지가 상위권을 차지하고 있다. 일부 반도체 소재·부품·장비주도 낙수효과로 주가가 뛰긴 했지만 ‘삼전닉스’에 비해선 이익 모멘텀이 약하다. 에픽AI에 따르면 삼성전자와 SK하이닉스의 올해 영업이익 컨센서스(증권사 전망치 평균)는 각각 362조원, 265조원이다.
+
+코스닥시장 상장사 원익IPS(1862억원·152.3%), 주성엔지니어링(710억원·127.1%) 등도 실적 개선세가 가파르긴 하지만 시가총액과 수급 영향력 측면에서 코스닥시장 전체를 끌어올리기는 역부족이다.
+
+코스닥시장의 고질적 문제로 꼽히는 부실기업도 투자자 신뢰를 떨어뜨리는 요인이다. 한국거래소에 따르면 이날 기준 관리종목 105개 가운데 86개(81.9%)가 코스닥시장에 집중돼 있다. 2021년 이후 상장 폐지된 기업 883개 중 491개(55.6%)도 코스닥시장 기업이다.
+
+시장에서는 일부 부실기업과 불성실공시법인이 코스닥시장 전체의 신뢰도를 훼손하며 우량 성장기업까지 낮은 평가를 받는 구조가 고착화됐다는 지적이 나온다.
+
+고금리 환경도 부담이다. 성장주는 금리가 오를수록 미래 이익 가치가 낮게 평가되는 경향이 있어 주가수익비율(PER)이 높은 코스닥시장에 상대적으로 불리하다. 이 때문에 코스닥시장을 이끌던 개미 투자자 자금도 유가증권시장으로 쏠리고 있다. 한국거래소에 따르면 올해 개인 투자자는 유가증권시장에서 누적 128조원을 순매수한 반면, 코스닥시장에선 6조원 가까이 순매도했다.
+
+◇ 성장기업 육성 위축되나
+코스닥시장이 좀처럼 살아나지 못하자 연초 ‘3천닥(코스닥지수 3000) 달성’을 외친 정부의 고민도 커지고 있다. 금융업계 관계자는 “코스닥지수 3000은커녕 2000 달성도 멀어지면서 각 부처 주재 회의에서 3천닥 얘기가 쏙 들어갔다”고 했다. 정부는 코스닥시장 승강제 도입과 동전주 퇴출 등에 속도를 내겠다는 방침이지만 실효성에 대한 의문이 적지 않다. 코스닥시장 기업의 레벨을 나누면 1군에 속하지 않은 기업에 오히려 낙인이 찍혀 ‘제2의 코넥스’가 형성되는 게 아니냐는 우려다.
+
+주가 부진이 지속되면 코스닥시장의 본 역할인 성장기업 육성이 위축될 수 있다는 지적도 있다. 한국거래소에 따르면 올해 상반기 기술특례상장은 8건에 그쳤다.
+
+전문가들은 코스닥시장이 성장하기 위해서는 근본적으로 ‘반도체 투톱 주도 장세’가 지나야 한다고 입을 모은다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005303329' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005303329</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
