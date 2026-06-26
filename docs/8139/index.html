@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반도체 쏠림 부작용에 코스피 '휘청'…삼전·닉스에 휘둘린 지수</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/421/0009026169' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8139" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>반도체 쏠림 부작용에 코스피 '휘청'…삼전·닉스에 휘둘린 지수</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 수요 축소 우려로 인해 코스피 시장이 급락하며 서킷브레이커가 사상 초유의 세 번째 발동되었습니다. 대형 반도체주에 대한 높은 쏠림 현상이 시장 변동성을 극대화시키고 있으며, 투자심리가 매우 위축된 상태입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 산업인 반도체 업황 악화 우려와 대형주 편중 심화가 결합하여 시장 변동성을 극대화하고 전반적인 투자 심리를 급격히 위축시켰기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#서킷브레이커</span> <span class="tag tag-hash">#코스피</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">반도체 쏠림 부작용에 코스피 '휘청'…삼전·닉스에 휘둘린 지수
+코스피 200 변동성 지수 전날 95선 마감…금융위기 이후 최고치
+(서울=뉴스1) 박승희 기자 = 국내 증시에서 한달 동안 세 차례 서킷브레이커가 발동되는 첫 사례가 나왔다.
+26일 한국거래소에 따르면 이날 코스피 시장이 서킷브레이커가 발동됐다. 지난 8일과 23일에 이어 이달 들어서만 세 번째다.
+과거 외환위기와 글로벌 금융위기, 코로나19 팬데믹 등 굵직한 대외 충격 때마다 서킷브레이커가 발동된 바 있지만 한 달간 세 차례 반복적으로 발생한 건 이번이 처음이다.
+서킷브레이커는 주가지수가 일정 수준 이상 급락할 경우 시장 과열과 투매를 막기 위해 주식 거래를 일시 중단하는 제도다. 국내에는 외환위기 여파로 주식 시장이 무너졌던 1998년에 도입됐다.
+2000년부터 2024년까지 25년 동안 코스피 시장에서 서킷브레이커가 발동된 건 모두 6차례에 불과했다.
+미국 증시 급락, 국제유가 급등, 9·11 테러, 코로나19 팬데믹 등 굵직한 대외 충격이 시장을 덮칠 때마다 비상정지 장치가 작동했다. 코로나19 충격이 극심했던 2020년 3월에는 한 달 새 두 차례 서킷브레이커가 발동됐다.
+올해 들어서는 발동 빈도가 눈에 띄게 늘었다. 연초 이후 코스피 시장에서만 서킷브레이커가 5차례 발동됐다.
+올해 3월 미국과 이란 전쟁으로 증시가 흔들리며 지난 3월 두 차례 발동된 데 이어, 금리 인상 가능성, 메모리 반도체 수요 축소 등 이유로 반도체주가 급락하며 시장을 흔들었다.
+시장에서는 대형 반도체주 쏠림 현상이 시장 변동 폭을 키우고 있다고 보고 있다.
+전날 기준 코스피 시가총액은 7813조 723억 원이었는데, 삼성전자(우선주 제외)와 SK하이닉스 두 종목의 시가총액이 53.43%로 절반을 넘었다.
+이날도 뉴욕증시에서 확산한 메모리 반도체 수요 축소 우려에 삼성전자와 SK하이닉스 주가가 급락하며 증시가 내리막길을 걸었다.
+이에 코스피 200 변동성 지수도 금융위기 이후 역대 최고치를 기록 중이다. 전날 해당 지수는 95.09로 마감했다. 금융위기 당시인 2008년 10월 29일 장중 103.05를 기록한 뒤 약 18년 만에 가장 높은 수준을 기록한 것이다.
+1만 포인트 돌파 기대를 키우던 코스피가 8410선으로 급락 마감하면서 시장의 관심은 서킷브레이커 이후 반등 여부로 옮겨가고 있다.
+과거 사례를 살펴보면 코스피 시장에서 서킷브레이커가 발동된 뒤 2거래일간 지수는 2020년 3월 13일을 제외하고 전부 상승했다.
+26일 오후 서울 중구 하나은행 본점 딜링룸에 종가가 나오고 있다. 이날 코스피는 전일 종가와 비교해 519.09포인트(5.81%) 하락한 8411.21로 장을 마감했다. 2026.6.26</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/421/0009026169' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/421/0009026169</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
