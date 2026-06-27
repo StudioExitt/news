@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7거래일 연속 1530~1540원대 고환율</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.28</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006316869' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8230" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>7거래일 연속 1530~1540원대 고환율</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국과 이란 간 지정학적 군사 충돌이 지속되고 있으며, 향후 미국 6월 고용 보고서 발표를 앞두고 원/달러 환율은 높은 변동성 속에 1500원 초중반대 흐름을 유지할 것으로 전망된다.
+글로벌 에너지 및 정치적 불확실성, 그리고 주요국 경제지표(미국 고용보고서)에 따라 단기적으로 상방 압력을 받을 가능성이 높다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">환율 및 거시경제 지표(미국 고용보고서)가 주요 동력으로 작용하며, 지정학적 리스크로 인해 단기적인 환율 변동성이 매우 높음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">무역</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#환율</span> <span class="tag tag-hash">#거시경제</span> <span class="tag tag-hash">#미국고용보고서</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">7거래일 연속 1530~1540원대 고환율
+미국·이란, 종전 합의에도 군사 충돌
+주 중 미국 6월 고용지표 발표 대기
+“환율, 1500원 초중반대 하방경직적 흐름” 미국과 이란이 종전 합의에도 군사 충돌을 이어가는 가운데 원·달러 환율은
+1500원대에서 등락을 이어갈 것으로 전망된다. 하반기로 접어들 다음주에는 미국 6월 고용보고서가 발표되는 만큼 달러 강세가 재차 이어질지
+여부도 주목할 필요가 있겠다.
+
+사진=로이터
+
+28일 서울외국환중개에 따르면 주말인 지난 27일 새벽 2시 기준 환율 종가는 1535.80원에 거래를 마치며 전거래일 대비 7.30원 내렸다.
+지난 18일 1540원을 기록한 환율은 7거래일 연속 1530~1540원대 고환율을 이어가고 있다.
+
+종전 합의에도 불구하고 미국과 이란의 군사 충돌이 이어지면서 지정학적 불확실성도 재차 커지는 분위기다. 미 중부사령부(CENTCOM)는
+26일(현지시간) 성명을 통해 미군 항공기가 이란의 미사일 및 드론 저장시설과 해안 레이더 기지를 타격했다고 밝혔다. 중부사령부는 이번 공격이
+“이란이 호르무즈 해협을 통과하던 선박을 공격한 데 대한 강력한 대응”이라고 설명했다.
+
+전날 대만 선사 에버그린 마린은 싱가포르 선적의 컨테이너선 ‘에버 러블리’호가 권장 항로를 따라 항해하던 중 선측을 피격당해 함교에 손상을
+입었다고 밝힌 바 있다. 미국 측은 이를 이란의 자폭형 공격 드론에 의한 것이라고 지목했다.
+
+나아가 내주 예정된 미국 6월 고용보고서 발표 역시 주요 이벤트다. 미국 실업률이 재차 견조한 고용시장을 가리킬 경우 달러 강세 흐름이
+이어지면서 환율에도 상방 압력을 가할 수 있기 때문이다.
+
+이에 이번주 환율은 중동 정세와 미국 고용보고서 발표 등을 주시하면서 등락할 것으로 전망된다. 최근 지속된 외국인 자금 이탈과 서학개미 해외주식
+투자 수요도 중요한 수급 재료로 꼽힌다.
+
+이진경 신한투자증권 연구위원은 “달러 인덱스의 하방 경직적 흐름이 이어질 전망에 무게를 두고 있다”면서 “미국 6월 제조업지수와 취업자수가
+양호한 흐름을 이어갈 것으로 예상된다”고 봤이.
+
+그는 이어 “미국과 이란간 추가 협상 관련 불확실성이 잔존한 만큼 달러인덱스의 하방 경직성을 자극할 것”이면서 “환율 역시 1500원 초중반대
+흐름이 예상되며 당국 개입 경계감은 상단을 제한하겠으나 잔존한 대외 불확실성과 주식으로의 자금 유입이 소극적인 점은 원화 수요를 약화하는
+요인”이라고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006316869' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006316869</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
