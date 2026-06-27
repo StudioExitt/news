@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>순손실 1985억→순이익 3016억...데이브(DAVE 1/2)</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.28</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005378016' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8244" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>순손실 1985억→순이익 3016억...데이브(DAVE 1/2)</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">핀테크 기업 데이브(Dave)가 미국에서 오버드래프트 서비스를 활용하며 폭발적인 성장을 이루고 있음을 분석합니다. 데이브는 기존 금융기관의 신용점수 의존 모델 대신, AI를 이용해 고객의 실제 계좌 거래 내역을 분석하여 대출 부실 위험이 낮은 고객층을 공략하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">혁신적인 AI 기반 대출 심사 모델을 보유한 핀테크 기업(Dave)이 구체적인 재무 성과와 시장 편입(S&P)을 바탕으로 강력한 성장성을 입증했습니다. 전통 금융의 약점을 파고드는 비즈니스 모델 자체가 높은 평가를 받을 요소입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">DAV</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">핀테크</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#핀테크</span> <span class="tag tag-hash">#AI금융</span> <span class="tag tag-hash">#스몰캡</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[반준환의 미국 스몰캡(29)]순손실 1985억→순이익 3016억...데이브(DAVE 1/2)
+[편집자주] 숫자 뒤 스토리를 읽어야 진짜 투자가 보입니다. 한국주식도 미국 스몰캡 생태계를 알면 α를 낼 수 있습니다. 기술의 언어를 투자의
+언어로 풀어내는 전문기자와 글로벌 특화분석 원리서치의 투자 나침반으로 여러분을 안내하겠습니다. 반보(半步)만 앞서면 남들이 모르는 길이
+보일겁니다. 난해한 기술주 투자, 이제 쉽고 재미있게 즐겨보세요.
+
+미국에는 글로벌 투자은행(IB)부터 커머셜뱅크, 신용카드, 캐피탈, 리스, 저축은행, 증권사 등 수많은 금융기관이 있다. 그 만큼 신용거래와
+관련한 다양한 서비스들이 있다. 오버드래프트(당좌대월)도 소비자들이 흔하게 쓰는 서비스 중 하나다.
+
+오버드래프트는 미국식 마이너스통장이라고 생각하면 이해가 쉽다. 통장 잔고가 부족한데 결제가 일어나면 은행이 일단 돈을 메워주고, 그 대가로
+수수료를 뗀다. 한국의 마이너스통장은 빌린 돈만큼만 이자를 받지만 오버드래프트는 1건에 3만~4만원(평균 26.77달러)의 정액 수수료를 받는게
+다르다.
+
+이 서비스는 수표발행이 일반적이었던 서구 금융문화를 반영한 것이다. 1728년 스코틀랜드 왕립은행이 에든버러 상인 윌리엄 호그에게 계좌잔고가
+비어도 돈을 미리 인출할 수 있도록 해준게 첫 사례였다. 글로벌 투자분석업체 원리서치에 따르면 미국인 1명이 매년 지출하는 오버드래프트 수수료만
+평균 30만8000원(200달러)가 넘는다. 2024년 연간 18조6000억원(121억달러)에 달했고 지난해에도 124억달러 안팎의 오버드래프트
+수수료를 금융기관들이 받은 것으로 추산된다. 매년 2300만 가구가 수수료를 내는 것으로 조사됐다.
+
+━
+미국식 마이너스 통장, 오버드래프트로 수천억 이익
+━
+
+문제는 오버드래프트를 사용하는 고객들이 경제적 취약층이라는 점이다. 그리고 이들이 지급하는 수수료가 채무 불이행 확률에 비해 지나치다는 지적도
+끊이지 않는다. 잔고가 빠듯할수록 오버드래프트가 자주 터지고, 수수료가 쌓이며 다시 잔고가 마른다. 미국 성인 수천만명은 신용점수가 낮거나 아예
+없어 은행 대출 문턱조차 넘지 못한다. 이들에게 은행은 도움이 아니라 벌금 청구서에 가깝다.
+
+원리서치에 따르면 미국 개인고객 계좌의 약 9%가 연 10회 이상 오버드래프트 서비스를 이용하게 되는데 이들이 전체 수수료의 약 79%를
+부담한다. 2024년 한 번 이상 낸 성인은 약 11%입니다. 그리고 소득 2만5000~5만달러 계층은 19%가 오버드래프트 수수료를 낸 반면
+10만달러 이상은 6%에 그쳤다. 18~29세는 16%인데 60세 이상 고객은 6%다. 주로 저소득·청년 고객들이 서비스를 쓴다는 뜻이다.
+
+미국 대형은행이 오버드래프트 한 건에 물리는 수수료는 약 35달러(약 5만4000원)지만, 정작 은행이 떼이는 부실은 건당 평균 2달러(약
+3000원)에 그친다. 수수료가 실제 손실의 17배가 넘는 사실상 떼일 걱정 없는 장사인 셈이다.
+
+나스닥 상장사 데이브(Dave)는 이런 빈틈을 파고들어 가파른 성장을 이루고 있는 회사다. 특히 전통 은행들과 달리 인공지능(AI)로
+오버드래프트 부실율이 낮은 고객들을 발굴해 공략한다는 점에서 월가의 주목을 받고 있다.
+
+데이브의 간판 상품은 익스트라캐시(ExtraCash)다. 신용조회 없이, 이자 없이, 연체료 없이 최대 77만원(500달러)을 급여일 전에 당겨
+쓰는 서비스다. 신청부터 승인까지 5분이 걸리지 않는다. 핵심은 보이지 않는 심사 엔진 캐시에이아이(CashAI)다. 신용점수가 없는 사람에게
+돈을 빌려주면서도 떼이지 않는 비결이 여기 있다.
+
+전통 은행은 돈을 빌려줄 때 신용점수(FICO)를 본다. 과거의 대출·연체 이력을 쌓아 만든 성적표다. 이 성적표가 없는 사람은 곧바로
+거절이다. 사회초년생, 이민자, 프리랜서, 일용직 근로자 등이 대표적이다. 반면 데이브는 성적표 대신 통장 자체를 본다.
+회원이 앱에 주거래 은행계좌를 연결하면, 오픈뱅킹 방식으로 그 계좌의 거래내역이 데이브로 넘어온다.
+
+계좌 연결은 플레이드(Plaid) 같은 외부 금융데이터 중개업체를 거치며, 회원 본인의 동의를 거친다. 이렇게 들어온 통장에서
+데이브의 AI시스템은 수백 개의 데이터 항목을 읽는다. 월급이 얼마나 규칙적으로 들어오는지, 어디에 얼마를 쓰는지, 잔고가 어떻게 출렁이는지 같은 신호다.
+은행은 개인 신용점수에만 의존하지만 데이브는 지금 이 사람 지갑이 어떻게 돌아가는지를 본다. 신용점수가 없어도 다음 월급이 또박또박 들어오는
+사람이라면 빌려줄 수 있다는 논리다. 모든 과정은 사람 손을 거치지 않고 실시간으로 끝난다.
+
+빠른 대출승인도 데이브의 강점이다. 주택담보대출이나 신용대출은 부실 여부가 드러나는 데 몇 년이 걸린다.
+모델이 틀렸어도 한참 뒤에야 알게 되니 고치는 속도도 느리다. 데이브의 익스트라캐시는 평균 만기가 약 11일이다.
+다음 월급날 자동으로 갚아지기 때문이다. 빌려준 돈이 11일이면
+회수되니, 신용평가 모델이 맞았는지 틀렸는지도 즉각 검증된다.
+
+━
+수십억건의 은행거래 데이터 통해 대출 부실율 평가..중기연체율 1%대에 불과
+━
+
+데이브는 창업 이래 1억8000만건이 넘는 익스트라캐시 집행과 수십억건의 은행 거래 데이터를 쌓았다. 누적 공급액만
+33조8800억원(220억달러)에 이른다. 빌려주고 갚고 신용평가 모델을 재개발하는 과정을 수억회 반복하며 모은 현금흐름 데이터가 엄청난 힘을
+발휘하는 것이다.
+
+데이브의 AI 심사모델은 계속해서 진화하는 중인데 분석 데이터도 계속 늘어나는 중이다. 이 결과 평균 승인액은 늘어나면서도 연체율은 떨어지는
+선순환 고리가 가동되고 있다. 데이브는 2022년 순손실 1985억원(1억2891만달러)을 내며 위기 끝에 몰렸지만 2025년에는 순이익
+3016억원(1억9587만달러)을 기록하며 대반전을 이뤘다.
+
+미국에는 데이브 외에도 비슷한 서비스를 제공하는 앱이 많다. 언인, 머니라이언, 브리짓, 침 스팟미 등이 있으나 가장 주목받는 것은 역시
+데이브다. 언인의 경우 서비스 이용자가 실제 일하는 근로시간을 체크하고 시간당 임금을 곱해 총 수입을 추산하는 구조인데 근로시간 검증이 이슈이고
+머니라이언은 한도가 높지만 1회 인출액이 상대적으로 적다는 단점이 있다.
+
+데이브는 수수료 없는 입출금계좌(데이브 체킹)를 비롯해 직불카드, 부수입 일자리를 연결하는 사이드허슬(Side Hustle), 저축 도구까지 한
+앱에 통합해 좋은 평가를 받고 있다. 데이브의 매출은 2023년 3990억원에서 2025년 8534억원으로 2년 만에 2배 넘게 뛰었다.
+영업손익은 2023년 650억원 적자에서 2024년 533억원 흑자로 돌아선 뒤 2025년에는 2874억원으로 5배 넘게 커졌다. 순이익도
+2024년 891억원에서 2025년 3016억원으로 3.4배 늘었다.
+
+덩치만 키운 게 아니다. 매출이 60% 늘 때 영업이익은 그보다 훨씬 빠르게 불었다. 매출 증가분이 고스란히 이익으로 떨어지는 영업 레버리지
+구간에 진입했다는 뜻이다. 회원이 늘수록 인공지능 대출심사 모델이 정교해지고 손실은 줄어든다. 2026년 1분기에도 흐름은 이어졌다.
+매출 2440억원(1억5841만달러)으로 전년 동기 대비 47% 늘었고, 순이익은 892억원(5794만달러)을 기록했다. 채권회수가 어려워지기
+시작하는 중기 연체율(28일 이상 연체)은 1.69%로 1분기 기준 역대 최저다.
+
+주가도 고공행진을 거듭하는 중이다. 2024년말 86.92달러→2025년말 221.41달러→2026년6월26일 348.71달러로 가파른 상승세가
+이어지고 있다. 2025년 순이익 기준 PER은 20배 전후인데 AI·성장주로 분류되는 핀테크 기업의 평균 PER을 생각하면 비싸다고 보기는
+어려렵다는 평가가 나온다. 데이브는 지난 6월 1일 S&P 스몰캡 600 지수에도 편입됐다. 지수 추종 자금이 자동으로 들어오는 중이다.
+
+특징적인 것은 데이브가 은행이 아니라는 점이다. 직접 대출하는 대출기관도 아니다. 제휴은행에 얹혀 은행 서비스를 앱으로 파는 핀테크 기업이다.
+데이브 같은 기업들을 네오뱅크(neobank)라 일컫기도 한다. 한국 핀테크 투자자라면 데이브의 대안 신용평가 모델이 국내에서 어떻게 자리
+잡는지를 지켜볼 만하다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005378016' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005378016</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

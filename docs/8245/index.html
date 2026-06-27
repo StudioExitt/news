@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>횡보·하락장서 악순환…변동성에 부작용 우려 커져</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.28</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014032134' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8245" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>횡보·하락장서 악순환…변동성에 부작용 우려 커져</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">단일종목 레버리지 ETF의 과도한 유동성과 초고회전율이 증시 변동성을 키우며 개인 투자자들의 뇌동매매를 부추기고 있습니다. 이 과정에서 높은 거래대금을 바탕으로 증권사들은 막대한 수수료 수익을 얻는 구조적 비판에 직면했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">고위험 파생 상품(레버리지 ETF)의 남용으로 인한 시장 변동성 확대와 개인 투자자 피해, 그리고 증권사 수익 구조에 대한 근본적인 문제 제기가 포함되어 있어 시장 심리에 큰 영향을 미칠 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#변동성위험</span> <span class="tag tag-hash">#증권업계윤리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">횡보·하락장서 악순환…변동성에 부작용 우려 커져
+"10조" vs "500억" 논란에도…증권사 '배불리기' 비판
+당국, 예탁금·교육 등 규제 검토…실효성에는 '의문'
+[서울=뉴시스] 박영태 기자 = 26일 오후 서울 중구 하나은행 딜링룸 전광판에 코스피 지수가 표시되고 있다.코스피는 전
+거래일(8930.30)보다 519.09포인트(5.81%) 하락한 8411.21에 마감했으며 코스닥 지수는 전 거래일(887.81)보다
+36.44포인트(4.10%) 내린 851.37에 거래를 마쳤다. 2026.06.26. since1999@newsis.com[서울=뉴시스] 김진아
+기자 = 삼성전자와 SK하이닉스 등 반도체 대장주의 일일 등락률을 2배로 추종하는 '단일종목 레버리지 상장지수펀드(ETF)'가 출시된지 한 달이
+경과했으나 고배율 상품의 특성이 증시 변동성을 심화시키며 사실상 개인 투자자들의 초단타 놀이터로 변질됐다는 지적이 나온다.
+
+고수익의 유혹에 이끌린 개미들이 대거 진입해 널뛰기 장세의 위험을 떠안고 있는 반면, 매매 급증에 따른 폭발적인 회전율을 바탕으로 증권업계는
+막대한 수수료 불로소득을 거두고 있어 비판의 목소리가 커지고 있다.
+
+한 달 새 거래대금 3배↑…하루 -26% 폭락으로 변동성은 심화
+
+28일 금융당국 및 증권업계에 따르면 지난달 27일 단일종목 레버리지 ETF(14개 상품) 상장 후 개인투자자들을 중심으로 시장의 유동성이
+급격히 팽창하면서 부작용에 대한 우려도 깊어지는 모습이다.
+
+한국거래소에 따르면 이들 상품군의 시가총액은 상장 당시 5조원 규모에 불과했으나 지난 25일 기준 250% 이상 폭증한 17조5900억원
+수준으로 급격히 늘어났다. 불과 한 달도 되지 않아 3배 이상의 대규모 자금이 유입된 셈이다.
+
+전체 ETF 시장에서 단일종목 레버리지 ETF가 차지하는 거래대금 비중은 무려 35%에 달한다. ETF 거래 3건 중 1건은 이들 상품군에
+집중되고 있는 꼴이다.
+
+i례적인 수준을 나타내고 있는 회전율은 이들 상품이 극단적인 초단타 매매 수단으로 전락했음을 방증한다.
+
+올 들어 삼성전자와 SK하이닉스 등 본주 회전율이 각각 0.53%, 0.69%로 1% 미만에 머물고, 일반 주식형 레버리지 ETF가 30%
+안팎을 유지하고 있는 것과 대조적으로 단일종목레버리지 상품의 일평균 매매회전율은 122%(이달 12일 기준)로 집계됐다. 일부 상품의 하루 평균
+회전률은 무려 세 자릿수를 나타내고 있다.
+
+이처럼 장기 보유가 아닌 단타 매매가 주를 이루는 상황에서, 기초자산인 본주의 변동성이 커질 때마다 2배 배율을 추종하는 파생 상품의 충격은
+파괴적인 수준으로 증폭되고 있다.
+
+일례로 반도체 랠리가 극에 달하며 코스피가 급등했던 지난 9일, 삼성전자와 SK하이닉스가 각각 8.97%, 15.91% 상승하자 ‘KODEX
+삼성전자단일종목레버리지’와 ‘TIGER SK하이닉스단일종목레버리지’는 각각 18.97%, 33.93% 폭등하며 시장의 과열을 부추겼다.
+
+반면 코스피가 장중 9% 이상 급락했던 지난 23일과 25일 이들 상품의 낙폭은 이날 하루 20~22% 이상 수직 하락하며 시장을 공포로
+몰아넣었다.
+
+극단적인 변동성은 개인투자자들의 뇌동매매를 자극하는 부작용을 낳고 있다. 고점에 진입한 개인들이 주가 폭락 시 담보 부족으로 인한 반대매매에
+노출되거나 손절매를 단행하고, 반등장에서는 무리한 추격매수에 나서는 등 악순환이 반복된다는 것이다.
+
+[서울=뉴시스] 김선웅 기자 = 이찬진 금융감독원장이 지난 22일 서울 여의도 금융감독원에서 정례 기자간담회를 하고 있다. 2026.06.22.
+mangusta@newsis.com
+[서울=뉴시스] 김선웅 기자 = 이찬진 금융감독원장이 지난 22일 서울 여의도 금융감독원에서 정례 기자간담회를 하고 있다. 2026.06.22.
+mangusta@newsis.com
+
+"개미는 실익 없고 시스템만 이익"…고회전 장세에 '통행세' 수익좌
+
+개인 투자자들이 음의 복리 효과와 원금 유실로 신음하는 사이 상품을 취급하는 증권사와 자산운용사들은 수수료 확대에 따른 수혜를 누리고 있다.
+
+시장에서는 레버리지 상품의 극단적인 회전율이 증권사들의 브로커리지(위탁매매) 수수료 수입을 천문학적으로 밀어 올릴 것이란 추측이 나온다.
+
+주식 거래시 매매 대금의 일정 비율을 수수료로 수취하는 구조상, 개인의 단타 횟수가 늘어날수록 증권사들의 이익 역시 기계적으로 늘어나게 된다.
+
+최근 이찬진 금융감독원장이 "증권사들이 단일종목 레버리지 상품 출시로 10조원 규모의 수수료 수익만 챙겼다"며 증권업계를 향해 원색적인 비판을
+쏟아낸 배경도 이 같은 이익 구조의 비대칭성에 기인한다.
+
+이후 황성엽 금융투자협회장이 '오해'라는 표현과 함께 실제 수수료 추산 규모는 약 500억 원 수준이라고 진화에 나섰으나, 고배율 파생 상품의
+활성화가 결과적으로 증권사들의 수익 구조를 비정상적으로 증폭시켰다는 비판론은 가라앉지 않고 있다.
+
+당국, 투자자 보호방안 고심…실효성엔 '의문'
+
+사태의 심각성이 커지자 시장에서는 당국 차원에서 실효성 있는 투자자 보호장치를 즉각적으로 마련해야 한다는 목소리가 높아지고 있다.
+
+당장 금융감독원은 이번 주 중 주요 자산운용사 관계자들을 긴급 소집해 단일종목 레버리지 ETF 관련 본격적인 대응 마련을 예고한 상태다.
+
+현재 당국은 개인 투자자의 진입 장벽을 높이는 방안으로 현재 1000만원 수준인 기본예탁금 기준을 상향 조정하고, 필수 사전 교육 이수 조건을
+강화하는 방안 등을 유력하게 검토 중인 것으로 알려졌다.
+
+그러나 시장에서는 이 같은 진입 규제의 실효성을 두고 회의적인 시각이 지배적이다.
+
+한 자산운용업계 관계자는 "예탁금 액수를 올린다고 해도 자금 동원력이 있는 투기성 자금의 진입을 원천 차단하기는 어렵다"며 "특히 국내 시장의
+레버리지 광풍에 맞춰 최근 해외 운용사들이 국내 개인 투자자들을 겨냥한 초고배율 상품을 역으로 쏟아내고 있는 상황에서, 국내 증시의 문턱만
+높이는 방안이 실질적인 방어벽이 될지 의문"이라고 꼬집었다.
+
+또 다른 증권사 관계자도 "당국이 검토하는 방안들은 투자자들에게 레버리지 상품의 일간 리밸런싱 구조, 변동성 확대 구간에서의 손익 비대칭성 등을
+사전에 이해시키는 데는 도움이 될 수 있겠지만, 제도적 장벽을 높이는 것으로 실질적인 이해도가 개선된다고 보기는 어렵다"
+고 지적했다.
+
+이어 "형식적인 교육 이수나 진입 규제보다는 투자자가 실제로 어떤 상황에서 손실이 확대될 수 있는지를 직관적으로 이해할 수 있도록 사례 중심의
+정보 제공과 지속적인 투자자 교육이 병행되는 것이 더 중요하다는 생각"이라고 조언했다."</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014032134' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014032134</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
