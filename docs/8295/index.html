@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>에픽AI 컨센서스</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.28</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005303554' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8295" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>에픽AI 컨센서스</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">대한유화와 SK그룹은 원자재 가격 급등 및 반도체 호조에 힘입어 올해 영업이익 컨센서스가 크게 상향 조정되었습니다. 다만, 로보티즈는 적자 전환 가능성이 제기되고, 대한항공/하나투어를 비롯한 경기 민감주는 수익성 악화 우려가 나타나면서 업종별 실적 차별화 장세가 예상됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">SK 및 대한유화 등 원자재 기반 산업의 실적 개선 기대감이 크며, 특히 반도체 업황 호조에 따른 그룹 전반의 이익 증가가 두드러짐. 다만, 경기 민감주(여행, 건설)와 일부 테마주(로보티즈)는 역풍을 맞아 명확한 업종별 실적 차별화가 예상됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">대한유화</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">석유화학</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">항공운수</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#기업실적 #컨센서스 #산업업황</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">에픽AI 컨센서스
+
+대한유화 年 영업이익 2361억원 예상
+SK, 반도체 호조로 작년 9배 이익낼듯
+로보티즈는 연간 적자 전환 가능성도
+대한유화 생산 부지 전경. (사진=대한유화)
+대한유화 생산 부지 전경. (사진=대한유화)
+석유화학 기업 대한유화의 올해 영업이익 컨센서스가 한 주 새 10% 이상 상향됐다. 상반기 중동 전쟁으로 인해 원유 및 석화제품 판매가가
+급등하면서 증권가의 눈높이가 높아졌다. SK그룹의 지주사인 SK도 반도체 실적 호조로 영업이익 전망치가 계속해서 상향되고 있다.
+
+28일 인공지능(AI) 기반 투자정보 플랫폼 에픽AI에 따르면 대한유화의 올해 영업이익 컨센서스(증권사 추정치 평균)는 2361억원으로
+집계됐다. 일주일 전(2084억원)보다 13.27% 늘어났다. 대한유화는 나프타를 분해해 이를 토대로 에틸렌 등 기초유분을 생산하는 기업이다. 
+지난 2월 미·이란 전쟁을 계기로 원유와 석유화학 제품 가격이 전반적으로 상승하면서 수혜를 입었다. 기존에 저렴하게 수입해둔 나프타를 생산에
+투입하면서 판매가 상승분 대부분을 수익에 반영하는 '래깅 효과' 덕분이다. 대한유화는 지난 1분기에도 전년 동기 대비 8.68% 증가한
+736억원의 영업이익 736억원을 기록했다.
+
+SK의 영업이익 컨센서스(9조5729억원)도 일주일 새 8.74% 뛰었다. 지난해 연간 영업이익(1조998억원)의 무려 9배나 달하는 수치다.
+주력 자회사인 SK스퀘어가 SK하이닉스의 반도체 사업 호조에 힘입어 이익이 대폭 증가한 영향이다. 여기에 고유가에 따른 래깅효과를 본
+SK이노베이션을 비롯해 SK텔레콤 SK네트웍스 SKC SK에코플랜트 등 주요 계열사도 견조한 실적을 내고 있다. 이 밖에
+go영(476억원·10.75%), 엘앤씨바이오(363억원·7.24%), 피에스케이(1790억원·3.90%) 등도 영업이익 전망치가 나란히
+상향됐다.
+
+반면 로봇 부품 기업인 코스닥 상장사 로보티즈는 올해 영업이익 전망치가 일주일 전보다 21.90% 급감했다. 증권사 7곳이 추정한 로보티즈의
+영업이익은 평균 73억원이다. 지난 25일 관련 보고서를 낸 삼성증권은 올해 연간 적자 전환 가능성까지 제시했다. 서지현 삼성증권 연구원은
+"1분기 임직원 성과보상을 위한 자기주식 교부로 118억원의 영업손실이 발생했다"며 "일회성 요인이긴 하지만 매분기 흑자 기조를 유지해온 기업인
+만큼 적자 전환은 아쉬운 대목이며, 올해 연간 흑자 기조 유지도 다소 불확실해졌다"고 했다.
+
+건설기업 아이에스동서도 눈높이가 다소 낮아졌다. 영업이익 컨센서스는 1998억원으로 일주일 전보다 8.77% 감소했다. 신영증권이 아이에스동서의
+연간 영업이익 전망치를 다른 증권사 대비 40~50% 낮은 1230억원으로 제시한 영향이다. 박세라 신영증권 연구원은 "1분기 고양 덕은지구
+6,7 블록 매출로 인해 높은 실적 성장을 기록했지만 2분기부터는 사업 공백이 불가피한 상황"
+이라고 했다. 고유가와 여행 수요 감소에 직격탄을
+입은 대한항공(8102·-4.53%)과 하나투어(593·-3.44%)도 영업이익 컨센서스가 감소했다.
+원문링크: https://n.news.naver.com/mnews/article/015/0005303554</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005303554' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005303554</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
