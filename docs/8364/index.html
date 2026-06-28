@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>메모리 왜 월가 갈까…떠오르는 TSMC ‘꿀맛 기억’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/025/0003533723' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8364" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>메모리 왜 월가 갈까…떠오르는 TSMC ‘꿀맛 기억’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스가 AI 시대에 필요한 대규모 투자 자금 확보를 위해 미국 나스닥에 ADR 상장을 추진한다. 이는 한국 기업의 밸류에이션 개선과 글로벌 시장 접근성을 높이는 계기가 될 수 있으나, 주가 괴리 및 규제 리스크도 동시에 내포하고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 반도체 시대 대규모 자금 조달 구조 변화 및 글로벌 시장 진입으로 인한 밸류에이션 개선 기대감이 크기 때문에 매우 높은 중요도를 가진다. 다만 가격 괴리 리스크가 상존한다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="empty">—</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">SK하이닉스가 다음 달 미국 나스닥에 ADR(미국 주식예탁증서) 방식으로 상장한다. 티커는 ‘SKHY’. 28일 블룸버그에 따르면 이번 ADR의 실물 담보 역할을 하는 주식은 SK하이닉스 보통주 최대 1779만 주다. 지난 23일 종가(255만5000원)를 적용하면 총 45조4534억원 규모의 예탁증서가 발행된다. 시장은 이번 ADR 상장을 대체로 긍정적으로 평가하고 있다. 인공지능(AI) 시대 메모리 반도체 설비 투자 규모가 수백조원대로 불어나면서 대규모 투자금 확보가 필요한 상황이기 때문이다. 또 미국 증시에서 직접 달러를 조달하는 것이 환율 리스크와 자금 조달 측면에서도 유리하다는 분석이 나온다. ADR은 미국 투자자가 해외 기업 주식을 미국 증시에서 쉽게 거래할 수 있도록 만든 미국 주식예탁증서다.
+김경진 기자
+김경진 기자
+뉴욕 증시 입성을 계기로 해외 경쟁사 대비 낮은 밸류에이션(실적 대비 주가 평가)을 받는 ‘코리아 디스카운트’를 해소할 수 있다는 기대감도 커지고 있다. 마이크론은 물론, 상장을 앞둔 중국 메모리 반도체 기업 창신메모리(CXMT)마저 SK하이닉스보다 높은 밸류에이션을 받는다.
+전 세계 1위 파운드리 기업 TSMC 역시 ADR 상장을 계기로 대만 증시에 상장된 본주의 밸류에이션이 재평가되기도 했다.
+런 이유로 일본을 대표하는 메모리 반도체 기업 키옥시아 역시 내년 봄 ADR 상장을 추진하겠다고 공식화했다. 자본시장 일각에서는 삼성전자의 ADR 상장도 가능한 시나리오 가운데 하나로 보고 있다.
+미국에서 상장되는 SK하이닉스 예탁증서 1주당 원주 전환 비율은 0.1주로 정해졌다. 이론적으로 미국에서 SK하이닉스 ADR 10주를 모으면 SK하이닉스 원주 1주로 바꿀 수 있고, 반대로 SK하이닉스 원주 1주를 맡기면 ADR 10주를 받을 수 있다는 뜻이다.
+다만 그늘도 있다. ADR 상장을 위해 기존에 없던 주식이 새로 발행되는 만큼 최대 수량이 발행될 경우 기존 주주의 지분율은 약 2.44% 희석된다. 한국 본주와 미국 ADR 가격 사이에 괴리가 발생할 때마다, 국내 주식 수급이 흔들리는 부작용이 생길 수도 있다.
+대표적인 사례가 TSMC다. 1997년 뉴욕증권거래소(NYSE)에 ADR을 상장한 TSMC는 대만 금융당국이 ADR의 본주 전환을 사실상 제한하면서, 미국 ADR이 대만 본주보다 최대 수십 퍼센트 높은 가격에 거래되는 현상이 여러 차례 반복되고 있다. 사실상의 ‘이중 가격’이 형성된 것이다.
+김경진 기자
+김경진 기자
+핵심은 국내 주식을 미국 ADR로 얼마나 자유롭게 전환할 수 있느냐에 달려 있다. 만약 전환이 비교적 자유롭게 허용된다면 TSMC처럼 미국 ADR에만 큰 프리미엄이 붙는 현상은 피할 수 있다. 다만 구체적인 내용은 아직 최종 결정되지 않은 것으로 알려졌다.
+미국에 상장된 이상 미 증권거래위원회(SEC)의 공시·회계 기준을 일정 부분 따라야 하는 것은 물론, 집단소송 리스크 등 미국 시장의 높은 규제 비용도 함께 감수해야 하는 ‘양날의 검’이라는 평가가 나온다. 실제 SK하이닉스에 앞서 ADR을 상장했던 일본 소니와 중국 알리바바도 미국에서 집단소송을 당해 막대한 합의금을 지급한 바 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/025/0003533723' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/025/0003533723</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
