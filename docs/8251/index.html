@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>크레딧 스프레드 65.1bp…연초 대비 투자심리 위축</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.28</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006316895' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8251" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>크레딧 스프레드 65.1bp…연초 대비 투자심리 위축</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">고금리 환경과 크레딧 스프레드 확대(65.1bp)로 회사채 시장의 전반적인 투자심리가 위축되고 있습니다. 투자자들은 신용위험이 낮은 우량 등급 채권에 집중하고 있으며, 국고채 금리 자체가 높아지면서 민간 회사채 투자의 매력이 감소하는 추세입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">회사채 시장 전반의 투자심리 위축 및 높은 금리가 나타나면서 금융투자 섹터에 대한 경계감이 높아졌기 때문입니다. 우량 기업의 자금 조달은 안정적이나, 시장 전체 분위기가 부정적이므로 단기적인 하방 압력을 예상합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융투자</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">채권시장</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#회사채</span> <span class="tag tag-hash">#크레딧스프레드</span> <span class="tag tag-hash">#금리변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">이번 주 삼성증권 단독 수요예측…최대 6000억 발행
+크레딧 스프레드 65.1bp…연초 대비 투자심리 위축
+국고채 3년물 3.7%대…신용등급별 온도차 심화
+이 기사는 2026년06월28일 07시00분에 마켓인 프리미엄 콘텐츠로 선공개 되었습니다.
+
+ 고금리에 BBB급 회사채 시장까지 위축되면서 회사채 발행 시장이 얼어붙고 있다. 발행사들은 높아진 조달금리 부담에 회사채 발행을 미루고 있고, 투자자들은 국고채만으로도 충분한 금리를 확보할 수 있는 만큼 신용등급이 낮은 회사채 투자에 신중해지는 분위기다.
+이에 따라 당분간 회사채 시장에서는 실적이 견조한 우량채 중심의 발행이 이어질 전망이다.
+
+삼성증권 전경. (사진=삼성증권)
+
+‘AA+’ 삼성증권, 최대 6000억 회사채 발행
+28일 투자은행(IB) 업계에 따르면 이번 주(6월 29일~7월 3일) 회사채 시장에서는 삼성증권(AA+)이 공모 회사채 발행을 위한 기관투자자 대상 수요예측을 진행한다. 우량 신용도를 보유한 삼성증권은 오는 7월 2일 회사채 발행을 위한 수요예측에 나선다. 발행 예정 규모는 총 3000억원이다.
+
+트랜치(만기)는 2년물 1000억원, 3년물 1500억원, 5년물 500억원으로 구성했다. 수요예측 결과에 따라 최대 6000억원까지 증액 발행할 수 있다. 희망 금리밴드는 개별 민간채권평가사(민평) 평가금리 대비 -30bp(베이시스포인트·1bp=0.01%포인트)~+30bp를 가산한 수준으로 제시했다.
+
+한국기업평가, 한국신용평가, 나이스신용평가는 삼성증권의 신용등급을 ‘AA+’로 평가하고 있다. 등급전망은 ‘안정적’이다.
+
+삼성증권은 증시 호조와 거래대금 확대에 힘입어 우수한 수익성을 이어가고 있다. 올해 1분기 영업순수익은 8451억원으로 전년 동기 대비 2832억원 증가했다. 위탁매매와 자산관리 수지가 각각 2453억원, 412억원 늘었고, 채무보증과 대출이자를 중심으로 IB부문 수익도 성장했다. 이에 힘입어 1분기 순이익은 4200억원을 기록했다. 총자산이익률(ROA)은 2.1%, 판관비/영업순수익 비율은 33.1%로 우수한 수익성을 나타냈다.
+
+자본적정성 지표도 개선됐다. 2026년 3월 말 수정순자본비율(수정NCR)과 순자본비율은 각각 217.7%, 2332.8%로 전년 말 대비 상승했다. 조정레버리지배율은 7.6배로 양호한 수준을 유지했다.
+
+김선주 한국신용평가 책임연구원은 “금융시장 변동성이 높은 수준이나 리테일부문의 견고한 사업기반과 다각화된 수입원을 토대로 우수한 실적대응력을 유지할 전망”이라며 “안정적인 이익창출력과 이익유보를 통한 자본축적으로 수정NCR 등 자본적정성도 양호한 수준을 유지할 것”이라고 밝혔다. 다만 “위험투자 확대와 투자자산 부실화에 따른 재무건전성 지표 저하 여부에 대해서는 모니터링이 필요하다”고 덧붙였다.
+
+크레딧 스프레드 65bp대…선별 투자 심화
+한편 최근 회사채 투자심리는 빠르게 위축되고 있다. 본드웹에 따르면 지난 26일 기준 크레딧 스프레드는 65.1bp까지 확대됐다. 지난 1월 12일 48.9bp 수준과 비교하면 크게 오른 수준이다. 크레딧 스프레드는 AA-급 3년물 회사채 금리와 국고채 3년물 금리의 차이를 뜻한다. 스프레드가 확대될수록 회사채 투자심리가 약해졌다는 의미다.
+
+최근 금리 변동성이 커진 가운데 제이알글로벌리츠 사태에 이어 중앙그룹 사태까지 겹치면서 크레딧 시장 전반의 경계감이 높아진 것으로 풀이된다. 특히 국고채 3년물 금리가 연 3.7% 수준까지 오른 만큼 기관투자자 입장에서는 굳이 신용위험을 부담하면서 회사채를 적극적으로 담을 유인이 약해졌다는 분석이 나온다. 이날 기준 회사채 AA- 3년물 금리는 4.41%, 국고채 3년물 금리는 3.76% 수준으로 나타났다.
+
+채권시장 관계자는 “최근 시장은 금리 매력만으로는 움직이지 않고, 신용 이벤트가 발생했을 때 원금 훼손 가능성까지 함께 따지는 분위기”라며 “실적과 등급이 뒷받침되는 발행물에는 수요가 유입될 수 있지만 그 외 크레딧물로 온기가 확산되기까지는 시간이 필요해 보인다”라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006316895' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006316895</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
