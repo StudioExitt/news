@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>하루 평균 3.88% 오르내려…3월 급락장보다 더 출렁</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.28</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014032176' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8255" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>하루 평균 3.88% 오르내려…3월 급락장보다 더 출렁</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 증시가 반도체주에 대한 과도한 의존성과 레버리지 ETF 거래 급증으로 인해 극심한 변동성을 보이며 공포와 패닉 장세를 나타내고 있습니다. 높은 일일 등락률과 잦은 서킷브레이커 발동 등의 시장 불안정 신호가 빈번하여 단기적인 투자 위험성이 매우 높아진 상황입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업황 및 시장 구조에 과하게 집중된 포지셔닝과 파생상품 거래 증가는 단기적으로 극심한 변동성을 예고하며 투자 심리를 위축시킴.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체쏠림</span> <span class="tag tag-hash">#시장변동성</span> <span class="tag tag-hash">#ETF리스크</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">하루 평균 3.88% 오르내려…3월 급락장보다 더 출렁
+CB만 두 차례…반도체 쏠림·레버리지 ETF 변동성 키워
+[서울=뉴시스] 박영태 기자 = 26일 오후 서울 중구 하나은행 딜링룸 전광판에 코스피 지수가 표시되고 있다.코스피는 전 거래일(8930.30)보다 519.09포인트(5.81%) 하락한 8411.21에 마감했으며 코
+[서울=뉴시스] 박영태 기자 = 26일 오후 서울 중구 하나은행 딜링룸 전광판에 코스피 지수가 표시되고 있다.코스피는 전 거래일(8930.30)보다 519.09포인트(5.81%) 하락한 8411.21에 마감했으며 코스닥 지수는 전 거래일(887.81)보다
+36.44포인트(4.10%) 내린 851.37에 거래를 마쳤다. 2026.06.26. since1999@newsis.com[서울=뉴시스] 김경택 기자 = 국내 증시가 그야말로 예측 불가능한 롤러코스터 흐름을 나타내고 있다. 하루에 지수가 4% 안팎으로 날뛰는 극심한 변동성 장세가
+이어지면서, 시장 참여자들 사이에서는 공포와 패닉이 일상화되는 모양새다.
+특히 지난주에만 두 번이나 매매가 중단되는 초유의 사태가 발생하며 코스피는 역대 가장 파괴적인 일주일을 보내게 됐다.
+28일 금융투자업계에 따르면 최근 국내 증시의 가장 큰 특징은 오를 때도 내릴 때도 변동폭이 유난히 크다는 점이다.
+코스피 전체 시총의 절반 이상을 차지하는 반도체주 흐름에 지수가 크게 좌우되는 구조가 고착화되면서 코스피의 일일 등락률이 4%를 넘나드는 일이
+잦아지고 있다.
+실제 이달 들어 코스피의 하루 평균 등락률 절대값은 약 3.88%를 기록했다. 이는 지수가 6200선에서 5000선으로 수직 낙하하는 등 극심한
+변동성을 보였던 지난 3월(3.64%)보다도 더 높은 수치다.
+이처럼 증시가 극단적인 널뛰기를 반복하는 배경에는 '반도체 쏠림 현상'과 그에 따른 수급 불안정이 자리잡고 있다. 그동안 코스피가 삼성전자와
+SK하이닉스 등 대형 반도체 투톱에 기대 가파르게 오르면서 반도체 업종의 작은 변수에도 시장 전체의 불확실성이 증폭되는 현상이 반복되고 있는
+것이다.
+여기에 레버리지·인버스 상장지수펀드(ETF) 거래가 급증하고 있는 점도 시장 변동성을 키우는 요인으로 지목된다. 이들 파생 ETF는 일간 목표
+배수를 유지하기 위해 리밸런싱 거래를 실시한다. 개별 주식의 주가 변동성이 확대될수록 이러한 기계적인 매매 규모도 함께 늘어나 수급 불안정을
+심화하는 구조인 셈이다.
+전문가들은 증시 변동성이 당분간 더욱 확대될 가능성이 있다고 보고 있다.
+이재원 유안타증권 연구원은 "전날 하락의 본질은 새로운 대형 악재보다 반도체 쏠림 포지션의 되감기"라며 "여기에 단일 종목 레버리지 ETF와
+시가총액 상위주에 집중된 ETF 패시브 수급까지 겹치면서 작은 노이즈에도 매도 압력 크게 증폭되고 있다"
+고 설명했다.
+이 연구원은 "시장 상승을 견인하는 중인 개인 투자자의 수급은 대형주뿐 아니라 단일종목 레버리지 ETF에 집중되고 있다"며 "반도체 업황 호조에
+따른 이익추정치 상향 지속된다는 전망 속 이런 수급 쏠림은 지속·심화될 수밖에 없으며 현 상황이 유지된다면 급등락은 앞으로도 계속될 것"
+이라고 내다봤다.
+전날에는 오후 12시10분께 코스피가 8% 이상 급락한 상태가 1분간 지속되면서 전 종목의 매매거래를 일시 중단하는 '서킷브레이커(CB)'가
+발동됐다. 지난 23일 하루 만에 10% 가까이 폭락했던 '검은 화요일'의 충격이 채 가시기도 전에 불과 사흘 만에 또다시 시장이 통째로 멈춰
+서는 '검은 금요일'이 재현된 것이다.
+국내 증시 역사상 한 주에 서킷브레이커가 두 차례나 발동된 것은 이번이 처음이다. 올해 누적 서킷브레이커 발동 횟수만 벌써 5회에 달한다. 이는
+역대 통산 발동 횟수(11회)의 절반에 육박하는 수치다.
+프로그램 매도호가 효력을 일시 정지하는 '사이드카' 역시 올해만 29회 발동돼, 과거 2008년 글로벌 금융위기 당시의 연간 기록(26회)
+을 이미 훌쩍 넘어섰다. 매일이 위기 상황이라는 방증이다．
+원문링크: https://n.news.naver.com/mnews/article/003/0014032176</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014032176' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014032176</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
