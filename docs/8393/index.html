@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>레버리지·인버스 빼고, 한도 규제도…‘반쪽짜리 개방’ [서양개미가 온다]③</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/243/0000099729' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8393" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>레버리지·인버스 빼고, 한도 규제도…‘반쪽짜리 개방’ [서양개미가 온다]③</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">외국인 투자자에게 ETF 시장 문호를 개방하려는 금융당국의 규제 완화 움직임이 있지만, 레버리지·인버스 상품 제외와 주요 기간산업군(한전, 가스공사 등)에 대한 별도의 외국인 취득 한도 규제가 남아있어 실질적인 투자 접근성은 제한적이라는 분석입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">외국인 자본의 국내 ETF 시장 유입 문턱을 낮추는 구조적 변화라는 점에서 중요하나, 레버리지/인버스 상품 제외 및 기간산업군에 대한 별도 규제가 걸림돌로 작용하여 기대 효과가 제한적일 수 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF규제개혁</span> <span class="tag tag-hash">#외국인자금유입</span> <span class="tag tag-hash">#금융시장</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[AI 구글 제미나이]	외국인 투자자에게 국내 상장지수펀드(ETF) 시장 문호를 개방하겠다는 금융당국의 구상이 속도를 내고 있지만 정작 제도 세부 내용을 들여다보면 적지 않은 규제가 남아 있다. 레버리지·인버스 상품은 제외되고 외국인 지분 제한 종목이 포함된 ETF에 대해서는 별도 한도 규제가 검토된다.
+
+금융투자업계에 따르면 금융당국은 외국인 통합계좌 거래 대상에 ETF·ETN을 추가하는 내용의 금융투자업규정 개정을 추진 중이다. 그동안 외국인은 통합계좌를 통해 국내 개별 주식 거래는 가능했지만 ETF·ETN 투자에는 제약이 있었다. 글로벌 투자자들이 국가별 자산배분 과정에서 ETF를 핵심 투자 수단으로 활용한다는 점에서 업계는 이를 대표적인 투자 장벽으로 지목해 왔다.
+
+문제는 투자 접근성을 높이기 위해 마련된 제도가 기존 규제 체계와 충돌하기 시작했다는 점이다. 외국인 투자 문턱은 낮추되 ▲시장 안정성 ▲공매도 규제 ▲기간산업 보호 원칙은 유지해야 하는 만큼 금융당국도 세부 설계에 고심하는 모습이다. 
+
+ETF 편입비중·리밸런싱마다 한도 재산정 숙제
+
+가장 먼저 논란이 되는 부분은 레버리지·인버스 ETF다. 금융당국은 외국인 통합계좌를 통한 ETF·ETN 거래를 허용하면서도 레버리지·인버스 상품은 대상에서 제외할 방침이다. 레버리지 ETF는 기초지수 수익률을 배수로 추종하는 구조인 만큼 변동성이 크다. 인버스 ETF는 시장 하락에 투자하는 상품 특성상 사실상 공매도와 유사한 효과를 낼 수 있다는 판단에서다.
+
+업계에서는 제도 취지와 실제 허용 범위 사이에 괴리가 있다는 평가도 나온다. 최근 글로벌 ETF 시장은 국가 단위 투자보다 특정 산업과 테마 중심으로 재편되고 있다. 엔비디아와 테슬라, 나스닥100 등을 기초자산으로 한 레버리지 ETF는 미국 시장에서 개인투자자 자금을 대거 흡수하며 성장했다. 금융당국이 이번 제도 개선을 통해 끌어들이려는 대상 역시 글로벌 리테일 자금이라는 점에서 정작 핵심 수요층이 선호하는 상품은 막아놓은 셈이라는 지적이다. 한 증권업계 관계자는 “투자 문은 열어줬지만 실제로 사고싶은 상품은 제한하는 구조가 될 수 있다” 말했다.
+
+외국인 지분 제한 종목이 포함된 ETF 처리 문제도 새로운 변수로 떠오르고 있다. 금융당국은 통신·방송·항공 등 외국인 지분 제한 업종이 포함된 ETF에 대해서는 별도의 외국인 취득 한도를 적용하는 방안을 검토 중인 것으로 알려졌다. 현행법상 일부 기간산업은 국가 안보와 공공성 등을 이유로 외국인 보유 비율이 제한된다. 대표적으로 한국전력과 한국가스공사는 현재 외국인 통합계좌를 통한 개별 종목 매수가 불가능하다. 외국인 투자자의 취득 한도와 보유 비율을 실시간으로 관리하기 어렵다는 이유에서다.
+
+특정 산업 넘어 코스피200 ETF 영향 우려
+
+문제는 외국인 지분 제한 종목이 일부 테마형 ETF가 아니라 국내 대표 지수 곳곳에 포함돼 있다는 점이다. 한국전력과 한국가스공사는 물론 통신·항공 업종 일부 종목도 코스피200 구성 종목에 편입돼 있다. 이 때문에 외국인 취득 한도 규제가 ETF에 적용될 경우 특정 산업 ETF를 넘어 코스피200 ETF와 같은 대표 지수형 상품까지 영향을 받을 수 있다는 우려가 나온다.
+
+시장에서는 자칫 제도 취지와 실제 효과가 엇갈릴 수 있다는 우려도 제기된다. 외국인 투자 접근성을 높이기 위해 ETF 시장을 개방했지만 정작 해외 투자자들이 한국 시장에 가장 손쉽게 접근하는 수단인 대표 지수형 ETF에 별도 규제가 적용될 경우 투자 편의성이 낮아질 수 있기 때문이다.
+
+더 큰 문제는 기준 설정이다.금융당국은 외국인 취득 한도 문제를 시스템적으로 관리할 수 있다는 입장이지만 실제 적용 단계에서는 해결해야 할 과제가 적지 않다. 외국인 지분 제한 종목이 일정 비율 이상 편입된 ETF만 규제 대상으로 볼지, 단 한 종목이라도 포함되면 적용할지부터 명확한 기준이 필요하다. 동일한 코스피200 ETF라도 지수 구성 종목 변경이나 정기 리밸런싱에 따라 규제 대상 여부가 달라질 수 있기 때문이다.
+
+규제 논리를 둘러싼 논쟁도 적지 않다. ETF 투자자는 개별 종목을 직접 취득하는 것이 아니라 집합투자기구의 수익증권을 보유하는 구조다. 실제 현재 외국인이 일반 계좌를 통해 ETF를 매수할 때는 개별 종목 기준 외국인 취득 한도를 별도로 적용하지 않는다. 통합계좌를 통한 거래에만 별도 규제를 적용할 경우 같은ETF를 두고 거래 방식에 따라 규제가 달라지는 셈이다.
+
+다만 시장에서는 이번 조치가 모건스탠리캐피털인터내셔널(MSCI)가 수년간 지적해 온 투자 접근성과 거래 편의성 문제를 개선한다는 점에서 의미가 크다고 평가한다. 해외 개인투자자 유입 효과는 결국 허용 범위에 달려 있다는 분석이 나온다. 최근 글로벌 ETF 자금이 국가 단위 투자보다 반도체와 인공지능(AI)·방산·전력 인프라 등 특정 산업과 테마 중심으로 이동하고 있는 만큼 레버리지 ETF 제한과 외국인 한도 규제가 실제 자금 유입 규모를 결정하는 변수가 될 수 있다는 것이다.
+
+한 자산운용사 고위 임원은 “이번 조치는 기관투자가 입장에서는 분명 긍정적 변화”라면서도 “제도는 열렸지만 투자 선택지가 제한된다면 기대했던 리테일 자금 유입 효과는 생각보다 크지 않을 수 있다”고 강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/243/0000099729' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/243/0000099729</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
