@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"코스피 1만1450 열렸다"…순환매 3가지 조건</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006317546' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8395" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"코스피 1만1450 열렸다"…순환매 3가지 조건</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">하나증권 보고서는 높은 이익 추정치를 바탕으로 코스피 예상 상단을 1만1450포인트로 제시했으나, 반도체 섹터의 압도적인 실적 우위(이익 비중 72%)로 인해 시장 전반으로 매기가 확산되는 순환매는 제한적일 것으로 분석했습니다. 고금리 환경에서는 단순한 낙폭과대보다 잉여현금흐름 증가율, 분기별 이익률 상승 등 기업 선별 전략이 중요하다고 조언합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">높은 예상 지수 상단가를 제시하며 시장의 기대감을 고조시키지만, 반도체 업황 우위와 고금리 환경이라는 명확한 제한 요소를 동시에 언급하여, 단순 매매보다는 철저한 종목 선별을 요구하는 구조적 분석 보고서이기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">제약/바이오</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #코스피분석 #고금리시대투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">하나증권, 7월 주식시장 전망 보고서
+2027년 순이익 추정치 상향에 지수 눈높이↑
+반도체 이익 우위 여전…순환매는 제한적
+g고금리 환경선 실적·현금흐름 갖춘 종목 선별 코스피의 이익 추정치가 빠르게 상향 조정되면서 지수 상단에 대한 눈높이도
+높아지고 있다는 분석이 나왔다. 다만 삼성전자(005930)와 SK하이닉스(000660)를 중심으로 한 반도체 이익 모멘텀이 여전히 압도적인
+만큼, 시장 전반으로 매기가 확산되는 순환매가 본격화하기는 쉽지 않다는 진단이다.
+
+이재만 하나증권 연구원은 29일 발간한 '7월 주식시장 전망과 전략' 보고서에서 “현재 2027년 코스피 순이익 추정치는 946조원으로, 2010년 이후 평균 주가수익비율(PER) 9.9배를 적용하면 코스피 예상 상단은 1만1450포인트까지 높아질 수 있다”고 밝혔다. 앞서
+하나증권은 지난 1일 2027년 코스피 순이익 추정치 890조원을 기준으로 예상 상단을 1만 450포인트로 제시한 바가 있다.
+
+지수 하단에 대해선 최근 20일 이격도를 기준으로 7900선을 제시했다. 이 연구원은 “6월 초 연준 기준금리 인상 우려가 부각됐던 당시 코스피
+20일 이격도 저점은 94%였다”며 “이를 현재 코스피에 적용하면 저점은 7900포인트 수준”이라고 설명했다. 과거 서킷브레이커 발동 이후 발동
+직전 수준으로 회복하는 데 평균 32거래일이 걸렸지만, 올해는 5~6거래일로 회복 기간이 크게 짧아졌다는 점도 짚었다.
+
+(표=하나증권)
+
+최근 시장 변동성이 커진 배경으로는 높아진 이익 기대와 상장지수펀드(ETF) 수급 영향이 꼽혔다. 하나증권에 따르면 6월 들어 VKOSPI는
+90포인트를 기록해 글로벌 금융위기 당시 고점보다 높은 수준까지 올랐다. 코스피 12개월 예상 영업이익 증가율이 전년 대비 239%까지
+높아지면서 기대감이 커졌지만, 동시에 실제 실적이 예상치를 밑돌거나 이익 증가율이 정점을 통과할 수 있다는 우려도 변동성을 키우는 요인으로
+작용했다.
+
+ETF의 영향력도 커졌다. 국내 주식 관련 ETF는 지난해 1월 536개에서 올해 5월 말 615개로 늘었다. 특히 특정 산업이나 섹터를
+추종하는 ETF가 빠르게 증가하면서 리밸런싱에 따른 개별 종목 수급 영향도 확대됐다. 레버리지 ETF는 5월에만 전월 대비 14개 늘어난
+43개로 집계됐다. SK하이닉스 단일종목 레버리지 ETF 누적 거래대금은 116조원으로, 삼성전자 레버리지 ETF의 1.6배 수준에 달했다.
+
+반도체 쏠림은 여전히 시장의 핵심 변수다. 하나증권은 코스피 내 삼성전자와 SK하이닉스의 12개월 예상 순이익 비중이 각각 41%, 31%로 두
+종목 합산 72%에 이른다고 분석했다. 반면 시가총액 비중은 두 종목 합산 55% 수준이다. 특히 지난 22일 SK하이닉스 시가총액이
+2080조원으로 삼성전자를 넘어선 데 대해 이 연구원은 “이익 비중 역전 이전에 시가총액 비중이 역전된 것은 극단적인 쏠림 현상이자 단기 과열
+신호 중 하나”라고 판단했다.
+
+문제는 이익 기준으로 보면 반도체를 대체할 업종이 아직 뚜렷하지 않다는 점이다. 하나증권은 올해 코스피 순이익이 729조원으로 전년 대비
+235% 증가하고, 내년엔 946조원으로 30% 늘어날 것으로 전망했다. 이 가운데 삼성전자의 올해 순이익 증가율은 570%, SK하이닉스는
+410%로 예상됐다. 내년에도 각각 33%, 38% 증가할 것으로 전망돼 시장 평균을 웃돈다. 반면 두 종목을 제외한 코스피 기업의 순이익
+증가율은 올해 64%, 내년 18%로 상대적으로 낮다.
+
+이 연구원은 미국 증시의 순환매 사례와 비교해 국내 시장의 한계를 설명했다. 올해 S&P500에선 이른바 ‘매그니피센트7’보다 나머지 종목들의
+수익률이 높았다. 이는 M7과 비M7의 이익 증가율 격차가 크게 좁혀졌기 때문이다. 그러나 국내 증시는 삼성전자와 SK하이닉스의이익 우위가
+여전히 강해 이익을 기반으로 한 순환매가 제한적일 수 있다는 분석이다.
+
+다만 유가 하락은 일부 업종에 기회가 될 수 있다. 미국과 이란 간 종전 협상 진행으로 서부텍사스산원유(WTI) 가격은 배럴당 70달러 수준까지
+내려왔다. 하나증권은 과거 WTI가 70달러 수준일 때 영업이익률 개선과 주가 수익률이 상대적으로 높았던 업종으로 미국 은행·소프트웨어, 국내
+제약·바이오, 하드웨어, 소프트웨어를 제시했다. 올해 주가가 부진했던 업종이라는 점에서 반등 여지가 있다는 설명이다.
+
+그러나 금리 부담은 여전히 남아 있다. 미국 10년물 국채금리는 4.4% 수준으로, 미국과 이란 간 전쟁 발생 이전의 3.9%보다 높다.
+이 연구원은 “국제유가 하락과 함께 봐야 할 변수는 미국 시중금리”라며 “고금리 수준이 유지되는 상황에서는 기업 선별이 중요하다”고 강조했다.
+
+그는 고금리 국면에서 주목할 조건으로 △순이익보다 잉여현금흐름 증가율이 높은 기업 △2분기와 3분기 순이익 증가율이 높아 성장주로 분류될 수
+있는 기업 △1분기부터 3분기까지 영업이익률이 꾸준히 상승할 것으로 예상되는 기업을 제시했다. 국내 종목으로는 삼성전자, SK하이닉스,효성중공업(298040), LG이노텍(011070), 현대로템(064350), 한국항공우주(047810), 대덕전자(353200),한미약품(128940) 등이 해당 조건에 부합한다고 봤다.
+
+이 연구원은 “순환매의 조건은 이익 증가율 격차 축소”라며 “국내 증시는 반도체 이익 모멘텀이 여전히 강한 만큼 단순한 낙폭과대보다는 이익과
+현금흐름, 수익성 개선 여부를 함께 봐야 한다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006317546' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006317546</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
