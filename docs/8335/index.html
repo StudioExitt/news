@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>전통산업 주가 저평가 아냐 미국 빅테크 고공행진 따른 착시</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.28</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005699834' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8335" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>전통산업 주가 저평가 아냐 미국 빅테크 고공행진 따른 착시</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">대형 운용사는 자본 시장이 AI/기술주에 쏠린 착시 현상으로 인해, 오히려 전통산업이나 미국 외 지역의 소외된 영역에 고할인율로 저평가된 투자 기회가 많다고 진단했습니다. 다만, 정부 부채 급증은 가장 경계해야 할 거시적 위험입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 자본의 흐름이 특정 섹터(AI/빅테크)에 편중되는 착시 현상을 지적하며, 투자자들에게 오히려 소외된 전통산업이나 비(非)미국 지역의 가치주를 재조명시키고 있습니다. 이는 장기적인 관점에서의 포트폴리오 분산 및 리스크 관리 측면에서 중요한 시사점을 제공합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전통산업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">경기 순환주</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">비(非)국가 시장</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#가치투자</span> <span class="tag tag-hash">#글로벌자본흐름</span> <span class="tag tag-hash">#저평가주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">최근 글로벌 자본시장은 반도체와 인공지능(AI) 등 특정 섹터와 국가로의 유동성 쏠림이 그 어느 때보다 심화하는 양상을 보이고 있다.
+상장지수펀드(ETF)를 필두로 한 패시브 투자의 대중화가 전 세계에 정형화된 투자 패턴을 만들면서, 역설적으로 시장의 비효율성이 커졌다는 지적도
+나온다. 그러면서 잠재력 있는 종목에 투자하는 '가치 투자'의 시대가 저물었다는 평가도 일각에서 제기된다.
+
+하지만 데이비드 삼라 '아티잔 파트너스' 매니징 디렉터(MD)는 최근 매일경제와의 서면 인터뷰에서 현재 시장이 오히려 가치 투자자들에게 '타깃이 풍부한(Target-rich)' 환경을 만들어주고 있다고 진단했다. 아티잔 파트너스는 5월 말 기준 총 운용자산(AUM)이 1860억달러(약
+255조원)에 달하는 미국의 대형 독립계 운용사다. 삼라 MD가 이끄는 '인터내셔널 밸류 전략' 부문은 2002년 설정 후 24년간 연평균 11.83% 수익률을 기록하며 벤치마크를 매년 5%포인트 이상 아웃퍼폼하는 대기록을 보유하고 있다. 이들은 철저한 기업 리서치를 바탕으로 내재 가치 대비 최소 25% 이상 할인된 우량주만 발굴해 장기 투자하는 철학을 고수한다.
+
+삼라 MD는 "오늘날 자본은 기술주, 방산·항공우주 그리고 최근까지 석유 관련 주식으로만 몰려들고 있다"며 "그 외 모든 분야는 뒤로
+밀려났는데, 역설적으로 바로 그 소외된 영역에 다양한 기회가 존재한다"고 밝혔다. 또한 그는 "현재 미국을 제외한 글로벌 증시에 유입된 자본의
+40~50%는 미국 투자자들로부터 나온다"며 "문제는 이 거대한 자금이 개별 기업의 가치를 따지지 않고 국가 전체나 특정 산업군을 통째로 묶어서
+기계적으로 사들이다 보니, 전 세계 유사한 기업들의 몸값이 차별화되지 않고 비슷해지는 동조화 현상이 극명해졌다"고 짚었다.
+
+미국 증시는 비싸고 비(非)미국 증시는 싸 보이는 현상에 대해 삼라 MD는 "특정 국가 시장 전체가 통째로 잘못 평가돼 저평가된 것이 아니다"며
+"단지 미국 지수에는 몸값이 높게 뛰는 빅테크 기업이 많고, 다른 나라 지수에는 상대적으로 낮게 평가되는 전통 산업 기업의 비중이 높아서 생긴
+착시"라고 설명했다. 지수 자체의 저평가 착시에 속지 말아야 한다는 뜻이다. 투자자들이 간과하는 '미국 외 지역의 소형주' 시장을 그는 가장
+매력적인 '노다지'로 꼽는다.
+
+한국 증시의 큰 축을 담당하는 메모리 반도체(삼성전자·SK하이닉스)와 중화학공업 등 경기 순환형 산업에 대해 삼라 MD는 "우리는 경기 순환적
+기업에 투자하는 것을 전혀 꺼리지 않으며, 오랫동안 자동차·금융·반도체 등에 투자해왔다"며 "다만 장기적 관점에서 '정상화된 이익 창출력'
+을 바라보고, 중간 사이클의 수익성 추정치를 기반으로 내재 가치를 산정해야 한다"고 밝혔다. 그러면서 "지난 반도체 사이클의 최고점 이익에만 갇혀
+있었다면 현재 삼성전자·SK하이닉스가 창출하는 이익을 과소평가했을 것"이라며 "경기 순환형 비즈니스는 안정적인 현금흐름을 가진 기업보다 훨씬
+복잡하고 변동성이 크기 때문에 매수할 때 훨씬 큰 할인율을 요구하는 게 원칙"이라고 덧붙였다.
+
+삼라 MD는 투자자들이 가장 경계해야 할 거시적 위험으로 '정부 부채의 급증'을 꼽았다. 삼라 MD는 "대부분 국가에 존재하는 높은 수준의 정부
+차입과 재정적자는 민간 시장을 밀어내는 구축 효과를 낳고, 과도할 경우 심각한 금융위기로 이어질 수 있다"고 경고했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005699834' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005699834</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
