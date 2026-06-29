@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사람 대신 AI가 장애 복구…SK AX, 기업 운영 바꿨다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004635934' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8445" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>사람 대신 AI가 장애 복구…SK AX, 기업 운영 바꿨다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 기술을 활용한 IT 인프라 자동화와 반도체 산업의 호황이 동시에 부각되며, 기업 운영 및 핵심 기술 분야에 긍정적인 모멘텀을 제공합니다. 다만, 정부의 RSU 세제 지원 미비는 국내 인재 유치 시장에 부정적 요소로 작용할 수 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 기반 자동화 및 반도체 수요 호황(AI 메모리)이 확인되며 핵심 산업의 구조적 성장을 반영함. 다만 RSU 세제 정책 미비는 중장기적인 인재 확보 리스크를 제기.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK AX</span> <span class="tag stock-tag">키옥시아홀딩스</span> <span class="tag stock-tag">HD현대일렉트릭</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI혁신</span> <span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#IT자동화</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■AI 프리즘 [직장인 뉴스]
+IT 장애 대응 리드타임 50% 단축
+RSU 세제 혜택 결국 제외
+키옥시아 직원, 스톡옵션으로 1인당 100억 평가차익
+▲ AI 프리즘* 맞춤형 경제 브리핑
+* 편집자 주: ‘AI PRISM’(Personalized Report & Insight Summarizing Media)은 한국언론진흥재단의 지원을 받아 개발한 ‘인공지능(AI) 기반 맞춤형 뉴스 추천 및 요약 서비스’입니다. 독자 유형별 맞춤 뉴스 6개를 선별해 제공합니다.
+
+[주요 이슈 브리핑]
+■ AI 에이전트의 부상: SK AX의 ‘AI 에이전트 기반 인프라 운영 서비스’가 도입 기업 40여 곳으로 확산되며 기업 IT 운영 방식을 바꾸고 있다. 밤낮·주말을 가리지 않던 IT 장애 대응 병목이 AI 에이전트 자동화로 해소되면서, 반복 업무를 맡던 직원들은 전문 업무에 집중하는 구조로 전환되는 양상이다.
+
+■ RSU 세제 공백: 정부가 올해 세법개정안에서 양도제한조건부주식(RSU) 세제 혜택을 제외하면서, 첨단 인재 유치를 위한 핵심 수단이 사실상 무력화됐다. KDI가 직접 세제 지원 필요성을 보고했음에도 재정경제부가 이를 거부해, 업계는 ‘인재를 외치면서 당근은 없다’고 비판하는 상황이다.
+
+■ 스톡옵션의 위력: 키옥시아 직원 600여 명이 2018년 받은 스톡옵션이 AI 메모리 호황으로 급등하면서 1인당 평균 10억 엔(약 100억 원) 이상의 평가차익을 올렸다. 닛케이는 이를 “AI 시대 자본주의의 새로운 풍경”으로 평가했다.
+
+[신입 직장인 관심 뉴스]
+1. 밤낮·주말 없는 IT 장애…AI 에이전트로 해결한다
+- 핵심 요약: SK AX가 AI 에이전트 기반 인프라 운영 서비스 ‘엑스젠틱와이어 NPO’를 올해 4월 정식 출시하고, 현재 40여 개 기업이 도입해 운영 중이다. 기존에는 IT 장애 발생 시 담당자 소집, 원인 분석, 변경관리위원회 승인 등 여러 단계를 거쳐야 해 대응 시간이 길어졌으나, AI 에이전트가 이 과정을 대신 수행해 리드타임을 50% 이상 단축할 수 있다는 설명이다. 에이전트가 단독 처리할 구간과 사람·에이전트가 협업할 구간을 구분해 업무를 배분하며, 반복적인 장애 대응에서 벗어난 직원은 사람의 판단이 필요한 전문 업무에 집중할 수 있다.
+SK AX는 현재 40여 개인 AI 에이전트를 100여 개까지 확대할 계획이며, 올해 금융·게임 등으로 도입처를 넓힐 방침이 있다.
+
+2. ‘이직률 3.5%’ TSMC 비결은 RSU…“지방인재에 과감한 혜택 줘야”
+- 핵심 요약: 양도제한조건부주식(RSU·Restricted Stock Unit)은 일정 조건 충족 시 자사 주식을 지급받는 제도로, 주가 상승에 따라 보상이 커지는 구조 덕분에 글로벌 기업에서 핵심 인재 유지 수단으로 자리 잡았다. 직원 1인당 연평균 약 15만 달러(약 2억 2000만 원)의 RSU를 지급한 엔비디아의 이직률은 2.7%, RSU와 유사한 선지급형 주식 보상(RSA)을 병행하는 TSMC의 이직률은 3.5%인 반면, 2024년 기준 삼성전자의 연간 이직률은 10.1%에 달한다. 한국에서는 한화·네이버·쿠팡 등 일부 대기업이 RSU를 도입했으나 주로 임원급에 한정돼 있으며, 세제 지원 없이는 기술 인재 전반으로 확대하기 어렵다는 지적이 나온다. 스탠퍼드대 ‘AI 인덱스 2026’에 따르면 한국은 AI 분야 종사자 1만 명당 0.35명이 순유출되는 인재 유출국으로 분류됐다.
+
+3. 인재 외치더니…RSU 세혜택 결국 뺐다
+- 핵심 요약: 정부가 올해 세법개정안에 RSU에 대한 세제 혜택을 제외한 것으로 확인됐다. 재정경제부는 KDI가 용역 보고서를 통해 “RSU 비과세 특례와 과세 이연이 필요하다”고 건의했음에도 이를 받아들이지 않았으며, 기존 스톡옵션에 이미 세제 지원이 갖춰져 있다는 이유를 들었다. 2024년 벤처기업법 개정으로 RSU의 법적 근거는 마련됐으나, 세제 혜택이 없어 스타트업 등에서는 제도가 거의 확산하지 못하는 상태다. 재계에서는 “호남에 반도체 생산 라인을 까는 난이도가 1이라면 인재를 데리고 오는 것은 100배, 1000배 더 어려운 일”이라며 정부의 세제지원을 촉구하고 나섰다.
+
+[신입 직장인 참고 뉴스]
+4. 기업용 보안시장 개척…LGU+ ‘세이프AI’ 뜬다
+- 핵심 요약: LG유플러스(032640)(032640)가 AI 전용 DLP(데이터 손실 방지) 솔루션인 ‘유플러스 세이프AI(U+ Safe AI)’를 올 하반기 출시한다. 기존 DLP가 메일·USB·클라우드 반출을 차단하는 데 그쳤다면, 세이프AI는 챗GPT·클로드 등 외부 대규모언어모델(LLM)에 민감 정보를 입력하는 행위까지 탐지해 사전에 차단하는 방식이다. 금융당국이 망분리 규제를 단계적으로 완화하는 가운데 은행·증권사 등 금융권을 1차 공략 대상으로 삼아 복수 기업과 계약을 조율 중이며, 중장기적으로는 제조업으로 확장할 계획이다. LG유플러스는 지난해 클라우드 기반 통합계정관리 솔루션 ‘알파키’와 클라우드 보안 솔루션 ‘U+SASE’에 이어 세이프AI로 미래형 보안 인프라 구축에 속도를 내고 있다.
+
+5. 물류·생산 자동화로 납기 경쟁력 ‘레벨업’…배전기기로 AI 훈풍 이어나간다
+- 핵심 요약: HD현대일렉트릭(267260)(267260)이 1161억 원을 투입해 지난해 11월 조성한 청주 배전캠퍼스에서 자율이동로봇(AMR), 자동 케이스 처리 장치(ACR), 다관절 로봇 등을 통해 생산 자동화율을 기존 70%에서 93%로, 설비종합효율(OEE·Overall Equipment Effectiveness)을 58%에서 75%로 끌어올렸다. 이를 통해 중저압 차단기 연간 생산능력을 500만 대에서 850만 대로 확충했으며, 납기 경쟁력 향상으로 1년 이상 걸리던 고사양 제품 납기를 절반 이하로 단축하는 성과를 냈다. 글로벌 시장조사기관에 따르면 세계 배전기기 시장은 2024년 1203억 달러에서 2034년 2032억 달러로 연평균 6% 성장할 것으로 전망된다. HD현대일렉트릭은 AI 데이터센터향 매출 비중이 지난해 10% 미만에서 올해 15~20%까지 늘어날 것으로 내다보고 있다.
+
+6. 키옥시아 다녔을 뿐인데…수백 명 100억 원 벼락부자 등극
+- 핵심 요약: 낸드플래시 업체 키옥시아홀딩스 직원 약 600명이 2018년 미국 사모펀드(PEF) 베인캐피털의 인수 당시 받은 총 700만 주 규모의 스톡옵션이, AI 메모리 호황으로 주가가 급등하면서 1인당 10억 엔(약 100억 원) 이상의 평가차익을 올린 것으로 알려졌다. 베인캐피털은 통상 경영진에게만 부여하던 스톡옵션을 부장·과장급을 포함한 일반 직원에게까지 확대 지급했으며, 키옥시아는 최근 연중 최고가 11만 2700엔을 기록해 부여 주식의 평가이익이 약 7780억 엔에 달하는 것으로 추산된다. 한편 키옥시아홀딩스의 스테이시 스미스 회장의 2025회계연도 보수는 44억 3100만 엔(약 423억 원)으로 전년도 대비 15배 가까이 늘었다. 2년 연속 매출·순이익 사상 최고치를 경신한 키옥시아의 올해 2분기 순이익은 전년 동기 대비 47.5배인 8690억 엔에 달할 전망이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004635934' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004635934</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

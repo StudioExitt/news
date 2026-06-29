@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엔비디아 퇴사율 2.7% vs 삼전 10.1%…격차 만든 ‘이것’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004635933' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8446" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>엔비디아 퇴사율 2.7% vs 삼전 10.1%…격차 만든 ‘이것’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">medium</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">엔비디아와 TSMC 등 글로벌 IT 기업의 낮은 퇴사율은 RSU(양도제한조건부주식) 같은 성과 공유 보상 시스템 덕분으로 분석되며, 이는 국내 반도체 업계가 도입해야 할 핵심 과제로 제시됩니다. 한편, SK하이닉스가 나스닥 ADR 상장을 통해 글로벌 자본 유입을 기대하며 코리아 디스카운트 해소를 목표로 합니다.
+정부는 RSU의 세제 혜택을 제외하여 기업과 임직원 모두가 실질적인 부담을 느끼는 상황이 발생하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 AI 반도체 시장의 폭발적인 성장이 확인되며, SK하이닉스의 나스닥 상장과 RSU를 통한 인재 유지 및 부의 창출 구조 등 산업 전반에 걸친 긍정적 모멘텀이 강력하게 작용하고 있습니다. 다만, 국내 세제 정책 측면에서는 부정적 이슈가 공존합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">엔비디아</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">AI 관련 기술</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자본시장 및 금융</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#AI혁명</span> <span class="tag tag-hash">#자본시장개방</span> <span class="tag tag-hash">#RSU</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">
+■AI 프리즘 [캠퍼스 뉴스]
+TSMC 이직률 3.5% 비결 RSU
+SK하이닉스, ADR 나스닥 상장
+키옥시아 직원, 스톡옵션으로 1인당 100억
+
+a AI 프리즘* 맞춤형 경제 브리핑
+* 편집자 주: ‘AI PRISM’(Personalized Report &amp; Insight Summarizing Media)은 한국언론진흥재단의 지원을 받아 개발한 ‘인공지능(AI) 기반 맞춤형 뉴스 추천 및 요약 서비스’입니다. 독자 유형별 맞춤 뉴스 6개를 선별해 제공합니다.
+
+[주요 이슈 브리핑]
+
+■ RSU 세제 공백: 정부가 올해 세법개정안에서 양도제한조건부주식(RSU) 세제 혜택을 결국 제외했다. KDI 용역 보고서가 비과세 특례·과세 이연의 필요성을 권고했음에도 재정경제부는 이를 받아들이지 않았다.
+
+■ 반도체 글로벌 자본 무대 진출: SK하이닉스(000660)가 7월 10일 나스닥에 미국주식예탁증서(ADR)를 상장하며 한국 반도체가 글로벌 자본시장의 중심에 서는 새로운 국면을 맞는다. HBM 시장 점유율 56.4%로 선두를 달리는 SK하이닉스는 ADR 상장으로 글로벌 자금 유입이 확대돼 시총 글로벌 톱10 진입이 현실화될 것이라는 전망이 나온다.
+
+■ 주식 보상의 부의 창출: AI 메모리 호황으로 키옥시아 직원 600명이 스톡옵션 한 장으로 1인당 100억 원대 평가차익을 거뒀다. 부장·과장급 일반 직원에게까지 스톡옵션을 배분한 베인캐피털의 결정이 AI 시대 자본주의의 새로운 부 창출 방식을 보여주는 사례로 주목받는다.
+
+[대학생 취업준비생 관심 뉴스]
+1. ‘TSMC 이직률 3.5%’ 비결은 RSU…“지방 인재에 과감한 혜택 줘야”
+- 핵심 요약: 엔비디아의 이직률은 2.7%, TSMC는 3.5%인 반면 삼성전자(005930)는 10.1%로 두 배 이상 높다. 그 배경에는 RSU(양도제한조건부주식), 즉 기업 주가 상승분을 임직원과 공유하는 장기 보상 제도의 유무가 있다는 분석이다. 국내에서는 한화(000880)·네이버·쿠팡 등 일부 대기업과 IT 기업이 RSU를 도입했지만 세제 혜택 부재로 주로 임원급에 한정돼 있고, 반도체·AI 핵심 엔지니어 전반으로 확산이 막혀 있는 상황이다. KDI는 주식을 받는 시점에 현금 유입 없이 세금부터 내야 하는 ‘드라이 인컴’ 구조가 기업과 임직원 모두 RSU를 실질적으로 기피하게 만드는 요인이라고 지적했다.
+2. 인재 외치더니…RSU 세제 혜택 결국 뺐다
+- 핵심 요약: 정부가 올해 세법개정안에 RSU 세제 혜택을 포함하지 않은 것으로 28일 확인됐다. 재정경제부는 KDI로부터 “RSU 비과세 특례와 과세 이연이 필요하다”는 용역 보고서를 받고도 이를 받아들이지 않았다. 현행법상 스톡옵션에는 행사 이익 연 2억 원까지 비과세, 5년 분납, 양도소득세 과세특례 등 세 가지 세제 지원이 갖춰진 반면 RSU에는 해당 혜택이 전무하다. 재계 고위 관계자는 “인재를 지방으로 데려오는 것은 반도체 생산 라인을 까는 것보다 100배, 1000배 더 어렵다”며 정부의 과감한 세제 지원을 촉구했다.
+3. SK하이닉스 나스닥 데뷔전 가는 최태원…시총 ‘글로벌 톱10’ 쏜다
+- 핵심 요약: 최태원 SK그룹 회장이 7월 10일 뉴욕에서 열리는 SK하이닉스 ADR(미국주식예탁증서) 나스닥 상장 기념식에 참석할 예정이다. 지난해 6월 200조 원이었던 SK하이닉스 시가총액은 이달 처음으로 2000조 원을 돌파하며 1년 만에 10배 가까이 급등했다. HBM(고대역폭메모리) 시장 점유율 56.4%로 마이크론(23.1%), 삼성전자(20.5%)를 큰 격차로 따돌리고 있지만, 글로벌 자금이 미 증시를 선호해 마이크론보다 낮은 기업가치를 평가받는 ‘코리아 디스카운트’ 해소가 이번 상장의 핵심 목표다. 최 회장은 출장 기간 젠슨 황 엔비디아 CEO, 일론 머스크 스페이스X CEO 등 글로벌 빅테크 수장과도 잇따라 회동할 것으로 알려졌다.
+[대학생 취업준비생 참고 뉴스]
+4. 기업용 보안 시장 개척…LGU+ ‘세이프AI’ 뜬다
+- 핵심 요약: LG유플러스(032640)가 올 하반기 기업용 AI 보안 솔루션 ‘유플러스 세이프AI(U+ Safe AI)’를 출시한다. 챗GPT·클로드 등 외부 LLM(대규모언어모델)에 텍스트를 입력하는 행위까지 탐지해 민감 정보의 외부 유출을 사전에 차단하는 AI 전용 DLP(데이터 손실 방지) 솔루션에 생산성 기능을 결합한 제품이다. 1차 공략 대상은 은행·증권사 등 금융권으로, 금융당국이 망분리 규제를 단계적으로 완화하는 것이 긍정적 요인으로 작용할 전망이다. 한편 LG유플러스는 지난해 클라우드 통합계정관리 솔루션 ‘알파키’와 보안 솔루션 ‘U+SASE’를 잇따라 출시하며 기업 보안 인프라 구축을 본격화하는 모습이다.
+5. 밤낮·주말 없는 IT 장애…AI 에이전트로 해결한다
+- 핵심 요약: SK AX가 AI 에이전트 기반 인프라 운영 서비스 ‘엑스젠틱와이어 NPO’의 고객사 확대에 박차를 가하고 있다. AI 에이전트가 기업 IT 인프라에서 발생하는 장애를 선제적으로 탐지·해결해 대응 리드타임을 50% 이상 단축하는 구조로, 현재 40여 곳의 기업이 도입해 쓰고 있다. 현재 완성된 AI 에이전트는 40여 개이며 SK AX는 이를 100여 개까지 늘려 올해 금융·게임 분야로 도입처를 확대할 계획이다. 단순·반복 장애 대응 업무를 에이전트가 대신 처리함으로써 인력은 사람의 판단이 필요한 전문 업무에 집중할 수 있는 구조로 재편되는 상황이다.
+6. 키옥시아 다녔을 뿐인데…직원 수백 명 100억 원 벼락부자 등극
+- 핵심 요약: 일본 낸드플래시 업체 키옥시아홀딩스 직원 약 600명이 2018년 베인캐피털 인수 당시 받은 스톡옵션으로 1인당 10억 엔(약 100억 원) 이상의 평가차익을 보유하게 됐다. 베인캐피털은 경영진에게만 부여하던 관행을 깨고 부장·과장급을 포함한 일반 직원에게까지 총 700만 주 규모의 스톡옵션을 배분했다. 이후 AI 투자 확대에 따른 메모리 호황으로 키옥시아 주가가 급등하면서 총 평가이익은 약 7780억 엔에 달하는 것으로 추산된다. 닛케이는 이를 “인류 역사상 최대 규모의 자본 투자 경쟁을 불러온 AI 혁명이 부품 공급 업체 직원에게까지 막대한 혜택을 안겨주는 AI 시대 자본주의의 새로운 풍경”이라고 평가했다.
+▶기사 바로가기: 外人 주식 매도·강달러…2분기 평균 환율 1500원 넘을 듯
+▶기사 바로가기: 인재 외치더니…RSU 세혜택 결국 뺐다
+▶기사 바로가기: 거래대금 급증에…증권사 ‘빅5’ 영업익 4조 육박
+원문링크: https://n.news.naver.com/mnews/article/011/0004635933</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004635933' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004635933</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

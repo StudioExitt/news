@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>외국인 ‘셀 코리아’에 무너진 원화…환율 1500원 돌파</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004635936' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8443" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>외국인 ‘셀 코리아’에 무너진 원화…환율 1500원 돌파</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">외국인의 대규모 주식 매도세와 미국 기준금리 인상 전망에 따른 달러 강세가 맞물려 원화 가치가 급락하며 환율이 1,500원대를 돌파했습니다. 동시에 반도체 섹터로의 수급 집중 심화와 가계 자금이 부동산으로 유입되며 국내 금융 시장의 과열 및 변동성이 극단적으로 높아진 상황입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">외국인 매도와 환율 급등은 거시 경제 전반의 불안정성을 시사하며, 국내 금융 자산에 대한 투자 심리 위축이 예상됩니다. 동시에 반도체 섹터로의 수급 과부하는 시장 변동성 위험을 극대화하고 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#환율폭등</span> <span class="tag tag-hash">#원화약세</span> <span class="tag tag-hash">#외국인매도</span> <span class="tag tag-hash">#반도체쏠림</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■AI 프리즘 [주식 뉴스]
+2분기 평균 환율 28년 만에 1500원 돌파
+가계 주식 수익 429조, 부동산 유입 가속
+증권사 빅5 2분기 영업익 84% 급증
+▲ AI 프리즘* 맞춤형 경제 브리핑
+* 편집자 주: ‘AI PRISM’(Personalized Report &amp; Insight Summarizing Media)은
+한국언론진흥재단의 지원을 받아 개발한 ‘인공지능(AI) 기반 맞춤형 뉴스 추천 및 요약 서비스’입니다. 독자 유형별 맞춤 뉴스 6개를 선별해
+제공합니다.
+
+[주요 이슈 브리핑]
+
+■ 환율 1500원 뉴 노멀화: 올 2분기 평균 원·달러 환율이 1500.1원으로, 1998년 외환위기 이후 28년 3개월 만에 분기 평균
+1500원대를 기록하게 됐다. 외국인이 올 들어 유가증권시장에서 136조 7000억 원을 순매도한 데다 미국 기준금리 인상 전망에 따른 달러
+강세가 맞물리며 원화 약세가 고착화하는 양상이다.
+
+■ 삼전닉스 쏠림 심화: 삼성전자(005930)·SK하이닉스(000660) 단일 종목 레버리지 ETF(상장지수펀드)
+상장 이후 코스피 시총에서
+반도체 투톱이 차지하는 비중이 한 달 새 48.78%에서 56.48%로 커졌다. 수급이 반도체에 집중되며 사이드카(프로그램 매수 효과 일시 효력
+정지)가 한 달 새 11차례 발동하는 등 시장 변동성이 극단으로 치닫고 있다.
+
+■ SK하이닉스 나스닥 ADR 상장: SK하이닉스가 7월 10일(현지 시간) 나스닥에 미국주식예탁증서(ADR)
+를 상장하며 최태원 SK그룹 회장이
+직접 기념식에 참석할 예정이다. HBM(고대역폭메모리) 시장 점유율 56.4%로 압도적 1위인 SK하이닉스가 글로벌 자본시장의 재평가를 받으며
+시가총액 2000조 원 안착을 노린다.
+
+[주식투자자 관심 뉴스]
+
+1. 外人 주식 매도·강달러…2분기 평균 환율 1500원 넘을 듯
+- 핵심 요약: 올 2분기(4월~6월 26일) 평균 원·달러 환율이 1500.1원을 기록해 1998년 1분기(1596.8원) 이후 28년 3개월
+만에 분기 평균 1500원을 넘어설 것이 확실시된다. 원화 약세의 핵심 동인은 외국인의 대규모 ‘셀 코리아’로, 5월에만 49조 원을 순매도해
+월간 기준 역대 최대를 기록했고 이달에도 37조 원 가까이 팔아치웠다. 여기에 미국 기준금리 인상 전망으로 달러인덱스(DXY지수)가 지난 24일
+101.7까지 치솟아 1년 1개월 만에 최고치를 나타냈고, 엔·달러 환율도 161.93엔으로 1년 11개월 만에 최고 수준이다.
+한국은행(한은)은 최근 금융안정보고서에서 외국인의 포트폴리오 리밸리싱(재조정)
+종료 시점을 가늠하기 어렵다며 단기간 환율 하락을 기대하기
+어렵다는 입장을 밝혔다.
+
+2. 가계, 작년 주식으로 번 돈 429조…부동산에 흘러가 ‘K양극화’ 더 심화
+- 핵심 요약: 한은에 따르면 지난해 가계의 주식 자본 이득은 429조 원으로 장기 평균(약 20조 원)의 22배에 달했으며, 지난해 서울
+아파트 매매 가격은 전년 말 대비 8.98% 올라 2013년 통계 집계 이후 최고치를 기록했다. 학계 연구에 따르면 코스피 지수와 서울 아파트
+실거래가의 상관계수는 2013~2019년 0.4에서 2020~2025년 0.7로 높아졌으며, 올 코스피가 반년 만에 약 100% 급등하는 동안
+시가총액만 3327조 원 증가했다. 금융권 관계자는 올 들어 주식 매도 자금 중 3조 7000억 원이 주택 시장으로 유입됐지만 증시 상승 폭
+대비 아직 미미한 수준이라고 평가했다. 한은은 금융안정보고서에서 주식 차익 실현 자금이 주택 시장으로 과다 유입될 경우 금리 인상을 통한 금융
+불균형 완화 효과가 약화될 수 있다고 경고했다.
+
+3. 거래대금 급증에…증권사 ‘빅5’ 영업익 4조 육박
+- 핵심 요약: 에프앤가이드에 따르면
+미래에셋증권(006800)·한국금융지주(071050)·삼성증권(016360)·NH투자증권(005940)·키움증권(039490) 등 5대 증권사의
+올 2분기 영업이익 컨센서스(증권사 추정치 평균)는 3조 9120억 원으로 전년 동기 대비 84.1% 급증할 전망이다. 이 중 미래에셋증권은
+2분기 영업이익이 1조 4002억 원으로 전년 대비 179.8% 증가해 주요 증권사 가운데 유일하게 분기 영업이익 1조 원을 돌파할 것으로
+예상되며, 나머지 4사도 30~87% 범위의 두 자릿수 증가율을 기록할 전망이다. 코스피 일평균 거래대금은 5월 50조 2150억 원, 6월(1~26일) 51조 1845억 원으로 사상 최고 수준을 이어가고 있다. 다만 KRX 증권지수는 같은 기간 코스피가 66.48% 오르는 동안
+16.77% 하락했는데, 증권가에서는 거래대금 증가세가 정점을 지났다는 우려가 주가에 선반영된 영향으로 해석한다.
+
+[주식투자자 참고 뉴스]
+
+4. SK하이닉스 나스닥 데뷔전 가는 최태원…시총 ‘글로벌 톱10’ 쏜다
+- 핵심 요약: 최태원 SK그룹 회장과 곽노정 SK하이닉스 사장 등 주요 경영진은 7월 10일(현지 시간) 미국 뉴욕에서 열리는 SK하이닉스
+나스닥 ADR(미국주식예탁증서) 상장 기념식에 참석해 글로벌 투자자들에게 AI 메모리 경쟁력과 중장기 성장 전략을 직접 설명할 예정이다.
+IDC에 따르면 SK하이닉스는 올 1분기 HBM 시장에서 56.4%의 점유율로 2위 마이크론(23.1%), 3위 삼성전자(20.5%)를 큰
+격차로 앞서고 있으나 26일 기준 시총(1905조 원)은 나스닥 상장사인 마이크론(1965조 원)보다 낮다. 금융투자업계는 ADR 상장으로
+글로벌 자금 유입이 확대되면 코리아 디스카운트(국내 주식 저평가 현상)가 해소되며 시총 2000조 원대 안착이 가능할 것으로 보고 있다. 한편
+최 회장은 출장 기간 일론 머스크 스페이스X CEO, 젠슨 황 엔비디아 CEO 등 글로벌 빅테크 수장들과 반도체 장기공급계약 및 ASIC(주문형
+반도체) 제작 등을 협의할 것으로 알려졌다.
+
+5. 삼전닉스 레버리지에 세금을 매긴다면
+- 핵심 요약: 삼성전자·SK하이닉스 단일 종목 레버리지 ETF 상장 이후 두 종목이 코스피 시총에서 차지하는 비중이 56.48%까지 확대되며
+조선·방산·전력 등 여타 업종 주가가 20~30% 급락하고 코스닥은 1200선 재탈환 시도에서 800대로 추락하는 등 수급 쏠림이 심화됐다.
+단일 종목 레버리지 16종의 순자산은 15조 9316억 원까지 불어났으며 코스피가 하루 4% 이상 급등락하는 날이 이틀에 한 번꼴로 나타났고
+사이드카는 한 달 새 11차례 발동됐다. 이찬진 금융감독원장이 사후적 우려를 표명하는 가운데 필자는 레버리지 ETF 양도차익에 10~20%의
+세금 신설, 적용 대상 종목을 상위 30~50개로 확대해 분산 효과를 꾀하는 방안, 거래 시간 단축 및 증거금(현행 1000만 원) 대폭 상향
+등을 대안으로 제시했다. 수급 왜곡이 해소되지 않는 한 코스피 1만 포인트 달성에도 반도체 소수 투자자만 수혜를 입고 대다수 투자자의
+FOMO(투자 소외감)는 극심해질 것이라는 진단.
+
+6. 고부가 사업 재편…LG디스플레이(034220), 5년 만에 1조 흑자 청신호
+- 핵심 요약: LG디스플레이는 대형 LCD(액정표시장치)
+사업을 정리하고 OLED(유기발광다이오드) 중심으로 사업 구조를 재편한 결과 올해
+연간 영업이익 컨센서스가 1조 1179억 원으로, 5년 만에 연간 1조 원 흑자 달성이 예상된다. 에프앤가이드에 따르면 2분기에는 희망퇴직 등
+일회성 비용으로 1000억 원대 영업손실이 예상되나 OLED 매출 비중은 올해 60%까지 상승해 전년 대비 5%포인트 증가할 전망이다.
+LG디스플레이는 공정 전반에 AI 생산 체계를 도입해 연간 2000억 원 이상의 비용을 절감하고 있으며, 지난해 1조 2600억 원에 이어
+올해도 1조 1000억 원을 OLED 신기술 인프라 구축에 추가 투입하기로 했다. 업계에서는 하반기 모바일용 OLED 성수기 진입과 북미 고객사
+내 점유율 개선이 맞물리며 실적 모멘텀이 더욱 강화될 것으로 보는 상황이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004635936' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004635936</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
