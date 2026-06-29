@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>‘메가 프로젝트’로 낙폭 줄였지만… 외인 탈출에 뒷심 빠진 코스피</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/005/0001857895' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8563" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>‘메가 프로젝트’로 낙폭 줄였지만… 외인 탈출에 뒷심 빠진 코스피</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부의 '메가 프로젝트' 발표에 힘입어 코스피는 일시적인 낙폭을 만회했으나, 외국인 투자자들의 대규모 순매도로 인해 상승 동력이 약하다는 평가입니다. 시장에서는 정책 기대감보다는 차익 실현 및 구조적 매도세에 무게를 두고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">정부 주도의 대형 산업 정책(메가 프로젝트)은 중장기적으로 시장의 방향성을 설정하는 중요 계기가 되지만, 현재 가격 반영과 외인 매도세로 인해 단기적인 투자심리 위축이 두드러집니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오/제약</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#메가프로젝트</span> <span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#외인매도</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">“정책 기대감, 기술적 반등 유도”
+코스닥은 상승… 매수 사이드카
+대형 반도체를 중심으로 급락했던 코스피가 29일 정부의 ‘3대 메가 프로젝트 국민보고회’ 이후 낙폭을 상당 부분 만회했다. 코스피는 이날 약보합으로 마감하며 정책 기대감이 반영되는 모습이다. 다만 시장이 국민보고회에 큰 의미를 부여하지 않고 있다는 분석이 나온다. 발표 전 윤곽이 드러난 만큼 가격에 선반영 된 데다, 최근 들어 반도체 쏠림현상으로 인한 조정이 가파르게 이어지고 있어서다.
+코스피는 등락을 거듭하며 전 거래일보다 16.56포인트(0.20%) 하락한 8394.65에 이날 거래를 마쳤다. 애플이 중국산 반도체 구입을 검토하고, 오픈AI가 상장을 연기하는 등의 소식이 반도체 ‘투톱’ 삼성전자 SK하이닉스 주가에 악재로 작용했다. 코스피는 장중 한때 전 거래일보다 283.22포인트(3.37%) 하락한 8127.99까지 밀리기도 했다.
+코스피가 낙폭을 줄이기 시작한 것은 오후 2시 이후부터다. 그 시간은 이재명 대통령이 청와대에서 이재용 삼성전자 회장, 최태원 SK그룹 회장과 함께 ‘3대 메가 프로젝트’ 투자계획 발표를 시작한 시점이다. 이 프로젝트는 반도체 <0xED><0x8C><0xB9>(생산 공장)과 대규모 인공지능(AI) 데이터센터, 피지컬AI·로봇 등 첨단전략산업을 수도권이 아닌 지역을 거점 삼아 육성하는 계획이다. 기업은 대규모 투자를, 정부는 전력과 용수, 거주환경 등 인프라 조성을 지원한다. 이 영향으로 오후 2시56분에는 코스피가 8525.53까지 오르며 지수가 1%대 상승으로 전환되기도 했다.
+뒷심은 발휘하지 못했다. 전문가들은 2거래일 연속 크게 하락한 코스피가 때마침 기술적 반등을 할 요인을 찾고 있었던 것으로 분석한다. 즉 유의미한 반등은 아니라는 설명이다. 정용택 IBK투자증권 수석이코노미스트는 “3대 메가 프로젝트가 기술적 반등을 유도한 것이다. 실제로 수급이 계속 유입될지는 지금 시점에서 전망하기 쉽지 않다”고 말했다.
+현재 시장 방향성을 주도하는 것은 정책 기대감보다는 반기 리밸런싱을 위해 외국인이 코스피 주식을 내다 파는 것이라는 분석이다. 외국인은 이날까지 7거래일 연속 순매도했다. 반도체주 중심으로 24조6787억원어치를 내다 팔았다. 이날 하루에만 7조6670억원 순매도했는데, 올해 들어 가장 큰 규모다. 삼성전자는 전 거래일보다 4.86% 하락한 32만3000원, SK하이닉스는 1.68% 내린 262만8000원에 각각 거래를 마쳤다.
+수급 순환매가 펼쳐지며 이날 코스닥은 전 거래일보다 69.20포인트(8.13%) 상승한 920.57에 마감, 모처럼 반등에 성공했다. 오전 9시28분에는 매수 사이드카가 발동되기도 했다. 3대 메가 프로젝트 발표에도 반도체 소부장 상승세는 미미했다. 대신 오름테라퓨틱(26.17%) 올릭스(24.22%) 에코프로(23.69%) 등 바이오와 이차전지주가 급등했다.
+김주연 미래에셋증권 연구원은 “미국 증시 헬스케어 업종 강세를 보여 국내에서도 업종 전반이 상승했다”고 설명했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/005/0001857895' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/005/0001857895</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
