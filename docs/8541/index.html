@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스닥 소부장 '낙수효과'...기관, 5천억 '매집'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001256971' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8541" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스닥 소부장 '낙수효과'...기관, 5천억 '매집'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부의 대규모 투자 프로젝트 기대감에 코스닥 시장이 상승세로 마감했으며, 특히 반도체 소재·부품·장비(소부장) 기업들이 기관 순매수 등에 힘입어 큰 폭으로 급등했습니다. 증권가는 이번 투자가 전반적인 반도체 생태계에 '낙수효과'를 가져올 것으로 예상합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">정부 주도의 대규모 투자 프로젝트와 기관의 적극적인 매집세가 반도체 소부장 섹터 전반에 걸친 강한 기대감을 반영함. 기술 사이클 회복과 산업 구조 재편에 대한 시장의 높은 관심을 보여주지만, 실제 실적 전환까지 시간적 여유를 두고 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">기가비스</span> <span class="tag stock-tag">에이직랜드</span> <span class="tag stock-tag">원익IPS</span> <span class="tag stock-tag">HPSP</span> <span class="tag stock-tag">주성엔지니어링</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체소부장</span> <span class="tag tag-hash">#낙수효과</span> <span class="tag tag-hash">#기관매집</span> <span class="tag tag-hash">#AI인프라</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open"><앵커>
+정부의 이번 대규모 투자 프로젝트를 두고 증권가에서는 반도체 소재, 부품, 장비 기업들을 주목하고 있습니다.
+
+코스닥 시장은 낙수효과 기대감으로 달아올랐습니다.
+
+증권부 고영욱 기자 나와 있습니다.
+
+고 기자, 오늘 시장부터 정리해주시죠.
+
+<기자>
+오늘 우리 증시를 뜨겁게 달군 건 코스닥이었습니다. 장 초반부터 5% 넘게 급등하며 매수 사이드카가 발동됐고요.
+
+이후로도 상승폭을 확대해 8% 오른 920선에 장을 마쳤습니다. 코스닥 시장을 주도한 건 5000억원 넘게 순매수한 기관이었습니다. 외국인도
+265억원 순매수했습니다.
+
+특히 대표적인 반도체 소부장 기업인 기가비스가 오늘 사상 최고가를 기록했고요.
+
+상한가를 기록한 에이직랜드를 비롯해 제너셈과 유니셈 등 반도체 소재, 부품, 장비주들이 20% 넘게 급등했습니다.
+
+장초반 미국발 AI 투자 축소 우려로 하락했던 코스피는 국민보고회 발표 뒤 빠르게 회복하면서 상승전환에 성공해 전장보다 0.07% 오른
+8,416 포인트에 장을 마쳤습니다.
+
+<앵커>
+반도체 소부장 기업들이 큰 폭으로 올랐군요. 결국 반도체 투자 확대의 수혜가 결국 소부장 기업들로 확산될 수 있기 때문이겠죠?
+
+<기자>
+그렇습니다. 반도체 공장 한 곳을 짓더라도 증착과 식각, 검사, 패키징 등 수많은 장비와 소재가 필요합니다.
+
+동탄과 평택 삼성전자 반도체 공장만 보더라도 인근에 100곳에 육박하는 협력사들이 포진해 있습니다.
+
+증권가에서는 이번 프로젝트가 반도체 생태계 전반에 낙수효과를 가져올 것으로 보고 있습니다.
+
+실제로 신한투자증권은 최근 보고서 제목을 아예 “코스닥 주도주는 소부장”이라고 붙였고요.
+
+신영증권도 최근 코스닥 시장이 바이오 중심에서 반도체 중심으로 재편되는 초기 단계라고 평가했습니다.
+
+<앵커>
+그렇다면 어떤 기업들이 주목받고 있습니까?
+
+<기자>
+최근 시장에서는 원익IPS와 피에스케이, HPSP, 주성엔지니어링 같은 반도체 장비 기업들이 대표 수혜주로 거론됩니다.
+
+하나증권은 AI 시대 핵심 병목으로 반도체 장비와 테스트, 전력, 냉각 인프라 등을 꼽았는데요.
+
+과거처럼 반도체 온기가 산업 전반으로 퍼지는 것이 아니라 AI 인프라에 꼭 필요한 기업들로 집중되고 있다는 분석입니다.
+
+<앵커>
+결국 시장이 보는 핵심은 뭡니까?
+
+<기자>
+이번 발표의 핵심은 투자 규모보다 실제 투자 집행입니다.
+
+삼성전자와 SK하이닉스 중심 랠리가 소재, 부품, 장비 기업으로 확산될 수 있을지가 관전 포인트입니다.
+
+오늘 코스닥 강세 역시 시장이 그 가능성을 반영하기 시작했다는 해석이 나옵니다.
+
+다만 반도체 산업단지 조성과 정주여건 마련 등이 필요한 만큼 실제 기업 실적으로 이어지기엔 시간이 필요해 보입니다.
+
+<앵커>
+잘 들었습니다. 고영욱 기자였습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001256971' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001256971</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
