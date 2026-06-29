@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK하닉 美 ADR 상장, 韓 반도체 재평가 계기…7조 수급 기대</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005378476' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8470" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>SK하닉 美 ADR 상장, 韓 반도체 재평가 계기…7조 수급 기대</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스의 미국 ADR 상장이 성공적으로 이루어질 경우, 최소 7조원 이상의 글로벌 패시브 자금이 유입되며 한국 반도체 산업 전체의 가치 재평가(Re-rating)를 이끌 것으로 기대됩니다. 또한 메모리 수요 증가와 빅테크 기업들의 러브콜에 힘입어 국내 반도체주 상승 모멘텀이 지속될 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">SK하이닉스의 미국 ADR 상장은 단순한 주식 거래를 넘어, 거대한 해외 기관/패시브 자금 유입을 통한 기업 가치 재평가(Re-rating)의 기폭제 역할을 할 것으로 예상됩니다. 더불어 메모리 업황 자체의 호조세가 맞물려 단기적 상승 모멘텀이 매우 강력합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#ADR상장</span> <span class="tag tag-hash">#밸류에이션재평가</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">정의현 미래에셋자산운용 ETF운용본부 본부장이 29일 미래에셋자산운용은 유튜브 채널을 통해 열린 웹세미나에서 설명하고 있다./사진=TIGER
+ETF 공식 유튜브 채널 캡처
+SK하이닉스가 미국 ADR(주식예탁증서) 상장을 통해 7조원이 넘는 자금을 끌어모으고, 밸류에이션 재평가를 받을 것이란 예측이 나왔다. 삼성전자 역시 메모리 가격 상승으로 인해 성장할 가능성이 큰 만큼 반도체 톱2 기업의 질주는 계속될 것이란 전망이다.
+
+정의현 미래에셋자산운용 ETF운용본부 본부장은 29일 미래에셋자산운용은 유튜브 채널을 통해 열린 웹세미나에서 "SK하이닉스의 ADR 상장은 단순한 이벤트가 아니다"라며 "ADR 상장을 통해 최소 7조원의 수급이 몰리고, 나스닥 지수 편입 가능성도 있다"고 말했다. ADR 상장이 글로벌 투자자 기반 확대와 한국 반도체 기업 가치 재평가를 이끌 수 있는 중요한 계기가 될 것이란 의견이다.
+
+ADR은 미국 투자자가 미국 증시에서 SK하이닉스 주식 거래할 수 있게 한 예탁증서로, 다음 달 10일 나스닥에 상장할 예정이다. 신주 발행 규모는 약 45조원이다. 
+정 본부장은 "ADR 상장으로 미국 기관투자자와 패시브 자금의 SK하이닉스 접근성이 높아질 것"이라며 "SK하이닉스 ADR이 미국 대표 반도체지수에 편입될 경우 약 46억달러(약 7조원) 규모의 패시브 자금이 유입될 수 있다"고 설명했다.
+
+국내 주식시장에 상장된 SK하이닉스의 밸류에이션도 재평가될 가능성이 있다고 봤다. 앞서 미국 증시에 ADR을 상장시킨 대만 반도체 기업 TSMC도 주가 재평가를 받았기 때문이다.
+ADR 상장 이후 TSMC 본주(대만증시에 상장된 주식)의 가격은 ADR로 환산 시 396달러를 기록했다. 반면 ADR은 467달러에 거래가 됐다. 외국인 투자 접근성이 좋고, 패시브 자금 유입이 용이한 만큼 ADR 가격에 프리미엄이 붙은 것이다. ADR 주가가 먼저 뛰면 이후 본주가 따라잡으면서 가격 차이를 좁히는 모습을 보인다.
+
+정 본부장은 "SK하이닉스 주식시장 접근성과 패시브 수급 차이 때문에 경쟁사 마이크론 대비 저평가됐었다"며 "ADR 상장을 계기로 이 격차가 줄어드는 리레이팅을 기대할 수 있을 것"이라고 분석했다.
+
+메모리 산업 성장도 지속 중이다. 삼성전자와 SK하이닉스는 경쟁적으로 차세대 고대역폭메모리 HBM4E 샘플을 개시했다. 최태원 SK그룹 회장은 글로벌 빅테크 CEO(최고경영자)들고 만나 협력을 강화 중이고, 젠슨황 엔비디아 CEO는 SK하이닉스에 웨이퍼를 더 만들어달라고 말하는 등 러브콜을 보내고 있다.
+
+메모리 현물 가격도 다시 상승세를 보인다. 모건스탠리는 이달 초 리포트를 발간하고 '칩 플레네이션'이란 개념을 제시했다. 이는 메모리칩 가격이 시간이 지나도 계속 비싸지는 것을 뜻한다. 메모리 수급 불균형은 이어지고, 수요는 꺾이지 않을 것이란 게 모건스탠리의 전망이구나.
+
+이에 정 본부장은 TIGER 반도체 ETF 상품들에 주목해야 한다고 조언했다. 'TIGER 반도체TOP10'은 국내 반도체 ETF 중 순자산 1위 상품으로, 삼성전자와 SK하이닉스에 집중 투자한다. SK하이닉스이 비중이 33%, 삼성전자의 비중이 29%다.
+
+'TIGER 200 IT'는 반도체와 기판 등 AI(인공지능) 하드웨어에 한 번에 투자하는 상품이다. SK스퀘어의 비중이 28%로 가장 높고, 이후 SK하이닉스(비중 24%) 삼성전기(17%), 삼성전자(16%)순이다.
+
+국내 우량주 10종목에 투자하는 'TIGER 코리아TOP10'도 SK하이닉스(40%)와 삼성전자(27%)를 담고있다.
+반도체주 변동성이 부담스러운 투자자는 반도체 커버드콜 ETF에 투자하는 것도 방법이다. 다만, 정 본부장은 커버드콜 상품도 삼성전자와 SK하이닉스 비중을 살펴 골라야 한다고 강조했다. 'TIGER 배당커버드콜액티브'는 삼성전자(25.2%)와 SK하이닉스(23.5%)는 물론 'TIGER 200'(8.7%), 삼성전자우선주(5.8%) '{TIGER 200 타겟위클리커버드콜}'(3.5%)을 담고 있다. 실질적인 삼성전자와 SK하이닉스 비중은 각각 35.2%와 27.1%에 달한다.
+
+'TIGER 반도체TOP10커버드콜액티브'도 투자하고 있는 삼성전자, SK하이닉스, 관련 ETF, SK하이닉스 선물 비중을 합하면 삼성전자와 SK하이닉스 실질 비중이 각각 23.7%와 28.1%다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005378476' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005378476</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
