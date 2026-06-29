@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>증권사 자사주 소각 <0xEC><0x9E><0xB0>걸음…'저PBR 탈출' 속도 낸다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000511406' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8482" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>증권사 자사주 소각 <0xEC><0x9E><0xB0>걸음…'저PBR 탈출' 속도 낸다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">증권업계가 활발한 주주환원 정책으로 자사주 소각에 속도를 내고 있습니다. 이는 증권주의 고질적인 저PBR 상태를 해소하고, 최근 강화되는 상법 및 금융당국의 밸류업 정책 기조에 따른 결과입니다. 대형 증권사들이 수천억원 규모의 자사주를 전량 소각하며 주주가치 제고를 선도하고 있어 시장 기대감이 높습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">거시적 정책 변화(밸류업, 상법 개정)와 업종 특성 개선 노력(자사주 소각)이 맞물려 저평가된 섹터의 구조적 재평가를 유도하고 있기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증권주</span> <span class="tag tag-hash">#자사주소각</span> <span class="tag tag-hash">#저PBR</span> <span class="tag tag-hash">#밸류업</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">자사주 소각이 증권업계 주요 주주환원 정책으로 떠오르고 있다. /서예원 기자
+자사주 소각이 증권업계 주요 주주환원 정책으로 떠오르고 있다. /서예원 기자
+증권사들이 자사주 소각에 속도를 내고 있다. 증시 활황에 따른 실적 개선으로 주주환원 여력이 커진 데다 상법개정안 시행등 자본시장 내 밸류업 강화 기조가 맞물린 결과다. 그동안 단순보유하고 있던 자사주를 소각하는 기조로 시장 분위기가 빠르게 재편되면서 증권주의 고질적인 저PBR(주가순자산비율) 상태 극복과 주당 가치 상승에도 도움이 될 전망이다.
+
+29일 금융투자업계에 따르면 오는 30일부터 자기주식 보유 및 처분 공시를 강화하는 내용을 골자로 한 자본시장법 시행령이 시행된다. 이번 시행령 개정은 3차 상법 개정안의 후속 조치다. 개정안은 자기주식을 발행주식총수 대비 1% 이상 보유하는 상장회사에만 부과되던 자기주식 보유현황 및 처리계획 공시를 자기주식을 보유하는 모든 상장회사로 확대한 게 골자이다.
+
+아울러 개정 상법에 따라 자기주식을 대상으로 하는 교환사채(EB) 발행이 전면 금지된다. 그동안 자기주식 대상 교환사채는 자금조달의 필요성이 크지 않은 상황에서 지배주주에 우호적인 제3자 등에게 발행함으로써 사실상 경영권 방어수단으로 사용되거나 지배력 유지를 위해 활용됐다.
+
+29일 금융투자업계에 따르면 오는 30일부터 자기주식 보유 및 처분 공시를 강화하는 내용을 골자로 한 자본시장법 시행령이 시행된다. /더팩트
+DB
+29일 금융투자업계에 따르면 오는 30일부터 자기주식 보유 및 처분 공시를 강화하는 내용을 골자로 한 자본시장법 시행령이 시행된다. /더팩트
+DB
+
+금융당국의 밸류업 강화 기조에 발맞춰 증권사들도 주주환원 목적의 자사주 소각 정책을 활발히 시행하고 있다. 대형사 중에는 미래에셋증권이 대표적이다. 미래에셋증권 회사 설립 이후 최대 규모의 자사주 소각에 나섰다. 미래에셋증권은 3000억원의 자사주를 취득하고 전량 소각할 계획이다. 기존 최대 취득 규모인 1030억원 대비 약 3배 수준이다.
+
+구체적으로 취득 대상은 보통주 2000억원, 1우선주 100억원, 2우선주 900억원으로 구성된다. 특히 1우선주를 취득 대상에 포함한 것은 이번이 처음이다. 보통주와 우선주 간 괴리율 완화 및 균형 있는 주주가치 제고를 고려한 주주환원 정책이라는 평가다.
+
+키움증권은 지난 2024년 국내 상장사 최초로 기업가치 제고 계획을 공시한 데 이어 기존 보유한 자기주식 265만여주를 전량 소각했다. 발행주식의 약 8% 규모다.
+
+기존 보유 자사주 비중이 높았던 중소형사도 대규모 소각에 동참한다. 신영증권은 지난 22일 자기주식 보유분 중 526만2283주를 상법이 정한 기한내 소각하겠다고 공시했다. 이는 총발행주식의 32%, 자기주식 보유분의 62.5%에 해당한다. 아울러 지속적인 배당 정책 및 주주환원 방안도 검토한다는 계획이다.
+
+대신증권은 보통주 155만여주, 1우선주 80만여주, 2우선주 19만여주 등 총 255만여주의 자사주를 이날 소각한다. 지난 2월 발표한 기업가치제고계획에 주주따른 조치다. 앞서 대신증권은 '2026년 기업가치 제고 계획 및 이행 현황' 공시를 통해 자기주식 총 1535만주를 6개분기에 걸쳐 매 분기 말 단계적으로 소각한다고 밝혔다.
+
+유안타증권도 지난 5월 주주가치 제고를 위해 자사주 701만여주를 소각했다.
+
+시장에서는 증권사들의 자사주 소각 러시가 한동안 이어질 것으로 보고 있다. 증시 활황에 따른 거래대금 증가로 증권사들이 사상 최대 수준의 이익체력을 확보한 데다 자사주 소각으로 저PBR 해소 등 증권주 재평가에 기여할 수 있다는 이유에서다.
+
+김용진 서강대 경영학과 교수는 "증권주는 전통적으로 고배당주로 분류됐지만 PBR이 낮고 이익 변동성이 크다는 이유로 만성적인 저평가를 받아왔다. 하지만 자사주 소각을 통해 저평가를 해소할 수 있다"고 말했다.
+
+그는 "일례로 1분기 기준 코스피 밸류업 정책 공시 기업의 PBR은 2024년 이후 상승세를 보였지만 미공시 기업은 2025년 대비 하락세로 전환했다는 연구 결과가 있을 만큼 자사주 소각은 PBR에 굉장히 중요한 영향을 준다"며 "앞으로도 3차 상법 개정안과 밸류업 정책 등 주주들에 유리한 제도 변화에 힘입어 증권사들의 자사주 소각 흐름은 강화될 것"이라고 내다봤.
+
+신현용 유안타증권 연구원은 "상법 개정안이 기취득 자사주의 경우 1년 6개월 내 소각하도록 규정하면서 기업들은 추가 매입보다는 소각에 더 집중할 가능성이 높다"고 분석했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000511406' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000511406</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
