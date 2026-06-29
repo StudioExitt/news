@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[영상] 이미 상장됐는데 또 상장? SK하이닉스의 승부수</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/005/0001857742' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8478" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[영상] 이미 상장됐는데 또 상장? SK하이닉스의 승부수</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스가 뉴욕 증시에 ADR 형태로 상장하며 자금 조달과 함께 기업가치 재평가를 목표로 하고 있습니다. 이는 AI 반도체 시장의 성장에 맞춰 글로벌 투자자들의 관심이 집중되며, 국내 주가에도 긍정적인 모멘텀을 제공할 것으로 기대됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">SK하이닉스의 미국 증시 상장(ADR)은 단순한 자금 조달을 넘어 글로벌 시장에서의 '기업가치 재평가' 기대감을 불러일으키며 주가 상승의 주요 촉매제가 될 수 있습니다. 특히 AI 반도체 분야 투자 확대를 배경으로 합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ADR상장</span> <span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#기업가치재평가</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">투자자라면 꼭 알고 갈 경제 이슈
+쉽고 친절하게 풀어드립니다
+y튜브 [여의돈스트리트]를 검색하세요
+경기도 이천시 SK하이닉스 본사 로고. 연합뉴스
+SK하이닉스가 다음 달 10일 뉴욕 증시에 상장합니다. 이렇게 되물으실 수도 있을 겁니다.
+
+“이미 코스피에 상장돼 있는데 또 상장한다고?”
+
+맞습니다. 이상하게 들리기도 합니다. SK하이닉스가 이번에 ADR(주식예탁증서) 형태로 상장을 하는 걸 말하는데요. 이 ADR이 무엇인지, 왜 증권가가 호재로 보는지, 그리고 삼성전자도 ADR 형태로 상장에 나설 가능성이 있는지까지 쉽게 알아보겠습니다.
+
+ADR, 이름은 생소하지만 원리는 아주 간단합니다.
+
+예를 들어 미국 투자자가 SK하이닉스에 투자한다고 가정하겠습니다. 원래라면 한국 증권계좌를 만들고, 달러를 원화로 환전한 뒤, 한국 증시에서 주식을 사야 합니다. 상당히 번거롭죠.
+그래서 미국 은행이 중간 역할을 합니다. 한국에 있는 SK하이닉스 주식을 보관한 다음 그 주식을 대신하는 ‘증서’를 미국에서 발행합니다. 미국 투자자는 이 증서를 나스닥에서 달러로 사고파는 것입니다. 결과적으로 ‘미국에서도 거래할 수 있는 SK하이닉스 주식’을 하나 만들어지는 셈입니다.
+
+g렇다면 SK하이닉스는 왜 미국에 상장하는 걸까요. 상장 기본 목적은 자금 조달입니다. SK하이닉스는 ADR 상장을 통해 최대 45조4500억원을 조달할 계획인데요. 이렇게 확보한 자금은 용인 반도체 클러스터와 청주 첨단 패키징 공장, AI 반도체 생산시설 확대에 투자할 계획입니다.
+
+▲영상으로 보기
+
+하지만 SK하이닉스가 45조 4500억원이 모자라서 신주를 발행하는 것은 아닐 겁니다. 더욱 근본적인 목적이 있다는 거죠. 시장 전문가들은 ‘기업가치 재평가’를 주요 목적으로 분석합니다.
+
+현재 미국 메모리 반도체 기업인 마이크론은 SK하이닉스와 비슷한 기업가치를 인정받고 있습니다. 그런데 여러분 아시죠. 기술로 보나 이익으로 보나 SK하이닉스가 마이크론보다 더 뛰어난 회사라는 거. SK하이닉스가 ADR로 미국에 상장되면 최소 마이크론, 혹은 그 이상의 평가를 받을 수 있다는 기대가 커지고 있습니다.
+
+또 앞으로 나스닥100이나 필라델피아 반도체지수 등에 편입된다면 관련 ETF 자금까지 유입될 가능성도 있습니다.
+
+이미 성공한 사례가 있습니다. 세계 최대 반도체 파운드리 기업인 TSMC도 오래전부터 ADR 형태로 미국에서 거래되고 있습니다. 미국 투자자들은 엔비디아를 사듯, 애플을 사듯 TSMC에도 쉽게 투자할 수 있습니다. 실제로 TSMC는 미국 AI 투자 열풍의 대표적인 수혜주 가운데 하나가 됐습니다.
+
+여기서 한 가지 재미있는 점이 있는데요. SK하이닉스 ADR과 한국에 상장된 본주는 서로 전환이 가능합니다.
+
+예를 들어 미국에서 ADR 가격이 한국 주식보다 더 비싸게 거래된다고 가정해 보겠습니다. 그러면 투자자는 한국에서 SK하이닉스 주식을 사고, 이를 ADR로 전환한 뒤 미국에서 더 비싼 가격에 파는 차익거래가 가능하다는 거죠.
+
+다만 이론적으로만 가능하지 실제 개인이 활용하기에는 절차상 어려움으로 쉽지 않을 거고요. 아마 곧바로 본주가 오르면 ADR이 오르고, ADR이 오르면 본주가 따라붙는 현상을 보일 겁니다.
+
+정리하자면 미국에서 프리미엄이 붙으면 그 프리미엄이 국내 주가에도 전달될 수 있다는 이야기입니다.
+
+그런데, 어쨌거나 이것도 유상증자잖아요. 왜 ADR 호재로 SK하이닉스 주가가 올랐을까요? 이번 ADR 상장으로 주식 수가 약 2.5% 늘어나기 때문에 기존 SK하이닉스 주주의 지분 가치가 희석되는 것은 사실입니다.
+
+보통 유상증자는 악재로 받아들여 집니다. 하지만 이번에는 분위기가 다릅니다. 조달한 자금을 AI 반도체 투자에 사용하고, 기업가치가 재평가될 가능성이 더 크다고 시장이 판단한 것입니다.
+
+흥미로운 점은 증권가에서 벌써 삼성전자 ADR 가능성도 거론되고 있다는 겁니다. 최근 해외 투자자들과 만난 증권사들은 삼성전자 ADR에 관한 관심이 예상보다 훨씬 높았다고 분위기를 전해오고 있습니다. 해외 투자자 입장에서는 삼성전자도 미국 증시에서 직접 투자할 수 있기를 원한다는 것입니다.
+
+물론 아직 삼성전자가 ADR 상장을 추진한다고 발표한 것은 아닙니다. 다만 증권가에서는 글로벌 투자자의 접근성을 높이기 위한 자본정책 가운데 하나로 ADR 상장이 충분히 검토될 수 있는 시나리오라고 보고 있습니다.
+
+SK하이닉스가 7월 10일 뉴욕증시에 ADR(주식예탁증서) 형태로 상장합니다. 이미 코스피에 상장된 기업이 왜 또 미국 증시에 상장하는 걸까요?
+ADR의 원리부터 기업가치 재평가 기대, 유상증자인데도 호재로 평가받는 이유, 그리고 삼성전자 ADR 가능성까지 쉽게 설명드립니다. 영상을 통해
+확인해보세요.
+
+투자자라면 꼭 알고 갈 경제 이슈
+쉽고 친절하게 풀어드립니다
+y튜브 [여의돈스트리트]를 검색하세요</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/005/0001857742' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/005/0001857742</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
