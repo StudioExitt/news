@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>삼전닉스 넘어 소부장으로...코스닥, 정책약발 '후끈'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001256933' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8489" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>삼전닉스 넘어 소부장으로...코스닥, 정책약발 '후끈'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">대규모 국가 성장 전략 발표와 정책 지원 강화로, 그동안 대형주에 쏠렸던 투자 자금이 반도체 소재·부품·장비(소부장) 분야의 코스닥 중소형주로 확산될 것이라는 기대감이 커지고 있습니다. 시장은 코스피 대비 코스닥의 상대적 강세를 보이며, 업종 순환매에 대한 기대를 높이고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">정부의 강력한 정책 지원과 자금 투입 계획(국민성장펀드), 그리고 대형주 중심에서 소부장 중심으로 투자 영역이 확장될 것이라는 기대감은 시장 전체에 구조적인 상승 동력을 제공합니다. 이는 코스닥으로 수급을 끌어올리는 매우 긍정적인 요인입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">원익IPS</span> <span class="tag stock-tag">피에스케이</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 소재</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 부품</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#소부장</span> <span class="tag tag-hash">#코스닥</span> <span class="tag tag-hash">#정책수혜</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open"><앵커>
+오늘 발표된 대규모 투자 계획을 계기로 그동안 삼성전자와 SK하이닉스에 집중됐던 수급이 반도체 소재, 부품, 장비 기업들로 확산될 수 있다는
+기대가 커지고 있습니다.
+
+실제로 오늘 코스닥 시장에서는 이런 변화가 나타나고 있습니다.
+
+증권부 고영욱 기자와 자세히 살펴보겠습니다. 고 기자, 시장은 어떻게 보고 있습니까?
+
+<기자>
+시장의 관심은 수혜 업종과 수급 변화에 쏠려 있습니다.
+
+특히 오늘은 반도체 소재, 부품, 장비주를 중심으로 매수세가 확산되며 코스닥이 7% 가량 급등하고 있는데요. 오전 한때 코스닥 매수 사이드카도
+발동됐습니다.
+
+반면 코스피는 현재 2% 가량 하락하고 있어 두 시장의 흐름이 뚜렷하게 엇갈리고 있습니다.
+
+사실 최근 증시는 삼성전자와 SK하이닉스 등 일부 AI·반도체 대형주만 오르는 쏠림 장세가 이어졌습니다.
+
+SK증권에 따르면 상승 종목 대비 하락 종목 비율을 나타내는 ADR은 코스닥 20일 기준 최근 55% 수준까지 떨어졌는데, 통상 바닥권으로
+평가되는 70~80%를 크게 밑도는 수준입니다.
+
+쉽게 말해 삼성전자와 SK하이닉스만 오르고 나머지 종목은 떨어지는 장세가 이어졌다는 의미입니다.
+<기자>
+그런데 오늘은 반도체 소부장주를 중심으로 매수세가 확산되며 분위기가 달라지고 있습니다.
+<앵커>
+왜 코스닥이 주목받고 있는 겁니까?
+
+<기자>
+이번 프로젝트의 핵심이 반도체 생태계 확대에 있기 때문입니다.
+
+청와대는 오늘 반도체와 AI 데이터센터, 피지컬 AI를 중심으로 한 국가 성장 전략을 공개했습니다. 삼성전자와 SK도 투자 계획을 직접
+발표합니다.
+
+시장은 이들 기업에 장비와 소재를 공급하는 코스닥 소부장 기업들과 정책 수혜가 기대되는 성장주에 더 주목하고 있습니다.
+
+실제로 신한투자증권은 최근 보고서 제목을 아예 “코스닥 주도주는 소부장”이라고 붙였는데요.
+
+코스피가 4% 넘게 급락했던 날에도 원익IPS와 피에스케이 등 반도체 장비주가 강세를 보였다고 분석했습니다.
+
+신영증권도 최근 코스닥 시장이 바이오 중심에서 반도체 중심으로 재편되는 초기 단계라고 평가했습니다.
+
+다만 오늘은 바이오 업종도 강세를 보였는데요. 정부 국민성장펀드가 최근 리가켐바이오에 직접 투자한 사실이 알려지면서 관련 기대감이 확산된
+영향으로 풀이됩니다.
+<앵커>
+정책 측면에서도 코스닥에 호재가 있죠?
+
+<기자>
+그렇습니다. 하반기에는 코스닥 활성화 정책도 줄줄이 대기하고 있습니다.
+
+우선 거래소는 프리미엄과 스탠다드 시장으로 구분하는 승강제 도입 방안을 구체화할 예정입니다.
+
+기관 자금이 우량 기업으로 유입되도록 시장 구조를 개편하겠다는 취지입니다.
+
+이와 함께 저PBR 기업을 공개하는 이른바 ‘네이밍 앤드 셰이밍’ 제도도 도입됩니다.
+
+부실기업 퇴출 기준도 강화됩니다. 7월부터 주가 1000원 미만 장기 지속 종목과 시가총액이 낮은 기업에 대한 상장폐지 요건이 강화됩니다.
+
+국민참여형 성장펀드 역시 성장기업 투자 확대를 위한 정책 카드로 꼽힙니다.
+
+실제로 정부는 최근 리가켐바이오에 직접 투자하는 등 반도체와 AI뿐 아니라 바이오 분야에도 정책 자금을 집행하고 있습니다.
+
+결국 좋은 기업에는 자금이 몰리고 부실기업은 퇴출시키겠다는 방향이 분명해진 셈입니다.
+<앵커>
+결국 오늘 시장이 보는 포인트는 뭡니까?
+
+<기자>
+시장이 주목하는 건 AI 반도체 수혜 범위가 넓어질 수 있느냐입니다.
+
+그동안 삼성전자와 SK하이닉스에 집중됐던 반도체 투자 기대가 소재, 부품, 장비 기업으로 확산되고 국민성장펀드 등 정책 자금이 바이오와 AI
+기업으로 유입될 경우 코스닥에도 새로운 주도주가 등장할 수 있기 때문입니다.
+
+신영증권은 국내 증시의 특징으로 주도 업종이 빠르게 교체되는 높은 순환성을 꼽았습니다. 과거 조선과 바이오, 2차전지에 이어 지금은 반도체가
+시장을 주도하고 있다는 분석입니다.
+
+오늘 코스피가 소폭 하락하고 있는 가운데 보인 코스닥의 강세는 시장이 그 가능성을 시험하기 시작했다는 신호로 해석됩니다.
+
+다만 실제 투자 집행과 기업 실적 개선까지 이어질 수 있을지는 계속 확인이 필요하다는 평가입니다.
+<앵커>
+잘 들었습니다. 증권부 고영욱 기자였습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001256933' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001256933</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
