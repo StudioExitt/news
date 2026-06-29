@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>큰 변동성 맞은 K-증시, 국면 전환인가 이대로 폭락인가 [어쨌든 경제]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006318074' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8486" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>큰 변동성 맞은 K-증시, 국면 전환인가 이대로 폭락인가 [어쨌든 경제]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">최근 증시의 급락은 근본적 악재보다는 파생상품 유입과 기관들의 포트폴리오 리밸런싱 등 단기 수급 왜곡이 주원인으로 진단됩니다. AI와 반도체 사이클의 장기 성장 잠재력은 여전하므로, 단기 조정을 '분할 매수' 기회로 삼아 우량주에 접근해야 합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">현재의 급락을 단기 수급 이슈로 규정하고 반도체 및 AI 메가 트렌드의 구조적 성장성을 강조하며, 매크로 환경 분석과 구체적인 종목별 대응 전략(분할 매수)을 제시하여 투자 방향에 큰 영향을 줄 수 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#분할매수</span> <span class="tag tag-hash">#K증시투자전략</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">"AI 패러다임 신뢰 여전…단기 수급 왜곡에 따른 매도 확대는 ‘분할 매수’ 기회"
+최근 한국 증시가 유례없는 급등락을 반복하며 시장의 공포를 키우고 있다. 코스피와 코스닥 지수가 단기 고점을 기록한 이후 수급 불균형과 거시경제 변수가 맞물리며 하루 만에 지수가 4~5%대 급락하는 이른바 ‘롤러코스터’ 장세가 반복되고 있다.
+
+이에 ‘어쨌든 경제’는 최석원 전 SK증권 미래전략부문 대표와의 심층 진단을 통해, 현 폭락장의 본질을 분석하고 거시적 변수와 반도체 사이클의 지속 가능성을 포함한 2026년 하반기 투자 전략을 진단했다.
+
+펀더멘털을 흔든 ‘파생상품 유입’과 ‘포트폴리오 리밸런싱’
+최석원 전 대표는 최근의 증시 폭락이 국내 기업의 이익 훼손 등 근본적인 악재보다는 단기적 수급 왜곡에서 비롯됐다고 진단했다. 특히 이찬진 금융감독원장이 최근 기자간담회에서 우려를 표명한 ‘레버리지 ETF(상장지수펀드)’ 상품의 급격한 자금 유입이 시장 변동성을 배가시키는 촉매 역할을 했다는 분석이다.
+
+최 전 대표는 “특정 초대형 우량주에 연계된 레버리지 상품에 자금이 단기 집중되면서 지수 전체의 변동성 확대를 야기했다”며 “국내 증시 특성상 두 반도체 기업의 시가총액 비중이 매우 높아 파생상품발 충격이 글로벌 증시 전반으로 확산되는 왜곡 현상이 나타났다”고 설명했다. 다만 제도를 인위적으로 없애기보다는 시장이 자정 작용을 통해 이를 소화하기까지 다소간의 시차가 필요할 것으로 내다봤.
+
+기관 및 외국인 투자자들의 ‘반기 말 포트폴리오 비중 조절(리밸런싱)’ 역시 급락을 부추겼다. 상반기 주가 상승 속도가 이익 성장 속도를 크게 앞지르면서 기관의 보유 비중이 중립 수준을 초과하게 되었고, 이에 따라 반기 말·초를 기점으로 차익 실현 및 포트폴리오 재조정 매물이 한꺼번에 쏟아졌다는 해석이다.
+
+빅테크 비용 부담과 ‘피크아웃’ 논란의 실체
+시장 일각에서 제기되는 반도체 업황의 ‘피크아웃(정점 통과)’ 우려에 대해 최 전 대표는 명확하게 선을 그었다. 최근 글로벌 빅테크 기업들의 인프라 투자 비용 상승 움직임이 수요 둔화 우려로 이어졌으나, 이는 확장 국면에서 나타나는 일시적 진통이라는 시각이다.
+
+그는 현 AI 사이클의 위치를 ‘초기에서 중기로 넘어가는 전환점’으로 규정했다. 기업 간 거래(B2B) 관점에서의 실질적인 AI 도입과 대중화는 여전히 제한적인 수준이며, 향후 고사양 반도체의 수요 공급 구조를 감안할 때 장기적 성장 잠재력은 훼손되지 않았다는 판단이다.
+
+“과거 PC나 스마트폰의 도입기에도 반도체 사이클은 수년에 걸쳐 진행되었습니다. 가격이 단기적으로 20% 이상 급락하는 조정 국면을 거친 뒤, 1년 후에는 이전 고점을 대폭 상향 돌파하는 패턴이 반복되었습니다. 현 국면 역시 이익 실적 가시화에 따른 재평가 과정의 일부로 보아야 합니다.”
+
+반도체 투톱의 구조적 차별화… 단기 ‘하이닉스’·장기 ‘삼성전자’ 유효
+투자자들이 가장 고심하는 삼성전자와 SK하이닉스에 대한 대응 전략으로는 두 기업의 사업 포트폴리오 강점을 분리해 접근할 것을 제안했다.
+
+단기 관점에서는 고대역폭메모리(HBM) 시장의 독점적 지위를 유지해 온 SK하이닉스가 반도체 집중도 측면에서 상대적 우위를 지속할 가능성이 높다. 반면, 장기적 관점에서는 삼성전자의 밸류에이션(가치 평가) 매력이 부각될 수 있다. 기술 격차 해소로 내년 중 HBM 품질 분산이 이루어질 것으로 예상되는 데다, 대만 TSMC의 캐파(생산능력) 포화에 따른 파운드리 물량 수혜 및 글로벌 테슬라 등과의 협업 가능성이 상존하기 때문이다. 다른 사업부의 경기 민감성 우려가 이미 주가에 선반영된 만큼, 장기적으로는 삼성전자의 상승 탄력이 더 클 수 있으므로 두 종목을 분할 조정하며 동시 보유하는 전략이 바람직하다는 제언이다.
+
+미 경제 ‘노랜딩’과 1500원대 강달러 고착화의 명암
+하반기 매크로(거시경제) 환경의 경우 미국 경제의 견고함이 지속되는 가운데 환율 변동성이 한국 증시의 하방을 지지하거나 교란하는 요인으로 작용할 전망이다.
+
+최 전 대표는 현재 미국 경제에 대해 고용과 기업 투자의 견실함을 근거로 경기 침체 없는 성장이 이어지는 ‘노랜딩(무착륙)’ 시나리오를 제시했다. 연방준비제도(Fed)의 통화정책 리스크가 상존하나, 새로 취임한 케빈 워시(Kevin Warsh) 연준 의장의 철저한 원칙주의 성향을 감안할 때 경기를 침체로 몰고 갈 무리한 매파적 금리 인상 가능성은 낮다고 보았다.
+
+원·달러 환율은 하반기 중반까지 1500원에서 1550원 선 사이의 높은 수준에서 밴드를 형성할 것으로 예측됐다. 국내 수출 기업들이 경상수지 흑자로 막대한 달러를 확보하고 있음에도, 글로벌 투자 및 자산 보유 선호로 인해 원화 환전 수요가 줄어든 탓이다. 다만 최 전 대표는 “현재의 외국인 매도는 환율 요인보다는 글로벌 자산 리밸런싱에 따른 기계적 매도”라며 환율 고착화가 급격한 자금 유출의 방증은 아니라고 진단했다.
+
+이분법적 시장 구분을 지양하고 ‘변동성’을 관망하라
+최 전 대표는 개인 투자자들이 가장 경계해야 할 태도로 ‘단기 변동성 추종 매매’와 ‘코스피·코스닥의 이분법적 분리’를 꼽았다.
+
+현재 코스닥 시장은 부실기업의 퇴출 시스템 미비로 자금의 효율적 배분이 저해되고 있으며, 철저하게 실적 기반의 차별화 장세가 진행 중이다. 따라서 시장 지수를 추종하는 ETF 방식보다는 개별 우량 종목으로의 압축이 필수적이라는 조언이다.
+
+그는 “전문가들조차 단기 잦은 매매로는 수익을 내기 어려운 극한의 변동성 장세”라며 “AI 및 반도체 메가 트렌드의 장기적 실적 개선 흐름을 신뢰한다면, 단기 급락 조정을 우량주에 대한 가격 메리트 진입 시점으로 삼아 ‘분할 매수’ 후 장기 보유하는 것이 가장 실효성 있는 대안”이라고 제언했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006318074' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006318074</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
