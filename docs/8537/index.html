@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'빚투 돌려막기 악순환' 당국, 증권사 매담대도 점검한다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026-06-29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005378764' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8537" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'빚투 돌려막기 악순환' 당국, 증권사 매담대도 점검한다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금융당국이 투자자들이 미수금을 처리하기 위해 매도금담보대출을 연쇄적으로 사용하는 '돌려막기' 구조를 점검하고 있다. 이는 시장의 과열된 차입 투자를 규제하겠다는 강력한 신호로 해석되며, 향후 증권사의 대출 한도 및 금리 운영에 변화가 예상된다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">금융당국이 레버리지(차입) 기반의 투기적 거래 구조 전반을 재점검함에 따라, 투자자들의 자금 운용 및 증권사 상품 판매 방식에 제동이 걸릴 가능성이 매우 높음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#규제강화</span> <span class="tag tag-hash">#빚투주의</span> <span class="tag tag-hash">#미수금</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">최근 주식 외상거래금액(미수금)이 2조원을 넘어선 가운데 금융당국은 매도금담보대출이 초단타 빚투(빚내서 투자) 자금으로 활용되는지 살펴본다. 미수로 주식을 산 개인투자자들이 미수계좌 동결을 막기 위해 매도금을 담보로 대출받는 '대출 돌려막기'를 하는지 점검하는 것이다. 금융당국이 빚투 과열에 제동을 걸고 있는 만큼 매도금담보대출도 관리대상에 포함될지 주목된다.
+
+29일 금융당국과 금융투자업계에 따르면 최근 금융감독원은 증권사의 매도금담보대출 현황과 투자자들의 활용사례, 제도개선 방안을 전반적으로 들여다보고 있다. 매도금담보대출은 매도주문이 체결된 증권을 담보로 증권사들이 매도대금의 최대 99%까지 빌려주는 대출로 '긴급자금'으로 활용된다. 현재 주식대금은 T(거래일)+2일에 결제되는데 그사이 급전이 필요한 투자자들이 자주 활용한다. 최근에는 단타 투자가 늘면서 주식을 미수로 사들인 후 다음날 처분, 매도금담보대출을 통해 미수금을 내는 사례가 늘고 있다.
+
+금융당국은 매도금담보대출이 이른바 빚투 돌려막기 자금으로 쓰이는지 투자자들의 활용사례를 점검하고 있다. 증권사에서 돈을 빌려 주식을 매수하고, 매도금담보대출을 통해 반대매매·미수동결을 막으면 자기자본 없이 차입거래를 이어갈 수 있어서다. 특히 금감원은 신용융자 거래 한도 소진→미수(외상거래)→매도금담보대출로 이어지는 빚투 구조를 살펴보는 것으로 전해진다. 신용융자는 금융투자업 규정상 증권사의 자기자본 한도(1배)규제가 있지만 미수, 매도금담보대출의 경우 구체적인 규정이 없다.
+
+실제 증권사에서 매도금담보대출 한도를 확대하기도 했다. 키움증권은 지난 10일 매도금담보대출 한도를 계좌별 30억원에서 70억원으로 상향 조정했다. 대출 한도가 늘면 개인투자자들이 그만큼 많은 주식을 팔아 급전 자금으로 활용할 수 있다. 주식투자 관련 온라인 커뮤니티에서도 "매도금담보대출로 미수동결 막기", "단타 후 매담대 자동 설정"과 같은 문의가 잇따라 올라오고 있다.
+
+금융당국이 매도금담보대출을 점검하는 건 과도한 차입투자의 악순환을 끊기 위해서라는 해석이 나온다. 이찬진 금감원장은 지난 22일 기자간담회에서 "미수와 신용융자 거래를 다 합산해 통합적으로 어떤 (관리) 입장을 가져갈지 고민하고 있다. 금융위원회와 함께 입장을 정리해 늦지 않게 대안을 마련하려 한다"며 미수거래에 대해서도 '차입투자'의 관점에서 함께 관리할 것임을 시사했었다.
+
+실제 미수금 규모는 최근 급증하고 있다. 금융투자협회 통계에 따르면 지난 25일 기준 위탁매매 미수금은 2조688억원으로 전일(1조3769억원) 대비 6919억원(50.25%) 늘었다. 일주일 전(1조2294억원)에 비해서는 8394억원(68.28%) 증가한 것이다. 미수금을 갚지 못해 증권사가 할인된 가격에 투자자 주식을 처분하는 반대매매금액은 지난 24일 1108억원으로 일주일 사이 823% 급증했다.
+
+매도금담보대출이 '반대매매 방지책'으로 활용되는 만큼 당국에서도 관리 수준을 끌어올릴 것이란 관측이 나온다. 앞서 이재명 대통령은 T+2일 결제주기를 두고 "증권사들이 그 사이에 해당 자금을 이용해 꽤 혜택을 보는 모양"이라며 증권사들에 부정적 견해를 나타냈다.
+
+업계에서는 대통령의 이 같은 견해가 매도금담보대출 금리 인하에 대한 압박이라고도 해석하고 있다. 업계 고위 관계자는 "청와대, 규제합리화위원회에서 증권사들이 매도금담보대출로 돈을 번다고 보고 있어서 어떻게 해야하는지 긴장하고 있다"며 "각 사가 대출 한도, 금리를 경쟁적으로 운영하는 와중에 난감하다"고 말했다.
+
+한편 매도금담보대출이 '반대매매 방지책'으로 활용되는 만큼 당국에서도 관리 수준을 끌어올릴 것이란 관측이 나온다. 금융감원원이 국회 정무위원회 소속 김상훈 국민의힘 의원실에 제출한 자료에 따르면 올해 1~4월 주요 10개 증권사의 매도금담보대출 이자수익은 약 535억9000만원으로 지난해 연간 이자수익의 81.3%에 달했다</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005378764' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005378764</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
