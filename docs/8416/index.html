@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 투자 부담 커진 빅테크…반도체 변동성 더 커질 것</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #6b7280; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/366/0001175092' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8416" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>AI 투자 부담 커진 빅테크…반도체 변동성 더 커질 것</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">미분류</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">—</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 투자 비용 급증에 따른 CAPEX 부담이 반도체 업계 변동성 확대의 핵심 요인입니다. 빅테크가 자본집약적 기업으로 바뀌는 구조적 변화가 단기적인 투자 불확실성을 키우고 있습니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI투자</span> <span class="tag tag-hash">#반도체변동성</span> <span class="tag tag-hash">#CAPEX</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">현대차증권은 미국 빅테크 기업들의 인공지능(AI) 투자 부담이 커지면서 반도체 업종의 변동성이 당분간 확대될 수 있다고 진단했다. 메모리 가격 상승으로 AI 인프라 투자 비용이 예상보다 빠르게 늘어나면서 투자 지속성에 대한 시장의 의구심이 커지고 있다는 분석이다.
+
+삼성전자 경기도 화성 반도체 사업장./뉴스1
+삼성전자 경기도 화성 반도체 사업장./뉴스1
+김재승 현대차증권 연구원은 29일 보고서에서 “최근 미국 빅테크 기업들의 주가는 약세를 보이면서 반도체 업종 주가에도 악영향을 미치고 있다”며
+“현재 AI 관련 주가 흐름의 핵심은 AI 수요 우려가 아닌, AI 수요를 충족시키기 위한 투자 비용이 급격히 상승하고 있다는 점”이라고 밝혔다.
+
+보고서에 따르면 메모리 반도체 가격 상승은 반도체 업체들의 실적에는 긍정적이지만, 이를 구매하는 하이퍼스케일러들의 설비투자(CAPEX) 부담은
+빠르게 커지고 있다. AI 투자 경쟁은 여전히 이어지고 있지만 시장에서는 이 같은 대규모 투자가 언제까지 지속될 수 있을지를 우려하기 시작했다는 설명이다.
+
+실제 미국 빅테크 기업들의 자금 운용 방식도 변화하고 있다. 과거에는 높은 영업현금흐름을 바탕으로 대규모 자사주 매입을 이어왔지만 AI 인프라
+투자 확대 이후에는 자사주 매입을 줄이는 대신 회사채 발행을 늘리고 있다. AI 투자 확대가 플랫폼 기업을 자본집약적 산업으로 바꾸고 있다는
+분석이다.
+
+김 연구원은 “과거 빅테크 기업들은 강한 현금 창출력을 가진 플랫폼 기업으로 평가받았으나 AI 투자가 늘어나면서 자본집약적 기업 형태로 바뀌고 있는 것”이라며 “플랫폼 기업에서 자본집약적인 기업으로의 변화는 대규모 CAPEX에 대한 불확실성으로 인해 과거 플랫폼 기업 형태와 비교했을 때 밸류에이션이 낮아질 수밖에 없다”고 설명했다.
+
+증권가는 이 같은 투자 부담이 단기간에 해소되기는 어려울 것으로 보고 있다. 현대차증권은 2026년에도 미국 빅테크 기업들의 영업현금흐름 대비
+CAPEX 비율이 90%를 웃도는 수준이 이어질 것으로 전망했다. 이에 따라 AI 투자 지속성에 대한 의구심과 반도체 업종의 주가 변동성도 상당
+기간 이어질 가능성이 있다는 분석이다.
+
+김 연구원은 “빅테크의 CAPEX 지속 우려가 단기간에 해소되기는 쉽지 않다”며 “2026년에는 영업현금흐름 대비 CAPEX 비율이 90%를 넘는 기간이 지속될 전망이다. 타이트한 현금흐름상 AI 투자 지속성에 대한 시장 변동성은 2026년 이어질 전망”이라고 말했다.
+
+다만 현대차증권은 이번 변동성을 AI 산업 성장 둔화로 해석할 필요는 없다고 봤다. AI 투자 경쟁이 이어지는 만큼 투자 부담이 커지는 것은
+불가피한 과정이며, 장기적인 산업 성장성은 여전히 유효하다는 판단이다.
+
+김 연구원은 “과도한 CAPEX는 그만큼 AI 경쟁이 치열하다는 의미”라며 “실제 CAPEX가 감소하기 전까지는 국내 반도체 업종 조정 시 매수
+기회로 삼아야 한다. 국내 반도체 업종은 주가 급등에도 불구하고 여전히 저렴하다”고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/366/0001175092' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/366/0001175092</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
