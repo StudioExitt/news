@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>메모리 대란에 애플 가격 인상 '백기'…가전 전반 가격 인상 도미노 덮치나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/057/0001956269' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8742" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>메모리 대란에 애플 가격 인상 '백기'…가전 전반 가격 인상 도미노 덮치나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">메모리 반도체 공급 부족으로 인한 '메모리 대란'이 발생하며, 애플을 필두로 스마트폰, 노트북, 가전 전반의 가격 인상이 불가피해지고 있습니다. 이는 반도체 값 폭등에 따른 물가상승(칩플레이션) 압력으로 작용하여 최종 소비재 시장의 수요 위축 우려를 키우고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 공급망 문제는 산업 전반의 원자재 비용을 폭등시켜 최종 소비자 물가를 상승시키고 있습니다. 이는 기업 실적에는 단기적 호황 요인이지만, 거시 경제 관점에서는 소비 위축 우려를 증폭시키는 매우 중요한 리스크 요인입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">가전제품</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">스마트폰</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체대란</span> <span class="tag tag-hash">#칩플레이션</span> <span class="tag tag-hash">#소비위축</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">【 앵커멘트 】
+최근 메모리 반도체 공급이 수요를 못 따라 가면서 가격이 급등해 '메모리 대란'이 벌어지고 있습니다.
+상황이 이렇자 메모리가 들어가는 스마트폰과 노트북, 가전 등 가격 인상이 불가피할 전망입니다.
+정설민 기자가 보도합니다.
+
+【 기자 】
+애플 매장에 가격 인상 안내문이 내걸렸습니다.
+
+99만 원짜리 '가성비' 노트북이 석 달 만에 20만 원 인상됐고, 태블릿 PC 등 대다수 제품의 가격도 줄줄이 올랐습니다.
+
+▶ 인터뷰 : 애플 매장 직원
+- "가격이 올랐어요. 4일 정도 됐어요."
+
+메모리 반도체 공급 부족으로 부품값이 급등하자 애플이 백기를 든 건데, 팀 쿡 CEO는 "100년 만에 한 번 있을 홍수"에 비유하며 위기감을
+표했습니다.
+
+결국, 중국산 저가 메모리 도입을 검토하는 상황까지 이르렀습니다.
+
+▶ 스탠딩 : 정설민 / 기자
+- "하지만 메모리 가격은 내년까지는 꺾이지 않을 전망인데요. 올해 3분기에만 최대 50%, 4분기에도 추가로 40% 오를 거라는 전망도
+나왔습니다."
+
+삼성전자와 애플은 하반기 잇따라 스마트폰 신제품 출시를 앞두고, 사상 초유의 300만 원짜리 폰까지 등장할 걸로 예상되는 상황.
+
+▶ 인터뷰 : 서성민 / 서울 은평구
+- "학생이다 보니까 가격이 오른 거에 대해서 부담이 느껴져서 (신제품) 사는 게 어려울 거 같아요."
+
+여기에 AI 기능을 위해 고성능 메모리를 필수로 쓰는 TV나 세탁기 등 가전 전반으로 가격 인상 도미노가 번지는 건 시간 문제라는 관측입니다.
+
+▶ 인터뷰 : 서용구 / 숙명여대 경영학부 교수
+- "반도체 업체한테는 호황이지만 최종 가전 소비자 가격은 올라갈 수밖에 없는 상황이다. 반도체 호황에 의한 물가상승이라는 역설을 맞이하고
+있다."
+
+반도체 값 폭등이 완제품 가격을 끌어올리는 이른바 칩플레이션은 결국 소비 위축으로 이어질 거란 우려가 나옵니다.
+
+MBN뉴스 정설민입니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/057/0001956269' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/057/0001956269</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
