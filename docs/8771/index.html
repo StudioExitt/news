@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>삼전·SK하닉 레버리지 회전율, 전체 ETF 12배…단타 쏠림에 변동성 '극심'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/421/0009033136' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8771" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>삼전·SK하닉 레버리지 회전율, 전체 ETF 12배…단타 쏠림에 변동성 '극심'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">삼성전자, SK하이닉스 등 반도체 대형주 레버리지 ETF에 거래가 과도하게 집중되면서 회전율이 전체 시장의 12배를 기록했습니다. 이러한 단기 자금 쏠림은 옵션 시장 구조와 유사한 '단타' 메커니즘을 형성하여 국내 증시 변동성을 극심하게 확대시키는 주요 원인으로 지목됩니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#변동성위험</span> <span class="tag tag-hash">#단기투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">변동성이 극심했던 6월, 출시 한 달이 갓 넘은 단일종목 레버리지 상장지수펀드(ETF)에 거래가 집중된 것으로 나타났다. 거래대금 기준 회전율은 전체 ETF 시장의 12배를 웃돌았고, 상장구좌 기준 회전율도 100%를 넘기며 단기 손바뀜이 두드러졌다. 삼성전자와 SK하이닉스 등 반도체 대형주 쏠림 현상이 심화한 가운데 이들 종목을 2배로 추종하는 상품에 단기 자금이 몰리면서 시장 변동성을 키우는 요인으로 작용하고 있다는 분석이 나온다.
+1일 뉴스1 집계 결과, 16종 단일종목 레버리지 ETF의 6월 거래대금 기준 회전율은 75.49%로 나타났다. 이는 전체 ETF 시장 회전율(6.06%)의 12.45배에 달하는 수준이다. 레버리지·인버스 상품 회전율(41.39%)과 비교해도 1.8배 이상 높았다. 전체 ETF 시장은 물론 고위험 상품군과 비교해도 단일종목 레버리지 ETF에서 자금 회전이 유독 빨랐다는 의미다.
+상장구좌 기준으로 봐도 손바뀜은 두드러졌다. 같은 기간 거래량을 상장구좌 수로 나눈 상장구좌 기준 회전율은 단일종목 레버리지 ETF 16종 평균 100.39%로 집계됐다. 전체 ETF(37.47%), 레버리지·인버스 ETF(69.94%)를 크게 웃돌았다.
+거래 규모 자체도 단일종목 레버리지 ETF 상품 16종이 전체 시장 내에서 상당한 비중을 차지했다. 지난달 단일종목 레버리지 ETF 상품의 전체 거래대금은 11조 6617억 원으로 ETF 시장 전체 거래대금(31조 743억 원)의 37.52%를 차지했다. 출시 초기 상품군임에도 ETF 시장 거래의 3분의 1 이상이 단일종목 레버리지 상품에서 발생한 셈이다.
+6월 거래대금 1위 상품은 SK하이닉스단일종목레버리지 ETF였는데, 한 달간 4조 3025억 원이 거래됐다. 월말 기준 시가총액이 약 6배 큰 KODEX 200보다도 거래대금이 1.8배 이상 많았다.
+문제는 이 같은 거래 집중이 단순히 ETF 시장 내부의 현상에 그치지 않을 수 있다는 점이다. 단일종목 레버리지 상품 출시 이후 국내 증시 변동성도 급격히 확대하고 있다. 출시 이후 약 한 달 동안 매수·매도 사이드카는 총 11회, 서킷브레이커는 3회 발동됐다. 특히 서킷브레이커는 이달에만 3차례 발동되며 월간 기준 역대 최다 기록을 새로 썼다. 코스피200 변동성지수(VKOSPI)는 지난 29일 96.94에 마감하며 금융위기 이후 최고치를 기록했다.
+단일종목 레버리지 ETF는 옵션 시장의 '숏 감마'와 유사한 수급 구조를 만들어낸다는 점에서 변동성 확대 요인으로 꼽힌다. 운용사와 유동성공급자(LP)는 목표 레버리지 비율을 유지하기 위해 기초자산 가격이 오르면 현물이나 선물을 추가로 사고, 가격이 내리면 보유 물량을 줄여야 한다. 이 과정에서 상승장에서는 매수세가 더해져 상승 폭이 커지고, 하락장에서는 매도 압력이 붙어 낙폭이 확대될 수 있다.
+단일종목 레버리지 ETF 자금 규모가 더욱 커질 것으로 예상되면서 시장의 우려는 더욱 커지고 있다.
+장근혁 자본시장연구원 선임연구위원은 최근 보고서에서 "최근 주가 상승에 따른 순자산가치(NAV) 상승효과로 레버리지 ETF의 순자산총액(AUM)이 증가하고 있는 점을 감안하면 그 영향이 점차 커질 수 있다"고 경고했다.
+이어 "향후 AUM 증가 추이와 변동성 국면에서의 리밸런싱 거래 영향을 지속해서 모니터링해야 한다"며 "투자자들도 주가 상승 이후 위험이 더 커질 수 있다는 점과 종목 쏠림 위험을 감안하여 위험관리에 유의할 필요가 있다"고 조언했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/421/0009033136' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/421/0009033136</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
