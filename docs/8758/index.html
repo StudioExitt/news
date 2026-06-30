@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>하반기 증시 ‘4대 리스크’ 주의보</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/023/0003984990' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8758" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>하반기 증시 ‘4대 리스크’ 주의보</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국민연금의 대규모 리밸런싱 재개, 반도체 쏠림 부작용, 빚투 후폭풍 등 하반기 주식 시장의 주요 위험 요인 4가지를 점검하며 높은 변동성을 경고하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">국민연금의 대규모 자산 매각 가능성과 글로벌 거시 경제 불확실성(미국 금리 인상, 환율)이라는 상위 리스크 요인을 종합적으로 제시하며 시장 전반에 강력한 주의보를 울리고 있기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#국민연금</span> <span class="tag tag-hash">#리밸런싱</span> <span class="tag tag-hash">#미국금리</span> <span class="tag tag-hash">#반대매매</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">변동성 장세 속 위험 요인 분석
+
+작년 시총 대비 공매도 금액 비중이 높았던 종목에 국민연금이 보유한 주식을 5억원 이상 대여한 것으로 나타났다.
+오늘부터 국민연금의 50조원 매물 폭탄이 나오기 시작할까. 국민연금 리밸런싱 재개를 앞두고 투자자들의 불안감이 고조되고 있다. 리밸런싱은 투자한 자산의 비율이 목표를 벗어나면 초과분을 기계적으로 사고파는 조치다. 지난달 29일 ‘한국형 공포 지수’로 불리는 코스피200 변동성 지수(VKOSPI)가 96.94로 사상 최고치를 기록했다. 시장의 불안 심리가 최고점에 달했다는 의미다. 국민연금 매도를 포함, 하반기 투자자들을 불안하게 만들 4대 위험 요소를 점검해 봤다.
+
+① 국민연금 50조원 매물 폭탄?
+
+7월부터 국민연금이 국내 주식 리밸런싱을 재개한다. 1월 기금운용위원회에서 6월 말까지 한시 유예했던 조치가 끝나는 것이다.
+문제는 매도 규모다. 대신증권은 26일 기준 국민연금의 국내 주식 비율을 30%로 추정했다. 올해 목표(20.8%)보다 9.2%포인트 높다.목표치를 164조원 초과한 상태다.
+국민연금은 중장기와 단기로 나눠 각각 ‘전략적 자산 배분(SAA)’과 ‘전술적 자산 배분(TAA)’으로 불리는 투자 비율 결정 재량권을 갖고있다. SAA는 6%포인트, TAA는 2%포인트가 부여된다. 두 재량을 모두 활용하면 총 28.8%까지 국내 주식을 담을 수 있는 셈이다.
+
+신영증권은 국민연금이 TAA를 안 쓰고 SAA만 쓴 경우 코스피 지수별로 매도 규모를 추산했다. 국민연금이 보유 비율 26.8%를 초과하는 주식을 매도하는 시나리오다. 이에 따르면 8000선에서는 27조9000억원이고 9000선에선 74조4000억원, 1만 선에선 120조9000억원이다. 29일 종가(8394.65) 기준으로는 50조원 안팎을 팔아야 한다.
+
+il각에선 국민연금발 ‘매물 폭탄’ 우려가 과장됐다는 평가도 있다. 국민연금이 하루 집행 물량을 줄이고 거래일을 늘려 충격을 분산할 장치를 마련했다는 것이다.
+
+그래픽=김현국
+그래픽=김현국
+①②반도체 쏠림 부작용
+
+올 초부터 현재까지 반도체 업종의 누적 수익률은 226%에 달한다. 약 3.3배나 오른 셈이다. 반도체의 가격 부담이 커졌기 때문에 투자자들은 차익을 실현하고 다음 주도주를 찾을 수밖에 없다.
+
+이런 주도주 변화는 과거 사례에서도 확인된다. 2000년대 중반 조선·철강·화학에서 ‘차화정(자동차·화학·정유)‘, 바이오, 이차전지, ’조방원(조선·방산·원자력)' 등으로 주도주가 빠르게 교체돼 왔다.
+
+그 결과 전년도 수익률 1위 업종이 다음 해에도 1위를 지킨 비율이 한국의 경우 3.8%로 극도로 낮다. S&P500(22.2%)에 크게 못 미쳤다. 만약 쏠림 현상이 지속돼 주도주 손바뀜이 원활하게 이뤄지지 못하면 주가 흐름은 불안해질 수밖에 없다.
+
+②③빚투 후폭풍, 반대매매 급증
+
+빚을 내 주식을 샀는데, 주가가 떨어져 빚을 못 갚게 되는 상황이 되면 증권사가 주식을 강제 매각해 대출금을 회수한다. 이를 반대매매라고 한다.
+최근 하루 평균 반대매매가 500억원대에 이른다. 지난주(22~26일) 누적 반대 매매 규모는 2717억원으로, 전주(648억원)의 4배 이상으로 불어났다. 빚을 내 주식에 투자하는 신용융자 잔고가 38조원에 이르는 만큼 주가 급락은 반대 매매 폭증을 낳고, 투자 심리를 급격히 위축시킬 수 있다.
+
+③④미국발 금리 인상 폭탄
+
+미국발 금리 인상이 증시를 얼어붙게 만들 수 있다. 미국 노동시장이 튼튼한 가운데 중동발 유가 충격이 물가상승 위험을 키운 결과다. 투자은행들은 연말까지 미국 물가 상승률이 3%를 웃돌 것으로 전망한다. 미국이 금리를 올리면 원화 약세와 외국인 증시 이탈 압력이 더 커질 수 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/023/0003984990' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/023/0003984990</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
