@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'2분기만 같아라'…빅테크가 전쟁보다 강했다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001257147' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8764" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'2분기만 같아라'…빅테크가 전쟁보다 강했다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 칩 중심의 반도체주 강세에 힘입어 미국 주요 지수가 상승 마감했으며, 분기 실적 기대감이 시장을 견인하고 있습니다. 다만, AI 투자 지속 가능성 우려와 지정학적 긴장 등 불확실성이 공존하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 기반 반도체 업황의 폭발적인 성장세가 주식 시장의 가장 강력한 핵심 동력으로 작용하고 있음을 보여주며, 단기적 강세장은 확실시되나 지정학적/금리 불확실성이 높아 투자 전략 구분이 필요한 상황.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">엔비디아</span> <span class="tag stock-tag">AMD</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI #반도체주 #나스닥</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">인공지능(AI) 칩을 포함한 기술주 강세에 힘입어 30일(현지시간) 미국의 3대 지수는 상승 마감했다.
+
+이날 뉴욕증시에서 다우존스30 산업평균지수는 전장보다 136.46포인트(0.26%) 오른 52,319.20에 거래를 마쳤다.
+
+스탠더드앤드푸어스(S&P) 500 지수는 전장보다 58.93포인트(0.79%) 오른 7,499.36에, 기술주 중심의 나스닥 종합지수는 전장보다 393.58포인트(1.52%) 오른 26,213.72에 각각 마감했다.
+
+올 상반기와 2분기를 마감하는 거래일이었던 이날 미국 3대 주요 지수는 다우 평균은 0.3%, S&P500 지수는 0.8%, 나스닥 지수는 1.5% 올랐다.
+
+2분기 동안 나스닥은 20% 상승, S&P500은 약 14% 올랐다. 이는 2020년 2분기 이후 가장 큰 분기별 상승률이며 다우존스 지수 역시 같은 기간 12% 이상 상승, 2022년 4분기 이후 가장 강력한 상승세를 기록했다.
+
+시장에서는 미국과 이란의 군사적 긴장이 증가하지 않는 한 투자심리를 저해할 만한 재료가 눈에 띄지 않았다는 분석이 나온다. 투자자들은 여전히 금리를 제외하면 다음 달 시작되는 2분기 실적이 AI 투자 확대가 실제 실적으로 이어지고 있는지 확인할 시험대가 될 것으로 보고 있다.
+
+오리온의 팀 홀랜드 최고투자책임자(CIO)는 "2026년 상반기의 교훈은 금리를 제외하면 기업 실적이 거의 무엇보다 중요하다는 것"이라며 "미국과 이란 간 적대 행위가 확대되지 않는다면 올해 남은 기간 강세장이 더 넓은 종목군으로 확산될 것"
+
+이어 "시장의 이면을 살펴보면 올해 들어 지금까지, 적어도 6월 한 달 동안은 성장주보다는 가치주가 좋은 성과를 보였다"며 "금리가 다소 높은 수준을 유지할 가능성이 있는데 이는 성장주에는 역풍이 될 수 있지만 경기 변동에 민감한 주식 등에는 순풍이 될 수 있다"고 설명했다.
+
+이날 시장에서 인공지능(AI) 칩을 포함한 반도체주 강세가 두드러졌다. 엔비디아 주가는 1% 넘게 올랐고, AMD와 인텔도 각각 7% 상승했다.
+
+밴에크 반도체 상장지수펀드(ETF)인 에스엠에이치(SMH)는 3% 올라 연초 대비 상승률은 81%에 달한다.
+
+인공지능(AI) 종목 중심의 랠리는 당분간 이어질 것이라는 전망도 나온다. 글로벌 투자은행 UBS는 이날 보고서에서 시장의 핵심 동력인 AI 랠리 경계감과 함께 낙관론을 내놨다. AI 투자 증가세의 지속 가능성에 대한 우려가 여전히 남아있다는 것이다.
+
+UBS는 "이번 주 증시는 낙관적으로 출발했지만 AI 투자 지출의 지속 가능성에 대한 우려는 여전히 남아 있다"면서 "장기적으로 AI 관련 종목은 여전히 주식시장 성과를 좌우하는 핵심 요인이 될 것"이라고 전했다. 이어 "AI 관련 종목 안팎으로 분산투자가 중요하며 데이터센터 운영업체와 일부 결제 기업 등 상대적으로 방어적인 AI 수혜주도 고려할 필요가 있다"고 덧붙였다.
+
+미국과 이란이 중재국 카타르 도하에 각각 대표단을 파견하며 대화 재개에 나서면서 원유 공급 정상화 기대감이 커지면서 국제 유가는 하락했다. 이날 ICE선물거래소에서 8월 인도분 브렌트유 선물은 배럴당 72.92달러로 전장보다 0.3% 내렸다. 뉴욕상업거래소에서 9월 인도분 서부텍사스산원유(WTI) 선물은 배럴당 69.5달러로 1.8% 하락했다.
+
+d만 미국과 이란의 협상 재개는 여전히 불안한 모습이다. 이날 마지드 빈 모하메드 알안사리 카타르 외무부 대변인은 "재러드 쿠슈너와 스티브 윗코프 특사가 도하에 있으나 이번에는 이란 관계자와 직접적으로 만나지 않는다"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001257147' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001257147</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
