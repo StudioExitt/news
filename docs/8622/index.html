@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 인프라 병목 현상…구글도 “계약한 만큼 공급 못해”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='원문링크: https://n.news.naver.com/mnews/article/011/0004636369' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8622" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>AI 인프라 병목 현상…구글도 “계약한 만큼 공급 못해”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">글로벌 빅테크 기업들(구글, 메타)이 감당하지 못하는 AI 컴퓨팅 수요 적체 현상(병목)을 겪는 것으로 확인되었습니다. 반면, 국내에서는 정부와 주요 그룹들이 총 550조 원 규모의 AIDC 구축을 선언하며 아시아태평양 최대 인프라 허브 도약을 목표하고 있어 강력한 자본 지출 사이클이 예상됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 산업의 필수 인프라 및 자본적 지출(CAPEX) 규모가 전례 없는 수준으로 커지고 있음을 보여주지만, 글로벌 공급 병목과 국내 소송 리스크 같은 변수도 존재하여 중립적인 판단이 필요함. 다만 장기 성장 동력은 명확하게 부각됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI인프라</span> <span class="tag tag-hash">#AIDC</span> <span class="tag tag-hash">#반도체사이클</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■AI 프리즘 [글로벌 뉴스]
+빅테크도 뚫지 못한 AI 컴퓨팅 장벽
+DWS “코스피 PER 8배, 아직 비싸지 않다”
+中 CXMT, 텐센트와 4.5조 D램 계약
+▲ AI 프리즘* 맞춤형 경제 브리핑
+* 편집자 주: ‘AI PRISM’(Personalized Report &amp; Insight Summarizing Media)은 한국언론진흥재단의 지원을 받아 개발한 ‘인공지능(AI) 기반 맞춤형 뉴스 추천 및 요약 서비스’입니다. 독자 유형별 맞춤 뉴스 6개를 선별해 제공합니다.
+[주요 이슈 브리핑]
+■ AI 인프라 병목 현실화: 구글이 메타에 자사 AI 모델 ‘제미나이’ 컴퓨팅 용량을 요구한 만큼 제공하지 못한 것으로 드러났다. 알파벳의 미이행 수주액(backlog)은 4600억 달러로 전 분기 대비 2배에 육박하며, 처리한 용량의 23배에 달하는 수요가 적체된 상태다.
+국제결제은행(BIS)은 이날 연례 보고서에서 AI 낙관론이 장기 투자 침체로 이어져 글로벌 금융시장을 흔들 수 있다고 경고했다.
+■ 한국 AI 인프라 허브화: 정부와 SK그룹·GS(078930)그룹·네이버가 손잡고 울산·동해·세종 등 권역별 거점에 2029년까지 총 8.4GW 규모의 AI 데이터센터(AIDC)를 구축한다. 투자 유치를 포함한 총 투자 규모는 550조 원이며, 2단계 확장까지 완료하면 국내 AIDC 용량은 18.4GW에 달해 아시아태평양 최대 수준의 AI 인프라 허브 도약을 목표로 한다.
+[메모리 담합 소송 파장]: 미국 소비자 14명과 중소기업 3곳이 삼성전자(005930)·SK하이닉스(000660)·마이크론을 상대로 캘리포니아 연방법원에 D램(DRAM) 가격 담합 소송을 제기했다. 원고들은 세 기업이 2022년부터 공급량과 가격을 담합해 4년간 D램 가격을 약 700% 끌어올렸다고 주장하며, 집단소송으로 확대될 경우 피소 기업은 손해액의 3배를 배상해야 한다.
+[글로벌 투자자 관심 뉴스]
+1. 구글도 AI 인프라 병목…계약 용량 감당 못해 성장 발목 잡히나
+- 핵심 요약: 구글이 올해 3월 메타에 AI 모델 ‘제미나이’ 컴퓨팅 용량을 계약한 만큼 공급할 수 없다고 통보하면서 AI 인프라 병목이 빅테크 전반의 문제임이 확인됐다. 알파벳은 1분기 클라우드 매출이 사상 처음으로 200억 달러를 돌파했지만, 미이행 수주액은 4600억 달러로 전 분기 대비 2배에 육박하는 수요 적체를 안고 있다. 한편 BIS는 연례 보고서에서 현재 AI 투자 열풍이 3년간 4.5배 수준으로, 1990년대 닷컴 버블(5년간 1.9배)을 훌쩍 뛰어넘는다며 장기 침체로 이어질 가능성을 경고했다. 메타는 구글의 제한 조치 이후 직원들에게 AI 사용 단위인 토큰을 더 효율적으로 쓰도록 권고하는 상황이다.
+2. 유럽의 ‘큰 손’ DWS “AI發 코스피 상승세 지속…MSCI 선진지수 편입은 시간 문제”
+- 핵심 요약: 유럽 대표 자산운용사 DWS 그룹(운용 자산 1조 930억 유로·약 1900조 원)이 한국 증시의 상승세가 지속될 여력이 있다는 분석을 내놨다. 요하네스 뮐러 DWS 글로벌 리서치 총괄은 “한국 증시의 12개월 선행 주가수익비율(PER)이 약 8배 수준으로 비싸다고 할 수 없다”며, 현 상승세의 지속 여부는 AI 인프라 투자에 따른 자본지출(CAPEX) ‘슈퍼 사이클’이 얼마나 이어지느냐에 달려 있다고 짚었다. DWS는 현재 아시아 신흥시장에 대해 ‘비중확대(Overweight)’ 전략을 유지하고 있으며, 특히 한국 시장에 대해 긍정적인 시각을 갖고 있다고 밝혔다. 이번에 불발된 모건스탠리캐피털인터내셔널(MSCI) 선진국지수 편입에 대해서도 “시간 문제”라는 낙관적 전망을 제시했다.
+3. 최태원 “AIDC는 지능 생산하는 공장”…울산·동해·세종에 550조 드라이브
+- 핵심 요약: 정부와 SK그룹·GS그룹·네이버가 손잡고 울산·동해·세종 등 권역별 거점에 2029년까지 총 8.4GW 규모의 AI 데이터센터(AIDC)를 구축하기로 했다. 총 투자 규모는 550조 원이며, 2035년 2단계 확장까지 마무리되면 국내 AIDC 용량은 총 18.4GW에 달해 아시아태평양 전체의 약 25%를 차지할 전망이다. GS그룹이 강원 동해에 구축하는 AIDC는 아시아 최대 규모로, 총투자비만 30조 원이며 GPU와 메모리까지 포함하면 120조 원 수준에 이를 것으로 예측된다. 최태원 SK그룹 회장은 AIDC를 “지능을 생산하는 공장”으로 규정하며, 서비스형 GPU(GPUaaS) 등 고부가가치 플랫폼 사업으로 확장할 계획을 밝혔다.
+[글로벌 투자자 참고 뉴스]
+4. 상장 앞둔 中 CXMT, 텐센트에 5년간 4조 5000억 원어치 D램 공급한다
+- 핵심 요약: 중국 메모리 반도체 제조업체 창신메모리테크놀로지(CXMT)가 텐센트홀딩스와 최대 5년간 200억 위안(약 4조 5000억 원) 규모의 서버용 D램 공급 계약을 체결했다. CXMT는 2025년 기준 세계 4위 D램 제조업체로, 올해 1분기 매출이 전년 동기 대비 700% 급증한 508억 위안을 기록하고, 16억 위안 손실에서 250억 위안 순이익으로 흑자 전환하는 데 성공했다. 또한 상하이증권거래소 커<0xEC><0xB4><0xB9>반(科創板·과학혁신판)에 295억 위안(약 6조 7000억 원) 조달을 목표로 하는 기업공개(IPO)가 승인된 상태로, 대규모 장기 공급 계약 체결로 IPO에 대한 관심이 높아지는 양상이다. 다만 로이터통신은 CXMT의 DDR5 규격 D램 생산 수율이 아직 낮은 편이며 글로벌 상위 경쟁사들과 기술 격차가 여전히 존재한다고 평가했다.
+5. 삼성·하닉·마이크론, 美서 메모리 담합 혐의로 피소
+- 핵심 요약: 미국 소비자 14명과 중소기업 3곳이 삼성전자·SK하이닉스·마이크론을 상대로 캘리포니아 연방법원에 D램 가격 담합 소송을 제기했다. 원고들은 세 기업이 2022년부터 고대역폭메모리(HBM·고성능 AI 칩의 필수 부품)로의 전환을 내세워 D램 공급량을 줄이고 4년간 가격을 약 700% 끌어올렸다고 주장했다. 담합 전문 로펌 바테이던이 D램 탑재 제품을 구매한 소비자와 기업 전체를 대변하는 집단소송을 목표로 하고 있어, 향후 집단소송으로 확대될 경우 피소 기업들은 손해액의 3배를 배상해야 하는 상황이다. 다만 투자은행(IB) 제프리스 등 업계는 이번 소송이 적어도 올해 말까지는 메모리 가격에 영향을 미치지 않을 것으로 내다봤。</div><div class='news-src'>원문링크: <a href='원문링크: https://n.news.naver.com/mnews/article/011/0004636369' style='color:#64748b;word-break:break-all'>원문링크: https://n.news.naver.com/mnews/article/011/0004636369</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
