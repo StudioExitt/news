@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피, 삼성전자 5%대 상승에 2%대 강세…코스닥은 하락 반전</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026-06-30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006318886' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8666" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피, 삼성전자 5%대 상승에 2%대 강세…코스닥은 하락 반전</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 대형주의 주가 상승세에 힘입어 코스피 지수가 2%대 강세를 기록했습니다. 다만, 외국인 투자자는 반기 리밸런싱 여파로 대규모 차익 실현 매도를 지속하고 있습니다.
+시총 상위 종목들은 전반적으로 올랐으나, LG에너지솔루션 등 일부 섹터는 하락 마감하며 시장의 혼조세를 보여주었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 대형주 실적 및 산업 지표(SOX) 강세에 힘입어 시장 전체의 상승 탄력이 높게 나타났습니다. 다만 외국인의 매도는 단기적인 부담 요인입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #코스피강세 #기관매수</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">韓 반도체 대형주 투자 소식에 美 장비주 강세…SOX +3.8%
+반기 리밸런싱 막바지 8일째 외국인 순매도…6월 누적 46조7000억 돌파
+기관 2조2799억 순매수 지수 견인…삼성전기 7%대, SK스퀘어 7%대 급등
+삼성전자 5%대 급등...SK하이닉스도 3%대 상승 강보합권에서 출발했던 코스피가 30일 오후들어 반도체 대형주의
+상승세가 확대하며 2%대 강세를 보이고 있다. 외국인은 반기 리밸런싱 여파로 대규모 매도를 이어가고 있다.
+엠피닥터에 따르면 오후 1시 31분 현재 코스피는 전 거래일 대비 220.72포인트(2.63%) 오른 8615.37을 기록 중이다.
+유가증권시장에서 기관이 2조2799억원 순매수하며 지수 상승을 주도하고 있다. 개인도 1256억원 매수 우위다. 반면 외국인은
+2조4234억원어치 팔며 차익 실현을 지속하고 있다. 프로그램 매매는 차익과 비차익을 합쳐 1조3038억원 순매도다.
+강진혁 신한투자증권 선임연구원은 “한국 반도체 대형주의 대규모 투자 소식 영향으로 미국 장비주인 어플라이드머티어리얼즈(+10.8%),
+램리서치(+8.4%) 등이 강세를 보이며 필라델피아 반도체지수(SOX)가 3.8% 올랐다”며 “삼성전자, 삼성전기 등이 지수를 지탱하고 있다”고
+분석했다. 이어 “반기 리밸런싱 막바지로 8거래일째 반도체 중심의 외국인 현물 순매도가 이어지고 있다”며 “6월 누적 순매도 규모는
+46조7000억원을 돌파했다”고 덧붙였다.
+시가총액 상위 종목은 일제히 상승하고 있다. SK스퀘어(402340)(+7.20%), 삼성전기(009150)(+6.87%),
+삼성전자(005930)(+5.26%), SK하이닉스(000660)(+3.20%), 삼성전자우(005935)(+3.09%),
+삼성물산(028260)(+2.02%)는 오르고 있다. 현대차(005380)(+0.60%), 삼성생명(032830)(+0.61%)도 강보합권이다.
+반면 LG에너지솔루션(373220)(-8.36%), 삼성바이오로직스(207940)(-2.35%)는 하락하고 있다.
+이 시각 코스닥은 4.50포인트(0.49%) 내린 916.07에 거래되고 있다. 개인이 3259억원 매수 우위를 보이고 있으나, 외국인과 기관은
+각각 2430억원, 823억원 매도 우위다. 코스닥은 30주년 행사를 앞두고 바이오·2차전지에서 소부장으로 순환매가 나타나며 보합권에 머물고
+있다.
+코스닥 시장 시총 상위주는 혼조세다. 주성엔지니어링(036930)(+12.74%), 원익IPS(240810)(+6.60%),
+이오테크닉스(039030)(+3.29%), 레인보우로보틱스(277810)(+1.16%), HLB(028300)(+1.18%) 등이 오르고 있다.
+반면 에코프로(086520)(-7.97%), 에코프로비엠(247540)(-5.37%), 알테오젠(196170)(-3.62%),
+코오롱티슈진(950160)(-4.00%), 리노공업(058470)(-1.88%)은 하락하고 있다.
+업종별로는 전자장비와기기가 6%대 뛰고 있고 레저용장비와제품, 전기장비, 반도체와반도체장비 등이 3~5% 오르고 있다. 반면 전기제품이 5%대
+밀리고 있고 건강관리업체및서비스, 생물공학, 화학 등도 4%대 하락하고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006318886' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006318886</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
