@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 메가프로젝트 띄운 정부…“반도체 넘어 전력·로봇까지 확산”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #6b7280; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.06.30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006318478' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8605" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>AI 메가프로젝트 띄운 정부…“반도체 넘어 전력·로봇까지 확산”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">미분류</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">—</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부가 발표한 대규모 3대 메가프로젝트(반도체, 피지컬 AI, 데이터센터)를 통해 국내 산업 투자 사이클이 물리적 인프라 전반으로 확장될 전망입니다. 특히 AI 데이터센터 증설에 따른 전력망 및 에너지 솔루션 기업들이 핵심 수혜주로 주목받고 있습니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전력</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">기계</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI메가프로젝트</span> <span class="tag tag-hash">#산업인프라</span> <span class="tag tag-hash">#반도체사이클</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">유안타증권 보고서
+서남권 제2 반도체 거점·충청권 HBM 후공정 육성
+AI 데이터센터 2035년 18.4GW 목표로 인프라 확충
+유안타證 “AI Capex 2단계…K-제조업 전반 수혜” 정부가 반도체와 피지컬 인공지능(AI), AI 데이터센터를 축으로 한 ‘대한민국 대도약 3대 메가프로젝트’를 발표하면서 주식시장에서도 AI 투자 사이클의 확산 기대가 커지고 있다. 그동안 고대역폭메모리(HBM)와 메모리 가격 상승을 중심으로 반도체 대형주가 AI 랠리를 주도했다면, 앞으로는 데이터센터와 전력망, 발전·송전, 냉각, 로봇, 후공정, 소재·부품·장비로 투자 테마가 넓어질 수 있다는 분석이다.
+
+이재원 유안타증권 연구원은 30일 보고서에서 이번 정책을 ‘AI Capex 2단계’로 해석했다. 1단계가 HBM과 메모리 가격 상승을 통한 반도체 대형주 주도 장세였다면, 2단계는 AI 인프라 구축 과정에서 필요한 물리적 병목을 해소하는 산업 전반으로 수혜가 확산하는 국면이라는 설명이다.
+
+(표=유안타증권)
+
+정부가 제시한 3대 메가프로젝트는 반도체, 피지컬 AI, AI 데이터센터로 구성됐다. 반도체 분야에선 서남권을 수도권에 이은 제2 반도체 생산거점으로 조성하고, 용인·평택 기존 클러스터의 조기 완공을 추진한다. 충청권은 HBM 후공정 거점으로 육성한다. 유안타증권은 이를 통해 삼성전자와 SK하이닉스를 중심으로 한 메모리 초격차 유지와 함께 HBM, 후공정, 소부장, 전력반도체까지 수혜 범위가 넓어질 수 있다고 봤다.
+
+투자 규모도 크다. 보고서에 따르면 정부 발표 기준 서남권 반도체 <0xED><0x8C><0xB9> 4기 투자 규모는 800조원, 충청권 HBM 패키징은 81조원이다. AI데이터센터에는 550조원, 차세대 반도체 연구개발(R&D)에는 30조원이 제시됐다. 삼성전자(005930)는 기존 투자 계획을 포함해 평택·용인2030조원, 호남 425조원, 충청 140조원, 영남 60조원 규모의 투자 계획이 언급됐다. SK하이닉스(000660)는 AIDC1000조원, 용인 D램 600조원, 청주 낸드 100조원, 서남권 400조원 규모가 제시됐다.
+
+피지컬 AI 프로젝트는 제조업 AI 전환과 AI 로봇 상용화가 핵심이다. 정부는 데이터팩토리 구축, 독자 피지컬 AI 파운데이션 모델 개발, 로봇 부품 국산화 등을 추진한다. 매년 AI 로봇 1000대 이상을 보급하고 AI 로봇 인력 1만명을 양성하며, 3년 내 독자 모델을 개발한다는 목표도 포함됐다. 이 연구원은 이를 두고 AI가 소프트웨어와 클라우드 영역을 넘어 제조, 물류, 돌봄, 농업, 안전, 국방 등 현실 산업으로 확산하는 흐름이라고 평가했다.
+
+AI 데이터센터 역시 핵심 축이다. SK(034730)와 GS(078930), 네이버 중심의 대규모 AI 연산 인프라 구축이 추진되고, 국산 신경망처리장치(NPU), 전력·냉각 솔루션, 클라우드 기술과의 연계도 제시됐다. 목표는 2035년까지 총 18.4GW 규모다. 이 연구원은 데이터센터가 커질수록 병목은 연산 능력에서 전력망, 발전, 저장, 냉각으로 이동한다며 전력기기와 발전설비, 에너지저장장치(ESS), 데이터센터 장비·솔루션이 핵심 수혜 영역이 될 수 있다고 짚었다.
+
+유안타증권은 한국 증시의 투자 포인트가 단순한 AI 사용국이 아니라 AI 투자 수요를 제조업 이익으로 흡수하는 공급국이라는 점에 있다고 봤다. 한국은 메모리 반도체와 전력기기, 원전·발전설비, 2차전지를 동시에 보유한 드문 제조업 공급망이라는 설명이다. 미·중 갈등 이후 중국 중심공급망 일부가 고부가·고신뢰 영역에서 한국으로 이전되는 점도 구조적 수혜 요인으로 꼽았다.
+
+다만 실제 집행까지는 넘어야 할 산이 적지 않다. 전력과 용수, 부지, 인력 확보가 병목으로 작용할 수 있고, 반도체의 경우 장기적으로 공급과잉 우려가 제기될 가능성도 있다. 이 연구원은 “이번 프로젝트가 단기적인 메모리 공급난 해소에 영향을 주기는 어렵다”며 “단기 주가 반응은 투자 총액보다 실제 착공 속도, 전력 인프라 확보, 기업별 이사회 승인, 수요 가시성에 따라 업종별로 차별화될 것”이라고 전망했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006318478' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006318478</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
