@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>일 거래대금 100조원에도 증권주는 소외…“순환매 땐 다시 볼 때”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006319533' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8808" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>일 거래대금 100조원에도 증권주는 소외…“순환매 땐 다시 볼 때”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">높은 거래대금에도 불구하고, 반도체 대형주에 자금이 쏠리면서 증권주는 시장 흐름에서 소외되고 있다. 전문가들은 향후 ETF 성장 및 금융당국의 정책 변화로 인해 순환매가 발생할 경우 증권주 재평가가 필요하다고 조언하며 '비중 확대'를 유지했다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">증권주는 현재 주도주에 자금이 쏠려 단기적으로 소외되는 현상이지만, 거시적 환경(높은 거래대금, ETF 성장)과 정책 변화를 근거로 향후 순환매 시 반등 가능성이 높다고 판단하여 투자 의견을 제시하고 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한국금융지주</span> <span class="tag stock-tag">삼성증권</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증권주</span> <span class="tag tag-hash">#순환매</span> <span class="tag tag-hash">#ETF시장</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">SK증권 보고서
+반도체 쏠림에 증권주, 코스피 대비 56.5%p 언더퍼폼
+단일종목 레버리지 ETF 성장에 브로커리지 판도 변화
+한국금융지주·삼성증권 최선호주 제시 일평균 거래대금이 100조원을 넘어서는 증시 호황에도 증권주가 유독 소외되고 있다는 분석이 나왔다. 지수 상승과 거래대금 증가는 증권업 실적에 우호적인 변수지만, 반도체 대형주로 수급이 쏠리면서 정작 증권주는 시장 흐름에서 밀려났다는 평가다. 다만 거래대금의 절대 수준이 여전히 높고 상장지수펀드(ETF) 시장 성장세가 이어지는 만큼, 순환매가 나타날 경우 증권주에 다시 주목할 필요가 있다는 조언이다.
+
+장영임 SK증권 연구원은 1일 보고서에서 “유례없는 지수 상승과 일평균 거래대금 100조원 시대에도 증권업종 주가는 크게 부진하다”며 “2011년 차화정 랠리와 마찬가지로 특정 주도주에 수급이 집중되며 증시 호조에도 증권주가 소외되는 역설적인 현상이 나타나고 있다”고 말했다.
+
+(표=SK증권)
+
+보고서에 따르면 현재 일평균 거래대금은 100조원대, ETF까지 포함하면 140조원대를 기록하고 있다. 그러나 KRX 증권지수는 올해 들어 42.7% 상승하는 데 그치며 코스피 대비 56.5%포인트 언더퍼폼했다. 특히 2분기엔 코스피 대비 부진 폭이 76.9%포인트에 달했다. 실적 호조와 거래대금 증가라는 호재에도 반도체 중심의 수급 쏠림과 거래대금 피크아웃 우려가 증권주 투자심리를 눌렀다는 설명이다.
+
+장 연구원은 현재 국면을 2011년 차화정 랠리와 비교했다. 당시에도 자동차·화학·정유 등 특정 주도주로 자금이 몰리면서 지수와 거래대금은 견조했지만 증권주는 먼저 하락했다. 다만 그는 “2011년 하반기에는 차화정 업황 둔화와 미국 신용등급 강등, 유럽 재정위기 등 매크로 악재가 겹쳤지만, 현재는 반도체 업황과 한국 수출이 견조하고 거래대금도 증가세를 이어가고 있다”고 진단했다.
+
+증권주 반등의 핵심 변수로는 거래대금의 ‘확산’이 꼽혔다. 단순히 코스피 대형주나 반도체에 거래가 몰리는 수준을 넘어 코스닥, ETF, 자산관리(WM) 등으로 회전율이 확산돼야 증권주 재평가가 가능하다는 의미다. 장 연구원은 “반도체 주도 장세에서 소외되는 것은 어쩔 수 없지만, 순환매가 나타난다면 증권주에 관심을 한 번 더 가져야 할 때”라고 말했다.
+
+ETF 시장 성장도 증권주에 새로운 재료가 될 수 있다고 봤다. 5월 단일종목 레버리지 ETF 출시 이후 ETF 거래대금이 빠르게 늘면서 전체 거래대금 증가세를 떠받치고 있기 때문이다. 특히 ETF 거래대금 확대는 단순 수수료 증가를 넘어 브로커리지 점유율 판도에도 영향을 주고 있다.
+
+SK증권에 따르면 6월 기준 KRX·NXT·ETF를 합산한 브로커리지 점유율은 키움증권(039490)이 14.8%, 한국투자증권이 13.6%로 격차가 1.2%포인트까지 좁혀졌다. 한국투자증권은 DMA 서비스를 바탕으로 ETF 거래대금 점유율을 크게 끌어올렸다. DMA는 기관·외국인 등이 보다 빠른 주문 경로를 활용하는 서비스로, 단일종목 레버리지 ETF 거래가 늘면서 점유율 경쟁의 변수로 부상했다.
+
+정책 기대도 남아 있다. 금융당국은 외국인 통합계좌의 투자 가능 대상을 국내 ETF로 확대하는 방안을 추진하고 있고, 하반기엔 코스닥 활성화 정책도 구체화될 예정이다. 장 연구원은 이 같은 정책이 현재 코스피 대형주에 집중된 거래대금을 코스닥과 ETF 시장으로 일부 확산시키고 회전율을 높이는 계기가 될 수 있다고 평가했다.
+
+SK증권은 증권업종에 대해 투자의견 ‘비중 확대’를 유지했다. 투자전략으로는 브로커리지 부문을 기초 체력으로 갖추면서 주식시장 강세의 수혜를 극대화할 수 있는 WM·운용 포트폴리오를 보유한 종목 중심의 접근을 제시했다.
+
+최선호주로는 한국금융지주와 삼성증권(016360)을 꼽았다. 한국금융지주는 ETF 점유율 확대를 통해 브로커리지 경쟁력을 보여주고 있고, 증시 강세에 따른 ELS 조기상환과 운용 자회사 유가증권 평가이익도 기대된다는 평가다. SK증권은 한국금융지주의 올해 자기자본이익률(ROE)을 21.8%로 전망하면서도 주가순자산비율(PBR)은 0.86배에 불과하다고 분석했다.
+
+삼성증권에 대해서는 리테일 경쟁력을 바탕으로 브로커리지와 자산관리 부문의 이익 기여도가 높다고 평가했다. 장 연구원은 “최근 증권주 수익률은 업황과 실적 대비 과도하게 부진하다”며 “거래대금 확산과 회전율 제고 여부가 향후 증권주 반등의 관건이 될 것”이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006319533' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006319533</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
