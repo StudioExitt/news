@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상반기 기술주 최대 승자, 미국 아니었다…그럼 누구?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006320416' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8980" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>상반기 기술주 최대 승자, 미국 아니었다…그럼 누구?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">상반기 글로벌 기술주 랠리에서 미국 시장보다 한국과 신흥국이 더 큰 폭의 성장을 기록하며 최대 승자로 떠올랐습니다. 특히 반도체 관련 기업(SK하이닉스, TSMC 등)이 전 세계 주가 상승을 강력하게 견인한 것으로 분석되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">신흥국과 한국의 기술주가 역사적인 급등세를 기록하며 전 세계 기술주 흐름을 주도했습니다. 이는 반도체 사이클의 강력한 회복세와 AI 관련 인프라 수요 폭증에 기인합니다. 비록 하반기 변수로 통화정책이 언급되었지만, 현재 시장 분위기는 극도로 긍정적입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">TSMC</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #기술주 #신흥국랠리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">MSCI 신흥국 기술주지수 90%↑, 美 압도
+코스피 101.1% 급등…신흥국 랠리 견인
+SK하닉 300%·TSMC 55%…반도체 주도
+"하반기 변수는 통화정책"…연준 인상 전망 올해 상반기 글로벌 증시에서 기술주가 최대 강세 업종으로 떠오른 가운데, 최대 수혜자는 미국이 아닌 한국과 신흥국 등이었던 것으로 나타났다. 한국 코스피지수는 상반기 101.1% 급등했고, SK하이닉스 주가는 약 300% 폭등하며 글로벌 기술주 랠리를 주도했다.
+
+코스피가 사상 첫 9000을 돌파하며 한국 자본시장 역사를 새로 쓴 지난 6월 18일 서울 중구 하나은행 본점 하나은행 본점에서 직원들이 코스피 9000 돌파 기념 타종 세리머니를 하고 있다. (사진=이데일리 이영훈 기자)
+
+신흥국 기술주, 미국 압도
+
+1일(현지시간) CNBC에 따르면 MSCI의 업종별 지수 중 대형·중형 신흥시장 기술주 지수는 상반기 90% 넘게 상승해 가장 우수한 성과를 냈다. 유럽판 지수는 44.8% 오른 반면, 엔비디아·애플·마이크로소프트(MS)·브로드컴·마이크론 등이 주요 종목인 미국판 지수는 19.4% 상승에 그쳤다.
+
+같은 흐름은 다른 지수에서도 확인됐다. 범유럽 스톡스600 기술지수는 1~6월 23.4% 급등했지만, 스탠더드앤드푸어스(S&P)500 정보기술지수는 19.4% 상승에 머물렀다. 엔비디아·애플·MS·알파벳이 포함된 나스닥100지수는 상반기 19.9% 올랐다.
+
+반면 S&P500지수는 9.55%, 나스닥종합지수는 12.79%, 다우존스산업평균지수는 8.85% 상승에 그쳐, 월가 3대 지수 모두 세계 주요 지수 대비 부진했다.
+
+MSCI 지역별 정보기술지수 추이 (기준값=100, 자료: MSCI·CNBC)
+
+코스피 101% 급등…SK하이닉스 300%↑
+
+MSCI신흥시장지수는 상반기 24% 올랐다. 이 가운데 코스피는 101.1% 급등해 두드러진 성과를 냈고, 일본 닛케이225지수도 약 39% 상승했다.
+
+유럽에서는 범유럽 스톡스600지수가 8% 이상 올랐다. 영국 FTSE100지수는 5.7%, 독일 DAX지수는 약 1.9%, 프랑스 CAC40지수는 3%를 소폭 웃도는 상승률을 기록했다. 남유럽에서는 스페인 IBEX35지수(12.5%), 이탈리아 FTSE MIB지수(14.7%), 포르투갈 PSI지수(10.5%)가 상대적으로 강세를 보였다.
+
+개별 종목별로는 엔비디아가 상반기 7.3% 오르는 데 그친 반면, MS는 AI 관련 변동성 속에 22.9% 하락했다.
+
+아시아·유럽에서는 반도체 종목이 기술주 상승을 견인했다. 대만 TSMC는 상반기 55.5% 상승했고, SK하이닉스는 약 300% 폭등했다.
+
+네덜란드 반도체 장비업체 ASMI와 ASML은 각각 93.3%, 86.8% 올랐으며, BE세미컨덕터 주가는 두 배 넘게 뛰었다.
+
+주요국 증시 수익률 비교 (단위: %, 자료: LSEG·팩트셋·CNBC)
+
+"하반기 변수는 통화정책"
+
+글로벌 증시는 인공지능(AI) 관련 불안, 미국-이란 전쟁, 거시경제 불확실성이 겹치며 상반기 내내 변동성을 보였다.
+
+블랙록투자연구소는 지난달 30일(현지시간) 고객에 발송한 중반기 전망 보고서에서 "AI가 혁신 자체를 가속화함으로써 영구적인 성장 돌파구의 가능성을 높이고 있다"면서도 "그 풍요에 도달하는 경로는 희소성을 거쳐야 한다"고 밝혔다. 이어 "미국 주식 비중확대를 유지하며 전력·전력망·메모리·반도체·데이터센터 등 AI 성장의 병목 분야에 주목한다"고 덧붙였다.
+
+컬럼비아 스레드니들 인베스트먼트의 앤서니 윌리스 수석 이코노미스트는 하반기 시장의 핵심 변수로 통화정책을 꼽았다. 그는 "투자자들이 연준의 추가 금리 인상 필요성과 빈도를 재평가함에 따라 시장은 지표와 중앙은행 발언에 계속 민감하게 반응할 것"이라고 전망했다. 시카고상품거래소(CME) 페드워치에 따르면 시장은 연준이 7월 금리를 동결할 가능성을 66.3%, 9월 회의에서 최소 0.25%포인트 인상할 가능성을 66.9%로 반영하고 있다.
+
+도이체방크의 짐 라이드는 지난달 30일 노트에서 '매그니피센트 7'의 6월 부진 배경으로 포지셔닝 해소, AI 하이퍼스케일러 자본지출 우려, 매파적 연준 기조, 반도체 비용 상승을 꼽았다. 그는 "'AI 열풍'이 이어지는 가운데 코스피 같은 벤치마크가 연초 대비 100% 넘게 올랐다. 현재 시장 주도권은 매그니피센트 7에서 벗어났다"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006320416' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006320416</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
