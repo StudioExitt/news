@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주식 랠리 타고 하루 1200명 '백만장자'…미국서만 44만명 늘었다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005783987' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8882" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>주식 랠리 타고 하루 1200명 '백만장자'…미국서만 44만명 늘었다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금융 시장 강세로 미국에서 백만장자가 대거 증가하며 자산 격차가 커졌습니다. 고액 자산가들은 금융자산을 통해 큰 이익을 보았지만, 물가 상승과 제한적인 임금 성장으로 일반 서민들의 중위 자산은 오히려 감소하여 소득 불균형이 심화되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">금융 시장 강세와 자산가 중심의 부 증가를 보여주어, 금융자산을 보유한 계층에게는 강력한 모멘텀을 제공합니다. 다만, 중위 자산 감소 및 양극화 심화 경고는 일반 소비재 수요에 부정적 영향을 줄 수 있어 '중립'으로 평가하며 주의해야 합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#금융시장</span> <span class="tag tag-hash">#자산격차</span> <span class="tag tag-hash">#주식랠리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">전 세계 신규 백만장자 절반 차지
+평균 자산 늘었지만 중위 자산 20%↓지난해 전 세계에서 새로 늘어난 백만장자 두 명 중 한 명은 미국인이었던 것으로 나타났다. 금융 시장
+강세로 주식과 채권을 많이 보유한 고액 자산가들의 재산이 빠르게 불어난 반면 미국의 중위 자산은 최근 5년 동안 오히려 감소해 자산 격차는 더욱
+벌어졌다.
+
+지난달 17일 미국 뉴욕증권거래소 전광판에 다우존스산업평균지수 종가가 표시돼 있다. AP연합뉴스
+
+지난달 30일(현지시간) 월스트리트저널(WSJ)에 따르면 스위스 투자은행 UBS가 발표한 '2026 글로벌 자산 보고서'에서 지난해 미국의
+백만장자는 전년보다 44만명 이상 증가했다. 하루 평균 1200명 넘게 순자산 100만달러(약 15억원) 이상의 백만장자 대열에 새로 합류한
+셈이다.
+
+미국에서 늘어난 백만장자는 지난해 전 세계 신규 백만장자의 절반가량을 차지했다. 미국 내 전체 백만장자 수도 2360만명을 넘어서며 세계에서
+가장 많은 수준을 유지했다.
+
+UBS는 미국의 자산 증가를 이끈 주요 배경으로 금융시장 강세를 꼽았다. 미국인의 전체 자산에서 주식과 채권 등 금융자산이 차지하는 비중은
+79%에 달한다. 다른 국가보다 금융자산 의존도가 높은 만큼 주식시장 강세가 자산가들의 순자산 증가로 빠르게 이어졌다는 분석이다.
+
+고액 자산가 가운데서도 순자산 5000만달러 이상 1억달러 미만을 보유한 계층의 증가세가 두드러졌다. 이 계층은 2000년부터 지난해까지 연평균
+7.3% 증가해 같은 기간 다른 자산 구간보다 빠른 성장세를 보였다.
+
+국가별 전체 백만장자 수는 미국에 이어 중국 본토가 약 530만명으로 두 번째로 많았다. 일본 약 290만명, 독일 약 260만명, 영국과
+프랑스가 각각 약 240만명으로 뒤를 이었다. 한국은 약 130만명으로 집계됐다.
+
+그러나 백만장자 증가가 미국인 전반의 자산 사정이 나아졌다는 의미는 아니었다. 물가상승률을 반영하면 2020년부터 2025년까지 미국 성인
+1인당 평균 자산은 약 10% 늘었지만 자산 규모를 순서대로 세웠을 때 정중앙에 해당하는 중위 자산은 약 20% 줄었다.
+
+WSJ은 주식시장 랠리의 혜택이 주식 등 금융자산을 많이 보유한 고액 자산가에게 집중됐지만, 소득 대부분을 임금에 의존하는 계층은 높은
+인플레이션과 제한적인 임금 상승으로 어려움을 겪었다고 분석.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005783987' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005783987</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
