@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>안젤리나 졸리처럼 암 미리 막는 시대, 마크로젠 유전체 검사로 연다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005380010' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8887" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>안젤리나 졸리처럼 암 미리 막는 시대, 마크로젠 유전체 검사로 연다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">마크로젠이 송도글로벌지놈센터 개관을 기점으로 단순 분석 기업을 넘어 글로벌 의료 AI 및 빅데이터 기업으로 도약한다고 선언했습니다. 유전체 데이터와 AI를 결합한 '의료 AI 에이전트' 개발과 함께, 개인 맞춤형 예방 의학 시대를 열겠다는 포부를 밝히며 장기 성장 동력을 확보하고 흑자 전환 성공에 따른 배당 확대 계획을 발표했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">첨단 바이오 기술(유전체 분석) 기반으로 시장 패러다임 전환(예방 의학/AI 에이전트)을 선언하며 미래 성장성을 극대화했습니다. 또한, 분기 실적 호조와 대폭 증액된 배당금은 재무 건전성과 주주 신뢰도를 높여 강력한 긍정적 모멘텀으로 작용합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오테크놀로지</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">헬스케어 AI</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#유전체분석</span> <span class="tag tag-hash">#정밀의학</span> <span class="tag tag-hash">#AI헬스케어</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">서정선 마크로젠 회장이 머니투데이와 인터뷰하고 있다. /사진=마크로젠
+"2007년 송도 경제자유지역청 대외협력 자문위원으로 활동하며 이 황무지를 바라봤을 때부터 품었던 꿈이 있습니다. 영국 런던 남부에 120여개
+제약회사와 연구소가 모여있는 바이오 클러스터처럼 만들겠다는 꿈을 꿨습니다. 실제 송도에 다양한 바이오 기업과 병원이 들어왔지요. 20년 동안
+마크로젠도 상당히 커져서 여기에 유전체 센터를 세우게 됐습니다."
+
+서정선 마크로젠 회장은 지난달 2일 문을 연 인천 송도국제도시 '송도글로벌지놈센터'에서 "송도 센터는 아시아 45억 인구의 유전체 정보를 그리는
+전 세계 거점이 될 것"이라며 이같이 밝혔다. 코스닥 상장사이자 유전체 분석 기반의 정밀의학 생명공학 전문기업 마크로젠은 내년 창립 30주년을
+맞는다.
+
+서 회장은 송도 센터를 통해 마크로젠이 단순한 '유전체 분석 서비스 기업'을 넘어, 전 세계인의 유전 정보를 다루는 '글로벌 빅데이터 및 메디컬
+AI 기업'으로 도약할 것이라고 자부했다. 의료 데이터와 유전체 데이터를 결합한 '의료 AI(인공지능) 에이전트'를 구축해 개인 맞춤형 무병장수
+시대를 설계하는 것이 목표다.
+
+━
+
+"연간 30만명 분석, 4~5년 내 100만명까지 확대…아시아인 유전체 분석 실력 독보적"
+
+━
+
+마크로젠은 송도글로벌지놈센터가 현재 연간 30만 명의 유전체 분석을 진행할 수 있는 세계 5위권의 유전체 분석 플랫폼을 갖추고 있다고 강조했다. 보유 중인 한국인 유전체 분석 정보만 40만명을 넘는다. 전 세계 153개국, 3만3000여 곳의 연구자와 기관이 마크로젠에 데이터 분석을
+의뢰한다. 마크로젠 매출의 62%가 해외 연구자들로부터 받은 유전체 분석 사업에서 나오고
+있다.
+
+기술력도 세계 학계에서도 인정받고 있다고 마크로젠은 강조한다. 서 회장은 "백인 중심의 세계 유전체 지도 연구에서 마크로젠은 아시아인을 중심으로
+한 연구를 수행 중인 독보적인 기업"이라며 "국제학술지 '네이처(Nature)'에 총 세 차례(2009년·2016년·2019년) 논문을
+게재했고, 특히 2009년 논문은 인간 유전체 프로젝트 이후 발표된 전 세계 마일스톤 논문 37편 중 하나로 선정됐다"
+고 말했다.
+
+마크로젠은 국가바이오빅데이터 구축사업 등 정부 프로젝트에 참여하며 규모를 늘리고 있다. 이 속도대로면 향후 4~5년 내 연간 100만명 규모의
+분석 체제를 구축하게 된다. 이렇게 되면 개인의 유전체 데이터를 질병 데이터와 결합해 본격적인 고도화 예측 서비스를 제공할 수 있는 터닝포인트를
+맞이하게 될 것으로 마크로젠은 기대한다.
+
+서 회장은 "30억개의 유전체를 전부 분석하는 비용이 최근 180달러대로 크게 하락하면서 '시퀀싱(유전체 서열 분석)의 민주화'
+가 열리고 있다"며 "앞으로는 비만이나 탈모, 갑상선 등 특정 부분 유전체만 보는 것이 아니라, 내 몸 전체 유전체 지도를 누구나 알고 질병을 예방하는
+사회가 될 것"이라고 했다.
+
+━
+
+"내비게이션처럼 질병 피해간다… 의료 AI 에이전트 시대 열 것"
+
+━
+
+서 회장은 안젤리나 졸리가 유전체 검사를 통해 유방암 유전자(BRCA1) 변이를 확인하고 예방적 절제술을 받은 것처럼 모든 사람이 발병 가능성이
+높은 질병을 미리 막는 '정밀 맞춤 의학'의 단계로 최근 진입하고 있다고 봤다.
+
+그는 "유전체 검사는 개개인 신체의 타고난 설계도를 미리 알고 위험한 길을 피해 가도록 알려주는 인생의 '내비게이션'과 같다"며 "예컨대 치매
+유전자가 있다면 미리 수년에 한 번씩 뇌 MRI를 찍어 추적하고, 갑상선암 위험 변이가 있다면 건강검진 때 초음파를 필수적으로 챙기는 식"
+이라고 설명했다.
+
+마크로젠은 유전체와 질병 정보를 결합한 '의료 AI 에이전트'를 개발 중이다. 송도 센터에는 유전체 분석에 최적화된 AI 전문 모델 학습 환경이
+구축 있어 분석 시간을 획기적으로 줄이고 사용자들에게 맞춤형 건강 조언을 쉽게 제공할 수 있다고 강조한다.
+
+서 회장은 글로벌 빅테크와의 경쟁에서도 자신감을 보였다. "구글과 애플 같은 기업이 헬스케어 플랫폼은 가졌을지 몰라도 실제 환자들의 유전체
+d데이터와 임상 의료 정보는 없다"며 "마크로젠은 의사 출신 창업자들의 전문성과 우수한 국내 의료 시스템을 기반으로 정제된 아시아인 유전체
+데이터를 독점적으로 쥐고 있어 강력한 진입장벽을 구축했다"고 덧붙였다.
+
+━
+
+1Q 별도기준 흑자 전환 성공·배당 확대…"기다려준 주주에게 보답할 것"
+
+━
+
+마크로젠은 2012년 처음 흑자 전환한 뒤, 2023~2024년을 제외하고 꾸준히 흑자를 유지하고 있다. 지난해에는 연간 흑자전환에 성공했고,
+올해 1분기에도 별도 기준으로는 흑자 기조를 이어 나갔다.
+
+서 회장은 "우리는 30년간 유전체 분석이라는 한 우물을 파서 돈을 벌고 재투자하면서 미래로 도약하는 기반을 갖춰왔다"
+며 "성남 본사에서 송도로
+이전하며 일시적인 지출이 있었고 장비 세대교체 주기에 따른 단기적 영향이 있었지만 기업의 체질은 그 어느 때보다 좋아지고 있다. 서울 금천구
+가산동 부지 매각 등으로 현금 유입도 원활하다"고 강조했다.
+
+올해는 주주환원 정책도 새로 내놓았다. 마크로젠은 올해 주당배당금을 전년 대비 66.7% 상향한 500원으로 책정했다. 고배당기업 배당소득
+분리과세 특례 요건도 충족할 전망이다. 서 회장은 "우리 주주들은 회사를 믿고 함께해 온 장기 투자자들이며, 6년 연속 현금배당을 진행하고
+배당을 대폭 늘린 것도 장기 투자자들에 대한 보답의 일환"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005380010' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005380010</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
