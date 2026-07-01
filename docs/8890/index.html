@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"코스피 1만된다 한들 나한테 없는데 무슨 소용이냐" 법무부장관, 2030에 번호 준 사연</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002664326' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8890" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"코스피 1만된다 한들 나한테 없는데 무슨 소용이냐" 법무부장관, 2030에 번호 준 사연</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정성호 법무부장관이 코스피가 고공행진해도 자산 규모가 작은 2030 세대에게는 실질적인 의미가 없다고 지적했습니다. 특히 청년층이 보이스피싱이나 전세사기 등 금융 사기에 가장 취약하다며, 이들의 재산을 지킬 수 있는 정책 제안을 요청하며 높은 관심을 보였습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">기사는 정부 정책과 사회적 취약 계층 보호에 대한 내용이 주를 이루며, 시장 전체의 거시경제 변수를 언급하지 않아 직접적인 단기 투자 심리 변화를 유발하기 어렵습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">소비자 금융</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">사회 안전망</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#금융사기</span> <span class="tag tag-hash">#정책제안</span> <span class="tag tag-hash">#청년경제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피 지수가 8000을 넘어 고공행진을 하는 가운데 정성호 법무부장관이 ‘내 재산 지키기’에 2030 청년들의 관심과 정책제안을 요청했다.
+
+1일 법무부에 따르면 정성호 장관은 지난달 22일 정부과천청사에서 진행된 ‘제3기 법무부 2030 청년자문단 발대식’에서 “지금 코스피가 9000이 되고 1만이 된다 한들, 당장 내 수중에 돈이 없는데 여러분에게 무슨 의미가 있겠느냐”며 주가지수를 언급했다.
+
+정 장관은 “돈 있는 사람들은 주가가 갑자기 올라서 신났다”며 “(2030)여러분들이 빚내서 투자하거나 지금까지 저축한 돈으로 투자해 봐야 얼마나 되겠냐, 대부분 남의 이야기일 뿐”이라고 공감했다.
+
+법무부장관이 축사에서 불쑥 코스피란 말을 꺼낸 것은 자산규모가 상대적으로 작은 이들 세대가 보이스피싱이나 전세사기 등 금융사기 피해에도 가장 취약한 계층이기 때문인 것으로 풀이된다.
+
+정 장관은 소액사기에도 생계가 흔들릴 수 있는 2030을 향해 “그런 사회에서 우리가 가진 내 생명과 작은 재산조차도 보이스피싱과 전세 사기로 위협받고 있다”며 “전세 사기 피해자들 어떻냐, 내 집 없는 사람들이 피해자 아니겠냐. 대부분 사기 당하는 건 다 2030 세대”라고 강조했다.
+
+그는 “그 간극을 여러분이 좁혀주셔야 한다”며 “저 같은 기성세대들 생각이 아니라, 여러분들 세대에서 여러분이 피부로 느끼면서 ‘이런 제도를, 이런 정책을 해보면 좋겠다’ 그런 제안을 많이 해달라”고 요청했다.
+
+정성호 법무부 장관이 지난 22일 정부과천청사에서 열린 ‘제3기 법무부 2030 청년자문단 발대식’에서 자문단원들에게 위촉장을 전달한 후 기념 촬영하고 있다. [연합]
+
+정성호 법무부 장관이 지난 22일 정부과천청사에서 열린 ‘제3기 법무부 2030 청년자문단 발대식’에서 자문단원들에게 위촉장을 전달한 후 기념 촬영을 하고 있다. [연합]
+
+직접 자신과 소통할 수 있도록 전화번호도 공개했다.
+
+정 장관은 “휴대전화 꺼내봐요. 휴대전화 꺼 딱 법무부장관으로 해놔라”며 전화번호를 불렀다.
+
+그는 “법무부장관 전화번호니까 건의할 것, 건의했는데도 변화가 없다면 제게 직접 문자를 보내면 참고할 테니까 꼭 제안해 주길 부탁드리겠다”고 말했다.
+
+한편 한국예탁결제원에 따르면 지난해말 결산 기준 연령별 개인 투자자는 20대가 79만명으로 8.8%에 불과했다. 30대는 260만명으로 19.1%였다.
+
+가장 많은 연령대는 50대로 333만명, 23.1%였으며, 40대가 315만명, 21.8%으로 4050이 절반 가까이 차지했다.
+
+이밖에 60대가 220만명(15.3%), 70대가 79만명(5.5%)이었다. 20대 미만은 5.3%였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002664326' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002664326</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
