@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>기사 제목</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/005/0001858479' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8969" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>기사 제목</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">JTBC의 기업 회생 협의체 구성 과정에서 개인 채권 투자자가 공식적으로 제외되었다. 이로 인해 개인 투자자의 의견이 논의에 제대로 반영되기 어려울 것이라는 우려가 제기되며, 추후 변제 조건 결정 시 불리한 위치에 놓일 수 있다는 지적이 나왔다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">기업의 지급 불능(디폴트) 및 구조조정 과정은 관련 기업 섹터 전체의 투자심리에 부정적 영향을 미칠 수 있으며, 특히 개인 투자자 보호 문제를 제기하며 제도적인 관심을 유발한다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">미디어</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#회사채 #기업회생 #개인투자자보호</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">연합뉴스
+
+JTBC의 기업 회생 개시가 보류되고 자율 구조조정을 위해 채권자협의회가 꾸려졌지만 이 단체에 개인 채권 투자자는 포함되지 않은 것으로 확인됐다. JTBC 채권에는 투자일임·자문사와 증권사를 통해 개인 투자자 자금이 상당 규모 들어가 있다. 개인 투자자가 공식 논의 창구에서 빠지면서 향후 변제 조건을 정하는 과정에 이들의 의견이 제대로 반영되기 어려울 것이라는 우려가 나온다.
+
+1일 국민일보 취재를 종합하면 서울회생법원이 지난달 24일 구성한 JTBC 채권자협의회는 금융사 중심으로 꾸려졌다. 은행권에서는 KB국민은행, 증권업계에서는 한양증권, 여신전문금융업권에서는 하나캐피탈 등이 JTBC 채권을 보유한 것으로 알려졌다. 개인 투자자 측은 포함되지 않았다. 회생법원은 같은 달 30일 JTBC의 회생 개시 여부를 미루고 자율 구조조정 지원(ARS) 절차를 밟기로 했는데 정작 ARS 협의의 핵심 창구인 채권자협의회에는 회사채를 보유한 수많은 개인 투자자가 참여하지 못한 것이다.
+
+개인이 의견서를 낼 수는 있다. 그러나 채권자협의회는 단순한 의견 수렴 창구가 아니라 주요 채권자가 모여 JTBC의 채무 조정 방향 등을 논의하고 관련 정보를 공유받는 공식 창구다. 개인 투자자는 여기에 속하지 못한 만큼 협의 흐름을 실시간으로 파악하거나 의견을 제시하기 쉽지 않다. 채무 상환 협상 과정에서 후순위로 밀릴 가능성도 있다.
+
+JTBC 채권의 위험 부담자 중 개인 투자자는 적지 않다. JTBC가 회생을 신청하기 약 4개월 전 발행한 930억 원 규모의 회사채 ‘JTBC42’의 경우 절반 이상인 510억 원이 일임·자문사를 거친 개인 투자자 자금이다([단독] JTBC 디폴트 전 930억 회사채, 절반 이상 ‘개인 돈’이었다 참조). JTBC 공모 회사채에 투자된 개인 투자자 자금은 총 2500억 원에 육박하는 것으로 추정된다.
+
+개인이 위기 기업 채권자협의회에 참여한 전례가 없는 것도 아니다. 2024년 온라인 쇼핑몰 티몬·위메프가 유동성 위기에 처했을 때 회생법원은 두 회사의 ARS를 승인하면서 채권자협의회를 구성할 때 셀러(판매자)를 포함한 개인 채권자를 골고루 포함하라고 당부했다. 2013년 동양그룹 사태 당시에도 지주사인 ㈜동양의 회사채와 기업어음(CP)을 매수한 개인으로 구성된 비상대책위원회가 개인 투자자 대표 자격으로 채권자협의회에 참여했다.
+
+회생법원도 JTBC의 자율 구조조정 과정에서 개인이 소외될 수 있다는 점을 인지하고 있다. JTBC에 개인 투자자가 정보를 제때 얻을 수 있도록 홈페이지 등을 통해 정기적으로 공지하라고 했다.
+
+금융권 관계자는 “개인 투자자가 법원에 의견서를 낼 수 있다고 해도 채권자협의회에 들어가 논의에 참여하는 것과는 차이가 크다”면서 “JTBC 위험에 노출된 개인 투자자가 많다면 채권단 협의 과정에 이들의 의견을 반영할 별도 장치가 필요하다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/005/0001858479' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/005/0001858479</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
