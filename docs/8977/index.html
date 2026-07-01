@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'절대 안 판다'던 스트래티지의 변심…득일까 독일까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003107035' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8977" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'절대 안 판다'던 스트래티지의 변심…득일까 독일까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">강세장을 이끌었던 비트코인 플라이휠 전략의 핵심 기업 스트래티지(MSTR)가 최대 12억 5천만 달러 규모의 비트코인 매각 가능성을 공식화했습니다. 이는 단순한 재무 구조 조정으로, 기존의 공격적인 '절대 매도 금지' 원칙에서 벗어나 유동성 확보 및 자본 구조 관리로 전환하는 신호탄입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 주체인 스트래티지(MSTR)가 기존의 성공적이었으나 한계에 봉착한 투자 전략을 공식적으로 변경하고 매각 가능성을 열면서 비트코인 시장과 관련 자본 흐름 전반에 큰 변화를 예고했기 때문입니다. 이는 투자자들이 기업 재무구조와 시장 리스크 평가 방식을 조정하게 만듭니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">MSTR</span> <span class="tag stock-tag">비트코인 관련 ETF</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자본시장</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#비트코인</span> <span class="tag tag-hash">#스트래티지</span> <span class="tag tag-hash">#재무구조</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">비트코인 매각 가능성 첫 공식화…플라이휠 전략 한계론
+업계 "현실적 자본관리" vs "Never Sell 철학 훼손"
+스트래티지가 비트코인 매각 가능성을 열면서 강세장을 이끌었던 '비트코인 플라이휠' 전략이 시험대에 올랐다. 해당 이미지는 AI로 제작됨.
+스트래티지가 비트코인 매각 가능성을 열면서 강세장을 이끌었던 '비트코인 플라이휠' 전략이 시험대에 올랐다. 해당 이미지는 AI로
+제작됨. "우리는 비트코인을 사고, 절대 팔지 않는다(Buy Bitcoin. Never Sell)."
+
+지난 6년간 스트래티지 최고경영자(CEO) 마이클 세일러가 줄곧 강조해온 이 원칙에 처음으로 예외가 생겼다.
+
+업계에서는 이를 단순한 재무 전략 변경이 아니라 강세장을 이끌었던 '비트코인 플라이휠(Flywheel)' 전략의 전환 신호로 해석하고 있다.
+
+2일 가상자산 업계에 따르면 스트래티지는 최근 '디지털 크레딧 자본 프레임워크(Digital Credit Capital Framework)'를 발표하고 최대 12억5000만 달러 규모의 비트코인을 현금화할 수 있는 방안을 마련했다.
+확보한 자금은 우선주 배당과 부채 이자 지급, 자사주 매입, 현금성 자산 확보 등에 활용될 예정이다.
+회사는 비트코인을 핵심 재무자산으로 유지하겠다는 기존 방침은 재확인했지만, 필요할 경우 이를 유동성 확보 수단으로 활용할 수 있다는 점을 처음으로 공식 문서에 명시했다.
+
+업계에서는 이번 조치를 그동안 스트래티지 성장의 핵심 동력이었던 '비트코인 플라이휠' 전략의 진화로 보고 있다.
+
+플라이휠 전략은 주가가 비트코인 순자산가치(mNAV)를 웃도는 프리미엄을 활용해 신주를 발행하고, 확보한 자금으로 비트코인을 추가 매입하는 구조다.
+비트코인 보유량이 늘면 기업가치와 주가가 상승하고, 이를 기반으로 다시 자금을 조달하는 선순환 모델로 스트래티지를 세계 최대 비트코인 보유 기업으로 키운 핵심 전략으로 평가받아 왔다.
+
+다만 최근에는 시장 환경 변화로 이 같은 구조의 효율성이 크게 떨어졌다.
+
+비트코인 가격 상승세가 둔화한 가운데 스트래티지 보통주(MSTR)는 최근 8거래일 연속 하락하며 지난해 11월 고점 대비 80% 이상 급락했다. 우선주 STRC도 액면가인 100달러를 밑돌면서 배당 부담과 유동성 관리 필요성이 커졌다.
+
+박성제 신한투자증권 연구원은 "기존에는 보통주와 우선주 발행으로 조달한 자금을 비트코인 매입에 투입했다면, 이번 프레임워크는 현금 보유와 배당 관리, 자사주 매입을 병행하는 자본관리 체계로 전환한 것이 핵심"이라며 "조달 비용이 높아진 만큼 단순한 비트코인 매집보다 유동성과 자본구조관리의 중요성이 커졌다"고 분석했다.
+
+복진솔 포필러스 리서치리드도 "현재 mNAV가 1배 수준까지 내려온 상황에서는 신주를 발행해 비트코인을 매입하는 것이 기존 주주 가치를 희석시키는 구조"라며 "기존 플라이휠 모델은 사실상 한계에 도달했고, 시장 상황이 개선될 때까지는 보다 유연한 재무 전략을 이어갈 가능성이 높다"고 말했다.
+
+시장에서는 스트래티지의 매입 기조 변화가 비트코인 수급에 미칠 영향에도 관심이 쏠리고 있다.
+실제 발표 이후 비트코인은 6만 달러 선을 내준 뒤 한때 5만9000달러대까지 하락했고, 간밤에는 5만7000달러대까지 밀렸다.
+업계에서는 스트래티지가 기관 투자자들의 대표적인 비트코인 매수 주체로 꼽혀온 만큼, 매입 속도가 둔화되거나 실제 매도에 나설 경우 비트코인 수급에도 적지 않은 영향을 미칠 수 있다는 분석이 나온다.
+
+윤승식 타이거리서치 센터장은 "단기적으로는 스트래티지의 매입 둔화와 잠재적 매도 가능성으로 투자심리가 위축될 수 있지만, 장기적으로는 과도한 레버리지에 따른 파산 위험이 낮아져 시장 전체의 시스템 리스크는 오히려 완화될 수 있다"고 말했다.
+
+박 연구원은 "앞으로는 단순한 비트코인 보유량보다 실제 현금화 여부와 현금 보유 규모, 자본 배분 방식이 스트래티지와 비트코인 시장의 핵심 변수가 될 것"이라고 전망했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003107035' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003107035</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
