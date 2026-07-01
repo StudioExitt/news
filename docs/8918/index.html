@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스닥 성공 관건은 '기관', "투자할 만큼 매력 있냐"는 과제</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/648/0000048538' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8918" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스닥 성공 관건은 '기관', "투자할 만큼 매력 있냐"는 과제</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스닥의 지속 성장을 위해 기관 자본 유입이 필수적이나, 투자 매력도와 지배구조 문제가 핵심 과제로 부각되었다. 전문가들은 소액주주 보호를 위한 구조 개선과 함께 시장 지수 개발 및 승강제 도입 시기를 주요 촉매로 주목하고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">코스닥 시장 성장의 핵심 동력이 기관 자본 유입과 지배구조 개선임을 명확히 제시하며, 중장기적인 구조적 과제들을 제기하고 있어 투자 심리에 영향을 줄 수 있는 중요한 논의임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥</span> <span class="tag tag-hash">#기관투자자</span> <span class="tag tag-hash">#지배구조개선</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">"대주주가 지분팔며 주가 누르는데, 경영진도 각성해야"\n패시브 자금 공격적인 유입 가능하게 지수 차별화 요구도\n코스닥 승강제 도입 시기는 7월에서 10월로 미뤄져\n1일 여의도 콘래드호텔에서 코스닥 30주년을 맞아 ';코스닥 발전 방안' 토론회가 열렸다. /사진=이상원 기자
+1일 여의도 콘래드호텔에서 코스닥 30주년을 맞아 ';코스닥 발전 토론'에서 진성훈 코스닥협회 연구정책그룹장은 "코스닥 시장은 개인투자자 비중이 80%를 넘어가는 개인투자 중심의 시장"이라며 "하지만 코스닥에서 큰 비중을 차지하는 제약, 바이오의 경우 신약개발 등은 장기투자가 필요한 만큼 안정적인 기관의 자본이 계속 들어오는 것이 유리하고, 그래야 기업에 기회를 줄 수 있을 것"이라고 지적했다.
+
+성주완 미래에셋증권 부사장도 "우량하고 큰 기업일수록 상장심사보다는 상장 이후의 세일즈에 더 고민을 하게 되는데, 결국 큰 패시브 자금을 운용하는 국내외 운용사들이 자유롭게 들어와서 얼마나 공격적으로 사줄 수 있는냐는 부분에서 코스닥은 많이 못 미친다"고 꼬집었다.
+
+성 부사장은 이어 "코스닥 세그먼트를 구분하는 것도 하나의 방법이 되겠지만, 코스닥 자체에서 그런 큰 규모의 패시브 자금을 운용하는 운용사들이 투자할 수 있는 다양한 지수 개발 등을 많이 논의해주면 좋겠다"고 제안했다.
+
+i와 관련 최지우 한국거래소 코스닥시장본부 상무는 "지금까지 만든 (코스닥) 지수는 대부분 시가총액 위주로 시총 순위별로 만든 지수"라며 "새로운 세그먼트가 도입되면 기존의 시총기준보다는 성장성이나 안정성을 더 추구해서 새로운 지수를 만들 생각"이라며 "기관투자자들의 요구를 충분히 충족할 수 있도록 노력 할 것"이라고 말했다.
+
+반면, 기관투자자의 입장에서는 코스닥 시장 투자의 필요성엔 공감하면서도 기관 자금을 끌어들일 만큼 코스닥 시장이 투자 매력도를 높이는 것을 우선해야 한다는 지적이 나왔다.
+
+김지운 삼성액티브자산운용 본부장은 "투자 매력도가 높다면 기관투자자들은 뜯어말려도 투자하게 되어 있다. 투자매력도를 높이는 게 가장 중요하다"며 "각 기업의 이익 체계를 개선시키고, 한편으로는 지배구조 개선이 굉장히 중요하다. 코스닥에는 소액주주 보호에 대한 장치가 거의 없다"고 지적했다.
+
+김 본부장은 이어 "연초에 리노공업과 같은 기업이 대주주 블록딜로 지분 30%가량을 매도하면서 아직도 주가를 누르고 있는데, 사실 기업 내에서도 그런 부분에 대해 각성이 필요하다"며 "밸류업에 대한 인식 개선, 소액주주 보호에 대한 경영진의 인식개선이 정부의 정책만큼이나 필요하다"고 말했다.
+
+김 본부장은 "정부가 국민성장펀드나 코스닥 활성화 정책을 많이 지원하는 지금 기업가들도 그 책임을 정말 뼈저리게 느끼고 국민경제에 부응하면 좋겠다"고 강조했다.
+
+한편, 정부와 한국거래소가 추진하고 있는 코스닥 승강제 도입 시점은 당초 계획보다 더 늦춰지고 있다. 당초 7월부터 시행할 계획이던 승강제는 일러도 10월 이후에나 가능할 전망이다.
+
+이날 토론에 참석한 최지우 거래소 상무는 코스닥 승강제 도입 시기에 대해 "5월에 자본시장연구원과 용역계약을 체결해 진행하고 있고, 9월 이후에 용역보고서 결과가 나오지 않을까 생각된다"고 밝혔다.
+
+최 상무는 "학계와 업계분들과 자문단을 구성해 자본시장연구원과 함께 검토하고 있고, 이르면 7월, 늦어도 8월부터는 공청회를 통해 이슈에 대해 발표를 하고, 공감대를 형성할 계획"이라고 말했다. 최 상무는 "정확하게 정책 발표의 시점을 말하기는 애매한 단계이지만, 4분기, (늦어도) 10월에는 발표를 목표로 하고 있다"고 강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/648/0000048538' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/648/0000048538</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
