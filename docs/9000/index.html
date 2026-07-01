@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI에 밀린 엔터주…“말도 안 되는 저평가 구간”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006320426' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9000" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>AI에 밀린 엔터주…“말도 안 되는 저평가 구간”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">엔터 산업 주가가 AI 수급 이슈로 급락했으나, 하나증권은 주요 엔터테인먼트사들이 과도하게 저평가되었다고 분석했습니다. 각 사별 2분기 실적은 다소 엇갈리나, 하반기의 대형 아티스트 활동(월드투어 등)을 핵심 변수로 삼아 업종 전반의 비중 확대를 강력히 추천했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">전문 증권사의 구체적인 실적 예상치(2분기 및 연간)와 개별 핵심 아티스트의 대형 투어/컴백 모멘텀을 근거로 업종 전반에 걸친 매수 추천(비중 확대)이 나왔기 때문에 시장 투자심리에 매우 강한 영향을 줄 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">하이브</span> <span class="tag stock-tag">SM엔터테인먼트</span> <span class="tag stock-tag">JYP Ent.</span> <span class="tag stock-tag">YG 엔터테인먼트</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">미디어</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#엔터주</span> <span class="tag tag-hash">#저평가</span> <span class="tag tag-hash">#월드투어</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">하나증권 보고서
+하이브·SM 2분기 실적 컨센서스 부합 전망
+JYP·YG는 부진해도 하반기 투어 모멘텀 기대
+BTS·코르티스·캣츠아이 성장세가 섹터 반등 변수 인공지능(AI)으로 쏠린 증시 수급에 밀려 엔터테인먼트 업종 주가가 급락했지만, 오히려 현 주가는 과도한 저평가 구간이라는 분석이 나왔다. 2분기 실적은 회사별로 엇갈리겠지만 하반기 주요 아티스트 활동과 5세대 그룹 성장세를 감안하면 업종 전반의 비중을 확대할 시점이라는 판단이다.
+
+이기훈 하나증권 연구원은 2일 엔터테인먼트 산업 보고서에서 “AI에 집중된 수급 이슈 등으로 주가가 상당히 부진했지만 2분기 실적은 대체로 컨센서스에 부합할 것”이라며 “예상했던 기간 조정보다 더 가파른 가격 조정이 나타났기에 강한 비중확대를 추천한다”고 말했다.
+
+(표=하나증권)
+
+하나증권은 현재 주가 기준 하이브(352820)는 2027년 예상 주가수익비율(PER) 22배, 에스엠(041510)(SM)·JYP Ent.(035900)·와이지엔터테인먼트(122870)는 2026년 기준 12~15배 안팎으로 상당한 저평가 수준이라고 평가했다.
+
+2분기 실적은 하이브와 SM이 시장 기대에 부합하고, JYP와 YG는 다소 하회할 것으로 전망했다. 하나증권이 예상한 2분기 영업이익은 하이브 1445억원, SM 538억원, JYP 379억원, YG 77억원이다. 전년 동기 대비로는 하이브와 SM이 각각 119%, 13% 증가하고, JYP와 YG는 각각 27%, 7% 감소하는 수준이다.
+
+섹터 반등의 핵심 변수는 하이브다. 하나증권은 하이브가 BTS의 월드투어 효과로 2분기 사상 최대 실적을 낼 것으로 봤다. BTS 월드투어 24회, 약 130만명을 포함해 총 170만명의 콘서트 관객이 실적에 반영될 것으로 추정했다. 여기에 TXT, 코르티스, 르세라핌, 보이넥스트도어, 아일릿 등 다수 아티스트의 컴백 효과도 더해졌다는 설명이다.
+
+특히 하나증권은 BTS 이후의 성장축으로 코르티스와 캣츠아이를 주목했다. 코르티스는 최근 컴백 앨범 판매량이 이미 290만장에 달했고, 3분기 추가 버전 판매까지 감안하면 300만장을 넘어설 것으로 예상했다. 캣츠아이 역시 이번 컴백에서 100만장 안팎의 앨범 판매가 기대된다고 봤.
+
+이 연구원은 “코르티스와 캣츠아이는 세상을 바꾸고 있다”며 이들의 성장 속도가 경쟁 그룹에도 긍정적인 영향을 미칠 것으로 전망했다.
+
+SM은 NCT Wish, 에스파, 라이즈, 하츠투하츠 등의 컴백과 콘서트 효과로 2분기 실적이 컨센서스에 부합할 것으로 예상됐다. 하나증권은 SM의 2분기 매출액과 영업이익을 각각 3305억원, 538억원으로 추정했다. 앨범 판매량은 약 560만장, 콘서트 관객은 약 92만명으로 전망했다. 연내 신인 남자그룹 SMTR 데뷔와 2027년 NCT127 완전체 활동도 향후 실적 모멘텀으로 꼽았다.
+
+JYP는 2분기 실적 부진에도 하반기 반등 여지가 크다는 평가다. 2분기 영업이익은 379억원으로 컨센서스를 밑돌 것으로 봤지만, 3분기 스트레이키즈 컴백과 월드투어가 시작되면서 실적 모멘텀이 강화될 것으로 예상했다. 이미 발표된 한국 포함 아시아 일정만 약 59만명 규모이며, 북미·유럽으로 확대될 경우 또 한 번 200만명 이상의 투어가 가능하다는 분석이다.
+
+YG 역시 2분기 영업이익은 77억원으로 시장 기대를 하회할 전망이다. 다만 하반기에는 빅뱅 20주년 컴백과 투어가 핵심 변수로 떠오른다. 하나증권은 빅뱅이 8월 고양을 시작으로 2027년 2월까지 31회 돔·스타디움 공연을 발표했으며, 회차가 추가될 가능성도 높다고 판단했다. 하반기 앨범 컴백과 MD 매출 상승까지 감안하면 연간 800억원 안팎의 영업이익도 가능하다고 봤.
+
+이 연구원은 “BTS의 사상 최대 실적 선반영과 후속 성장 동력 부재 우려로 불과 4개월 만에 섹터 주가가 40~50% 하락했다”며 “하이브 실적에 대한 우려가 해소되면 다른 기획사들도 동반 상승할 가능성이 있다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006320426' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006320426</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
