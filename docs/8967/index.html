@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대순환 장세 3분기에도" 나스닥 0.7%↓…마이크론 10%↓</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001257287' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/8967" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>대순환 장세 3분기에도" 나스닥 0.7%↓…마이크론 10%↓</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 및 AI 관련 종목에서 차익실현 매물이 나오며 뉴욕증시가 일제히 하락했습니다. 주요 반도체주들이 급락했으나, 대형 기술주들의 방어적 매수세와 업종 순환매 기대감으로 장기적인 강세장 기반은 유지되고 있다는 분석입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 섹터의 급격한 차익실현과 AI 관련주 매도가 발생하여 단기적으로 시장 심리가 크게 위축되었으나, 전문가들은 대순환 구조와 우량주로의 자금 이동을 언급하며 하방 경직성을 보여주고 있어 복합적입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">마이크론</span> <span class="tag stock-tag">엔비디아</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">AI 기술주</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">대형 IT 기업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체조정</span> <span class="tag tag-hash">#AI차익실현</span> <span class="tag tag-hash">#금리인상</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">인공지능(AI) 관련 반도체 종목의 매도세가 이어지면서 1일(현지시간) 뉴욕증시가 일제히 하락했다. 상반기 미국 증시를 이끌었던 반도체 종목들이
+이날 급락하면서 AI 종목의 밸류에이션에 대한 부담으로 투자심리가 위축된 모습을 보였다.
+
+이날 뉴욕증시에서 다우존스30 산업평균지수는 전장보다 13.96포인트(-0.03%) 내린 52,305.24에 거래를 마쳤다.
+스탠더드앤드푸어스(S&P) 500 지수는 전장보다 16.13포인트(-0.22%) 내린 7,483.23에, 기술주 중심의 나스닥 종합지수는
+전장보다 173.69포인트(-0.66%) 내린 26,040.03에 각각 장을 마쳤다.
+
+AI 업종 낙관론에 힘입어 지난 2분기 S&P 500 지수와 나스닥 지수는 각각 15%, 21% 상승, 6년 만에 가장 높은 상승률을 기록하며
+상반기를 마감했지만 이날 뉴욕증시는 흔들리는 모습을 보였다.
+
+전날 급등했던 반도체종목들은 일제히 급락했다. 이날 필라델피아 반도체지수(SOX)는 6.27% 급락했다. 올해 상반기에만 80% 넘게 치솟은
+반도체 종목에 투자자들이 차익실현에 나선 결과다. 올해 상반기 약 250% 상승한 마이크론은 이날 10.39% 급락했고, 850% 이상 상승한 샌디스크 역시 10% 이상 하락 마감했다. AI 대표 기업인 엔비디아와 브로트컴과 각각 1.3%, 2.2% 내렸다.
+
+반면 대형 기술주와 경기 민감주에는 상대적으로 방어적인 매수세가 유입되며 전체 지수의 낙폭을 방어했다. 메타플랫폼스는 막대한 AI 인프라 투자로
+커진 비용 부담을 새로운 수익원으로 바꾸겠다는 시도를 선언하자 매출 증대 기대에 주가는 8.81% 올랐고 마이크로소프트(MS)와 애플도 각각
+3.02%, 1.73% 상승 마감했다.
+
+시장에서는 당분간 AI 관련주의 차익실현이 이어질 수 있지만 이번 조정은 추세적인 하락보다 업종 간 순환매로 보고 있다. 제프 킬버그 미 투자사
+KKM파이낸셜 최고경영자(CEO)는 "최근 기술주 차익실현 자금이 다우지수의 전통 우량주로 직접 유입되며 대순환 거래가 3분기에도
+이어지고 있다"면서 "매우 건강한 신호로 4년째 이어지는 강세장 상승 기반이 더욱 넓어지고 있음을 보여주는 것"이라고 분석했다.
+
+투자자들은 케빈 워시 미 연방준비제도(Fed·연준)의 향후 통화정책 방향을 주목하고 있다. 워시 의장은 이날 포럽중앙은행(ECB) 포럼에서 최근
+인플레이션 위험이 다소 완화됐다고 평가하면서도 "물가는 여전히 너무 높다"며 연준의 2% 물가 목표를 고수하겠다는 입장을 재확인했다.
+
+연준의 인플레 목표치는 2%다. 연준이 물가 지표의 핵심으로 여기는 개인소비지출(PCE) 가격지수는 지난 5월 전년 동월 대비 4.1% 상승해
+3년여 만에 최대치를 기록했다.
+
+이로써 시장의 시선은 2일 발표되는 6월 고용보고서에 쏠리고 있다. 민간에서 나온 6월 고용 수치는 9만 8000명 증가(계절 조정 후)한
+것으로 나타났다. 이는 5월의 12만 2000명보다 감소한 수치이며, 시장 예상치인 11만 명에도 못 미치는 결과다.
+
+워시 발언 이후 시장에서는 올해 한 차례 추가 금리 인상 전망이 다소 약해졌다는 평가가 나오기도 하지만 LSEG 집계 기준으로는 여전히 연내
+최소 한 차례 금리 인상이 예상되고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001257287' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001257287</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
