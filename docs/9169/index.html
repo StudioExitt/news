@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>메타 “남는 GPU 임대” 선언에… “AI 정점 신호탄?” 시장 출렁</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/005/0001858622' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9169" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>메타 “남는 GPU 임대” 선언에… “AI 정점 신호탄?” 시장 출렁</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">메타가 사용하지 않는 AI 연산 자원(GPU 등)을 외부 고객에게 임대하는 클라우드 사업 진출을 발표했다. 이로 인해 AI 시장의 과잉 투자 우려와 수요 둔화 신호탄이라는 해석이 나오면서 글로벌 반도체주가 급락하는 등 주식 시장이 출렁였다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">메타의 발표는 거대 빅테크 기업이 보유한 AI 인프라의 활용처를 변경하며, AI 시장의 고점 및 과잉 투자에 대한 근본적인 의문을 제기했기 때문에 중요도가 높음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">마이크론</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#메타 #GPU임대 #AI과잉투자 #반도체주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">AI 클라우드 사업 진출
+글로벌 반도체주 일제히 곤두박질
+“과도한 공포”vs“과잉 투자 청구서”
+AP뉴시스
+페이스북 모회사 메타가 활용하지 않는 자사 인공지능(AI) 컴퓨팅 자원을 외부에 대여·판매하는 클라우드 사업에 진출한다. 수천억 달러를 투입해 구축한 AI 연산 인프라를 새로운 수익원으로 활용하겠다는 구상이다. 이를 두고 시장에선 AI 관련 설비 투자가 ‘정점’에 달했다는 신호 아니냐는 해석이 나왔다. 실제 메타의 발표 직후 그래픽처리장치(GPU) 수요 둔화 우려가 확산하면서 글로벌 AI 반도체주는 일제히 급락했다.
+
+1일(현지시간) 블룸버그, CNBC 방송 등 외신에 따르면 메타는 범용 인공지능(AGI) 개발용으로 확보해 둔 데이터센터와 반도체 컴퓨팅 자원 일부를 외부 고객에 제공하는 방안을 추진 중이다. 사업 모델은 크게 두 갈래로 나눠진다. 첫 번째는 자사 AI 모델인 ‘뮤즈 스파크’를 메타 인프라에서 구동하고 개발자들이 응용프로그램 인터페이스(API)를 통해 이를 활용하게 하는 ‘플랫폼 서비스(PaaS)’ 방식이다. 여기에 AI 전용 클라우드 기업인 코어위브처럼 GPU 등 순수 AI 연산 자원 자체를 임대해 주는 ‘서비스형 인프라(IaaS)’ 방식이 함께 검토되고 있다.
+
+메타는 엔비디아의 GPU를 가장 많이 흡수하는 ‘큰손’ 중 하나다. 지난 2월에는 AMD와도 1000억 달러(약 155조원) 규모의 초대형 칩 공급 계약을 체결한 바 있다. 하지만 AI 모델 학습이 일단락되거나 트래픽이 몰리지 않는 시기에는 최첨단 인프라도 유휴 자원으로 남게 된다.
+이런 잉여 연산 능력을 임대하면 천문학적인 유지비와 투자금을 어느 정도 회수할 수 있다는 계산이 가능하다.
+
+이런 소식에 글로벌 증시의 희비가 극명하게 엇갈렸다. 이날 뉴욕 증시에서 메타 주가는 새로운 수익원에 대한 기대감에 8.8% 상승한 반면, AI 반도체주는 일제히 곤두박질쳤다. 메타와 같은 빅테크 기업에서 인프라가 남는다는 건 AI 관련 투자가 고점을 찍었다는 신호로 해석될 수 있기 때문이다. 사실상 GPU 수요 둔화를 암시하는 대목인 만큼 GPU에 투입되는 메모리 생산 기업에도 타격이 전해졌다. 이날 마이크론과 샌디스크는 각각 10%대 급락했고, 인텔도 9% 하락세를 보였다. 코스피도 이 여파의 사정권에 들었다.
+
+증시 전문가들은 대체로 시장의 공포가 과도하게 선반영됐다고 선을 그었다. 메타의 클라우드 사업 진출은 잉여 컴퓨팅 자원 활용보다는 회사가 보유한 소셜 데이터를 수익화하려는 셈법일 가능성이 높다는 것이다. 권영배 미래에셋증권 연구원은 “메타는 고성능 컴퓨팅 수요 상당 부분을 구글 제미나이로 이전했는데, 구글이 그 수요를 제한할 정도로 수요가 강한 상황”이라고 말했다.
+
+다만 ‘AI 거품론’이 지속적으로 제기돼 왔던 만큼, 이번 결정은 그간의 과잉 투자에 대한 청구서일 수 있다는 의견도 있다. 이민희 BNK투자증권 연구원은 “구글처럼 컴퓨팅 인프라 부족을 호소하는 업체도 있지만, 전반적으로 하반기 설비투자 전망치가 과대 추정돼 있을 수 있다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/005/0001858622' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/005/0001858622</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
