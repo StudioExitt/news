@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반도체 투매에도…증권가 "SK하이닉스 400만원 간다"</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/648/0000048556' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9013" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>반도체 투매에도…증권가 "SK하이닉스 400만원 간다"</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">증권가에서 SK하이닉스의 목표주가를 3배 가까이 대폭 상향 조정했습니다. 주요 배경으로는 AI 수요 확산에 따른 D램과 낸드 전반의 실적 개선 전망과, 미국 나스닥 ADR 상장을 통한 기업 가치 재평가가 꼽힙니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 수요 확산에 따른 실적 전망 상향 조정과 미국 시장 ADR 상장이라는 구조적 촉매제가 결합되어 기업 가치(밸류에이션) 재평가 기대감이 매우 높기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI #반도체 #ADR상장 #밸류에이션</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">반도체를 중심으로 기술주가 흔들리고 있는 가운데, SK하이닉스 목표주가를 400만원 이상으로 올려 잡는 증권사 보고서가 잇따라 나왔다. 고대역폭메모리(HBM)를 넘어 D램과 낸드까지 인공지능(AI) 수요가 확산되면서 실적 추정치가 빠르게 올라가고 있다는 이유에서다.
+
+2일 NH투자증권은 SK하이닉스 목표주가를 기존 320만원에서 410만원으로 상향했다. IBK투자증권도 목표주가를 기존 180만원에서 400만원으로 122% 올려 잡았다.
+
+두 증권사가 목표주가를 높인 배경은 실적 전망 상향이다. NH투자증권은 SK하이닉스의 올해와 내년 영업이익 전망치를 각각 289조4000억원, 470조원으로 조정했다. 장기 계약 비중 증가로 이익 안정성이 높아진 점을 반영했다.
+
+류영호 NH투자증권 연구원은 "AI 시대 강력한 메모리 수요와 산업구조의 변화는 메모리 기업들의 리레이팅 기대 요인"이라며 "최근 메모리 가격의 상승 흐름이 하반기에도 긍정적으로 이어질 것"이라고 분석했다.
+
+IBK투자증권도 2분기 실적 전망을 상향했다. IBK투자증권은 SK하이닉스의 2분기 매출액을 전 분기 대비 50.2% 증가한 78조9680억원, 영업이익을 62.3% 늘어난 61조원으로 예상했다.
+
+특히 IBK투자증권은 시장이 메모리 수요를 여전히 과소평가하고 있다고 봤다. 그간 시장의 관심은 HBM에 집중됐지만 앞으로는 서버용 D램과 기업용 SSD를 중심으로 한 낸드 수요까지 함께 커질 수 있다는 분석이다.
+
+김운호 IBK투자증권 연구원은 "메모리를 사이클 산업으로 인식하는 것에서 벗어나야 하고 이익 규모가 충분히 주가에 반영돼야 한다"며 "안정적 성장 산업으로 인식되면 밸류에이션 상향도 충분히 가능하다"고 진단했다.
+
+미국 주식예탁증서(ADR) 상장도 재평가 변수로 꼽힌다. SK하이닉스는 오는 10일 미국 나스닥 시장에서 ADR 거래를 시작할 예정이다.
+
+ADR이 상장되면 해외 투자자는 한국 주식을 직접 사지 않아도 미국 시장에서 달러로 SK하이닉스에 투자할 수 있다.
+
+증권가는 ADR 상장이 단순히 해외 투자자 접근성을 넓히는 데 그치지 않고 투자 재원 확보와 밸류에이션 재평가로 이어질 수 있다고 보고 있다.
+
+류영호 연구원은 "ADR 발행을 통한 신규 조달 자금은 시설투자에 투입될 예정"이라며 "자금 조달에 따른 현금흐름 개선은 향후 주주환원을 위한 재원으로 활용될 가능성도 높다"고 짚었다.
+
+IBK투자증권은 ADR 상장이 밸류에이션 재평가의 계기가 될 수 있다고 판단했다. 미국 시장에서 거래되면 같은 메모리 업체인 마이크론과 직접 비교가 가능해지는 만큼 국내 증시에서 적용받던 할인 요인이 일부 완화될 수 있다는 분석이다.
+
+김운호 연구원은 "SK하이닉스는 마이크론이라는 동일한 사업을 영위하는 업체가 받는 밸류에이션과 직접 비교할 수 있기 때문에 ADR이 국내 주식보다는 높은 밸류에이션을 받을 수 있을 것으로 기대한다"고 밝혔다.
+
+다만 주가는 최근 조정 흐름을 보이고 있다. SK하이닉스는 지난달 25일 291만7000원까지 오른 뒤 약세 흐름을 이어가는 모습이다. 이날 오전 넥스트레이드 프리마켓에서도 약세를 보이다 9시4분 기준 정규장에서 전 거래일보다 21만원(8.20%) 내린 235만원에 거래되고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/648/0000048556' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/648/0000048556</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
