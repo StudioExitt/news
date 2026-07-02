@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[뉴욕증시]반도체 약세에 나스닥 하락…다우 최고치</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.03</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005784948' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9179" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[뉴욕증시]반도체 약세에 나스닥 하락…다우 최고치</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 약세로 나스닥은 하락했으나, 예상치를 크게 밑도는 6월 비농업 고용지표 발표에 따라 연준의 금리 인상 기대가 후퇴하면서 다우지수가 사상 최고치를 경신하며 혼조세를 보였다. 이는 거시 경제 지표 변화가 기술주와 전통 산업군 간의 투자 심리 차이를 만들고 있음을 시사한다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">기술주는 반도체 약세로 부정적이나, 핵심 거시 경제 지표(비농업 고용지표)가 예상치를 크게 밑돌며 연준의 금리 인상 기대 완화(정책 전환 가능성)에 무게를 실어주면서 시장 전체에 긍정적인 자금 유입 기대를 형성했기 때문.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">엔비디아</span> <span class="tag stock-tag">마이크론</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#금리인상중단</span> <span class="tag tag-hash">#나스닥하락</span> <span class="tag tag-hash">#비농업지표</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">2일(현지시간) 미국의 3대 지수는 혼조세로 마감했다. 2거래일 연속 반도체 약세가 이어지며 투자심리가 위축되며 나스닥은 하락했다. 그러나 6월 비농업 고용지표가 예상을 크게 하회하면서 금리 인상 기대가 일부 후퇴하자 다우지수는 사상 최고치 기록을 경신했다.
+
+이날 뉴욕증권거래소(NYSE)에서 다우존스30산업평균지수(다우지수)는 전 거래일보다 594.83포인트(1.14%) 상승한 5만2900.07에 마쳤다. 대형주 중심의 S&P500지수는 0.01포인트(0.00%) 오른 7483.24, 기술주 중심의 나스닥지수는 207.36포인트(0.80%) 내린 2만5832.67에 마무리했다.
+
+주요 반도체 종목들이 추락하며 나스닥 지수를 끌어내렸다. 엔비디아 1.41%, 마이크론 5.45%, 인텔 5.22%, AMD 4.26%, 반에크 반도체(SMH) ETF 4.50% 등이 내림세로 마감했다.
+
+새비웰스의 최고 투자책임자인 안슐 사르마는 "지난 몇 달 동안 뜨거운 인기를 누렸던 분야에서 다른 분야로 자금이 이동하는 현상일 수도 있지만, 인공지능(AI) 투자 자체에 대한 재평가가 이루어지고 있다고 생각한다"며 "기업들이 컴퓨팅 비용에 더욱 민감해진다면, 다음으로 집중할 분야가 바로 컴퓨팅 비용이 될 수도 있지 않을까"라고 말했다.
+
+오전 발표된 비농업 고용지표도 시장에서 주목했다. 미 노동부 노동통계국은 6월 비농업 일자리가 전월 대비 5만7000명 증가했다고 밝혔다. 이는 다우존스가 집계한 전문가 예상치 11만5000명 증가를 크게 밑도는 수준이다. 4월과 5월 고용 증가 폭도 기존 발표보다 각각 3만1000명, 4만3000명 하향 조정돼 두 달 합산 7만4000명 줄었다.
+
+실업률은 4.2%로 전월 4.3%에서 소폭 하락했다. 시장 예상치 4.3%도 밑돌았다. 그러나 경제활동참가율은 61.5%로 떨어져 2021년 3월 이후 최저치를 기록했다.
+
+이같은 고용지표에 따라 연방준비제도(Fed)가 금리 인상을 보류할 수 있다는 전망이 나오면서 2년 만기 미국채 수익률이 하락했다.
+
+브래드포드 스미스는 "케빈 워시 의장 체제에서 Fed의 정책 반응 함수가 어떻게 형성될지 알아가는 상황에서 이번 고용지표는 Fed가 단기적으로 금리 인상에 나서야 한다는 압박을 덜어줬다"고 말했다.
+
+eToro의 브렛 켄웰도 "투자자들이 노동 시장을 완전히 파악했다고 생각했을 때, 6월 고용 보고서가 예상치 못한 변수를 던져줬다"며 "Fed가 매파적 입장을 취해야 한다는 압력이 줄기 때문에 위험자산 선호 심리에는 긍정적인 측면이 있을 수 있다"고 설명했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005784948' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005784948</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
