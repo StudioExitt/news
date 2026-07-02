@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비트코인을 계속 사는 회사, 돈은 어디서 나올까?[엠블록레터]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005701634' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9029" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>비트코인을 계속 사는 회사, 돈은 어디서 나올까?[엠블록레터]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">비트코인을 꾸준히 매수하는 기업의 자금 조달 구조와 지속 가능성을 분석합니다. 이 회사는 주식 발행, 전환사채, 우선주 등 다양한 금융상품을 활용해 비트코인 매수 자금을 확보하고 있으며, 이는 결국 투자자들의 신뢰에 크게 의존하는 구조입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">회사가 자금 조달 구조와 금융상품을 통해 가상화폐를 매수하는 메커니즘과 그에 따른 위험 신호를 구체적으로 분석하여 투자자들에게 중요한 참고 사례를 제시하고 있기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자산운용</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#비트코인</span> <span class="tag tag-hash">#기업금융</span> <span class="tag tag-hash">#가상화폐투자</span> <span class="tag tag-hash">#스트래티지</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">최근 비트코인 시장에서 가장 자주 등장하는 기업을 하나 꼽으라면 단연 스트래티지(Strategy)입니다. 비트코인 가격이 오를 때마다 “또 샀다”는 뉴스가 나오고, 가격이 하락하는 시기에도 꾸준히 매수하면서 많은 사람들의 관심을 받고 있습니다.
+
+그런데 이런 뉴스를 보다 보면 자연스럽게 궁금증이 생깁니다.
+
+“비트코인을 계속 사는데, 돈은 대체 어디서 나오는 걸까?”
+
+회사가 보유한 현금은 한정되어 있습니다. 그런데 스트래티지는 수년째 수십억 달러 규모의 비트코인을 꾸준히 매수하고 있습니다. 단순히 돈이 많아서 가능한 일일까요?
+
+이번 뉴스레터에서는 스트래티지가 왜 비트코인을 사기 시작했는지, 어떤 방식으로 자금을 조달하는지, 그리고 최근 이 전략에 어떤 균열이 생기고 있는지까지 알아보겠습니다.
+
+스트래티지는 왜 비트코인을 선택했을까?
+스트래티지는 원래 기업용 데이터 분석 소프트웨어를 개발하는 회사였습니다. 2020년 이전까지만 해도 비트코인보다 기업용 소프트웨어 사업으로 알려져 있었습니다.
+
+변화는 2020년에 시작됐습니다. 코로나19 이후 전 세계적으로 대규모 유동성이 공급되면서 인플레이션 우려가 커졌고, 스트래티지는 보유 현금을 그대로 두는 것보다 장기적으로 가치를 보존할 수 있는 자산에 투자하는 것이 더 적절하다고 판단했습니다. 그 결과 선택한 자산이 바로 비트코인이었습니다.
+
+스트래티지는 비트코인을 단기 투자 대상이 아니라 장기 자산으로 바라봤습니다. 총발행량이 2,100만 개로 제한되어 있다는 희소성과 장기적인 가치 상승 가능성에 주목한 것입니다.
+
+처음에는 회사가 보유한 현금으로 비트코인을 매수했습니다. 하지만 더 많은 비트코인을 확보하기 위해서는 새로운 자금 조달 방식이 필요했고, 이후 다양한 금융상품을 활용하기 시작했습니다.
+
+비트코인을 살 돈은 어떻게 마련할까?
+많은 사람들이 가장 궁금해하는 부분입니다.
+
+“회사의 현금도 언젠가는 바닥날 텐데, 어떻게 계속 비트코인을 살 수 있는 걸까?”
+
+스트래티지는 은행 대출에만 의존하지 않고 금융시장의 다양한 자금 조달 수단을 활용하고 있습니다. 대표적인 방법은 주식 발행, 전환사채, 우선주 발행입니다.
+
+먼저 주식 발행은 가장 익숙한 자금 조달 방식입니다. 회사가 새로운 주식을 발행하면 투자자들은 그 주식을 매수하고, 회사는 그 대가로 자금을 확보합니다. 스트래티지는 이렇게 확보한 자금으로 다시 비트코인을 매수합니다. 쉽게 말해 회사의 성장 가능성을 믿는 투자자들이 자금을 제공하고, 회사는 그 자금으로 비트코인을 사들이는 구조입니다.
+
+두 번째는 전환사채입니다. 전환사채는 채권과 주식의 성격을 함께 가진 금융상품입니다. 투자자는 먼저 회사에 돈을 빌려주고, 이후 정해진 조건이 충족되면 채권을 주식으로 전환할 수 있는 권리를 갖습니다. 회사는 일반 회사채보다 낮은 비용으로 자금을 확보할 수 있고, 투자자는 회사의 주가가 상승할 경우 추가적인 수익을 기대할 수 있습니다.
+
+마지막은 우선주입니다. 우선주는 일반 주식보다 배당과 잔여 자산 분배에서 우선권을 갖는 대신 의결권이 제한되는 경우가 많습니다. 스트래티지는 우선주를 발행해 확보한 자금 역시 비트코인 매수에 활용하고 있습니다. 특히 스트래티지가 발행한 STRC는 높은 배당을 제공하는 대신 주가가 100달러 안팎에서 유지되도록 설계된 일반 우선주와 다른 구조를 갖고 있습니다.
+
+투자자들은 왜 스트래티지에 투자할까?
+투자자들이 기대하는 핵심은 비트코인 가격 상승에 따른 수익입니다.
+
+스트래티지의 기업 가치는 이제 소프트웨어 사업뿐 아니라 보유한 비트코인의 가치와도 밀접하게 연결되어 있습니다. 비트코인 가격이 상승하면 회사가 보유한 자산 가치도 함께 커지고, 이는 기업 가치와 주가에 대한 기대감으로 이어질 수 합니다.
+
+투자 상품에 따라 기대하는 수익도 조금씩 다릅니다. 전환사채 투자자는 주가 상승 시 채권을 주식으로 전환해 추가 수익을 기대할 수 있고, 우선주 투자자는 상대적으로 안정적인 배당과 우선 회수권을 기대합니다. 일반 주식 투자자는 비트코인 가격 상승에 따른 기업 가치 증가에 투자하는 셈입니다.
+
+또 다른 이유는 간접적인 비트코인 투자 수단이라는 점입니다. 모든 투자자가 비트코인을 직접 매수하고 보관하는 것을 선호하는 것은 아닙니다. 스트래티지에 투자하면 이러한 과정 없이도 비트코인 가격 상승의 영향을 받을 수 있습니다. 즉, 투자자들은 스트래티지를 통해 비트코인에 간접적으로 투자하고 있는 것입니다.
+
+이 전략은 앞으로도 계속될 수 있을까?
+스트래티지의 전략은 장점과 위험을 함께 가지고 있습니다.
+
+장점은 비트코인 가격이 상승할수록 회사의 자산 가치도 함께 증가한다는 점입니다. 비트코인에 대한 기대가 이어질수록 더 많은 투자자를 유치할 수 있고, 확보한 자금으로 다시 비트코인을 매수하는 선순환 구조를 만들 수 있습니다. 또한 기관투자자 가운데는 규제나 내부 투자 정책상 비트코인을 직접 보유하기 어려운 곳도 있는데, 이들에게 스트래티지는 비트코인에 간접적으로 투자할 수 있는 선택지가 되고 있습니다.
+
+반대로 가장 중요한 위험 요소는 자금 조달 구조가 투자자들의 신뢰에 크게 의존한다는 점입니다. 비트코인 가격이 하락하거나 시장 상황이 악화되면 투자 심리가 위축될 수 있고, 이는 새로운 자금 조달을 어렵게 만들 수 있습니다. 결국 자금 조달이 원활하지 않으면 현재와 같은 비트코인 매수 전략도 유지하기 어려워질 수 합니다.
+
+최근에는 이러한 구조적 위험이 실제 시장에서도 나타나기 시작했습니다.
+
+스트래티지가 발행한 우선주 STRC는 원래 100달러 안팎에서 안정적으로 거래되도록 설계됐지만, 6월 말에는 한때 75달러 수준까지 하락했습니다. 이는 투자자들이 STRC의 배당 구조와 스트래티지의 자금 조달 전략을 이전보다 신중하게 평가하기 시작했다는 신호로 해석됩니다.
+
+또한 스트래티지는 올해 우선주 배당 재원을 마련하기 위해 보유 비트코인 일부를 매도했습니다. 규모는 크지 않았지만, 비트코인을 매도하지 않겠다는 기존 기조에서 변화가 나타났다는 점에서 시장의 관심을 받았습니다. 여기에 STRC 가격이 100달러 아래에 머무르는 동안에는 새로운 우선주 발행을 통한 자금 조달도 쉽지 않아, 비트코인 매수를 위한 자금 확보에도 영향을 줄 수 있는 상황입니다.
+
+스트래티지가 보여주는 것은 무엇일까?
+스트래티지는 이제 세계에서 가장 많은 비트코인을 보유한 상장기업으로 알려져 있습니다. 하지만 시장이 주목하는 이유는 보유 규모만이 아닙니다.
+
+회사가 주식과 전환사채, 우선주 등 다양한 금융 수단을 활용해 비트코인을 지속적으로 매수하는 구조를 만들었고, 그 구조가 실제 시장에서 어떻게 작동하는지를 가장 먼저 보여주고 있기 때문입니다.
+
+최근 STRC 가격 하락과 비트코인 일부 매도 사례는 이 전략이 비트코인 가격뿐 아니라 투자자들의 신뢰와 자금 조달 환경에도 영향을 받는다는 점을 보여줬습니다. 반대로 시장의 신뢰가 회복되고 비트코인 가격이 다시 상승한다면 지금의 구조가 다시 힘을 받을 가능성도 있습니다.
+
+결국 앞으로 주목해야 할 것은 현재의 자금 조달 구조를 얼마나 안정적으로 유지할 수 있느냐입니다. 이 결과는 앞으로 비트코인을 자산으로 편입하려는 다른 기업들에게도 중요한 참고 사례가 될 가능성이 있습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005701634' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005701634</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
