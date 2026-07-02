@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>늦춰진 상관계수 완화…액티브ETF ‘퇴출 경보’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004637613' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9144" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>늦춰진 상관계수 완화…액티브ETF ‘퇴출 경보’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">액티브 ETF의 상관계수 규제 완화가 지연되면서, 현행 기준을 충족하지 못한 상품들의 상장폐지 사례가 속출하고 있다. 이는 운용사들이 규제 변화를 예상하고 전략을 조정했으나, 단기간에 충분한 데이터 회복이 어려워 발생한 문제로 분석된다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">규제 변화 지연과 그로 인한 ETF의 상장폐지 증가 우려는 특정 금융 상품군에 대한 투자심리를 크게 위축시키며 중기적인 자금 흐름 및 포트폴리오 조정 압박을 가할 수 있다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#액티브ETF</span> <span class="tag tag-hash">#상관계수규제</span> <span class="tag tag-hash">#펀드퇴출</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">클립아트코리아액티브 상장지수펀드(ETF)의 기초지수 상관계수 규제 완화가 당초 예상보다 늦어지면서 상장폐지 속출 우려가 커지고 있다. 상관계수요건 폐지 시행 시점이 내년으로 미뤄질 가능성이 커진 가운데 이미 상관계수 미달로 시장에서 퇴출되는 상품도 나오는 실정이다.
+
+2일 금융투자 업계에 따르면 금융 당국이 추진 중인 액티브 ETF 상관계수 규제 개선은 당초 올해 하반기 시행이 거론됐지만 이르면 내년 2분기 이후가 될 것이라는 전망이 우세하다.
+
+현행 규정상 액티브 ETF는 비교지수와의 상관계수를 0.7 이상 유지해야 한다. 상관계수가 3개월 연속 기준을 밑돌면 상장폐지 대상이 된다. 비교지수를 그대로 추종하는 패시브 ETF는 상관계수 0.9 이상을 유지해야 한다.
+
+업계에서는 최근 상관계수 미달 사례가 늘어난 배경 중 하나로 규제 완화 지연을 꼽고 있다. 일부 액티브 ETF가 상관계수 규제 완화를 염두에 두고 운용 전략을 조정했지만 현행 규제가 유지되면서 기준 미달 사례가 발생했다는 설명이다. 상관계수는 최근 1년간 ETF 순자산가치(NAV)와 비교지수의 일일 변동률을 토대로 산출돼 과거 운용 내역이 계속 반영된다. 운용 전략을 다시 비교지수에 맞춰 조정하더라도 단기간 내 상관계수를 회복하기 어려워 당분간 기준 미달 사례가 이어질 수 있다는 설명이다.
+
+상관계수 미달에 따른 상장폐지 사례도 현실화하고 있다. 한국투자신탁운용의 ACE TDF2030액티브적격은 7일 상장폐지되며 ACE애플밸류체인액티브, ACE TDF장기자산배분, ACE TDF2050액티브적격은 9일 퇴출된다. 모두 순자산총액 부족이 아니라 상관계수 기준을 충족하지 못한 데 따른 것이다. 타임폴리오자산운용의 TIME 글로벌탑픽액티브도 같은 사유로 상장폐지 대상에 올랐지만 상장 후 1년 미만 상품에 대한 유예 규정이 적용돼 상폐를 피했다. 이 밖에 TIME 미국배당다우존스액티브와 HANARO 글로벌피지컬AI액티브도 상관계수 기준에 미달됐다고 최근 공시했다.
+
+자산운용사 관계자는 “하반기 상관계수 규제가 없어질 것으로 보고 액티브 운용을 확대했던 ETF들이 적지 않다”며 “상관계수는 1년 치 데이터가 누적되는 구조라 지금부터 운용을 보수적으로 바꿔도 당분간 미달 사례가 계속 나올 가능성이 크다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004637613' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004637613</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

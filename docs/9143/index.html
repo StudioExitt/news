@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[이정훈 칼럼]'드러누워 막는' 게 능사는 아니다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006321096' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9143" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[이정훈 칼럼]'드러누워 막는' 게 능사는 아니다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금융당국이 환율 안정 목표를 위해 성급하게 단일종목 레버리지 ETF 시장을 열었으며, 그 과정에서 규제 당국의 판단 착오와 과도한 투기성 자금 유입 문제가 심각했음을 지적합니다. 지나친 규제보다는 투자자 교육 강화 및 상품 다양화가 필요하다고 강조합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">당국의 정책 실패와 과열된 반도체주 기반의 레버리지 투기는 시장 불안정성을 야기하며 규제 리스크가 높아질 수 있습니다. 투자심리가 급격히 위축되거나, 혹은 제도 개편 기대감으로 단기적 변동성이 확대될 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#규제개혁</span> <span class="tag tag-hash">#반도체주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">이데일리 이정훈 논설실장] “단일종목 레버리지 상장지수펀드(ETF) 도입을 급하게 준비했던 것이
+맞다. 적절한 상품인지 출시할 때부터 의문을 갖고 있었다. 그 때 드러누웠어야 하지 않았나 개인적으로 반성하고 있다.”
+
+이찬진 금감원장이 지난달 22일 기자간담회에서 발언하고 있다. (사진=이데일리DB)
+
+국내 증시 대표지수가 하루에 7~8%씩 오르내리는 게 낮설지 않을 정도의 증시 상황을 ‘과열’을 넘어 ‘투기’나 ‘도박’으로까지 불리게 만든
+주범으로 꼽히는 레버리지 상품 출시를 제어하지 못했다는 이찬진 금융감독원장의 고백이었다. 그의 발언을 통해, 레버리지 상품 허용을 위한 의사결정
+과정에서 여러 전문가들의 우려섞인 경고가 묻혀 버렸음은 충분히 짐작할 수 있다.
+
+애초 원·달러 환율 안정이라는 목표 달성을 위한 수단으로 적절한지에 대한 판단 자체가 잘못됐고, 국내 증시 분위기나 우리 투자자들의 성향에 대한
+냉철한 진단도 부족했다는 게 본질적인 패착이었다.
+
+올해 초 홍콩 자산운용사가 삼성전자와 SK하이닉스 2배 상품을 홍콩에 상장시켜 자금을 끌어모으자, 금융당국은 국내 자금 유출을 차단함으로써
+환율을 낮출 수 있다고 봤다. 그러나 나중에 수치를 확인해보니 당시 홍콩에 상장된 두 종목의 레버리지 상품에 유입된 11조원 정도의 자금 중
+국내 투자자들이 홍콩까지 건너가 투자한 돈은 5000억원 남짓에 불과했다. 치솟는 환율을 안정시키는 게 최우선이었던 당국이, 잘못된 진단을
+토대로 투기성 강한 레버리지 상품을 성급하게 내놓은 셈이었다.
+
+특히 삼성전자와 SK하이닉스 두 종목의 시가총액이 코스피시장 전체의 절반을 훌쩍 넘어설 정도로 대형 반도체주 쏠림이 극심한 상황이었는데, 이들
+두 종목에 대해서만 레버리지 상품을 내놓겠다는 결정은 납득하기 쉽지 않다. 일찌감치 두 종목에 올라타지 못해 ‘나만 기회를 놓치는 것 아닐까’
+하는 포모(FOMO) 공포에 가득찼던 개인투자자들은 한순간에 수익을 따라잡고자, 위험성을 알고도 레버리지로 뛰어 들었다.
+
+상품 출시 한 달도 안돼 이들 레버리지 ETF에 14조원이 넘는 투자자금이 몰렸고, 잇딴 이란 종전 합의 불발과 글로벌 기준금리 인상 가능성, 
+기술주 과열 우려 등으로 반도체주 주가가 널뛰기 양상을 보이자 레버리지 ETF 거래대금도 수십조원에 달했다.
+
+이제서야 사태의 심각성을 깨달은 금융당국은 시장 안정대책을 고민하고 있다. 기본예탁금 상향 조정과 투자자 사전교육 강화, 신용거래 제한은
+물론이고 단일종목 레버리지 상품의 신규 상장을 금지하거나 시가총액이 일정 금액을 넘어가면 신규 판매를 제한하는 총량 규제 도입까지도 논의테이블에 올랐다고 한다. ‘저비용 장기투자’ 수단이라는 ETF의 장점을 극대화할 수 있는 실질적 대책이 서둘러 나와야 한다.
+
+다만 신규 상장 금지나 총량 규제 등에는 신중함을 기할 필요가 있다. 시장 부작용이 두려워 애초에 레버리지가 큰 상품을 ‘드러누워 막는’
+식으로만 대응하는 건 능사가 아니다.
+
+미국 투자자들은 단일종목 레버리지 ETF를 2배, 2.5배, 3배 등으로 자신의 투자성향에 맞춰 투자할 수 있고 레버리지 ETF가 아니어도
+만기가 당일인 제로데이옵션(0DTE) 같은 상품도 쉽게 거래할 수 있다. 조금만 눈을 돌려 가상자산 거래소로 가면 반도체 3배 레버리지에 최대
+50배까지 무기한 선물 계약을 더해 거래하는 것도 가능하지만 우리처럼 과도한 투기 쏠림은 없다.
+
+반면 그동안 우리는 투자자들을 보호한다는 명목으로 파생상품이나 레버리지 상품에 대한 접근 자체를 제한해왔다. 그러다 단 두 종목에 대해서만 두
+배 레버리지 상품을 허용하니 일거에 투기성 자금이 몰렸다. 오히려 투자자들에게 다양한 상품 라인업을 제공하면서도 사전 투자자 교육을 강화하고,
+장기 투자 상품에 대한 메리트를 획기적으로 높이는 제도 도입이 더 시급하다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006321096' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006321096</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
