@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>시장 달라졌는데 ‘동전주 상폐’ 강행…긴장감 맴도는 코스닥</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003107322' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9091" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>시장 달라졌는데 ‘동전주 상폐’ 강행…긴장감 맴도는 코스닥</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스닥 시장이 부실 기업 퇴출을 명분으로 '동전주'에 대한 상장폐지 기준을 대폭 강화했다. 이는 투자자 보호 목적이지만, 자금 쏠림이나 일시적 업황 부진으로 주가가 하락한 성장성 높은 중소·벤처 기업들이 오히려 과도하게 퇴출될 수 있다는 시장의 우려가 커지고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">코스닥 시장 상장폐지 규정 강화는 구조적인 정책 리스크를 반영하며, 성장주 투자 심리에 직접적인 영향을 미칠 수 있습니다. 특히 자금 흐름에 따른 주가 하락을 부실로 오인할 수 있다는 점이 핵심 우려 사항입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">중소기업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥</span> <span class="tag tag-hash">#상폐위험</span> <span class="tag tag-hash">#성장주</span> <span class="tag tag-hash">#증시규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">시장 달라졌는데 ‘동전주 상폐’ 강행…긴장감 맴도는 코스닥
+언론사: 데일리안
+날짜: 2026.07.02. 오후 3:05
+본문: 부실기업 퇴출에 속도…상폐 기업 최대 88곳 전망
+‘삼전닉스 중심’ 증시 성장에 소외된 코스닥 상장사
+좋은 업황·실적에도…주가 밀린 ‘성장기업 희생’ 우려
+해당 이미지는 AI로 제작됨.
+해당 이미지는 AI로 제작됨. “혁신 기업도 퇴출 대상이 돼 버렸다. 동전주는 부실 기업으로 인식되는 것이냐.”
+삼성전자와 SK하이닉스 중심으로 코스피가 급등한 상황에서도 코스닥에 올인했다는 개인 투자자의 토로다.
+코스닥 시장이 출범 30주년을 맞은 2026년 7월 1일, 주가 1000원 미만인 이른바 ‘동전주’에 대한 상장폐지 요건이 시행됐다.
+코스닥 디스카운트 해소를 위한 조치라는 게 한국거래소 입장이다.
+‘코스닥 신뢰 회복’과 ‘투자자 보호’를 위해 부실·한계 기업의 퇴출 기준을 대폭 강화했다.
+그러나 성장 기업을 어떻게 남길 것인지에 대한 코스닥 상장사들의 의문이 제기되며 ‘성장성’이라는 목표와 충돌한 모습이다.
+2일 한국거래소에 따르면 전날(1일)부터 1000원 미만의 주가가 일정 기간 유지되는 경우 상장 폐지하는 상장 규정 개정안이 시행됐다.
+올해 2월 발표한 ‘상장폐지 개혁 방안’이 5개월 만에 시행된 셈이다.
+주가가 30거래일 연속 1000원 미만이면 관리종목으로 지정되고, 이후 90거래일 중 45거래일 연속으로 주가가 1000원 이상을 유지하지 못하면 ‘주가 미달’ 요건을 충족한 것으로 판단돼 상장폐지 절차를 밟을 수 있다.
+상장 유지를 위한 시가총액 기준도 기존 150억원에서 200억원으로 상향됐으며, 내년에는 300억원까지 높아진다.
+이에 따라 이르면 올해 4분기부터 상장폐지 절차를 밟는 종목이 나타날 것으로 보인다.
+거래소는 상장폐지 결정 기업 수가 지난해 38개사에서 올해 88개사까지 늘어날 수 있다고 분석했다.
+업계에서는 코스닥 시장에서 동전주 비중이 높은 만큼, 상장사들의 긴장감이 상당할 것으로 보고 있다.
+전날 종가 기준 코스닥에서 동전주에 해당하는 상장사는 무려 150곳이다.
+동전주 위기에 놓인 코스닥 상장사의 관계자는 “최근 몇 년 동안 실적이 꾸준히 상승하며 수익성과 성장성이 확인됐으나, 주가가 낮다는 이유만으로 퇴출되는 것은 성장성이 높은 중소·벤처 기업들을 위한 시장이라는 코스닥의 정체성을 훼손하는 것 아니냐”고 토로했다.
+일각에서는 2월 발표한 규정안이 그대로 추진된다는 점에서 급변한 증시 환경을 고려하지 않은 정책이라고 지적했다.
+실제로 금융위원회가 올해 2월 12일 ‘상장폐지 개혁 방안’을 발표한 이후 코스피가 55.07%(5354.49→8303.41) 오른 반면 코스닥은 16.64%(1114.87→929.35) 떨어졌다.
+삼성전자·SK하이닉스 쏠림 현상으로 코스피가 상승하는 동안 코스닥은 반도체 랠리에서 소외된 모습이다.
+3~6월 이란 전쟁도 영향을 미치며 1996년 출범 당시(1000)보다 낮은 수준이 됐다.
+이 과정에서 업황·실적 악화가 아닌, 반도체 중심의 자금 쏠림으로 주가가 하락한 기업들도 적지 않다.
+이에 급변한 시장, 일시적인 업황 부진으로 주가가 내린 기업까지 획일적인 기준을 적용하면 성장성과 혁신성을 갖춘 기업들 마저 시장에서 퇴출될 수 있다는 우려가 나온다.
+코스닥 상장사 관계자는 “증시 상황에 따라 누구든 동전주가 될 수 있는데, 주가 1000원이라는 기준이 기업의 성장성을 반영한다고 볼 수 있는지 의문”이라며 “코스닥을 살리기 위한 개혁이 오히려 코스닥 본질을 흔들고 있다”고 단언했다.
+업계 한 관계자는 “코스닥은 현재의 실적보다 미래 성장성을 평가받고 상장한 기업들이 많아 주가가 기업가치를 온전히 반영하지 못한 곳들이 다수”라며 “동전주 퇴출의 취지는 공감하지만 섣부른 추진”이라고 지적했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003107322' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003107322</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
