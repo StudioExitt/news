@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>에코프로, 기습 유증에 주가 와르르…방향 '공감' 타이밍 '글쎄'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000512575' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9061" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>에코프로, 기습 유증에 주가 와르르…방향 '공감' 타이밍 '글쎄'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">에코프로비엠이 1조 2천억 원 규모의 대규모 주주배정 유상증자를 발표한 후, 주가가 급락하며 투자자들의 실망감이 반영되고 있습니다. 시장은 장기적인 공급망 내재화 필요성에는 공감하나, 현시점의 자금 조달 타이밍에 대해 강한 의문을 제기하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">대규모 유상증자로 인한 주주 가치 희석 우려와 전기차 업황 불확실성이 복합적으로 작용하여 단기적인 시장 충격이 매우 큰 상황입니다. 이는 관련 섹터 전반에 걸친 투자 심리 위축을 야기했습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">에코프로비엠</span> <span class="tag stock-tag">에코프로</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">화학</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">배터리 소재</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#2차전지</span> <span class="tag tag-hash">#유상증자</span> <span class="tag tag-hash">#주가급락</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">2일 한국거래소에 따르면 에코프로비엠은 전날 6.88% 급락한 13만2700원에 거래를 마친 후 다음 날인 2일 장에서도 장중 최저 12만2600원까지 떨어지는 등 급락세를 이어가고 있다. /에코프로
+
+ 에코프로비엠이 하반기 첫 거래일부터 주가가 급락하고 있다. 시장에서는 장기적인 투자 방향성은 타당하나 업황 불확실성이 지속되는 상황에서 단행된 유상증자 시점에 대해 냉정한 평가를 내리는 모양새다.
+
+2일 한국거래소에 따르면 에코프로비엠은 전날 6.88% 내린 13만2700원에 거래를 마쳤다. 2일 장에서도 장 초반 7%가량 하락한 최저 12만2600원까지 떨어졌다. 이는 올해 최저가 기록이다.
+
+모회사 에코프로의 낙폭은 더 도드라진다. 전날 12.76% 급락한 9만3000원까지 떨어지더니 2일 장에서는 5%대 하락한 8만7500원까지 떨어졌다. 코스닥 시가총액 2, 3위를 달리던 양사가 모두 3거래일 여만에 25% 넘게 급락한 결과다.
+
+에코프로 그룹주의 동반 약세는 지난달 30일 발표된 에코프로비엠 유상증자로 투자자들의 실망감이 반영된 결과로 풀이된다. 에코프로비엠은 이날 인도네시아 니켈제련소 지분 확보와 헝가리 공장 투자 등을 목적으로 1조2000억원 규모의 주주배정 후 실권주 일반공모 방식 유상증자를 발표했다.
+기존 발행주식 총수의 10.1%에 달하는 대규모 유상증자다.
+
+타이밍이 공교롭다. 에코프로비엠과 에코프로는 지난달 29일 하루 만에 각각 15.56%, 23.69% 급등하자마자 장 마감 직후 유상증자를 발표했다. 유상증자에 따른 자금 조달 효과를 극대화하기 위해 의도적으로 시점을 맞춘 게 아니냐는 견해가 나오는 이유다.
+
+이렇다 보니 투자자들 사이에서는 불신의 목소리가 지배적이다. 전기차 수요 둔화(캐즘)와 양극재 업황 회복 지연으로 2차전지 본업의 실적 부진이 이어지는 가운데, 주주가치 희석이 우려된 대규모 자금 조달을 현시점에 강행해야 했냐는 지적이다. 투자 효과가 실제 연결 실적으로 확인되기까지 상당한 시차가 존재하나, 주가 상단을 누르는 지분 희석 부담은 즉각적이라는 점도 투자자들의 발길을 돌리게 만들고 있다.
+
+여기에 지주사인 에코프로가 감당해야 할 재무 부담을 사업회사인 에코프로비엠 주주들에게 전가했다는 비판도 나온다. 7월 1일은 코스닥이 출범 30주년을 맞은 기념일로 모처럼 상승 마감하며 시장에 활기가 돌았던 날이다. 이런 시장 전반에 상승 심리가 깔린 분위기 속에 시가총액 상위 종목이 찬물을 끼얹었다는 날선 비판도 뒤따른다. 소액주주들 역시 주주가치 훼손에 반발해 금융감독원에 증권신고서 중점심사를 요청한 상태다.
+
+반면 증권가에서는 에코프로비엠이 유상증자가 필요했던 시기였다는 점에는 공감하는 분위기다. 이번 유상증자는 에코프로그룹이 조달 자금의 대부분을 인도네시아 니켈 제련소 지분 취득에 투입해 핵심 원재료인 니켈 공급망을 내재화하겠다는 구상이 목적이기 때문이다. 이를 통해 니켈, 전구체, 양극재로 이어지는 수직계열화를 완성하면 장기적인 원가 경쟁력을 확보할 수 있다는 분석이다.
+
+박정하 iM증권 연구원은 "니켈은 하이니켈 양극재 원가에서 가장 중요한 원재료 중 하나라는 점에서 중장기적으로 안정적인 니켈 조달과 원가 경쟁력 제고에 기여할 수 있을 것"이라며 "헝가리 공장의 경우 유럽 전기차 시장 회복과 EU 역내 공급망 규제가 강화될수록 전략적 가치가 높아질 것이"라고 분석했다.
+
+그러나 증권가도 단기적인 수급 부담에는 우려의 목소리를 냈다. 전환사채(CB)나 신종자본증권 등 메자닌 발행도 금리 부담 등에 어려워진 상황에서 유상증자 자금 조달 방법 또한 제3자 배정이 아닌 주주배정 후 일반공모 방식으로 진행했기 때문에 기존 주주의 지분 희석 우려는 불가피하다는 관측이다.
+
+이진명 신한투자증권 연구원은 "투자 효과가 실적으로 확인되기까지 시간이 필요한 데다 니켈 가격과 전기차 수요 회복 등 업황 변수의 불확실성이 여전히 존재한다"며 "유상증자에 따른 단기 주당순이익(EPS) 희석이 불가피하다는 점을 감안하면 단기 주가 모멘텀은 제한적일 것"으로 평가했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000512575' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000512575</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
