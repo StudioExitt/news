@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스닥, 만년 꼴찌 꼬리표 떼자" 거래소, 밸류업 지원 확대</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.03</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006321719' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9242" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스닥, 만년 꼴찌 꼬리표 떼자" 거래소, 밸류업 지원 확대</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">한국거래소가 코스닥 시장의 체질 개선과 기업가치 제고를 목표로 밸류업 지원을 확대한다고 발표했습니다. 단순히 공시하는 것을 넘어, 컨설팅 제공 및 주주환원 대신 R&D 투자 등 코스닥 특성에 맞는 전략을 강조하며 시장 참여 유도를 강화할 방침입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">코스닥 시장에 대한 거래소 차원의 구조적 개선(밸류업) 지원이 강화되는 것은 장기적으로 시장의 투명성과 신뢰도를 높이고 기관 자금 유입에 매우 긍정적인 영향을 미칩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">지배구조</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥밸류업</span> <span class="tag tag-hash">#기업가치제고</span> <span class="tag tag-hash">#저PBR</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">3일 코스닥 30주년 행사 '기업가치 제고 및 신뢰받는 공시' 발표
+코스닥사 기업가치 제고 계획 컨설팅 등 지원 속도
+"밸류업 공시, 단순 공시 아닌 투자자와의 접점 마중물"
+"올해 70사 완료…하반기 및 향후 지원 확대 계획"
+저PBR 개선 방향 및 영문공시 순차 확대 방침도... 한국거래소가 코스닥 기업들에 기업가치 제고(밸류업) 확산을 위한 컨설팅 지원 등을 강화한다. 사업 현황과 특성에 맞는 전략을 시장과 적극적으로 소통하도록 유도해, 개별 기업 가치 증대와 나아가 코스닥 시장 전반 체질 개선을 이룩하겠다는 구상이다.
+
+최성규 거래소 기업밸류업지원부 팀장이 3일 서울 여의도 거래소 서울사옥 컨퍼런스홀에서 열린 '코스닥 커넥트' 행사에서 발표하고 있다. (사진=이혜라 기자)
+
+거래소는 3일 서울 여의도 거래소 서울사옥 컨퍼런스홀에서 ‘기업가치 제고 및 신뢰받는 공시’를 주제로 코스닥 시장의 밸류업 추진 성과와 향후 과제를 설명했다.
+
+최성규 거래소 기업밸류업지원부 팀장은 “밸류업 계획 공시는 회사의 발전 전략을 시장 투자자와 소통하는 종합 커뮤니케이션”이라며 “단순 공시 게재에 그치는 것이 아닌 밸류업 지수 편입 등을 통해 기관투자자 자금과 만나는 중요한 접점”이라고 말했다.
+
+거래소에 따르면 올해 기업가치 제고 계획을 공시한 기업은 코스피 343개사, 코스닥 389개사 등 총 732개사다. 다만 참여 비중(시가총액 기준)으로 분류하면 유가증권 상장사 중 88.0%가 참여한 반면, 코스닥사는 31.5%가 참여하는 데 그쳤다. 밸류업 공시가 여전히 유가증권시장 상장 기업과 대표 기업 위주로 편중한 것이다.
+
+거래소는 코스닥 기업들의 기업가치 제고 공시 참여를 통해 각 기업의 레벨업 토대를 마련하겠다는 목표다. 이를 통해 시장 전반의 체력 증진 토대를 마련하겠다는 목적이다.
+
+최 팀장은 “코스닥 밸류업 공시가 확대된다면, 리서치 커버리지 부족에 따른 애로사항 해결과 패시브 자금 유입 확대에도 도움이 될 수 있다”고 설명했다.
+
+이를 위해 거래소는 기업 대상 밸류업 컨설팅 등을 확대할 예정이다. 거래소 밸류업 컨설팅은 내부 전문가와 회계법인 등이 함께 기업의 현황 진단부터 기업가치 제고 계획 수립, 공시 제출까지 전 과정을 원스톱으로 지원하는 방식으로 진행해 왔다.
+
+최 팀장은 “올해 상반기까지 코스닥 상장사 70개사를 대상으로 밸류업 컨설팅을 진행했다”며 “향후 지원 기업 수를 확대할 예정이며 기술성장기업을 우선 지원할 계획”이라고 말했다.
+
+그는 코스닥 기업 밸류업 공시는 시장 특성에 적합한 방식의 접근이 필요하다고 강조했다.
+
+최 팀장은 “코스피 기업은 주주환원 등을 중심으로 기업가치 제고 계획을 수립하는 경우가 많다”며 “코스피 기업 대비 상대적으로 자금 여력 등이 부족한 코스닥 기업은 연구개발 투자 재원을 확보하는 것이 당장의 주주환원보다 더 중요한 과제일 수 있다”고 했다. 이어 “코스닥 기업이 주주환원에 대한 접근 방식이 코스피 상장 기업과 다를 수 있다는 특성을 이해해야 한다”며 “코스닥 기업은 한정된 자원을 분배해 투자하는 방법과, 투자를 통해 수익성을 높여 궁극적으로 주주에게 어떻게 보답할 것인지를 기업가치 제고 계획에 설명하는 것이 더 중요하다”고 부연했다.
+
+거래소는 저PBR(주가순자산비율) 기업에 대해서도 단순 공표가 아닌 개선을 유도하는 방향으로 제도를 운영할 방침이다. 거래소는 전일 유가증권시장과 코스닥 시장에는 저PBR(주가순자산비율) 기업 공표제도를 운영하겠다고 밝힌 바 있다. 거래소는 동일 업종 내 PBR이 2개 반기 연속 하위 20%인 기업을 ‘KRX 밸류업 홈페이지’에 공개하고 종목명에 ‘저PBR’ 태그를 표시한다는 계획이다.
+
+최 팀장은 “저PBR 공표 요건에 해당하는 기업이라도 개선 계획 양식에 맞춰 기업가치 제고 계획을 제출하면 공표 대상에서 제외될 수 있다”고 했다.
+
+거래소는 우량 공시 기업에 대한 인센티브 도입도 검토 중이라고 설명했다.
+
+공시 제도 개선도 병행한다. 거래소는 내년부터 코스닥 시장에 지배구조보고서 자율공시를 도입하고, 2028년부터 의무공시로 확대하는 방안을 추진할 계획이다. 코스닥사 영문공시도 단계적으로 의무화하며, 신규 상장기업과 기술특례상장기업 등을 중심으로 정례 IR 지원도 확대할 방침이다.
+
+한편 거래소는 지난 1일부터 이날까지 사흘 간 코스닥 30주년 기념행사 ‘코스닥 커넥트 2026’을 진행한다. 정은보 이사장은 앞서 열린 개막식에서 “30년 전 벤처 시장을 개척한 도전 정신과 결기로 코스닥 시장구조를 개혁하고 투명하고 공정한 시장 질서를 확립해야 한다”며 “거래소는 정부와 함께 시장의 체질 개선을 적극 추진해 코스닥을 신뢰받는 시장으로 발전시키겠다”고 밝혔다.
+
+정은보 한국거래소 이사장. (사진=거래소)</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006321719' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006321719</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
