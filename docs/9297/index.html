@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[뉴스추적] 어떻게 파산까지 몰렸나 / 앞으로 어떻게 되나 / 매각했다더니</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.03</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/057/0001956852' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9297" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[뉴스추적] 어떻게 파산까지 몰렸나 / 앞으로 어떻게 되나 / 매각했다더니</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">한때 대형마트 시장의 강자였던 홈플러스가 사모펀드의 과도한 차입금 기반 인수와 급변하는 유통 환경에 직면하며 파산 위기에 놓였습니다. 회생절차 진행 및 자금 확보 여부가 업계 전반에 큰 영향을 미칠 것으로 예상됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">대형 유통업체(홈플러스)의 파산 가능성은 해당 산업 및 관련 협력사들에 매우 큰 부정적 영향을 미치며, 이는 주가에 중대한 리스크 요인으로 작용합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">신세계</span> <span class="tag stock-tag">이마트</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">유통업종</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">소비재</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#홈플러스 #파산위기 #유통산업 #리테일</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">【 앵커멘트 】
+한때 대형마트 2위를 달렸던 홈플러스가 사실상 파산에 이르게 됐는지 자세히 알아보겠습니다.산업부 유통팀 김세희 기자 나와있습니다.
+
+【 질문1-1 】
+홈플러스, 어떻게 파산까지 몰리게 된 건가요?
+
+【 답변 】
+오래된 문제가 결국 한꺼번에 터졌다는 평가가 많습니다.
+
+홈플러스는 지난 2015년 사모펀드인 MBK 파트너스 인수 당시 큰 빚을 안고 출발했습니다.당시 7조 원이 넘는 액수를 썼는데, 절반 이상이 차입금, 그러니까 빌린 돈으로 무리하게 인수해 고가 인수 논란이 계속됐습니다.
+▶ 인터뷰 : 김기완 / 홈플러스 노조위원장(지난 2015년)
+- "(사모펀드가) 홈플러스를 책임 있게 경영을 한다거나 지속적인 성장을 위해서 자기 투자를 한다는 계획을 갖고 있지 않다."
+
+대출이 워낙 많다 보니 번 돈은 투자보다 빚을 갚는 데 쓰였고, 경쟁력을 키울 여력은 갈수록 줄었습니다.
+
+【 질문1-2 】
+구조적인 이유 말고 또 다른 이유는 없었을까요?
+
+【 답변 】
+대형마트를 둘러싼 환경 변화도 무시할 수 없었습니다.
+코로나19와 급성장한 이커머스 업계와의 경쟁에도 밀리면서 영업 적자가 누적되는 등 자금난을 겪어 왔습니다.점포를 팔고 몸집을 줄이는 것만으로는 한계가 뚜렷했습니다.
+결국, 마지막 기회였던 회생절차에서도 법원이 요구한 최소한의 운영자금조차 확보하지 못하면서 더는 버티지 못하게 된 겁니다.
+
+【 질문2 】
+14일 안에 운영자금을 확보하면 항고를 할 수 있는데, 이때까지 자금을 못 구하면, 그럼 지금 영업 중인 매장들은 한꺼번에 다 문을 닫아야 하는건가요?
+
+【 답변 】
+지난해 기준 126개 매장이 운영 중이었는데, 지금 남은 건 67개 정도 됩니다.
+그런데 항고 기간 14일이 지나면 폐업 절차에 들어가는데 당장 모두 문을 닫지는 않겠지만 결국 시간문제라는 이야기가 나옵니다.비단 매장 운영만 문제가 아니라 앞서 리포트에서 보신 것처럼 직원들의 실직, 협력업체들의 도산 위험 등 유통업계 전반에 큰 파장이 예상됩니다.일단 홈플러스는 오늘 입장문을 내고 돈을 가장 많이 빌렸던 메리츠금융그룹에 2000억 원의 긴급 자금 운용을 요청했습니다.하지만, 메리츠금융그룹이 여기에 응할지 뚜렷하지는 않습니다.
+
+【 질문3 】
+파산을 좀 피해보려고 일부 사업도 매각했었잖아요. 얼마 전 하림그룹이 홈플러스 익스프레스, 그러니까 슈퍼마켓을 인수했는데, 이번 건과는 상관없는건가요?
+
+【 답변 】
+네. 홈플러스는 대형마트고, 홈플러스 익스프레스는 슈퍼마켓 브랜드라 이 두 곳은 엄연히 다릅니다.회생절차 과정에서 사업부를 분리해 이미 매각이 마무리됐고, 이번 파산 대상에는 포함되지 않습니다.이번 법원의 결정은 대형마트와 온라인 사업 등 남아 있던 홈플러스 본체에 대한 것인데요.홈플러스 익스프레스는 별도 법인으로 운영해 이번 파산과는 직접적인 관련이 없습니다.
+
+【 앵커멘트 】
+네 여기까지 듣겠습니다. 지금까지 김세희 기자였습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/057/0001956852' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/057/0001956852</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
