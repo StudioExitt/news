@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 87% 뛰었는데…지수는 사실상 '6종목'이 움직였다 [증시는 왜]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.04</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005543586' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9311" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 87% 뛰었는데…지수는 사실상 '6종목'이 움직였다 [증시는 왜]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 지수가 대폭 상승했으나, 시장 자금과 수익은 삼성전자와 SK하이닉스를 중심으로 한 반도체 섹터에 과도하게 집중되는 현상이 확인되었다. 이러한 집중도는 코스피의 추세를 대형주 중심의 '쏠림 현상'이 주도하고 있음을 시사하며, 단기적으로 강세 흐름이 지속될 가능성이 높다고 분석된다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">시장 자금과 이익이 특정 대형주(반도체)에 극도로 집중되고 있다는 구조적 분석을 제공하며, 단기적인 강세 지속성을 예측하고 있어 투자 방향성에 큰 영향을 미칩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체집중</span> <span class="tag tag-hash">#대형주랠리</span> <span class="tag tag-hash">#코스피분석</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[파이낸셜뉴스] 코스피가 900개 넘는 종목으로 구성돼 있지만 실제 지수는 사실상 6개 안팎의 종목이 움직이는 구조라는 분석이 나왔다. 삼성전자와 SK하이닉스를 중심으로 자금과 이익이 집중되면서 대형주와 중소형주 간 격차도 더욱 벌어지고 있다.
+
+■이익도 돈도 반도체로…양극화 심화
+4일 한국거래소에 따르면 코스피는 3일 전 거래일 대비 5.76% 급등한 8088.34에 거래됐다. 이는 지난 1월 2일 종가(4309.63) 대비 87.68% 상승한 수치다.
+
+가장 눈에 띄는 변화는 시장 집중도를 나타내는 지표다. 금융정보업체 에프앤가이드에 따르면 전일 기준 코스피 시장집중도지수(HHI)는 역대 최고 수준까지 높아졌다. HHI를 유효 종목수(1/HHI)로 환산하면 5.75로, 시가총액 비중을 고려할 때 사실상 6개 안팎의 종목이 코스피 전체의 방향을 좌우하는 구조라는 의미다.
+
+이 같은 집중 현상은 지난 5월 27일 단일종목 레버리지 상장지수펀드(ETF) 출시 이후 개인 자금이 삼성전자와 SK하이닉스로 집중되고, 외국인도 반도체 중심의 매매를 이어가면서 더욱 심화됐다.
+
+자금 흐름 역시 반도체로 향했다. 신한투자증권은 상반기 코스피가 100% 넘게 상승하는 동안 시가총액 증가분의 79%가 반도체에서 발생했다고 분석했다. 코스피와 코스닥을 나누는 것보다 반도체와 비반도체를 구분하는 것이 더 의미 있을 정도로 반도체 중심 장세가 뚜렷했다.
+
+대형주 중심의 집중 현상은 기업 실적에서도 확인된다. 유안타증권에 따르면 올해 코스피 상장사의 12개월 선행 순이익 컨센서스는 전주 대비 11조8000억원 증가한 반면 코스닥은 오히려 감소했다.
+
+강진혁 신한투자증권 선임연구원은 "상반기 시장은 대형주 집중과 순환매가 반복됐지만 결국 반도체 중심의 흐름이 시장을 주도했다"며 "하반기에도 반도체 릴레이 모멘텀이 이어지는 만큼 대형주 중심 장세가 지속될 가능성이 있다"고 말했다.
+
+i재원 유안타증권 연구원은 "주가가 특정 종목에 집중되는 근본적인 이유는 결국 이익이 한쪽으로 몰리기 때문"이라며 "반도체와 IT하드웨어, 은행 등 이익과 수급이 동시에 확인되는 코스피 대형주 중심의 전략이 유효하다"고 분석했다.
+
+■상승장은 계속…쏠림은 더 강해질 수도
+증권가는 당분간 반도체 중심의 강세 흐름이 이어질 가능성을 높게 보고 있다.
+
+삼성선물은 하반기에도 AI 인프라 투자 확대와 실적 개선을 바탕으로 반도체 중심의 강세 흐름이 이어질 것으로 전망했다. 다만 공격적인 자금 유입으로 증시 과열과 종목 편중이 심화될 경우 주의가 필요하다고 진단했다.
+
+증시 전문가들은 반도체 중심의 상승세가 이어질수록 코스피 내 비주도주와 코스닥의 상대적 소외도 함께 심화될 가능성이 크다고 보고 있다.
+
+증권업계 관계자는 "상반기에 코스피가 100% 넘게 상승한 반면 코스닥은 마이너스(-) 수익률을 기록하며 양극화가 확인됐다"며 "하반기에도 반도체 중심의 쏠림이 이어지면 지수는 신고가인데 투자자들의 체감 수익률은 낮은 장세가 이어질 가능성이 있다"
+</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005543586' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005543586</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
