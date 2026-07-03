@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>서울, 은마 재건축 속도전…강남권 표준모델 만든다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.03</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='원문링크:' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9234" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>서울, 은마 재건축 속도전…강남권 표준모델 만든다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">강남 핵심 재건축 사업(은마)이 규제 해소와 신속한 진행 모델을 구축하며 시장에 활력을 불어넣고, 이는 주변 지역의 부동산 가격 상승세로 이어지는 등 긍정적 흐름을 보였습니다. 다만, OECD는 한국 주택 시장의 장기적인 안정화를 위해 세금 구조 개편(보유세 강화)이 필요하다고 지적하며 정책 리스크를 제기했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">재건축 속도전(신속통합기획)은 정부 정책 지원을 받은 대표적인 상승 모멘텀이며, 이는 건설 및 관련 자재/금융주에 단기적으로 긍정적 기대를 심어줍니다. 다만, OECD가 제기한 보유세 강화 권고는 장기적인 세금 리스크로 작용할 수 있어 시장의 이중적 해석이 필요합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">현대건설</span> <span class="tag stock-tag">DL이앤씨</span> <span class="tag stock-tag">국민은행</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">건설</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">부동산</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#재건축</span> <span class="tag tag-hash">#신속통합기획</span> <span class="tag tag-hash">#부동산정책</span> <span class="tag tag-hash">#세제개편</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■AI 프리즘 [부동산 뉴스]
+25년 만에 ‘8부 능선’…은마 재건축 패스트트랙
+동탄 규제에 권선·병점 호가 급등
+OECD “부동산세, 거래에서 보유 중심 전환해야”
+
+▲ AI 프리즘* 맞춤형 경제 브리핑
+* 편집자 주: ‘AI PRISM’(Personalized Report &amp; Insight Summarizing Media)은 한국언론진흥재단의 지원을 받아 개발한 ‘인공지능(AI) 기반 맞춤형 뉴스 추천 및 요약 서비스’입니다. 독자 유형별 맞춤 뉴스 6개를 선별해 제공합니다.
+
+[주요 이슈 브리핑]
+
+■ 재건축 패스트트랙: 서울 강남 재건축의 상징 대치동 은마아파트가 사업시행계획 인가를 받으며 ‘8부 능선’을 넘었다. 2001년 재건축추진준비위원회 발족 이후 25년 만이며, 서울시가 도입한 ‘신속통합기획 시즌2’를 적용해 정비계획 변경 고시부터 인가까지 통상 1년 7개월 소요 기간을 7개월로 단축한 첫 사례다.
+
+■ 규제 반사이익 확산: 화성시 동탄구·용인시 기흥구·구리시가 규제지역으로 묶이면서 인접 비규제지역 시장이 들썩이고 있다. 수원 권선구 ‘수원하늘채더퍼스트2단지’ 전용 84㎡의 호가가 규제 당일 하루 만에 7000만 원 치솟았으며, 한국부동산원 집계 기준 권선구 매매가격은 전주 대비 0.25% 올랐다.
+
+■ OECD 세제 개편 권고: 경제협력개발기구(OECD)가 한국의 GDP 대비 부동산 세수 비중이 3.0%로 OECD 평균(1.6%)의 약 2배에 달한다고 지적했다. 보유세가 전체 부동산 세수에서 차지하는 비중은 29.4%로 OECD 평균(56%)의 절반 수준에 머물고 있어, 거래세 중심 구조를 보유세 중심으로 전환하라고 권고했다.
+
+[부동산 투자자 관심 뉴스]
+1. 은마가 문 연 ‘재건축 패스트트랙’…강남권 표준 모델 삼는다
+- 핵심 요약: 서울시가 은마아파트 사업시행계획 인가 사례를 강남권 재건축의 표준 모델로 삼겠다고 밝혔다. 앞서 잠실주공5단지도 1일 사업시행계획 인가를 받았으며, 서울시는 두 단지를 선도 사업으로 삼아 압구정 현대아파트 등으로 재건축 속도를 확산한다는 구상이다. 은마아파트에는 민간 정비사업 최초로 역세권 용적률 특례(331.9%)가 적용돼 공공임대 909가구·공공분양 195가구를 포함한 5850가구가 공급된다.
+서울시는 2028년까지 착공 가능한 85개 구역·8만5000가구를 핵심 공급 전략사업으로 선정해 공정촉진회의를 통해 집중 관리하고 있다.
+
+2. 25년 끈 은마 재건축…이르면 2028년 ‘첫삽’
+- 핵심 요약: 대치동 은마아파트가 사업시행계획 인가를 받아 재건축 절차의 ‘8부 능선’을 넘었다. 2001년 재건축추진준비위원회 발족 이후 25년 만이며, 서울시는 ‘신속통합기획 시즌2’를 적용해 정비계획 변경 고시부터 인가까지 7개월 만에 처리했다. 재건축 후 규모는 기존 14층 28개 동 4424가구에서 지상 49층 29개 동 5850가구로 확대된다. 이르면 2028년 착공이 예정돼 있으나, 기존 용적률이 204%로 높아 일반분양 물량이 적고 공사비 상승으로 조합원 분담금이 늘어나는 등 관리처분 단계에서 변수가 남아 있는 상황이다.
+
+3. 동탄 규제 반사이익?…하루새 호가 7000만 원 뛴 권선·병점
+- 핵심 요약: 화성시 동탄구·용인시 기흥구·구리시가 규제지역으로 지정된 이후 인접 비규제지역 아파트 호가가 빠르게 치솟고 있다. 수원 권선구 ‘수원하늘채더퍼스트2단지’ 전용 84㎡의 호가는 규제 당일 하루 만에 7000만 원 올랐으며, 화성 병점구 일대도 물건이 줄어들고 남은 매물 가격이 크게 오른 상황이다. 한국부동산원의 6월 5주 주간 아파트가격 동향에 따르면 수원 권선구가 전주 대비 0.25%, 안양 만안구와 군포시가 각각 0.25% 상승했다. 한편 서울 아파트 매매가격도 전주 대비 0.27% 오르며 상승세를 유지했고, 올해 서울 전세 누적 상승률은 5.10%로 매매 상승률(5.11%)에 육박하는 모습이다.
+
+[부동산 투자자 참고 뉴스]
+4. “韓 GDP 대비 부동산세, OECD 평균 2배…거래세 낮추고 보유세 높여야”
+- 핵심 요약: OECD가 ‘2026 한국경제보고서’에서 한국의 부동산 세제 구조 개편을 권고했다. 한국의 전체 부동산 세수 중 보유세 비중은 29.4%로 OECD 평균(56%)의 절반 수준인 반면, 거래세 비중은 50.4%에 달해 구조 불균형이 심각하다는 지적이다. OECD는 “거래세를 줄이고 보유세를 늘리는 세수 중립적 전환이 주거 이동성과 노동시장 효율을 높이고 주택 시장 마찰을 완화할 것”이라고 강조했다. 다만 한국의 전체 조세 수입에서 부동산 세금이 차지하는 비중이 이미 11.7%로 OECD 평균(5.1%)의 두 배를 넘는 만큼, 보유세 확대는 한국주택 시장의 특수성을 고려해 신중하게 설계해야 한다고 덧붙였다.</div><div class='news-src'>원문링크: <a href='원문링크:' style='color:#64748b;word-break:break-all'>원문링크:</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
