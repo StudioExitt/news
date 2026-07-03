@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 7700→7300→7800…반도체 반등에 '널뛰기'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.03</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005381104' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9228" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 7700→7300→7800…반도체 반등에 '널뛰기'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 지수가 반도체주 급등세에 힘입어 큰 변동성을 보이며 널뛰기 양상을 연출했습니다. 기관의 순매수와 개별 기업들의 AI 관련 호재가 단기 기술적 지지선을 사수하는 모습을 보여 투자 심리가 극대화되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업황 회복 기대감과 AI 관련 기술적 호재(삼성전자-앤트로픽 협의 등)가 단기적으로 지수 반등을 강력하게 주도했습니다. 다만, 급격한 변동성 자체가 시장 전반의 불안정성을 보여주어 투자 심리는 위축될 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#코스피변동성</span> <span class="tag tag-hash">#기술적지지선</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">3일 오전 서울 중구 하나은행 딜링룸./사진=뉴시스
+코스피 증시가 3일 오전 지수 등락폭을 500포인트 이상 넓히며 변동성 장세를 연출했다. 간밤 미국증시 반도체주 급락에 동조하는 매도세와 저가매수 시도가 맞서면서 증시 전체가 널뛰는 것으로 풀이된다.
+이날 오전 11시10분 코스피는 전 거래일 대비 211.87포인트(2.77%) 오른 7859.96으로 산출됐다. 전일 7648.09로 마감한 지수는 이날 7739.75로 상승 출발한 직후 하락 반전, 7378.10까지 내린 뒤 7879.21까지 급반등했다.
+한국거래소·넥스트레이드를 통틀어 이 시각까지 기관이 1조7793억원어치를 순매수하고 외국인은 1조4337억원어치, 개인이 4450억원어치를 순매도했다. 기관 중에선 순매수 금액이 금융투자(1조2625억원)·투신(2042억원)·연기금 등(1277억원) 순으로 많았다.
+종목별 변동성이 커지면서 개별주 대신 ETF(상장지수펀드) 매수로 시장에 접근하는 투자자가 급증한 것으로 풀이된다. 금융투자 계정은 ETF 유동성공급자(LP)인 증권사를 포함한다.
+시가총액 상위종목군에서 삼성전자가 전일 대비 1만250원(5.33%) 오른 30만1250원, SK하이닉스가 6만4000원(2.93%) 오른 225만1000원에 거래되며 지수 반등을 주도하고 있다. 개장 때 상승 출발한 뒤 가파르게 하락하다 급반등하는 추세다.
+반도체 연계·수혜주로 분류되는 삼성물산은 3%대 강세, SK스퀘어·삼성전기는 1%대 약세를 지속하고 있다. 시장 혼조가 짙어지면서 업종 내에서도 희비가 엇갈리는 모습이다. 나머지 시총 10위권 종목 중에선 LG에너지솔루션·삼성바이오로직스만 강보합세로 빨간불을 켰다.
+강진혁 신한투자증권 연구원은 이날 오전 시황에 대해 "미국 6월 비농업고용이 전월 대비 5만7000명 증가해 예상치(11만명)를 하회했고, 경제활동참가율이 하락하는 등 기준금리 인상 우려가 진정됐다"고 밝혔다. 금리인상은 통상 증시 투자심리를 약화하는 요소로 간주된다.
+강 연구원은 "삼성전자가 앤트로픽의 자체 AI(인공지능) 칩 생산을 협의 중이라는 외신 보도에 강세를 보였고, SK하이닉스도 상승 전환했다"며 "코스피가 단기 기술적 지지선을 사수했다"고 덧붙였다.
+서상영 미래에셋증권 상무는 "전일 13% 급락했던 일본 키옥시아가 이날 장중 10% 가까이 추가 하락하다 상승 전환했다"며 "이 같은 변화는 외국인 매도세를 잠시 주춤하게 하는 경향이 있다".
+코스피 업종 가운데선 증권이 4%대, 전기전자가 3%대, 제조가 2%대, 보험·유통·제약이 1%대 강세에 진입했다. 반면 의료정밀·건설은 3%대, 오락문화·IT는 2%대, 일반서비스·비금속·기계장비·통신·종이목재는 1%대 약세를 보이고 있다.
+한편 코스닥 증시는 연일 하락세를 이어가고 있다. 이 시각 지수가 전일 대비 17.79포인트(2.05%) 내린 848.93을 기록했다. 개인이 532억원어치를 순매수하고 외국인이 407억원어치, 기관이 269억원어치를 순매도했다.
+업종 대다수가 하락세다. 유통(강보합세)를 제외한 일반서비스·비금속·기계장비는 4%대, 오락문화·제조는 3%대, 제약·IT·전기전자·의료정밀·건설·금융·출판매체·금속·종이목재는 2%대, 기타제조·화학·운송은 1%대로 하락률을 키웠다. 음식료담배·통신은 약보합세다.
+주성엔지니어링이 13%대 급락을 빚고 있다. 알테오젠은 4%대, 에코프로비엠은 3%대, 레인보우로보틱스·에코프로·원익IPS는 2%대, 에이비엘바이오는 1%대 약세다. 반면 코오롱티슈진은 2%대, 리노공업은 1%대 강세에 돌입했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005381104' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005381104</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
