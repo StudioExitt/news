@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>하루 758P 출렁…210조 몰린 단일종목 레버리지의 그림자</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.03</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='원문링크: https://n.news.naver.com/mnews/article/011/0004637970' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9290" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>하루 758P 출렁…210조 몰린 단일종목 레버리지의 그림자</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 시장이 단기간에 높은 변동성을 보이며 대형 반도체주를 중심으로 급등세를 나타냈습니다. 그러나 이 과정에서 단일종목 레버리지 상품으로 210조 원의 자금이 집중되면서, ETF의 구조적 특성(쇼트 감마)과 시장 조성자의 거래가 맞물려 변동성을 키우는 '그림자' 위험이 커지고 있다는 것이 분석되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심적인 투자 위험 요소(레버리지 상품의 과도한 집중과 변동성)에 대한 경고가 포함되어 있으며, 이는 시장 참여자들의 장기적인 투자 심리와 시스템 구조 전반에 영향을 미치는 거시적/구조적 분석입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지위험</span> <span class="tag tag-hash">#변동성</span> <span class="tag tag-hash">#단일종목투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■‘고변동 테마장’ 된 코스피
+6월 거래대금 전체 ETF의 27%
+쇼트감마·리밸런싱에 가격 급등락
+올해 코스피 변동성 비트코인 웃돌아
+“장기자금 확충, 수급기반 강화 필요”
+장중 7300 밀렸다 반등 ‘팔천피’ 복귀
+삼성전자 8%·하이닉스 10%대 뛰어
+3일 서울 중구 하나은행 딜링룸 현황판에 코스피 지수와 SK하이닉스, 삼성전자 종가가 표시돼있다. 이날 코스피는 전장보다 440.25포인트(5.76%) 오른 8088.34, 코스닥지수도 전장보다 1.69포인트(0.19%) 상승한 868.41에 장을 마쳤다.
+연합뉴스6월 한 달 내내 ‘롤러코스터’를 탔다는 평가를 받은 코스피는 월간 기준으로 1%가량 하락하는 데 그쳤다. 결과만 놓고 보면 비교적 잔잔했던 한 달이었으나 장중 수백 포인트씩 등락을 거듭하면서 하루에 수익과 손실이 수차례 엇갈리는 장세는 일상이 됐다. 특히 단일종목 레버리지 상품들이 상장 한 달여 만에 증시 구조의 중심축으로 떠오른 가운데 작은 가격 변화가 시장 전체를 흔드는 파급력이 한층 뚜렷해지고 있다는 분석이 나온다.
+3일 한국거래소에 따르면 코스피는 전 거래일 대비 440.25포인트(5.76%) 오른 8088.34에 거래를 마쳤다. 지수는 전장보다 91.66포인트(1.20%) 오른 7739.75로 출발한 뒤 하락 전환해 한때 7300선까지 밀렸지만 다시 상승 전환했고 오름폭을 확대하며 ‘팔천피’를 회복했다. 이날 장중 고점과 저점의 차이는 758.18포인트로 지난달 23일(971.61포인트)에 이어 역대 두 번째로 컸다. 대형 반도체주를 중심으로 반발 매수세가 강하게 유입되면서 장중 프로그램매수호가 일시효력정지(사이드카)가 발동됐다. 올해 들어 코스피에서만 31번째다.
+시가총액 상위 종목 중 삼성전자(8.22%)와 SK하이닉스(10.88%)는 각각 ‘30만전자’ ‘240만닉스’를 회복했고
+SK스퀘어(4.20%), 삼성전기(3.27%), 현대차(2.07%), LG에너지솔루션(2.40%) 등도 오름세를 보였다. 증시 호황의 대표수혜주인 삼성증권(10.38%), 미래에셋증권(6.48%), 키움증권(8.06%) 등도 급등했다. 개인과 외국인은 각각 2조 2943억 원, 2조 1928억 원을 팔아치우며 동반 순매도했다.
+투자자들 입장에서는 지수의 진폭이 날로 커지면서 한 치 앞을 가늠하기 어려운 장세가 이어지고 있다. 특히 올해 5월 27일 상장한 단일종목 레버리지 상품들이 증시 거래 구조의 중심부로 치고 올라오면서 이례적인 수급 영향력을 끼치고 있다는 평가다. 레버리지 상장지수펀드(ETF)는
+구조적으로 시장이 오를 때는 더 사고 내릴 때는 더 파는 ‘쇼트 감마(Short Gamma)’ 특성을 갖는다. 목표 레버리지 비율을 유지하기 위해 하루 단위로 리밸런싱을 실시하기 때문이다. 기초자산 가격이 오르면 목표 비중을 맞추기 위해 추가 매수하고, 반대로 하락하면 추가 매도에 나선다. 결과적으로 기존 주가 흐름을 같은 방향으로 더욱 키우는 구조다.
+여기에 시장조성자의 헤지성 거래까지 맞물리면 가격 움직임은 한층 커질 수 있다. 시장조성자는 투자자들이 ETF를 원활하게 사고팔 수 있도록 매수·매도 호가를 대주는 역할을 한다. 이 과정에서 한쪽 방향으로 위험이 쌓이지 않도록 삼성전자나 SK하이닉스 현·선물 등을 사고팔아 균형을 맞춘다. 주가가 급변할수록 리스크 관리를 위한 거래 규모도 함께 커지고 결국 현물·ETF·파생시장이 서로 영향을 크게 주고받는 메커니즘이 형성된다. 유명간 미래에셋증권 연구원은 “투자자들은 레버리지 ETF의 영향력이 높아진 상황에서 구조적으로 변동성이 커진 주식시장에 적응할 필요가 있다”고 진단했다.
+신한투자증권 리서치센터에 따르면 올해 상반기 코스피의 변동성을 연율화한 수치는 57%로 비트코인(47%)을 웃돌았다. 같은 기간 삼성전자와 SK하이닉스의 연율화 변동성은 각각 78%, 90%에 달했고 단일종목 레버리지 상품은 각각 156%, 180% 수준으로 확대됐다. 통상 80%를 웃도는 변동성은 한때 양자컴퓨팅이나 대체육 등 일부 고변동성 테마에서나 관찰되던 수준이다. 국내 대표지수와 시가총액 최상위 종목이 사실상 ‘고위험 테마주’에 가까운 가격 진폭을 보인 셈이다.
+음의 복리효과와 같은 위험성에도 불구하고 ‘주도주 쏠림’ 현상이 심화함에 따라 이를 두 배로 추종하는 레버리지 상품으로 자금이 몰리는 현상은 이어지고 있다. 실제로 지난달 국내 ETF 거래대금 1위는 SK하이닉스의 일일 수익률을 두 배로 추종하는 ‘KODEX SK하이닉스단일종목레버리지(84조 3060억 원)’였다. 해당 기간 수익률은 10.9%로 장중 변동성이 누적된 탓에 본주의 상승률(12.1%)을 오히려 밑돌았지만 거래 규모는 국내 대표지수 추종 상품인 ‘KODEX 200(63조 9730억 원)’을 제치고 1위에 올랐다.
+삼성전자·SK하이닉스를 기초자산으로 하는 단일종목 레버리지 상품 14종(인버스 제외)의 지난달 거래대금은 약 212조 원으로 집계됐으며 이는 같은 기간 전체 ETF 거래대금(약 797조 원)의 27%에 육박하는 규모다.
+이종형 키움증권 리서치센터장은 “코스피200 레버리지 ETF는 리밸런싱이 200개 종목에 분산되지만 단일종목 레버리지 상품은 삼성전자와 SK하이닉스에만 집중된다”며 “변동성이 커질수록 단기 매매 수요가 다시 레버리지 상품으로 유입되고 운용자산(AUM)이 늘어나면서 리밸런싱 규모도 커지는 순환 구조가 구축된다는 점에서 투자에 유의해야 한다”고 말했다.
+이에 대해 금융 당국은 단일종목 레버리지발 변동성 확대가 제한적이라는 인식을 갖고 있다. 이진우 메리츠증권 리서치센터장은 “미국 시장은 다양한 투자 주체가 수급을 받쳐주지만 국내 시장은 상대적으로 수급이 얇아 특정 상품의 영향이 크게 나타날 수 있다”며 “단기 규제보다 퇴직연금 등 장기자금이 꾸준히 유입되는 시장 구조를 만드는 것이 근본적인 해법”이라고 짚었다.</div><div class='news-src'>원문링크: <a href='원문링크: https://n.news.naver.com/mnews/article/011/0004637970' style='color:#64748b;word-break:break-all'>원문링크: https://n.news.naver.com/mnews/article/011/0004637970</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
