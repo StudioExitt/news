@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'현기증' 반도체 주가… 삼성전자 실적·SK하닉 ADR 상장 '분기점'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.05</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/421/0009040852' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9405" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'현기증' 반도체 주가… 삼성전자 실적·SK하닉 ADR 상장 '분기점'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">삼성전자 2분기 잠정 실적 발표가 메모리 반도체 시장의 '피크아웃' 우려와 강한 연관성을 보이며 코스피 주가 방향을 결정할 핵심 분기점이 될 전망입니다. 또한, SK하이닉스의 ADR 상장 기대감과 미국의 금리 관련 지표 확인 역시 투자 심리에 중요한 영향을 미칠 것으로 예상됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 반도체 업황의 핵심 동인(AI 수요/메모리 사이클)과 개별 기업의 실적 발표(삼성전자), 그리고 거시경제 지표(FOMC 의사록) 및 상장 이슈(SK하이닉스 ADR)가 복합적으로 얽혀 있어 시장 방향성을 판가름할 매우 중요한 시점이기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체주가</span> <span class="tag tag-hash">#삼성전자실적</span> <span class="tag tag-hash">#AI투자</span> <span class="tag tag-hash">#피크아웃</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">최근 코스피 변동성이 최고조에 달한 상황에서 이번 주 발표되는 삼성전자(005930)의 2분기 잠정 실적이 메모리 반도체 '피크아웃'(고점 통과) 우려 확산과 진화를 가를 분기점이 될 것으로 보인다. 
+
+5일 금융투자업계에 따르면 오는 7일 발표되는 삼성전자의 2분기 잠정 실적이 단기 코스피 향방을 결정할 전망이다. 잠정 실적은 전사 매출과 영업이익만 공개되고, 사업부별 세부 실적은 이달 말 콘퍼런스콜과 함께 발표된다.
+
+시장에서는 삼성전자의 이익 규모에 따라 반도체 업종 주가의 변동성 수준이 달라질 것으로 보고 있다. 지난주 글로벌 증시에서 반도체 업종은 인공지능(AI) 데이터센터 투자 지연과 메모리 업황 피크아웃 논란이 맞물리면서 크게 출렁였다.
+
+특히 애플이 메모리 가격 상승을 이유로 제품 가격 인상을 발표하면서 완제품 가격의 인상이 소비자 수요를 위축시켜 결과적으로 메모리 수요 부진이라는 악순환을 낳을 수 있다는 우려가 커졌다. 또 메타가 잉여 컴퓨팅 자원을 활용한 클라우드 사업 진출을 언급해 빅테크의 AI 설비투자가 둔화되는 것 아니냐는 우려도 제기됐다.
+
+이에 미국 증시 필라델피아 반도체 지수는 지난 1일과 2일 각각 6.27%, 5.45% 급락했다.
+
+국내 반도체 투톱인 삼성전자와 SK하이닉스 주가도 요동쳤다. 삼성전자의 경우 지난주 5거래일간 등락률이 -4.86%(6/29), +3.41%(6/30), -5.84%(7/1), -9.06%(7/2), +8.22%(7/3)를 기록하며 롤러코스터를 탔다. SK하이닉스는 주초 3거래일 동안 상대적으로 변동성이 적었지만, 지난 2일과 3일에는 각각 14.57% 하락하고 10.88% 급등하며 극한의 널뛰기를 보였다.
+
+삼성전자가 견조한 2분기 실적을 입증할 경우 시장의 우려를 진정시킬 수 있을 것으로 보인다. 증권정보업체 에프앤가이드에 따르면, 역대급 메모리 슈퍼사이클에 힘입은 삼성전자의 2분기 영업이익 컨센서스는 85조 5909억 원으로 집계됐다. 이는 지난해 1분기 영업이익(57조 2000억 원)보다 49.6% 많은 수치다. 일회성 비용이나 성과급 충당금이 반영되기 전 영업이익은 약 100조 원 규모에 달할 것으로 추정된다.
+
+오는 8일 공개되는 6월 미국 연방준비제도(Fed)의 연방공개시장위원회(FOMC) 의사록도 주목된다. 당시 FOMC에서 기준금리를 연 3.50~3.75%로 만장일치 동결했지만 위원 절반이 최소 1회 금리 인상을 예측했다. 위원들이 FOMC에서 추가 긴축 필요성과 인플레이션 리스크를 어느 수준까지 논의했는지가 의사록의 핵심이 될 전망이다.
+
+서상영 미래에셋증권 연구원은 "이번 주는 금리 부담이 완화될 수 있는지, 그리고 AI 투자 사이클이 여전히 견고하다는 신호가 이어질 수 있는지를 확인하는 과정이 될 것"이라고 전망했다.
+
+아울러 오는 10일(현지시간) SK하이닉스의 미국주식예탁증서(ADR) 나스닥 상장도 주요 이벤트다. 발행 규모는 약 45조 5000억원으로 발행주식 총수의 약 2.5%다.
+
+증권가에서는 이번 ADR 상장으로 주식가치 희석보다도 SK하이닉스가 그동안 글로벌 메모리 기업과 비교해 받았던 저평가 완화 및 투자 접근성 개선과 글로벌 패시브 자금 유입에 따른 긍정적 요인이 많을 것으로 기대하고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/421/0009040852' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/421/0009040852</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
