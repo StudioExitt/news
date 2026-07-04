@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>증권사로 몰리는 IRP…은행들 ETF로 고객 잡기 나섰다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.04</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='원문링크 정보 없음 (가정)' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9330" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>증권사로 몰리는 IRP…은행들 ETF로 고객 잡기 나섰다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">개인형 퇴직연금(IRP) 자금이 금융기관 간 이동이 가속화되며 증권사 적립금 증가세가 두드러지고 있습니다. 이에 대응하여 은행들은 ETF 등 투자 상품 라인업을 확대하며 고객 이탈 방어에 나서는 등, 금융 시장 내 경쟁 구도가 심화되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심은 IRP 자금 이동과 은행권의 경쟁적 대응입니다. 이는 증권사의 수수료 기반 수익 증가와 금융 서비스 전반의 활성화를 의미하여 투자 심리를 높이고 관련 섹터(증권사, 자산운용사)에는 긍정적으로 작용할 요인으로 해석됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">미래금융주 관련 종목</span> <span class="tag stock-tag">증권사 대형주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자산운용</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#IRP</span> <span class="tag tag-hash">#퇴직연금</span> <span class="tag tag-hash">#ETF투자</span> <span class="tag tag-hash">#증권사경쟁</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■AI 프리즘 [직장인 뉴스]
+증권사 퇴직연금, 은행보다 3배 빠른 증가
+카드 소득공제 5조 돌파 눈앞
+정부, 중기에 15조 긴급 지원
+▲ AI 프리즘* 맞춤형 경제 브리핑
+* 편집자 주: ‘AI PRISM’(Personalized Report &amp; Insight Summarizing Media)은
+한국언론진흥재단의 지원을 받아 개발한 ‘인공지능(AI) 기반 맞춤형 뉴스 추천 및 요약 서비스’입니다. 독자 유형별 맞춤 뉴스 6개를 선별해
+제공합니다.
+[주요 이슈 브리핑]
+■ 퇴직연금 경쟁 재편: 올해 1분기 증권사 퇴직연금 적립금이 10조 원 급증하며 은행(3조 6000억 원)의 세 배에 달하는 속도로 불어났다.
+개인형 퇴직연금(IRP·Individual Retirement Pension) 실물이전 제도 시행 이후 기존 상품을 해지하지 않고도 은행에서
+증권사로 계좌를 이동할 수 있게 되면서 자금 이탈이 가속화하는 양상이다。
+■ 30년 세제 수술 논란: 신용카드 소득공제 감면액이 올해 4조 6298억 원에 달하며 4년 새 46.2% 급증했고, 내년에는 5조 원을
+돌파할 전망이다. 한시 도입 제도가 11차례 연장을 거듭하는 사이 통합고용세액공제·근로장려금과 맞먹는 규모의 조세지출 항목으로 굳어진 상황이다.
+■ 홈플러스 파산 위기: 서울회생법원이 홈플러스의 수정 회생계획안에 대해 수행 가능성이 없다고 판단, 회생절차 폐지 결정을 내렸다. 직원 1만
+2000명의 실직 위기와 함께 입점 업체 점주, 납품 대금을 받지 못한 중소기업, 전자단기사채(ABSTB·자산유동화 단기사채) 투자자까지 연쇄
+파장이 예상되는 상황이다.
+[신입 직장인 관심 뉴스]
+1. 증권사로 빠지는 IRP…은행권, KPI 높여 잔액 방어
+- 핵심 요약: 증시 활황으로 개인형 퇴직연금(IRP) 자금이 은행에서 증권사로 빠르게 이동하면서 은행권이 영업점 핵심성과지표(KPI·Key
+Performance Indicator)에서 관련 배점을 높이는 방식으로 고객 이탈 차단에 나섰다. 올해 1분기 증권사 퇴직연금 적립금은 131조 원에서 141조 원으로 10조 원 늘어난 반면, 은행권은 같은 기간 3조 6000억 원 증가에 그치며 격차가 벌어지고 있다. 은행
+계좌에서는 상장지수펀드(ETF·Exchange Traded Fund)를 실시간 매매하기 어렵고 투자 가능 상품군도 증권사에 비해 제한적이라는
+점이 이탈의 주된 원인으로 꼽힌다. 이에 KB국민은행은 ETF 상품 21종을 추가해 총 260종의 라인업을 구축하는 등 시중은행들이 서비스
+강화에 나서고 있는 모습이다.
+2. ‘30년 누더기’ 카드 소득공제 5조 원 눈앞…이대로 놔두면 재정절벽
+- 핵심 요약: 1999년 한시 도입된 신용카드 소득공제가 11차례 연장을 거치며 올해 감면액 4조 6298억 원을 기록, 내년 5조 원 돌파를
+앞두고 있다. 직장인이 총급여의 25%를 초과해 신용카드를 사용하면 초과 금액의 15%를 소득세 계산 때 공제받는 구조로, 2016년 37조
+4000억 원이었던 전체 조세지출이 올해 80조 5000억 원으로 10년 새 2배 이상 불어난 재정 부담의 한 축을 차지한다.
+김우철 서울시립대 세무학과 교수는 한계세율이 높은 고소득자일수록 혜택이 커지는 구조적 형평성 문제를 지적하고 있다. 한편 올 1~5월 개인카드 승인금액은 446조
+2000억 원으로 전년 동기 대비 28조 5000억 원 늘어, 감면액이 전망치를 웃돌 가능성도 제기된다.
+3. 중기에 15조 원 경영자금 공급…법인세 납부기한 연장도
+- 핵심 요약: 정부가 고환율 장기화로 원가 부담이 가중된 중소·중견기업을 대상으로 총 14조 9000억 원 규모의 긴급경영자금 공급 방안을
+발표했다. 구윤철 경제부총리 겸 재정경제부 장관 주재 비상경제본부 회의에서 확정된 이번 대책은 중동 상황 대응용 정책금융 잔여 재원 13조
+8000억 원에 신규 자금 1조 1000억 원을 더한 규모다. 원·부자재 수입 비중이 매출액의 20% 이상인 기업은 매출·영업이익 감소 요건
+없이도 자금을 지원받을 수 있고, 수출입은행의 위기대응 특별프로그램은 7조 원에서 8조 원으로 확대되며 금리 우대 폭도 최대 2.2%포인트로
+높아진다. 또한 고환율로 경영 애로를 겪는 중소기업에는 법인세·부가가치세·소득세·관세 납부기한 연장 혜택도 병행 지원되는 상황이다.
+4. 2000억 원 조달 못해…홈플러스 파산 수순
+- 핵심 요약: 서울회생법원 제4부가 홈플러스의 수정 회생계획안 변경안에 대해 수행 가능성이 없다고 판단, 지난해 3월 기업회생절차(법정관리)
+개시 신청 1년 4개월 만에 회생절차 폐지 결정을 내렸다. 대주주인 MBK파트너스와 최대 채권자인 메리츠금융그룹의 대치 속에 회생에 필요한 최소
+자금 2000억 원 조달에 실패했고, 그 사이 공익채권이 급증하며 재무 구조가 악화됐다. 홈플러스가 14일 이내에 자금을 확보해 즉시항고할 경우
+회생절차가 되살아날 가능성은 남아 있으나, MBK와 메리츠 모두 책임 공방을 이어가고 있어 반전은 쉽지 않다는 전망이 우세하다. 한편 정부는
+법원 발표 3시간 만에 임금 체불 근로자와 중소 협력 업체를 대상으로 4400억 원 규모의 긴급 유동성 지원 대책을 내놓아 사실상 파산을 전제로
+한 조치라는 분석이 나오는 모습이다.</div><div class='news-src'>원문링크: <a href='원문링크 정보 없음 (가정)' style='color:#64748b;word-break:break-all'>원문링크 정보 없음 (가정)</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
