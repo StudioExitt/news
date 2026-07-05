@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>온라인 쇼핑몰서 교묘한 피싱 결제창…과도한 개인정보 주의</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.05</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016176478' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9462" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>온라인 쇼핑몰서 교묘한 피싱 결제창…과도한 개인정보 주의</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">온라인 쇼핑몰을 사칭한 피싱 페이지를 통해 해커들이 카드 정보 등 개인정보를 탈취하는 사례가 급증하고 있어 금감원이 소비자경보를 발령했습니다. 특히 정상 결제 과정과 유사하게 꾸민 페이지에서 과도한 정보를 요구할 경우 피해에 노출되기 쉬우므로 주의가 필요합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">개인정보 유출 및 피싱 위험 경고는 전자상거래 기반 금융 거래의 신뢰도와 보안 시스템 투자 필요성을 강조하여 관련 기술 및 금융 서비스 기업 주가에 단기적인 영향을 줄 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">금융결제원 관련주</span> <span class="tag stock-tag">개인정보보호솔루션 기업</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">보안장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#피싱주의 #온라인쇼핑 #카드보안 #개인정보유출</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">최근 일부 온라인 쇼핑몰에서 해커가 교묘하게 피싱 페이지를 구성해 카드 정보를 탈취한 정황이 확인되면서 소비자주의가 요구된다.
+금융감독원은 5일 카드 부정 사용 피해를 줄이기 위해 소비자경보 '주의' 단계를 발령했다고 밝혔다.
+최근 금융보안원이 국내 일부 온라인 쇼핑몰에 해킹·피싱 공격으로 신용카드 정보를 탈취한 정황을 확인하고 이를 금감원에 통보하면서다.
+지난달 29일 기준 카드정보를 탈취하는 전문적인 공격조직에 의해 총 5천707건이 탈취된 것으로 집계됐다.
+범행은 보안이 취약한 일부 국내 온라인 쇼핑몰 내 카드 결제 과정에서 실제 결제 화면과 유사하게 꾸며진 피싱 페이지를 해킹 등을 통해 구성하는식으로 이뤄졌다.
+피싱 페이지는 결제를 위해 카드 정보나 비밀번호, 주민등록번호 등 개인정보를 입력해야 하는 것처럼 설계돼 정상 결제 과정에는 필요하지 않은 개인정보를 과도하게 수집하는 특징이 있다는 점을 유의해야 한다.
+카드 정보 탈취 이후 '결제 오류' 같은 경고창을 표시한 뒤 정상 결제 페이지를 재호출해 결제 정보 재입력을 유도하면 정상 결제가 이뤄지기에소비자로선 피싱 페이지를 인지하기 어렵단 점을 악용했다.
+금감원은 탈취 정보가 부정 결제에 활용될 가능성이 크고 회원 개인정보의 불법 유통과 추가적인 피해 발생이 우려된다고 전했다.
+이에 금감원은 "온라인 쇼핑몰 등에서 카드 결제 시 주민등록번호, 카드 비밀번호 전체 숫자 등 과도한 정보를 입력하도록 요구한다면 의심하고 이를거절해야 한다"고 권고했다.정상적인 결제 과정에서 주민등록번호 전체 숫자, 카드 비밀번호 네자리 등을 모두 입력하도록 요구하는 경우는 없기 때문이다.
+온라인 쇼핑 후 카드정보 피싱 등이 의심되면 추가 피해 방지 차원에서 카드사에 즉시 카드 정지, 재발급 및 비밀번호 변경을 신청하라고 조언했다.또 유출된 비빌번호를 다른 사이트에서 중복 사용하는 경우 추가 피해 예방을 위해 변경해야 한다.
+아울러 정보 유출 추가 피해가 의심되는 경우 경찰에 즉시 신고하라고 전했다.
+해킹 등 부정한 방법으로 탈취된 정보를 이용한 카드 부정 사용의 경우 소비자에게 고의·중과실이 없는 경우, 카드사에서 보상받을 수 있다.
+한편 피해를 보고받은 금감원은 금융보안원·카드사와 긴밀한 공조 체계를 구축해 즉각 대응 중이라고 전했다.
+금융보안원은 탈취된 카드 정보 등을 카드사에 전달해 부정 결제 시도를 차단토록 지원하고, 각 카드사는 정보 탈취 고객에 개별 안내, 카드 재발급, 부정 결제 차단 등 소비자 보호 조치를 즉시 수행했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016176478' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016176478</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
