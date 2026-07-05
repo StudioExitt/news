@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2분기 ‘빚투’ 하루 평균 62조원…증권사 추정 이자수익만 1.4조</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.05</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006322945' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9435" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>2분기 ‘빚투’ 하루 평균 62조원…증권사 추정 이자수익만 1.4조</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">강한 상승세가 이어진 2분기 동안 개인 투자자들의 '빚투' 규모(신용융자+담보융자)는 하루 평균 62조원에 육박하며 역대 최고 수준을 기록했다. 이에 힘입어 증권사들은 이자수익 등 금융 부문에서 막대한 수익 증가를 보였으며, 이는 시장 과열 및 높은 레버리지 사용 위험 신호를 나타낸다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">개인 투자자들의 레버리지 사용이 역대 최고치로 쌓이며 시장 과열 및 구조적 리스크가 매우 높아진 것으로 분석됨. 이는 단기적인 모멘텀을 반영하지만, 장기적으로는 조정 가능성을 시사함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">종합금융회사</span> <span class="tag stock-tag">대형증권사 주가</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#빚투경고</span> <span class="tag tag-hash">#레버리지리스크</span> <span class="tag tag-hash">#증권사수익</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">신용융자 35.9조·주식담보 25.9조…‘빚투’ 역대 최대
+증시 활황에 증권사 이자수익 전분기 대비 8.7%↑ 올해 2분기 국내 증시가 강한 상승세를 보인 가운데 개인투자자들의 ‘빚투’ 규모도 하루 평균 62조원에 육박한 것으로 나타났다. 신용거래융자 잔고가 역대 최고 수준으로 불어나면서 증권사들이 관련 이자로 거둔 수익도 1조4000억원에 가까운 것으로 추정된다.
+
+5일 금융투자협회에 따르면 지난 4~6월 신용거래융자 잔고는 하루 평균 35조9418억원으로 집계됐다. 이는 1분기 평균 31조126억원보다 15.9% 증가한 수준이다. 신용거래융자는 투자자가 주식 매수를 위해 증권사에서 자금을 빌린 뒤 아직 갚지 않은 금액으로, 대표적인 ‘빚투’ 지표로 꼽힌다.
+
+여의도 증권가. (사진=연합뉴스)
+
+2분기 초 32조원대였던 신용융자 잔고는 증시 상승세와 맞물려 빠르게 늘었다. 지난달 24일에는 38조6328억원까지 치솟으며 역대 최대 수준을 기록했다. 코스피가 2분기 중 사상 처음으로 9000선을 돌파하는 등 강세장을 이어가자 레버리지를 활용한 개인투자자들의 주식 매수도 함께 확대된 것으로 풀이된다.
+
+주식을 담보로 한 예탁증권담보융자 잔고는 같은 기간 하루 평균 25조9666억원으로 나타났다. 1분기 평균 26조296억원과 비교하면 소폭 줄었지만, 2분기 내내 24조~26조원대를 유지했다. 예탁증권담보융자는 보유 주식을 담보로 자금을 빌리는 방식이다. 담보로 제공할 수 있는 종목에 제한이 있고 담보로 잡힌 주식은 매도할 수 없어 신용융자만큼 급격한 변동은 크지 않다.
+
+신용융자와 예탁증권담보융자를 합산한 2분기 ‘빚투’ 규모는 하루 평균 61조9084억원으로 집계됐다. 1분기 평균 57조423억원보다 4조8661억원 늘어난 것으로, 역대 최고 수준이다.
+
+빚투 규모가 커지면서 증권사들의 이자수익도 증가한 것으로 추산된다. 신용융자는 증권사와 융자 기간에 따라 이자율이 다르지만, 통상 한 달 안팎의 융자에는 연 8~9%대 금리가 적용된다. 2분기 하루 평균 신용융자 잔고 35조9418억원에 연 9% 이자율을 적용하면 증권사들이 거둔 신용융자 이자수익은 약 8086억원으로 추정된다.
+
+예탁증권담보융자는 15일 이내 대출에는 연 7% 후반대, 한 달 이상에는 연 8% 중후반대 이자가 붙는 경우가 많다. 2분기 하루 평균 잔고 25조9666억원에 연 8.5% 금리를 적용하면 관련 이자수익은 약 5517억원으로 계산된다.
+
+이를 합치면 2분기 증권사들이 신용융자와 예탁증권담보융자를 통해 벌어들인 추정 이자수익은 총 1조3603억원에 달한다. 같은 방식으로 계산한 1분기 추정 이자수익 1조2508억원보다 8.7% 늘어난 규모다. 1분기에도 국내 10개 대형 증권사가 신용융자만으로 거둔 이자수익은 6000억원 수준에 달한 바 있다.
+
+시장에서는 신용융자 잔고가 당분간 높은 수준을 이어갈 가능성이 크다고 본다. 최근 신용융자 잔고는 38조원 안팎에서 움직이고 있다. 증권사의 신용공여 합계액은 자기자본의 100%를 넘을 수 없어 일부 증권사의 대출 여력이 한계에 가까워진 영향도 있는 것으로 분석된다.
+
+다만 NH투자증권과 KB증권 등 주요 증권사들이 증자를 통해 자기자본 확충에 나서고 있어 향후 신용공여 한도는 더 확대될 수 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006322945' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006322945</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
