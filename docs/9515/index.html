@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[미국 주식 돋보기] AI에이전트 보안 솔루션 옥타 올해 주가 70% 급등</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.05</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005702947' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9515" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[미국 주식 돋보기] AI에이전트 보안 솔루션 옥타 올해 주가 70% 급등</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI와 클라우드 확산에 따른 보안 수요 증가라는 메가 트렌드의 수혜주로 옥타(Octo)가 주목받고 있습니다. 특히 AI 에이전트 전용 인증 솔루션을 발표하며 시장의 기대감을 높였으며, 이는 장기적인 성장 동력으로 작용할 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">회사가 핵심적인 성장 동력인 AI 시대와 클라우드 트렌드를 정확히 파악하고 있으며, 그에 맞춰 'AI 에이전트 전용 보안 솔루션'을 출시하여 시장의 가장 시급한 니즈를 선점했기 때문입니다. 이는 일시적 모멘텀을 넘어 산업 패러다임 변화에 따른 구조적 성장 기대감을 높여줍니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">Okta (OTCI)</span> <span class="tag stock-tag">Adobe</span> <span class="tag stock-tag">Microsoft Azure</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">사이버 보안</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">클라우드 컴퓨팅</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI보안</span> <span class="tag tag-hash">#디지털신원</span> <span class="tag tag-hash">#SaaS</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">디지털 신원 관리
+AI 시대 수혜주로 부상
+디지털 신원 보안 기업 옥타에 대한 투자자들의 주목도가 높아지고 있다. 인공지능(AI) 에이전트와 클라우드 확산으로 보안의 중요성도 함께 커지면서 이 회사 주가도 연초 대비 69%나 급등했다.
+2일(현지시간) 뉴욕증시에서 옥타 주가는 전일 대비 0.68% 오른 141.42달러에 장을 마감했다. 이는 연초 대비로는 69.08% 급증한 수치다.
+옥타는 2009년 초대형 소프트웨어 기업인 세일즈포스에서 엔지니어링 담당 부사장이었던 토드 매키넌 옥타 최고경영자(CEO)가 창업한 기업이다. 수많은 클라우드 서비스를 쓰는 기업의 직원들이 수십 개의 사이트 아이디와 비밀번호를 일일이 관리하고 로그인하는 게 큰 보안 구멍이 될 수 있다는 문제점을 발견한 뒤 클라우드 보안 및 통합 인증 서비스를 개발한 것으로 알려졌다. 쉽게 말해 디지털 세계의 출입문 통제 시스템을 만드는 소프트웨어 기업이다.
+옥타는 클라우드 전환의 흐름을 타고 급성장하며 2017년 나스닥에 상장했다. 이후 2021년 경쟁사 오스제로를 인수하며 클라우드 보안 및 신원보안 분야의 선두 기업으로 자리 잡았다. 주력 솔루션은 인력 ID 관리와 고객 ID 관리로 나뉜다. 인력 ID 관리는 직원들이 하나의 아이디로 수많은 사내 애플리케이션에 안전하게 로그인할 수 있도록 지원하는 서비스다. 고객 ID 관리는 일반 소비자들이 특정 웹사이트나 애플리케이션에 가입하고 로그인할 때 필요한 인증 시스템을 개발자들에게 API 형태로 제공하는 서비스다.
+특히 AI 에이전트 시대가 열리면서 사람뿐 아니라 AI 에이전트까지 아우르는 신원 보안 플랫폼의 중요성이 대두돼 시장의 주목을 받고 있다. 월가에서는 기업들이 AI 에이전트를 본격 도입할 경우 AI 에이전트의 신원을 인증하고 접근 권한을 통제하는 보안 작업이 필수적으로 요구될 것으로 보고 있다. 옥타는 이미 AI 에이전트 전용 신원 보안 서비스인 '오스 포 젠AI(Auth for GenAI)'를 선보였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005702947' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005702947</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
