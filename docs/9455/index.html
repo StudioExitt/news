@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>증시는 뛰는데 증권주는 뒷걸음…거래대금 둔화 우려 선반영?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.05</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006322992' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9455" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>증시는 뛰는데 증권주는 뒷걸음…거래대금 둔화 우려 선반영?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 시장이 크게 상승세임에도 불구하고 증권주는 상대적으로 부진하며, 이는 거래대금 증가세가 정점을 지나 둔화할 수 있다는 우려가 선반영된 것으로 분석됩니다. 다만 ETF 시장 성장과 정책 기대감이 하방을 일부 지지하고 있는 상황입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">증권주의 부진 원인과 향후 성장 동력(ETF 구조적 증가세, 정책 기대감)에 대한 심층 분석을 담고 있어 투자 전략 수립에 중요한 참고 자료가 됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">증권사 주식군 전체</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">ETF·펀드</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증권주</span> <span class="tag tag-hash">#거래대금</span> <span class="tag tag-hash">#수급쏠림</span> <span class="tag tag-hash">#ETF투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">지난달 코스피 보합에도 KRX 증권지수 16% 하락
+2분기 코스피 67.8%↑에도 증권업종은 11% 역주행
+"2011년 차화정 랠리 때와 닮은 수급 쏠림"
+외국인 ETF 투자 확대·코스닥 정책 기대감도 올해 2분기 증권사들이 호실적을 거둘 것으로 전망되지만 증권주 주가는 되레
+약세를 이어가고 있다. 브로커리지(위탁매매) 수익을 떠받친 거래대금 증가세가 정점을 지나 둔화할 수 있다는 우려가 주가에 선반영된 영향으로
+풀이된다.
+
+코스피가 전 거래일(7648.09)보다 440.25포인트(5.76%) 오른 8088.34에 마감한 3일 오후 서울 중구 하나은행 딜링룸 전광판에
+지수가 표시되고 있다.
+(사진=뉴시스)
+
+5일 한국거래소에 따르면 지난달 코스피는 0.33포인트(0.00%) 올라 사실상 보합에 머물렀다. 반면 같은 기간 KRX 증권지수는 16.43% 
+하락하며 시장과 엇갈린 흐름을 나타냈다.
+
+2분기 전체로 봐도 증시와 증권주의 흐름은 달랐다. 지난 4~6월 코스피는 67.77% 상승한 반면 KRX 증권지수는 10.69% 하락했다.
+통상 거래대금 증가와 함께 증권주도 강세를 보이는 것과 달리 이번 상승장에서는 증권업종만 상대적으로 소외된 모습이다.
+
+장영임 SK증권 연구원은 “유례없는 지수 상승과 일평균 거래대금 100조원 시대에도 증권업종 주가는 크게 부진하다”며 “2011년
+차화정(자동차·화학·정유) 랠리와 마찬가지로 특정 주도주에 수급이 집중돼 증시 호조에도 증권주가 소외되는 역설적인 현상이 나타나고 있다”고
+분석했다.
+
+장 연구원에 따르면 2011년에도 자동차·화학·정유 등 특정 업종으로 자금이 쏠리면서 지수와 거래대금은 견조했지만 증권주는 먼저 하락했다. 다만
+당시에는 차화정 업황 둔화와 미국 신용등급 강등, 유럽 재정위기 등 대외 악재가 겹쳤던 반면, 현재는 반도체 업황과 한국 수출이 견조하고
+거래대금도 높은 수준을 유지하고 있다는 점에서 차이가 있다는 설명이다.
+
+시장에서는 거래대금 증가세가 정점을 통과할 수 있다는 우려도 증권주 투자심리를 짓누르는 요인으로 꼽는다. 1분기 일평균 거래대금이 전분기 대비
+80% 넘게 증가한 만큼 하반기에도 같은 속도의 증가세를 기대하기는 어렵다는 인식이 주가에 반영됐다는 분석이다.
+
+반면 거래대금 증가율이 다소 둔화되더라도 절대적인 거래 규모는 여전히 높은 수준인 탓에 과도한 우려라는 지적도 있다. 여기에
+상장지수펀드(ETF) 시장의 구조적인 성장세가 브로커리지 수익 감소 우려를 일부 상쇄할 수 있다는 분석이다. 특히 단일종목 레버리지 상품 출시
+이후 ETF 거래가 빠르게 늘면서 전체 거래대금도 견조한 흐름을 이어가고 있다. ETF 거래 확대는 브로커리지 수수료 수익뿐 아니라 증권사 간
+시장점유율 경쟁에도 영향을 미칠 것으로 예상된다.
+
+정책 기대감도 남아 있다. 금융당국은 외국인 통합계좌의 투자 가능 대상을 국내 ETF와 상장지수증권(ETN)으로 확대하는 방안을 추진하고 있다.
+정부의 코스닥 시장 활성화 정책도 구체화되고 있는 만큼 현재 코스피 대형 반도체주에 집중된 거래가 시장 전반으로 확산될 경우 증권업종에도
+긍정적인 요인이 될 수 있다는 전망이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006322992' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006322992</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
