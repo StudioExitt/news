@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"9천피냐, 7천피냐" 삼전닉스에 달렸다...AI 피크아웃 우려 씻을까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.06</span>
+        
+        <a class="more-btn" href="https://studioexitt.net/news/9561" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"9천피냐, 7천피냐" 삼전닉스에 달렸다...AI 피크아웃 우려 씻을까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">삼성전자의 실적 발표가 증시의 핵심 변수로 작용할 것이며, AI CAPEX 우려를 해소하는 '촉매제' 역할이 기대된다. 반도체 업황 강세 신호와 대형주의 모멘텀을 바탕으로 기존 포트폴리오 전략 유지가 권고된다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#삼성전자 #AI반도체 #실적발표 #CAPEX</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">지난 2일 오후 서울시 중구 하나은행 본점 딜링룸 전광판에 코스피 등 종가가 표시되고 있다. 2026.7.2/뉴스1 Copyright (C)
+
+뉴스1. All rights reserved. 무단 전재 및 재배포, AI학습 이용 금지. 코스피지수가 7일 삼성전자의 2분기 잠정실적 발표를 기점으로 방향을 잡을 것으로 전망된다. 지난주 외국인이 코스피 시장에서만 20조원 가까이 팔아치웠지만 개인과 기관이 이를 받아내며 8000선을 지켜냈다. AI(인공지능)산업의 견고함이 실적으로 확인되면 다시 상승장에 진입할 것으로 보인다.
+
+5일 한국거래소에 따르면 지난주(6월29일~7월3일) 코스피지수는 전주(8411.21) 대비 322.87포인트(3.84%) 하락한 8088.34에 거래를 마쳤다. 코스피지수는 지난주 후반에 약 8% 떨어졌다가 급등하며 8000선을 지켰다.
+
+이번주 증시의 핵심변수는 7일 발표되는 삼성전자 실적이다. 지난주 코스피지수 하락을 촉발한 것도 AI CAPEX(설비·투자 등 자본지출) 피크아웃(정점 후 하락) 우려여서다. 삼성전자가 2분기 시장 전망치를 뛰어넘는 '어닝서프라이즈'(깜짝 실적)를 내면 그간의 차익실현 압력이 완화될 수 있다.
+
+오는 10일엔 SK하이닉스 ADR(미국주식예탁증서)의 나스닥 상장 '빅이벤트'도 예정돼 있다. 해외의 강한 수요를 확인하면 국내 증시에서도 반도체 주도주에 대한 투심(투자심리)이 확대될 것이란 전망이 나온다.
+
+629~73 코스피 지수 추이/그래픽=김현정
+
+거시경제 지표는 코스피 시장에 불리한 상황은 아니다. 유가(WTI)가 70달러를 하회하고 미국의 6월 비농업부문 고용지표가 예상치를 밑돌아 미국 연방준비제도(연준)의 금리인상 명분도 약해졌다.
+
+이런 가운데 증권가에서도 삼성전자 실적과 SK하이닉스 ADR 나스닥 상장을 주요 변수로 지목했다. 김종민 삼성증권 연구원은 "이제 시장은 AI 피크아웃에 대한 의구심을 숫자로 해소해야만 하는 변곡점에 섰다"며 "실적시즌을 통해 확고한 AI CAPEX 기조가 재확인된다면 글로벌 증시는 의심을 해소하고 실적증명에 따른 대세상승장에 재돌입할 것"이라고 짚었다.
+
+김 연구원은 "이번 실적발표에서 가장 중요한 지표는 단연 AI 투자 수익성과 앞으로의 CAPEX 가이던스(실적 전망치)"라며 "AI 수익성은 기대치에 부합하고 CAPEX는 시장 전망치를 상회해 AI반도체 중심으로 상승하는 시나리오에 무게를 두는 것이 합리적"이라고 설명했다.
+
+나정환 NH투자증권 연구원은 "주가가 고점 대비 10% 이상 하락하기 시작하면 보통 투자자는 손실회피 성향으로 매도심리가 확대된다"면서 "손실구간에 놓인 투자자의 심리가 '본전에서 팔자'에서 '추가 상승이 기대되니 보유하자'로 전환될 촉매가 필요하다"고 짚었다. 그러면서 "현 국면의 1차 촉매는 삼성전자 잠정실적"이라며 "어닝서프라이즈가 확인되면 메모리업황 강세신호로 작용해 매도심리가 보유 또는 추격매수 심리로 전환하는 촉매가 될 수 있다. 다만 상승세가 이어지려면 7월 TSMC와 ASML 실적 등을 통해 하반기 방향성을 확인해야 한다"고 조언했다.
+
+증권가에서는 이번주 반도체와 IT(정보기술) 대형주 중심의 기존전략 유지를 추천했다. 이재원 유안타증권 연구원은 "지난 2일 코스피 12개월 선행 PER(주가순이익비율) MDD(최대 하락폭)가 -51%까지 확대돼 역사적 하단권에 근접했다"며 "삼성전자 잠정실적 발표 이후 EPS(주당순이익)가 추가 상향조정되면 지수반등을 기대해볼 이유가 있다. 실적과 ADR 모멘텀이 존재하는 반도체 대형주, IT 대형주, 소부장(소재·부품·장비)과 함께 간다는 기존전략을 유지해야 한다"</div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
