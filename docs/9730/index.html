@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[투자의 창]‘레버리지 대항마’ 혼합형 ETF</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004638686' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9730" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[투자의 창]‘레버리지 대항마’ 혼합형 ETF</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">기사는 높은 변동성을 키우는 레버리지 ETF의 '추세 추종형' 구조를 설명하고, 주가 상승에 반대로 포지션을 조정하는 '역추세형' 전략을 대안으로 제시합니다. 혼합형 ETF 등 역추세형 상품이 시장 변동성 완화에 기여할 수 있음을 조명하며 금융 당국의 관심을 촉구합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">레버리지 상품의 작동 원리와 이에 대한 거시적 대체 전략(역추세형 혼합형 ETF)을 제시함으로써 시장 구조에 대한 깊은 논의를 촉발하며 투자자들의 포트폴리오 구성 방식에 중요한 시사점을 던져주기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자산운용</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#역추세형투자</span> <span class="tag tag-hash">#포트폴리오분석</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■강성수 한국투자신탁운용 솔루션본부장
+강성수 한국투자신탁운용 솔루션본부장올해 5월 27일 상장한 단일종목 레버리지 상품이 출시된 지 한 달이 넘었다. 우연의 일치일 수도 있지만,
+상장 이후 6월 30일까지 코스피 하루 변동 폭이 5%를 넘은 날은 모두 7일로 전체 거래일의 29.2%에 달했다. 과거 5년 간의 비율(2.1%)과 비교하면 이례적인 수준이다. 최근 시장 변동성이 커진 데에는 여러 요인이 작용했겠지만, 단일종목 레버리지 상품의 영향도 완전히 배제하기는 어렵다. 실제로 최근에는 레버리지 상장지수펀드(ETF)가 시장 변동성을 확대할 수 있다는 지적도 이어지고 있다.
+
+레버리지 ETF가 변동성을 키우는 이유는 ‘추세 추종형’ 구조에 있다. 기초자산 가격이 오르면 포지션을 늘리고, 기초자산 가격이 내리면 포지션을 줄여야 한다. 매일 펀드 수익률이 ‘기초자산 1일 수익률의 2배’가 되도록 운용한다는 전략 때문이다.
+
+예를 들어 기초자산 가격이 100에서 120으로 20% 오르면 레버리지 ETF의 수익률은 100에서 140으로 40% 증가한다. 이후에도 2배 수익률을 유지하려면 기초자산 노출을 확대해야 하므로 추가 매수가 이뤄진다. 반대로 주가가 하락하면 노출도를 줄이기 위해 매도하게 된다. 결국
+상승장에서는 매수, 하락장에서는 매도가 반복되면서 기존 추세를 더욱 강화하는 구조다.
+
+반대로 ‘역추세형’ 전략은 기초자산 가격이 오르면 포지션을 줄이고, 기초자산 가격이 내리면 포지션을 늘리는 전략이다. 대표적인 전략이 일정한 자산 비중을 유지하는 ‘고정비율(Constant Mix)’ 전략이다. 예를 들어 주식과 채권을 각각 50%씩 보유하는 포트폴리오는 주가 상승으로 주식 비중이 60%가 되면 일부를 매도하고, 하락으로 40%가 되면 다시 매수한다. 주가의 움직임과 매매 규모를 같이 고려하면, 이같은 ‘반반 전략’은 역추세형 전략이 됨을 알 수 있다. 이러한 역추세형 전략은 주식시장의 변동성을 낮추는 역할을 한다.
+
+연기금의 장기 포트폴리오도 기본적으로는 역추세형 전략에 가깝다. 따라서 추세 추종형 자금이 변동성을 키울 때 이를 완충하는 기능을 기대할 수 있다. 그러나 안타깝게도 현재 국민연금이 국내주식에 대한 ‘역추세형 전략’ 역할을 수행하리라고 기대하기는 어렵다. 그동안 리밸런싱을 미뤄왔던 탓에 국내 주식 비중을 줄여야 하는 상황이기 때문이다.
+
+이런 점을 고려하면 고정비율 전략을 활용하는 혼합형 ETF가 확대될 경우 시장의 변동성을 일부 완화하는 대안이 될 수 있다. 금융당국도 이러한 점을 함께 고민해볼 필요가 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004638686' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004638686</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
