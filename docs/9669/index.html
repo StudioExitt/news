@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스페이스X 휘청이자…우주 ETF 줄줄이 하락</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005306696' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9669" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>스페이스X 휘청이자…우주 ETF 줄줄이 하락</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">스페이스X 주가의 급격한 변동성으로 국내 우주 관련 ETF들이 대규모 손실을 기록했습니다. 하지만 전문 애널리스트들은 스페이스X가 가진 핵심 사업 구조와 기술력을 높이 평가하며 매수 의견과 높은 목표주가를 제시하여 향후 반등 기대감을 키우고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 우주 관련 주체인 스페이스X의 단기 급락과 대규모 자금 조달 공시는 투자 심리 위축을 야기하며 관련 ETF에 직접적이고 강한 영향을 미쳤습니다. 다만 전문가의 강력한 '매수' 의견이 상쇄 요인으로 작용합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">스페이스X (가상)</span> <span class="tag stock-tag">방산 관련 주식</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">우주항공</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#스페이스X</span> <span class="tag tag-hash">#우주ETF</span> <span class="tag tag-hash">#항공우주테크</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">회사채 발행 계기로 급락세
+일각선 반등 낙관하는 시각도미국 항공우주 업체 스페이스X 상장 이후 해당 종목을 담은 국내 상장지수펀드(ETF)가 줄줄이 내림세다. 상장 초기 급등했던 스페이스X 주가가 급락세로 돌아서면서 ETF 수익률에 부정적인 영향을 미친 것으로 풀이된다.
+
+ETF체크에 따르면 지난 2일 기준 스페이스X를 편입하고 있는 국내 미국 우주항공 ETF의 최근 한 달간 수익률이 일제히 마이너스를 기록했다.
+
+한국투자신탁운용의 ‘ACE 미국우주테크액티브’는 최근 한 달간 수익률이 19.30% 하락했다. 이 회사는 기업공개(IPO) 청약에서 공모주 배정을 한 주도 받지 못했다. 다만 상장일 장내 매수를 통해 스페이스X를 포트폴리오 최대 수준인 31.87%까지 편입했다.
+
+이 외에도 스페이스X를 20~30%가량 담은 삼성자산운용의 ‘KODEX 미국우주항공’의 한달간 수익률은 -17.82%, 미래에셋자산운용의 ‘TIGER 미국우주테크’는 -32.35%를 기록했다. 신한자산운용의 ‘SOL 미국우주항공TOP10’ 역시 -20.74%로 부진했다.
+
+국내 미국 우주항공 ETF가 이처럼 일제히 하락한 건 스페이스X 주가의 변동성이 커졌기 때문이다. 지난 1일(현지시간) 뉴욕 주식시장에서 스페이스X 주가는 전 거래일 대비 7.80% 하락한 157.54달러에 장을 마쳤다. 스페이스X는 지난달 12일 주당 135달러에 공모가를 확정하고, 나스닥 시장에서 150달러로 거래를 시작했다. 이후 주가는 장중 225.64달러까지 치솟기도 했으나, 며칠만에 147.11달러까지 밀리는 등 등락 폭이 컸다. 특히 지난달 22일 스페이스X가 채무 상환을 위해 200억 달러 규모 회사채 발행을 공시한 점이 주가 하락의 도화선이 됐다.
+
+다만 전문가들은 스페이스X 주가가 단기 급락한 현재 수준에서 반등할 여력이 충분하다고 내다봤다. 대니얼 아이브스 웨드부시 애널리스트는 ‘매수(Buy)’ 의견을 유지했다. 그는 스페이스X를 로켓 발사와 위성 인터넷(스타링크), 컴퓨팅 인프라가 결합한 강력한 ‘수직 계열화’ 기업으로 평가하며, 12개월 목표주가를 190달러로 제시했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005306696' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005306696</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
