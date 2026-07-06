@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'호남 반도체 클러스터' 테마株 무더기 상한가…과열 경고등</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014049686' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9748" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'호남 반도체 클러스터' 테마株 무더기 상한가…과열 경고등</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">호남 반도체 클러스터 기대감에 힘입어 지역 테마주들이 연속 상한가를 기록하며 과열 양상을 보이고 있으나, 전문가들은 구체적인 실적 기반이 없는 '실체 없는 테마주' 과열로 보고 투자자들에게 주의를 당부함.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단순 기대감으로 인한 테마주의 과도한 급등세는 시장의 거품 우려를 키우며 투자자들에게 경각심을 주기 때문에 높은 관심도를 가짐. 하지만 실적 기반이 아니므로 직접적인 매수 촉진보다는 주의 환기 역할에 그침.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">건설</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체클러스터</span> <span class="tag tag-hash">#테마주과열</span> <span class="tag tag-hash">#투자주의</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">서울 중구 하나은행 본점 딜링룸에서 마감 시황이 표시되고 있다. 2026.07.06. mangusta@newsis.com[서울=뉴시스] 김경택 기자 = 정부의 호남 반도체 클러스터 추진 소식에 광주·전남 기반의 '금호' 계열 기업을 비롯한 지역 테마주들이 또다시 무더기 상한가를 기록했다. 하지만 구체적인 실체가 없는 상태에서 연일 주가가 급등락하는 롤러코스터 장세를 보이고 있어 투자자들의 주의가 요구된다.
+
+7일 한국거래소에 따르면 금호건설의 주가는 전날 2850원(30.00%) 오른 1만2350원에 거래를 마쳤다. 우선주인 금호건설우(29.92%)도 가격제한폭까지 치솟았고, 과거 계열 분리돼 사명만 '금호'인 금호타이어(29.96%), 금호전기(29.96%) 등도 무더기로 뛰었다. 광주에 기반을 둔 남화토건 역시 12% 가까이 급등했다.
+
+주가가 뛴 것은 호남 반도체 클러스터가 추진될 경우 광주를 기반으로 사업을 영위하고 있는 이들 기업이 수혜를 입을 것이라는 기대가 커졌기 때문으로 풀이된다.
+
+문제는 이를 둘러싼 주가 변동성이 이미 적정 수준을 넘어섰다는 점이다. 실제 금호건설의 경우 지난달 24일 첫 상한가를 기록한 이후 이달 1일까지 6거래일 중 5거래일이나 상한가로 직행했다. 이 기간 주가는 3700원선에서 1만4500원선까지 4배 가까이 뛰었다.
+
+하지만 이후 이틀 연속 20% 가까이 폭락하며 1만원 밑으로 내려왔고, 전날 다시 가격제한폭까지 급등하는 현기증나는 흐름을 이어가고 있다.
+
+금호전기 역시 지난달 25일 상한가를 시작으로 전날까지 4번의 상한가와 2번의 20% 급락세를 동시에 경험하는 등 극심한 변동성을 나타내고 있다.
+
+남화토건 역시 지난달 24일 가격제한폭까지 치솟았고 이튿날 14% 급락하더니 또다시 두번의 상한가를 기록하는 등 계속해서 '천당과 지옥'을 오가는 흐름을 나타내고 있다.
+
+시장 전문가들은 이 같은 현상에 대해 전형적인 실체 없는 테마주 과열이라고 입을 모은다. 반도체 클러스터 조성은 장기 프로젝트인 데다 이들 기업이 실제 반도체 사업이나 인프라 구축과 관련해 구체적인 계약을 맺거나 수혜를 확정한 바가 전혀 없기 때문이다.
+
+주가가 연일 변동성을 나타내자 한국거래소 역시 해당 종목들에 경고등을 울리며 시장 감시를 강화하고 있다. 한국거래소는 지난달 금호전기와 금호건설, 남화토건을 투자경고종목으로 지정한 바 있다.
+
+금융투자업계 관계자는 "대규모 지역 개발 호재는 실제 기업의 실적 개선으로 이어지기까지 최소 수년에서 십수년이 걸릴 뿐만 아니라, 수혜 기업이 전혀 다른 곳으로 낙점될 가능성도 배제할 수 없다"며 "투자에 앞서 실질적인 사업 수혜 여부를 냉정하게 따져볼 필요가 있다"고 조언했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014049686' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014049686</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
