@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 인프라 빅뱅 시대, 두산·삼성SDS 증권가 목표가 ‘쑥’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005703070' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9596" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>AI 인프라 빅뱅 시대, 두산·삼성SDS 증권가 목표가 ‘쑥’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 데이터센터 투자 확대에 힘입어 두산은 고성능 CCL 수요 급증으로 실적 개선이, 삼성SDS는 국가 AI 컴퓨팅 센터 참여 및 데이터센터 확장으로 강력한 성장 동력을 확보하며 증권가 목표주가가 대폭 상향 조정되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 산업의 거대한 흐름을 포착하여 관련 핵심 하드웨어 공급사(두산)와 인프라 서비스 제공사(삼성SDS) 모두에 대한 실적 및 미래 가치를 대폭 상향 조정했기 때문에 투자심리가 강력하게 개선될 것으로 예상됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">두산</span> <span class="tag stock-tag">삼성SDS</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전력시설</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI인프라</span> <span class="tag tag-hash">#데이터센터</span> <span class="tag tag-hash">#성장주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">인공지능(AI) 데이터센터 투자 확대로 두산과 삼성에스디에스(삼성SDS)의 실적 개선에 대한 증권가의 기대감이 높아지고 있다.
+
+6일 iM증권은 두산에 대해 투자의견 ‘매수’를 유지하고 목표주가를 기존 120만원에서 200만원으로 대폭 끌어올렸다. 삼성SDS에 대해서도 iM증권은 투자의견 ‘매수’와 함께 목표주가를 기존 22만원에서 27만원으로 상향 조정했다.
+
+이상헌 iM증권 연구원은 두산에 대해 “AI 데이터센터를 향한 수요 지속 증가로 AI 가속기 중심 매출이 확대되고, 차세대 제품 가세로 평균판매단가 상승이 예상된다”고 평가했고, 삼성SDS에 대해서는 “구미 AI 데이터센터와 국가 AI 컴퓨팅 센터 등 인프라를 연이어 확보하면서 성장의 핵심 동력 기반을 마련했고 매출 성장 가속화로 수익성 개선이 가시화됐다”고 평가했다.
+
+iM증권에 따르면 두산은 올해 2분기 자체사업 실적에서 매출액 7353억원, 영업이익 2051억원을 기록할 전망이다. 이는 전년 동기 대비 각각 31.6%, 44.4% 증가한 수치로 핵심 부문인 전자BG(비즈니스그룹)의 고성장이 실적을 이끌 것으로 기대된다.
+
+i 연구원은 두산의 올해 연간 자체사업 실적에 대해 “매출액 3조226억원, 영업이익 8385억원으로 각각 전년 대비 36.1%, 66.5% 늘어나며 실적개선이 가시화될 것”이라고 밝혔다.
+
+전자BG의 실적 개선은 북미 AI 데이터센터 수요를 기반으로 AI 가속기와 800G 통신장비 중심의 하이엔드급 동박적층판(CCL) 공급량이 대폭 늘어난 결과다. 반도체 업황 호조로 D램과 낸드플래시 등 고성능 메모리용 제품 공급도 확대되며 수익성이 뚜렷하게 개선됐다.
+
+특히 두산은 올해 6월부터 북미 고객사향 차세대 제품 공급을 시작한 것이 눈에 띈다. 이 같은 세대전환 제품의 판매가격(ASP) 상승은 향후 수익성 개선에도 기여할 것으로 예상된다.
+
+두산 전자BG의 네트워크 인프라 수요 확대도 돋보인다. 올해 1분기 광모듈향 매출은 334억원을 기록해 이미 지난해 전체 연간 매출을 넘어서는 실적을 거뒀다.
+
+AI 데이터센터 확대는 두산의 네트워크용(NWB) 양산능력 확충으로 이어지고 있다. 지난해 말 기준 8기가 가동 중인 NWB는 AI 데이터센터확대에 따른 CCL(동박적층판) 수요 증가로 올해 2기, 내년 2기가 추가 설치되며 올해와 내년 CAPA가 현재 대비 각각 25%씩 확대될 예정이다.
+
+삼성SDS도 AI 데이터센터 성장을 계기로 증권가에서 본격적인 기업가치 재평가에 나선 모습이다.
+
+앞서 삼성SDS는 AI 인프라 부문에 5조원, 신사업(M&A) 부문에 4조원, AX·AI 서비스 및 AI 플랫폼·솔루션 분야에 1조원 등 2031년까지 총 10조원을 투자하는 계획을 밝혔다.
+
+현재 국내에서는 상암·수원·구미·춘천·동탄 등 5개 데이터센터를 가동 중이며 여기서 발생하는 연간 매출은 1조1000억원 수준이다.
+
+동관과 서관 각각 20MW씩 총 수전 용량 40MW 규모의 동탄 데이터센터는 동관의 서버 랙 용량이 완판됨에 따라 올해 1분기부터 20MW 규모의 서관이 가동을 시작했으며 이를 통해 연간 6000억원의 매출 증가가 예상된다. 서관 증설은 SCP(삼성클라우드플랫폼) 수요 흡수는 물론 구독형 GPU(GPUaaS) 사업을 본격 전개할 수 있는 발판이 될 것으로 평가된다.
+
+가장 주목되는 것은 60MW 규모의 구미 AI 데이터센터다. 오는 2029년 3월 가동을 목표로 하고 있으며 GPUaaS 사업의 전초기지로 활용될 예정이다. 연간 매출은 1조원 이상으로 예상되며 이후 추가로 60MW 규모 확장이 이어질 계획이다.
+
+i와 함께 삼성SDS가 주축이 된 컨소시엄은 지난 3월 정부가 추진하는 국가 AI컴퓨팅센터 구축 사업의 우선협상대상자로 선정됐다. 전남 해남 솔라시도 부지에 40MW 규모로 조성되는 이 센터는 2028년까지 GPU 1만5000장, 2030년까지 5만장 이상이 탑재될 예정이다. 향후 연간 매출 1조원 이상, 이후 추가 40MW 확장이 예상돼 중장기 성장 동력을 확보했다는 평가가 나온다.
+
+삼성SDS는 올해부터 데이터센터 설계·구축·운영을 대행하는 DBO(Design·Build·Operate) 사업도 본격 추진하며 2031년까지 500MW 이상의 수주를 확보해 연간 매출 1조원 달성을 목표로 하고 있다.
+
+i 연구원은 “기존 데이터센터 매출 1조6000억원을 기반으로 구미 AI 데이터센터 2조원, 국가AI컴퓨팅센터 2조원, DBO 사업 1조원 등이 더해지면서 2031년에는 데이터센터 연간 매출이 6조6000억원에 이를 것”이라며 “10% 중후반대 영업이익률을 가정하면 1조원 이상의 영업이익 확보가 가능해 AI 데이터센터 매출 성장 가속화에 따른 수익성 개선이 가시화되면서 기업가치 재평가가 이뤄질 수 있을 것”이라고 내다봤.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005703070' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005703070</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
