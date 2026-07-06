@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI가 바꾼 시총 판도…코스피 톱10 재편 모습은?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006324010' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9681" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>AI가 바꾼 시총 판도…코스피 톱10 재편 모습은?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체와 AI 중심의 자금 쏠림으로 코스피 시가총액 상위 종목의 지형이 재편되었습니다. 삼성전자와 SK하이닉스를 중심으로 한 반도체·AI 가치 사슬 기업들이 시장을 주도하며 높은 성장세를 보였으며, 이는 전통 산업주의 상대적 소외를 부각시켰습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 기반 반도체 산업의 압도적 성장이 자본 시장 전반의 관심과 투자를 집중시키면서 시총 상위권 구조 자체를 근본적으로 변화시켰기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">SK스퀘어</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI반도체</span> <span class="tag tag-hash">#시총재편</span> <span class="tag tag-hash">#성장산업</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">반년 새 톱10 3개 종목 교체\n조방원 밀리고 삼성그룹주 전반도 '약진' 올해 상반기 코스피 시장이 급격한 변동성을 보이는 동안 시가총액 상위 종목의 지형도도 달라졌다. 인공지능(AI) 열풍을 타고 반도체를 중심으로 투자자금이 쏠리면서 시총 순위가 재편된 가운데, 조선·방산·원전(조방원) 대표주는 일제히 순위권 밖으로 밀려났다.\n이 사진은 인공지능(AI)을 활용해 제작했습니다.\n6일 한국거래소에 따르면 이날 종가 기준 코스피 시총 상위 10개 종목(우선주 제외)은 삼성전자(005930), SK하이닉스(000660), SK스퀘어(402340), 삼성전기(009150), 현대차(005380), LG에너지솔루션(373220), 삼성생명(032830), 삼성물산(028260), 삼성바이오로직스(207940), 기아(000270) 순이다.\n올해 첫 거래일(1월 2일)과 비교하면 삼성전기와 삼성생명, 삼성물산 등 3개 종목이 새롭게 10권에 이름을 올렸다. 반면 HD현대중공업(329180)과 한화에어로스페이스(012450), 두산에너빌리티(034020)는 이탈했다.\n표면적으로는 상위 10개 종목 가운데 7개가 자리를 지켰지만 세부 순위가 크게 달라진 점이 특징이다. 선두 삼성전자와 SK하이닉스 등 반도체 투톱으로의 쏠림이 심화하면서 SK스퀘어, 삼성전기 등이 따라가는 모습을 보여서다. SK스퀘어와 삼성전기가 상위권으로 올라서면서 코스피 시총 상위권은 반도체·AI 밸류체인 중심으로 재편됐다.\n유가증권시장 내 삼성전자 시총 비중은 연초 21.37%에서 28.07%로, SK하이닉스는 13.85%에서 25.56%로 확대됐다.\n눈에 띄는 종목은 SK스퀘어다. 연초 7위에 머물렀던 SK스퀘어는 반 년 만에 3위에 등극했다. SK스퀘어의 핵심 자회사인 SK하이닉스 보유 지분 가치 부각 영향이 컸다. SK하이닉스가 고대역폭메모리(HBM)를 앞세워 글로벌 AI 반도체 시장의 핵심 기업으로으로 활약하면서, 지주사인 SK스퀘어가 덕을 봤다. SK스퀘어 주가는 이날 149만 5000원을 기록, 올해 첫날 종가 대비 약 281% 상승했다.\n삼성전기도 두드러졌다. 삼성전기는 연초 32위였으나, 이날 기준 4위를 기록했다. 시총은 무려 20조 1672억원에서 137조 1376억원으로 불어났다. 삼성전기는 상반기 코스피 시장에서 700%대로 올라 올 들어 가장 높은 상승률을 올리기도 했다.\n삼성생명, 삼성물산 등 삼성 그룹주의 약진도 나타났다. 두 종목은 연초 시총 10위권을 하회했지만 삼성전자 지분가치 재평가 등 기대가 맞물리며 투자자들의 관심을 받았다. 이날 기준 나란히 7위와 8위를 기록했다.\n반면 지난해 증시를 주도했던 조방원 대표주는 일제히 상위권을 이탈했다. 조방원 대표 종목인 HD현대중공업, 한화에어로스페이스, 두산에너빌리티는 모두 10위 밖으로 밀렸다. 지난해 강한 주가 상승을 바탕으로 시총 상위권에 진입했지만, 올 들어 차익실현 매물이 출회된 데다 시장의 관심이 반도체 등 종목으로 이동하면서 소외된 결과다.\nLG에너지솔루션과 삼성바이오로직스 역시 순위 하락을 피하지 못했다. 연초 3위였던 LG에너지솔루션은 6위로, 4위였던 삼성바이오로직스는 9위로 내려앉았다. 이 역시 투심이 악화한 영향이다.\n증권가에서는 이번 시총 순위 변화가 시장에 유입된 자금의 방향을 직관적으로 보여주는 지표라고 평가했다.\ni재원 유안타증권 연구원은 “반도체주 등을 중심으로 이익 추정치가 지속 상향되면서 시장의 관심을 받았고, 이 결과 시총 상위권도 해당 종목들 위주로 재편됐다”며 “반면 이차전지와 바이오 등 업종은 시장의 외면을 받았다”고 말했다. \nh반기에도 반도체 중심의 시총 쏠림은 이어질 가능성이 있다는 전망이다.\ni 연구원은 “현재 삼성전자와 SK하이닉스가 코스피 시가총액에서 차지하는 비중이 절반을 웃돌고 있고, 실적 역시 두 종목을 중심으로 개선되고 있다”며 “이같은 구조가 이어진다면 일부 종목으로의 쏠림은 지속될 가능성이 높다”고 언급했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006324010' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006324010</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
