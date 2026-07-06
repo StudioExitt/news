@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'동전주' 앞둔 콘텐트리중앙, 벼랑 끝 '기사회생' 카드 있나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000513695' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9734" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'동전주' 앞둔 콘텐트리중앙, 벼랑 끝 '기사회생' 카드 있나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">콘텐트리중앙이 법정관리 돌입과 핵심 합병 계획 무산으로 주가가 급락하며 '동전주' 및 상장폐지 위기에 놓였습니다. 대주주의 자금 출연이나 경영권 매각 등 기사회생 카드가 논의되지만, 현실적인 재무 구조적 장벽에 부딪히고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 계열사의 법정관리 돌입 및 대형 프로젝트(합병) 무산 소식은 기업의 근본적인 가치와 시장 신뢰도에 치명타를 입혔으며, 주가 급락과 상장폐지 가능성까지 언급하며 강력한 부정적 심리를 반영합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">콘텐트리중앙</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">미디어</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">엔터테인먼트</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#법정관리</span> <span class="tag tag-hash">#상장폐지위험</span> <span class="tag tag-hash">#기업구조조정</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">중앙그룹 계열사 콘텐트리중앙이 법정관리 돌입에 따른 거래정지 후 11거래일 만에 거래가 재개됐으나 4거래일 연속 급락하면서 1600원선까지 밀렸다. 시장에서는 이대로라면 내달 안에 주가 1000원 미만의 '동전주' 추락은 물론, 최악의 경우 상장폐지 절차를 밟을 수 있다는 암울한 전망까지 나온다.
+
+7일 한국거래소에 따르면 전날 콘텐트리중앙은 전 거래일 대비 8.15% 오른 1600원에 거래를 마쳤다. 지난 1일 거래 재개 후 사흘 연속 하한가를 맞은 후 소폭 상승했지만 그간 기록적인 낙폭에 비하면 의미 있는 반등으로 보기 어려운 수치다.
+
+거래정지 전 4995원이던 주가 대비로는 순식간에 67.95% 급락했고, 올해 들어서도 83.50% 하락했다. 뿐만 아니라 52주 최고가인 1만1530원(2026년 9월 17일)선에 진입했던 장기 투자자들은 사실상 손실을 만회하기 불가능한 시점에 도달한 모양새다.
+
+더 큰 문제는 지난주 3일 연속 하한가를 기록한 기간 살 사람이 없어 매도 주문만 쌓이는 거래 불능 상태가 지속되면서 소액주주들의 자산 증발 피해가 극에 달했다는 점이다. 또 신용거래 물량의 반대매매까지 쏟아질 경우 주가는 걷잡을 수 없이 더 추락할 가능성도 배제하기 어렵다.
+
+콘텐트리중앙의 주가가 곤두박질 친 배경은 증권가도 예상하지 못했던 법정관리 돌입에 따른다. 콘텐트리중앙은 지난달 JTBC 등 중앙그룹 계열사 4곳과 함께 채권을 제때 갚지 못하게 된 이유로 법원에 기업회생절차를 신청했다. 이중 유일한 상장사인 콘텐트리중앙은 5월만 해도 대신증권, 메리츠증권, IBK투자증권 등 다수 증권사가 투자의견 '매수'까지 내놓을 만큼 우려할 사항이 부각되지 않았던 곳이다.
+
+또한 당시 콘텐트리중앙은 롯데시네마와 합병계획을 발표하면서 극장 사업 부문 계열사인 메가박스중앙과 함께 영화관 사업에서 큰 효과를 낼 것으로 기대가 모였다. 방송 부문 계열사인 SLL중앙 역시 리쿱율(콘텐츠 제작비 회수 비율) 호전과 동시방영 확대 등으로 올해 역대 최대 영업이익률을 달성할 것으로 전망됐다.
+
+그러나 돌연 기업회생을 신청하면서 투자자들의 장밋빛 기대는 물거품이 됐다. 엎친 데 덮친 격으로 롯데시네마와 합병도 기한 만료로 최종 무산되면서 주가를 지탱할 상승 동력을 완전히 상실하게 됐다는 평가다.
+
+이렇다 보니 시장에서는 콘텐트리중앙이 상장폐지라도 면하기 위해 꺼내 들 수 있는 기사회생 카드에 주목한다. 벼랑 끝에 몰린 상장사를 살리기 위해 언급되는 시나리오는 대주주 사재 출연, 경영권 지분 매각, 대규모 외부 투자 유치 등이 거론된다.
+
+먼저 대주주 사재 출연은 대주주가 개인재산을 털어 책임 경영의 의지를 보이는 카드로 꼽힌다. 기업회생 신청으로 잃어버린 시장 신뢰를 회복하고 주가 하락에 대한 제동 장치를 걸 수 있다는 장점도 있다. 경영권 지분 매각은 롯데시네마와 합병이 무산된 만큼 새로운 원매자를 찾아 대주주 지분과 경영권을 넘기는 고강도 구조조정 시나리오로 언급되고 있다. 대규모 외부 투자 유치 역시 유상증자나 전환사채(CB) 발행 등을 통해 글로벌 자본이나 대형 사모펀드(PEF)의 자금을 수혈받는 방식이다.
+
+그러나 세 가지 모두 현실적인 장벽이 높아 실현 가능성이 낮다는 견해도 나온다. 법정관리 상태의 기업에 선뜻 수천억원의 자금을 투입할 외부 투자자를 찾기 어렵기 때문이다. 사재 출연이나 경영권 매각 또한 신용등급이 하향 조정되고 밸류에이션 평가가 바닥을 친 바람에 대주주로서는 손실을 감수해야 하는 상황이다.
+
+한 투자은행업계 관계자는 "법정관리 상태인 현 재무 구조상 외부 자본이 선뜻 진입하기는 매우 까다로운 조건"이라며 "확실한 경영 정상화 로드맵이 제시되지 않는다면 추가적인 주가 하락은 물론 시장 퇴출 압박을 견뎌야 하는 시점에 도달할 것"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000513695' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000513695</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
