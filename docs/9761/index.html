@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>급락장에 겁먹지 말아야…숫자로 주도주 선별</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005786265' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9761" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>급락장에 겁먹지 말아야…숫자로 주도주 선별</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">최근 반도체주 급락과 외국인 매도로 불안감이 높아지지만, 하나증권은 이를 '강세장의 끝'으로 볼 수 없다고 진단했습니다. 수출 및 거시경제 지표가 견조하며, 매도세는 위기 회피보다 리밸런싱/차익실현 성격이 강합니다. 오히려 이 변동성 속에서 주도주를 선별하는 기회로 삼아야 합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 기관의 매도 및 거시경제 변수 불확실성에도 불구하고, 수출 실적과 메모리 시장의 구조적 강점을 제시하며 투자 기회와 시점 포착에 대한 명확한 분석을 제공했기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#AI투자</span> <span class="tag tag-hash">#주도주선별</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">AI 수요 둔화 우려에 반도체주 급락
+외국인 매도·국민연금 리밸런싱도 수급 부담
+6월 수출 사상 첫 1000억달러 돌파
+h아나證 "지금은 도망 보다 주도주 선별"
+연합뉴스
+최근 삼성전자와 SK하이닉스가 흔들리고, 외국인이 팔고, 국민연금 리밸런싱(자산분배 재조정) 부담까지 거론되면 상승장이 끝났다는 불안이 번지는 분위기다. 하지만 모든 급락이 강세장의 끝을 뜻하는 것은 아니라는 시각도 있다. 너무 빠르게 앞서간 가격과 느슨해진 수급이 정상화하는 과정이라는 분석이다.
+
+7일 하나증권은 아직 시장에서 도망칠 때가 아니라고 진단했다. 최근 미국 증시에서 마이크론테크놀로지가 하락하고, 국내 증시에서 삼성전자와 SK하이닉스가 떨어졌지만 이를 곧바로 인공지능(AI) 수요 붕괴로 해석하는 것은 과하다는 판단이다.
+
+김두언 하나증권 연구원은 "본질은 수요 소멸이 아니라 투자 효율성에 대한 재점검"이라며 "AI 인프라 투자는 여전히 진행 중이고 병목이 여전히 메모리에 있는 만큼, 시장은 AI가 사라질 가능성이 아니라 AI 투자가 얼마나 빠르게 이익으로 연결될지 묻고 있는 것"이라고 설명했다.
+
+공포와 달리 숫자는 아직 나쁘지 않다. 지난달 한국 수출은 1022억5000만달러로 전년 대비 70.9% 증가했다. 월간 수출이 1000억달러를 넘어선 것은 처음이다. 반도체 수출은 448억2000만달러로 199.5% 늘었다.
+
+거시경제 지표는 시차를 두고 반영되지만, 반도체 가격은 지금의 수급을 보여준다. 하나증권에 따르면 이달 초 DDR4 1Gx8 현물가격은 한 주 만에 1.26% 상승했다. DDR5 수요도 강하게 유지됐다. 김 연구원은 "AI 수요가 구조적으로 꺾였다면 가장 먼저 가격이 흔들려야 한다"며 "지금 확인되는 신호는 오히려 반대다"라고 강조했다.
+
+물론 수급 부담은 분명하다. 외국인 매도는 단기 변수가 아니라 상수에 가까워졌다. 하나증권에 따르면 이미 올해 상반기 외국인은 한국 주식을 988억달러(약 148조원) 순매도했다.
+
+다만 이를 외환위기나 한국 시장 자체에 대한 불신으로 해석할 필요는 낮다고 해석했다. 외국인 매도의 성격은 위기 회피보다 차익실현과 리밸런싱에 가깝다는 분석이다. 한국 증시가 AI와 반도체를 중심으로 급등했고, 외국인은 커진 비중을 줄이고 있다. 불안의 본질은 국가 체력 훼손이 아니라 가격 상승 이후 나타나는 수급 정상화라는 뜻이다.
+
+외환 체력도 무너지지 않았다. 지난달 말 외화보유액은 4273억6000만달러로 전월 대비 3억7000만달러가량 증가했다. 국내총생산(GDP) 대비로는 21.8% 수준이다. 지난 4월 경상수지는 282억9000만달러 흑자, 상품수지는 338억8000만달러 흑자를 기록했다. 김 연구원은 "수출이 늘고, 경상수지가 쌓이고, 외화보유액이 유지되는 상황을 외환위기라고 부르기는 어렵다"며 "다만 원화 약세는 매수 재개를 늦추는 만큼, 외국인 수급은 환율 안정 이후 돌아올 잠재 수요로 봐야 한다"고 설명했다.
+
+국민연금 리밸런싱은 시장이 부담스러워하는 변수다. 국민연금은 올해 국내주식 목표 비중을 14.9%에서 20.8%로 높였지만, 국내 증시 급등으로 이미 국내주식 비중은 28.5%까지 높아졌을 것으로 추정된다. 목표 비중만 놓고 보면 매도 가능 금액은 138조원에 달한다. 하지만 전략적자산배분(SAA)과 전술적자산배분(TAA) 허용 범위 최대치를 반영하면 6조원 수준의 매수 여지도 생긴다.
+
+하나증권은 결국 핵심은 규모보다는 속도라고 강조한다. 시장에서는 국민연금이 월 4조원 안팎으로 매도할 수 있다는 관측이 나온다. 강한 매수 주체였던 국민연금이 당분간 중립 또는 매도 주체로 돌아설 수 있다는 점은 아쉽지만, 이를 시장을 무너뜨릴 '매도 폭탄'으로 단정하기는 어렵다는 분석이다.
+
+문제는 수급 공백이다. 외국인은 쉬고, 국민연금은 리밸런싱하고, 개인은 심리에 민감하다. 이런 시장에서는 오를 때는 계단식으로 오르고, 빠질 때는 압축적으로 빠진다. 7월 초 급락 이후 개인 매수세가 주춤한 것도 이 때문이다. 펀더멘털이 먼저 꺾였다기보다, 가격 충격이 투자심리를 먼저 흔든 셈이다.
+
+남은 위험으로는 '칩플레이션'을 꼽았다. 메모리 가격 상승은 반도체 기업에는 이익이지만, 고객에게는 비용이기 때문이다. 가격이 너무 빠르게 오르면 PC, 스마트폰, 서버 고객의 구매 속도가 둔화할 수 있다. 김 연구원은 "지금 시장이 봐야 할 것은 메모리 가격 상승 자체가 아니라, 그 비용을 AI 인프라 투자 안에서 흡수할 수 있는지다"라며 "칩플레이션이 실적을 키우는 구간에서는 주가가 오르겠지만, 수요를 밀어내는 구간에서는 밸류에이션이 흔들린다"고 경고했다.
+
+결국 외국인과 국민연금이 비운 매수 주체 자리를 개인이 모두 채우기는 어렵기에 변동성은 나타날 수 있다. 하나증권은 오히려 이때를 기회로 포착해야 한다고 분석한다. 김 연구원은 "변동성이 커진다는 것과 강세장이 끝났다는 것은 다른 이야기"라며 "공포가 가격을 만들 때, 숫자는 기회를 만든다"고 강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005786265' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005786265</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
