@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[애널리스트의 마켓뷰]글로벌 주식 투자, 주당순이익에 주목하자</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/020/0003731909' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9736" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[애널리스트의 마켓뷰]글로벌 주식 투자, 주당순이익에 주목하자</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 자본 지출(CAPEX)이 강력한 성장 동력으로 작용해왔으나, 최근 거품 논란 및 비용 관련 뉴스로 부담을 느끼는 구간입니다. 다만, 근본적인 주도주의 실적과 중기 이동평균선 상승세는 변함없으므로, 단기 잡음보다는 견고한 주당순이익(EPS) 흐름에 주목해야 합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 분야의 장기 성장 모멘텀은 매우 강하며, 최근의 단기적 우려(이격도 과열)에도 불구하고 근본적인 실적 개선세는 유지되므로 투자를 확신시키는 분석입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">미국 메모리 업체</span> <span class="tag stock-tag">AI 인프라 기업</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#인공지능</span> <span class="tag tag-hash">#CAPEX</span> <span class="tag tag-hash">#EPS주목</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">김성환 신한투자증권 투자전략부 팀장 상반기(1∼6월) 인공지능(AI) 자본 지출(CAPEX)이 놀라운 랠리를 펼쳤다. 여기에 숨은 세 가지 배경을 지목할 수 있다. 첫 번째로는 앤스로픽의 매출 고성장과 흑자 전환이다. 작년까지 시장은 모델이 돈을 벌 것이라고 생각하지 않았고 하이퍼스케일러(초거대 데이터센터 운영 기업)들이 과도한 투자를 단행하고 있다고 생각했다. 그러나 연초 앤스로픽의 매출 급성장이 수익화에 대한 우려를 불식시켰다.
+
+두 번째로는 알파벳이 1분기(1∼3월) 제미나이 매출 고성장을 나타냈을 뿐만 아니라 의외로 현금 흐름 소진도 없었다. 회사채로 자금을 조달해서인데, 아직 크레디트 스프레드(회사채와 국고채 간 금리 차) 확대 기미가 없다. 추후 자본 지출을 늘릴 여력이 더 많다는 점으로 해석될 수 있었다.
+
+세 번째로는 거대언어모델(LLM)의 치킨게임 구도다. 지난해 여름 제미나이가, 연말·연초 클로드가, 최근에는 코덱스가 차례대로 사람들의 이목을 끌었는데 기존 LLM들의 품질이 저하됐다고 느끼거나 성능이 향상된 모델이 나오면 트래픽의 이동이 보였다. 이는 LLM이 점유율을 잃지 않기 위해 지출 경쟁을 하게 만드는 요소로 해석됐다.
+
+서사적인 차원에서 주가 상승 구조를 해석해 보면 2분기(4∼6월) 중 AI CAPEX 주도주들의 주가 상승 구조는 탄탄한 근미래 주당순이익(EPS) 상향 조정이 중기 이동평균선의 상향을 견인했다. 최종 수요에 대한 장기적인 낙관이 ‘콜 옵션’ 성격의 베팅을 불러오면서 이동평균선 대비 이격도(현재 주가가 이동평균선에서 얼마나 떨어져 있는지를 백분율로 나타낸 지표)까지 같이 확대된 구조로 볼 수 있다.
+
+6월 말부터 최종 수요, 즉 장기 성장 지속 가능성에 대한 의구심을 불러일으킬 만한 뉴스가 대거 등장하고 있다. 이는 이격이 높은 AI CAPEX 주식들에 부담으로 작용하는 것으로 보인다. 기업들이 AI 사용량을 늘려 토큰 소비를 극대화하는 전략에서 부담을 느낀다는 뉴스도 나온다. 오픈AI의 토큰 가격 인하 시사, 토큰 비용이 저렴한 중국계 AI의 약진 등은 장기적인 CAPEX 낙관에 도전적인 소식이다. 최근 메타가 발표한 초과 컴퓨팅 파워를 활용한 클라우드 진출 역시 궤를 같이하는 뉴스다.
+
+그러나 이것이 추세 반전을 의미하진 않는다고 본다. 주도주의 견고한 현실, 견고한 EPS 추정치 상향과 견고한 중기 이동평균선의 상승세는 변함없을 것이다. 이격 부담이 충분히 줄어들면 호재와 악재에 대한 민감도는 반전될 수 있다.
+
+현재 주식시장이 경험하는 변동성은 가히 역사적이다. 마이크론, 샌디스크 등 미국 메모리 업체들의 변동성은 연 100%를 상회한다. 워낙 주가가 많이 오르다 보니 주가 급등락은 얼마든지 발생할 수 있다. 그 과정에서 잡음도 등장할 수밖에 없다. 이런 시장에서 모든 잡음에 전부 대응하는 것은 불가능하다. 신호에 주목해야 한다. 지금 주목해야 할 신호는 기업 이익, 즉 EPS다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/020/0003731909' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/020/0003731909</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
