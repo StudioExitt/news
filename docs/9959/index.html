@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>최대 실적에도 주가 폭락한 삼성전자…"조정은 오히려 기회"</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/421/0009046401' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9959" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>최대 실적에도 주가 폭락한 삼성전자…"조정은 오히려 기회"</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">삼성전자가 사상 최고 실적을 발표했음에도 불구하고, 주가 상승률 둔화 우려와 차익실현 매물로 인해 급락세를 보였습니다. 그러나 증권업계는 AI 수요 지속 및 메모리 공급 부족으로 ASP 상승이 예상되어 이번 조정이 오히려 장기적인 저가 매수 기회라고 판단하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">최대 실적(펀더멘털)을 바탕으로 강력한 이익 모멘텀이 확인되었으며, 단기적인 가격 조정에도 불구하고 장기적/중기적 업황 전망(ASP 상승, 메모리 사이클 전반전)에 대한 확신도가 높습니다. 시장의 변동성은 오히려 매수 기회로 해석됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#AI</span> <span class="tag tag-hash">#저가매수</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 급락한 7일 오후 서울 중구 하나은행 본점 딜링룸 전광판에 코스피지수와 삼성전자와 SK하이닉스 종가가 표시되고 있다. 2026.7.7
+(서울=뉴스1) 문창석 기자 = 삼성전자가 역대급 실적을 기록했지만 가격 상승세가 멈출 것이란 관측이 나오며 주가가 급락세를 보였다. 일각에선 '메모리 피크'에 대한 우려보다는 저가 매수의 기회로 삼아야 한다는 조언이 나온다.
+8일 한국거래소에 따르면 지난 7일 삼성전자는 코스피에서 전일 대비 2만 2000원(6.92%) 하락한 29만 6000원에 마감했다. 삼성전자를 비롯한 반도체주 급락에 이날 코스피는 장중 매도 사이드카와 서킷 브레이커가 연이어 발동되기도 했다.
+이날 삼성전자는 2분기 잠정 영업이익이 사상 최고인 89조 4000억 원이라고 밝혔다. 하지만 실적 호조에도 가격 상승률 둔화에 대한 우려가 제기되며 주가가 급락세를 보였다. 여기에 그동안 주가가 급등한 만큼 외국인들의 차익 실현 욕구가 커진 동시에 리밸런싱 매물이 지속적으로 나온 점도 주가 하락으로 이어졌다.
+시장에선 반도체 업종의 이익 모멘텀이 그대로라는 점에서 이날 주가 조정이 단기적일 것이란 관측에 무게를 싣고 있다. 그동안의 주가 상승세가 꺾이고 추세적 하락으로 반전하려면 반도체 업종의 실적이 피크에 도달해야 하는데, 삼성전자의 실적은 올해 2분기보다 3~4분기에 더 커질 것으로 예상되기 때문이다.
+인공지능(AI)에 대한 글로벌 빅테크 기업들의 투자가 줄어들 것이란 전망도 과도한 우려라는 시각이 많다. AI 서버 수요는 여전히 확대되는 반면, 투자는 아직 초기 국면이라 공급 부족 상황이 지속된다는 것이다. KB증권은 현재의 메모리 공급 부족 현상이 해소될 때까지 최소 2년 이상 소요될 것으로 내다봤.
+오히려 메모리가 계속 부족하기에 하반기부터는 삼성전자의 메모리 평균판매가격(ASP)이 올라가 마진율이 더욱 높아질 것이란 전망이 나온다. 시장조사업체 트렌드포스에 따르면 3분기 DDR5 계약 가격은 기존 대비 10%, 4분기 가격도 14% 상향된 것으로 집계됐다. 대신증권은 내년에도 고대역폭메모리(HBM)의 ASP가 전년 대비 91% 상승할 것으로 전망하고 있다.
+이종욱 삼성증권 연구원은 "AI 수요, 클라우드 기업들의 AI 매출이 꺾이지 않고 성장했다. 고객사들은 여전히 더 높은 성능의 HBM과 D램을 요구하고 있다"며 "하지만 공급 업체들은 아직 본격적인 증설 대응 국면에도 진입하지 않았다. 메모리 사이클은 아직 전반전"이라고 말했다.
+이날 경기 수원시 영통구 삼성전자 수원캠퍼스의 모습. 2026.7.7
+i날 경기 수원시 영통구 삼성전자 수원캠퍼스의 모습. 2026.7.7 
+증권업계에선 향후 삼성전자가 막대한 실적을 바탕으로 주가 상승세를 이어갈 것으로 보고 있다. KB증권은 올해 삼성전자 연간 영업이익이 전년 대비 761% 증가한 375조 원, 2027년 영업이익은 547조 원으로 추정했다. 미래에셋증권 역시 올해 영업이익이 397조원, 2027년은 576조 원이 될 것으로 전망했다.
+여기에 삼성전자가 성과급 충당금을 설정해야 한다는 점도 주가 하방을 단단하게 할 것이란 관측이 나온다. 현재 삼성전자는 임직원 보상 목적으로 약 25조 원 규모의 자사주를 보유하고 있는데, 향후 지급해야 할 성과급 규모를 고려하면 추가 매집이 불가피하다는 것이다.
+코스피 역시 이날 추가 하락하면서 극심한 저평가 영역에 들어섰다는 의견이 많다. 이날 장중 기록한 코스피 지수 7300포인트는 선행주가수익비율(PER)이 6.3배 수준으로, 금융위기 당시 저점(6.27배)과 비슷하다. 한지영 키움증권 연구원은 "이늘 오늘의 낙폭이 그만큼 비이성적이고 과도함을 보여준다"고 말했다.
+시장에선 삼성전자의 이익 전망이 여전히 견조하고 반도체 수요도 지속되는 만큼 이날 주가 조정이 오히려 기회라는 시각이 우세하다. 실제로 삼성전자 목표주가를 낮춘 증권사는 아직 없으며, 미래에셋증권은 오히려 이날 삼성전자의 2분기 잠정실적 발표 이후 내년 영업이익 전망치를 기존보다 6.0% 상향하기도 했다.
+박준영 한화투자증권 연구원은 "펀더멘털에 영향을 주는 충격이 아니라 노이즈나 오해로 메모리 사이클이 종료되는 경우는 없었다"며 "완벽한 펀더멘털을 갖추고 있는 한국 메모리 산업에 뚜렷한 이유 없이 발생하는 극심한 변동성은 저가 매수의 기회로 판단되며 주가 사이클의 종료 시점은 도래하지 않았다"</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/421/0009046401' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/421/0009046401</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

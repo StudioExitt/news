@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK하이닉스 ADR ‘역대급’ 코너스톤 투자… ‘AI 미다스 손’도 붙었다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004639203' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9960" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>SK하이닉스 ADR ‘역대급’ 코너스톤 투자… ‘AI 미다스 손’도 붙었다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스가 미국 ADR 발행에 역대 최대 규모의 코너스톤 투자자를 확보하며 글로벌 자본시장의 강력한 신뢰를 입증했습니다. 특히 오픈AI 관련 AI 전문 투자사들의 참여는 고성장 AI 인프라 시장 내 SK하이닉스의 리더십을 재확인시켜 주었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 자본시장의 최대 규모 코너스톤 확보와 AI 전문 기관투자사(오픈AI 관련 연구원 출신)의 참여는 SK하이닉스가 AI 인프라 및 HBM 시장에서 독보적인 리더임을 재확인시켜 주었습니다. 이는 단기적 공모가 산정에 긍정적 영향을 미칠 뿐만 아니라, 중장기적으로 메모리 반도체 업황에 대한 강한 자신감을 반영하여 강력한 상승 동력으로 작용할 것으로 분석됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #ADR #AI #HBM</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">ADR은 물론 코너스톤도 역대 최대
+‘병목 예측’ AI 거물 투자사도 참여
+10일 ADR 상장 기점 반등 여부 주목SK하이닉스(000660)가 미국 주식예탁증서(ADR) 발행을 위한 수요예측 시작과 동시에 사상 최대
+규모의 초기 핵심 기관투자자(코너스톤)를 확보했다. 오픈AI 전 연구원과 인공지능(AI) 업계 거물들이 참여해 고수익률을 기록 중인 AI 생태계
+전문 투자사도 SK하이닉스에 관심을 보인 것으로 나타나 ADR 상장 후 흥행 가능성이 높아지고 있다는 평가다.
+경기도 이천시 SK하이닉스 본사 모습. 연합뉴스
+경기도 이천시 이천시 본사 모습. 연합뉴스7일 금융투자업계에 따르면 SK하이닉스는 미국 증권거래위원회(SEC)에 제출한 F-1 등록신고서
+정정을 통해 영국계 베일리 기포드, 미국 헤지펀드 코튜 매니지먼트, AI 전문 투자사 시츄에이셔널 어웨어니스(Situational
+Awareness LP) 등 3곳이 코너스톤 투자자로 참여했다고 밝혔다. 이들이 제시한 매입 의향 금액은 총 70억 달러(약 10조 6800억
+원)로 전체 공모 예정 규모인 281억 3310만 달러(약 42조 9300억 원)의 25%에 달한다.
+이는 글로벌 자본시장 역대 최대 수준의 코너스톤 유치다. 2023년 나스닥에 상장한 ARM은 애플, 구글, 엔비디아, 삼성전자, TSMC 등
+다수의 테크 기업이 코너스톤으로 참여했으나 물량은 총 공모액 15%인 7억 3500만 달러(약 1조 1200억 원)에 머물렀다.
+업계는 AI 인프라 테마 특화 투자사인 시츄에이셔널 어웨어니스의 참여에 주목하고 있다. 이 펀드는 오픈AI의
+초정렬(Superalignment)팀 연구원 출신인 레오폴드 아<0xEC><0x85><0xB4>브레너가 2024년 설립했다. 냇 프리드먼 전 깃허브 최고경영자(CEO),
+다니엘 그로스 전 SSI CEO 등 실리콘밸리 주요 AI 관계자들이 동참하고 있다. 아<0xEC><0x85><0xB4>브레너가 2024년 발표한 동명의 에세이 ‘시츄에이셔널 어웨어니스’는 현재까지의 AI 인프라 병목 흐름을 정확히 예측해 유명세를 탔다.
+이 펀드는 AI 인프라 공급망 기업인 아이렌(IREN), 코어위브, 블룸에너지 등에 선제 투자해 높은 수익을 올려왔다. 운용자산(AUM)도
+급속히 늘어 현 규모는 약 200억 달러(약 30조 5200억 원)로 추정된다. 대형 기관의 단순 포트폴리오 배분을 넘어 AI 전문 투자사가
+고대역폭메모리(HBM) 선두 주자인 SK하이닉스에 대규모 투자를 확약했다는 점에서 메모리 업황 지속 긍정론에 힘이 실린다는 평가다.
+시츄에이셔널 어웨어니스를 이끄는 레오폴드 아<0xEC><0x85><0xB4>브레너. 아<0xEC><0x85><0xB4>브레너 엑스시츄에이셔널 어웨어니스를 이끄는 레오폴드 아<0xEC><0x85><0xB4>브레너. 법적 구속력이 없는 투자 의향(IOI) 단계이나
+글로벌 우량 기관들이 신뢰를 드러낸 만큼 향후 공모가 산정에 유리하게 작용할 전망이다.
+SK하이닉스의 최종 ADR 공모가는 9일 장 마감 후 확정된다. 세 기관은
+일반 공모 참여자와 동일한 조건으로 미국예탁주식(ADS)을 매입하겠다는 의향을 밝힌 상태다.
+ADR 상장을 기점으로 최근 주춤했던 SK하이닉스 주가가 반등할 수 있을지도 주목된다. 시장에서는 ADR에 글로벌 자금이 유입될 시 한국에
+상장된 SK하이닉스 본주도 탄력을 받을 것이라는 관측과 동시에, ADR과 본주 간 괴리가 벌어질 수 있다는 우려가 공존한다. 실제 TSMC의
+경우 ADR이 본주 대비 10~20% 높은 가격에 거래되고 있다. 이날 UBS는 투자자들에게 SK하이닉스 본주를 매각한 후 ADR을 매입하라고
+권유하기도 했다. 투자 편의성과 유동성, 프리미엄 측면에서 ADR이 유리하다는 판단이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004639203' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004639203</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
