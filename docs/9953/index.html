@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[뉴욕증시]반도체 업종 '털썩'…일제히 하락 마감</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005786841' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9953" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[뉴욕증시]반도체 업종 '털썩'…일제히 하락 마감</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 업종의 급락으로 나스닥과 S&P 500지수가 하락 마감했습니다. 또한, 호르무즈 해협에서의 공격 소식과 이에 따른 국제유가 급등은 투자 심리를 크게 악화시켰습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업황의 근본적인 피로감과 AI 기대치 과열에 따른 매도세가 시장을 이끌었으며, 여기에 호르무즈 해협 사건으로 인한 에너지 공급 불안정성이 더해져 투자심리가 매우 악화되었습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">마이크론</span> <span class="tag stock-tag">AMD</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체공황</span> <span class="tag tag-hash">#지정학적리스크</span> <span class="tag tag-hash">#유가급등</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">국제유가 상승 마감
+이란, 카타르 선박 공격
+美, 이란 원유 제재 면제 철회7일(현지시간) 미국의 3대 지수는 반도체 업종의 급락과 국제유가 상승 영향으로 일제히 하락 마감했다. 또 이란이 호르무즈 해협에서 카타르 선박을 공격하면서 국제유가가 급등한 점도 투자심리에 부정적인 영향을 미쳤다.
+
+이날 뉴욕증권거래소(NYSE)에서 다우존스30산업평균지수(다우지수)는 전 거래일보다 130.70포인트(0.25%) 하락한 5만2925.15에 마쳤다. 대형주 중심의 S&P500지수는 33.58포인트(0.45%) 떨어진 7503.85, 기술주 중심의 나스닥지수는 302.47포인트(1.16%) 내린 2만5818.69에 마무리했다.
+
+뉴욕증권거래소 내부. 뉴욕(미국)=황윤주 특파원
+뉴욕증권거래소 내부. 뉴욕(미국)=황윤주 특파원
+
+이날 반도체 업종이 급락하며 지수를 끌어내렸다. 마이크론 4.71%, 인텔 9.66%, 퀄컴 1.88%, AMD 6.51%, 마벨 테크놀로지 7.45%, KLA 7.22% 등의 약세가 두드러졌다.
+
+FBB 캐피털 파트너스의 리서치 책임자인 마이크 베일리는 "기대치는 높아졌지만, 펀더멘털은 이러한 지나치게 높은 수요를 충족시키지 못하고 있으며, 이것이 하락세를 부추기고 있다"고 분석했다. 이어 "지금까지 나타난 자금 이동 추세가 계속될 것으로 예상한다"고 덧붙였다.
+
+인공지능(AI) 관련 주식에 대한 하락 압력 원인으로 삼성전자의 주가 급락이 꼽힌다. 삼성전자는 전일 2분기 호실적을 발표한 후 약 7% 하락 마감했다.
+
+바이탈 놀리지의 아담 크리사풀리는 "삼성에 대한 반응은 향후 몇 주 동안 시장이 직면할 가장 큰 위험 중 하나를 보여준다"며 "2분기 실적은 절대적인 기준으로 볼 때 상당히 견조할 가능성이 높지만, 1분기 시즌과는 달리 현재 기대치가 매우 낙관적으로, 이는 기준치가 상당히 높아졌음을 의미한다"
+
+또 중국의 딥시크가 자체 AI 칩을 개발 중이라는 외신 보도도 영향을 미쳤다. 엔비디아 등 AI 반도체 기업에 대한 의존도가 낮아질 수 있어서다.
+
+스페이스X는 전일 대비 6.83% 떨어진 149.47달러로 마감했다. 이는 상장 시초가보다 낮은 가격이다. FBB 캐피털 파트너스의 리서치 책임자인 마이크 베일리는 주가 하락을 두고 "인공지능 기업이 되려고 노력하는 회사라는 점을 고려할 때, 일종의 위험 회피 움직임을 나타내는 것"이라고 지적했다.
+
+반면 일라이 릴리 2.96%, JP모건체이스 0.44%, 월마트 0.80%, 마이크로소프트 0.54% 등이 상승세로 마쳤다. 헬스케어, 금융, 빅테크 등 다른 분야로 자금을 이동하는 흐름이 뚜렷했다.
+
+호르무즈 해협에서의 긴장도 악재로 떠올랐다. 호르무즈 해협 인근에서 카타르 선적의 LNG 운반선 알레카야트호가 이란의 미사일 공격을 받아 기관실에 화재가 발생해 폭발할 위험이 있는 것으로 전해졌다.
+
+마제드 알 안사리 카타르 외무부 대변인은 "이번 사건은 국제 항행 보안과 글로벌 에너지 공급에 대한 용납할 수 없는 공격이자 명백한 국제법 위반"이라고 규탄했다.
+
+이에 미국 재무부 해외자산통제국(OFAC)도 이란산 원유의 생산, 인도, 판매 허용을 위해 지난달 21일자로 발급했던 60일짜리 임시 일반면허를 취소한다고 밝혔다.
+
+국제유가는 상승세로 마쳤다. 이날 뉴욕상품거래소에서 8월 인도분 미 서부텍사스산 원유(WTI)는 전장 대비 2.76% 오른 배럴당 70.44달러에 마감했다. ICE선물거래소에서 9월 인도분 브렌트유는 전장보다 3.01% 상승한 74.16달러에 마쳤다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005786841' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005786841</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
