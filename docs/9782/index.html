@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 8000선 깨져…삼성전자, 최대 실적에도 4%대 ‘뚝’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006324361' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9782" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 8000선 깨져…삼성전자, 최대 실적에도 4%대 ‘뚝’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 8000선 아래로 하락하며 약세에 머물렀고, 외인 매도세가 시장을 압박했습니다. 삼성전자는 역대 최대 실적을 발표했으나, 기대감 선반영 및 차익실현 매물 출회 등의 요인으로 인해 주가가 큰 폭으로 하락하는 모습을 보였습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">코스피 지수 하락 및 대형주인 삼성전자의 급락세는 단기 투자심리 위축을 반영하며 시장 전반에 부정적인 영향을 미칩니다. 실적 발표와 무관한 조정세가 확인됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#삼성전자</span> <span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#차익실현</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피, 2%대 내린 7800선…외인 매도 지속
+뉴욕증시 반도체주 반등에도 코스피 힘 못 써
+samsung전자 ‘셀온’ 물량 출회…하닉도 1%대 하락
+‘캐나다 잠수함 수주 고배’ 한화오션, 22%대↓ 
+7일 장 초반 코스피가 8000선 아래로 내려앉았다.
+삼성전자(005930)가 역대 최대 규모의 2분기 실적을 발표했으나 셀온(Sell On·호재에도 주가가 하락하는 현상)으로 인해 하락세가 이어지는 모습이다.
+
+7일 오전 서울 중구 하나은행 딜링룸 전광판에 코스피와 원·달러 환율이 표시되고 있다. (사진=뉴스1)
+엠피닥터에 따르면 이날 오전 9시 4분 기준 코스피 지수는 전 거래일 대비 205.44포인트(2.55%) 내린 7845.89에 거래 중이다.
+지수는 전장 대비 131.13포인트(1.64%) 하락한 7919.20에 출발해 하락세를 지속하고 있다.
+
+시장에서는 개인이 1648억원, 기관이 412억원을 순매수했고 외국인이 2022억원을 순매도하고 있다.
+
+업종별로는 오락·문화, 의료·정밀기기, 비금속, IT서비스 등이 강세다. 반면 운송장비·부품, 기계·장비, 건설, 금속, 제조, 전기·전자 등은 약세다.
+
+간밤 뉴욕증시에서 반도체주가 반등했고 이날 삼성전자도 역대 최대 분기 실적을 발표했으나 주가는 힘을 쓰지 못하는 모습이다. 실적 발표 전 기대감이 선반영되면서 이미 주가가 큰 폭으로 오른 탓에 차익실현 매물이 출회하는 것으로 풀이된다.
+
+이날 삼성전자는 올해 2분기 연결 기준 매출 171조원, 영업이익 89조4000억원으로 집계됐다고 잠정 실적을 공시했다. 전년 동기 대비 각각 129.31%, 1810.26% 증가한 역대 최고 실적이다.
+
+d만 이 시각 삼성전자(005930)는 전 거래일 대비 1만5000원(4.72%) 내린 30만3000원에 거래되고 있다. 반도체 투톱인 SK하이닉스(000660) 역시 전장 대비 4만원(1.71%) 하락한 230만3000원에 거래 중이다.
+
+한지영 키움증권 연구원은 “삼성전자 잠정실적 발표 후 셀온 물량 출회 또는 업황 노이즈 극복에 따른 추격 매수 여부가 금일 단기적인 관전 포인트”라면서 “이번주 남은 기간 동안 반도체 포함 코스피 이익 모멘텀 재생성 여부가 주중 증시 회복력의 강도를 결정할 것”이라고 내다봤다.
+
+i밖에 시가총액 상위 종목 중 삼성전기(009150)(1.09%), KB금융(105560)(1.64%), 셀트리온(068270%)=>(오류 처리) 등이 소폭 강세다. 반면 SK스퀘어(402340)(-4.01%), 현대차(005380)(-4.48%), LG에너지솔루션(373220)(-2.82%), 삼성생명(032830)(-2.67%), 삼성물산(028260)(-2.34%) 등 대부분이 약세다.
+
+캐나다 차세대잠수함도입사업(CPSP)에서 고배를 마신 한화오션(042660)은 전장 대비 2만5700원(22.14%) 급락한 9만400원에 거래 중이다.
+
+코스닥 지수는 같은 시각 전 거래일 대비 8.55포인트(1.10%) 오른 855.62에 거래 중이다. 지수는 전장 대비 3.33포인트(0.39%) 내린 843.74에 출발했으나 상승 전환했다.
+
+투자자별로 개인이 295억원을 순매도했고 외국인과 기관이 각각 28억원, 282억원원을 순매수하고 있다.
+
+시총 상위 2개 종목의 흐름은 엇갈렸다. 알테오젠(196170)은 전장 대비 8000원(2.42%) 오른 33만9000원에, 에코프로비엠(247540)은 200원(0.16%) 내린 12만1500원에 거래 중이다.
+
+i밖에 시총 상위 종목 중 에코프로(086520)(0.35%), 주성엔지니어링(036930)(5.61%), 코오롱티슈진(950160)(5.78%), HLB(028300)(1.74%) 등이 강세다. 반면 리노공업(058470)(-2.00%), 이오테크닉스(039030)(-1.89%), 심텍(222800)(-1.10%) 등은 약세다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006324361' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006324361</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
