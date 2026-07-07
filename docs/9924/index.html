@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>널뛰는 증시에 채권형 펀드·MMF로 돈몰려</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005544982' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9924" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>널뛰는 증시에 채권형 펀드·MMF로 돈몰려</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">증시의 높은 변동성과 고점 우려로 인해 투자 자금이 안전자산으로 대거 이동하고 있습니다. 주식형 펀드에서 채권형 및 MMF로 자금 흐름이 집중되면서 단기적으로 시장의 불안 심리가 반영되고 있음을 보여줍니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">투자자들이 극심한 변동성에 대한 피로감을 느끼며 안전자산(채권/MMF)으로 자금이 급격히 이동하는 현상이 관찰되었기 때문입니다. 이는 단기 투자 심리가 위축되어 있음을 나타냅니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#안전자산선호</span> <span class="tag tag-hash">#펀드흐름</span> <span class="tag tag-hash">#변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">최근 국내 증시가 급등락을 오가는 '롤러코스터' 장세를 이어가자, 주식형 펀드에서 자금이 빠져나가고 있다. 증시 고점 우려 속 극심한 변동성에 피로감을 느낀 투자자들이 안전자산으로 향하는 분위기다.
+
+7일 금융투자협회에 따르면 전날 국내 주식형펀드 설정원본(공·사모 합계)은 221조8082억원으로, 지난달 말 대비 9조9540억원 급감했다. 주식형펀드는 변동 장세에도 몸집을 키우며 지난달 18일 설정액이 최대치(243조9557억원)로 불어났지만, 이후 감소하는 추세다. 반면 채권형펀드 설정원본은 202조3856억원으로, 이달 들어 1조3365억원 늘었다.
+
+주춤하던 파킹형 자금도 빠르게 불어나고 있다. 머니마켓펀드(MMF) 잔고는 246조4056억원으로, 이달에만 22조771억원 급증했다. MMF 잔고는 지난 5월 19일 262조140억원으로 최대치를 기록한 뒤 감소세를 이어가며 지난달 말 220조원대까지 떨어졌지만, 이달 들어 급격하게 늘었다.
+
+MMF는 단기 국고채나 기업어음(CP), 양도성예금증서(CD) 등에 투자하는 초단기채권형 펀드다. 입출금이 자유롭고 하루만 예치해도 수익을 낼 수 있어, 단기 자금 운용 수단으로 활용할 수 있다는 점에서 불확실성이 클 때 자금 유입이 활발해지는 경향을 띤다.
+
+증시가 극심한 변동성을 이어가자, 투자자들이 채권과 MMF 등 상대적으로 안전한 투자처로 대피하는 것으로 풀이된다. 국내 증시는 반도체 투톱이 가파르게 상승하며 쏠림이 심화된 상황에, 차익실현 매물과 반도체 수요 피크아웃(정점 후 하락) 우려가 맞물리며 변동성이 확대되는 상황이다.
+
+조아인 삼성증권 연구원은 "삼성전자·SK하이닉스가 국내 증시에서 차지하는 비중이 높아졌기 때문에, 당분간 시장 변동성 확대는 불가피하다"며 "상반기 메모리 반도체 주가 호조로 코스피는 약 100% 상승하며 글로벌 주요 증시 중 가장 높은 상승률을 기록했고, 단기 급등에 따른 인공지능(AI) 투자 과열 논란이 나오는 것은 자연스러운 현상"이라고 해석했다.
+
+이어 "이달 말 미국 빅테크 실적 발표가 메모리 반도체 주식들의 중요한 변곡점이 될 것"이라며 "하이퍼스케일러들의 AI 투자 지속성이 재확인된다면 우리 증시는 다시 회복력을 보일 것"이라고 덧붙였다.
+
+한지영 키움증권 연구원도 "이달 삼성전자와 SK하이닉스 등 반도체주의 주가 변동성 확대는 2·4분기 역대급 주가 폭등에 따른 기술적 되돌림 수요가 확산된 측면이 강했던 것으로 보인다"며 "고변동성 환경이 차익실현, 비중 조절 등 단순 수급 이슈로 주가가 빠지는 현상을 펀더멘털상 악재로 과잉 해석하게 만들고 있다"고 분석했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005544982' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005544982</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
