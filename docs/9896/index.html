@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>문턱 높인 중복상장, 복잡한 예외조항…현장 고심 깊어</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002667035' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9896" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>문턱 높인 중복상장, 복잡한 예외조항…현장 고심 깊어</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금융당국의 중복상장 원칙 금지 및 예외 기준 강화 조치로 자본시장에 큰 파장이 예상됩니다. 특히 물적분할 자회사의 경우 '3% 룰' 등 까다로운 주주동의 절차가 필수화되어 기업들의 자금 조달 경로에 어려움이 가중되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">상장 주관 및 자금 조달 관련 규제 강화는 기업 성장의 필수 동력을 약화시키고 투자 불확실성을 높여 전반적인 시장 분위기에 부정적 영향을 미칠 것으로 예상됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자본시장</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융산업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#중복상장규제</span> <span class="tag tag-hash">#3%룰</span> <span class="tag tag-hash">#기업지배구조</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">금융당국이 자회사의 중복상장을 원칙적으로 금지하고, 깐깐한 예외 기준을 만들면서 자본시장에 거센 파장이 일고 있다. 모회사 일반주주의 권익을 침해한다는 지적에 따른 조치지만, 업계에서는 까다로워진 심사기준과 ‘3% 룰’ 적용 등으로 인해 기업의 자금 조달 창구가 막혀 성장이 저하될 수 있다는 우려도 나온다.
+
+특히 거래소가 기업별로 상황이 다른 만큼, 케이스 바이 케이스 즉 사례별로 대응하겠다고 밝히며, 보다 구체적인 가이드라인이 필요하단 지적도 제기된다. 7일 중복상장을 준비 중인 기업들은 전날 금융위원회와 한국거래소가 발표한 ‘중복상장 원칙금지·예외허용을 위한 세부기준’ 가이드라인을 두고 대응책을 고심하고 있다.
+
+새롭게 발표된 가이드라인의 핵심은 모회사 이사회에 상법상 주주충실의무를 구체화한 5대 의무를 부과하고, 한국거래소의 상장 심사를 대폭 강화한 것이다. 이에 따라 상장을 추진하는 모회사 이사회는 중복상장이 주주에게 미칠 영향 평가를 실시하고, 주주보호 방안을 마련해야 하며, 주주소통 또는 주주동의 여부를 반드시 확인해야 한다. 또한, 이 모든 이행 과정은 ‘독립적 특별위원회’의 사전 심의 및 의결을 거쳐야 한다.
+
+가장 논란이 되는 부분은 ‘주주동의’ 절차다. 거래소는 일반주주 보호 필요성에 상응하는 주주 보호 노력을 심사하며 그 원칙으로 주주동의를 권고했다.
+
+특히 일반 자회사가 아닌, 모회사의 핵심 사업을 떼어낸 ‘물적분할 자회사’의 경우에는 주주동의가 필수로 요구된다. 금융위는 물적분할 상장의 경우 모회사 디스카운트 우려가 크다고 보고, 보다 엄격한 기준을 제시했다.
+
+주주동의를 인정하는 기준으로는 상법상 감사위원 선임에 준하는 이른바 ‘3% 룰’이 적용된다. 3% 룰은 대주주와 특수관계인의 합산 지분 의결권을 최대 3%로 제한하고, 참여주식의 과반 찬성, 발행주식 총 수의 4분의 1 이상 찬성을 받아야 안건이 가결된다. 기존 사업부를 물적분할해 설립된 HD현대로보틱스, SK플라즈마 등은 이 3% 룰의 영향을 받는다.
+
+이에 대해 최준선 성균관대 법학전문대학원 명예교수는 “3% 룰은 해외 어디에도 없는 제도로, 자기 재산에 대해 정당한 재산권을 행사해야 할 대주주에 대한 역차별”이라며 “이사회와 주주총회의 결의 사항은 이미 법률로 정해져 있는데, 3% 룰이 남용되고 있는 실정”이라고 비판했다.
+
+다만, 일반 자회사의 경우에는 주주동의를 받지 못하더라도 거래소가 엄격하게 개별 심사하는 방법으로 사실상 예외적 상장의 길을 열어 뒀다. 거래소는 “자회사의 사업자금 조달 필요성 및 대안의 존재 여부, 산업 특성, 모·자회사 관계형성 경위 및 기간, 상대적 비중 등을 기반으로 요구 수준을 차별화하겠다”고 밝혔다.
+
+하지만 업계에선 자금 조달의 필요성이나 첨단산업 여부, 모자회사 관계 파악 등에 대한 구체적인 가이드라인과 사례가 아직은 없는 상황이라 대응하는 것이 쉽지 않다고 호소한다. 모회사 대비 매출, 영업이익, 자산 비중이 모두 10% 미만인 저비중 자회사는 주주동의가 면제돼 비교적 상황이 낫다. 다만, 저비중 자회사라도 물적분할된 회사의 경우에는 3%룰에 따른 주주동의 의무화가 적용된다.
+
+미국 나스닥 상장을 추진 중인 현대차그룹의 보스턴다이내믹스의 경우 저비중 자회사에 해당돼 별도의 주주동의를 거치지 않아도 될 가능성이 높다. 다만, 해외 거래소에 상장하는 경우에도 모회사 이사회 5대 의무는 동일하게 적용되기 때문에 보다 촘촘한 설계가 필요할 전망이다.
+
+업계에서는 사실상 중복상장이 매우 어려워질 것으로 보고 있다. 특히 가이드라인 이후 허용될 개별 기업의 사례를 주목하는 분위기다. 한 업계 관계자는 “사실상 주주동의를 받는 것이 가장 큰 관문”이라며 “아무런 인센티브 없이 기존 주주들에게 상장 동의를 해달라고 하는 것은 현실성이 없기 때문에 자회사 상장 주식을 기존 주주에게 얼마나 배정할 것인지, 자사주 소각이나 배당 확대를 제시하더라도 큰 유인이 되기는 어려울 것이”라고 말했다.
+
+상장이 무산될 경우 닥칠 후폭풍도 무시하기 어렵다. 자회사의 성장성을 보고 투자했던 재무적투자자(FI)들의 엑시트(투자금 회수)가 가로막히면 대규모 법적 분쟁으로 번질 수 있단 우려도 나온다. 또한 기업들의 자금 조달 창구가 막히면서 사모투자 유치 등 다른 자금 조달 방안을 선택할 가능성도 제기된다.
+
+또 다른 업계 관계자는 “우량 자회사가 상장 자체를 연기하고, 사모투자 유치 등 다른 자금 조달 방안을 선택할 수 있고, 결국 그 수익을 사모펀드 등 일부만 향유하게 되는 결과를 낳을 것”이라고 내다봤.
+
+한 컨설팅업체 관계자는 “금융당국이 덕산넵코어스(모회사 덕산하이메탈)를 우수 사례로 소개한 만큼, 새로운 가이드라인 이후 첫 번째로 허용될 중복상장 기업에 주목하고 있다”며 “거래소가 케이스 바이 케이스로 심사하겠다고 밝힌 상황인 만큼, 여러 기업들의 사례가 구체적인 가이드라인으로 작용할 것”이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002667035' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002667035</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
