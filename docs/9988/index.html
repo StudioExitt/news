@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>호실적도 못 버틴 반도체株…문제는 실적보다 높아진 눈높이</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006325024' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9988" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>호실적도 못 버틴 반도체株…문제는 실적보다 높아진 눈높이</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">삼성전자가 사상 최대 실적에도 주가 급락을 겪었으나, 이는 실적 쇼크보다는 지나치게 높아진 기대치와 레버리지 상품에 의한 수급 변동성 때문이라는 분석입니다. 기사는 AI 수요 기반의 구조적 공급 부족 현상을 강조하며, 성급한 매도(투매)보다 조건부 분할 비중 확대가 유효하다고 조언합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">직접적인 실적 쇼크는 아니었으나, 과도한 기대치와 단기 수급 요인으로 인해 급락장이 발생하며 투자 심리를 위축시키고 있어 시장에 중대한 분석적 경고를 던지고 있기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체주의</span> <span class="tag tag-hash">#AI수요</span> <span class="tag tag-hash">#투자전략</span> <span class="tag tag-hash">#기술분석</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">삼성전자가 사상 최대 분기 실적을 내고도 주가가 급락한 것은 실적 쇼크가 아니라 높아진 기대치와 수급 쏠림이 맞물린 결과라는 분석이 나왔다. 메모리 업황의 피크아웃 우려가 커졌지만, 실제 공급 과잉이나 인공지능(AI) 수요 둔화를 확인할 만한 증거는 아직 부족하다는 판단이다.
+
+이재원 유안타증권 연구원은 8일 보고서에서 “삼성전자 실적 발표 후 급락의 핵심은 실적 쇼크가 아니라 기대치 미달의 문제”라며 “현재 필요한 판단은 반도체를 팔아야 하는지가 아니라 AI 설비투자(CAPEX)가 실제로 꺾였는지 여부”라고 말했다.
+
+(표=유안타증권)
+
+삼성전자의 2분기 잠정 실적은 매출 171조원, 영업이익 89조 4000억원으로 사상 최대치를 기록했다. 유안타증권은 특별성과급 충당금 반영을 고려하면 실질 영업이익은 100조원을 웃돌았을 것으로 추정했다. 공식 영업이익 컨센서스 84조 6000억원도 약 6% 상회한 수준이다.
+
+그럼에도 실적 발표 당일 삼성전자와 SK하이닉스(000660) 주가는 동반 급락했고, 장중 코스피 시장엔 서킷브레이커가 발동됐다. 이 연구원은 “실적 절댓값 자체는 좋았다”며 “문제는 시장 기대치가 높아져 있었고 한국시장 내 반도체 비중이 너무 커졌다는 것”이라고 진단했다.
+
+실적 발표 직전 다수 애널리스트가 삼성전자 영업이익 90조원 이상을 제시했고, 시장 일부에선 성과급 충당금을 제외하면 100조원 안팎의 이익을 기대했다. 매출액도 컨센서스 174조 5000억원을 소폭 밑돌았다. 실적 개선이 이미 주가에 선반영된 상황에서 잠정 실적 발표가 신규 매수 재료가 아니라 차익실현의 명분으로 작용했다는 설명이다.
+
+수급 부담도 컸다. 지난 7일 코스피 거래대금 상위 10개 종목 중 SK하이닉스와 삼성전자가 1·2위를 차지했고, 삼성전자·SK하이닉스 단일종목 레버리지와 인버스 상품도 4개 포함됐다. 유안타증권에 따르면 단일종목 레버리지 ETF 출시 이후 삼성전자와 SK하이닉스의 일간 고가 대비 저가 변동률은 각각 7.1%, 8.6%로 확대됐다. 출시 이전 4.4%, 5.1%보다 크게 높아진 수치다.
+
+d만 이 연구원은 이번 급락을 메모리 사이클 종료로 단정하기는 어렵다고 봤다. 메모리 공급은 클린룸, 전력, 장비 리드타임, 공정 전환, 수율 안정화, HBM 패키징 병목 해소 등이 선행돼야 해 단기간에 늘기 어렵다는 이유에서다. AI향 메모리는 범용 D램보다 고객별 스펙과 공급안정성의 진입장벽도 높하다.
+
+그는 “공급 과잉을 말하려면 실제 증설 속도, 고객 재고 축적, 장기공급계약(LTA) 재협상, HBM 수율 안정화가 확인돼야 한다”며 “현재 확인되는 것은 오히려 공급 부족의 심화”라고 설명했다. 고객사의 메모리 수요 충족률이 50~60% 수준에 그친다는 진단과 애플의 가격 인상 역시 공급자 우위 환경을 뒷받침한다고 봤다.
+
+밸류에이션 측면에서도 투매를 정당화하기 어렵다는 평가다. 유안타증권에 따르면 지난 7일 종가 기준 코스피 12개월 선행 주가수익비율(PER)은 6.97배로 금융위기 수준까지 낮아졌다. 이 연구원은 “낮은 PER만으로 매수를 주장할 수는 없지만, 공급 부족과 AI CAPEX가 유지되는 구간에서 현재 밸류에이션 수준의 투매는 과도하다”고 말했다.
+
+전략적으로는 투매 동참보다 조건부 분할 비중 확대가 유효하다고 제시했다. 확인 조건으로는 외국인 현물 순매도 강도 축소, 60일 이동평균선 지지, 7월 말 하이퍼스케일러 2분기 실적 발표 이후 AI CAPEX 가이던스 유지 또는 상향, 코스피 이익 추정치 상향 조정을 꼽았다.
+
+이 연구원은 “쇼크는 실적이 아니라 기대치와 포지션에서 발생했다”며 “AI CAPEX가 꺾인 증거가 없고 밸류에이션이 역사적 하단에 위치한 만큼 공포에 동참할 이유는 약하다”고 말했다. 이어 “외국인 매도 강도 둔화와 하이퍼스케일러 CAPEX 가이던스 확인, SK하이닉스 ADR 상장, 단일종목 레버리지 ETF 제도 개선 등을 기다리며 반도체 대형주의 분할 비중 확대 기회를 탐색할 구간”이라고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006325024' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006325024</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
