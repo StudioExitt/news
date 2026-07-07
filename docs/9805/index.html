@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>깜짝 실적도 소용없네…삼성전자 '셀온'에 코스피 털썩</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005786515' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9805" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>깜짝 실적도 소용없네…삼성전자 '셀온'에 코스피 털썩</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">삼성전자가 시장 예상치를 뛰어넘는 호실적을 기록했음에도 불구하고, 차익실현 물량과 전반적인 반도체 업종의 매물 출회로 인해 주가가 5% 이상 급락하며 코스피 전체 지수 하락을 주도했습니다. 외국인 순매도가 이어지며 국내 증시 전반에 걸쳐 약세 압력이 지속되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">삼성전자의 호실적이 기대감을 높였으나, 오히려 '차익실현 매물'이라는 요인 때문에 주가 급락을 초래하며 코스피 전체 지수 하락을 이끌었기 때문에 시장의 단기 투자심리가 매우 부정적임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #차익실현 #코스피하락</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">삼성전자 2분기 영업익 89조원
+예상 넘는 실적에도 주가는 5% 이상 빠져
+전자·닉스 하락에 코스피 4% 이상 하락
+코스피 지수가 장 초반 4% 넘게 급락하며 8000선이 무너진 7일 서울 중구 하나은행 딜링룸 전광판에 국내증시 현황이 표시돼 있다.
+2026.7.7 강진형 기자
+코스피 지수가 장 초반 4% 넘게 급락하며 8000선이 무너진 7일 서울 중구 하나은행 딜링룸 전광판에 국내증시 현황이 표시돼 있다.
+2026.7.7 강진형 기자
+삼성전자가 시장 기대치를 뛰어넘는 2분기 실적을 발표했음에도 셀온(호재 발표 후 차익실현)이 나오며 주가는 크게 하락했다. 반도체주 전반에 차익실현 물량이 나오면서 코스피도 4%대 약세다.
+삼성전자 2분기 호실적에도 셀온 나오며 주가 급락
+7일 코스피는 전 거래일 대비 1.64% 내린 7919.20에 개장한 뒤 낙폭을 키워 오전 10시 기준 4.34% 하락한 7704.07에 거래 중이다. 오전 10시23분께에는 매도 사이드카가 발동됐다. 코스닥은 0.39% 내린 843.74에 장을 시작했지만 상승 반전해 0.43% 오른 850.75에 거래되고 있다.
+간밤 뉴욕증시가 반도체주 위주로 상승했음에도 코스피는 하락세를 보여 대조를 이뤘다. 다우존스30 산업평균지수는 전장보다 0.29% 오르며 사상 처음으로 5만3000을 돌파했다. 스탠더드앤드푸어스(S&P)500 지수와 나스닥 종합지수는 각각 0.72%, 1.12% 상승했다.
+엔비디아(0.37%), 인텔(1.54%), 마이크론(0.96%), 브로드컴(3.73%), 웨스턴디지털(7.14%), 시게이트(5.86%) 등 주요 반도체주가 상승하면서 필라델피아 반도체 지수도 2.2% 올랐다.
+코스피는 반도체주를 포함한 시가총액 상위주를 중심으로 하락이 가파르다. 특히 대장주인 삼성전자가 5% 이상 빠지면서 지수 하락을 주도했다.
+삼성전자는 이날 개장 전 시장 예상치인 84조원을 뛰어넘는 89조원에 달하는 2분기 영업이익을 발표했다. 하지만 차익실현 물량이 나오면서 오전 10시 기준 전 거래일 대비 5.82% 하락한 29만9500원까지 밀렸다. SK하이닉스도 3.80% 내린 225만3000원에 거래되고 있다.
+SK스퀘어(-6.49%), 삼성전기(-5.53%), 현대차(-4.98%), LG에너지솔루션(-5.78%), 삼성생명(-6.10%) 등 대부분의 대형주가 하락세다.
+김석환 미래에셋증권 연구원은 "삼성전자의 2분기 영업이익은 성과급 충당금을 제외하면 100조원대로 추정될 정도로 사상 최대 규모"라며 "역대급 실적에도 차익 매물이 나오면서 주가는 약세를 보이고 있다"고 평가했다.
+한화오션 캐나다 잠수함 수주 실패에 20% 이상 급락
+한화오션이 60조원에 달하는 캐나다 차기 잠수함 사업(CPSP) 수주 경쟁에서 독일 회사에 밀려 우선협상대상자로 선정되지 못했다는 소식에 조선주 전체가 가라앉은 것도 코스피에 영향을 끼쳤다. 이날 오전 10시2분 현재 한화오션은 전 거래일 대비 22.65% 하락한 8만9800원에 거래 중이다. 마크 카니 캐나다 총리는 CPSP 사업 우협 대상자로 독일 티센크루프마린시스템스(TKMS)를 최종 선정했다고 간밤에 발표했다.
+한화오션과 원 팀을 꾸려 수주 경쟁에 참여했던 HD현대중공업도 4.12% 내린 55만9000원에 거래되고 있다.
+외국인의 순매도가 지속되는 것도 우리 증시에는 부담이다. 외국인들은 이날도 오전 10시18분 기준 코스피에서 1조원 이상 순매도하며 13거래일 연속 팔자를 이어갔다. 기관도 2000억원 이상 순매도하는 가운데 개인만 1조3000억원 순매수하고 있다. 서상영 미래에셋증권 상무는 "반도체 업종을 중심으로 외국인들의 대규모 차익실현 매도가 이어지는 등 수급 불안이 지속되고 있다"며 아시아 시장 전반에서 기술주에 대한 차익실현 심리가 확산하고 있는 점도 부담"</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005786515' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005786515</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
