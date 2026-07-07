@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK하이닉스 ADR 상장 코앞...환율 구원투수 될까?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003109028' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9968" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>SK하이닉스 ADR 상장 코앞...환율 구원투수 될까?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스 ADR 상장은 대규모 달러 유입을 기대하며 환율 안정 및 주가 상승 모멘텀으로 작용할 수 있습니다. 하지만 자금 이동성, 전방 산업 업황 등 불확실성이 커 변동성에 대비해야 합니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">마이크론테크</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ADR상장</span> <span class="tag tag-hash">#환율변동성</span> <span class="tag tag-hash">#반도체주기</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">상장 앞두고 달러 공급 확대 기대
+환율 안정론 vs 자금 유출 우려
+시장에서는 SK하이닉스의 ADR 상장이 환율 안정에 긍정적인 영향을 줄 수 있다고 보고 있다.
+미국 나스닥 미국주식예탁증서(ADR) 상장이 고환율 해소의 변수로 떠오르고 있다.
+대규모 달러 자금 유입으로 환율이 안정될 수 있다는 기대가 나오는 동시에, 외국인 투자자들의 자금 이동에 따라 되려 변동성이 커질 수 있다는 관측도 제기된다.
+8일 금융투자업계에 따르면, SK하이닉스는 오는 10일 미국 나스닥 ADR 상장과 거래 개시를 앞두고 있다. 발행 총액은 43조1400억원 수준이다. 전체 발행주식의 약 2.5%인 최대 1779만주를 신주로 발행할 계획이다. 청약일과 납입일은 오는 14일이며 신주 증권예탁증서(DR) 상장 예정일은 29일이다.
+ADR은 한국 기업 주식을 미국 증시에서 달러로 사고팔 수 있게 만든 증권이다. 기존에도 외국인 투자자는 한국거래소를 통해 SK하이닉스 주식을 매수할 수 있었지만, ADR이 상장되면 미국 투자자들은 현지 증권계좌로 달러를 이용해서 나스닥에서 직접 거래할 수 있게 된다.
+시장에서는 이번 ADR 상장이 환율 안정에 긍정적인 영향을 줄 수 있다고 보고 있다. ADR 발행을 통해 대규모 달러 자금이 국내로 유입되면 외환시장 내 달러 공급이 늘어 원·달러 환율 하락 압력으로 작용할 수 있어서다.
+실제 상장 전부터 관련 효과가 환율에 반영되고 있다는 분석도 나온다. 향후 들어올 달러를 미리 매도하는 선물환 거래가 늘어나면 시장 내 달러 공급이 증가해 원·달러 환율 하락 요인으로 작용할 수 있다는 것이다.
+박상현 iM증권 연구원은 "SK하이닉스 ADR 상장에 따른 달러 공급 확대는 환율과 외국인 수급에 적지 않은 영향을 미칠 것"이라고 말했다.
+주가 측면에서도 기대감은 있다. 미국 투자자들의 접근성이 보다 높아지는 만큼 신규 자금 유입에 대한 기대가 커진다는 것이다. 나스닥100 등 주요 지수 편입 가능성이 거론되는 점도 호재로 꼽힌다. 지수에 편입되면 이를 따라 투자하는 패시브 자금이 들어올 수 있어서다.
+저평가 해소 기대도 나온다. 미국 투자회사 시노버스 트러스트의 대니얼 모건 수석 포트폴리오 매니저는 미국 증시 상장이 SK하이닉스의 저평가를 줄이는 데 도움이 될 것으로 봤다. 현재 SK하이닉스의 12개월 선행 주가수익비율(PER)은 6.2배 수준으로 경쟁사인 마이크론보다 낮다.
+만약 ADR 상장이 반드시 환율 안정으로 이어질 것이라는 보장은 없다는 의견도 우세하다. 기존 외국인이 한국에 상장된 SK하이닉스 주식 대신 나스닥 ADR로 갈아탈 경우 국내 증시에서는 자금이 빠져나갈 수 있다. 이 경우 환율 안정 효과가 제한되고 외국인 수급 변동성이 커질 수 있다.
+인공지능(AI) 메모리 반도체 업황에 대한 신중론도 남아 있다. 빅테크 기업들이 데이터센터 투자를 늘리면서 메모리 수요는 커지고 있지만, 기업이 투자 자금을 채권과 주식시장에서 계속 조달하고 있는 만큼 투자 확대가 언제까지 이어질지는 불확실하다는 지적도 나온다.
+업계에서는 SK하이닉스 ADR 상장 이후 자금 흐름과 글로벌 투자자들의 반응을 지켜봐야 한다고 보고 있다. 금융투자업계 관계자는 "ADR 상장은 단기적으로 달러 공급과 외국인 수급에 영향을 줄 수 있는 재료"라고 말했다. 그러면서도 "실제 환율 안정 효과는 상장 이후 자금 유입 규모와 기존 외국인 투자자의 이동 여부를 확인해야 판단할 수 있다"고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003109028' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003109028</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
