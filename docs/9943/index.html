@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>‘가만히 있으면 중간은 간다’ 입증한 애플…AI 못한 덕에 폭락 면해</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005704229' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9943" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>‘가만히 있으면 중간은 간다’ 입증한 애플…AI 못한 덕에 폭락 면해</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 경쟁에 과도하게 자본지출을 늘린 다른 빅테크와 달리, 애플이 비용 통제 전략을 취하며 '방어주' 매력을 높이고 있습니다. 게다가 폴더블 아이폰 출시 기대감과 메모리 반도체 시장 조정은 단기적인 주가 상승 동력으로 작용할 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">애플이 AI 과잉 투자 경쟁에서 한발 물러선 '방어주' 매력을 강조하고 있으며, 폴더블 아이폰 출시 및 메모리 시장 조정 사이클 등 단기적인 호재가 복합적으로 작용하며 투자 심리를 개선시키고 있기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">애플 주식</span> <span class="tag stock-tag">메모리 반도체 기업</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#애플</span> <span class="tag tag-hash">#AI투자</span> <span class="tag tag-hash">#방어주</span> <span class="tag tag-hash">#폴더블아이폰</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[AP연합뉴스]
+[AP연합뉴스]빅테크 인공지능(AI) 경쟁에 동참하지 않고 있는 애플이 어부지리로 시가총액 1위 자리를 넘보고 있다. 대규모 자본지출
+출혈경쟁에서 한발짝 벗어나 있다는 점이 투자 매력 포인트로 꼽히고 있다.
+
+6일(현지시간) 뉴욕 증시에서 애플은 1.31% 오른 312.66달러에 거래를 마감했다. 시총은 4조5920억달러(약 7000조원)로 전 세계
+2위다. 지난 1년 동안 시총 1위를 지킨 엔비디아(4조7320억달러)와 벌어졌던 격차가 서서히 좁혀지고 있다. 두 회사의 시총 격차는 불과
+3% 수준이다.
+
+역설적이게도 애플은 AI 경쟁에서 빠진 덕분에 주목받고 있다. 알파벳(구글 모회사)과 마이크로소프트 등 다른 빅테크들은 AI 경쟁에서 우위를
+점하고자 최근 투자를 대폭 늘리는 추세지만 애플은 실리를 택하고 있다.
+
+알파벳은 올해 1분기 자본지출(Capex)을 전년 동기 대비 107% 늘렸다. 마이크로소프트는 85% 확대했다. 반면 애플은 36% 줄였다.
+그러면서도 브로드컴·TSMC와 협력해 자체 AI 서버 칩은 개발하는 등 ‘필요한 AI 투자’에 전념하고 있다.
+
+빅테크의 AI 과잉 투자 우려가 커지는 상황에서 애플의 독자 노선은 방어주 매력을 더하고 있다. 역사적으로 애플은 아이폰이라는 든든한 캐시카우
+덕분에 시장 하락 시 다른 기술주보다 낙폭이 제한적이었다.
+
+오는 9월 처음으로 공개될 폴더블 아이폰 ‘아이폰 폴드’도 호재다. 애플 소식통으로 유명한 궈밍치 TF인터내셔널증권 연구원은 “올 하반기 폴더블
+아이폰의 조립 출하량은 700만~800만대로 예상된다”며 “재판매꾼 등과 의견을 교환한 결과 폴더블
+아이폰 가격이 2300~2500달러(350만~380만원)에 달하더라도 올해 강한 수요가 유지될 것”이라고 전망했다.
+
+반면 스마트폰 원가를 높이는 메모리 반도체 가격 상승세는 애플에 부담 요인이다. 이에 따라 애플은 마이크론이나 삼성전자 등 메모리 기업 주가가
+오를 때 정반대로 하락하는 모습을 보이곤 했다. 그런데 최근 메모리 주식들이 D램 가격 상승률 둔화 전망 탓에 조정을 받자 애플 주가는 안도
+랠리를 보이고 있다. 게다가 애플은 메모리 가격 상승세가 길어지더라도 충성 고객층을 보유한 덕분에 다른 스마트폰 제조사보다 가격 전가력이 강한
+편이다.
+
+한편 애플은 최근 중국산 제품 사용 가능성까지 거론하며 마이크론 등 고객사와 메모리 가격 협상을 시도하고 있다.
+
+d만 대다수 투자자들은 조만간 애플이 엔비디아 시총을 역전할 가능성은 높지 않다고 관측한다. 이날 예측시장 폴리마켓에서는 이달 말 애플이 시총 1위를 기록할 확률이 15%로 거래돼 엔비디아(79%)보다 낮았다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005704229' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005704229</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
