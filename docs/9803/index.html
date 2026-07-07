@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[코인뉴스] 스트래티지 또 팔았는데…비트코인 왜 올랐나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003108649' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/9803" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[코인뉴스] 스트래티지 또 팔았는데…비트코인 왜 올랐나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">비트코인은 거대 기관의 매도 물량(스트래티지)에도 불구하고 상승세를 이어갔습니다. 이는 장기 보유자의 매도 압력 완화, 파생상품 시장 투자 심리 회복, 그리고 향후 미국 현물 ETF를 통한 지속적인 기관 자금 유입 기대감이 가격을 지탱한 결과로 분석됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">본 기사는 순수 암호화폐 시장의 기술적 분석과 거시적인 자금 흐름(ETF 유입)에 초점을 맞추고 있어 직접적인 전통 주식 종목 추천은 어렵습니다. 그러나 기관 자금 유입 기대감 등 전반적인 리스크 온(Risk-On) 심리 개선을 반영하므로, 전반적인 시장의 위험 선호도를 판단하는 데 참고가 될 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#비트코인</span> <span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#가상화폐</span> <span class="tag tag-hash">#투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">2억1600만 달러 규모 매도 결정에도 6만4000달러 돌파
+매도 압력 완화·투자심리 회복…"ETF 자금 유입이 상승세 좌우"
+해당 이미지는 AI로 제작됨. 해당 이미지는 AI로 제작됨. 비트코인이 스트래티지(Strategy)의 대규모 비트코인 매도 결정에도 6만4000달러선을 돌파했다.
+
+과거에는 스트래티지의 매도 소식만으로도 시장이 크게 흔들렸지만 이번에는 장기 보유자의 매도 압력이 줄고 파생상품 시장의 투자심리가 회복되면서 매도 물량을 시장이 무난히 소화했다는 분석이 나온다.
+
+7일 글로벌 가상자산 시황 플랫폼 코인게코에 따르면 이날 오전 9시 기준 비트코인은 6만4002달러에 거래됐다.
+
+비트코인은 이날 오전 5시40분께 6만3786달러를 기록한 뒤 상승폭을 키우며 오전 6:10분께 6만4286달러까지 오르며 6만4000달러선을 넘어섰다.
+
+간밤 스트래티지는 약 2억1600만 달러 규모의 비트코인을 매도하기로 결정했다고 밝혔다.
+
+2분기 동안 비트코인 가격이 하락하면서 평가손실이 커진 영향이다.
+
+시장에서는 이번 반응이 지난 5월 말과는 확연히 달랐다는 점에 주목했다.
+
+당시 스트래티지가 32BTC를 매도했을 때는 투자심리가 급격히 위축되며 비트코인이 며칠 만에 7만4000달러에서 6만 달러 수준까지 급락했다. 반면 이번에는 매도 규모가 훨씬 컸음에도 비트코인은 오히려 상승세를 이어갔다.
+
+시장에서는 스트래티지의 매도 자체보다 시장 전반의 매도 압력이 크게 약해진 점이 가격을 지탱한 것으로 보고 있다.
+
+실제 온체인 데이터도 매도 압력이 완화되고 있음을 보여준다.
+
+장기 보유자의 거래소 이체 물량은 일주일 전 하루 평균 8040BTC에서 최근 4130BTC 수준으로 감소했다. 장기 보유자의 거래소 입금은 통상 매도 가능성을 보여주는 지표로 해석된다.
+
+파생상품 시장의 투자심리도 개선되는 모습이다.
+
+가상자산 전문매체 코인텔레그래프에 따르면 비트코인 무기한 선물의 연환산 펀딩비는 9%까지 상승하며 롱과 숏 포지션이 비교적 균형을 이루는 수준을 나타냈다. 지난 주말 마이너스(-) 펀딩비가 형성됐던 것과 비교하면 투자심리가 빠르게 회복됐다는 평가다.
+
+옵션시장에서도 극단적인 위험회피 신호는 나타나지 않았다.
+
+암호화폐 파생상품 거래소 데리비트(Deribit)의 풋옵션 프리미엄은 시장 불안이 커질수록 상승하는 경향이 있지만 현재는 1.15 수준으로 중립 구간에 머물고 있다.
+
+d만 시장에서는 이번 반등이 추세적인 상승으로 이어지기 위해서는 미국 현물 비트코인 ETF를 통한 기관 자금 유입이 지속돼야 한다고 보고 있다.
+
+기관 자금이 꾸준히 유입될 경우 현물 수급 개선과 투자심리 회복이 맞물리면서 비트코인이 6만5000달러선을 넘어 추가 상승세를 이어갈 가능성이 있다는 전망이 나온다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003108649' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003108649</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
