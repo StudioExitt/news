@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피, 낙폭 줄이다 다시 2%대 하락…개인·외인 동반 '팔자'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016182228' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10013" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피, 낙폭 줄이다 다시 2%대 하락…개인·외인 동반 '팔자'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 증시는 전날의 급락세가 이어지며 하한가를 기록하는 등 큰 폭의 조정을 겪었습니다. 외국인과 개인 투자자의 동반 매도, 반도체주의 약세와 뉴욕증시의 동반 하락이 주요 원인으로 작용했으며, 호르무즈 해협을 둘러싼 지정학적 긴장 고조가 추가적인 투자 심리 위축을 가져왔습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">국내 증시의 급락세는 반도체 업황 악화와 글로벌 거시 리스크 (미-이란 갈등)에 대한 투자 심리 위축이 복합적으로 작용한 결과입니다. 특히 핵심 주력 종목들이 동반 하락하며 시장 전반의 신뢰도를 떨어뜨리고 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">KB금융</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체하락 #외인매도 #지정학적리스크</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피, 전날 이어 급락 출발 (서울=연합뉴스) 이진욱 기자 = 8일 서울 중구 하나은행 본점 딜링룸에서 직원들이 업무를 보고 있다. 이날 오전 9시 2분 현재 코스피는 전날보다 291.99포인트(3.81%) 내린 7,364.32다. 지수는 전장 대비 203.83포인트(2.66%) 내린 7,452.48로 하락 출발해 낙폭을 키우고 있다. 2026.7.8 cityboy@yna.co.kr
+
+(서울=연합뉴스) 김유향 기자 = 코스피가 8일 급락 출발한 뒤 낙폭을 다소 축소했다.
+이날 오전 10시 35분 현재 코스피는 전날보다 10.84포인트(0.14%) 내린 7,645.47이다. 이후 다시 2%대의 하락세를 보이고 있다.
+
+지수는 전장 대비 203.83포인트(2.66%) 내린 7,452.48로 하락 출발해 장초반 한때 7,352.89로 3.96%까지 밀렸지만, 이후 상승전환해 7,791.66까지 1.77% 오르기도 했다.
+
+한국형 공포지수로 불리는 코스피200 변동성지수(VKOSPI)는 전날보다 1.12% 오른 86.65로 여전히 80선을 웃돌고 있다.
+
+외국인은 유가증권시장에서 2천510억원 순매도로 '팔자'를 이어가고 있다. 개인도 5천229억원 매도 우위다.
+
+기관은 홀로 7천933억원 매수 우위로 지수에 상승 여력을 불어넣고 있다.
+
+코스피200선물시장에서도 외국인은 393억원 순매도를 나타내고 있다.
+
+간밤 뉴욕증시에서는 반도체주의 약세와 국제유가 급등이 맞물리며 3대 주요 주가지수는 동반 하락했다.
+다우존스30 산업평균지수는 전장보다 0.25% 내렸고, 스탠더드앤드푸어스(S&P) 500 지수와 기술주 중심의 나스닥 종합지수는 전장보다 각각 0.45%, 1.16% 하락 마감했다.
+
+인텔(-9.66%), 마이크론(-4.71%), 웨스턴디지털(-7.86%) 등 주요 반도체 관련 종목들이 큰 폭 하락했다. 필라델피아반도체지수는 장중 7.28%까지 낙폭을 키우다 결국 4.65% 하락 마감했다.
+
+삼성전자가 시장 기대치를 웃도는 실적을 발표했음에도 국내 증시에서 주가는 급락하자, 인공지능(AI) 반도체 업종에 대한 투자심리가 위축된 것으로 풀이된다.
+
+호르무즈 해협을 둘러싼 중동의 지정학적 긴장이 다시 불거지면서 시장의 투자심리는 더욱 위축됐다. 전날부터 호르무즈 해협을 지나던 선박 3척이 잇따라 공격받았다는 소식이 전해졌다. 이후 미군 중부사령부가 호르무즈 해협에서 이란이 상선을 공격한 데 대한 대응으로 이란을 상대로 강력한 공습을 개시했다고 현지시간 7일 밝히면서 미-이란 갈등 재차 고조에 대한 불안감이 생긴 것으로 보인다.
+
+이 가운데 국내증시는 급락 출발한 뒤 장중 등락을 거듭하고 있다.
+미래에셋증권 김주연 연구원은 "코스피는 하락 출발 후 반도체주 중심으로 반등을 시도했다"며 "기관 수급이 유입됐다"고 설명했다.
+한지영 키움증권 연구원은 "미국 반도체주의 급락 선반영 및 해당 주식들의 장 후반 낙폭 축소, 이달 들어 코스피가 연쇄 급락했다는 점에 따라 저가 매수세 유입 등이 지수 회복력을 부여하면서 장중 반등할 전망"이라고 말했다.
+
+국내 '투 톱' 반도체 대장주는 동반 3%대 하락 출발한 뒤 상승전환했지만, 현재는 각 종목 분위기가 다르다.
+
+삼성전자는 2.20% 내린 28만9천500원에 거래되고 있다. 3.55% 내린 채 출발한 이후 상승세로 전환해 한때 30만원을 회복했지만, 현재는 다시 하락세로 돌아섰다.
+
+SK하이닉스는 2.14% 오른 224만8천원이다. 비슷하게 3.77% 하락 출발했지만, 장 초반 상승전환해 한때 232만9천원까지 오르기도 했다.
+
+다른 시가총액 상위 종목들을 보면 SK스퀘어(-1.62%), 삼성전기(-1.09%), 현대차(-0.63%), LG에너지솔루션(-2.71%), 삼성생명(-5.20%) 등 상당수가 내리고 있다.
+
+반면 기아, 현대모비스(1.41%), 셀트리온(2.08%), LG전자 등은 강세다. KB금융(1.33%), 신한지주(1.01%), 메리츠금융지주(1.14%) 등 전통적인 '방어주'인 금융주도 상승 중이다.
+
+업종별로는 건설(-3.79%), 기계·장비(-3.43%), 의료·정밀기기(-3.46%) 등 대다수의 업종이 약세다. 부동산(0.36%), 운송·창고(0.12%), 제약(0.01%)만 오름세다.
+
+오전 11시 3분 현재 코스닥 지수는 3.8% 하락하며 799.12로 800선을 내줬다. 코스닥지수가 800선을 밑돈 것은 약 10개월만에 처음이다.
+
+지수는 이날 14.84포인트(1.79%) 내린 816.39로 출발해 낙폭이 커지고 있다.
+
+코스닥 시장에서는 외국인이 835억원 순매도 중이다. 개인과 기관은 각각 528억원과 262억원 매수 우위다.
+
+al테오젠(-5.33%), 에코프로비엠(-1.83%), 에코프로(-2.49%), 레인보우로보틱스(-4.03%), 주성엔지니어링(-0.51%) 등 코스닥 시장 시가총액 상위 1~30위가 현재 일제히 하락 중이다.
+
+티에스이(1.07%), 기가비스(1.29%), 대한광통신(0.27%) 등 일부만 오르고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016182228' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016182228</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
