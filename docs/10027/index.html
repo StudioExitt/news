@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>정점 vs 저점…시험대 오른 ‘반도체주’ [이슈&뷰]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.08</span>
+        
+        <a class="more-btn" href="https://studioexitt.net/news/10027" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>정점 vs 저점…시험대 오른 ‘반도체주’ [이슈&뷰]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체주의 실적 호조에도 불구하고 시장은 '피크아웃' 우려와 높은 변동성 경고에 직면했습니다. 주요 외신들은 개인 투자자 위험을 지적했으나, 증권가 중론은 조정을 저가 매수 기회로 보고 중장기 회복력을 높게 평가하며 관망세가 짙어지고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업황의 사이클 변화(정점 또는 저점)와 국내외 주요 투자은행들의 상반된 시각이 교차하면서, 시장 참여자들에게 매우 높은 불확실성과 변동성 리스크를 경고했기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #증시 #투자심리 #경기사이클</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">반도체 피크아웃 논란 다시 수면위로
+‘저승사자’ 모건스탠리 “주가 조정 온다”
+WSJ “오징어게임 같아” 변동성 우려
+JP모건 “최근 조정, 저가 매수 기회”
+국내 증권가 “다시 회복력 보일 것”
+구윤철 “리스크 요인 면밀히 점검”
+이달말 빅테크 실적·투자계획이 관건
+삼성전자와 SK하이닉스 등 코스피를 이끄는 반도체주가 진정한 시험대에 올랐다. 7일 삼성전자가 기록적인 2분기 실적 결과까지 내놨지만, 주가는 오히려 급락했다. 삼성전자와 SK하이닉스가 사실상 주도하는 코스피 역시 급락을 면치 못했다. ▶관련기사 3·18면
+외신에선 국내 증시를 ‘오징어 게임’이라 평가하는 등 한층 냉정한 잣대를 들이대고 있다. 그동안 외국인 매물을 받아내며 증시 상승을 이끌었던 개인투자자의 매수 여력마저 최근엔 약해지고 있다는 분석이다. 이제 반도체의 피크아웃(peak-out)에 돌입했다는 분석과, 실적 전망을 근거로 한다면 중장기적으론 상승세를 전망하는 게 객관적이란 분석도 있다. 뜨거운 순간은 지났고, 이젠 냉정한 평가가 필요한 때다.
+삼성전자가 시장 전망을 뛰어넘는 역대 최대 실적을 발표한 같은 날 글로벌 투자은행(IB) 모건스탠리는 메모리 반도체 업황이 ‘변화율의 정점(Peak Rate of Change)’에 가까워지고 있다는 보고서를 내놨다. 메모리 업황이 하락 국면에 접어든 것은 아니지만 D램 가격 상승률과 실적 개선 속도가 점차 둔화하면서 메모리 기업들의 주당순이익(EPS) 추정치 상향도 정점에 가까워지고 있다는 분석이다. 이에 따라 단기적으로 메모리 관련 종목의 변동성이 확대될 수 있다고 전망했다.
+모건스탠리의 마이크 윌슨은 투자자들이 그동안 급등했던 반도체주에서 상대적으로 덜 올랐던 초대형 클라우드 기업(하이퍼스케일러)와 다른 업종으로 자금을 옮기고 있다며 “업종 간 격차가 지금과 같은 수준으로 지속되기는 어렵다”고 말했다.
+외신도 한국 증시를 향해 경고음을 내고 있다. WSJ은 최근 한국 증시에 대해 “세계에서 가장 뜨거운 시장이 오징어게임이 될 위험에 처했다”며 높은 변동성과 외국인 투자자 이탈을 지적했다. WSJ은 “인구 5100만명의 한국에서 개인이 얼마나 더 베팅할 수 있는지 의문”이라며 “파티가 끝나면 손실은 대부분 개인투자자에게 돌아갈 수 있다”고 경고했다.
+한국 증시의 한계를 지적하는 목소리도 적지 않다. 블룸버그 통신에 따르면, 투자은행 UBS그룹은 7일(현지시간) SK하이닉스의 미국주식예탁증서(ADR)를 매수하고 한국 상장 주식은 매도하라고 투자자들에게 권고했다. 새로 발행되는 ADR이 프리미엄에 거래될 가능성이 높다는 판단에서다. 한국 증시에서의 반도체주 평가보다 미국 증시 내의 평가가 더 긍정적일 것이란 의미이다.
+국내 증시는 최근 들어서 삼성전자와 SK하이닉스에 대한 높은 의존도, 단일종목 레버리지 ETF 확산 등이 문제점으로 지적되고 있다. 시장 변동성을 키우는 요인이 된다는 이유에서다. 그동안 외국인 매물을 받아내던 개인투자자의 매수 여력도 예전 같지 않다. 투자자예탁금은 지난달 말 136조원대에서 최근 112조원대로 감소했다.
+일각 반도체 피크아웃 우려와 달리 투자업계의 중론은 중장기적 상승세 전망에 무게를 두고 있다. JP모건은 최근 반도체주 조정을 저가 매수 기회로 평가했다. 삼성전자의 2분기 실적에 대해서도 시장 기대를 웃도는 ‘어닝 서프라이즈’라며 예상보다 강한 메모리 가격과 원화 약세가 실적 호조를 이끌었다고 분석했다.
+국내 증권가 역시 인공지능(AI) 투자 사이클이 정점을 지났다고 보기에는 이르다는 입장이다. 삼성증권은 전날 긴급시황 보고서를 내고 “많이 올랐기 때문에 단기 급등에 따른 AI 투자 과열 논란이 나오는 것은 자연스러운 현상”이라면서도 “현재 AI 투자 사이클이 정점을 지났다고 판단하지는 않는다”고 밝혔다.
+이날 코스피는 반도체주 급락과 미-이란 긴장 고조에 장 초반 급락했다가 낙폭을 상당 부분 만회, 7700선을 회복했다. 지수는 전날 대비 2.66% 내린 7452.48에 개장한 뒤 장 초반 7352.89까지 빠졌으나, 다시 상승세로 돌아섰다. 이날 10시5분 기준 코스피는 0.79% 상승한 7716.74를 기록 중이다. 삼성전자는 3.55% 내린 채 출발해 한때 28만3000원까지 밀렸지만, 이후 낙폭을 축소했다. SK하이닉스도 3.77% 하락 출발했지만, 장초반 상승전환해 한때 230만원선을 회복했다.
+한편, 구윤철 부총리 겸 재정경제부 장관은 이날 열린 시장상황점검회의에서 “주식시장의 경우 그간의 급등에 따른 외국인 및 기관의 차익실현과 리밸런싱 목적 매도, 글로벌 인공지능(AI) 경기 전망 등에 따라 조정을 받으면서 변동성이 일부 확대됐다”며 “주식시장의 과도한 변동성을 유발할 수 있는 리스크 요인에 대해서는 면밀히 점검하겠다”고 강조했다.</div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
