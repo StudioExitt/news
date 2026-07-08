@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>개미 열에 여덟은 손실봤다…요즘 아무도 주식얘기 안하는 이유</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005704707' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10094" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>개미 열에 여덟은 손실봤다…요즘 아무도 주식얘기 안하는 이유</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 반도체 업황 의구심과 국제 정세 불안으로 5%대 급락하며 최저치를 기록했습니다. 분석 결과, 개인투자자들이 가장 많이 매수한 상위 종목 절반 이상에서 손실을 본 것으로 나타나, '쏠림 심화' 속에 투자자들의 높은 개별 손실 비중이 확인되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업황 관련 불확실성과 지정학적 리스크 증가가 복합적으로 작용하며 시장 전체의 투자심리가 급격히 위축되었고, 개인투자자들의 높은 손실 비중이 시장 하락을 가속화하는 주요 원인으로 작용했기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주식시장</span> <span class="tag tag-hash">#투자심리</span> <span class="tag tag-hash">#반도체사이클</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">8일 서울 여의도 한국거래소 홍보관에 코스피 및 개별 종목 지수가 표시되고 있다. 이날 코스피는 전날보다 409.52포인트(5.35%) 내린 7,246.79로 장을 마쳤다. [사진 = 연합뉴스]
+코스피가 올해 상반기 69%나 급등하는 ‘불장’을 기록하는 동안 개인투자자 대다수는 손실 구간에 머물렀던 것으로 나타났다.
+개인이 가장 많이 사들인 상위 50개 종목 가운데 절반은 투자자 10명 중 8명 이상이 현시점에 ‘마이너스 수익률’을 기록하고 있다. 대형 반도체주가 이끈 증시 호황에 가려졌던 국내 증시의 그늘이다.
+8일 매일경제가 국내 한 대형 증권사를 이용하는 개인투자자들이 올해 초부터 6월 말까지 국내와 해외에서 많이 매수한 상위 50개 종목을 각각 분석한 결과 국내 증시의 손실투자자 비율은 평균 73.45%로 집계됐다. 손실투자자란 조사 기간의 종가(기준가)보다 개인의 평균 매입 단가가 높은 투자자를 뜻한다.
+이번 분석에 따르면 국내 매수 상위 50개 종목 중 손실투자자 비율이 20% 미만으로 비교적 안정적 수익을 올린 것은 삼성전자(12.3%), SK하이닉스(16.1%), 삼성전자 우선주(11.6%) 등 반도체 투톱과 삼성전기(12.7%) 등에 불과했다.
+반면 상위 50개 종목 중 절반인 25개는 손실투자자 비율이 80%를 넘어섰다. 개인투자자 유입이 많았던 인기 종목일수록 고점에 진입해 손실을 보고 있는 사람이 다수를 차지했던 셈이다.
+올 상반기 국내 주식 50개 종목의 평균 수익률은 20.5%로 겉보기엔 양호했다. 그러나 수익률 상위 5개 종목의 평균 수익률이 198%에 달하기 때문에 소수의 주도주가 착시효과를 불러왔던 것으로 풀이된다.
+추연식 유리자산운용 주식운용본부장은 “개인투자자는 분할 매수보다 한꺼번에 매수하는 경향이 강하다”며 “최근처럼 변동성이 큰 장에서는 고점과 저점을 가늠하기가 더 어렵기 때문에 손실 비중이 높아진 것”이라고 진단했다.
+63빌딩에서 바라본 여의도 증권가. [사진 = 연합뉴스]
+같은 기간 해외 주식에 투자한 ‘서학개미’ 성적표는 대조적이었다. 해외 주식 매수 상위 50개 종목의 손실투자자 평균 비율은 44.2%로 국내보다 29.25%포인트 낮았다. 투자자 평균 수익률도 해외 주식이 국내 주식보다 2배 이상 높았던 것으로 집계했다.
+한편 이날 코스피는 전 거래일 대비 5.35%(409.52포인트) 하락한 7246.79에 마감했다. 종가 기준으로 지난 5월 20일(7208.95) 이후 49일 만에 최저치다. 해외 투자은행들이 반도체 업황에 의구심을 제기하면서 투자심리가 위축됐기 때문이다. 여기에 미군·이란 간 군사적 충돌 재개로 국제유가와 미국 국채 금리가 동반 상승해 위험자산을 회피하려는 심리도 짙어졌다.
+코스닥은 10개월 만에 아예 800선 밑으로 추락했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005704707' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005704707</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
