@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[밥 대신 주식] "비트코인 안 삽니다"…국장으로 향한 개미들</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003109520' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10151" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[밥 대신 주식] "비트코인 안 삽니다"…국장으로 향한 개미들</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">개인 투자자들이 높은 변동성을 보이던 가상화폐 시장에서 자금을 빼내 국내 증시(코스피)로 이동하고 있습니다. 특히 삼성전자와 SK하이닉스와 같은 반도체 주식에 대한 관심이 높아졌으며, 이는 과거의 '한탕' 심리가 단순히 코인으로 국한되지 않고 주식시장 전체로 확산되고 있음을 보여줍니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">개인 자금의 투자처가 가상화폐에서 국내 주식 시장으로 명확히 이동하고 있음을 보여주는 현상입니다. 이는 단기적인 거래대금 변화와 함께 특정 업종(반도체)에 대한 개인 투자 심리가 극대화되고 있음을 시사하지만, 전문가 경고처럼 과도한 추격 매수 위험성 때문에 '추세적 상승'으로 보기 어렵습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#국내증시 #개미투자 #반도체주 #자금흐름</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코인 떠난 투자자들 "비트코인보다 삼성전자"
+전문가 "최근 주식도 변동성 커 추격매수는 금물" 코스피가 전례 없는 상승세를 이어가면서 대한민국은 그야말로 '주식 공화국'이 됐다. 주식(株式)이 주식(主食)이 되어버린, 밥 대신 주식 투자에 시간을 쏟아붓는 이들이 늘어나고 있다. 하지만 뜨거운 기대감 이면에는 경계해야 할 지점도 있다. 과도한 낙관론과 특정 종목 쏠림, 레버리지 투자 확대는 손실 요인이 될 수 있다. 국내 주식시장에 대한 기대와 함께 투자자가 반드시 알아야 할 위험 요인을 균형 있게 들여다보고자 한다.
+
+'100배 코인'의 꿈이 식자 개인투자자 자금이 가상자산 시장을 떠나 국내 증시로 이동했다."예전엔 아침에 일어나면 업비트를 켰는데 요즘은 증권사 어플부터 <0xEC><0xBC><0xAD>니다." 
+
+30대 직장인 김모씨는 2년 전만 해도 '100배 코인'을 찾아 밤새 차트를 들여다봤다. 알트코인 하나만 제대로 잡으면 인생이 바뀔 수 있다는 기대 때문이었다.
+
+하지만 시장이 식기 시작하면서 계좌는 순식간에 반토막이 났다. 손실을 감수하고 코인을 정리한 김씨의 포트폴리오는 삼성전자와 SK하이닉스가 대부분을 차지하고 있다. 
+
+김씨는 "코인으로 큰돈을 벌겠다는 생각은 이제 접었다"며 "코스피가 더 빨리 돈이 될 것 같다는 생각이 든다"고 말했다.
+
+김씨만의 이야기가 아니다. 40대 직장인 박모씨는 삼성전자와 SK하이닉스가 조정을 받자 매도보단 추가 매수에 나섰다. 그는 "예전 같으면 반도체주가 빠질 때 코인으로 돈이 이동할 것이라고 생각했는데 이제는 그런 기대를 하지 않는다"며 "주식이 빠져도 결국 다시 주식으로 돈이 들어온다"고 말했다.
+
+20대 직장인 이모씨도 최근 비트코인 대신 SK하이닉스를 선택했다. 그는 "비트코인이 2억원까지 오르기를 기다리는 것보다 SK하이닉스에 투자하는 편이 더 빨리 수익을 낼 것 같다"고 말했다.
+
+이들이 내린 결론은 같았다. '코인' 대신 '국장'이었다. 실제로 시장의 흐름도 이를 뒷받침한다. 9일 한국거래소에 따르면 지난 7일 기준 코스피 거래대금은 65조8430억원으로 지난해 같은 시점(15조652억원)보다 4배 이상 증가했다. 반면 코인게코 기준 같은 날 국내 5대 가상자산 거래소(업비트·빗썸·코인원·코빗·고팍스)의 24시간 거래대금은 약 9억1047만1830달러로 집계됐다. 원화 기준 약 1조3840억원 규모로, 같은 날 코스피 거래대금의 약 2.1% 수준에 그쳤다. 지난달 9일만 해도 국내 5대 거래소의 24시간 거래대금은 약 16억5000만 달러(약 2조원)로 당시 코스피 거래대금의 4.3% 수준이었다. 한 달 만에 거래대금이 약 45% 감소하면서 코스피와의 격차도 더욱 벌어진 셈이다.
+
+'코인 같은 국장'…변동성의 무대도 달라졌다
+과거 투자자들이 알트코인을 찾았던 이유는 단 하나였다. 하루에도 수십 %씩 움직이는 변동성이었다. 하지만 최근에는 그 무대가 국내 증시로 옮겨가는 모습이다.
+
+지난 7일 효성화학은 29.84% 오르며 상한가를 기록했고 세종텔레콤(29.95%), 원풍물산(29.73%), 케이피엠테크(29.87%)도 가격제한폭까지 치솟했다. 반대로 범한퓨얼셀은 하루 만에 30% 하락하며 하한가를 기록했다. 같은 시각 업비트 상승률 상위 종목인 슈퍼폼은 10.43%, USDAI는 5.13% 상승하는 데 그쳤다.
+
+시가총액 상위 종목의 움직임은 더욱 극적이다. 삼성전자는 올해 3월 말 16만7000원에서 6월 19일 37만4500원까지 두 배 이상 뛰었다. 하루 만에 10.09% 급등한 날도 있었고 12.31% 급락한 날도 있었다. SK하이닉스 역시 3월 말 80만6000원에서 6월 말 298만7000원까지 치솟았으며 하루 15.91% 급등하거나 12.47% 급락하는 등 과거 알트코인을 떠올리게 하는 변동성을 보였다.
+
+반면 대표 가상자산인 비트코인은 올해 2월 9200만원까지 하락한 이후 최근까지 9000만~9500만원 박스권에서 움직이며 하루 변동폭도 대부분 2~3% 수준에 머물고 있다.
+
+업계에서는 국내 증시의 강세와 가상자산 시장의 침체가 맞물리면서 당분간 개인 자금의 이동이 이어질 가능성이 크다고 보고 있다. 다만 전문가들은 자금이 주식시장으로 옮겨갔다고 해서 투자 행태까지 달라진 것은 아니라고 지적한다. 최근 일부 종목에 개인 투자자들의 자금이 과도하게 쏠리는 현상 역시 과거 알트코인 투자 열풍과 크게 다르지 않다는 것이다.
+
+한 자본시장 전문가는 "기업의 실적이나 펀더멘털보다 단기간 수익률만 보고 추격 매수에 나설 경우 코인 투자에서의 실패를 주식시장에서도 반복할 수 있다"며 "시장만 바뀌었을 뿐 '한탕'을 노리는 투자 습관은 경계해야 한다"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003109520' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003109520</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
