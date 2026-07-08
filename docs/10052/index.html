@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 외국인 '엑소더스'에…개미들 '버티기'도 한계점 오나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014054153' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10052" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 외국인 '엑소더스'에…개미들 '버티기'도 한계점 오나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">외국인의 대규모 매도세(엑소더스)가 지속되면서 코스피 지수가 3주 만에 2,000포인트 이상 급락했습니다. 그간 지수 하단을 방어하던 개인 투자자들의 저점 사기 심리마저 한계에 도달하며 수급 불안이 커지고 있다는 분석입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">외국인의 거대한 자금 이탈과 반도체 섹터의 하방 압력으로 인해 코스피 시장 전체의 신뢰도가 크게 떨어지며 단기적인 투매가 우려됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피급락</span> <span class="tag tag-hash">#외국인매도</span> <span class="tag tag-hash">#투자심리위축</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 외국인 매도세에 3주 만에 2000포인트 이상 후퇴하면서 개인 투자자들의 저점 사수 의지도 한계점에 직면하고 있다.
+
+최근 지수 급락에도 개미 군단이 연일 순매수에 나서며 필사적으로 지수를 방어하고 있지만 겉잡을 수 없이 커진 외인의 매도 폭탄을 홀로 감당하기에는 버거워지는 모습이다.
+
+8일 한국거래소에 따르면 코스피는 지난달 19일 장중 9385.59를 기록한 뒤 이날 오후 한때 7200선 밑으로 미끄러졌다. 불과 3주 만에 2000포인트 이상 수직 낙하한 셈이다.
+
+이 같은 급락장의 배경에는 외국인 투자자들의 거센 매도 폭탄이 자리잡고 있다. 외국인은 지난달 19일부터 전날까지 13거래일 연속 '팔자' 행진을 이어오고 있다. 이 기간 41조944억원어치를 팔아치웠다. 정규장 외 프리마켓, 애프터마켓 거래 실적을 포함하면 매도 규모는 49조2447억원에 달한다.
+
+지수 랠리의 주역이었던 반도체가 피크아웃(고점 이후 둔화) 우려에 흔들리고 있는 가운데 증시의 주요 수급 주체인 외국인이 연일 '셀 코리아'를 외치며 물량을 쏟아내면서 그동안 지수 하방을 완강하게 받쳐주던 개인 투자자들의 '버티기 심리'마저 한계치에 다다르는 것이 아니냐는 우려가 나온다. 실제 이날 오후 2시30분께 개인은 외국인과 함께 '팔자' 흐름에 동참하고 있다.
+
+지난달 코스피에서 42조4005억원을 순매수한 개인은 이달 들어서도 11조5028억원 가량을 사들이며 지수 하단을 방어하고 있다. 다만 끝없는 외국인 이탈 가속화로 저점 매수 신뢰에 금이 가며 투자심리가 꺾일 수 있다는 우려가 나온다.
+
+개인이 지난달 집중적으로 사들인 SK스퀘어를 비롯해 삼성전자, SK하이닉스 등이 이달에만 적게는 20%에서 많게는 30%가까이 주가가 빠졌기 때문이다. 이를 두고 투자자들 사이에서는 단기 조정 단계를 넘어 본격적인 하락 국면에 접어든 것이 아니냐는 불안감이 확산하면서, 실제 매도 주문으로 이어지는 모양새다.
+
+증시의 또 다른 축인 기관 투자자마저 방향성을 잡지 못하고 있는 점은 수급 불안을 더욱 부채질하고 있다. 기관 투자자는 지난달 19일 고점 이후 전날까지 코스피에서 단 2조원 가량 순매수하는 데 그쳤다. 이달 순매수 규모도 4800억원 수준에 불과했다. 시장을 지탱할 수급 주체가 전무하다는 점이 개인들의 버티기 심리를 무너뜨리는 요인으로 작용할 수 있다는 평가다.
+
+시장에서는 수급의 균형이 완전히 깨진 상태에서 투자자들의 불안 심리가 가격을 더 크게 흔드는 악순환이 반복되고 있다는 분석이 나온다.
+
+한지영 키움증권 연구원은 "지금 급락은 순전히 국장 고유의 요인에서 기인하고 있는 듯하다"면서 "연속되는 조정 및 시간 단위 변동성 증폭에 대한 피로도가 극대화되면서 지수 반등 시 매도, 하락 시 투매 동참을 유발 중인 모습"이라고 설명했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014054153' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014054153</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
