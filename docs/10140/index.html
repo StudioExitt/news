@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>나스닥 가는 SK하이닉스…단기 부담 딛고 '재평가' 받을까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000514476' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10140" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>나스닥 가는 SK하이닉스…단기 부담 딛고 '재평가' 받을까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스가 나스닥에 ADR을 상장하며 글로벌 투자 기반이 확대되어 장기적인 기업가치 재평가 기대감이 높아지고 있다. 다만, 신주 발행으로 인한 단기 수급 부담 및 공모가 형성 과정에서 가격 조정 압력을 받을 가능성이 제기된다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 접근성 확대 및 대규모 자금 조달을 통한 장기적 성장 동력 확보가 기대되지만, 신주 발행에 따른 단기 수급 부담과 공모가 결정 변수에 의해 주가의 방향성이 크게 영향을 받을 것으로 예상됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#SK하이닉스</span> <span class="tag tag-hash">#나스닥ADR</span> <span class="tag tag-hash">#반도체재평가</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">SK하이닉스는 오는 10일 미국 나스닥에 주식예탁증서(ADR)를 상장할 예정이다. SK하이닉스가 오는 10일 미국 나스닥에 주식예탁증서(ADR)를 상장하는 가운데 시장에선 단기 수급 부담과 장기 기업가치 재평가 가능성이 엇갈리고 있다. 신주 발행을 통한 대규모 자금 조달이라는 점에서 희석 우려가 불거지는 한편, 미국 투자자 접근성이 높아지면서 글로벌 반도체 기업으로서의 재평가 계기가 될 수 있다는 기대도 나온다.
+
+◆ 왜 호재인데 주가는 빠질까…단기 변수는 '희석'
+SK하이닉스는 지난달 24일 이사회를 열고 신주 ADR 발행을 결의했다. 상장 예정일은 오는 10일이다. 1DR당 원주 전환비율은 보통주 0.1주로, ADR 10주가 보통주 1주에 해당한다. 시장에서는 이번 ADR 발행 규모를 약 43조원 수준으로 추산하고 있다. 당초 최대 45조원 안팎이 거론됐지만 최근 주가 조정이 반영되면서 발행 규모도 다소 줄어든 것으로 알려졌다.
+
+이번 ADR 상장이 단순한 해외 거래시장 확대 이상의 의미를 갖는 이유는 발행 방식에 있다. ADR은 해외 기업 주식을 미국 증시에서 거래할 수 있도록 만든 증권으로, 미국 투자자들이 SK하이닉스에 보다 쉽게 투자할 수 있는 통로를 제공한다. 다만 이번 상장은 기존 주식을 예탁하는 방식이 아니라 신주를 발행해 ADR 형태로 상장하는 구조다.
+
+발행 물량은 단기 수급 부담으로 꼽힌다. SK하이닉스가 발행하는 신주는 최대 1779만주로, 전체 주식 수의 약 2.5% 수준이다. 비율만 놓고 보면 대규모 희석으로 단정하기는 어렵지만, 금액 기준으로는 국내 기업의 해외 주식 발행 사례 중에서도 이례적으로 큰 규모다. 시장에서는 이번 ADR을 단순한 거래시장 확대가 아닌 자금 조달과 투자자 기반 확대가 동시에 이뤄지는 이벤트로 보고 있다.
+
+단기적으로는 공모가와 상장 이후 거래 흐름이 핵심 변수다. ADR 공모가는 해외 기관투자자를 대상으로 한 수요예측을 거쳐 9일 확정된다. 공모가가 국내 보통주 가격보다 낮게 형성될 경우 시장은 이를 새로운 가격 기준으로 받아들일 가능성이 있다. 이 경우 국내 주가에도 추가 조정 압력이 가해질 수 있다.
+
+실제 주가도 상장을 앞두고 약세를 보인 바 있다. SK하이닉스는 지난달 25일 장중 298만7000원까지 오르며 '300만닉스' 진입을 눈앞에 뒀지만, 전날에는 장중 205만4000원까지 밀리며 200만원선을 위협받았다. 인공지능(AI) 반도체 기대감으로 단기간 급등한 상황에서 ADR 신주 발행에 따른 물량 부담과 차익실현 매물이 맞물린 결과다.
+
+여기에 글로벌 반도체 업황을 둘러싼 투자심리 위축도 주가 부담을 키우는 변수로 작용했다. 전날 미국 증시에서 인텔, 마이크론, AMD 등 주요 반도체주가 동반 하락했고 필라델피아반도체지수도 4%대 하락했다. AI 투자 지속성에 대한 우려가 커지면서 국내 반도체주도 장중 약세를 이어갔다.
+
+상장 이후에도 단기 변동성은 이어질 수 있다. 나스닥에서 거래되는 ADR 가격과 국내 보통주 가격 사이에 괴리가 생길 경우 차익거래가 발생할 수 있기 때문이다. ADR이 미국 시장에서 어떤 가격 흐름을 보이느냐에 따라 다음 거래일 국내 주가에도 영향을 미칠 수 있는 만큼, 상장 직후에는 호재 여부보다 시장이 적정 가격을 찾아가는 과정이 먼저 진행될 가능성이 크하다.
+
+◆ 초기 흥행 넘어 실제 매수세로…재평가 시험대
+미국 현지 분위기는 우호적으로 형성되는 모습이다. 앞서 블룸버그통신은 SK하이닉스 ADR 공모에 모집 물량을 수 배 웃도는 청약이 들어왔다고 보도했다. 대형 기관투자자와 기술주 전문 투자자들의 수요가 강했고, 지난 6일 열린 투자설명회에는 기관투자자 약 1000곳이 참여한 것으로 전해졌다.
+
+주요 장기 투자자의 참여 가능성도 흥행 기대를 키우는 대목이다. 블룸버그와 로이터 등 외신에 따르면 베일리기포드, 코튜매니지먼트, 시추에이셔널어웨어니스파트너스 등은 SK하이닉스 ADR에 최대 70억달러 규모의 인수 의사를 보였다. 이들 투자자는 성장주와 기술주 투자에 강점을 가진 곳으로 꼽히는 만큼 미국 기관투자자들의 초기 관심을 보여주는 사례로 해석된다.
+
+중장기적으로는 이번 ADR 상장이 글로벌 투자자의 접근성을 높이는 계기가 될 수 있다. 미국 투자자들은 한국 증시 거래 절차나 환전, 시차 부담 없이 미국 정규장에서 SK하이닉스에 투자할 수 있게 된다. 이는 미국 반도체 기업들과 직접 비교되는 환경을 만들면서 기업가치 평가에도 영향을 줄 수 있다.
+
+엔비디아, 브로드컴, 마이크론 등 AI 반도체 기업과 같은 시장에서 거래되는 만큼 글로벌 투자자들의 비교 대상에도 오르게 된다. AI 반도체 관련 글로벌 펀드들이 같은 시장 안에서 SK하이닉스를 편입하거나 비중을 조정하기 쉬워지고, 투자자 기반 확대가 기업가치 재평가로 이어질 수 있다는 기대가 나온다.
+
+글로벌 주관사 라인업도 장기 투자자와의 접점을 넓히는 기반으로 평가된다. 이번 ADR 발행에는 뱅크오브아메리카, 씨티그룹, 골드만삭스, JP모간 등이 주요 주관사로 참여한다. 대형 투자은행들이 공모를 주관하는 만큼 미국과 글로벌 기관투자자를 대상으로 한 배분과 마케팅이 진행될 전망이다. 다만 주관사 참여 자체가 흥행을 보장하는 것은 아니어서 실제 수요는 공모가와 상장 첫날 거래에서 확인될 것으로 보인다.
+
+조달 자금의 활용 계획도 장기 성장성을 뒷받침하는 요소다. SK하이닉스는 ADR을 통해 확보한 자금을 용인 반도체 클러스터 1기 <0xED><0x8C><0xB9> 건설과 청주 P&T7 어드밴스드 패키징 <0xED><0x8C><0xB9> 건설, EUV 노광장비 등 첨단 생산시설 투자에 사용할 계획이다. 특히 고대역폭메모리(HBM) 생산능력 확대와 후공정 경쟁력 강화에 속도를 낼 수 있다는 점에서 장기 성장동력 확보에도 힘이 실릴 것으로 전망된다.
+
+이후에는 미국 반도체 관련 지수와 상장지수펀드(ETF) 편입 여부도 관심사다. ADR 거래 규모와 유동성이 충분히 확보되면 필라델피아반도체지수나 관련 ETF 편입 기대가 커질 수 있다. 다만 지수 편입은 상장 직후 결정되는 사안이 아니라 일정 기간 거래량과 유동성이 축적돼야 하는 만큼 중장기 과제로 보는 것이 적절하다.
+
+한 증권업계 관계자는 "ADR 상장은 투자자 기반을 넓히는 의미 있는 이벤트지만, 신주 발행을 동반한 만큼 상장 직후에는 가격 확인 과정이 불가피하다"며 "미국 투자자들의 관심이 실제 거래 활성화와 기업가치 재평가로 이어질지가 중요하며, 공모가와 첫날 거래 흐름이 첫 시험대가 될 것"</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000514476' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000514476</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
