@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 떨어져도 "난 돈 벌었다"...수익률 '15%' 찍은 커버드콜 [ETFvsETF]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005383485' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10148" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 떨어져도 "난 돈 벌었다"...수익률 '15%' 찍은 커버드콜 [ETFvsETF]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">하락장에서도 높은 수익률을 기록하는 커버드콜 ETF에 대한 관심이 높아지고 있으며, 기초자산(주가 지수 vs. 고배당주)과 옵션 전략(타겟위클리 등)에 따라 성과 편차가 크다는 점을 강조합니다.
+
+이는 커버드콜 특성상 옵션 매도로 얻은 프리미엄 수익이 하락장 손실을 완충하는 효과를 보여주며, 투자 시 상품의 세부 조건을 반드시 비교해야 함을 조언합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">커버드콜 ETF의 작동 원리 및 성공 사례를 제시하며 투자 전략 자체에 대한 높은 관심을 유발하므로 시장 참여자들의 포트폴리오 재편에 영향을 줄 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#커버드콜ETF</span> <span class="tag tag-hash">#옵션전략</span> <span class="tag tag-hash">#투자상품비교</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[ETFvsETF]국내 커버드콜 ETF
+[편집자주] ETF(상장지수펀드)가 필수 투자 상품으로 자리 잡았습니다. 매번 새로운 ETF가 쏟아지면서 투자자들의 선택은 어려워지고 있습니다.
+[ETF vs ETF]는 ETF 구성 종목, 포트폴리오, 수익률, 거래량, 총보수 등을 비교해 투자자의 현명한 선택을 돕겠습니다.
+주요 커버드콜 ETF 수익률/그래픽=윤선정
+주요 커버드콜 ETF 수익률/그래픽=윤선정국내 증시가 급등락을 반복하면서 분배금을 얻을 수 있는 커버드콜 ETF(상장지수펀드)에 대한 관심이 높아지고 있다. 특히, 기초지수와 콜옵션 전략에 따라 높은 수익률을 올리고 있는 상품도 있는 만큼 투자 전 이를 확인해야 한다는 조언이 나온다.
+
+8일 코스콤 ETF체크에 따르면 'TIGER 200커버드콜' ETF의 이날 기준 한 달 수익률(분배금 재투자 기준)은 15.88%를 기록했다. 이는 국내 주식에 투자하는 커버드콜 ETF 21개 중 가장 높은 수익률이다.
+
+'RISE 200고배당커버드콜ATM'과 'TIGER 200커버드콜OTM'은 각각 수익률 15.01%와 5.88%를 기록해 그 뒤를 이었다.
+
+최근 한 달간 코스피 200 지수는 10.69% 하락했으나, 관련 커버드콜 ETF는 플러스 수익률을 기록한 것.
+
+해당 ETF들이 하락장에도 수익률을 낸 것은 커버드콜 ETF 자체 특성 덕분이다. 커버드콜 ETF는 기초자산을 특정 가격에 살 수 있는 권리를 매도(콜옵션)해 얻은 이익을 배당금으로 활용한다. 이 때문에 기초자산이 하락할 경우 손실을 일부 완충할 수 있다.
+
+같은 커버드콜 ETF라도 기초자산에 따라 수익률이 갈렸다. 고배당주에 투자하는 커버드콜 ETF도 최근 한 달간 플러스 수익률을 올렸다. 'KODEX 금융고배당TOP10타겟위클리커버드콜'과 'ACE 고배당주Plus커버드콜액티브'의 수익률은 각각 4.8%와 2.96%를 기록했다.
+
+반면 반도체주에 투자하는 커버드콜 ETF인 'KODEX 반도체타겟위클리커버드콜'(수익률 -4.3%) 'TIGER 반도체TOP10커버드콜액티브'(-3.69%), 'FOCUS AI반도체위클리고정커버드콜'(2.38%) 등은 같은 기간 마이너스 수익률을 냈다.
+
+콜옵션 전략도 수익률에 영향을 줬다. 'KODEX 200타겟위클리커버드콜', 'SOL 200타겟위클리커버드콜', 'TIGER 200타겟위클리커버드콜'의 1개월 수익률은 -2%대를 기록했다.
+
+타겟위클리 커버드콜 ETF는 기존 커버드콜 상품과 달리 목표 분배율을 정해놓고 유동적으로 콜옵션 매도 비중을 조절하는 상품이다. 매번 콜옵션 매도 비중을 100%로 할 필요가 없기 때문에 그만큼 기초자산 상승을 따라갈 수 있는데, 최근 하락장이 지속되면서 오히려 이런 특성이 수익률을 끌어내렸다.
+
+d만, 타겟위클리 커버드콜의 연초 이후 수익률은 다른 커버드콜 상품 대비 좋았다. TIGER 200타겟위클리커버드콜의 연초 이후 수익률은 90.23%로, 같은 기간 TIGER 200커버드콜(31.50%) 대비 3배 가량 높았다.
+
+자산운용업계 관계자는 "타겟커버드콜 ETF의 경우 시장 참여도가 높아 최근 하락장에서는 수익률이 낮았지만, 연초 이후로는 높은 수익률을 기록했다"며 "커버드콜 ETF 투자 시 기초자산, 콜옵션 전략, 분배율 등을 따져보고 투자해야 한다"고 조언했다.
+
+연분배율은 'PLUS 고배당주위클리커버드콜'이 25.17%로 가장 높았다. △'TIGER 배당커버드콜액티브'(연분배율 18.02%) △'PLUS 고배당주위클리고정커버드콜'(16.69%) △'RISE 200위클리커버드콜'(16.66%) 등이 뒤를 이었다.
+
+커버드콜 ETF 중 순자산 규모가 가장 큰 상품은 KODEX 200타겟위클리커버드콜로, 지난 7일 기준 6조2382억원을 기록했다. TIGER 배당커버드콜액티브의 순자산은 2조3103억원으로 2위에 올랐다.
+
+[컷대]ETF vs ETF/그래픽=윤선정
+[컷대]ETF vs ETF/그래픽=윤선정</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005383485' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005383485</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
