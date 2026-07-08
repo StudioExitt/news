@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESG 공시, 자산 10조 넘으면 의무화…상장사 부담 더 커졌다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005307860' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10112" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>ESG 공시, 자산 10조 넘으면 의무화…상장사 부담 더 커졌다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부가 자산 10조원 이상 상장사에 대해 ESG(환경·사회·지배구조) 공시를 법정의무화합니다. 이로써 기업들은 온실가스 배출량 등 지속가능성 정보를 의무적으로 공개해야 하며, 규제 준수 비용 및 부담 증가에 대한 우려도 커지고 있습니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">환경 설비/에너지</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">컨설팅 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ESG공시</span> <span class="tag tag-hash">#규제강화</span> <span class="tag tag-hash">#탄소중립</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">자율 아닌 법정공시로…2028년부터 사업보고서 수록
+
+2029년엔 3171社 규제 사정권
+도입 초기 3년간은 한시 면책
+
+글로벌 자금 국내 유입 기대 속
+현장선 "규제 준수 비용 급증"2028년부터 자산 규모가 10조원 이상인 유가증권시장 상장사는 사업보고서에 온실가스 배출량 같은 ESG(환경·사회·지배구조) 관련 지속가능성 공시를 해야 한다. 정부는 지난 2월 공개한 초안보다 공시 의무 대상이 확대됐고, 자율공시에서 법정공시로 전환된 만큼 한시적인 면책 제도도 도입하기로 했다. 시장에서는 ESG 공시 의무화가 글로벌 자금의 국내 증시 유입을 촉진할 것으로 기대하고 있지만 기업들의 공시 부담을 키울 것이란 반론도 동시에 나오고 있다.
+◇ 2028년엔 291개사 공시 대상
+&lt; 당정, ESG 공시 최종안 발표 >
+이억원 금융위원장(왼쪽 두번째)이 8일 서울 여의도 국회 의원회관에서 열린 '지속가능성 공시 제도화 방안 관련 당정협의'에서 발언을 하고 있다. 연합뉴스< 당정, ESG 공시 최종안 발표 > 이억원 금융위원장(왼쪽 두번째)이 8일 서울 여의도 국회 의원회관에서 열린 '지속가능성 공시 제도화 방안 관련 당정협의'에서 발언을 하고 있다. 연합뉴스정부와 더불어민주당은 8일 서울 여의도 국회의원회관에서 당정협의회를 개최해 이 같은 내용을 골자로 한 ‘ESG 공시 제도화 최종 방안’을 발표했다. 이 방안에 따르면 연결자산 총액이 10조원 이상인 유가증권시장 상장사는 2028년 사업보고서 제출 때부터 ESG 관련 공시를 의무적으로 해야 한다. 공시 대상 기업은 2029년엔 자산 5조원 이상으로, 2030년에는 2조원 이상으로 확대된다.공시범위 포함 기업 수는 종속회사를 포함해 2028년 291개사, 2029년 3171개사로 예상된다.
+
+이는 지난 2월 금융위원회가 발표한 초안보다 강화된 것이다. 당초 금융위는 2028년 자산 30조원 이상 기업부터 ESG 공시를 의무화할 계획이었다. ESG 공시를 2028년부터 바로 사업보고서에 수록하도록 한 것도 ‘한국거래소 공시 후 법정공시 전환’을 언급한 원안보다 엄격해진 대목이다. 거래소 공시와 달리 사업보고서는 자본시장법상 과징금·손해배상·형사처벌 책임을 지기 때문이다.
+제도 도입 2년 뒤인 2030년부터는 ‘제3자 인증’ 제도도 시행한다. 제3자 인증은 회계법인과 같은 독립 기관이 ESG 정보 신뢰성을 따지는 것으로 재무제표의 회계감사와 비슷한 개념이다. 협력사, 판매처 등 공급망 전반의 온실가스를 책정하도록 한 ‘스코프3’ 공시는 금융위 초안대로 제도 시행 3년 뒤인 2031년부터 도입하기로 했다.
+
+당정이 초안보다 ESG 공시 제도를 강화하기로 한 것은 해외 기관과 연기금의 국내 증시 유입을 확대하기 위한 것이다. ESG 공시 제도 논의에 밝은 한 인사는 “서구권 기관을 중심으로 기후변화가 각 기업의 가치에 영향을 주고 있다는 인식이 퍼지고 있다”며 “유럽의 탄소국경조정제도(CBAM) 시행에서 볼 수 있듯 ESG 정보는 통상 측면에서도 중요해지고 있다”고 설명했다.
+◇ 기업들 “공시 부담 커진다” 걱정
+당정에서는 기업들의 공시 부담이 크다는 점을 고려해 각종 면책 조항을 마련했다. 도입 초기 3년간 ESG 공시 정보 전반에 자본시장법상 책임을 면제하기로 한 것이 대표적이다. 협력사의 온실가스 배출 정보처럼 추정이 어려운 ESG 정보도 충실히 공시했다는 전제하에 법적 책임을 배제하기로 했다. 다만 의도적인 그린워싱(친환경적인 것처럼 꾸미는 것)에는 법적 책임을 묻는다.
+
+재계에서는 이 같은 면책에도 ESG 공시에 따른 부담이 크다는 목소리가 나온다. 2028년부터 바로 법정공시로 시행된다는 점에서 규제 준수 비용이 적지 않다는 이유에서다. 한 금융회사의 ESG 담당자는 “공시 인증·컨설팅까지 합치면 많게는 3억원가량의 비용이 발생할 것으로 보고 있다”며 “종속회사가 많은 대기업은 그 비용이 더 클 것”이라고 설명했다.
+
+ESG 데이터 신뢰성을 두고도 논란이 적지 않다. 법무법인의 ESG 컨설팅 담당 임원은 “탄소 배출 데이터에는 상당히 많은 추정이 들어간다”며 “협력사가 많은 기업 중에서 탄소배출 데이터를 측정하기 어렵다는 문의가 많다”고 말했다. 이를 고려해 정부는 2028년까지 15대 업종에 대해 온실가스 데이터 취합 방법론을 마련하고 원료 채취부터 제품 폐기까지의 탄소 배출 데이터를 볼 수 있는 전과정목록 데이터베이스(LCI DB)도 확장할 방침이다. 하지만 영업비밀 노출을 이유로 자료를 제공하길 꺼리는 기업도 많아 관련 공공 데이터베이스를 구축하기 어렵다는 의견도 나온다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005307860' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005307860</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
