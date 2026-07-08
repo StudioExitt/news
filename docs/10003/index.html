@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“어떻게 지금 주가가 목표가 보다 높나”トー속절없이 떨어지는 ‘스페이스X’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005704310' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10003" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“어떻게 지금 주가가 목표가 보다 높나”トー속절없이 떨어지는 ‘스페이스X’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">나스닥100 편입에도 불구하고 스페이스X 주가가 급락하며 실망감을 안겼습니다. 월가 주요 투자은행들은 낙관적인 목표가를 제시했지만, 독립 리서치에서는 가치 평가의 비현실성을 지적하며 상반된 의견을 내놓아 높은 변동성에 노출되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">나스닥100 편입 효과에도 불구하고 급락하고 상반된 목표주가로 인해 단기적 투자 심리가 극도로 혼란스러우며 변동성(Volatility)이 매우 높음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">항공운수</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#스페이스X</span> <span class="tag tag-hash">#AI인프라</span> <span class="tag tag-hash">#가치평가논쟁</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">7일 나스닥100 지수 편입에도
+6.8% 하락 149.47달러에 마감
+‘목표가 800불’ 월가 장밋빛 전망
+첫 보고서에도 내림세 막지 못해
+목표가가 현 주가보다 낮은 ‘굴욕’도
+
+2026년 6월 12일, 미국 뉴욕시의 나스닥 마켓사이트에서 스페이스X의 기업공개(IPO) 당일, 스페이스X의 창립자이자 CEO, 회장, 수석 엔지니어인 일론 머스크가 화상 연결을 통해 연설하고 있다. 로이터
+2026년 6월 12일, 미국 뉴욕시의 나스닥 마켓사이트에서 스페이스X의 기업공개(IPO) 당일, 스페이스X의 창립자이자 CEO, 회장, 수석 엔지니어인 일론 머스크가 화상 연결을 통해 연설하고 있다. 로이터
+
+상장 한 달도 채 되지 않아 나스닥100 지수에 이름을 올린 스페이스X가 편입 당일 주가가 하락하며 굴욕을 맛봤다. 이날 월가 주요 투자은행들은 일제히 첫 공식보고서로 스페이스X에 대한 장밋빛 전망을 쏟아냈으나, 일각에서는 목표가를 현 주가보다 낮게 책정하기도 해 자존심을 세게 구겼다.
+
+스페이스X이 주가는 나스닥100에 편입된 7일(현지시간) 전 거래일보다 6.83% 급락한 149.47달러에 마감했다. 나스닥100 편입으로 40억달러 이상의 패시브 자금이 유입될 것으로 추산했지만 정작 뚜껑을 열어보니 시장의 반응은 차가웠다.
+
+시장의 관심은 주가하락과 함께 이날 쏟아진 월가의 투자보고서에 집중됐다.
+
+기업공개(IPO) 이후 리서치 제한기간(Quiet Period)이 종료되면서 스페이스X와 관련된 월가 주요 투자은행들은 일제히 첫 공식 보고서를 내놓았다.
+
+스페이스X IPO의 공동 대표 주관사인 모건스탠리와 골드만삭스는 찬양일색이었다. 모건스탠리는 목표주가 300달러와 함께 ‘비중확대(Overweight)’ 의견을 제시하며 스페이스X를 “우주 산업에서 사실상 대체 불가능한 ‘X of 1’” 기업이라고 평가했다.
+골드만삭스도 목표주가 205달러와 ‘매수(Buy)’ 의견을 내놓으며 올해 약 190억 달러로 예상되는 매출이 2030년에는 4740억 달러까지 늘어날 것으로 전망했다.
+
+목표가 239달러로 책정한 번스타인은 투자 포인트를 로켓 사업이 아닌 AI에서 찾았다. 번스타인은 “스페이스X의 투자 논리는 스타십의 성공 여부에 달려 있으며, 궁극적인 가치 창출은 궤도 데이터센터를 기반으로 한 AI 사업에서 나올 것”이라고 분석했다. 로켓은 우주 기반 AI 인프라를 구축하기 위한 수단이며, 진정한 기업가치는 AI 컴퓨팅 플랫폼에서 나온다는 설명이다.
+
+무려 800달러로 목표가를 제시한 레이먼드 제임스도 “우주 운송과 저궤도 위성, AI 인프라가 결합된 새로운 플랫폼 기업으로 성장할 경우 지금의 기업가치는 시작에 불과하다”고 평가했다.
+
+전반적인 분위기는 낙관론이 우세하다. 금융정보업체 LSEG에 따르면 현재 스페이스X를 커버하는 18명의 애널리스트가 제시한 목표주가의 중간값은 227달러다.
+
+반면 독립 리서치업체인 모펫네이선슨은 같은 날 목표주가 131달러와 ‘중립(Neutral)’ 의견으로 스페이스X에 유일한 비수를 꽂았다. 현 주가보다 목표가를 낮춘 곳은 지난달 투자조사업체 CFRA가 ‘매도(Sell)’ 의견과 함께 목표주가 115달러를 제시한 것에 이어 두번째이다.
+
+모펫네이선슨은 “현재 약 2조 달러에 달하는 기업가치는 전통적인 기업가치 평가 방식으로는 설명하기 어렵고, 일론 머스크가 제시한 29조 달러 규모의 총도달가능시장(TAM)도 현실성이 떨어진다”고 지적했다. 이어 “중립 의견조차 후한 평가일 수 있으며 이론적으로는 매도 의견도 가능하지만 투자자들이 미래의 성장 기회에 높은 가치를 부여하고 있는 만큼 적극적인 매도 전략이 반드시 적절한 것은 아니다”라고 평가했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005704310' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005704310</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

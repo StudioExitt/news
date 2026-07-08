@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 2% 하락… 반도체 ‘피크아웃’ 우려에 기술주 약세</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/366/0001177511' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10004" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 2% 하락… 반도체 ‘피크아웃’ 우려에 기술주 약세</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국 증시 하락과 반도체 슈퍼사이클의 피크아웃 우려가 커지며 코스피 지수가 큰 폭으로 하락 출발했습니다. 시총 상위 종목과 유통주 전반에서 매도세가 나타나며 기술주의 약세를 주도하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 산업인 반도체의 성장 모멘텀 약화(피크아웃)와 지정학적 리스크가 시장 전체의 매도세와 투자 심리 위축을 동반하고 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#기술주약세</span> <span class="tag tag-hash">#피크아웃</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">8일 코스피 지수가 하락 출발했다. 전날 미국 증시가 기술주 중심으로 하락 마감한 뒤 우리 증시에서도 전기전자 업종 중심으로 매도 물량이 나오고 있다. 반도체 슈퍼사이클에 대한 의구심이 커지면서 투자 심리가 위축된 것으로 풀이된다.
+
+코스피 지수는 전 거래일보다 203.83포인트(2.66%) 내린 7452.48에 거래를 시작했다. 장 초반 지수는 7350선까지 밀리기도 했다.
+이날 외국인과 연기금이 동반 순매수하고 있지만, 적극적인 매수세가 아닌 것으로 판단된다. 개인은 매도 우위다.
+
+8일 서울 중구 하나은행 본점 딜링룸에서 직원들이 업무를 보고 있다./연합뉴스
+8일 서울 중구 하나은행 본점 딜링룸에서 직원들이 업무를 보고 있다./연합뉴스
+시가총액 상위 종목 대부분이 하락하고 있다. 삼성전자와 SK하이닉스가 각각 3% 안팎 하락하고 있고 그동안 주가가 급등했던 SK스퀘어와 삼성전기 역시 7~8% 큰 폭 하락하고 있다.
+
+그동안 내수 회복에 대한 기대로 급등했던 유통주도 큰 폭 하락하고 있다. 롯데쇼핑이 10% 넘게 떨어지고 있고 신세계와 현대백화점도 하락세다.
+
+우리나라를 비롯한 글로벌 증시에서 기술주가 전부 약세다. 전날 삼성전자가 실적을 발표한 이후 반도체 ‘피크아웃(정점)’ 우려가 커진 영향이다.
+지난 밤 미국 나스닥 지수가 1.16% 하락했는데, 특히 마이크론과 샌디스크 등 반도체주의 약세가 두드러졌다. 필라델피아 반도체 지수도 4% 넘게 하락했다.
+
+한동안 잠잠했던 미국과 이란의 갈등도 다시 부상했다. 전날 밤 호르무즈 해협에서 카타르 선박이 피격됐는데, 이란으로 추정된다는 보도가 나왔다.
+긴급한 소식이 전해지면서 이날 국제 유가는 급등했다. 개장 초반 미국 증시 선물도 약세다.
+
+이재원 유안타증권 연구원은 “삼성전자가 2분기 사상 최대 규모의 잠정 실적을 발표했지만, 투자자들의 기대치에는 미치지 못해 차익 실현 명분이 되고 있다”며 이런 환경에서 나온 외국계 투자은행의 ‘메모리 조정론’과 하이퍼스케일러들의 투자 지속성 의구심, 단일종목 레버리지 상장지수펀드(ETF) 쏠림 등이 부담으로 작용하고 있다고 분석했다。
+
+코스닥 지수도 2% 넘게 하락세다. 코스닥 지수는 전 거래일보다 2% 넘게 하락해 810선에서 움직이고 있다. 바이오와 2차전지, 소부장주 대부분 하락하고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/366/0001177511' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/366/0001177511</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
