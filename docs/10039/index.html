@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>널뛰는 삼전하닉…코스피 3%·코스닥 5% '와르르'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006325333' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10039" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>널뛰는 삼전하닉…코스피 3%·코스닥 5% '와르르'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">글로벌 경기 불확실성과 반도체 업황 우려 속에 코스피와 코스닥 시장이 급락세를 보였으며, 삼성전자와 SK하이닉스를 중심으로 개별 종목의 변동성이 매우 큰 모습을 나타냈다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 대장주들을 중심으로 큰 폭의 하락세가 나타나며 시장 전체에 불안 심리가 확산되었기 때문입니다. 이는 단기적인 투자심리 위축을 초래합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#코스피하락</span> <span class="tag tag-hash">#투자심리위축</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">오후장 들어 낙폭 더 키우는 증시
+삼성전자·SK하이닉스 널뛰기
+불안 커진 증시, 코스닥 10개월 만 800선 붕괴 양 시장이 오후 장에서도 하락세를 벗어나지 못하고 있다.
+
+8일 오전 서울 중구 하나은행 딜링룸에서 딜러들이 업무를 하고 있다. 코스피는 전 거래일보다 203.83포인트(2.66%) 내린 7452.48개장했다. (사진=뉴시스)
+
+8일 엠피닥터에 따르면 오후 1시 23분 기준 코스피는 전장 대비 254.80포인트(3.39%) 하락한 7377.77을 기록 중이다.
+
+지수는 이날 3%대 하락 출발했다. 오전 한때 삼성전자, SK하이닉스가 장중 상승권에 진입하며 지수도 따라 상승 전환하기도 했다. 다만 10시 30분 기점 지수는 다시 음전하며, 하락권에서 움직임을 지속 중이다.
+
+신현용 유안타증권 연구원은 이날 보고서에서 “삼성전자가 2분기 예비 실적에서 영업이익 1,800% 급증한 기록적 분기를 발표했으나 자본지출과 수요 우려로 주가가 하락했다”며 “이란산 원유 판매 허가 철회 소식에 장 후반 매도세가 가속되며 국채 금리도 상승 중”이라고 언급했다.
+
+투자 주체별로는 개인과 외국인이 각각 7530억원, 6898억원어치를 매도 중이다. 외국인은 오전에서 수급 포지션을 변경, 이날까지 14거래일째 순매도 중이다. 기관은 금융투자권 중심으로 1조원대 담아가고 있다.
+
+시가총액 상위주는 내림세가 짙다.
+
+시총 상위 1~50위 종목 가운데 상승 종목은 단 여섯 개다.
+
+인공지능(AI)발 거품론 우려를 놓고 시장 해석이 분분한 가운데, 삼성전자(005930)와 SK하이닉스(000660)는 이날도 상승하락권을 오가며 6~8%대의 변동을 보이고 있다.
+
+글로벌 투자은행(IB) 모건스탠리가 전일 반도체주에 대해 부정 의견을 낸 데 이어, 이날 UBS그룹 세일즈·트레이딩 데스크가 이날 고객 노트에서 “SK하이닉스 신규 ADR이 프리미엄에 거래될 가능성이 높기 때문에 투자자들은 SK하이닉스의 ADR을 매수하고 한국 상장 주식은 매도해야 한다”고 제시한 것으로 알려졌다.
+
+이밖에도 SK스퀘어(402340), 삼성전기(009150), 현대차(005380), lg에너지솔루션, 삼성생명(032830), 삼성물산(028260), 삼성바이오로직스(207940), KB금융(105560) 등 시총 상위 10위권 내 종목들은 일제히 내림세다.
+
+같은 시각 코스닥지수는 전 거래일 대비 41.53포인트(5.03%) 내린 789.47포인트를 기록 중이다.
+
+코스닥 지수는 이날 2%대 내림세로 출발해 장중 하락폭을 키웠다. 10시경 1%내까지 낙폭 축소를 시도했으나, 이내 오전 11시 2분경 800포인트를 이탈했다. 수가 800선을 하회한 것은 지난해 9월 4일 이후 약 10개월 만이다. 코스닥 지수는 오후장 들어 하락폭이 더 커지며 790선마저 내줬다.
+
+코스닥 시장에서는 외국인과 기관이 동시 매물을 내놓고 있다. 오전 순매수 대응하던 기관도 현재 구간 173억원어치를 매도하고 있다. 개인 홀로 1000억원어치를 받아주는 모양새다.
+
+코스닥 시장에서도 시총 상위 종목은 줄줄이 내리고 있다. 코스닥 50위권 내 종목 가운데 상승 종목은 기가비스(420770) 1개사다.
+
+강진혁 신한투자증권 연구원은 “전일 삼성전자 잠정실적 발표 후 혼재된 시장 심리가 표출되며 변동성이 야기되고 있다”며 “금융위기 이후 최저 수준의 펀더멘털과 유동성 등 시소게임에서 균형을 모색하는 구간으로 판단한다.”</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006325333' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006325333</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
