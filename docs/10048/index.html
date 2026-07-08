@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[단독] SK하닉, ADR 상장 물량의 10배 수탁 등록..."추가 상장 가능"</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001258018' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10048" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[단독] SK하닉, ADR 상장 물량의 10배 수탁 등록..."추가 상장 가능"</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스가 ADR 상장 물량의 10배에 달하는 커스터디 한도를 확보하며, 향후 대규모 추가 상장 가능성을 시사했습니다. 글로벌 기관 투자자들의 ADR 선호와 ETF 자금 유입 예상으로 인해 '차익거래' 구조가 형성되며 국내 본주 주가를 강력하게 끌어올릴 것으로 분석됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">ADR 상장 물량의 대폭적인 커스터디(금고) 등록 및 차익거래 구조가 형성될 것으로 예측되며, 이는 국내 본주 주가를 지속적으로 끌어올리는 강력한 선순환 동인이 될 것으로 분석됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#SK하이닉스</span> <span class="tag tag-hash">#ADR상장</span> <span class="tag tag-hash">#차익거래</span> <span class="tag tag-hash">#반도체</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open"><앵커>
+SK하이닉스 ADR의 미국 나스닥 상장이 이틀 앞으로 다가왔습니다. 월가의 자금이 어떤 과정을 통해 얼마나 SK하이닉스로 유입될지 증권부 전효성
+기자와 짚어보겠습니다.
+
+SK하이닉스가 이번 ADR 상장 물량의 10배에 해당하는 규모를 커스터디 물량으로 잡아뒀다는 점이 중요 포인트로 꼽히는데요. 구체적으로 어떤
+의미입니까?
+
+<기자>
+이번 SK하이닉스 ADR 상장 물량은 281억 달러 규모입니다. 한국 본주 기준 1779만주에 해당합니다. 전체의 2.5%이죠.
+
+미국 증권거래위원회에 제출된 서류(F-6)를 보면요. 향후 SK하이닉스 본주를 금고에 잠그고, 미국에서 ADR로 바꿔갈 수 있는 한도를 본주 기준 1억 7800만주 규모로 등록해뒀습니다. 이번 상장 물량의 10배, SK하이닉스 전체 발행 주식의 25%에 달하는 규모입니다.
+
+<앵커>
+커스터디 한도가 신규 상장 물량의 10배에 달한다는 얘기인데, 커스터디가 어떤 절차인지 모르시는 분들도 많을 겁니다.
+
+<기자>
+'한국 상점에서 가방을 떼와서 미국 백화점에 진열해 파는 상황'을 떠올리시면 쉽습니다. 코스피 SK하이닉스 보통주가 한국 상점 물건, 나스닥 ADR은 미국 백화점에 진열된 상품이죠.
+
+'커스터디'는 한국 상점에서 미국 백화점으로 가방을 수송하는 과정입니다. 한국에 있는 SK하이닉스 보통주를 사서 금융기관 금고에 안전하게 잠가둡니다. 보통주를 담보로 잡아서 미국 나스닥에서 ADR로 발행하는 거죠.</strong>
+글로벌 큰손 입장에서는 환전도 해야하고 계좌 개설도 복잡한 한국에서 보통주를 사기보다 달러로 편하게 살 수 있는 미국 ADR을 선호합니다.
+그런데 이번에 상장되는 ADR은 한국 본주 물량의 2.5% 밖에 안됩니다. 공급은 적은데 미국 현지에서 투자 수요가 몰릴 것으로 예상되는
+상황이다보니 미국 ADR 가격에 웃돈(프리미엄)이 붙어 비싸지게 됩니다.
+
+<앵커>
+한 가지 헷갈리는 부분이 있습니다. 한국 주식을 사서 금고에 잠그는 구조라고 했는데, 최근 UBS는 글로벌 투자자에게 '코스피 SK하이닉스 본주를 팔고 나스닥 ADR을 사라'고 권했거든요. 이거 서로 모순되는 것 아닌가요?
+
+<기자>
+시장에서 뛰는 플레이어가 여럿이기 때문에 일어나는 현상입니다.
+
+첫 번째 플레이어는 주식을 보유하려는 '글로벌 기관 투자자'입니다. UBS의 고객들이죠. 이들 입장에서는 한국 본주를 사는 것보다 미국에서
+매수하기 편리하고 수수료도 싼 ADR을 들고 있는 게 유리합니다.
+
+게다가 앞으로 하이닉스 ADR이 미국에서 웃돈이 붙을 게 뻔하니, UBS가 이들에게 '지금은 한국 본주는 던지고 미국 ADR로 갈아타라'고추천한 겁니다.
+
+<앵커>
+글로벌 기관 투자자들이 한국 주식 대신 미국 ADR을 사려고 몰려들면, 미국 시장의 프리미엄은 더 치솟겠군요.
+
+<기자>
+바로 그 때 '차익거래업자'들이 등판합니다. 헤지펀드들이죠. 이들은 미국 ADR 가격이 치솟는 것을 보고 '코스피에서 SK하이닉스 본주를 사다가
+미국에 ADR로 만들어서 팔면 이득이겠다'고 판단합니다.
+
+차익거래업자들이 기관투자자들이 던진 SK하이닉스 보통주를 쓸어 담게 되고, 이 주식들이 커스터디 금고로 들어가 잠기게 되는 겁니다.
+
+정리하자면 글로벌 기관 투자자들이 ADR을 사려고 몰릴수록 프리미엄이 벌어집니다. 프리미엄을 먹기 위해 차익거래업자들이 한국 주식을 사서 금고에
+잠급니다. 결과적으로 국내 유통 물량이 줄어들며 한국 주가까지 위로 강하게 끌려 올라가는 선순환 구조가 만들어집니다. UBS는 '장차 프리미엄을
+누릴 수 있는 ADR을 일찌감치 사서 이득을 봐라'고 꿀팁을 준 셈입니다.
+
+<앵커>
+시장의 메커니즘을 보니 왜 UBS가 "고민할 필요도 없는 확실한 거래"라고 평했는지 이해가 가네요. 그래서 SK하이닉스도 차익거래와 커스터디
+규모가 커질 것을 예상하고 커스터디 한도를 미리 늘려둔 거군요.
+
+<기자>
+차익거래와 커스터디 구조가 주가를 어떻게 끌어올리는지 잘 보여주는 선례가 대만 TSMC입니다.
+
+TSMC는 1997년 미국에 ADR을 상장했습니다. 미국에서 거래되는 ADR은 접근성이 좋다보니 지속적으로 프리미엄이 붙었고, 상대적으로 저렴한
+대만 본주를 사서 커스터디 금고에 넣고 미국 ADR로 파는 차익거래가 끊임없이 반복됐습니다. 결국 대만 증시에서 유통되던 주식이 계속 금고로
+빨려 들어가는 '물량 잠김 현상'이 발생하면서, 대만 본주 주가까지 덩달아 계속 위로 밀려 올라가는 강력한 선순환이 만들어진 겁니다.
+
+SK하이닉스 역시 이 TSMC의 검증된 성공 공식을 정확히 벤치마킹했습니다. 10일 당장 나스닥에 상장되는 첫 물량은 전체의 2.5% 수준인
+1779만주, 금액으로는 294억달러에 불과하지만요. 향후 글로벌 자금의 차익거래와 커스터디 전환이 폭발적으로 늘어날 것을 내다보고 초기 물량의
+10배이자 전체의 25%에 달하는 1억7800만주, 최대 2800억달러 규모까지 금고에 잠그고 ADR로 바꿀 수 있도록 SEC에 등록해둔
+겁니다.
+
+<앵커>
+투자자들이 궁금해하실만한 지점이 나스닥으로 향했을 때 ETF 같은 패시브 자금이 얼마나 들어올지 여부입니다. 이 부분을 계산해봤다고요?
+
+<기자>
+먼저 나스닥100 같은 대표 지수에 편입되는 것은 어렵습니다. 외국 기업은 전체 시총이 아니라 ADR 가치로만 평가받기 때문에 스페이스X 같은
+조기 편입 요건(시총 40위 이내)을 맞추기 힘듭니다.
+
+12월 정기 편입도 있긴 하지만 현재 ADR 예상 시총이 100위권 커트라인이라 아슬아슬합니다. SK하이닉스 본주 주가가 242만원일때를
+기준으로 ADR 상장 신청이 들어가는데, 본주 주가가 최근 10% 정도 빠졌잖아요. ADR도 상장 직후 비슷한 폭의 조정을 받게 되면 나스닥
+100위권 진입은 어렵게 됩니다.
+
+하지만 반도체 테마 ETF인 SMH에서 당장 9월에 대규모 자금 유입이 기대됩니다. SMH가 SK하이닉스 비중을 3~5% 담을 경우
+21억~34억달러의 뭉칫돈이 들어옵니다. SOXX라는 반도체 ETF도 있기는 한데 이 펀드는 규정상 해외 ADR이 전체의 10% 밖에 차지하지
+못하도록 돼 있어 수급이 제한적입니다.
+
+여기에 나스닥100에는 못 들어가도 자동으로 편입되는 나스닥 종합 지수 인덱스 펀드 자금 3억 4000만달러, 그동안 접근성이 낮아 대체재로
+마이크론만 사던 외국인들이 SK하이닉스로 갈아타는 글로벌 액티브 자금까지 합치면 단기 수급으로만 최대 25억 달러가 유입될 수 있습니다.
+
+나아가 2028년 9월에는 3개월 상장+6개월 거래량 요건을 채워 필라델피아 반도체 지수 편입까지 노릴 수 합니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001258018' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001258018</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
