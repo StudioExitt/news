@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상폐 요구까지…삼전·닉스 레버리지, 보완 가능할까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003109962' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10335" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>상폐 요구까지…삼전·닉스 레버리지, 보완 가능할까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부가 삼성전자·SK하이닉스 단일종목 레버리지 상품의 높은 변동성 및 상장폐지 요구에 대응하기 위해 개선 방안을 검토 중입니다. 구체적으로는 예탁금 상향 조정, 교육 강화, 리밸런싱 분산 등의 규제적 보완책 마련이 논의되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">금융당국이 레버리지 상품의 과도한 변동성에 대한 우려를 인지하고 구체적인 규제 완화 및 기술적 보완 방안을 검토 중이라는 점은 시장 안정화에 기여하는 정책적 신호입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지</span> <span class="tag tag-hash">#파생상품규제</span> <span class="tag tag-hash">#반도체</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">10일 금융당국 및 금융투자업계 등에 따르면, 정부는 삼성전자·SK하이닉스 단일종목 레버리지·인버스 상품 관련 개선 방안을 검토하고 있다.
+낙인찍힌 가운데 일부 투자자는 물론 정치권에서도 상장폐지 필요성이 제기되고 있다.
+단일종목 레버리지는 정부가 고환율 주범으로 지목한 서학개미들의 해외투자 수요를 환류하기 위해 도입됐으나 성과보단 부작용이 크다는 평가를 받고
+있습니다.
+이찬진 금융감독원장은 '후회'와 '반성'을 언급하며 정책 실패를 인정하기도 했다.
+다만 금융당국이 표면상 '국내외 규제 격차 해소'를 명분으로 단일종목 레버리지를 허용한 데다 크게 불어난 관련 상품 자산 규모 등을 고려하면, 상폐보다는 수요 억제나 기술적 보완 등을 모색할 가능성이 높다는 관측이다.
+10일 금융당국 및 금융투자업계 등에 따르면, 정부는 단일종목 레버리지 관련 개선 방안을 검토하고 있다.
+앞서 구윤철 부총리 겸 재정경제부 장관은 지난 7일 국회 재정경제기획위원회 전체회의에서 "지금 레버리지 상품이 주식시장 변동성을 많이 갖고 오고
+있다는 우려를 잘 알고 있다"며 "문제를 어떻게 보완하고 최소화할지에 대해 협의 중"이라고 밝힌 바 있다.
+가장 유력하게 거론되는 방안은 기본 예탁금 상향 조정이다.
+현재 1000만원인 예탁금을 3000만원에서 5000만원 수준으로 끌어올려 진입 문턱을 높이겠다는 구상이다.
+관련 교육도 강화될 수 있다는 관측이다. 현재는 일반교육 1시간, 심화교육 1시간 등 총 2시간의 교육을 거쳐야 단일종목 레버리지 투자가
+가능하다.
+유동성공급자(LP)의 호가 제출 의무가 완화되는 장 마감 직전, 호가 공백으로 레버리지 상품 괴리율이 상승하는 문제에 대한 보완도 이뤄질
+전망이다.
+실제로 지난달 8일 SK하이닉스 주가는 7.68% 하락했지만, 한국투자신탁운용의 'ACE SK하이닉스단일종목레버리지'는 장 막판 49.70%급등했다.
+호가 공백 시점에 대량의 시장가 주문이 들어오면서 괴리율은 90.18%까지 치솟았다.
+호가 제시 의무가 완화된 시점에 집중되는 리밸런싱을 분산시키는 방안도 구체화될지 주목된다.
+리밸런싱이란 목표 수익률을 맞추기 위해 기초자산(삼성전자·SK하이닉스) 비중을 재조정하는 과정을 뜻한다.
+레버리지·인버스 상품의 경우 주가가 오르면 더 사고 주가가 내리면 더 파는, 옵션 시장의 '숏 감마(Short Gamma)'와 유사한 구조라
+변동성에 미치는 영향이 상대적으로 크다.
+다만 관련 변동성 확대는 '반도체 투톱'으로 대표되는 국내증시 특성에 기인한 측면이 크다.
+일례로 코스피 200 지수에서도 반도체 투톱 비중이 과반을 차지하는 만큼, 단일종목 레버리지뿐만 아니라 코스피 200 레버리지·인버스 상품 관련
+리밸런싱도 변동성 확대에 영향을 주고 있다는 분석이다.
+관련 맥락에서 단일종목 레버리지가 증시 변동성을 좌지우지하는, '꼬리가 몸통을 흔들고 있다'는 우려가 제기되지만, 보다 면밀한 분석이 필요하다는
+지적도 나온다.
+해외증시 역시 반도체 쏠림과 그에 따른 변동성 장세가 거듭되고 있는 만큼 '구조적 요인'과 독특한 국내증시 특성으로 요약되는 '개별적 요인'
+을 두루 고려해 대응책을 마련해야 한다는 설명이다.
+업계 관계자는 "과거 공매도가 매도를 당했던 전철을 밟아선 안 된다"며 "원인을 정확하게 파악하고 해법을 마련할 필요가 있다"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003109962' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003109962</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
