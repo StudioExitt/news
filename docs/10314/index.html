@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>‘통제 불능’ 레버리지… 코스피 5% 이상 변동 올해 25일, 작년엔 2일</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.10</span>
+        
+        <a class="more-btn" href="https://studioexitt.net/news/10314" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>‘통제 불능’ 레버리지… 코스피 5% 이상 변동 올해 25일, 작년엔 2일</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">단일종목 레버리지 상품의 급증으로 인해 코스피 시장 변동성이 통제 불능 상태에 이르렀으며, 5% 이상 폭등/폭락 일수가 과거 대비 비정상적으로 늘어난 것으로 나타났다. 전문가들은 과도한 개인 투자자의 베팅과 손실 증폭 메커니즘(손실의 눈덩이)으로 인해 시장 변동성 확대와 공황 매도 국면 전환 가능성에 경고하고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단일 종목 레버리지 상품이 코스피 전체 시장의 변동성을 비정상적으로 증폭시키고 있으며, 개인 투자자들의 과도한 베팅으로 인해 시스템적 리스크(공황 매도) 발생 가능성이 높아지므로 매우 높은 영향을 미칠 수 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지</span> <span class="tag tag-hash">#시장변동성</span> <span class="tag tag-hash">#공황매도</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미·이란 갈등 격화에 코스피가 급락하며 '검은 수요일'을 기록한 8일 오후 서울 중구 하나은행 딜링룸 전광판에 종가와 SK하이닉스, 삼성전자 주가가 나오고 있다. 달러·원 환율은 전일 오후 3시 30분 주간종가 대비 미·이란 갈등 격화에 코스피가 급락하며 '검은 수요일'을 기록한 8일 오후 서울 중구 하나은행 딜링룸 전광판에 종가와 SK하이닉스, 삼성전자 주가가 나오고 있다. 달러·원 환율은 전일 오후 3시 30분 주간종가 대비 29.7원 내린 1498.5원을 기록했다. 서울 마포구의 직장인 한모(31)씨는 이달 초 SK하이닉스 가격 움직임의 2배를 베팅할 수 있는 레버리지 상품을 1500만원어치 샀다. 그런데 투자하자마자 주가가 급락해 원금의 3분의 1이 사라졌다. 한씨는 “SK하이닉스 주가 하락률의 두 배로 떨어지다 보니 원금 손실이 커져서 충격 속에 잠을 못 잘 지경”이라고 했다.
+
+삼성전자, SK하이닉스의 주가 상승, 하락에 2배 베팅할 수 있는 단일종목 레버리지 상품이 출시된 전후 코스피가 3% 이상 등락한 날의 비율이 2배 급증한 것으로 나타났다. 그런데 주가가 하락하면 하락 폭이 증폭되면서 한씨처럼 큰 손실을 보는 개인 투자자가 늘고 있다. 주요 단일종목 레버리지 상품들의 출시 이후 누적 수익률은 -16~-25%에 달한다.
+
+9일 NH투자증권에 따르면 코스피가 3% 이상 급등락한 날은 올 들어 42일이었다. 3%는 주식 시장에서 통상 일상적인 상승, 하락과 급등락을 가르는 기준이다. 단일종목 레버리지 상품이 나온 5월 27일 직전까지 96거래일 동안 26일이었고, 출시일 이후 8일까지 30거래일 동안 16일이었다. 3% 이상 급등락한 날 비율은 출시 전 27%에서 출시 후 53%로 껑충 뛰었다. 하지만 미국 S&P500은 올 들어 122일 동안 단 한 번도 3% 이상 급등락하지 않았다. 2% 이상 등락한 날만 5일에 그쳤다. 월스트리트저널(WSJ)은 6일 “한국 주식시장의 변동성은 삼성전자와 SK하이닉스 두 종목의 레버리지 상품에 의해 더 커졌다”고 지적했다.
+
+코스피가 5% 이상 폭등, 폭락한 날도 단일종목 레버리지 상품 출시 후 더 빈번해졌다. 출시 전엔 5% 이상 변동일이 96거래일간 16%(15일)에 그쳤지만 출시 후엔 30거래일 중 33%(10일)나 됐다. 물론 미국은 하루도 없었다.
+
+작년과 비교하면, 아직 올해가 절반밖에 지나지 않았지만 3% 이상 코스피 변동일은 9일에서 42일로 367% 급증했다. 5% 이상 변동일은 작년 2일에서 올해 25일로 12배 이상(1150%) 폭증했다.
+
+‘손실의 눈덩이’ 효과가 작용했기 때문이라는 해석이 나온다. 레버리지 상품 수익률은 삼성전자, SK하이닉스 등 기초가 되는 주식의 하루 등락률의 2배로 움직인다. 그래서 걸린 돈의 크기를 매일 장 마감 즈음 원금의 2배로 맞춰 놓아야 한다. 이때 적은 증거금으로 많이 살 수 있는 주식선물(先物)이 주로 쓰인다. 주가가 오른 날은 늘어난 원금에 맞춰 걸린 돈의 크기를 더 키우고, 내린 날은 줄어든 원금에 맞춰 더 줄여 놓아야 한다. 주가가 떨어진 날은 하락이 하락을 부르는 악순환이다.
+
+실제 이달 들어 9일까지 삼성전자는 11.6%, SK하이닉스는 14.6% 내렸는데, 두 종목 레버리지 상품은 각각 최대 24.2%, 31.9% 폭락했다. 삼성전자, SK하이닉스는 코스피 시가총액의 절반을 차지하는 데, 이 두 종목으로 구성된 2배 레버리지 상품이 운용되면 전체 시장 변동성의 진폭도 배가될 수밖에 없다. 한국거래소에 따르면 코스피 상반기 장중 평균 변동성은 3.3%로, 1998년 상반기(3.51%) 이후 28년 만에 가장 높았다.
+
+단일종목 레버리지 상품은 사실상 개인 투자자들이 떠받치고 있다. 한국거래소에 따르면 이 상품 상장일인 5월 27일부터 9일까지 개인 거래 대금은 약 92조4000억원에 달했다. 이는 이 레버리지 상품들 시가총액(12조6000억원)의 7배를 웃돈다.
+
+월스트리트저널은 ‘세계에서 가장 뜨거운 시장(한국 증시)이 오징어 게임이 될 위험에 처했다’는 기사에서 “인구 5100만명의 한국에서 개인이 얼마나 더 베팅할 수 있는지 의문”이라며 “파티가 끝나면 손실은 대부분 현지 개인 투자자에게 남을 수 있다”고 경고했다. 김석환 미래에셋증권 연구원은 “레버리지 상품 특성상 주가 하락세가 멈추지 않아 손실이 감당할 수 없을 정도로 커지면 신규 자금 유입이 중단되는 시점이 올 수밖에 없다”며 “원금 손실 공포가 극에 달할 경우, 순식간에 매물이 쏟아지는 ‘패닉 셀링(공황 매도)’ 국면으로 전환될 가능성도 열려 있다.”</div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
