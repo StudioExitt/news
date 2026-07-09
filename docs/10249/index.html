@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[코인뉴스] 비트코인 떠난 돈...이더리움으로 향했다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003109873' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10249" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[코인뉴스] 비트코인 떠난 돈...이더리움으로 향했다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국 현물 비트코인 ETF에서 순유출세가 나타난 반면, 이더리움 현물 ETF는 5거래일 연속 대규모 자금 유입을 기록했습니다. 이는 기관 투자자들의 관심과 매수세가 비트코인을 넘어 이더리움으로 점차 이동하고 있다는 신호로 해석됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">기관 투자자들의 대규모 자본 흐름(ETF 순유입/순유출)은 시장 방향성을 결정짓는 가장 강력한 신호 중 하나입니다. 비트코인에서 이더리움으로의 추세적 관심 이동은 단순한 변동을 넘어 섹터 또는 코인의 주도권 이동을 의미하기 때문에 높은 점수를 부여했습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">대형 증권사 주가 지수</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">디지털 자산</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#이더리움</span> <span class="tag tag-hash">#비트코인ETF</span> <span class="tag tag-hash">#기관자금</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">비트코인 ETF 하루 만에 순유출 전환
+이더리움은 5거래일 연속 순유입
+해당 이미지는 AI로 제작됨.
+해당 이미지는 AI로 제작됨. 미국 현물 비트코인 상장지수펀드(ETF)가 하루 만에 다시 순유출로 돌아섰다.
+반면 이더리움 현물 ETF는 5거래일 연속 자금이 유입되며 기관투자자들의 관심이 이더리움으로 옮겨가는 모습이다.
+9일 글로벌 가상자산 시황 플랫폼 코인게코에 따르면 이날 오후 4시 기준 비트코인은 6만2792달러에 거래됐다.
+8일(현지시간) 파사이드 인베스터스와 SoSoValue에 따르면 미국 현물 비트코인 ETF는 총 8490만 달러(약 1276억원)의 순유출을
+기록했다. 
+직전 거래일 2150만 달러 순유입을 기록하며 자금이 돌아오는 듯했지만 하루 만에 다시 순유출로 전환한 것이다.
+자금 이탈은 주요 ETF를 중심으로 나타났다.
+블랙록의 IBIT에서는 약 5900만 달러, 그레이스케일의 GBTC에서는 약 6400만 달러, 피델리티의 FBTC에서는 약 1500만 달러가
+빠져나갔다.
+반면 그레이스케일의 미니 비트코인 ETF는 약 5300만 달러가 유입되며 유일하게 순유입을 기록했다.
+최근 비트코인 ETF는 대규모 순유출과 제한적인 순유입이 반복되면서 기관투자자들의 방향성이 뚜렷하지 않은 흐름을 이어가고 있다.
+반면 이더리움 ETF에는 자금이 꾸준히 유입됐다.
+이더리움 현물 ETF는 이날 약 7000만 달러가 순유입되며 5거래일 연속 자금이 들어왔다.
+피델리티의 FETH가 약 6900만 달러를 기록하며 대부분의 자금을 끌어들였고, 반에크의 ETHV도 소폭 순유입을 나타냈다.
+시장에서는 최근 이더리움 업그레이드 기대와 ETF 수요 회복이 기관투자자들의 매수세를 이끌고 있는 것으로 보고 있다.
+업계에서는 비트코인 ETF의 자금 유출이 일시적인 현상인지, 기관 자금이 이더리움으로 이동하는 흐름의 시작인지를 지켜봐야 한다는 분석이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003109873' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003109873</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
