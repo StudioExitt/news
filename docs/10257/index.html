@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스닥 800선 내주자 ETF도 흔들…액티브는 한 달 새 23%↓</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006326276' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10257" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스닥 800선 내주자 ETF도 흔들…액티브는 한 달 새 23%↓</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 대형주로의 수급 쏠림 심화 속에 바이오, 이차전지 등 코스닥 성장주의 투자심리가 위축되며, 주요 코스닥 ETF가 한 달 만에 17~23%대의 큰 손실을 기록했습니다. 지수가 800선을 하회하며 회복 동력이 약한 모습을 보였습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">코스피 대형주로의 자금 쏠림 현상과 코스닥 섹터별 급격한 투자심리 위축이 확인되었으며, 이는 단기적인 차원을 넘어 시장 구조적 불안정성을 시사합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥 #ETF #자금쏠림</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">대표 코스닥150 ETF 한 달 새 17~18%대 손실 액티브형 코스닥 ETF는 최대 22.96% 떨어져 성장주 투심 위축에 코스닥 800선 회복 실패 코스피 대형주 중심의 쏠림이 이어지는 가운데 바이오·이차전지·반도체 소부장 등 코스닥 내 성장주 투자심리가 얼어붙으면서 지수형 ETF와 액티브 ETF 모두 부진한 흐름을 보였다. 단기 낙폭이 커진 만큼 저가 매수 기대도 나오지만, 코스닥 지수가 800선 아래에 머물면서 손실 회복엔 시간이 필요하다는 평가다.
+9일 코스콤 ETF체크에 따르면 이날 종가 기준 주요 코스닥150 ETF의 최근 1개월 성과는 17~18%대 손실을 기록하고 있다. KODEX 코스닥150(-17.84%), SOL 코스닥150(-18.08%), ACE 코스닥150(-17.53%), TIGER 코스닥150(-17.61%), KIWOOM 코스닥150(-17.71%), RISE 코스닥150(-17.75%) 등이 모두 비슷한 낙폭을 보였다. 수익률은 배당금 재투자를 가정한 토털리턴 기준이다.
+9일 서울 중구 하나은행 본점 딜링룸 모습 (사진=연합뉴스)
+단기·중기 성과도 약했다. 주요 코스닥150 ETF의 최근 1주일 성과는 대부분 손실 폭이 10~11%대까지 밀렸다. KODEX 코스닥150(-11.05%), SOL 코스닥150(-10.93%), TIGER 코스닥150(-10.82%) 등이 두 자릿수 손실을 기록했다. 3개월 기준으로도 KODEX 코스닥150(-25.13%), SOL 코스닥150(-25.31%), TIGER 코스닥150(-25.15%) 등 주요 상품의 손실 폭은 25% 안팎까지 확대됐다.
+액티브형 코스닥 ETF는 지수형 ETF보다 더 크게 흔들렸다. KoAct 코스닥액티브의 최근 1개월 손실이 22.96%, TIGER 코스닥액티브는 22.82%, TIME 코스닥액티브는 22.77%를 기록했다. PLUS 코스닥150액티브는 -19.47%, MIDAS 코스닥액티브도 -18.16%로 부진했다. 코스닥 조정 국면에서 편입 종목과 업종 비중에 따라 일부 액티브 ETF의 손실 폭이 지수형 ETF보다 더 크게 나타난 셈이다.
+ETF 수익률 부진은 코스닥 시장 전반의 약세와 맞물려 있다. 이날 코스닥 지수는 전 거래일 대비 9.00포인트(1.15%) 오른 794.00에 마감했지만, 800선 회복에는 실패했다. 코스닥이 종가 기준 800선을 밑돈 것은 지난해 9월 이후 약 10개월 만이다. 코스닥은 지난달 1000선을 내준 데 이어 900선마저 하회했고, 이달 들어서도 13% 넘게 하락했다.
+코스닥 약세는 개별 기업의 펀더멘털 훼손보다 코스피 대형주로의 수급 쏠림이 낙폭을 키운 결과라는 분석이 나온다. 바이오·이차전지 등 일부 성장 업종의 실적 가시성에 대한 의구심이 남아 있는 데다, 반도체 대형주와 저평가주를 중심으로 코스피에 자금이 몰리면서 코스닥 전반의 매수 기반이 약해졌다는 평가다.
+코스피와 코스닥 간 격차가 다시 크게 벌어진 점도 이런 흐름을 보여준다. 2023년 한때 좁혀졌던 두 시장의 시가총액 차이는 코스피 중심 장세가 강화되면서 재차 확대됐다. 시장 기조가 단기간에 바뀌긴 어렵지만, 낙폭이 컸던 코스닥 종목 가운데 실적 개선이 확인되는 기업을 중심으로 선별적인 회복 가능성도 거론된다.
+이영원 흥국증권 연구원은 “코스피 시장에 비해 더욱 큰 조정을 겪고 있는 코스닥 시장은 코스피 시장과의 시가총액 배율이 6월 말 14.2배까지 확대됐고, 현재도 13.3배 수준”이라며 “2023년 4.4배 수준까지 격차가 좁혀졌던 상황에서 코스피 시장으로의 쏠림이 가속화되면서 기록적인 차별화가 진행되고 있다”고 설명했다.
+그는 이어 “시장의 기조가 쉽게 바뀌기는 어렵겠지만, 펀더멘털을 기반으로 선별적인 정상화 과정도 진행될 것으로 판단된다”고 말했다. 결국 코스닥 ETF의 수익률 회복 역시 지수의 단순 반등보다 주요 편입 업종의 실적 가시성과 수급 회복 여부에 달렸다는 평가다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006326276' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006326276</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
