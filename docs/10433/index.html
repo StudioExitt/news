@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>목표가 상향 행렬 멈춰…반도체 투톱 전망 ‘극과 극’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004640384' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10433" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>목표가 상향 행렬 멈춰…반도체 투톱 전망 ‘극과 극’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">증권가 목표주가 상향세의 동력이 약해지고, 반도체 대형주의 미래 전망이 최고점부터 현 주가 이하까지 극명하게 엇갈리며 투자 심리가 위축되고 있습니다. 코스피는 장중 급등분을 반납하는 등 변동성이 커지는 양상입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 섹터(반도체)를 중심으로 목표가 상향세 둔화 및 전문가 의견 불일치가 심화되며 투자 심리가 크게 위축되었기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#증시</span> <span class="tag tag-hash">#투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">올 들어 국내 증권가에서 이어져온 목표주가 ‘상향 행렬’에 균열이 나타나고 있다.
+연초만 해도 상향 리포트 발간 건수가 하향 리포트를 최대 10배 가까이 압도했지만 이달 들어서는 비슷한 수준까지 격차가 좁혀졌다. 증시 랠리를 주도해온 반도체 ‘투톱’에서 목표가 하향은 물론 최근 주가 고점에도 못 미치는 목표가까지 등장하는 등 낙관론이 조금씩 힘을 잃으면서 코스피 역시 장중 급등분을 잇따라 반납하는 모습이다.
+
+10일 금융정보 업체 에프앤가이드에 따르면 이달 들어 국내 증권사가 발간한 목표주가 상향 리포트는 167개로 하향 리포트(157개)보다 불과 10개 많았다. 1월에는 상향 리포트가 하향 리포트의 4.1배였고 코스피 상승 기대가 컸던 2월에는 9.7배까지 벌어졌다. 이후 3월 5.9배, 4월 3.9배, 5월 4.0배로 상향 우위가 이어졌지만 6월 2.2배에 이어 이달 1.1배까지 축소됐다.
+
+이는 반도체 투톱의 목표주가 상향 움직임이 주춤한 영향이 크다. SK하이닉스(000660)의 목표주가 상향 리포트는 4월 34건에서 5월 22건, 6월 18건으로 줄었고 이달 들어서는 10일까지 6건에 그쳤다. 삼성전자(005930) 역시 4월 26건, 5월 31건에서 6월 19건으로 감소한 뒤 이달 현재 6건에 머물고 있다. 이에 따라 관련 소재·부품·장비 종목에서도 목표주가 상향이 함께 주춤한 것으로 분석된다.
+
+반도체 사이클의 고점 여부를 둘러싼 증권가의 눈높이는 조금씩 엇갈리는 모습이다. DB증권은 8일 삼성전자 목표주가를 최고점인 37만 4500원보다 낮은 36만 원으로 유지한 반면 같은 날 KB증권은 60만 원을 제시했다. 인공지능(AI) 수요를 바탕으로 추가 상승이 가능하다는 강세론에 반도체 업황이 고점에 가까워졌다는 경계론이 맞서는 모습이다.
+
+SK하이닉스에 대해서는 BNK투자증권이 8일 투자 의견 ‘보유(HOLD)’와 함께 목표주가 185만 원을 제시했다. 이는 보고서 작성 기준주가인 207만 6000원을 밑도는 수준이다. 반면 대다수 증권사는 380만~430만 원대 목표가를 유지하고 있으며 KB증권은 420만 원을 제시했다.
+
+시장 상승과 목표주가 상향을 이끌어온 반도체 대형주에서조차 목표가 하향과 현재 주가를 밑도는 전망이 등장하면서 연초와 같은 일방적인 낙관론은 약해지고 있다는 분석이다. 코스피 역시 최근 극심한 변동성을 보이고 있다. 지난달 19일 장중 9385.59까지 오른 뒤 급등락을 반복했고 이달 들어서는 장중 고점에서 크게 밀려 마감하는 흐름이 두드러졌다. 3일을 제외하면 이달 들어 거래일 종가가 장중 고점보다 3% 이상 낮은 수준에서 형성됐다.
+
+특히 최근 이틀간은 장중 급등세를 막판까지 지키지 못했다. 9일 코스피는 전 거래일 종가 대비 장중 4.1%까지 치솟았지만 상승 폭을 대부분 반납해 0.62% 오르는 데 그쳤다. 이날도 장중 7704.93까지 올라 전 거래일 대비 5.7% 급등했고 오후 12시 54분께 매수 사이드카까지 발동됐다. 하지만 다시 상승 폭을 줄이면서 전 거래일보다 184.03포인트(2.52%) 오른 7475.94에 거래를 마쳤다.
+
+반도체 투톱의 주가 흐름도 엇갈렸다. 삼성전자는 이날 전 거래일 대비 2.52% 오른 28만 5000원에 마감했지만 SK하이닉스는 상승과 하락을 오가다 막판 약세로 돌아서 0.27% 내린 218만 원에 장을 마쳤다. 한 자산운용사 대표는 “증권사 목표주가는 시장이 상승할 때 여러 곳이 함께 올리는 경향이 있지만 상승세가 주춤하면 상향 조정도 줄어든다”며 “상향 리포트가 감소하고 하향 리포트가 늘어나는 것은 시장의 눈높이가 달라지고 있다는 신호”라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004640384' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004640384</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
