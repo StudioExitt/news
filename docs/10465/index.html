@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상반기 IPO ‘반토막’…하반기 ‘옥석가리기’ 본격화</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.11</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/243/0000100308' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10465" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>상반기 IPO ‘반토막’…하반기 ‘옥석가리기’ 본격화</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">상반기 IPO 시장이 규제 강화와 시장 부진으로 급격히 위축되었으며, 공모 규모와 상장 기업 수가 절반 수준으로 감소했습니다. 하반기에는 정부 정책 변화를 통해 양적 성장보다 사업 지속 가능성과 경쟁력을 갖춘 우량 기업 중심으로 '옥석가리기' 장세가 본격화될 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">IPO 시장의 구조적 변화와 심사 기준 강화는 중기적인 자금 흐름과 기업 가치 평가에 큰 영향을 미침.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#IPO시장</span> <span class="tag tag-hash">#옥석가리기</span> <span class="tag tag-hash">#금융정책</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[하반기 공모시장]① 코스피 1곳·코스닥 16곳 등 일반 IPO 기업 17곳 그쳐
+공모금액 절반 가량 '뚝'…상장 시가총액도 ‘반토막’
+[AI 구글 제미나이]<0xC2><0xA0>
+[AI 구글 제미나이] 
+ 올해 상반기 기업공개(IPO) 시장이 금융당국의 상장 심사 강화와 코스닥 시장 부진이 맞물리며 크게 위축됐다. 신규
+상장 기업 수가 지난해의 절반 이하로 줄어든 데다 공모금액과 상장 시가총액도 감소했다. 금융당국이 기업의 성장성과 공모 구조, 투자자 보호를
+중심으로 심사 기준을 강화하면서 상장을 준비하던 기업들이 일정을 조정한 영향이다. 시장에서는 하반기 코스닥 활성화 정책과 기술특례상장 제도
+개선, 기업성장집합투자기구(BDC) 도입 등이 본격화하면서 경쟁력을 갖춘 기업을 중심으로 IPO 시장 재편이 빨라질 것으로 보고 있다.
+
+한국거래소와 금융투자업계에 따르면 올해 상반기 코스피 1곳과 코스닥 16곳 등 국내 증시에 신규 상장한 일반 IPO 기업은 총 17곳으로
+집계됐다. 스팩(SPAC·기업인수목적회사)을 제외한 기준으로 지난해 상반기 38곳과 비교하면 55.3% 감소한 수준이다. 같은 기간 공모금액은
+2조2095억원에서 1조1327억원으로 48.7% 줄었고, 신규 상장 기업의 상장 시가총액 역시 14조53억원에서 7조3593억원으로 47.5%
+감소했다.
+
+상장을 준비하는 기업들의 움직임도 둔화했다. 금융당국과 한국거래소가 상장예비심사 단계부터 기업의 실적 지속 가능성과 성장성, 공모가 산정의
+적정성 등을 보다 엄격하게 들여다보면서 심사 기간이 길어지고 상장 시점을 재검토하는 기업도 늘었다. 증시 변동성과 코스닥 시장 부진까지 겹치면서
+기업가치를 제대로 평가받기 어려운 상황에서 무리하게 증시 입성을 추진하기보다 시장 상황을 지켜보겠다는 기업들이 늘어난 것이다.
+
+올해 상반기 IPO 시장의 가장 큰 변화는 외형 확대보다 상장 기업의 질적 개선에 무게가 실렸다는 점이다. 금융당국은 신규 상장 기업 수와 공모
+규모를 늘리는 데 집중하기보다 증시에 입성하는 기업의 성장성과 사업 지속 가능성, 상장 이후 투자자 보호 체계를 강화하는 방향으로 정책 기조
+을 전환하고 있다.
+
+특히 기술특례상장을 통해 증시에 입성하려는 기업에 대한 검증이 강화됐다. 적자 상태에서도 기술력과 성장 가능성을 인정받으면 상장이 가능했던 기존
+제도를 보완해 기술력뿐 아니라 사업화 가능성과 매출 성장성, 자금조달 필요성 등을 종합적으로 살펴보는 방향으로 심사 기준이 바뀌고 있다.
+
+공모 구조 역시 주요 심사 대상으로 떠올랐다. 상장을 통해 조달한 자금이 실제 연구개발(R&D)과 시설 투자, 신사업 확대 등 기업 성장에
+활용되는지, 기존 주주와 재무적투자자(FI)의 투자금 회수 수단으로 활용되는지를 면밀하게 살펴보는 분위기가 강해졌다. 구주매출 비중이 지나치게
+높거나 상장 직후 기존 주주의 대규모 지분 매각 가능성이 있는 기업은 투자자들의 보수적인 평가를 받을 가능성이 커졌다.
+
+모회사와 자회사가 동시에 증시에 상장하는 ‘중복상장’ 문제를 둘러싼 제도 개선도 IPO 시장의 불확실성을 높인 요인이다. 금융당국은 자회사 상장
+과정에서 모회사 일반주주의 가치가 훼손되는 문제를 줄이기 위해 주주 보호 방안을 강화하는 방향으로 제도 개선을 추진하고 있다.
+
+이에 따라 상장을 준비하는 기업 입장에서는 사업 경쟁력과 성장성뿐 아니라 지배구조와 공모 구조, 기존 주주 보호 방안까지 종합적으로 고려해야
+하는 상황이 됐다. 제도 변화의 방향을 지켜보기 위해 상장 일정을 늦추거나 공모 규모를 조정하는 기업이 늘면서 상반기 IPO 시장은 사실상
+‘숨고르기’ 국면에 접어들었다.
+
+기술특례 개선·BDC 도입 등 하반기 제도 변화가 변수
+
+다만 신규 상장 기업 감소가 곧바로 공모주 시장의 투자 수요 위축을 의미하는 것은 아니라는 평가도 나온다. 오히려 한정된 투자자금이 성장성과
+사업 경쟁력을 갖춘 기업으로 집중되면서 기업별 공모 성적의 양극화는 더욱 뚜렷해졌다.
+
+져스텍과 매드업은 기관투자자 대상 수요예측과 일반청약 과정에서 높은 경쟁률을 기록하며 투자자들의 관심을 끌었다. 시장 불확실성이 커진 상황에서도
+성장성이 높은 산업에 속해 있거나 안정적인 실적 기반과 차별화된 사업모델을 갖춘 기업에는 기관과 개인투자자의 자금이 몰리고 있다는 평가다.
+
+반면 사업모델의 차별성이 부족하거나 실적 가시성이 낮은 기업에 대해서는 투자자들의 평가가 한층 냉정해졌다. 일부 기업은 기관 수요예측 단계에서
+기대에 미치지 못하는 성적을 기록하거나 희망 공모가 밴드 하단에서 공모가를 결정했다. 상장 이후 주가가 공모가를 밑도는 기업도 나타나면서
+‘공모주라면 일단 투자한다’는 과거의 투자 관행이 약화되고 있다는 분석이다.
+
+시장에서는 이 같은 선별 투자 기조가 하반기 더욱 강화될 것으로 보고 있다. IPO 시장 전체로 투자자금이 유입되기보다는 실적과 성장성, 산업
+경쟁력, 공모 구조를 갖춘 기업으로 자금이 집중되는 ‘옥석가리기’ 장세가 이어질 가능성이 높다는 것이다.
+
+하반기 IPO 시장의 최대 변수는 정부와 한국거래소가 추진하는 코스닥 활성화 정책이다. 기술특례상장 제도를 개선해 성장기업의 시장 진입 기회를
+확대하는 동시에 상장 유지 요건과 퇴출 기준을 강화해 부실기업을 신속하게 정리하는 방향으로 시장 구조 개편이 추진되고 있다.
+
+기업성장집합투자기구(BDC) 도입도 성장기업의 자금조달 구조를 변화시킬 수 있는 요인으로 꼽힌다. BDC는 다수의 투자자로부터 자금을 모집해
+비상장기업과 성장기업에 투자하는 상장형 투자기구다. 기업 입장에서는 IPO 이전 단계에서 장기 성장자금을 조달할 수 있고 투자자에게는 비상장
+성장기업에 간접 투자할 수 있는 새로운 투자 수단이 될 수 있다.
+
+다만 제도 개선이 실제 IPO 시장의 투자심리 회복으로 이어지기 위해서는 상장 이후 기업들의 주가 성과와 성장성이 뒷받침돼야 한다는 지적도
+나온다. 상장 직후 주가가 급락하거나 실적 전망치를 밑도는 기업이 반복될 경우 공모주 시장에 대한 투자자 신뢰를 회복하기 어렵기 때문이다.
+
+증권업계에서는 하반기 IPO 시장이 단순한 신규 상장 기업 수 회복보다 시장의 질적 재편 여부를 확인하는 시기가 될 것으로 보고 있다. 상장
+심사 문턱이 높아진 상황에서도 경쟁력을 입증한 기업에는 투자자금이 집중되는 흐름이 나타나고 있는 만큼 기술특례 제도 개선과 BDC 도입, 코스닥
+시장 구조개편 등이 우량 성장기업의 증시 진입으로 이어질지가 관건이다.
+
+증권업계 관계자는 “올해 IPO 시장은 상장 기업 수와 공모 규모가 감소했지만 투자자금 자체가 사라졌다기보다 성장성과 실적을 입증한 기업으로
+자금이 집중되는 흐름이 강해졌다”며 “하반기에는 제도 변화와 시장 환경을 지켜보며 상장 시기를 조정했던 기업들이 다시 시장에 진입할 가능이
+있는 만큼 우량기업을 중심으로 공모주 투자심리가 회복될 수 있을지가 핵심 관전 포인트”라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/243/0000100308' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/243/0000100308</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
