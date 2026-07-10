@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>방산·원전 테마株 반등 … 코스피·코스닥 모처럼 빨간 맛</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005705854' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10422" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>방산·원전 테마株 반등 … 코스피·코스닥 모처럼 빨간 맛</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 중심의 쏠림 현상이 완화되며 전 섹터에 걸쳐 상승세가 나타났습니다. 특히 중동 분쟁 고조와 지정학적 리스크 재점화로 방산주(현대로템, 한화시스템 등)가 급등했고, 원자력발전 및 금융지주사도 반등세를 보이며 코스피와 코스닥 동반 강세 마감했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">지정학적 리스크 고조에 따른 방산주(T009)와 에너지 시설 관련 테마(원전/S0014), 그리고 밸류업 프로그램 수혜 기대감이 복합적으로 작용하며 시장 전반의 투자 심리를 개선시켜 상승 동력을 제공했기 때문에 높은 점수를 부여했습니다. 다만, 기관 및 외국인의 매도세가 지속되고 있어 차익 실현 가능성도 염두에 두어야 합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한화시스템</span> <span class="tag stock-tag">현대로템</span> <span class="tag stock-tag">두산에너빌리티</span> <span class="tag stock-tag">4대 금융지주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">방위산업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">원자력발전</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#방산테마 #원전테마 #코스피반등 #거시경제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피와 코스닥이 동반 강세를 보이며 모처럼 반등했다. 최근 국내 증시를 주도했던 반도체 쏠림 현상이 완화되면서 전 종목에 걸쳐 고른 상승 흐름이 나타났다. 이날 코스피와 코스닥 모두 매수 사이드카가 발동됐다. 다만 기록적인 반등세 속에서도 개인투자자와 외국인은 매도세를 이어가며 향후 수급 방향성에 관심이 쏠리고 있다.
+
+10일 한국거래소에 따르면 이날 코스피는 전 거래일 대비 2.52% 오른 7475.94에 장을 마감했다. 코스피는 이날 장중 5.66%나 오르면서 7700선을 탈환하기도 했으나 이후 상승폭을 일부 반납했다. 코스닥지수는 하루 만에 5.47% 급반등하면서 837.43을 기록했다.
+양대 증시가 장중 가파른 상승세를 보이면서 이날 오후 1시 전후로 코스피와 코스닥 모두 매수 사이드카카 발동됐다.
+이달 초 한 차례 주도주 조정이 이어진 뒤 쏠림 현상이 완화되는 모양새다. 앞선 급등장에서 삼성전자와 SK하이닉스가 10%에 가까운 일일 상승률을 기록하며 지수를 견인했던 것과 달리 이날은 고른 오름세가 두드러졌다. 삼성전자는 이날 2.52% 오른 28만5000원에 장을 마감했으며 SK하이닉스는 0.27% 내린 218만원을 기록했다. 반면 쏠림 양상이 완화되며 시가총액 하위 종목까지 전반적인 상승세가 나타났다. 이날 코스피 상승 종목은 802개에 달했으며 하락 종목은 92개에 그쳤다. 코스닥 역시 1488개 종목이 상승 마감한 가운데 하락 종목은 204개에 불과했다.
+
+업종별로는 방산·원전 테마주가 가파른 반등을 기록했다. 이날 LIG디펜스앤에어로스페이스 주가는 전 거래일 대비 7.93% 올랐으며 한화시스템은 10.82% 급등했다. 중동 분쟁 재점화에 따른 방공용 요격 미사일 천궁-Ⅱ 추가 수주 기대감이 모인 것으로 풀이된다. 미국과 이란의 무력 공방이 사흘째 이어지는 등 지정학적 리스크가 다시 고조되면서 최근 조정을 지속하던 방산주에 다시금 관심이 모이는 모양새다. 이날 현대로템은 전 거래일 대비 11.39% 오른 17만8900원에 장을 마감했다.
+
+원전 테마주도 간만에 반등했다. 이날 두산에너빌리티 주가는 전 거래일 대비 6.69% 오른 7만8100원에 거래를 마쳤다. 올 초 원전 테마주로가파른 랠리를 보인 뒤 조정을 받던 현대건설(8.39%)과 대우건설(8.79%)도 모처럼 반등을 기록했다.
+
+김세련 LS증권 연구원은 "최근 국내외 원전주 차익실현에 따른 디레이팅이 이루어지고 있지만 본질은 달라진 것이 없다"며 "대우건설의 체코 두코바니 원전 시공 계약이 연내 체결될 것으로 예상되는 가운데 팀코리아의 베트남 닌투언 제2원전 2기 수주 가능성 역시 기대감으로 작용하고 있다"
+
+이날 가파른 반등세에도 개인투자자는 매도세를 지속했다. 주도주 조정과 극심한 변동성에 못 이겨 이탈 자금이 나오고 있는 것으로 풀이된다. 앞서 수조 원씩 자금을 쏟아부으며 국내 증시를 떠받쳤던 개인투자자들은 이날 코스피에서 7727억원어치를 순매도하며 사흘 연속 매도세를 기록했다.
+외국인 투자자도 다시 매도세로 전환하면서 이날 코스피에서 3299억원어치를 팔아치웠다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005705854' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005705854</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
