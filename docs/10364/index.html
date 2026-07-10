@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피, 2~3% 상승세…삼성전자 강세, 하이닉스 강보합(종합)</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016186878' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10364" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피, 2~3% 상승세…삼성전자 강세, 하이닉스 강보합(종합)</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 인프라 투자 확대 기대감과 글로벌 반도체 강세에 힘입어 코스피와 코스닥이 큰 폭으로 상승 출발했습니다. 특히 삼성전자와 SK하이닉스가 높은 관심을 받으며 국내 증시 전반의 강세를 이끌고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 AI 인프라 투자 확대 기대를 배경으로 반도체 섹터가 직접적으로 강세를 보이며 코스피/코스닥 지수 전반에 걸쳐 강력한 상승 동력을 제공했기 때문입니다. 특히 SK하이닉스의 대규모 ADR 상장 기대감은 개별 종목의 주목도를 높였습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI</span> <span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#코스피강세</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">상승 출발한 코스피와 코스닥
+(서울=연합뉴스) 김주형 기자 = 코스피가 장 초반 3% 이상 급등세를 보이며 출발한 10일 서울 중구 하나은행 본점 딜링룸 현황판에 코스피와 코스닥이 표시되고 있다.
+코스피는 전장 대비 260.58포인트(3.57%) 오른 7,552.49로 출발해 현재 상승폭을 조절하고 있다. 코스닥은 15.83포인트(1.99%) 오른 809.83으로 800선을 웃돌고 있다. 2026.7.10 kjhpress@yna.co.kr
+(서울=연합뉴스) 김유향 기자 = 10일 코스피가 장 초반 2~3%대의 상승세를 보이고 있다.
+이날 오전 9시 34분 현재 코스피는 전날보다 159.91포인트(2.19%) 오른 7,451.82다.
+지수는 전장 대비 260.58포인트(3.57%) 오른 7,552.49로 출발해 상승폭을 조절하고 있다.
+코스피 상승세에 한국형 공포지수로 불리는 코스피200 변동성지수(VKOSPI)는 81.03로 전날보다 5.21% 내렸다.
+한편 서울 외환시장에서 달러 대비 원화 환율은 현재 1511.75원을 나타내고 있다.
+지수를 끌어올리고 있는 것은 개인과 기관이다. 이들은 각각 90억원과 6천561억원 순매수로 지수를 함께 견인하고 있다.
+외국인은 전날까지 연이틀 코스피 '사자'를 이어가다 이날은 순매도를 나타내고 있다. 현재 유가증권시장에서 외국인은 6천331억원 매도 우위다.
+다만 외국인은 코스피200선물시장에서는 1천54억원 순매수를 보이고 있다.
+간밤 뉴욕증시에서는 AI(인공지능) 인프라 투자에 대한 확대 기대에 다시 힘이 실리자 반도체주가 급등했다. 그러면서 3대 주요 주가지수는 일제히 강세 마감했다.
+다우존스30 산업평균지수와 스탠더드앤드푸어스(S&P) 500 지수는 각각 전장보다 0.27%, 0.81% 올랐고, 기술주 중심의 나스닥 종합지수는 전장보다 1.30% 상승했다.
+메모리 반도체 기업인 마이크론 테크놀로지가 AI 수요 증가에 대응하기 위해 미국 내 공장 등에 2035년까지 2천500억 달러 이상을 투자하겠다는 계획을 발표하면서 주가가 4.52% 급등했다.
+메타도 자체 AI 칩 생산 계획을 밝히면서 4.70% 올랐고 샌디스크도 7.59% 뛰었다. 필라델피아반도체지수는 3.06% 상승했다
+SK하이닉스의 미국주식예탁증서(ADR) 수요 예측에 공모 물량의 7배가 넘는 청약이 몰린 것으로 알려진 점도 반도체 랠리에 힘을 보탰다.
+국제 유가도 내렸다. 미국과 이란 긴장 재고조에 한 때 배럴당 74달러 선을 웃돌던 8월 인도분 미 서부 텍사스산 원유(WTI)는 71달러대로 내려왔다.
+이에 국내 증시는 상승 탄력을 되찾아 강세를 이어가고 있다.
+ADR상장 기대 SK하이닉스, 주가는?
+(서울=연합뉴스) 김주형 기자 = 코스피가 장 초반 3% 이상 급등세를 보이며 출발한 10일 서울 중구
+하나은행 본점 딜링룸 현황판에 코스피와 SK하이닉스 주가가 표시되고 있다.
+ADR상장 기대 SK하이닉스, 주가는?
+(서울=연합뉴스) 김주형 기자 = 코스피가 장 초반 3% 이상 급등세를 보이며 출발한 10일 서울 중구 하나은행 본점 딜링룸 현황판에 표시가 있다.
+SK하이닉스는 나스닥 시장에 미국 주식예탁증서(ADR)를 공식 상장해 거래가 시작될 예정이다. 2026.7.10
+특히 SK하이닉스는 미국주식예탁증서(ADR) 공모가가 주당 149달러로 최종 확정됐다는 소식이 전해진 가운데 투자자들은 다시 반도체 '투 톱'을 주목하고 있다. 다만, 이전부터 관련 기대감이 형성된 만큼 장중 차익실현이 매물이 나오고 있는 것으로 보인다.
+현재 SK하이닉스는 0.14% 오른 218만9천원에 거래되고 있다. 개장부터 5.03% 상승 출발해 장 초반 한때 230만5천원까지 올랐지만, 한때 하락전환하기도 했다.
+SK하이닉스는 이번 공모를 통해 265억700만달러(약 40조원)를 조달할 수 있게 됐다. 이는 과거 알리바바(250억달러)를 넘어 외국 기업의 미 IPO 사상 최대 규모일 것으로 보인다.
+삼성전자는 2.34% 오른 28만4천500원이다. 이날 4.68% 뛴 29만1천원으로 출발했지만, 마찬가지로 상승폭을 일부 줄인 채 강세를 이어가고 있다.
+SK스퀘어(2.71%), 삼성전기(4.35%), 현대차(3.70%), LG에너지솔루션(5.74%), 삼성생명(2.61%), KB금융(6.83%) 등 시가총액 상위 종목 상당수가 '빨간 불'(주가 상승)을 켰다.
+반면 한화에어로스페이스(-0.21%), 한미반도체(-0.46%), LG이노텍(-1.48%) 등 일부는 내리고 있다.
+현재 코스피 내 모든 업종이 오르고 있다. 그중에서도 건설(6.68%), 증권(5.13%), 금속(4.97%) 등의 상승률이 특히 높다.
+같은 시간 코스닥 지수는 20.04포인트(2.52%) 오른 814.04다.
+지수는 출발부터 13.00포인트(1.64%) 오른 807.0으로 800선을 회복했으며, 장중 한때 822.69까지 오르기도 했다.
+코스닥 시장에서는 기관과 외국인이 각각 657억원과 211억원 매수 우위로 지수를 끌어올리고 있다. 개인은 833억원 순매도다.
+알테오젠(9.17%), 에코프로비엠(8.07%), 에코프로(7.18%), 레인보우로보틱스(4.87%), 주성엔지니어링(2.16%)은 오르고 있다.
+반면 신약 개발 및 치료제 연구 관련 의문이 제기된 HLB(-29.89%)와 펩트론(-28.19%)을 비롯해 클래시스(-2.00%), 티씨케이(-0.88%)는 약세다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016186878' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016186878</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
