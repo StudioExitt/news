@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“삼전도 닉스도 현대차도”…주도주 목표가 줄줄이 낮춘 증권가</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/366/0001178392' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10435" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“삼전도 닉스도 현대차도”…주도주 목표가 줄줄이 낮춘 증권가</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체(삼성전자, SK하이닉스)와 현대차 등 주요 주도주에 대한 증권가들의 목표주가가 일제히 하향 조정되고 있다. 이는 AI 투자 둔화 우려 및 높아졌던 시장 기대치 대비 실적 증가율 둔화 가능성이 반영된 결과로, 전반적인 투자 심리가 위축되고 있음을 시사한다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 투자 사이클의 둔화 우려와 주도주들의 목표가 조정이 확인되면서 시장 전반의 투자 심리가 위축되고 있으며, 이는 단기적인 매도 압력으로 작용할 수 있기 때문.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">현대차</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자동차</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증권가조정</span> <span class="tag tag-hash">#주도주하락</span> <span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">AI 투자 둔화·실적 증가율 둔화 우려 반영
+삼성전자·SK하이닉스 이어 현대차도 눈높이 낮춰
+“실적은 견조하지만 기대치 조정 국면" 분석
+
+반도체를 중심으로 국내 증시를 이끌었던 주도주들에 대해 증권사들이 잇달아 목표주가를 낮추고 있다. 삼성전자와 SK하이닉스를 시작으로 현대차까지
+목표가 하향 리포트가 이어지면서, 실적은 여전히 견조하지만 높아진 시장 기대치를 조정해야 한다는 목소리가 커지는 모습이다.
+
+10일 서울 중구 하나은행 본점 딜링룸 전광판에 종가가 나오고 있다. 이날 코스피는 전일 종가와 비교해 184.03포인트(p)(2.52%) 상승한 7475.94, 코스닥은 전일 대비 43.43포인트(p)(5.47%) 상승한 837.43로 마감했다. 서울외환시장에서 달러·원 환율은 전일 오후 3시 30분 주간종가 대비 4.7원 내린 1501.4원을 기록했다. /뉴스1
+10일 금융투자업계에 따르면 이번 주 들어 삼성전자와 SK하이닉스, 현대차 등 시가총액 상위 종목에 대한 목표주가 하향 리포트가 잇따라 나왔다.
+반도체 업황을 둘러싼 피크아웃(정점 통과) 우려와 단기 급등에 따른 기대감 선반영, 실적 증가율 둔화 가능성 등이 공통적으로 반영됐다.
+
+주가도 하락세다. 한국거래소에 따르면 삼성전자와 SK하이닉스는 이달 들어 이날까지 각각 14.7%, 17.7% 하락했다. 삼성전자는 지난달 33만4000원에서 28만5000원으로, SK하이닉스는 265만원에서 218만원으로 내려앉았다. 양사의 합산 시가총액도 지난달 말 3842조원에서 3219조원으로 약 623조원 감소했다.
+
+가장 보수적인 시각을 제시한 곳은 BNK투자증권이다. BNK투자증권은 지난 8일 SK하이닉스에 대해 투자의견 ‘보유(HOLD)’와 함께 목표주가 185만원을 제시했다. 이는 리포트 작성 당시 주가와 현재 주가를 모두 밑도는 수준으로, 사실상 매도 의견에 가까운 목표가다.
+
+BNK투자증권은 AI 인프라 투자 확대를 이끌어온 글로벌 빅테크들의 설비투자(CAPEX)가 시장 기대만큼 이어지기 어려울 수 있다고 진단했다.
+메타 등 클라우드서비스사업자(CSP)의 투자 속도 조절 가능성과 중국 메모리 업체들의 공급 확대를 반도체 업황의 주요 변수로 꼽았다.
+
+이민희 BNK투자증권 연구원은 “AI 서버 향 디램, 기업용 솔리드스테이트드라이브(eSSD)는 아직 공급 부족 시황에 있다”면서도 “주문을 제공하는 하이퍼스케일러들의 경쟁적인 인프라 투자는 더 이상 유효하지 않다”고 진단했다.
+
+이어 “현재 미국 CSP들의 올해 설비투자(CAPEX) 컨센서스는 83% 증가, 내년은 23% 증가로 돼있다”며 “내년 메모리, 중앙처리장치(CPU) 가격 상승 기대와 에이전트 AI 신모델들 스펙 상향을 고려하면 내년에도 최소 30~40% 이상 설비투자 증가가 필요해 보이지만 오히려 향후 투자 속도 조절 가능성이 높아지고 있어 현재 반도체 기업의 실적 전망과는 괴리가 있다”고 분석했다.
+
+삼성전자에 대해서도 목표주가 하향이 나왔다. 키움증권은 지난 8일 목표주가를 기존 43만원에서 39만원으로 낮췄다. 올해 국내 증권사가 삼성전자 목표가를 내린 것은 지난 3월 이후 두 번째다.
+
+키움증권은 2분기 실적은 시장 기대치에 부합하겠지만 하반기부터는 주당순이익(EPS) 증가율 둔화와 메모리 가격 상승세 완화, 중국 메모리 업체와의 경쟁 심화 등이 동시에 나타나면서 주가 변동성이 확대될 것으로 내다봤.
+
+박유악 키움증권 연구원은 “하반기는 주당순이익(EPS) 성장률이 둔화하는 가운데 차세대 고대역폭메모리(HBM4)와 기업용 SSD(eSSD) 시장점유율 확대 기대와 중국 메모리 업체와의 경쟁 심화 우려가 동시에 작용하면서 주가 변동성이 확대될 것”이라며 “메모리 장기 전망치를 조정한 점을 반영해 목표주가를 낮췄다”고 설명했다.
+
+목표가 하향은 반도체에만 국한되지 않았다. 최근 로보틱스와 피지컬 AI 기대감으로 급등했던 현대차 역시 증권사들의 눈높이가 낮아지고 있다. 이번 주(7월 6~10일) 현대차 리포트를 낸 증권사 11곳 가운데 DS투자증권만 목표주가를 상향했고, 신한·유진·키움·LS·다올투자증권 등 5곳은 목표주가를 낮췄다.
+
+y진투자증권은 현대차의 2분기 영업이익이 전년 동기 대비 14.4% 감소한 3조1000억원으로 시장 기대치를 소폭 밑돌 것으로 전망했다. 판매 부진과 신차 공백, 부품 공급 차질, 중동 수출 감소 등이 실적에 부담을 준 것으로 분석했다.
+
+i재일 유진투자증권 연구원은 “휴머노이드 로봇 모멘텀으로 주가가 급등한 이후 단기 차익실현이 나타났고, 2분기 실적 부진과 AI에 대한 과도한 기대감이 선반영된 영향도 컸다”며 “최근 주가 하락은 펀더멘털상의 문제가 아니라 기대치 조정 과정으로 판단한다”고 말했다.
+
+이어 “하반기 신형 아반떼와 투싼 출시로 신차 공백이 해소되고 그랜저 하이브리드와 아이오닉3 등 신차 효과가 더해질 것”이라며 “2분기 실적 부진은 오히려 매수 기회가 될 수 있다”고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/366/0001178392' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/366/0001178392</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
