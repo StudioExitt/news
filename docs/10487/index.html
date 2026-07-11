@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"왜 내 계좌만 마이너스가 났지?", '오버트레이딩'이 뭐길래[인치범의 주식투자 부트캠프]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.11</span>
+        
+        <a class="more-btn" href="https://studioexitt.net/news/10487" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"왜 내 계좌만 마이너스가 났지?", '오버트레이딩'이 뭐길래[인치범의 주식투자 부트캠프]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">주식 시장에서 게이미피케이션(게임화) 앱 사용으로 인해 투자자가 자발적으로 과도하게 거래하는 경향('오버트레이딩')을 분석했습니다. 본 기사는 높은 거래 빈도가 수수료, 세금, 그리고 눈에 보이지 않는 슬리피지 손실이라는 삼중고를 유발하여 계좌를 녹일 수 있음을 경고하며, 건강한 투자 습관의 중요성을 강조합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">개인의 잘못된 투자 습관과 시장 구조적 유인 요소를 지적하며 투자자들에게 행동 재무학적 주의를 촉구하는 매우 교육적인 기사입니다. 장기적으로는 투자 문화를 개선할 수 있지만, 단기적인 주가 방향 예측에는 직접적인 영향이 적습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">소비자 금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#오버트레이딩</span> <span class="tag tag-hash">#투자심리</span> <span class="tag tag-hash">#거래비용</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">영화 더 울프 오브 월스트리트 스틸컷.
+영화 더 울프 오브 월 스트리트(The Wolf of Wall Street)에서 증권회사 상사인 마크 해나(매튜 매커너히)가 신입 직원인 주인공 조던 벨포트(레오나르도 디카프리오)에게 한 말입니다. 안타깝지만 현실에서도 명백한 사실입니다. 오늘의 주가가 오를지 내릴지 대부분 모릅니다. 우리는 이걸 알면서도 왜 주식을 '자주 거래'하게 되는 걸까요? 오늘은 20대 투자자가 생각해봐야 할 '잦은 거래'에 대해 알아보겠습니다.
+주식앱의 게이미피케이션(Gamification)화: 나도 모르게 자꾸 뭔가 하게 돼
+젊은 층에서 인기가 높은 일부 모바일 증권앱은 이용이 쉽고, 편리하고 재밌습니다. ... [중략] ... 게다가 설명도 부족합니다. 그런 와중에 접한 이 금융앱은 과장하면 아마 구세주 같을 것입니다.
+게임하듯 따라해보니 터치 몇 번으로 어느새 주식 거래가 완료됩니다. 매일 앱으로 출석 체크해 보상을 받고 미션을 달성해 배지(Badges)도 획득합니다. ... 다만 우려되는 점도 있습니다. 이렇게 자주 주식 화면을 들여다보는 사람은 '무언가 해야 한다'는 강박에 사로잡힙니다. 게임화된 UI/UX가 인간본성을 더욱 자극할 수 있기 때문입니다. 거기에 FOMO(Fear Of Missing Out), 즉 '나만 기회를 놓칠지 모른다는 불안감'도 이런 심리를 더욱 자극합니다. 행동경제학에서는 이런 심리를 '행동 편향(Action Bias)'이라고 설명합니다. ... 매일 출석 체크하고 게임 하듯이 앱 속을 산책하다 보면 자신도 모르게 매매 버튼을 자주 누르게 되지 않을까요?
+누적 비용 사례. 제미나이 생성 이미지
+매매 버튼을 누를 때마다 새어나가는 돈1: 거래 비용(수수료+유관기관 제비용+세금)
+상당수 투자자들은 "거래 좀 자주하면 어때! 수수료, 세금 등은 미미해. 무시하자"고 생각합니다. 하지만 이틀에 한 번씩만 매매(매수+매도)해도 5년 후,"티끌모아 티끌"일 줄 알았던 거래비용이 "티끌모아 손해"가 됩니다. ... [중략] ...</body></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
