@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[공모주달력]'공모가 상단 확정' 에이치엘지노믹스 청약</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/648/0000048822' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10564" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[공모주달력]'공모가 상단 확정' 에이치엘지노믹스 청약</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">레메디와 에이치엘지노믹스 등 바이오/의료 기기 기업들이 IPO를 앞두고 있으며, 높은 경쟁률과 공모가 상단 확정을 통해 주목받고 있다. 다만 최근 상장사들의 주가 흐름을 통해 초기 시장 변동성과 대규모 매물 출회 위험성도 함께 분석하고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">바이오/의료 기기 섹터 기업들의 성공적인 자금 조달과 높은 시장 수요를 보여주고 있으나, 대규모 주주 물량 및 공모주의 가격 변동성이 높아 단기적 투자는 주의가 필요함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">의료 장비 및 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">제약</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#공모주</span> <span class="tag tag-hash">#바이오</span> <span class="tag tag-hash">#제약산업</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">제목:   [공모주달력]'공모가 상단 확정' 에이치엘지노믹스 청약
+언론사: 비즈워치
+날짜: 2026.07.12. 오전 8:00
+본문: 공모가 상단에 기관수요 몰리며 2만1500원 확정
+청약 경쟁률 1701대 1 레메디, 13일 코스닥 입성
+
+7월 셋째 주에는 레메디가 코스닥에 상장해요. 지난주 수요예측을 끝낸 에이치엘지노믹스는 13~14일 이틀간 청약을 진행해요.레메디 13일 코스닥
+입성<0xC2><0xA0>… 따따상 갈까
+
+13일 월요일<0xC2><0xA0>코스닥에 입성하는 레메디는 의료용 기기 제조업체인데요. 청약과정에서부터 높은 경쟁률로 인기를 끌면서 상장 당일 주가흐름에도 관심이
+쏠리고 있어요.
+
+지난달 수요예측에<0xC2><0xA0>기관투자자 2246곳이 참여하며 1146대 1의 경쟁률을 보였는데요. 지난 1일과 2일 진행한 일반 투자자대상
+청약에서도<0xC2><0xA0>30만주 배정에 5억1200만주가 접수되면서 1701대 1의 경쟁률을 보였어요.
+
+공모가 역시 희망공모가 상단인 2만700원에 확정했는데요. 따라서 상장 당일 주가는 가격제한폭(공모가의 60%~400%)인
+1만2420원~8만2800원 사이에서 움직일 예정이에요.
+
+레메디는 창업자이자 최대주주인 이레나 고문이 43.91%를 보유하고 있고, 송준호 등 4명의 특수관계인이 7.69%를 보유 중이에요. 이들
+최대주주 등 특수관계자 물량은 공모 후에는 43.23% 비중을 차지하는데요. 3년 동안 매각이 제한되어 있어요.
+그 밖에 최대주주 등을 합쳐
+1년 이상 매각이 제한되는 주식은 340만3689주, 44.63%에요. 
+
+1개월 이상 매각 제한 물량을 포함하면 상장 당일 매각 제한 물량은 58.96%인 449만6631주, 유통 가능 물량은 41.04%인
+312만9160주에요. 이 중 유통 가능 물량에 해당하는 공모주는 전체 물량의 15.74%인 120만주로 상장 당일 주가가 높은 수준을
+y지한다면 매도가능성이 있다는 점을 주의해야 해요.
+
+레메디는 독자 개발 기술력을 기반으로 만든 의료 및 산업분야 휴대용 X선 촬영장치와 비파괴검사솔루션을 개발·제조·판매하고 있어요. 특히 초소형
+기술을 기반으로 산업용 검사 및 원격의료뿐 아니라 우주항공과 AI 기반 디지털 영상 솔루션에까지 사업영역을 확대하고 있어 해외에서도 공공조달등에서 관심을 받고 있다고 해요.
+
+'공모가 상단' 에이치엘지노믹스 13~14일 청약
+
+에이치엘지노믹스는 13~14일 이틀간 청약을 진행해요. 환불일은 16일, 상장일은 24일로 예정돼 있어요. 희망공모가는
+1만8500원~2만1500원이었는데요. 공모가 상단에 94.8%의 신청물량이 몰리면서 최종 공모가도 2만1500원으로 결정됐어요.
+
+에이치엘지노믹스는 한림제약이 100% 지분을 보유한 한림제약(비상장) 계열사인데요.<0xC2><0xA0>한림제약 보유주식인 구주 600만주 중 85만5000주를
+공모하고, 신주는 171만주를 공모해요. 공모주 중 구주가 33.3%, 신주가 66.67% 비중을 차지해요.
+
+공모 후 모회사인 한림제약의 지분율은 66.27%로 바뀌는데요. 한림제약의 보유물량은 2년 6개월간 매각이 제한돼요.
+
+에이치엘지노믹스는 총 공모주 256만5000주를 공모해 551억원을 조달할 계획인데요.이번 공모를 통해 공장 증설을 계획하고 있어요.
+지난 2일 증권신고서에서 기존 제1공장의 생산능력이 한계에 가까워졌고, 이에 따라 제2공장 증축 등에 765억원의 시설자금이 필요하다고
+밝혔어요.
+한림제약향 매출 구조에서 벗어나 독립적인 영업기반을 갖춘 제약주로 도약할 계획이라고 해요.
+
+대표주관사는 KB증권, 공동주관사는 IBK증권이며 인수물량은 KB증권이 230만8500주, IBK증권이 25만6500주예요.
+
+총 256만5000주 중 기관투자자가 75%, 일반투자자가 25%를 배정받아요.
+
+에이치엘지노믹스는 완제의약품 제조사에 약품의 원재료를 공급하는 기업인데요. 고난도·고부가가치 제품 중심의 다품종 라인업을 갖추고 원료의약품
+시장에서 입지를 다져 왔어요. 한림제약 5개 계열사 중 처음으로 상장하는 회사로 주목받고 있어요.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/648/0000048822' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/648/0000048822</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
