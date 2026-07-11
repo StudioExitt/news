@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반도체 낙관론 꺾였나…증권가 목표가 상향 ‘급감’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.11</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='원문링크: https://n.news.naver.com/mnews/article/011/0004640521' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10474" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>반도체 낙관론 꺾였나…증권가 목표가 상향 ‘급감’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">증권가 목표주가 상향 리포트 건수가 연초 대비 급감하며 반도체 관련 낙관론이 꺾이는 모습입니다. 이는 업황 기대감 하락을 반영하는 주요 지표로 해석됩니다. 또한, 개인 투자자의 높은 변동성 노출과 금리 불확실성에 따른 사모채 활황 등 거시적인 불안 요인도 확인되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 성장 동력인 반도체 섹터의 기대감 자체가 하락세로 전환되고 있으며, 이는 시장 전반의 투자심리 위축을 예고하는 강력한 경고 신호입니다. 또한 거시적으로 높은 변동성 및 금융권 자금 조달 구조 변화(사모채 활황)가 확인되었습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체낙관론붕괴</span> <span class="tag tag-hash">#목표가하락</span> <span class="tag tag-hash">#시장변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">반도체 투톱 전망도 극과 극
+호반, 한진칼 지분 20%대 육박
+코스피 반대매매 하루 1400억
+AI 프리즘* 맞춤형 경제 브리핑
+편집자 주: ‘AI PRISM’(Personalized Report &amp; Insight Summarizing Media)은 한국언론진흥재단의 지원을 받아 개발한 ‘인공지능(AI) 기반 맞춤형 뉴스 추천 및 요약 서비스’입니다. 독자 유형별 맞춤 뉴스 6개를 선별해 제공합니다.
+[주요 이슈 브리핑]
+■ 반도체 전망 엇갈림: 이달 국내 증권사의 목표주가 상향 리포트는 167건으로 하향 리포트(157건)와의 격차가 10건까지 좁혀졌다. 연초 4배를 웃돌던 상향 우위는 6월 2.2배를 거쳐 이달 1.1배까지 줄어드는 모습이다. 삼성전자(005930)와 SK하이닉스(000660) 모두 목표가 상향 건수가 매달 감소하며 소재·부품·장비주로 이어지던 온기도 함께 식어가는 양상이다.
+■ 지분 경쟁 격화: 호반그룹이 한진칼(180640) 지분을 20.15%까지 늘리며 조원태 한진(002320)그룹 회장 측(20.56%)과의 격차를 0.41%포인트로 좁혔다. 이에 따라 한진칼 주가는 애프터마켓에서 급등세를 나타냈다.
+■ 증시 변동성 확대: 코스피가 급등락을 반복하는 가운데 개인 투자자의 반대매매 규모가 하루 1400억 원대로 치솟았다. 단기간 급격한 지수 조정이 강제 청산 증가로 이어지는 모습입니다.
+[주식투자자 관심 뉴스]
+1. 목표가 상향 행렬 멈춰…반도체 전망도 “극과 극”
+핵심 요약: 이달 국내 증권사의 목표주가 상향 리포트는 167건으로 하향 리포트(157건)와의 격차가 10건에 불과했다. 연초 4.1배에 달했던 상향 우위는 2월 9.7배까지 벌어졌다가 6월 2.2배, 이달 1.1배로 축소됐다. 삼성전자와 SK하이닉스의 목표가 상향 리포트도 4월 이후 매달 줄어드는 흐름이다. 이 가운데 DB증권(016610)은 삼성전자 목표가를 36만 원으로, KB증권은 60만 원으로 제시하는 등 증권사 간 눈높이 차이도 뚜렷하게 나타난다.
+2. 호반, 한진칼 지분 추가 취득…최대주주와 격차 0.41%P로
+핵심 요약: 호반그룹이 한진칼 지분을 기존 18.46%에서 20.15%로 늘리며 조원태 회장 측(20.56%)과의 격차를 0.41%포인트로 좁혔다. 호반호텔앤리조트와 호반산업이 최근 장내 매수를 통해 지분을 확대한 결과이다. 호반그룹은 지분 변동 사유를 단순 투자 목적의 장내 매수라고 공시했다. 지분 경쟁이 부각되며 한진칼 주가는 NXT 애프터마켓에서 전 거래일 대비 15.87% 상승한 14만 6000원에 거래됐다.
+3. 하루동안 개미 주식 1400억 강제청산…극심한 변동성 여파
+핵심 요약: 9일 반대매매로 청산된 주식 규모는 1422억 원으로 전일(288억 원)의 약 5배, 이달 최대치를 기록했다. 위탁매매 미수금 대비 반대매매 비중도 10.2%로 지난달 9일 이후 최고 수준으로 높아졌다. 코스피는 7일 5.44%, 8일 5.99% 급락한 뒤 9일에도 급등락을 반복하며 0.62% 상승에 그쳤다. 한편 10일에도 코스피는 장중 사이드카가 발동되는 등 변동성이 이어지며 전 거래일 대비 184.03포인트(2.52%) 오른 7475.94에 마감했다.
+4. 금리 불확실성에 사모채 활황…발행 9兆 돌파
+핵심 요약: 올해 사모 회사채 발행 규모는 9조 4680억 원으로 지난해 연간 발행액(13조 9940억 원)의 약 68%에 달했다. 미국·이스라엘 전쟁과 반도체 호황에 따른 성장률 전망 상향 등으로 시장금리가 급등하자 기업들이 사모채로 눈을 돌리는 모습이다. 건설 업종을 중심으로 두산(000150)건설, 쌍용건설, 금호건설(002990) 등이 최근 한 달 새 사모채를 발행했다. 국고채 3년물 금리가 3.7%대 후반까지 오른 가운데 하반기에도 한국은행의 추가 기준금리 인상 가능성이 남아 있어 사모채 발행 흐름이 당분간 이어질 것으로 전망된다.</div><div class='news-src'>원문링크: <a href='원문링크: https://n.news.naver.com/mnews/article/011/0004640521' style='color:#64748b;word-break:break-all'>원문링크: https://n.news.naver.com/mnews/article/011/0004640521</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
