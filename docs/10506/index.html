@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>월가 "무조건 매수해라"…'중국판 엔비디아' 떴다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.11</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005308871' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10506" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>월가 "무조건 매수해라"…'중국판 엔비디아' 떴다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">중국 AI 칩 선두 기업 캠브리콘이 중국 정부의 강력한 'AI 플러스' 정책과 맞물려 급성장세를 보이며 '중국판 엔비디아'로 주목받고 있습니다. 뛰어난 실적 성장률, 높은 시장 점유율, 그리고 국내외 기관들의 지속적인 매수 의견을 받고 있어 높은 투자 매력을 보여주고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">중국의 국가적인 AI 산업 육성 정책('AI 플러스') 지원과 맞물려 핵심 기술을 국산화하는 과정에 있다는 점이 가장 큰 성장 동력입니다. 폭발적인 매출/순이익 증가율과 증권가들의 높은 목표주가는 강한 매수 신호로 작용하며, 장기적 관점에서 강력한 테마성을 지닙니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">텐센트</span> <span class="tag stock-tag">화웨이</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI칩</span> <span class="tag tag-hash">#중국정책</span> <span class="tag tag-hash">#반도체국산화</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">中 토종 AI 칩 대장주 캠브리콘
+중국 AI 칩 기업 캠브리콘의 제품. 사진=캠브리콘
+중국 AI 칩 기업 캠브리콘의 제품. 사진=캠브리콘
+시진핑 중국 국가주석은 지난 4월 중국 공산당 중앙정치국 회의를 주재하면서 '인공지능(AI) 플러스' 정책을 제시했다. AI 반도체 국산화를 비롯해 컴퓨팅 네트워크, 통신, 전력망 등 AI 관련 인프라 확장도 강조했다.
+중국의 ‘AI 플러스’ 전략이 발표된 후 가장 주목받은 기업이 있었다. ‘중국판 엔비디아’라고 불리는 AI 칩 기업 캠브리콘 테크놀러지스였다. 이 회사는 ‘중국판 나스닥’ 커<0xEC><0xB4><0xB9>반(상하이증권거래소 산하)에 상장돼 있다. 최근 6개월 간 주가가 59.22% 상승했고, 지난 6월 30일엔 시가총액이 1조위안을 넘어섰다.
+중국 AI 칩 기업 캠브리콘의 최근 6개월 주가. 사진=구글 제미나이
+中 ‘AI 굴기’의 상징으로 떠올라
+캠브리콘은 2016년 중국과학원(CAS) 출신 천톈스·천윈지 형제가 창업했다. 창업 초기에는 CAS의 지원을 받아 분사했고, 지금도 CAS가 15.7% 지분을 보유한 2대 주주다.
+첫 고객은 화웨이다. 2018년 매출의 98%를 화웨이에 의존하며 스마트폰용 AI 라이선스를 공급했다. 하지만 화웨이가 독자 기술을 개발한 후 새로운 고객사를 찾아야만 했다. 그 곳이 TSMC였다.
+2022년에는 미국 정부가 발목을 잡았다. 캠브리콘을 ‘거래 제한 기업’ 명단에 포함시킨 것이다. 이 때문에 TSMC와의 협력이 중단됐다.
+캠브리콘에 손을 내민 곳은 중국 정부였다. 중국 당국은 AI 산업 굴기를 노리고 있었고, 이를 위해 가장 필요한 핵심은 AI 칩의 국산화였다. 캠브리콘은 그렇게 AI 굴기의 상징으로 거듭났다. 현재 중국 AI 칩 시장 점유율 15%로, 화웨이에 이어 2위다.
+캠브리콘의 대표 제품은 2024년 업그레이드된 AI 칩 ‘시위안 590’이다. 이 제품은 AI 반도체 시장에서 가성비 칩으로 손꼽힌다. 엔비디아 ‘A100’의 80~90% 수준의 성능을 갖췄다는 평가를 받는다.
+중국 AI 칩 기업 캠브리콘의 실적. 사진=구글 제미나이
+캠브리콘은 지난해 순이익 흑자 전환에 성공했다. 캠브리콘의 지난해 매출은 전년보다 411% 급증한 64억9800만위안, 순이익은 20억5900만위안을 기록했다. 지난 1분기 매출은 전년 동기 대비 159.56% 늘어난 28억8500만위안, 순이익은 185.04% 증가한 10억1300만위안이었다. 모두 시장 예상치를 웃돌았다. 올해 연간 매출은 전년보다 약 175% 늘어날 230억위안으로 내다보고 있다.
+증권가 ‘매수’ 유지…목표주가 최고 1903위안
+월가와 상하이 증시에서 캠브리콘을 분석하는 애널리스트들은 모두 투자의견을 ‘매수’로 제시했다. 평균 목표주가는 1646.43위안이다.
+중국 후투증권의 모바일 투자 플랫폼 무무는 지난 28일 캠브리콘의 목표주가를 최고 1903위안으로 예상했다. 모건스탠리는 “캠브리콘은 중국산 AI 칩 가운데 추론 시나리오에서 가장 앞서고 있다”고 밝혔다. 이어 “올해 AI 가속기 배포 수를 50만 유닛까지 늘리겠다는 목표가 캠브리콘의 향후 추가 성장을 가리킨다”고 덧붙였다.
+중국 광파증권은 캠브리콘의 목표주가를 1367.31위안으로 제시했다. 아울러 캠브리콘의 주당순이익(EPS)이 올해 12.11위안, 2027년 21.46위안, 2028년 35.55위안으로 늘어날 것으로 내다봤다.
+인베스팅닷컴에 따르면, 캠브리콘의 6월 기준 12개월 선행 주가수익비율(PER)은 128배에 달한다. 엔비디아의 약 8배에 이른다. 중국이 정부 차원에서 AI 관련 사업을 적극 지원하고, 중국이 AI 칩 관련 하드웨어와 소프트웨어, 장비 부문을 국산화하고 있다는 점에서 상승 여력이 남아있다고 보고 있다.
+중국의 반도체 기업 창신메모리와 양쯔메모리의 연내 기업공개(IPO)도 캠브리콘의 주가에 호재가 될 전망이다. 중국의 AI 기업인 즈푸AI가 지난 1월 홍콩 증시에 상장한 데 이어 창신과 양쯔가 IPO에 성공하면 AI 칩 설계(캠브리콘)과 즈푸AI(AI 모델), 메모리 반도체(창신·양쯔)가 중국 증시에서 통합된 흐름으로 이어질 가능성이 크다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005308871' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005308871</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
