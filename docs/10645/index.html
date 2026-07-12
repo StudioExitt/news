@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[기자수첩] 미운 오리 '레버리지'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005547049' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10645" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[기자수첩] 미운 오리 '레버리지'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">레버리지 ETF의 도입 이후 주식시장 변동성이 급격히 커지면서, 금융당국의 정책 실패라는 비판에 직면했다. 기사는 레버리지 상품 자체가 문제가 아니라, 충분한 숙고 없이 위험상품을 시장에 내놓은 과정과 당국의 수습 노력을 지적하며 정부의 책임 있는 해결책 마련을 요구한다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">금융당국의 정책 실패를 지적하며 시장의 구조적인 위험(레버리지 상품)과 변동성을 집중 조명하고 있어 투자심리 및 제도 개선에 대한 중장기적인 영향을 미칠 수 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지상품</span> <span class="tag tag-hash">#정책실패</span> <span class="tag tag-hash">#시장변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">"단일종목 레버리지 상장지수펀드(ETF) 상품이 주식시장 변동성을 많이 가져오고 있다는 우려를 잘 알고 있다. 문제를 어떻게 보완하고 최소화할지에 대해 협의 중이다." 구윤철 경제부총리 겸 재정경제부 장관이 지난 7일 국회에서 한 발언이다.
+정부 인사가 높아진 국내 증시 변동성의 원인으로 '레버리지 상품'을 지목한 것은 이례적이다.
+레버리지 상품은 투자자들에게 '미운 털'이 박혔다. 실제로 상품 출시 이후 변동성이 확대됐기 때문이다. 레버리지 상품은 기초자산 수익률의 2배를 추종해야 하기 때문에 운용사와 유동성공급자(LP)가 상승장에는 추가 매수, 하락장에는 추가 매도에 나서면서 변동성을 키운다. 실제로 코스피200 변동성지수는 연초부터 지난 5월 26일까지 평균 52.66을 나타냈으나, 레버리지 상품 출시일부터 지난 10일까지는 평균 84로 급등했다. 증시변동성 완화장치도 역대급 발동 횟수를 기록 중이다. 상품 출시 이후 코스피에서 매수·매도 사이드카는 각각 8차례씩, 서킷브레이커는 4차례발동됐다. 지난해는 사이드카가 3차례발동됐으며, 서킷브레이커는 없었다.
+최근의 변동성 사태는 금융당국의 정책 실패로 평가된다. 당국은 지난해부터 이어진 고환율을 완화하자는 취지로 해당 상품을 도입했다. 하지만 환율은 지난달 1561원까지 치솟고 증시는 '투기판'이라는 오명을 벗지 못하고 있다. 이찬진 금융감독원장 역시 지난달 "급하게 준비했던 것은 맞다. 개인적으로 반성하고 후회하고 있다"며 정책 실패를 인정했다.
+'대주식 시대'로 불리며 자금이 대거 증시로 몰린 지금, 충분한 숙고 없이 위험상품을 내놓은 것은 당국의 패착이다. 지난해부터 불어난 빚투 규모를 지적하며 투자자들에게 경고를 던지던 모습과 모순되기도 하다.
+이미 엎질러진 물, 수습이 중요하다. 다만 '레버리지 상품' 자체가 문제는 아니다. 미국 증시에는 단일종목 레버리지·인버스 상품이 약 470개상장돼 있다. 핵심은 '충분한 숙고의 부재'다. 반도체 쏠림 현상이 심화된 상황에서 국내 증시 시총 비중이 50%가 넘는 삼성전자와 SK하이닉스만 레버리지 상품을 출시한 것이 국내 증시를 휘청이게 만들었다. 동화 '미운 아기 오리'에서 주인공 오리는 자신과 맞지 않은 환경에서 태어났지만, 결국 '백조'라는 꽃을 피웠다. 자신이 있을 곳을 찾아 떠난 여정이 빛을 발한 것이다. 정치권에서 레버리지 상품 상장폐지까지 거론되는 가운데, 출시하고 '아님 말고' 식의 일 처리는 부작용을 낳을 뿐이다. 당국과 정부가 해결 방안을 찾아 나선 가운데 레버리지가 있을 자리를 찾아주길 바란다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005547049' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005547049</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
