@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>흔들리는 코스피, 한은 금통위·미국 물가·TSMC 실적 촉각</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005384733' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10604" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>흔들리는 코스피, 한은 금통위·미국 물가·TSMC 실적 촉각</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 증시는 금리 결정, 미국 CPI 등 거시 경제 변수와 글로벌 반도체 기업들의 실적 발표(ASML, TSMC)에 민감하게 반응하고 있어 높은 변동성이 예상됩니다. 시장은 경기 둔화 및 금리 인상 우려 속에 방향성을 탐색 중입니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">ASML</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#금리인상</span> <span class="tag tag-hash">#CPI</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">10일 오후 서울 중구 우리은행 본점 딜링룸 전광판에 주요 지수가 표시되고 있다.
+코스피는 184.03포인트(2.52%) 오른 7475.94에, 코스닥 지수는 43.43포인트(5.47%) 오른 837.43에 마감했다. 원·달러 환율은 4.7원 내린 1501.4원에 마감했다. 이번 주 국내 증시는 한국은행의 기준금리 결정과 미국 CPI(소비자 물가지수), 글로벌 반도체 기업 실적에 따라 방향을 탐색할 전망이다. 지난주 급락으로 가격 부담은 줄었지만 변동성이 높은 상태여서 물가와 금리, 반도체 업황에 대한 판단이 엇갈릴 경우 지수가 다시 크게 흔들릴 가능성이 제기됐다.
+12일 한국거래소에 따르면 코스피지수는 지난 10일에 7475.94로 전일 대비 2.52% 오르며 거래를 마쳤다. 전주 마지막 거래일인 3일보다 7.6% 하락한 것이다. 반도체 피크아웃(정점 통과) 우려와 호르무즈 해협을 둘러싼 지정학적 긴장이 재부각된 가운데 증시는 높은 변동성을 보였다.
+앞서 삼성전자가 7일에 영업이익이 84조9000억원(전년 동기 대비 56.21% 증가)에 달하는 역대 최대 2분기 실적(잠정집계 기준)을 발표했지만 시장 일각에선 반도체 산업이 정점을 찍었거나 가시적인 성장율 둔화가 앞으로 나타날 것이란 우려가 제기됐다. 반도체 피크아웃 논란이 불거진 것으로 반도체 종목의 등락에 따라 코스피 변동성이 크게 확대됐다. 코스피지수가 올들어 단기 급등한 상황에서 차익 실현성 매도도 늘렸다.
+이상연 신영증권 연구원은 "올해 2월 이후 코스피는 급등일 13회, 급락일 12회로 아직 상승 우위지만 그 격차가 크지 않다"며 "코스피200 변동성지수도 높은 수준을 유지해 투자심리가 과열된 동시에 작은 충격에도 지수가 쉽게 흔들릴 만큼 취약해졌음을 보여준다"고 했다.
+미국 노동부는 14일(이하 현지시간) 6월 CPI를 발표한다. 물가가 시장 예상보다 높으면 미국 금리 인상 우려가 다시 커질 수 있다. 중동 긴장과 유가 상승 여파로 미국이 통화 긴축에 나설 명분이 커지는 것이다.
+이재만 하나증권 연구원은 "2022년 이후 미국 CPI 전년 동기 대비 (상승률)가 예상치를 웃돌았을 때 S&P500지수의 월평균 주가 수익률과 상승 확률은 -0.6%와 44%였지만 예상치에 부합했을 때는 1.9%와 61%, 밑돌았을 때는 1.7%와 72%였다"며 "코스피도 물가가 최소한 예상치에 부합해야 단기 반등 가능성이 높아질 것"이라고 했다.
+15일에는 네덜란드 반도체 장비업체 ASML이 2분기 실적을 내놓는다. 한국은행 금융통화위원회와 대만 반도체 위탁생산업체 TSMC의 실적 발표는 16일 예정돼 있다.
+시장에서는 한은이 기준금리를 연 2.75%로 0.25%포인트 올릴 것이란 전망이 우세하다. 실제 인상하면 2023년 1월 이후 3년6개월 만이다. 금리 인상 자체보다 추가 인상 가능성과 물가·환율에 대한 한은의 판단이 증시에 영향을 줄 것으로 보인다.
+ASML과 TSMC 실적은 반도체 피크아웃론의 향배를 가를 변수로 꼽힌다. 수주와 설비투자 전망이 기대에 못 미치면 반도체 투자심리는 재차 약화될 수 있을 것으로 보인다. 반대로 고객 주문 규모와 투자 계획이 시장 기대를 웃돌면 증시에서 안도감이 확산할 가능성이 제기된다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005384733' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005384733</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
