@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[미국 주식 돋보기] 데이터 유출없는 AI … 스노플레이크 급반등</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005706289' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10640" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[미국 주식 돋보기] 데이터 유출없는 AI … 스노플레이크 급반등</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">스노플레이크가 단순 데이터 보관 서비스를 넘어, 데이터 유출 걱정 없이 AI 모델을 구동할 수 있는 필수 인프라스트럭처로 진화하며 주가가 급반등했습니다. 실적 발표와 AI 전환(AX)에 성공적으로 적응한 것이 핵심 상승 동력으로 작용했으며, 월가에서도 최고 수준의 성장주로 평가받고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">경쟁 우위 확보와 AI 인프라 전환 성공에 따른 실적 개선 기대감 고조. 시장 수요가 확실한 핵심 기술 트렌드(AI)를 선점했기 때문에 주가 상승 동력이 매우 강력함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">그래프</span> <span class="tag stock-tag">클라우드 플랫폼</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">소프트웨어</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#스노플레이크</span> <span class="tag tag-hash">#AI인프라</span> <span class="tag tag-hash">#데이터플랫폼</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">클라우드 기반 데이터 플랫폼 기업 스노플레이크 주가가 최근 3개월 새 폭등하며 반전에 성공했다. 단순히 기업들의 데이터를 보관하고 관리하는 서비스에서 인공지능(AI)을 활용하는 핵심 인프라스트럭처로 진화하며 중요성이 부각됐기 때문이다. 고객 기업들이 데이터 유출 걱정 없이 스노플레이크 플랫폼에서 AI를 구동할 수 있다는 것이 핵심 강점이다.
+
+스노플레이크 주가는 지난 10일(현지시간) 261.45달러로 장을 마감했다. 지난 4월 10일 종가 121.11달러에서 불과 3개월 사이에 115.87% 상승했다.
+
+스노플레이크는 2012년 오라클 출신의 데이터 전문가들이 창업한 클라우드 기반 데이터 플랫폼 기업이다. 오라클은 데이터를 저장·관리하는 소프트웨어인 데이터베이스(DB) 분야 세계 1위 기업이다.
+
+스노플레이크는 기업의 다양한 부서별, 클라우드 인프라별로 나뉘었던 방대한 데이터를 클라우드를 활용해 한곳에 모아 관리하고 분석해주는 '데이터 웨어하우스(통합 창고)'로 인기를 끌었다. 마치 구글 독스처럼 접근 권한만 있으면 누구나 데이터를 공유하고 작업할 수 있게 함으로써 기업의 자산인 데이터를 함께 활용할 수 있게 만들었다.
+
+특히 사용한 연산량과 저장 용량만큼만 비용을 지불하는 '소비 기반 과금 모델'을 무기로 고속 성장했다. 기존에 기업들은 실제로 쓰든 안 쓰든 일정 비용을 지불해야 했다. 반면 스노플레이크 서비스를 사용하면 쓴 만큼만 비용을 내면 돼 막대한 비용을 절감할 수 있다.
+
+2017년 상장 당시에는 워런 버핏 버크셔해서웨이 회장이 이례적으로 공모에 참여하며 주목받기도 했다. 
+
+그러나 올 들어 4월 초까진 주가가 40% 이상 급락했다. 경쟁이 심해지며 성장세가 둔화한 데다 AI가 소프트웨어 기업들의 수요를 위축시킬 수 있다는 공포감이 증시를 강타하면서 주가가 악영향을 받았기 때문이다.
+
+반전에 성공한 것은 스노플레이크가 기업 AI 전환(AX)의 필수 인프라로 체질 전환에 성공했기 때문이다. 보안과 유출 우려 때문에 기업들은 자사의 핵심 자산인 내부 데이터를 외부로 빼 AI 모델에 학습시키는 것을 꺼릴 수 있다.
+
+스노플레이크는 이미 데이터가 보관된 창고 안으로 AI 모델을 가져와 활용하도록 패러다임을 바꿨다. 지난 2월에는 챗GPT 운영사인 오픈AI와 협력하며 최첨단 AI 모델을 스노플레이크 플랫폼에서 직접 구동할 수 있게 됐다.
+
+이 같은 전략은 실적 성장으로 이어졌다. 지난 5월 27일 발표한 2027회계연도 1분기 실적에서 매출은 전년 동기 대비 34% 성장한 13억9000만달러를 기록하며 시장 예상치를 웃돌았다. 조정 주당순이익(EPS)은 39센트로 시장 전망치(32센트)를 웃돌았다.
+
+고객 수와 사용량 모두 증가했다. 회사는 포브스가 성정한 세계 2000대 대기업 중 813개 기업을 고객으로 확보했으며 기존 고객들의 지출도 26% 늘었다고 발표했다. 향후 매출로 인식될 장기계약 잔액인 잔여이행의무(RPO)도 92억1000만달러로 전년 동기 대비 38% 성장했다. 이를 기반으로 연간 제품 매출 전망치를 기존 56억6000만달러에서 58억4000만달러로 상향 조정했다.
+
+스리다르 라마스와미 스노플레이크 최고경영자(CEO)는 "AI는 스노플레이크에 지속적으로 강력한 순풍으로 작용하고 있으며, 1분기가 확실한 변곡점이 됐다"면서 "핵심 플랫폼의 AI 기반 가속화와 자체 AI 제품의 채택 증가 모두 강한 성장을 보이고 있으며, 새로운 시대를 이끌 준비가 돼 있다"고 강조했다.
+
+월가 투자은행(IB)들도 눈높이를 올리고 있다. UBS는 목표주가를 210달러에서 370달러로 높였다. 지난달 뱅크오브아메리카(BoA)는 올해 하반기 추가 상승이 기대되는 소프트웨어 종목으로 스노플레이크를 지목했다.
+
+기업용 AI 시장의 핵심 플랫폼으로 자리 잡을 가능성이 크다며 가장 강한 AI 데이터 플랫폼 수혜주로 평가했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005706289' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005706289</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
