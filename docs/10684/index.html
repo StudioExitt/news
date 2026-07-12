@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"코스피 8200선이 갈림길"…뚫으면 1만, 막히면 7000선 이탈</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006328756' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10684" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"코스피 8200선이 갈림길"…뚫으면 1만, 막히면 7000선 이탈</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 8200선 안착 여부를 기점으로 중요한 갈림길에 서 있으며, 돌파 시 급격한 상승이 예상되지만 실패할 경우 하락 위험도 상존합니다. 하지만 중장기적으로는 미국 물가 둔화 및 기업 실적 개선 기대감으로 방향성은 상승세라는 분석입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">역사적 저평가 구간(PER 6.36배) 진입과 미국 CPI 및 기업 실적 시즌이라는 확실한 상방 촉매제를 제시하며 중장기적인 상승 전망을 내놓았기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#밸류에이션</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">대신증권 보고서\n선행 주가수익비율 6.36배…역사적 저평가 구간 진입\n미국 물가 둔화·2분기 실적 시즌이 반등 촉매\n8000선 아래 반도체·2차전지 등 주도주 매집 권고 코스피가 8200선 안착 여부를 놓고 중대한 갈림길에 섰다는 분석이 나왔다. 거래대금을 동반한 강한 반등으로 8200선을 넘어설 경우 빠르게 1만선에 진입할 수 있지만, 돌파에 실패하면 7000선 아래까지 밀리는 마지막 하락 국면이 나타날 수 있다는 전망이다. 다만 어떤 경로를 거치더라도 경기와 기업 실적의 상승 흐름이 이어지는 만큼 중기적인 방향은 상승이라는 평가다.\n\ni경민 대신증권 연구원은 13일 보고서를 통해 “투자심리와 수급 불확실성이 코스피 급락을 야기한 만큼 단기적으로는 8200선 돌파와 안착 여부가 중요하다”며 “단기 등락은 엇갈릴 수 있지만 이후 방향성은 상승”이라고 진단했다.\n\n(표=대신증권)\n\n코스피는 지난주 7.57% 하락한 7475.94에 거래를 마쳤다. 삼성전자 잠정 실적 발표 이후 반도체주를 중심으로 차익실현 매물이 쏟아진 데다 미국과 이란의 무력 충돌로 국제유가와 미국 국채금리가 오르면서 투자심리가 급격히 위축됐다. 서킷브레이커와 매도 사이드카가 잇달아 발동될 정도로 변동성도 확대됐다.\n\n글로벌 증시가 중동 리스크와 반도체 업황 우려에도 비교적 견조한 흐름을 보인 것과 달리 국내 증시의 낙폭은 두드러졌다. 앞선 상승장에서 반도체주가 코스피 시가총액의 60% 이상을 차지할 정도로 영향력이 커진 상황에서 반도체 관련 악재와 레버리지 상품 청산 등 수급 충격이 집중된 결과라는 설명이다.\n\ni 연구원은 최근 반도체주 급락을 펀더멘털 훼손보다는 인공지능(AI) 산업 서사에 대한 의구심과 밸류에이션 정상화, 레버리지 청산에 따른 수급 충격이 겹친 결과로 해석했다. 삼성전자의 2분기 잠정 실적이 시장 예상치를 웃돈 데 이어 반도체와 비반도체 업종의 실적 전망도 상향되고 있어 실적 개선 흐름 자체는 꺾이지 않았다고 평가했다.\n\n실제로 코스피 12개월 선행 주당순이익(EPS)은 지난 5월 말 1015포인트에서 이달 10일 1175포인트로 높아졌다. 반면 주가 급락으로 12개월 선행 주가수익비율(PER)은 6.36배까지 떨어졌다. 글로벌 금융위기 당시 저점과 맞먹는 역사적 저평가 구간이다. 선행 PER이 7배로만 회복해도 코스피는 8200선을 넘어설 수 있고, 8.6배 수준에서는 1만선 진입이 가능하다는 계산이다.\n\n이번 주 예정된 미국 물가지표도 증시 흐름을 가를 변수로 꼽혔다. 오는 14일 발표되는 미국의 6월 소비자물가지수(CPI)는 전년 동월 대비 3.8%, 전월 대비 0.1% 하락할 것으로 예상된다. 물가 둔화가 확인되면 미국의 추가 금리 인상 우려가 완화되면서 국채금리와 달러가 하향 안정되고, 국내 증시의 반등에도 힘이 실릴 수 있다는 전망이다.\n\n이어 2분기 실적 시즌이 본격화하면 급락 과정에서 커진 국내 주식의 가격 매력도 부각될 것으로 봤다. 삼성전자(005930)와 SK하이닉스(000660)를 비롯한 주요 기술기업의 실적 발표와 콘퍼런스콜을 통해 AI 투자와 반도체 업황에 대한 불확실성이 완화될 가능성도 있다.\n\nd만 8200선을 넘는 과정에서 거래대금이 늘지 않거나 다시 음봉이 나타날 경우 추가 조정을 경계해야 한다고 조언했다. 이 경우 코스피가 7000선을 일시적으로 밑돌고 6500선까지 지지력을 시험한 뒤 상승세로 돌아서는 시나리오도 배제할 수 없다는 설명이다.\n\ni 연구원은 “선행 PER 7배 이하에서는 매도에 따른 실익이 크지 않다”며 코스피 8000선 아래에서 변동성을 활용한 비중 확대 전략을 제시했다. 반도체와 2차전지, 전력기기, 방산 등 단기 하락 폭이 크면서도 실적 대비 저평가 영역에 진입한 기존 주도주를 중심으로 분할 매수할 필요가 있다는 조언이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006328756' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006328756</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
