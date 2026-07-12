@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>앤트로픽, 장외 몸값 '1.2조달러' 돌파…오픈AI 제쳐</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005788652' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10583" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>앤트로픽, 장외 몸값 '1.2조달러' 돌파…오픈AI 제쳐</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">앤트로픽의 AI 모델 클로드 개발사 가치가 장외 시장에서 1조 2천억 달러를 기록하며 큰 주목을 받고 있습니다. 하지만 전문가들은 지나친 시장 과열과 복잡한 SPV 우회 투자 방식에 따른 법적/재무적 위험성을 경고하고 있어 신중한 접근이 요구됩니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">OpenAI 주식</span> <span class="tag stock-tag">클로드 모델 관련 기업</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#인공지능</span> <span class="tag tag-hash">#장외시장</span> <span class="tag tag-hash">#VC투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">캡라이트 플랫폼서 기업가치 폭등인공지능(AI) 모델 클로드의 개발사인 앤트로픽의 기업가치가 장외 주식시장에서 이미 1조달러를 훌쩍 넘어선 것으로
+
+앤트로픽 로고. 연합뉴스
+
+11일(현지시간) 비즈니스 인사이더에 따르면 앤트로픽은 장외시장 플랫폼 '캡라이트'에서 이미 1조2000억달러(약 1800조원)를 기준으로 거래되고 있다. 이는 지난 5월 시리즈H 투자 유치 당시 평가받은 9650억달러를 크게 웃도는 수치이자, 경쟁사인 오픈AI의 캡라이트 플랫폼 내 기업가치(9080억 달러)까지 뛰어넘는 수치다.
+
+하비에르 아발로스 캡라이트 최고경영자(CEO)는 "앤트로픽은 벤처 2차 시장에서 역대 가장 주목받는 기업"이라고 말했다. 레인메이커 증권의 글렌
+앤더슨 최고경영자(CEO)도 앤트로픽 주식이 1조2천억 달러를 기준으로 거래되고 있다고 덧붙였다. 그는 앤트로픽 주식 가격이 그렇게 높게 형성됐음에도 팔겠다는 사람이 없어서 실제 거래가 이뤄지는 사례가 드물다면서, "내가 가진 매수 대기(수요) 거래를 모두 체결시킬 수만 있었다면 지금 나는 인터뷰 같은 건 하지 않고 해변에 가 있었을 것"이라고 전했다. 일부 투자자들은 자신이 보유한 집을 앤트로픽 주식과 맞바꾸자고 제안하기까지 하는 등 과열 양상이 나타나기도 했다.
+
+이처럼 앤트로픽 주식의 매도 물량이 사라진 것은 앤트로픽의 상장이 임박함에 따라 가치가 더 오를 것이라는 관측이 우세해졌기 때문으로 풀이된다.
+그러나 앤트로픽의 초기 투자사인 멘로 벤처스의 맷 머피 파트너는 이와 같은 장외 시장 평가액에 별다른 의미를 두지 않는다며, 이는 "잡음이 많은 신호"라고 지적했다. 앤트로픽 상장을 앞두고 매출이 급증하자 시장 과열 분위기에서 나타난 현상일 뿐이라는 것이다.
+
+또한 시장에서는 이와 같은 장외 거래 가운데 상당수가 특수목적법인(SPV)을 통한 우회 거래 형태라는 점에서 우려도 제기되고 있다. 이 같은 우회 거래는 개인 투자자들이 직접 앤트로픽 주식을 보유하는 것이 아니라 SPV를 설립해 법인 명의로 앤트로픽 주식을 사들이고, 투자자들은 SPV의 지분을 보유하는 방식으로 이뤄진다. 이 경우 중개인에게 높은 운용 수수료를 줘야 하고 의결권도 보유할 수 없을 뿐 아니라 나중에 사기로 드러나거나 거래가 무효가 될 가능성도 있다는 것이다. 실제 앤트로픽은 정관에 따라 이사회의 승인을 받지 않은 주식 거래는 무효이며, 특히 간접적인 방식의 투자 제안은 대부분 유효하지 않은 거래라는 경고문을 홈페이지에 게시하고 있다.
+
+한편 최근 앤트로픽에 밀려 시장 관심이 낮아졌던 오픈AI도 최근 새 AI 모델 GPT-5.6을 선보인 이후 거래가 늘고 있다고 비즈니스 인사이더는 전했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005788652' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005788652</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
