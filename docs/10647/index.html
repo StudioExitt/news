@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>나스닥이 16% 더 비싸"…SK하닉, 월요일 개장하면 오를까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001258438' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10647" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>나스닥이 16% 더 비싸"…SK하닉, 월요일 개장하면 오를까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스의 나스닥 ADR이 국내 주가 대비 16% 높은 가격에 거래되면서 글로벌 AI 반도체 시장에서 SK하이닉스의 기업 가치가 재평가되고 있다는 분석입니다. 미국 자본시장의 평가를 바탕으로 국내 투자 심리에도 큰 영향을 줄 것으로 기대됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 AI 반도체 수요 증가 기대감과 함께 해외 자본시장에서의 높은 기업 가치 평가(ADR 프리미엄)가 국내 시장에 긍정적인 영향 및 새로운 가격 기준점을 제시했기 때문입니다. 다만 즉각 반영은 어려워 신중한 접근이 필요합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI반도체</span> <span class="tag tag-hash">#ADR</span> <span class="tag tag-hash">#글로벌투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">나스닥에 상장한 SK하이닉스 미국주식예탁증서(ADR)가 첫날부터 크게 흥행하자 오는 13일 코스피 시장에도 관심이 쏠리고 있다고 한국경제신문이 보도했다.
+
+미국 투자자들이 SK하이닉스를 국내보다 16% 높은 가격에 평가하자 주가 상승 여력이 크다는 전망이 나오고 있다.
+
+SK하이닉스 ADR(티커명 SKHY)은 지난 10일(현지시간) 나스닥에서 168.49달러에 거래를 마쳐 공모가(149달러)보다 13.08% 올랐다. 장중 177달러까지 치솟기도 했다.
+종가를 원화로 계산하면 약 252만8000원이다. 같은 날 코스피 SK하이닉스 종가(218만원)보다 약 34만8000원(16%) 높다. 이 같은 가격 차이를 두고 미국 자본시장이 SK하이닉스의 경쟁력을 국내보다 더 높게 평가했다는 해석이 나온다.
+
+ADR은 본주보다 높은 가격에 거래되는 경우가 많다. 미국 투자자가 해외 증권계좌 개설이나 환전, 외국인 투자 등록 절차 없이 달러로 손쉽게 거래할 수 있어 접근성이 좋기 때문이다.
+
+이 과정에서 ADR과 본주 간 가격 차이를 활용한 차익거래가 발생, 시간이 지날수록 두 시장의 가격 차이가 점차 축소되기도 한다. 한 증권사 관계자는 "환율과 거래시간, 유동성 차이 등으로 ADR 가격이 본주에 그대로 반영되지는 않는다"면서도 "미국 시장이 제시한 기업가치가 국내 투자심리에 영향을 미치는 것은 자연스러운 현상이며, 이번 16%의 괴리는 국내 투자자들이 참고할 새로운 가격 기준이 될 수 있다"고 말했다.
+
+ADR 상장으로 SK하이닉스의 기업가치가 재평가될 것이라는 기대가 증권가에서 나오고 있다. 이번 상장으로 SK하이닉스는 미국 시장에서 엔비디아와 브로드컴, AMD, 마이크론 등 글로벌 AI 반도체 기업들과 같은 투자자 기반에서 평가받게 된다. KB증권은 "TSMC는 미국 ADR 상장 이후 본주 가치가 함께 상승했다"며 "SK하이닉스도 미국 기관투자가들의 투자 접근성이 좋아져 글로벌 메모리 업체 대비 할인 요인이 점차 해소되는 선순환 구조가 형성될 것"이라고 말했다.
+
+다만 증권가는 미국 시장 프리미엄이 국내 주가에 하루 만에 다 반영되기는 어렵다고 본다. 거래 구조와 투자자 구성, 환율 등이 다르기 때문이다. 외국인 수급과 투자심리에 따라 가격 차이가 점진적으로 좁혀질 가능성이 크다는 분석이 나오는 이유다.
+
+실적 전망에 따른 주가 상승 기대도 높다. 지난 9일 기준 국내 25개 증권사의 평균 목표주가는 346만2000원으로 현재 주가보다 약 58.8% 높다. 투자의견도 매수 24곳, 강력 매수 1곳으로 사실상 전원이 긍정적인 의견을 유지하고 있다.
+
+KB증권은 현재 12개월 선행 PER이 4.5배 수준에 불과하다는 점을 들며 "반도체 랠리는 아직 끝나지 않았다"고 평가했다. 대신증권도 '슈퍼 모멘텀'이 이어질 것이라 전망하며 AI 서버 증설과 HBM 판매 확대를 근거로 2026년과 2027년 영업이익 전망치를 각각 291조원과 432조원으로 상향 조정했다. 올해 영업이익 컨센서스도 3개월 전보다 43.3% 높아진 274조9280억원이다.
+
+글로벌 기관투자가들의 투자 접근성이 크게 높아지면서 수급 측면에서도 긍정적인 변화가 예상된다.. 미래에셋증권은 SK하이닉스 ADR이 미국 반도체 ETF인 SMH와 SOXX에 편입될 경우 최대 3억4000만달러의 신규 자금이 유입될 수 있다고 추산했다. 나스닥 지수 추종 ETF까지 포함하면 최대 4억5000만달러 규모의 추가 수요가 가능하다는 분석이다.
+
+국내 투자자들은 액면분할 변수도 주목하고 있다. 현재 SK하이닉스 주가는 218만원으로 개인투자자가 접근하기 쉽지 않은 수준이다. 최태원 SK그룹 회장은 최근 "요청이 더 오면 액면분할도 고려할 수 있다"고 말하며 가능성을 열어뒀다.
+
+액면분할이 현실화 한다면 삼성전자처럼 거래량 증가와 개인투자자 유입 효과가 나타날 수 있다고 시장은 내다본다. 현재 SK하이닉스를 편입한 ETF 규모만 약 65조2011억원에 달해 액면분할이 이뤄진다면 일부 자금이 ETF에서 개별 종목으로 이동할 수 있다는 것이다.
+
+실제로 삼성전자가 2018년 50대 1 액면분할을 단행하며 주당 가격을 250만원대에서 5만원대로 낮추자, 소액주주는 3개월 만에 약 24만명에서 62만명으로 두 배 이상 증가했다.
+
+다만 액면분할이 반드시 주가 상승으로 이어지는 것은 아니다. 지난해 액면분할을 실시한 16개 상장사를 분석한 결과 13개 종목의 주가가 분할 이후 한 달 동안 하락했다. 액면분할은 거래 단위를 조정하는 기술적 조치에 불과하기 때문이다.
+
+ADR 상장도 무조건 호재이기만 한 것은 아니다. ADR 발행 과정에서 약 2.5% 규모의 신주가 발행되어 기존 주주의 지분 가치가 희석되어서다. 최근 주가가 최고점인 298만7000원 대비 약 27% 조정받았지만, 단기 반등에 따른 차익실현 매물이 나올 수 있다.
+
+노동길 신한투자증권 연구원은 "ADR 프리미엄이 국내 시장에서 어떻게 반영될지는 외국인 순매수 규모와 차익거래 자금 유입, AI 반도체 투자심리에 달려있다"며 "미국 시장에서 ADR 가격이 추가 상승세를 이어갈 수 있는지도 향후 주가를 움직이는 변수가 될 것"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001258438' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001258438</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
