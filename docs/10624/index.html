@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'주가 누르기'에 속타는 개미들…볕들날 올까[주末머니]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005788726' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10624" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'주가 누르기'에 속타는 개미들…볕들날 올까[주末머니]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">상속세 부담을 줄이려는 대주주들의 '주가 누르기' 관행에 제동을 건 'PBR 0.8배법' 논의가 가속화되고 있습니다. 이 법안이 통과되면 저PBR 기업들은 주가를 인위적으로 낮추기 어려워지며, 자사주 매입이나 배당 등 주주 친화적 정책으로 이어져 기업 가치 재평가가 예상됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">상속세 및 증여세법 개정(PBR 0.8배법) 논의는 대주주의 기업 행동과 자본정책에 구조적인 변화를 가져올 수 있는 강력한 제도적 동인입니다. 이는 장기적으로 저평가된 고유 가치 기업들의 재평가 계기가 될 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">저PBR주</span> <span class="tag stock-tag">가업승계기업</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">부동산</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#PBR0.8배법</span> <span class="tag tag-hash">#상속세</span> <span class="tag tag-hash">#대주주행동</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">국내 증시에서 오래전부터 반복돼 온 이야기다. 현행 상속세 및 증여세법은 상장회사의 가치를 상속개시일 또는 증여일 전후 일정 기간의 평균 주가로 평가한다. 상속·증여를 앞둔 대주주로서는 주가가 낮을수록 세 부담이 줄어드는 구조다. 창업주가 고령이거나 승계를 앞둔 기업일수록 주주환원에 소극적이라는 의심을 받아 온 배경이다.
+
+이 오랜 논란을 겨냥한 'PBR 0.8배법'(상속세 및 증여세법 개정안) 논의가 다시 속도를 내고 있다. 더불어민주당 이소영 의원은 지난 9일 법안 추진 상황을 공개하며, 이달 말 발표될 정부 세제개편안 반영과 국회 기획재정위원회 심사를 동시에 이뤄내겠다는 계획을 밝혔다.
+
+기업이 얼마나 저평가됐는지를 가늠할 때 투자자들이 많이 쓰는 지표가 PBR(주가순자산비율)이다. PBR이 1배라면 시장이 순자산만큼 기업가치를 인정한다는 의미이고, 0.5배라면 절반 수준으로 평가받고 있다는 뜻이다. 물론 PBR이 낮다고 모두 주가를 억누른 기업은 아니다. 그러나 낮은 주가가 상속세 부담을 줄여주는 것은 분명한 사실이다.
+
+주가 낮출수록 세금 줄던 계산법, 어떻게 바뀌나
+
+이소영 의원이 2025년 5월 발의한 개정안의 핵심은, 상장회사 시가총액이 순자산가치의 80%(PBR 0.8배)에 미치지 못하면 자산가치와 수익가치 등을 고려해 기업가치를 평가하되 하한선을 순자산가치의 80%로 두는 것이다. 세율이 아니라 세금을 매기는 기업가치에 하한선을 두는 제도로, 비상장주식에 이미 적용되는 원칙을 저평가 상장사로 확장하는 셈이다. '주가누르기 방지법'으로도 불린다.
+
+법이 시행되면 대주주의 계산법이 달라진다. PBR 0.8 아래에서는 주가를 아무리 더 낮춰도 상속세가 줄지 않는다. 어차피 순자산가치의 80%기준으로 과세된다면, 주가를 높여 보유 주식의 재산가치를 키우는 편이 합리적 선택이 된다. 사람은 제도가 만든 유인에 반응한다는 경제학의 기본 원리 그대로다.
+
+엄수진 한화투자증권 연구원은 10일 발간한 보고서에서 PBR 0.8 미만 기업은 과세표준이 주가가 아닌 순자산가치로 산정되기 때문에 "피상속인이나 증여자가 주가를 낮게 유지할 유인이 약해지거나 없어짐에 따라, PBR이 0.8이 되는 수준까지는 주가를 끌어올릴 유인이 생긴다"고 분석했다.
+
+유인이 작동하는 구간은 딱 PBR 0.8까지다. 0.8을 넘어서면 세금이 다시 주가에 연동되기 때문이다. 뒤집어 보면, 0.8이 새 '기준선'이 되면서 저PBR 기업들의 주가가 그 수준에 수렴하는 '키맞추기' 현상이 나타날 수도 있다.
+
+물론 법안을 향한 시장의 시선이 우호적이기만 한 것은 아니다. 일각에서는 낮은 PBR을 곧 '의도적 저평가'로 등치하는 전제부터 무리라고 지적한다. 건설처럼 업황이 불투명한 업종이나 철강·화학 같은 장치산업은 구조적으로 PBR이 낮고, 낮은 주가가 외부 환경 탓인지 경영진 탓인지 가려내기도 어렵다는 것이다.
+
+시세보다 높게 매겨진 세금을 내느라 지분을 처분하면 경영권이 불안정해지고, '시세가 있는 자산은 시세로 과세한다'는 세법 원칙에 어긋난다는 비판도 있다.
+
+보고서는 법안의 옳고 그름에 대한 평가를 철저히 배제하고, 이 법안이 현실화했을 때 대주주와 기업 행동이 어떻게 달라질지 그 '효과'만을 분석 대상으로 삼았다.
+
+세법 하나가 기업 행동을 바꾼다
+
+엄 연구원은 보고서에서 이 법안의 파급을 '도미노 효과'로 설명했다. 풀어보면 첫 도미노가 세법 개정, 두 번째가 대주주의 행동 변화, 세 번째가 기업의 자본정책 변화다. 주가를 억누를 이유가 사라진 기업이라면 자사주 매입, 배당 확대, 적극적인 IR 같은 주주친화 정책을 마다할 이유도 줄어든다.
+
+이 효과는 세액이 확정되는 순간 끝나지 않는다. 한국에는 상속·증여세를 최장 10~20년에 걸쳐 나눠 내는 연부연납 제도가 있고, 그동안 상속인은 세금 낼 돈을 마련해야 한다. 보고서에 따르면 국내에서는 배당소득세·종합소득세 부담이 큰 배당보다 주식담보대출이나 지분 일부 매각이 선호되는데, 두 방법 모두 주가가 높을수록 유리하다.
+
+엄 연구원은 "주식담보대출은 대출 실행 시점의 주가가 높을수록 더 많은 대출금을 받을 수 있고 추후 주가가 하락하면 반대매매 위험이 있기 때문에 대출을 받고 난 후에도 주가를 열심히 관리할 유인이 있다"며 "이러한 유인은 연부연납 기간 내내 유지될 것"이라고 내다봤지.
+
+법 개정은 이 유인을 한층 키운다. 저PBR 기업일수록 과세표준이 많게는 몇 배로 높아져 세액이 크게 늘고, 그만큼 연부연납 기간도 길어질 가능성이 크다. 주가를 관리할 이유가 더 강해지고 그 기간도 더 길어진다는 얘기다.
+
+'장기간 저PBR'에 승계 임박까지 겹친 기업 주목
+
+그렇다면 이런 조건에서 어떤 기업을 눈여겨봐야 할까. 엄 연구원은 평소 PBR이 0.8 이상이다가 일시적으로 하락한 기업보다, 뚜렷한 이유 없이 장기간 0.8 미만에 머물러 온 기업이 더 주목할 대상이라고 조언했다. 대주주가 주가 상승을 의도적으로 억제했을 가능성이 있는 만큼 개정안 통과 시 유의미한 주가 상승을 기대할 수 있다는 것이다.
+
+반대로 사양산업 소속, 수년간 높은 차입 의존도, 공장 부지·본사 건물 등 자산가치의 주가 미반영처럼 저PBR에 뚜렷한 이유가 있다면 법 개정만으로 재평가를 기대하기 어렵다.
+
+여기에 승계 이슈가 겹치면 대상은 더 좁혀진다. 엄 연구원은 ▲최대주주나 창업주가 고령이거나 경영 일선에서 물러난 지 오래된 기업 ▲최대주주 자녀가 최근 임원으로 승진했거나 등기임원으로 선임된 기업 ▲최대주주와 자녀 간 지분율 격차가 커 넘겨줘야 할 지분이 많이 남은 기업을 꼽았다. 승계 과정에서 부담할 세금 규모가 클수록 유인 변화에 더 민감하게 반응할 가능성이 높다는 분석이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005788726' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005788726</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
