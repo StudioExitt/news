@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>나스닥 데뷔 첫날 13% 급등…SK하이닉스, 본주도 날아오를까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005547082' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10664" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>나스닥 데뷔 첫날 13% 급등…SK하이닉스, 본주도 날아오를까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">—</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스의 나스닥 데뷔 첫날 급등세는 글로벌 수요의 폭발적 관심을 반영했으며, 시장의 큰 활력을 보여주었습니다. 다만 전문가들은 미국 시장에서 형성된 프리미엄이 국내 본주로 이전되는 과정(언와인드 포지션 등)을 핵심 변수로 보고 있어 신중한 접근이 필요합니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#나스닥상장</span> <span class="tag tag-hash">#반도체급등</span> <span class="tag tag-hash">#미국증시분석</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[파이낸셜뉴스] SK하이닉스가 미국예탁증서(ADR) 상장을 통해 나스닥에 입성한 첫날 10% 넘게 급등하면서 국내 증시로도 훈풍이 이어질지 주목된다.
+
+13일 금융투자업계에 따르면 지난 10일(현지시간) 미국 나스닥 시장에 상장한 SK하이닉스 미국예탁주식(ADS)은 공모가(149달러) 대비 12.76% 오른 168.01달러로 첫 날 마감했다. 장중 한때 177달러까지 오르기도 했다.
+
+ADR은 예탁증권이고, ADS는 이와 연계된 실제 주식이다. SK하이닉스 ADS 1주가 한국 보통주 10분의 1에 해당한다는 점에 비춰볼 때, 미국 상장 첫날 종가를 원화로 환산하면 국내 보통주 1주당 253만2000원 수준이다. 이는 10일 국내 본주 종가인 218만원보다 약 16% 높은 수준이다.
+
+첫날 마감가를 기준으로 환산한 SK하이닉스의 시가총액은 약 1조2000억달러로, 미국 메모리 반도체 기업 마이크론(1조1000억달러)을 웃돌았다.
+
+SK하이닉스 ADS 첫날 강세는 글로벌 투자자들의 높은 관심을 확인한 결과라는 평가가 나온다. 거래량도 폭발적이었다. 이날 하루 전체 거래량은 1억600만주에 육박해 전체 거래량의 절반 가까이가 개장 초반 30분 내에 몰린 것으로 전해졌다.
+
+JJ 키나한 시카고옵션거래소(CBOE) 글로벌마켓 수석부사장은 "SK하이닉스 ADR이 나스닥 첫 거래 시작 30분 만에 5200만주 넘게 거래됐다"며 "엄청난 거래량으로 시장에 활력을 불어넣었다"고 평가했다.
+
+증권가에서는 SK하이닉스 ADS의 첫날 강세가 국내 본주에도 긍정적인 영향을 미칠 가능성이 있다고 보면서도, 미국 시장에서 형성된 프리미엄이 그대로 국내 주가에 반영될지는 좀 더 지켜봐야 한다는 분석을 내놓고 있다.
+
+신한투자증권은 상장 초기 SK하이닉스 ADS가 국내 본주 환산 가격보다 높은 수준에서 거래될 가능성이 크다고 분석했다. 미국 투자자들이 달러로 거래할 수 있고 미국 장중에도 자유롭게 매매할 수 있는 데다, 한국 주식에 직접 투자하기 어려운 자금까지 유입될 수 있어서다.
+
+다만 ADS의 높은 가격이 국내 본주 상승으로 곧바로 이어질지는 미지수다. 미국 시장에서 형성된 프리미엄이 국내 시장으로 이전될 수도 있지만, 미국 시장에만 별도 프리미엄으로 남을 가능성도 있기 때문이다.
+
+증권가는 TSMC를 대표적인 사례로 꼽는다. TSMC는 미국 ADS가 대만 본주보다 높은 가격에 거래되는 경우가 많았지만, 이는 대만 본주를 미국 ADS로 전환하는 과정에 제약이 있어 두 시장 간 가격 차이가 쉽게 해소되지 않았기 때문이라는 설명이다.
+
+SK하이닉스 역시 본주와 ADS 간 완전한 자유 전환 구조는 아니다. 회사가 예탁 주식 수준을 제한할 수 있고 본주를 ADS로 전환하는 과정에도 일정한 절차가 필요하다. 다만 TSMC처럼 구조적으로 공급이 강하게 제한되는 수준인지는 확인되지 않은 만큼, 미국 시장에서 형성된 프리미엄이 장기간 유지될지는 추가로 지켜봐야 한다는 분석이다.
+
+노동길 신한투자증권 연구원은 "국내 투자자들이 봐야 할 것은 ADS 첫날 상승률이 아니라 미국에서 형성된 프리미엄이 국내 본주로 얼마나 이전되는지 여부"라며 "상장 기대감과 공모에 따른 희석 우려는 이미 상당 부분 주가에 반영된 만큼 앞으로는 기존 헤지·공매도 포지션이 되돌려지는 언와인드(unwind) 여부가 본주 주가의 핵심 변수가 될 것"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005547082' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005547082</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
