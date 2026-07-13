@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 랠리에 균열… 주식 투매 불러온 ‘반도체 고점론’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.14</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/366/0001178896' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10888" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>AI 랠리에 균열… 주식 투매 불러온 ‘반도체 고점론’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 과열에 기반한 반도체 슈퍼 사이클 기대감이 시장을 주도했으나, 최근 기업 실적(브로드컴)과 데이터센터 공급 가능성(메타 클라우드 사업 진출 등)에 대한 의구심이 커지면서 '반도체 고점론'이 확산되었습니다. 이에 따라 코스피 지수가 큰 폭으로 하락하며 시장 전반의 투자 심리가 위축되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 과열 기대감이 주가 급락을 유발하며 투자 심리에 강력한 악재로 작용했기 때문에 시장 영향력이 높음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #AI과열 #주식하락 #고점론</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">AI 투자 과열론이 반도체 고점론으로 전이
+코스피 지수가 13일 9% 폭락하면서 지난 6월 22일 기록한 최고치(종가 9114.55포인트) 대비 25% 넘게 하락했다. 과거 코로나19 팬데믹이나 미국 신용등급 강등, 유럽 재정위기처럼 글로벌 경제를 뒤흔드는 큰 충격이 있었던 경우를 제외하면 이례적인 낙폭이다.
+글로벌 거시경제에 뚜렷한 악재가 발생하지 않은 상황에서 증시가 폭락하자 시장에선 그 원인을 다각도로 분석하고 나섰다. 미국과 이란의 지정학적 위기 고조, 단일종목 레버리지 상장지수펀드(ETF)의 시장 교란 등이 언급되지만, 증시를 흔든 근본적인 원인은 결국 인공지능(AI) 과열론과 반도체 고점론이라는 게 전문가들의 분석이다.
+그동안 삼성전자·SK하이닉스가 주도한 국내 증시 상승 랠리는 반도체 슈퍼 사이클이 장기간 이어질 것이라는 기대에 기반했다. AI 수요 증가로 데이터센터 건설에 천문학적인 투자가 이뤄지고, 이는 호황과 불황이 반복되는 반도체 산업 특유의 ‘경기 사이클’마저 없앨 것이라는 분석이 힘을 얻었다.
+증권가에선 코스피 지수가 1만포인트까지 오를 것이라는 낙관론이 우세했다. 삼성전자는 한 분기에만 100조원에 육박하는 영업이익을 기록하며 ‘반도체 초호황’을 증명해 보였다.
+하지만 시장의 분위기는 지난달 미국 브로드컴이 실적을 발표한 직후 급변했다.
+브로드컴은 다음 분기 AI 관련 매출이 160억달러에 이를 것으로 예상했는데, 이는 시장 예상치(172억달러)에 미치지 못한 규모였다. 브로드컴 실적 발표 직후 반도체 호황이 고점을 찍은 것 아니냐는 불안이 시장을 덮쳤다. 미국 필라델피아 반도체 지수가 10% 폭락했다.
+이후 마이크론이 깜짝 실적을 발표하면서 반도체 ‘피크아웃’ 논란을 잠재우는 듯했다. 그런데 반신반의하는 투자자들의 경계심을 키우는 장면이 또한번 연출됐다.
+지난 1일 페이스북·인스타그램의 모회사 메타가 자체 데이터센터의 유휴(遊休) 컴퓨팅 자원을 외부에 판매하는 클라우드 사업에 진출하겠다고 발표하자 세계 증시가 발칵 뒤집혔다. 대표적인 하이퍼스케일러(초대형 데이터센터 운영사)인 메타가 컴퓨팅 자원이 남는다는 걸 인정한 것으로 해석되면서 AI 과열론은 다시 고개를 들었다.
+AI 과열론은 반도체 고점론으로 이어졌다. AI 투자가 전형적인 ‘사이클 업종’이던 반도체 산업의 성격을 바꿀 것이라는 분석에도 균열이 가기 시작했다.
+월스트리트저널(WSJ)은 지난 10일 미국 나스닥에 주식예탁증서(ADR)를 상장한 SK하이닉스에 대해 “주가수익비율(PER)만 보면 주가가 싸 보이지만, 메모리 산업의 특성을 감안하면 단순히 저평가라고 보기 어렵다”고 지적했다.
+AI 산업 성장의 불길이 아무리 뜨겁다고 해도 결국 공급 부족이 해소되고 반도체 업체의 수익성이 둔화되는 것은 피할 수 없다는 분석이 잇따르면서 반도체 랠리에도 제동이 걸리는 모습이다.
+유승민 삼성증권 연구원은 “이와 관련해 나오고 있는 ‘나쁜 신호’는 한국, 미국 등 테크 비중이 높은 주식시장 PER에 대한 디레이팅(derating)이 진행 중이라는 점”이라며 “이는 강세장 후반 사이클에서 목격되는 일반적 현상”이라고 말했다.
+다만 일각에선 아직 데이터로 확인되지 않은 반도체 고점론에 과민하게 반응할 필요는 없다고 조언한다. 반도체 고점론이 증시 투매를 유발했지만, 그동안 주가 상승을 견인한 펀더멘털 자체가 훼손된 상황은 아니라는 것이다.
+당장 반도체 업황을 둘러싼 거시 지표가 여전히 견조하다. 이달 1~10월 우리나라 수출은 전년 동기 대비 54% 증가한 298억달러로 사상 최대를 기록했는데, 이중 반도체 수출이 193% 증가한 112억달러로 전체 수출의 40%를 차지했다.
+김석환 미래에셋증권 연구원은 “지금 주가 하락을 곧 반도체 수요의 급격한 위축으로 해석할 근거는 충분하지 않다”라며 “29일 예상되는 SK하이닉스의 2분기 잠정실적 발표와 하이퍼스케일러의 실적 발표에서 향후 설비투자(CapEx) 전망 업데이트를 확인한 뒤 대응해야 한다.”</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/366/0001178896' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/366/0001178896</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
