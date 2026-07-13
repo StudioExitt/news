@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스닥 바이오株 흔들…시총10위내 2개뿐</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005706940' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10850" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스닥 바이오株 흔들…시총10위내 2개뿐</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">HLB가 핵심 신약 '리보세라닙'의 FDA 승인 무산 악재로 주가가 급락하며 시총 순위가 크게 하락했다. 이는 바이오 섹터 전반에 대한 시장의 신뢰를 흔들고 있으며, 자금이 반도체 등 다른 섹터로 급격히 쏠리는 현상이 두드러졌다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 바이오 기업의 핵심 신약 개발 실패(FDA 승인 무산)는 단순한 개별 종목 이슈를 넘어 코스닥 전체 바이오 섹터에 대한 투자 심리 위축을 가져와 시장 구조적 변화 위험을 시사하기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">HLB</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">제약</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥 #바이오 #신약개발 #FDA</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">HLB가 신약 관련 악재로 인해 주가가 급락하면서 코스닥 내 시가총액 순위가 기존 10위에서 21위로 떨어졌다. 연이은 바이오 섹터의 악재와 반도체 쏠림이 맞물리면서 코스닥 시총 10위권 내 바이오 종목은 올 초 7개에서 2개로 대폭 축소됐다.
+
+13일 한국거래소에 따르면 이날 HLB는 하한가인 2만5650원에 장을 마감했다. 같은 날 HLB제약(-28%), HLB생명과학(-26.46%), HLB글로벌(-8.17%) 등 그룹주가 전반적으로 약세를 보였다.
+
+HLB는 간암 신약 '리보세라닙'의 미국 식품의약국(FDA) 승인이 무산되면서 지난 10일에 이어 2거래일 연속 하한가를 기록했다. 2거래일간 주가는 50% 이상 폭락했다. 이날 주가 급락 여파로 코스닥 시장 시가총액 순위도 전 거래일 종가 기준 10위에서 21위로 곤두박질쳤다.
+
+2022년 초부터 코스닥 시총 상위권 자리를 지켜온 HLB가 리보세라닙의 미국 승인 불발 악재가 반복됨에 따라 시장 내 영향력이 급격히 위축되는 모습이다.
+
+리보세라닙은 혈관 내피 성장인자 수용체(VEGFR-2)를 억제해 암세포가 성장을 위해 공급받는 신생혈관 생성을 차단하는 경구용 약물이다. 암세포 성장에 필수적인 산소와 영양분의 공급을 차단하는 방식으로 암을 사멸한다.
+
+HLB는 지난 10일 리보세라닙-캄렐리주맙 병용요법 FDA 심사에서 세 번째 보완요구서한(CRL)을 수령했다고 밝혔다.
+
+HLB는 앞서 2024년 5월, 2025년 3월에도 FDA 승인에 도전했다가 고배를 마신 바 있다.
+
+리보세라닙의 FDA 승인이 좌절될 때마다 HLB의 주가 변동성도 커지는 형국이다. 승인 기대감이 높아질 때면 주가가 급등했다가 좌절될 때마다 주가가 급락하는 양상이 반복되고 있다. 2024년 5월에는 HLB 주가가 10만원대에서 5만원대로 반 토막 났으며, 2025년 3월에는 9만원에 육박하던 주가가 4만6000원 선으로 단기간 급락했다.
+
+올 상반기 코스닥 시장은 바이오 섹터의 연쇄 악재와 반도체 섹터로의 급격한 자금 쏠림이 맞물리며 시총 상위 종목이 크게 재편됐다. 작년 말까지만 해도 코스닥 시총 10위권 내에 7개의 바이오 종목이 포진하며 강세를 보였으나 올 들어 급격히 축소됐다. 13일 HLB마저 10위권 밖으로 밀려나며 현재 코스닥 시총 상위 10개 종목 중 바이오 기업은 알테오젠과 코오롱티슈진 단 2개만 잔류하고 있다.
+
+특히 삼천당제약이 주가 급등세를 이어가던 지난 3월 대표이사의 대규모 지분 매각 공시를 기점으로 불성실공시법인 지정 예고와 블록딜 철회 사태가 잇따르자 바이오 섹터에 대한 시장의 신뢰가 흔들리기 시작했다. 뒤이어 에이비엘바이오는 지난 4월 말 담도암 2차 치료제 '토베시미그'의 임상2·3상 결과가 시장의 기대치를 하회하면서 가파른 주가 조정을 겪었다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005706940' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005706940</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

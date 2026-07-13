@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>삼닉 레버리지 우려 속…이찬진, 해법엔 침묵</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #6b7280; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005706939' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10851" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>삼닉 레버리지 우려 속…이찬진, 해법엔 침묵</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">미분류</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">—</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금융감독원장은 ETF 과장광고와 단일종목 레버리지 상품의 위험성을 지적하며 자정 노력을 주문했다. 규제당국의 높은 경계감은 투자자 보호를 강화할 것이라는 시장 우려를 높였으며, 개인투자자의 리스크 관리가 주요 이슈로 부상했다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF규제</span> <span class="tag tag-hash">#레버리지위험</span> <span class="tag tag-hash">#투자자보호</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">금감원장·운용사CEO 간담회
+운용사 의결권 행사체계 점검
+ETF 과장광고 자정노력 주문
+비공개 논의서 레버리지 거론
+변동성·개인 손실 우려 표명
+구체적인 개선책 논의는 안해
+
+이찬진 금감원장
+이찬진 금융감독원장이 자산운용업계를 향해 상장지수펀드(ETF) 관련 거짓·과장광고 근절과 괴리율 관리를 위한 고강도 자정 노력을 공개적으로 주문했다. 이어 비공개로 업계 의견을 청취하는 자리에서는 단일종목 레버리지 ETF가 증시 변동성과 개인투자자 손실을 키울 수 있다는 우려도 표명한 것으로 전해졌다. 다만 삼전닉스 레버리지와 관련해 구체적인 제도 개선책에 대해서는 침묵을 지키며 장고를 거듭하는 모습이다.
+
+이 원장은 13일 금융투자협회에서 20개 자산운용사 대표들과 간담회를 열고 "투자자가 ETF를 직접 선택하는 과정에서 운용사 광고에 주로 의존하는 만큼 거짓·과장광고는 투자자 보호 측면에서 매우 엄중한 사안"이라며 "특단의 자정 노력이 필요하다"고 밝혔다. 한국투자신탁운용은 'ACE 미국우주테크액티브'에 스페이스X 공모주를 공모가로 편입할 수 있다고 홍보했지만 인수단에 참여한 미래에셋증권이 최종 배정에서 공모주를 한 주도 받지 못하면서 계획이 무산됐다.
+
+이 원장은 또 "ETF를 운용할 때 유동성공급자(LP) 증권사와 함께 괴리율 관리에도 만전을 기해달라"고 당부했다. 이는 단일종목 레버리지 출시 이후 부각된 가격 왜곡 문제를 염두에 둔 발언으로 해석된다.
+
+이날 간담회는 운용사의 의결권·주주권 행사체계 점검 결과를 공유하기 위해 마련된 자리였지만 비공개 논의에서는 최근 자본시장 현안으로 떠오른 삼성전자·SK하이닉스 단일종목 레버리지 ETF 문제도 거론됐다. 한 참석자는 "이 원장이 레버리지 ETF가 증시 변동성을 높였다는 점을 거듭 강조했다"며 "다만 구체적인 개선책까지 논의되지는 않았다"고 말했다. 이날 코스피가 6900선을 밑돌면서 단일종목 레버리지 14종이 일제히 상장 이후 최저가를 기록한 가운데 참석자들 사이에서는 하락장에서 개인투자자의 손실이 더욱 커질 수 있다는 우려가 잇따랐다.
+
+한 운용사 대표는 "해외에도 유사한 상품이 존재해 도입 자체에는 근거가 있었지만 국내 투자자들이 예상보다 훨씬 공격적으로 활용하고 있다"며 "지금과 같은 하락장에서는 개인투자자 손실 문제가 더 심각해질 수 있다"고 말했다.
+업계에서는 향후 ETF 상품을 심사하고 상장하는 과정에서 시장 변동성을 확대할 가능성을 더욱 면밀하게 살펴봐야 한다고 건의한 것으로 전해졌다.
+
+시장에서는 개인투자자의 진입장벽을 높이는 방안이 주요 보완책으로 거론된다. 현재 단일종목 레버리지 ETF에 투자하려면 기본예탁금을 1000만원 이상 맡기고 온라인 사전교육을 이수해야 한다. 기본예탁금을 추가로 높여 실질적인 위험 감내 능력을 갖춘 투자자만 시장에 들어오도록 해야 한다는 주장이다.
+
+투자자가 보유한 전체 금융자산 가운데 단일종목 레버리지 등 초고위험 상품 비중이 일정 수준을 넘으면 신규 매수를 제한하는 '투자자별 맞춤형 한도'도 대안으로 거론된다. 단순히 계좌에 일정 금액을 예치했는지만 볼 것이 아니라 투자자의 자산 규모와 상품별 위험 노출도를 함께 따져야 한다는 취지다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005706939' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005706939</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
