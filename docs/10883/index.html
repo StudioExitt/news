@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"그간 번 돈 다 토해내게 생겼다"블랙먼데이 정리</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.14</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/021/0002804415' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10883" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"그간 번 돈 다 토해내게 생겼다"블랙먼데이 정리</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 반도체 대형주 급락에 편승하며 9% 가까이 폭락하고, 올해 들어 여러 차례 서킷브레이커와 사이드카가 발동되는 패닉장이 펼쳐짐. 레버리지 상품과 빚을 이용한 투자자들이 막대한 손실을 입고 있으며, 시장은 반도체 업황 및 규제 이슈에 주목함.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 대형주의 급락으로 인한 시장 패닉 및 기술적 제도 발동(CB, 사이드카) 등 시스템 리스크가 부각되며 단기 투자심리에 큰 악영향을 미치고 있기 때문.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#블랙먼데이</span> <span class="tag tag-hash">#반도체지수하락</span> <span class="tag tag-hash">#서킷브레이커</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">13일 서울 중구 하나은행 본점 딜링룸에 코스피와 SK하이닉스 주가가 표시되고 있다. 연합뉴스
+국내 증시가 13일 또다시 패닉에 빠졌다. 코스피는 9% 가까이 폭락하며 6800선까지 밀렸고 장중에는 올해 일곱 번째 서킷브레이커가 발동된 '검은 월요일'이었다. 개인투자자들의 손실이 눈덩이처럼 불어나며 “올해 주식 투자로 번 돈을 최근 한 달 새 모두 반납하게 생겼다”는 하소연도 나온다.
+
+이날 한국거래소에 따르면 코스피는 전 거래일보다 8.95% 내린 6806.93에 거래를 마쳤다. 지수는 전장보다 0.85% 내린 7412.03으로 출발, 장 초반 등락을 반복했지만 SK하이닉스와 삼성전자 등 반도체 대형주가 급락하면서 낙폭을 키웠다. 낮 12시25분에는 6951.02까지 밀리며 7000선을 내줬고 오후 들어 낙폭은 8%대로 확대됐다.
+
+한국거래소는 이날 오전 10시34분14초 코스피200선물지수 급락으로 유가증권시장의 프로그램 매도호가 효력을 5분간 정지했다. 발동 당시 코스피200선물지수는 전 거래일보다 5.23% 내린 1142.16이었다.
+
+오후에는 서킷브레이커까지 발동됐다. 거래소는 오후 1시28분32초 유가증권시장에 1단계 서킷브레이커를 발동하고 매매거래를 20분간 중단했다.발동 당시 코스피는 전 거래일보다 8.08% 내린 6871.20이었다. 코스피가 전 거래일 종가 대비 8% 이상 하락한 상태가 1분간 지속되면 서킷브레이커가 발동된다.
+
+코스피시장 서킷브레이커는 제도 도입 이후 총 13회 발동됐는데, 이 가운데 7회가 올해 집중됐다. 코스피 사이드카도 올해 들어 35회 발동해 금융위기 당시인 2008년 26회를 이미 웃돌았다. 이달에만 6번째 사이드카다.
+
+수급도 나빴다. 유가증권시장에서 개인은 3조8810억 원 순매수했지만 외국인과 기관은 각각 1조7064억 원, 2조1965억 원 순매도했다.외국인과 기관의 동반 매도가 반도체 대형주에 집중되며 지수를 끌어내렸다.
+
+무엇보다 반도체 투톱이 폭락을 주도했다. 삼성전자는 전 거래일보다 10.70% 내린 25만4500원에 마쳤고 SK하이닉스는 15.37% 급락한 184만5000원으로 마무리됐다. SK스퀘어는 17.60%, 삼성전기는 18.62% 폭락했다. 반면 LG에너지솔루션은 0.77%, KB금융은 0.98%, 삼성바이오로직스는 0.36% 올랐다. 현대차는 2.95%, 삼성생명은 4.26% 하락했다.
+
+이날 급락은 반도체주 수급 불안의 결과로 풀이된다. SK하이닉스 미국주식예탁증서(ADR) 상장 이후 국내 본주 차익실현 압력이 커지며 반도체 대형주 매물이 확대됐다.
+
+특히 레버리지 상품에 자금이 물린 개인 투자자들의 손실이 커지고 있다. 레버리지 상품은 기초자산의 하루 수익률을 배수로 추종해 상승과 하락이 반복될수록 손실이 커질 수 있다. ‘음의 복리’라고도 한다. 개인은 지난달 19일부터 최근까지 삼성전자와 SK하이닉스 단일종목 레버리지 상품을 수조원어치 사들였다. 그러나 이날 삼성전자와 SK하이닉스가 각각 10%와 15% 급락하면서 두 종목을 기초자산으로 하는 단일종목 레버리지 상장지수펀드(ETF) 14종이 일제히 역대 최저가를 기록했다.
+
+빚을 내 투자한 개인의 부담도 커지고 있다. 지난 10일 위탁매매 미수금은 1조4322억 원에 달했다. 정해진 기한 안에 돈을 갚지 못하면 증권사가 주식을 강제로 처분한다. 9일 반대매매 규모는 1422억 원으로, 지난달 9일 1698억 원 이후 한 달 만에 가장 많았다. 주가가 추가로 밀릴 경우 반대매매가 다시 하락을 부르는 악순환이 나타날 수 있다는 우려도 나온다.
+
+시장의 관심은 단일종목 레버리지 규제와 반도체 업황에 쏠리고 있다. 김용범 청와대 정책실장은 지난 10일 관련 상품을 두고 “F4 회의에서 면밀히 살펴보고 있다”고 밝혔다. 또 증시 변동성이 잦아들려면 반도체 업황에 대한 의구심이 해소돼야 한다는 분석도 있다. 이달 말 발표되는 마이크로소프트, 메타, 아마존 등 하이퍼스케일러의 실적과 인공지능(AI) 투자 계획이 핵심 변수로 꼽힌다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/021/0002804415' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/021/0002804415</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
