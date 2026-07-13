@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BTS 뛰고, 빅뱅 온다…주가 빠진 엔터주 ,하반기 반등할까?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/023/0003987259' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10712" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>BTS 뛰고, 빅뱅 온다…주가 빠진 엔터주 ,하반기 반등할까?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">엔터주들은 상반기 동안 주가 하락세를 겪었으나, BTS 월드투어 재개, 빅뱅 컴백 등 주요 아티스트들의 대규모 활동이 하반기에 본격화될 전망입니다. 증권가는 이러한 공연 및 MD 매출 증가를 바탕으로 엔터주의 실적과 주가 반등 가능성을 높게 보고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">업계 최고 아티스트들의 대규모 글로벌 투어 및 컴백 일정이 하반기부터 본격적인 현금 흐름과 매출 증가를 유발하며 섹터 전반의 반등 동력으로 작용할 것으로 분석되기 때문입니다. (실적 기반 상승 기대)</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">하이브</span> <span class="tag stock-tag">에스엠</span> <span class="tag stock-tag">JYP엔터테인먼트</span> <span class="tag stock-tag">와이지엔터테인먼트</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">미디어</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">소비자 금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#KPOP</span> <span class="tag tag-hash">#엔터주반등</span> <span class="tag tag-hash">#글로벌투어</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">엔터주 BIG4, 올 상반기 30~40% 하락
+서울 용산구 하이브 본사 앞으로 시민들이 지나가고 있다.
+올해 코스피가 반도체와 인공지능(AI) 관련주를 중심으로 가파른 상승세를 이어가는 동안 대표 엔터테인먼트 종목들은 좀처럼 힘을 쓰지 못했다.
+방탄소년단(BTS)은 월드투어를 재개했고, 빅뱅은 데뷔 20주년 컴백을 앞두고 있다. 스트레이키즈와 에스파 등 주요 K팝 그룹들도 잇따라 활동에 나서고 있지만 투자자들의 시선은 반도체로 향했다. 다만 증권가에서는 하반기부터 주요 아티스트들의 공연과 음반, MD(굿즈) 매출이 본격 반영되면서 엔터주의 실적과 주가 모두 반등 국면에 진입할 가능성이 높다고 보고 있다.
+
+◇ 목표주가 줄줄이 하향…“주가가 실적 못 따라가”
+10일 한국거래소에 따르면 하이브와 에스엠(SM), JYP엔터테인먼트, 와이지엔터테인먼트(YG) 등 국내 주요 엔터 4사의 주가는 올해 들어 일제히 약세를 나타냈다. 올 초 대비 하이브(10일 종가 기준 22만500원)는 33.2%, 에스엠(7만7500원)은 42.6%, JYP(5만700원)는 30.2%, YG(6만9400원)는 39.2% 각각 하락했다. BTS 월드투어가 시작됐고 주요 그룹들의 컴백 일정도 잇따라 공개됐지만 주가는 거꾸로 갔다. 증권가는 연초 BTS 복귀 등 대형 이벤트에 대한 기대감이 주가에 먼저 반영된 데다 이후 투자 자금이 반도체와 AI 관련주로 쏠리면서 엔터 업종이 상대적으로 소외됐다고 분석한다. 여기에 신인 IP 투자 확대와 월드투어 준비 비용 증가 등으로 단기 수익성에 대한 우려까지 겹치면서 밸류에이션 할인 폭도 커졌다는 설명이다.
+
+대부분의 증권사는 최근 엔터주의 목표주가를 하향 조정했다. 하이브는 33만~35만원, 에스엠은 10만9000원, JYP는 8만원 안팎, YG는 6만4000원 수준이다. 다만 이는 실적 전망을 낮춘 것이 아니라 업종 전반의 밸류에이션을 조정한 결과라는 게 증권가의 공통된 설명이다.
+증권가는 하반기 주요 아티스트들의 활동이 본격화되면 실적이 빠르게 개선되면서 투자심리도 회복될 가능성이 크다고 보고 있다.
+
+특히 업종 대표주인 하이브가 반등을 이끌 것이란 분석이 많다. 하이브는 BTS가 지난 4월 시작한 월드투어를 내년 3월까지 총 88회 이어가며 북미·유럽·남미·아시아 스타디움 공연을 소화할 예정이다. 공연뿐 아니라 MD 판매와 라이선싱, 음반 판매까지 수익원이 다변화되고 있어 2분기부터 실적 개선 효과가 본격화될 것이라는 분석이다. 여기에 코르티스와 캣츠아이 등 신규 IP도 빠르게 성장하면서 BTS 의존도가 점차 낮아지고 있다는 평가가 나온다. 이환욱 유안타증권 연구원은 “2분기부터 BTS 월드투어 실적이 본격 반영되며 큰 폭의 실적 개선이 예상된다”며 “코르티스와 캣츠아이의 투어와 신보 활동, 뉴진스 활동 재개 가능성까지 더해져 하반기 실적 및 주가 모멘텀을 확보할 것”이라고 분석했다. 흥국증권은 하이브가 2분기 역대 최대 실적을 기록할 것으로 전망했고, LS증권도 “높은 체급을 확인할 2분기”라고 평가했다.
+
+◇ 스트레이 키즈·빅뱅·에스파…하반기 공연 러시
+다른 엔터사들도 하반기 대형 아티스트들의 활동을 앞세워 반등을 노리고 있다. 에스엠은 에스파가 8월 서울 고척스카이돔 공연을 시작으로 세 번째 월드투어에 나서는 데 이어 라이즈와 NCT WISH, 하츠투하츠 등 저연차 IP의 성장세가 이어질 것으로 전망된다. EXO 등 기존 IP도 안정적인 팬덤을 유지하고 있어 엔터 4사 가운데 가장 안정적인 실적 흐름을 이어갈 것이라는 평가다. 이화정 NH투자증권 연구원은 “저연차 IP의 수익성 강화와 기존 IP의 수명 장기화에 따른 안정적인 실적이 이어지고 있다”며 “SM은 중국 내 K팝 기획사 최초로 공식 MD 매장을 확보한 만큼 중국 공연이 재개되면 가장 빠른 수혜가 기대된다”고 말했다.
+
+JYP엔터테인먼트는 올 하반기 스트레이키즈의 컴백과 월드투어가 예정돼 공연과 MD 매출이 실적에 본격 반영될 것으로 전망했다. 정지수 NH투자증권 연구원은 “도약 직전의 웅크림 과정”이라고 평가했고, 장지혜 키움증권 연구원도 “하반기 견고한 펀더멘털이 증명될 것”이라고 내다봤.
+
+YG엔터테인먼트는 빅뱅이 8월부터 내년 2월까지 18개 도시, 31회 규모의 스타디움·돔 월드투어를 앞두고 있다는 점이 최대 모멘텀으로 꼽힌다.
+이화정 NH투자증권 연구원은 ‘구원투수가 무려 빅뱅’이라는 제목의 보고서에서 “상방을 여는 고연차, 하방을 닫는 저연차”라며 “베이비몬스터와 트레저가 실적을 받쳐주는 가운데 빅뱅이 실적 개선을 이끌 것”이라고 전망했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/023/0003987259' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/023/0003987259</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
