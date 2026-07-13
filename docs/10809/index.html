@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7000선도 붕괴된 코스피…올해에만 서킷브레이커 7차례</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006329272' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10809" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>7000선도 붕괴된 코스피…올해에만 서킷브레이커 7차례</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">KOSPI가 8.95% 폭락하며 7000선이 붕괴되었고, 반도체 대장주의 급락과 수급 불안으로 서킷브레이커가 여러 차례 발동되며 큰 변동성을 보였습니다. 하지만 분석가들은 향후 실적 시즌 도래와 거시 경제 지표 발표를 근거로 기술적 반등의 가능성도 언급했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단기적인 패닉셀(Panic Sell) 발생으로 투자심리가 극도로 위축된 상황이며, 대형주 하락에 따른 공포가 시장 전반의 위험 신호로 작용함. 다만, 애널리스트들이 언급한 거시경제 지표와 실적 시즌이라는 바닥 논리는 중장기적인 반등 동력을 제시하고 있어 투자 전략 재점검이 필요한 시점임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피폭락</span> <span class="tag tag-hash">#서킷브레이커</span> <span class="tag tag-hash">#반도체사이클</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">8.95% 떨어진 6806.93에 마감
+오전 매도 사이드카 이어 오후 서킷브레이커 발동
+삼전·하닉 모두 10% 이상 급락
+코스닥도 800선 무너져 코스피가 9% 가까이 폭락하며 7000선까지 내어주며 마감했다. 반도체 대장주인 삼성전자(005930)와 SK하이닉스(000660)가 나란히 하락세를 기록하며 전체 지수를 끌어 내렸고, 결국 서킷브레이커(일시중단)까지 발동됐다.
+
+13일 서울 중구 하나은행 본점 딜링룸에서 딜러들이 업무를 보고 있다. (사진=방인권 기자)
+
+13일 엠피닥터에 따르면 코스피는 이날 63.91포인트(0.85%) 내린 7412.03에 출발해 669.01포인트(8.95%) 떨어진 6806.93에 마감하며 7000선이 붕괴됐다. 장중에는 6783.43까지 밀려나기도 했다.
+
+이날 코스피 시장에서는 개인 투자자 홀로 3조 8822억원을 순매수했으며 외국인과 기관 투자자가 각각 1조 6850억원, 2조 2194억원 순매도했아. 프로그램별로는 차익과 비차익을 합쳐 1조 7715억원 매도 우위를 보였다.
+
+시가총액 1, 2위인 삼성전자와 SK하이닉스에서 특히 매물이 쏟아지며 주가가 속절없이 무너졌다. 반도체 산업에 대한 피크아웃(고점 통과) 우려가 지속하면서 매도세를 증폭시킨 것으로 풀이된다. 이날 한국거래소 기준으로 삼성전자는 3만 500원(10.70%) 떨어진 25만 4500원, SK하이닉스는 33만 5000원(15.37%) 떨어진 184만 5000원에 거래를 마쳤다.
+
+이에 이날 오후 1시 28분쯤에는 코스피 시장에서 서킷브레이커가 발동됐다. 이는 지난 7일 이후 4거래일 만으로, 코스피에서 서킷브레이커가 발동한 것은 올해 들어 7번째다. 앞서 오전에는 매도 사이드카(프로그램 매도호가 일시 효력정지)가 발동, 오후 들어 낙폭이 더 커지면서 서킷브레이커로까지 이어졌다.
+
+다만 증권가에서는 2분기 실적 발표 시기가 돌아오는 만큼 향후 반등 여지는 충분하다고 분석한다.
+
+이경민 대신증권 연구원은 “펀더멘털 훼손이 아닌 AI 산업 서사의 균열, 밸류에이션의 되돌림, 수급(레버리지 청산)의 충격 영향으로 판단한다. 특히 국내 투자심리, 수급, 레버리지 ETF(상장지수펀드) 간 악순환의 고리가 형성되면서 글로벌 증시 대비 차별적인 약세를 기록 중”이라고 설명했다.
+
+지지선을 예단하기 어려운 것은 사실이나, 긴 호흡에서는 작은 변화에도 코스피의 상승 추세는 재개할 수 있다고 봤다.
+
+이 연구원은 “14일 발표되는 6월 CPI(소비자물가지수)가 중요한 분기점으로, 미국 통화정책 불확실성과 금리인상 우려는 진정 국면으로 진입할 수 있다”며 “여전히 고공 행진 중인 채권금리, 달러의 하락 반전, 하향 안정 국면 진입으로 이어지며 글로벌 증시 상승과 코스피 급락 진정에 힘을 실어줄 전망”이라고 설명했다. 여기에 다음주부터 본격적인 실적 시즌에 돌입하면서 주요 업종의 저평가 매력이 부각될 수 있다고 부연했다.
+
+한편 이날 코스닥은 2.29포인트(0.27%) 오른 839.72에 출발해 38.07포인트(4.55%) 내린 799.36에 거래되며 800선이 무너졌다. 코스닥 시장에선 개인 투자자와 기관 투자자자 각각 2114억원, 1736억원 순매수했으며 외국인 투자자 홀로 3879억원 순매도했다. 프로그램별로는 차익과 비차익을 합쳐 1856억원 매도 우위를 보였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006329272' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006329272</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
