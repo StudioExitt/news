@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 PER 역사적 저점 근접…美 빅테크 실적 발표가 변곡점</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005309491' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10862" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 PER 역사적 저점 근접…美 빅테크 실적 발표가 변곡점</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 과매도 구간에 진입했으나, 급락의 주요 원인은 반도체 업황 고점 우려와 레버리지 상품 등에 따른 수급 꼬임으로 분석됩니다. 시장 전문가들은 하락을 '저가 매수 기회'로 평가하며, 향후 미국 빅테크의 AI 관련 실적 발표를 핵심 변곡점으로 지목했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">코스피의 단기 하락은 과매도권에 진입한 측면이 강하며, 주가 회복의 주요 동력과 시점(미국 빅테크 실적)까지 명확하게 제시하고 있어 추후 시장 방향성에 큰 영향을 미칠 것으로 예상됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">TSMC</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#빅테크실적</span> <span class="tag tag-hash">#AI투자</span> <span class="tag tag-hash">#과매도</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피지수가 2개월 만에 ‘6000대’로 후퇴한 데 대해 전문가들은 “과도한 하락”이라고 진단했다. 반도체 고점 논란과 레버리지 상장지수펀드(ETF)에 따른 수급 꼬임, 중동 전쟁 등이 겹치며 ‘과매도’가 이뤄졌다는 분석이다. 이달 말 발표될 예정인 미국 빅테크 실적을 ‘9천피’ 회복을 위한 최대 변수로 지목했다.
+◇반도체 고점 우려에 무너진 코스피
+13일 한국경제신문이 국내 주요 증권사 리서치센터장과 시황팀장 등을 대상으로 긴급 설문조사한 결과 코스피지수가 6000대까지 밀린 건 과도하다는 의견이 지배적이었다. 이진우 메리츠증권 리서치센터장은 “실적을 고려하면 과매도권”이라며 “주가수익비율(PER)이 6배 수준까지 내려온 건 매우 이례적”이라고 설명했다. 김석환 미래에셋증권 수석연구위원은 “이익 전망 훼손보다 공포가 가격에 과도하게 반영된 수준”이라고 진단했다.
+
+증시 조정 이유로는 반도체 피크아웃 우려를 공통적으로 언급했다. 황승택 하나증권 리서치센터장은 “메모리 반도체 업황에 대한 고점 우려와 투자심리 악화가 주된 원인”이라며 “삼성전자 실적은 양호했지만 시장 기대치에는 미치지 못했다”고 설명했다.
+
+SK하이닉스 영업이익이 시장 컨센서스를 8% 밑돌 것이란 한국투자증권 보고서도 투자심리 악화로 이어졌다. 채민숙 한국투자증권 연구원은 “체결된 장기공급계약(LTA)을 바탕으로 가격 가정을 반영한 결과 올해와 내년 영업이익 추정치를 기존 대비 각각 9%, 11% 하향 조정했다”고 말했다.
+
+글로벌 환경과 수급 요인도 불안한 지점으로 꼽혔다. 이종형 키움증권 리서치센터장은 “호르무즈해협 폐쇄를 둘러싼 미국·이란 갈등이 재점화되면서 유가와 미 국채금리가 동반 상승해 매크로(거시경제) 부담이 가중됐다”고 했다. 이진우 센터장은 “반도체 톱2에 대한 쏠림이 워낙 심한 상황에서 레버리지 ETF 상품이 증폭기 역할을 했다”며 “개인의 자금 유입 강도가 줄어들고 외국인도 아직 돌아오지 않는 등 수급 안전판이 약해졌다”고 설명했다.
+◇“7000선 아래는 저가 매수 구간”
+이날 6806.93까지 하락한 코스피지수에 대해선 “저가 매수가 가능한 구간”이라는 평가가 나왔다. 김재승 현대차증권 시황팀장은 “변동성이 큰 편이지만 7000 이하는 단기적인 낙폭 과대 상태”라며 “저가 매수 기회로 본다”고 말했다. 황승택 센터장은 “투자심리 측면에서 저점 통과 과정에 진입한 것으로 판단한다”며 “7000선 전후는 가격 매력이 부각되는 구간”이라고 평가했다.
+
+다만 하단을 더 열어둬야 한다는 일부 언급도 있었다. 양지환 대신증권 리서치센터장은 “실적이 아니라 투자심리와 수급 악화에 따른 급락세가 지속되면서 지지선을 예단하기 어려워졌다”며 “2003~2004년 카드 사태 때의 PER을 고려하면 6500 정도가 역사적 저점”이라고 했다.
+
+윤창용 신한투자증권 리서치센터장은 “7000선이 무너진 상황에서 하단 방어보다는 하단을 재설정하는 국면이라고 봐야 한다”고 말했다.
+◇반등 여부는 빅테크 실적이 좌우
+코스피지수가 다시 9천피를 회복할 가능성이 높다는 게 다수 의견이었다. 양지환 센터장은 “실적과 경기 등 펀더멘털 환경이 견고하기 때문에 상승 추세가 언제든 재개될 수 있다”며 “3분기에 9천피를 회복할 가능성이 높다”고 내다봤.
+
+관건은 미국 빅테크의 실적이라는 분석도 나왔다. 이달 말까지 이어지는 실적 발표에서 견조한 이익과 인공지능(AI) 투자 규모(CAPEX)가 확인되는 것이 주가 회복의 열쇠라는 것이다.
+
+황승택 센터장은 “미국 하이퍼스케일러 실적에서 AI 투자 확대 기조가 확인되면 메모리 반도체 사이클 고점 우려가 완화될 것”이라며 “실적 발표 시즌 이후 9천피를 향한 상승 흐름이 나타날 수 있다”고 설명했다.
+이종형 센터장은 “이번주 예정된 ASML과 TSMC의 올 2분기 실적 발표가 분위기가 반전되는 계기가 될 수 있을 것”이라고 강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005309491' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005309491</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
