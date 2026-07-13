@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK하이닉스 '나스닥 상장' 호재에도 급락…코스피에 미칠 영향은</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/417/0001151478' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10860" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>SK하이닉스 '나스닥 상장' 호재에도 급락…코스피에 미칠 영향은</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스가 나스닥 ADR 상장에 성공했음에도 불구하고, 국내 본주는 호재 소멸 및 차익 실현 매물로 급락했습니다. 이는 단기적으로 코스피 시장의 변동성을 높이고, ADR-본주 간의 가격 괴리와 레버리지 상품 확산 등으로 인해 투자자들의 경계심을 높였습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단기적으로 ADR 상장이라는 큰 호재가 급작스럽게 '이벤트 소멸' 재료로 작용하며 본주 매도세와 함께 코스피 전반의 하락을 유발했습니다. 또한, 레버리지 상품과 외국인 순매도는 시장 변동성 확대라는 중대한 위험 신호를 던지고 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#ADR상장</span> <span class="tag tag-hash">#변동성확대</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">SK하이닉스가 ADR(미국증시 예탁증서) 방식으로 나스닥에 입성했다. 상장 첫날 13% 상승하며 흥행에 성공했지만 정작 본주인 SK하이닉스는 급락했다. SK하이닉스의 ADR 상장에 따른 호재가 소멸한 영향이다. 여기에 본주와 ADR 간 가격 차이 문제도 변수로 떠올랐다.
+
+지난 10일(현지시각) SK하이닉스는 나스닥에서 거래를 시작했다. 공모가인 149달러에서 출발해 장중 19% 가까이 상승한 177달러를 찍었지만 상승 폭을 줄이며 168.01달러에 장을 마쳤다. 12.76% 상승한 수치다.
+
+전문가들은 SK하이닉스의 ADR 상장이 증시에 긍정적으로 작용할 것이라 봤다. 밸류에이션 재평가도 있지만 정보 공백 해소의 측면에서도 도움이 될 것이라고 봤을 것이다. 한국 시장이 문을 닫은 시간대에 미국 시장에서 주요 이슈를 소화하며 코스피에 미칠 영향을 미리 가늠해볼 수 있다는 것이다.
+
+조준기 SK증권 연구원은 "코스피가 닫혀있는 시간은 생각보다 길고 넥스트레이드도 공백을 줄여줄 뿐 없애주지는 못한다"며 "정규장 기준으로 주중에는 17시간30분, 주말에는 65시간에 달하는 공백이 발생해 갭 리스크(폐장 시간의 돌발 변수에 따른 주가 변화)를 상승시켰다"고 지적했다.
+
+이 때문에 투자자들은 코스피200 야간선물이나 미국 증시에 상장된 아이셰어즈의 EWY 등 한국 증시 상장지수펀드(ETF) 추이를 통해 간접적으로 정보를 확인해 왔다. 이번 ADR 상장은 정보 루트가 또 하나 추가된 셈이다.
+
+조 연구원은 "SK하이닉스의 ADR 상장은 국내 증시가 닫혀있는 상황에도 가격을 가늠해볼 수 있는 도구가 될 것"이라며 "특히 미국 시간대 메모리 및 AI 관련 이슈가 SK하이닉스 ADR 가격 변동으로 연결되고 다음 날 한국 증시 시가에 전달되며 시초가를 예측하는 데 도움이 될 수 있다"고 관측했다.
+
+달러 강세 속 고환율 완화에 도움이 될 것이라는 기대도 있었다. SK하이닉스는 ADR 상장을 통해 265억달러(약 39조원) 규모의 자금을 확보했다. 이 자금은 국내 반도체 클러스터 및 장비 조달에 활용될 예정으로 오는 14일쯤 국내 납입이 예상된다.
+
+이진경 신한증권 연구원은 "SK하이닉스의 ADR 상장으로 원화 환전 수요가 집중되며 원/달러 환율의 하방 압력이 기대된다"며 "물량에 따라 1400원대로의 하향 돌파 시도도 가능해 보인다"
+
+━
+
+ADR 상승에도 본주는 10% 넘게 빠져…호재 소멸·ADR 프리미엄·레버리지 변수 떠올라
+
+━
+
+13일 SK하이닉스는 10% 넘게 급락했다. 다만 13일 SK하이닉스 본주는 '호재 소멸'로 인한 차익 실현으로 급락했다. 여기에 거래 편의성에 따른 ADR 프리미엄으로 인해 본주 매도 압력이 가해질 수 있다는 점, 그리고 레버리지 상품 상장 추진 등도 변수로 떠올랐다.
+
+실제로 이날 SK하이닉스는 전 거래일 대비 15.37% 하락했다. 코스피도 2개월 만에 7000선을 내주며 8.95% 급락한 6806.93에 마감했다. 서킷브레이커도 발동됐다. 중동 정세 긴장감이 다시 커진 점에 더해 'ADR 상장 재료 소멸'이 영향을 미쳤다는 평가다.
+
+김석환 미래에셋증권 연구원은 "최근 주가 상승을 이끌었던 ADR 상장 기대가 현실화하며 이벤트가 소멸했다"며 "또 국내 기관이 SK하이닉스의 2분기 영업이익이 시장 전망치를 밑돌 수 있다는 전망을 한 점도 하락을 주도했다고 본다"
+
+나스닥에 상장된 ADR이 코스피에 상장된 본주 대비 거래 편의성이 높아 본주가 하락할 가능성도 고려해야 할 요소다. 특히 이날 급락으로 본주와 ADR 가격 차이는 25% 넘게 벌어졌다. 이는 대만 TSMC 본주와 ADR의 프리미엄 차이인 16%보다 더 크다.
+
+상장 이전인 지난 7일(현지시각) 블룸버그는 스위스 투자은행 UBS가 고객들에게 SK하이닉스 ADR을 매수하고 본주는 매도하라는 전략을 제시했다고 보도한 바 있다. UBS는 "SK하이닉스의 ADR은 관리 측면에서 한국 본주 주식보다 더 매력적"이라며 "첫날부터 ADR을 매수하고 한국 주식을 매도하는 것은 너무나 당연한 선택"이라고 했다.
+
+이 같은 흐름은 ADR 상장 직전 외국인의 매도세로 일부 확인됐다. 한국거래소에 따르면 ADR 상장 직전인 지난 10일 외국인은 1조7181억원에 달하는 SK하이닉스 본주 주식을 매도했다. 외국인은 코스피 전체에서 1564억원을 순매수했던 지난 9일에도 SK하이닉스 본주는 4443억원을 순매도했다.
+
+지난 6일부터 10일까지 ADR 상장 전 일주일간 외국인이 순매도한 SK하이닉스 주식은 3조2259억원에 달한다. 이는 같은 기간 2조9005원원을 판 삼성전자를 넘어선 순매도 1위였다.
+
+ADR 레버리지 상장도 감안해야 할 요소다. 한국에서 지난 5월 말 삼성전자와 SK하이닉스 단일종목 레버리지 출시 이후 증시 급등락이 확대된 사례처럼 SK하이닉스 ADR 레버리지도 비슷한 영향을 받을 수 있다는 것.
+
+12일(현지시각) 로이터에 따르면 SK하이닉스 ADR을 바탕으로 하는 레버리지 상품은 최소 10개가 상장 준비 중인 것으로 나타났다. 나스닥100 추종 상장지수펀드(ETF) QQQ로 잘 알려진 프로셰어즈를 비롯해 레버리지셰어즈, 디렉시온 등 여러 운용사가 SK하이닉스 ADR의 2배 추종 레버리지와 역으로 2배를 추종하는 인버스 출시를 준비하고 있다. 상장일은 현지시각으로 오는 13~14일에 집중된다.
+
+존 조 JP모간자산운용 한국 포트폴리오 매니저는 블룸버그와의 인터뷰에서 "단일종목 레버리지 상품은 대형주의 변동성을 확대하는 경향이 있다"며 "레버리지 상품 확산은 상승 사이클의 후반부에서 개인 투자자의 추격 매수를 늘릴 수 있어 바람직하지 못하다"고 우려했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/417/0001151478' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/417/0001151478</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
