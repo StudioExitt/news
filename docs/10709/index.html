@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>증시에 잔인한 여름, 올해도 반복되나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/023/0003987261' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10709" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>증시에 잔인한 여름, 올해도 반복되나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피는 단기간 급락했으며, 주요 조정 원인으로 AI 산업 과열에 대한 의구심과 높은 투자자 기대치가 지적됩니다. 특히 계절적인 8~9월 약세장, 금리 인상 예상 등 거시경제 악재가 겹치면서 시장 전반의 하방 압력이 매우 높아진 상황입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">계절적 약세장(8~9월)과 긴축적인 통화 정책 기조가 장기적인 하락 압력으로 작용하고 있어 단기적으로 투자심리가 크게 위축될 수 있습니다. 구조적인 리스크 요인이 다수 복합됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증시하락</span> <span class="tag tag-hash">#계절성약세</span> <span class="tag tag-hash">#금리긴축</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">지난 6월 말부터 7월 접어들면서까지 증시가 큰 폭의 조정을 받고 있다. 단 2주일(6월22일~7월9일)만에 코스피는 20% 급락했다. 이에 따라 투자자들 근심이 깊어지고 있다.
+
+증시 조정의 원인은 지난 1년 여간 가파르게 상승한 반도체와 과잉 투자 등 AI 산업에 대한 의구심이 중심에 있다. 단일종목 레버리지 상품이 만든 과도한 변동성은 이런 우려에 기름을 부었다.
+
+크리스티안 뮐러-글리스만 골드만삭스 포트폴리오전략·자산배분 총괄은 블룸버그와 인터뷰에서 “AI가 이끈 대규모 실적 서프라이즈가 막바지에 가까워졌다”며 “이번 시즌에도 기업들 실적이 전망치를 웃돌 가능성은 크지만, 투자자 눈높이가 이미 높아져 상승세를 되살리기 어렵다”고 말했다.
+
+여기에 무더위가 찾아오면 증시가 맥을 못추는 계절적 요인까지 더해질 전망이다. 글로벌 펀드 매니저들이 휴가를 떠나고 거래가 급감한 가운데 작은 악재에도 주가가 출렁이는 현상은 매년 반복돼 왔다.
+
+8~9월이 코스피 바닥
+
+13일 한국거래소에 따르면, 2000년부터 올해까지 27년간(7~12월은 26년간) 코스피는 8~9월이 가장 저조했다. 월평균 등락률은 12개월 중 8월(-0.5%)·9월(-0.7%)·10월(-0.3%) 등 3개월만 마이너스(-)였고 나머지는 플러스(+)였다.
+
+2011년 8월엔 미국 신용등급이 강등됐고 유럽 재정위기가 촉발됐다. 이 달 코스피는 11.9% 하락했다. 2015년 8월엔 중국이 위안화를 기습 절하(11일)했고, 상하이종합지수가 8.49% 폭락하는 중국발 블랙먼데이(24일)가 터졌다. 이 달 코스피는 4.4% 급락했다. 미국발 경기침체 공포와 엔 캐리 트레이드 청산이 겹친 2024년 8월5일 블랙먼데이에 코스피는 8.77% 폭락했다.
+
+9월도 마찬가지다. 닷컴버블이 꺼진 2000년(-11%)과 9·11테러가 터진 2001년(-12%), 그 후유증이 이어진 2002년(-12.2%), 코로나 지원 후 연준의 고강도 긴축이 시장을 짓누른 2022년(-12.8%) 모두 코스피는 두 자릿수 급락했다.
+
+분기로 봐도 1분기(2.4%)·2분기(5.2%)·4분기(3.6%) 등은 플러스였는데, 8·9월이 낀 3분기만 0%로 가장 낮았다. 기점을 2020년으로 좁히면 4개 분기 중 유일하게 3분기만 평균 등락률이 마이너스(-0.6%)를 기록했다.
+
+실적 나오면 팔고, 휴가철 이어져
+
+2분기 실적 발표기(어닝 시즌)는 7월에 시작해 8월 초중순이면 끝난다. 그런데 마침 이 시기에 글로벌 펀드 매니저들은 여름 휴가를 떠난다.
+거래대금이 연중 최저 수준으로 떨어지고, 적은 매도 물량에도 지수가 크게 흔들린다.
+
+좋은 실적이 나와도 ‘소문에 사서 뉴스에 팔아라’는 증시의 불문율이 작동한다. 지난 7일 삼성전자가 엔비디아를 제치고 세계 1위 영업이익(2분기 잠정 89조4000억원)을 기록했음에도 7% 가까이 폭락했다. 이날 코스피도 4.91% 떨어졌다.
+
+본격적인 휴가철이 시작되면 이런 현상은 더 강화될 전망이다. 3분기 실적 기대가 형성되기 전까지 상승 동력은 약해지고 공백기가 생긴다.
+
+미국발 정책 불확실성도 겹친다. 8월 하순 미국 와이오밍주에서 세계 중앙은행장들은 잭슨홀 미팅을 갖는다. 하반기 글로벌 통화정책 방향을 가늠하는 자리다. 이를 앞두고 기관은 매수를 미루고 관망한다. 연방준비제도(Fed) 의장의 발언 한마디에 변동성이 치솟는다.
+
+올해도 여름 약세장 못 피하나
+
+외국인은 올 들어 150조원이 넘는 역대급 순매도를 이어가고 있다. 이를 받아내던 개인도 실탄이 바닥나는 중이다. 지난달 초 140조원에 육박하던 증시 대기자금(투자자예탁금)은 지난 9일 107조원까지 떨어졌다.
+
+상승, 하락폭을 두배로 키우는 레버리지 상품은 ‘빚투(빚내서 투자)’의 목을 조인다. 올해 일어난 1000억원 이상 반대매매(강제청산) 6번 중 5번이 단일종목 레버리지 상품이 출시된 5월27일 이후 발생했다. 반대매매는 투자자가 증권사에서 빌린 돈을 제때 갚지 못하거나 담보유지비율을 맞추지 못할 경우 증권사가 투자자 주식을 강제로 파는 제도다.
+
+여기에 국민연금은 이달 들어 국내주식 비중을 줄이는 리밸런싱을 재개했다. 코스피 급등으로 국내주식 비중이 목표치 20.8%를 크게 웃돌았기 때문이다.
+
+경제가 별로 좋지 않음에도 풀린 유동성에 물가가 오르는 현상을 제어하려는 중앙은행의 긴축은 증시에 악재다. 16일 한국은행 금융통화위원회는 기준금리를 연 2.5%에서 2.75%로 인상할 것으로 예상된다. 현실화하면 2023년 1월 이후 3년 6개월 만의 긴축 전환이다.
+
+반등의 계절 4분기까지 견뎌야
+
+다만, 여름을 넘기면 흐름은 바뀌는 것은 희망이다. 2000년 이후 26년간 4분기(10~12월)에 코스피 지수는 평균 3.6% 올랐다. 2분기(4~6월)의 5.2% 다음으로 높은 수준이다.
+
+월별로 봐도 9월에 바닥을 친 코스피는 10월(-0.3%)을 지나 11월엔 2.3%로 12개월 중 4월(3.1%) 다음으로 평균 상승률이 높았다. 12월도 1.5%로 4번째로 높은 평균 상승률을 기록했다.
+
+ger거경제 불확실성이 대부분 해소되고, 연말 소비 시즌 기대감이 커지고 배당을 노리는 지금이 증시에 유입되는 등의 결과로 해석된다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/023/0003987261' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/023/0003987261</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
