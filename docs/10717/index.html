@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스닥 3%대 급등…바이오·이차전지·반도체 소부장 '강세'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/138/0002233964' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10717" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스닥 3%대 급등…바이오·이차전지·반도체 소부장 '강세'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스닥 지수가 바이오, 이차전지, 반도체 소부장 등 고성장 테마주의 강력한 매수세에 힘입어 3%대 급등하며 시장을 주도했다. KOSPI 역시 일부 강세를 보이기도 했으나 전반적으로 개별 섹터 및 업종 간의 차별화가 극명하게 나타났다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">바이오, 이차전지, 반도체 등 첨단 성장 산업 섹터로의 매수세가 집중되며 코스닥을 강력하게 끌어올리는 등 명확한 업종별 차별화 강세가 나타나 투자 심리에 큰 영향을 줄 것으로 예상된다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">주성엔지니어링</span> <span class="tag stock-tag">알테오젠</span> <span class="tag stock-tag">에코프로비엠</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">이차전지</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥급등</span> <span class="tag tag-hash">#성장섹터</span> <span class="tag tag-hash">#소부장</span> <span class="tag tag-hash">#바이오</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">7월 13일 국내 증시에서는 코스닥이 3% 넘게 급등하며 강세를 주도하고 있다. 바이오와 이차전지, 반도체 소재·부품·장비(소부장) 등 시가총액 상위 종목에 매수세가 집중되면서 지수는 860선을 회복했다. 반면 코스피는 장 초반 급락 이후 낙폭을 만회하며 7480선 안팎에서 혼조세를 보이고 있다.
+
+이날 오전 9시 14분 현재 코스닥지수는 전 거래일보다 25.76포인트(3.08%) 오른 863.19를 기록 중이다.
+
+지수는 전장 대비 2.29포인트(0.27%) 오른 839.72로 출발한 뒤 시총 상위주를 중심으로 매수세가 유입되며 장중 865.72까지 치솟았다. 장중 저점은 838.89였다.
+
+수급별로는 기관과 개인이 각각 290억원, 481억원을 순매수하며 상승세를 이끌고 있다. 반면 외국인은 716억원어치를 순매도 중이다.
+
+시가총액 상위 종목은 대부분 강세다. 반도체 소부장 종목인 주성엔지니어링은 9.69% 급등했고, 리노공업(7.18%), 원익IPS(6.32%), 피에스케이(5.86%), 이오테크닉스(5.81%)도 일제히 상승하고 있다.
+
+바이오 대장주 알테오젠은 5.09% 오른 34만500원에 거래되고 있으며, 코오롱티슈진도 0.67% 상승했다. 이차전지 대표주인 에코프로(3.15%)와 에코프로비엠(2.55%), 로봇주 레인보우로보틱스(1.87%)도 오름세를 이어가며 지수 상승에 힘을 보태고 있다.
+
+같은 시각 코스피지수는 전 거래일보다 8.85포인트(0.12%) 오른 7484.79를 나타내고 있다.
+
+코스피는 전장 대비 63.91포인트(0.85%) 내린 7412.03으로 출발했지만, 장 초반 외국인과 기관의 매수세가 유입되며 반등에 성공했다.
+장중 7529.07까지 오르기도 했지만 이후 상승폭을 일부 반납하며 보합권에서 등락을 거듭하고 있다.
+
+y가증권시장에서는 외국인과 기관이 각각 60억원, 215억원을 순매수하고 있으며, 개인은 274억원을 순매도하고 있다.
+
+시가총액 상위 종목의 희비는 엇갈렸다. LG에너지솔루션(3.83%), 현대차(3.06%), 삼성바이오로직스(3.01%), KB금융(2.44%) 등이 2~3%대 강세를 보였고, 삼성전자(1.58%)와 삼성전자우(0.98%)도 상승하고 있다.
+
+반면 SK스퀘어(-5.96%)와 삼성전기(-5.74%)는 5% 넘게 하락했고, SK하이닉스(-3.58%)와 삼성생명(-0.88%)도 약세를 나타냈다.
+
+한편 파생상품 시장에서 코스피200 선물(2026년 9월물)은 오전 8시 54분 기준(20분 지연) 전 거래일보다 6.45포인트(0.53%) 내린 1204.05를 기록했다.
+
+서울 외환시장에서 원·달러 환율은 전 거래일보다 소폭 오른 1498.9원에 개장했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/138/0002233964' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/138/0002233964</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
