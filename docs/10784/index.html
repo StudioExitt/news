@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR 훈풍에도 코스피 '검은 월요일' 왜…반도체 쇼크에 레버리지發 변동성까지</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014063469' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10784" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>ADR 훈풍에도 코스피 '검은 월요일' 왜…반도체 쇼크에 레버리지發 변동성까지</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 SK하이닉스 ADR 흥행 기대감에도 불구하고 반도체 급락, 중동 리스크 확대, 레버리지 ETF 재조정으로 인해 8% 넘게 폭락하며 서킷브레이커가 발동된 '검은 월요일'을 맞았습니다. 단기적인 투자심리 위축과 기술적 변동성이 가장 큰 원인입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 쇼크에 따른 과도한 차익실현 매물과 레버리지 ETF의 구조적 변동성이 핵심 요인으로 작용했습니다. 다만, 수출 데이터 등 근거 지표는 여전히 견조하다는 반론이 존재합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">반도체 ETF</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체쇼크</span> <span class="tag tag-hash">#코스피급락</span> <span class="tag tag-hash">#레버리지ETF</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[서울=뉴시스] 전신 기자 = SK하이닉스의 미국주식예탁증서(ADR) 상장 흥행으로 투심 회복 기대감이 커졌던 코스피가 13일 장중 8% 넘게 급락해 7000선마저 무너지며 '검은 월요일'을 맞았다. SK하이닉스를 비롯한 반도체주 급락에 따른 차익실현 매물과 중동 리스크 확대, 레버리지 상장지수펀드(ETF) 리밸런싱(재조정)에 따른 수급 부담까지 더해진 결과로 풀이된다.
+
+한국거래소에 따르면 이날 오후 1시28분 유가증권시장에 올해 일곱 번째 서킷브레이커가 발동됐다. 발동 당시 코스피는 6871.20으로 전 거래일(7475.94)보다 8.08% 하락한 상태였다. 코스피가 장중 7000선을 밑돈 것은 지난 5월4일 이후 약 두 달 만이다.
+
+증권가에서는 SK하이닉스의 미국 주식예탁증서(ADR) 상장 이후 차익실현 매물이 출회된 데다 2분기 실적 기대치 부담, 미국과 이란 간 군사적 긴장 고조 등 대외 불확실성이 겹치며 투자심리가 급격히 위축됐다고 분석했다. 여기에 반도체 비중이 높은 국내 증시 구조와 레버리지 ETF의 리밸런싱 수요가 맞물리면서 낙폭을 키웠다는 진단도 나온다.
+
+이날 한지영 키움증권 연구원은 "SK하이닉스 ADR 상장이 흥행했음에도 메모리 업황의 사이클 피크아웃(정점 통과) 우려가 여전한 데다 최근 반도체주의 높은 변동성으로 투자자들이 악재에 더욱 민감하게 반응하고 있다"며 "반도체주의 역대급 변동성은 피로도를 증가시키면서 수급 이탈을 초래하는 분위기"라고 분석했다.
+
+이어 "주말 미국과 이란 간 갈등이 다시 고조되며 국제유가와 미 국채금리가 상승하는 등 거시경제(매크로) 부담이 커졌지만, 나스닥 선물과 일본 증시의 낙폭을 감안하면 글로벌 증시에 미치는 충격은 이전보다 제한적인 수준"이라고 덧붙였다.
+
+특히 시장에서는 급락 과정에서 레버리지 ETF의 리밸런싱 수요가 단기 변동성을 확대했을 가능성에도 주목하고 있다. 레버리지 ETF는 목표수익률을 유지하기 위해 시장 급등락 시 포지션을 리밸런싱하는 구조다. 이 과정에서 파생상품 거래와 투자자 손절매가 겹치면 단기적으로 수급 부담이 커져 시장 변동성이 확대될 수 있기 때문이다.
+
+실제 지난 주말 미국 증시에서 ADR 상장 첫날 13% 넘게 급등했던 SK하이닉스는 이날 국내 증시에서 차익실현 매물에 밀리며 200만원선을 내줬고, SK하이닉스 단일종목 레버리지 ETF도 일제히 20% 넘게 급락했다.
+
+오후 2시6분 기준 코스콤 CHECK에 따르면 '1Q SK하이닉스 선물 단일종목 레버리지 ETF'는 27.28% 하락했다. 이어 'TIGER SK하이닉스 단일종목 레버리지 ETF'(-27.05%), 'ACE SK하이닉스 단일종목 레버리지 ETF'(-26.99%) 등도 30%에 가까운 낙폭을 기록했다.
+
+한지영 연구원은 "국내 반도체가 코스피 시가총액에서 차지하는 비중이 절대적인 만큼 반도체가 흔들리면 지수도 함께 흔들릴 수밖에 없는 구조"라며 "여기에 레버리지 ETF의 리밸런싱에 따른 수급 부담도 단기적으로 변동성을 키운 측면이 있다"고 설명했다.
+
+다만 김석환 미래에셋증권 연구원은 이번 주가 조정을 반도체 업황 둔화로 해석하는 것은 무리라고 진단했다. 김석환 연구원은 "반도체 업황을 둘러싼 거시지표는 여전히 견조하다"며 "7월 1~10일 한국 수출은 전년 동기 대비 53.9% 증가한 298억달러로 같은 기간 기준 역대 최대를 기록했고, 반도체 수출도 193% 증가한 112억달러로 전체 수출의 37.6%를 차지했다"고 설명했다.
+
+이어 "메모리 가격 상승 효과가 반영된 점은 감안해야 하지만, 현재의 주가 하락을 반도체 수요가 급격히 위축되고 있다는 신호로 해석할 근거는 제한적"이라고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014063469' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014063469</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
