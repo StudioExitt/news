@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 서킷브레이커, 역대 13번 중 올해만 7번…"레버리지 ETF 영향"</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/421/0009056193' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/10776" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 서킷브레이커, 역대 13번 중 올해만 7번…"레버리지 ETF 영향"</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 지수가 장중 8%가량 급락하며 서킷브레이커와 프로그램 매도호가 일시정지가 발동되었다. 시장 전문가들은 이번 변동성이 기업의 근본적 실적 악화보다는 레버리지 ETF 상품 특유의 '숏감마 구조' 같은 기술적 수급 요인에 기인한다고 분석했다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">서킷브레이커 발동 자체가 시장에 대한 극도의 공포와 불안을 반영하며, 주요 원인으로 지적된 레버리지 ETF의 구조적 위험성(숏감마)은 향후 변동성에 대한 경고 신호로 해석되어 강력한 부정적 영향을 미칩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전기</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융지주사</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">ETF 운용산업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#서킷브레이커</span> <span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#시장변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">"코스피지수가 급락하며 서킷 브레이커가 발동된 13일 오후 서울 중구 하나은행 딜링룸 전광판에 코스피 지수가 표시되고 있다. 2026.7.13
+(서울=뉴스1) 손엄지 기자 = 코스피가 장중 8% 가까이 급락하면서 서킷브레이커가 발동했다. 역대 서킷브레이커 발동은 총 13차례인데, 이 중 절반이 넘는 7차례가 올해 발생했다. 증권가에서는 단일종목 레버리지 상장지수펀드(ETF) 확대가 시장 변동성을 키우고 있는 만큼 관련 수급을 면밀히 모니터링해야 한다고 조언했다.
+
+13일 오후 1시 49분 기준 코스피는 전 거래일 대비 594.97포인트(7.96%) 내린 6880.97을 기록했다. 코스피가 7000선 아래로 내려간 건 지난 5월 4일 이후 처음이다.
+수급별로는 개인이 2조 7231억 원을 순매수했지만 기관과 외국인이 각각 5727억 원, 2조 2350억 원을 순매도하며 지수를 끌어내렸다.
+코스피 시가총액 상위 반도체 종목은 일제히 급락세다. 삼성전기(009150) -17.99%, SK스퀘어(402340) -15.19%, SK하이닉스(000660) -13.35%, 삼성전자(005930) -9.21%, 삼성전자우(005935) -9.01%, 삼성생명(032830) -6.46% 등이 하락세다.
+
+한국거래소는 이날 오후 1시 28분 32초 코스피 시장에 서킷브레이커를 발동했다고 공시했다. 서킷브레이커는 코스피지수가 전 거래일 대비 8% 이상 하락한 상태가 1분 이상 지속될 경우 모든 주식 거래를 20분간 중단하는 제도다.
+
+이번 서킷브레이커는 지난 7일 이후 4거래일 만이며 올해 들어 7번째다. 역대 발동 사례는 총 13차례로, 올해에만 절반이 넘는 7차례가 집중됐다.
+앞서 이날 오전 10시 34분 14초에는 프로그램 매도호가 일시정지(사이드카)가 발동됐다. 올해 들어 발동한 사이드카는 이날까지 총 35차례다.
+
+증권가는 최근 시장 변동성이 단순한 펀더멘털 악화보다 레버리지 상품의 수급 영향이 크게 작용하고 있다고 분석했다.
+유명간 미래에셋증권 연구원은 "최근의 급격한 조정은 펀더멘털보다 레버리지 ETF의 숏감마 구조에서 비롯된 기술적 요인이 크다"며 "레버리지 ETF는 주가가 오를 때 매수하고 내릴 때 매도하는 숏감마 구조를 갖고 있어 변동성을 확대할 수 있다"고 설명했다.
+
+이어 "단일종목 레버리지 ETF가 시장 변동성을 키우고 있는 만큼 관련 수급에 대한 지속적인 모니터링이 필요한 국면"이라고 말했다.
+같은 시각 코스닥지수는 전 거래일 대비 36.51포인트(4.36%) 내린 800.92를 기록....</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/421/0009056193' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/421/0009056193</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
