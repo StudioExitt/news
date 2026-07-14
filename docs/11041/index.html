@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>창신메모리 16일 청약...삼전닉스 대신 中반도체ETF 담아볼까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.14</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001258719' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11041" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>창신메모리 16일 청약...삼전닉스 대신 中반도체ETF 담아볼까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">중국 창신메모리의 대규모 IPO가 임박하며 관련 중국 반도체 ETF에 자금이 몰리고 있습니다. 투자자들은 국내 직접 투자는 불가능하여 우회적인 ETF 투자를 고려하고 있으나, 과열된 기대감과 되돌림 가능성에 대한 경계심이 필요합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">거대한 IPO 자금 유입과 함께 전반적인 반도체 섹터의 구조적 성장(DRAM 공급 공백 메우기 등) 기대감이 커지고 있어 시장 관심도가 매우 높으나, 단기 ETF 과열 및 거품 위험 경고가 병존하여 중립적인 관점에서 접근해야 합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#중국IPO</span> <span class="tag tag-hash">#반도체ETF</span> <span class="tag tag-hash">#창신메모리</span> <span class="tag tag-hash">#DRAM</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">중국 최대 메모리 반도체 업체 창신메모리, CXMT가 이번 주 공모주 청약에 들어갑니다. 상장도 하기 전부터 국내 ETF 시장을 흔들고 있다고 하는데요. 증권부 강미선 기자와 짚어보겠습니다. 강 기자, 이번 창신메모리 IPO 규모가 어느 정도인가요? 네, 당장 내일모레인 16일부터 청약이 시작되는데요. 공모 규모가 295억 위안, 우리 돈 약 6조5천억원입니다. 예상 시가총액은 60조원 안팎으로 중국 과창판, 그러니까 상하이판 나스닥으로 불리는 시장에서 SMIC에 이은 역대 2위 규모 IPO입니다. 상장 시점은 7월 마지막 주에서 8월 초 사이가 될 전망입니다. 이번에 조달한 자금은 D램 기술 고도화와 차세대 반도체 개발과 공장증설에 투입될 예정입니다. 창신메모리는 상장 직후 과창50(STAR50)등 핵심 지수에 즉시 편입되지 않습니다. 통상 3개월에서 1년의 평가 기간을 거쳐야 하는데 연말쯤 편입될 거라는 전망이 나옵니다. 규모가 상당한데, 그럼 국내 투자자들도 이 청약에 직접 참여할 수 있는 건가요? 아쉽게도 불가능합니다. 과창판 상장 종목은 외국인 개인투자자의 직접 매매 자체가 사실상 원천 차단돼 있습니다. 그래서 국내 투자자들이 택할 수 있는 방법은 사실상 국내 상장된 중국 반도체 ETF를 통한 우회 투자 하나뿐인데요. 이 길목으로 벌써 자금이 몰리면서 관련 ETF들이 최근 한 달 새 눈에 띄게 강세를 보입니다. 현재 레버리지, 인버스 ETF 뺀 ETF들만 보면 최근 한 달 수익률 상위권이 중국 반도체와 과창판 관련 ETF의 독무대입니다. TIGER 차이나반도체FACTSET 수익률이 20% 넘으며 1위, KODEX·TIGER 차이나과창판STAR50 계열이 그 뒤를 잇습니다. 우리가 잘 아는 삼성전자·SK하이닉스 중심의 국내 반도체 ETF는 오히려 이 상위권에 이름을 올리지 못하고 있는 상황인데요. 반면 불과 두 달 전만 해도 수익률 1위를 달리던 ETF죠. 스페이스X 관련 대표 상품이었던 TIGER 미국우주테크는 지난 한 달간 -33%의 수익률을 기록했습니다. 레버리지와 인버스를 빼면 수익률이 거의 바닥권입니다. 당시엔 스페이스X가 아직 편입되지도 않은 상태에서 상장 기대감만으로 수익률 1위를 달렸는데, 정작 6월 스페이스X가 실제 상장한 이후에는 스페이스X 자체 주가도 조정을 받고 ETF 수익률도 오히려 급락으로 돌아선 겁니다. 전문가들은 지금 중국 반도체 ETF에 창신메모리 상장 전 기대감이 상당 부분 반영돼 있는 만큼 실제 상장 이후엔 스페이스X 때와 같은 되돌림 가능성도 함께 염두 나야 한다고 조언합니다. 실력도 성장세도 생각한 것 이상입니다. 절대 만만하게 보면 안 되는 기업입니다. 지난해 매출이 156% 늘며 첫 흑자 전환했고, 올해 1분기에만 매출이 거의 작년 연간을 따라잡는 수준입니다. 영업이익도 1,600%나 급증했습니다. 다만 누적 결손금이 8조9천억원에 달하고, 이번 IPO 자금에도 AI용 고성능 메모리죠, HBM 관련 계획은 없다는 점도 체크해야 할 포인트입니다. 현재 글로벌 D램 시장 점유율은 올해 1분기 기준 삼성전자와 SK하이닉스가 여전히 압도적 1, 2위입니다. 하지만 1년 전과 비교하면 SK하이닉스는 36%에서 29%로 낮아졌고, 그 자리를 창신메모리가 4%에서 8%로 채우며 빠르게 치고 올라온 흐름입니다. 국내 기업들이 HBM 생산에 집중하면서 생긴 범용 D램 공급 공백을 빠르게 파고들고 있는 겁니다. 이에 맞서 삼성전자는 용인 국가산단 첫 <0xED><0x8C><0xB9> 가동을 2년 앞당긴 2029년으로 확정했고, SK하이닉스도 용인과 호남권에 대규모 투자를 이어가고 있습니다. 미국 마이크론, 대만 TSMC도 증설에 속도를 내고 있어 글로벌 반도체 증설 전쟁 국면입니다. 결국 창신메모리 상장은 국내 투자자들에게는 단기적으로 관련 ETF 수익률과 직결되는 이슈지만요. 산업 차원에서는 반도체 기업들의 대규모 증설 경쟁을 촉발하는 신호탄인 셈인데요. 상장 이후 실제 주가와 실적 흐름을 계속 지켜봐야겠습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001258719' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001258719</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
