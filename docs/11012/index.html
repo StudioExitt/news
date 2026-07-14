@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"400만닉스" 기대 속, 나홀로 "185만" 외쳤던 증권사 재조명</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.14</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005789887' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11012" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"400만닉스" 기대 속, 나홀로 "185만" 외쳤던 증권사 재조명</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">최근 목표주가가 과도하게 높게 제시되던 SK하이닉스가 급락하자, 이전에 보수적인 전망을 내놓았던 증권사 보고서가 재조명되고 있다. 전문가는 AI 투자 사이클 둔화와 전형적인 반도체 업황 순환적 특성(사이클의 역설)에 주목해야 한다고 진단했다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">과거의 과열된 시장 분위기와 달리, AI 투자 사이클 둔화 및 업황 순환적 특성(사이클 리스크)에 대한 경고가 나오면서 단기 투자 심리 위축이 예상되므로 주의가 필요함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#투자주의</span> <span class="tag tag-hash">#밸류에이션</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">주요 증권사 400만원대 목표가 쏟아낼 때
+BNK투자증권 홀로 '185만원' 경고등
+글로벌 인공지능(AI) 반도체 시장의 호황을 이끌며 '300만원 선' 돌파를 눈앞에 뒀던 SK하이닉스의 주가가 폭락세로 돌아서며 심리적 마지노선이던 180만원대마저 위협받고 있다. 이 가운데 시장이 낙관론에 취해 있던 시기, 홀로 '목표주가 185만원'을 제시했던 증권사 보고서가 재조명되고 있다. 당시에는 지나치게 보수적인 전망으로 받아들여졌지만 결과적으로는 단기 조정을 예고한 '선행 신호'였다는 평가가 나온다.
+
+"사실상 매도"였던 목표주가 '185만원'
+앞서 지난 9일 BNK투자증권은 보고서를 통해 SK하이닉스에 대해 투자의견 '보유(Hold)'와 목표주가 185만원을 유지했다. 표면적으로는 기존 의견을 반복한 것이지만, 보고서 작성 직전인 지난 8일 종가가 207만6000원이었다는 점에서 시장에서는 이를 사실상의 '매도 신호'로 해석했다.
+
+SK하이닉스 주가는 지난달 25일 298만7000원까지 치솟으며 '300만닉스'를 눈앞에 둔 상황이었다. 특히 대다수 리포트가 SK하이닉스에 대해 현재가를 훨씬 뛰어넘는 목표가를 제시하고 있었다. KB증권은 같은 날 "아직 정상은 멀었다"고 평가하며 SK하이닉스 투자의견 '매수'와 목표주가 420만원을 유지한 바 있다.
+
+대신증권 역시 지난 7일 SK하이닉스의 목표주가를 390만원으로 올리면서 "나스닥 ADR 상장으로 밸류에이션 디스카운트 해소가 기대된다"고 진단했다. 이외에도 이달 SK하이닉스 관련 보고서를 내놓은 상상인증권(380만원), NH투자증권(410만원), IBK투자증권(400만원), 교보증권(400만원)이 모두 목표가를 올려잡았다.
+
+그러나 이후 불과 나흘 만에 주가는 약 15% 급락하며 184만5000원까지 내려앉았고, 일부 구간에서는 170만원 선마저 위협받았다.결과적으로 BNK투자증권의 보고서는 단기 주가 흐름을 정확히 짚은 셈이 됐다.
+
+AI 투자 둔화, '균열 신호'였나
+보고서의 핵심 근거는 AI 인프라 투자 사이클의 둔화 가능성이었다. BNK투자증권은 AI 서버용 D램과 기업용 SSD(eSSD)가 여전히 공급 부족 상태에 있지만 이를 떠받쳐온 하이퍼스케일러들의 공격적 투자 경쟁이 지속되기 어려울 것이라고 진단했다.
+
+이는 단순한 수요 감소라기보다, 투자 속도의 조정 가능성을 짚은 것으로 해석된다. 실제로 일부 글로벌 빅테크 기업이 자체 인프라 활용 확대나 투자 효율성 개선에 나서고 있는 점은 시장 기대치에 균열을 낼 수 있는 요인으로 지목된다.
+
+또한 AI 랠리 이후 중국 업체들의 시장 진입이 본격화될 경우, 중장기적으로 공급 과잉 국면이 도래할 수 있다는 우려도 제기됐다. 이 같은 전망은 현재의 '공급 부족' 서사가 구조적으로 이어지기 어렵다는 문제의식을 담고 있다는 점에서 의미가 있다.
+
+"싸 보이지만 비싸다"…사이클의 역설
+보고서는 반도체 업종의 전형적인 사이클 특성에도 주목했다. 실적이 가파르게 개선되는 후반부에는 밸류에이션이 낮아 보이지만, 실제로는 고점에 근접한 구간일 수 있다는 지적이다.
+
+이는 메모리 업종이 경기 순환적 특성을 갖는 대표적 산업이라는 점에서 설득력을 갖는다. 수요 모멘텀이 둔화하는 시점부터는 저PER(주가수익비율) 매력이 오히려 함정이 될 수 있다는 해석이다. 다시 말해 '싸 보이는 착시'가 나타나는 구간이라는 것이다. 이 같은 시각은 연말 이후 실적 모멘텀이 둔화할 것이라는 전망과 맞물리며, 내년 이후 밸류에이션이 더 이상 매력적이지 않을 수 있다는 결론으로 이어졌다.
+
+잇따라 실적 눈높이 낮추는 증권가
+최근 들어 주요 증권사들도 SK하이닉스의 실적 전망치를 잇달아 하향 조정하고 있다. 이는 단순한 주가 조정이 아니라, 펀더멘털 기대치 자체가 낮아지고 있음을 시사한다는 해석이 나온다.
+
+미래에셋증권은 2분기 영업이익 추정치를 기존 70조7000억원에서 62조3000억원으로 약 12% 낮췄다. 현대차증권 역시 매출과 영업이익을 각각 87조6000억원, 62조4000억원으로 기존 대비 하향 조정했으며 한국투자증권도 영업이익 추정치를 60조4000억원으로 낮췄다.
+
+다만 일각에서는 최근 주가 급락으로 이러한 우려가 상당 부분 선반영됐다는 분석도 제기된다. 이에 따라 단기적으로는 저점 매수 전략이 유효하다는 의견도 병존하는 상황이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005789887' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005789887</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
