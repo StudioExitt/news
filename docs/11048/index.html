@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“주식 통장 보기가 무섭다” 삼전닉스 괴롭히는 것은…레버리지 ETF일까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.14</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004641567' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11048" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“주식 통장 보기가 무섭다” 삼전닉스 괴롭히는 것은…레버리지 ETF일까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 단일종목 레버리지 ETF의 과도한 거래 집중 현상이 금융당국의 규제 논의를 불러오고 있습니다.
+그러나 전문가들은 변동성의 근본 원인이 아닌 '증폭 장치'로 분석하며, 최근 시장 불안정의 진짜 배경을 AI 투자 회의론과 글로벌 반도체 업황 변화에서 찾고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단기적인 변동성 논쟁을 넘어, AI 인프라 투자 지속 가능성에 대한 근본적 의문과 글로벌 반도체 업황 사이클의 변화가 핵심 리스크 요인으로 제시되었기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #AI투자 #레버리지ETF</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">제목: “주식 통장 보기가 무섭다” 삼전닉스 괴롭히는 것은…레버리지 ETF일까
+언론사: 서울경제
+날짜: 2026.07.14. 오후 6:31
+본문: 삼성전자, SK하이닉스. 연합뉴스
+삼성전자, SK하이닉스.연합뉴스최근 코스피가 급등락을 반복하자 단일종목 레버리지 ETF가 변동성의 주범으로 지목되고 있다. 금융당국과 업계는규제 논의에 속도를 내고 있지만, 증권가에서는 레버리지 ETF가 시장을 흔든 원인이라기보다 이미 커진 변동성을 더 키우는 ‘증폭 장치’에 가깝다는 분석이 나온다.
+
+거래는 미국보다 훨씬 활발…규제 논의 본격화
+14일 한국투자증권과 금융투자업계에 따르면 국내 단일종목 레버리지 ETF의 거래대금은 기초자산 거래대금의 20~30% 수준으로,미국(4~5%)의 최대 6배에 달하는 것으로 나타났다. 이에 금융당국과 업계도 시장 쏠림 현상을 우려하며 대응책 마련에 나섰다.
+
+한국투자증권이 이날 발표한 ‘레버리지 ETF의 이해: 변동성 확대의 영향력 점검’ 보고서에 따르면 지난 10일 기준 SK하이닉스와 삼성전자레버리지 ETF의 시가총액은 각각 기초자산의 0.32%, 0.18%로 미국의 마이크론(0.55%), 테슬라(0.29%)와 큰 차이가 없었다.
+
+하지만 거래 규모는 달랐다. 지난 6월 1일부터 7월 10일까지 SK하이닉스와 삼성전자레버리지 ETF의 거래대금은 기초자산 거래대금의 각각30.38%, 20.07%에 달했다. 반면 마이크론과 테슬라는 각각 5.36%, 4.31% 수준에 그쳤다.
+
+i처럼 국내 시장의 레버리지 ETF 거래가 과도하게 집중되면서 금융투자협회는 이날 주요 증권사 CEO들을 긴급 소집해 대응 방안을 논의했다.오는 16일 기획재정부·금융위원회·금융감독원·한국은행이 참여하는 ‘F4 회의’를 앞두고 업계 의견을 먼저 수렴하려는 취지다.
+
+i찬진 금융감독원장도 최근 자산운용사 CEO 간담회에서 “ETF가 대표적인 간접투자 상품으로 성장한 만큼 운용사의 책임도 커졌다”며 투자자보호를 강조했다. 앞서 지난달에는 단일종목레버리지 ETF 도입과 관련해 “드러누워서라도 막았어야 했다”고 말하며 우려를 드러낸 바 있다.
+
+“원인보다 증폭 요인”...진짜 변수는 AI 투자
+다만 증권가는 최근 증시 변동성을 레버리지 ETF만으로 설명하기는 어렵다고 진단했다.
+염동찬 한국투자증권 연구원은 “단일종목레버리지 ETF는 변동성의 원인이라기보다 기존 움직임을 확대하는 역할을 한다”고 분석했다.
+
+레버리지 ETF는 목표 수익률을 맞추기 위해 장 마감 무렵 보유 비중을 조정하는 리밸런싱 거래를 진행한다. 주가가 오르면 추가 매수하고,하락하면 매도하는 구조다. 이 때문에 관련 거래는 통상 오후 3시 이후 장 후반에 집중된다.
+
+하지만 최근 코스피 변동성은 장 마감 직전보다 오전 시간대에 더 크게 확대됐다. 한국투자증권도 단일종목레버리지 ETF가 상장된 지난 5월27일 전후 거래량을 비교한 결과 삼성전자와 SK하이닉스 모두 장 후반 거래는 늘었지만, 장중 전반의 급등락까지 설명하기는 어렵다고 분석했다.
+
+오히려 최근 증시 불안은 글로벌 반도체 업종의 투자 심리 악화와 더 밀접하다는 설명이다. 하이퍼스케일러들의 AI 인프라 투자 지속 가능성에 대한의문이 커지면서 데이터센터 수요 기대를 반영해 크게 올랐던 삼성전자와 SK하이닉스 등 국내 반도체주도 함께 흔들렸고, 여기에 장 마감 리밸런싱수요가 겹치며 변동성이 한층 커졌다는 것이다.
+
+염 연구원은 “AI 투자 지속성에 대한 우려로 글로벌 반도체 기업들의 변동성이 먼저 확대됐고, 이후 레버리지 ETF의 리밸런싱이 이를 더욱 키운것으로 보는 것이 적절하다”고 설명했다.
+
+결국 단일종목레버리지 ETF를 둘러싼 규제 논의는 이어질 가능성이 크지만, 최근 코스피 급등락의 배경에는 AI 투자 회의론과 글로벌 반도체업황 변화라는 더 큰 시장 흐름이 함께 작용하고 있다는 분석에 힘이 실리고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004641567' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004641567</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
