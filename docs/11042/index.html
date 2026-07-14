@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“주식이 이런거였어요?” 공포에 질린 주린이들…4조 던졌다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.14</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005707525' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11042" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“주식이 이런거였어요?” 공포에 질린 주린이들…4조 던졌다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">개인 투자자들이 공포와 지정학적 위기 우려 속에 약 4조 원 규모의 순매도 물량을 쏟아냈습니다. 대규모 반대매매 및 패닉셀이 발생했으나, 기관과 외국인의 매수세가 받쳐주며 지수는 소폭 상승 마감했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">개인 투자자들의 대규모 패닉셀(공포 매도)과 반대매매 물량 급증으로 인해 단기적인 시장 변동성이 매우 커졌으며, 이는 투자 심리 악화의 가장 큰 원인이 되었습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#패닉셀</span> <span class="tag tag-hash">#반대매매</span> <span class="tag tag-hash">#거시경제위험</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">4일 서울 하나은행 본점 딜링룸에 코스피가 표시되고 있다. 이날 코스피는 37.87p(0.56%) 내린 6,769.06로 장을 시작했다.
+[연합뉴스]4일 서울 하나은행 본점 딜링룸에 코스피가 표시되고 있다. 이날 코스피는 37.87p(0.56%) 내린 6,769.06로 장을 시작했다.
+[연합뉴스]하락장에서 외국인 매물을 받아내며 ‘물타기’를 해왔던 개미들이 14일 백기를 들었다. 대규모 반대매매 매물이 더해지며 유가증권시장에서
+4조원대 순매도에 나선 것이다. 기관과 외국인이 개인 매물을 받아내며 코스피는 0.72% 오른 약보합으로 장을 마감했다. 이날 매도
+사이드카(프로그램 매매 효력 일시정지)까지 나왔던 코스닥은 낙폭을 줄이며 1.92% 하락한 채 장을 마쳤다.
+이날 개인들은 코스피에서 4조1500억원을 순매도했다. 이날 프리장에서도 1조원 가까이 팔아치웠다는 점을 감안하면 5조원가량을 순매도한 셈이다.
+전날 증시가 급락한 데다 중동발 지정학적 위기마저 재개되면서 투자심리가 위축돼 반대매매와 패닉셀이 나온 것이다. 이날 개인들이 순매도한 물량은
+s아모펀드(1조1294억원)와 금융투자(1조8949억원)가 대부분 받아냈다.
+
+개인들의 매도 물량은 대부분 삼전닉스에 집중됐다. 이날 개인들은 SK하이닉스 2조5000억원, 삼성전자 1조620억원, SK스퀘어를 1030억원
+가까이 팔았다.
+
+이 중 상당 부분은 반대매매로 풀이된다. 통상적으로 시장이 강한 상승세를 보인 날 개인들이 매도세를 나타내는 것과 반대로 이날 삼성전자나
+SK하이닉스가 3% 상승했는데도 매도 물량이 쏟아졌기 때문이다. 특히 SK하이닉스는 점심 무렵 장중 9.05%나 주저앉기도 했다.
+
+그간 증시 급락에도 미수금 대비 반대매매는 큰 폭으로 늘어나지 않았다. 금융투자협회에 따르면 지난 9일 위탁매매 미수금 대비 반대매매 금액은
+1조4220조원으로 급증했으나 10일 8160억원, 13일 2620억원 수준으로 6월보다는 오히려 감소했다. 김석환 미래에셋증권 연구원은“증권사들이 그간 증거금률을 40%로 상향해 미수거래 규모도 크게 늘지 않았고 반대매매의 위험이 감소했다”고 말했다.
+
+대신 ‘빚투(빚내서 투자)’ 자금들이 이날 대거 손절에 나선 것으로 풀이된다. 전날 코스피가 9% 넘게 하락한 여파로 미수거래뿐만 아니라 일반
+신용융자에서도 대거 반대매매가 발생한 것으로 분석된다.
+
+이미 주요 종목은 지난주부터 대거 반대매매가 나온 바 있다. 반대매매에다 투자심리 약화까지 겹쳐 신용거래융자 잔액도 7월 10일
+35조5700억원으로 7월 2일 37조7200억원에서 대폭 줄었다.
+
+코스콤 체크에 따르면 지난 7일부터 13일까지 삼성전자에서 신용잔액은 2343억원이 줄어들었다. 일주일 새 10% 이상 떨어진 현대차와
+네이버에서도 신용융자 잔액은 각각 879억원, 335억원 줄었다. 같은 기간 21%나 빠진 삼성전기도 신용잔액이 320억원 감소했다.
+
+한 자본시장 관계자는“전일 급락한 영향으로 14일 반대매매 물량은 1조원을 넘을 것으로 보인다”고 말했다.
+
+그간 코스피에서 팔던 외국인들은 이날 삼성전자는 순매도했지만 SK하이닉스와 SK스퀘어는 순매수했다. 오전에 발생한 반대매매로 코스피가 한때
+6448.86까지 밀린 상황에서 저가 매수에 나선 것이다.
+
+글로벌 투자은행(IB) 골드만삭스는 이날 ‘코스피, 주요 기술적 지지선을 시험하다’ 보고서에서 6800선을 중요한 지지선으로 제시했다. 
+6800선이 무너지면 다음 지지선은 6500까지 하락할 수 있다는 분석이다. 골드만삭스는 “장중 극심한 변동성을 야기한 주요 원인 중 하나는
+단일종목 레버리지 상장지수펀드(ETF)의 급격한 디레버리징(강제매도)”이라고 평가했다.
+
+단기간에 급락했기 때문에 연기금의 매도 리밸런싱 부담이 해소됐다는 점은 증시 하방을 지지할 요인으로 꼽힌다. 이날 씨티증권은 “코스피200
+선물이 1095을 하회했을 때 국민연금의 국내 주식 비중이 26.8%에 도달한 것으로 추정하는데 지금은 1085 수준”이라며 “다만 지수가
+1000~1066 부근에 도달하기 전까지는 국민연금이 개입해 주식을 매수할지 불확실하다”고 말했다. 여전히 높은 수준에 있는 포트폴리오의
+변동성을 감안할 때 주식 매수 여력이 제한된다는 설명.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005707525' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005707525</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
