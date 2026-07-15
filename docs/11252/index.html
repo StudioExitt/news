@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>기사회생 홈플러스 … 정상화까진 '첩첩산중'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.15</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005708099' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11252" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>기사회생 홈플러스 … 정상화까진 '첩첩산중'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">홈플러스가 메리츠와 MBK로부터 2천억원 규모의 긴급자금을 지원받아 파산 위기에서 일단 벗어났으나, 이사회 통과, 법원의 항고 수용 등 복잡하고 어려운 과제가 남아있어 경영 정상화까지는 장거리 레이스가 될 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">일시적으로 긴급 자금을 확보하며 파산 위기에서 벗어난 것은 긍정적이나, 이후 정상화를 위한 복잡한 절차(법원 승인, 이사회 동의 등)와 내부적인 경쟁력 약화 문제가 워낙 크기 때문에 즉각적인 주가 상승 모멘텀으로 보기 어렵습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">유통/소매업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#홈플러스</span> <span class="tag tag-hash">#회생절차</span> <span class="tag tag-hash">#DIP지원</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">홈플 긴급자금 2천억 수혈\n파산 나흘 앞두고 극적지원\n16일 메리츠 이사회 의결\n법원서 항고 절차 수용땐\n두달내 새 수정안 만들어야\nMBK파트너스와 메리츠금융그룹이 2000억원 규모 긴급운영자금(DIP) 지원에 잠정 합의하면서 홈플러스가 일단 회생 폐지 위기에서는 벗어나게 됐지만. 하지만 넘어야 할 산이 많다. 단기적으로는 자금 지원 안건의 메리츠 이사회 통과 여부를 비롯해 법원의 즉시항고 수용 여부 등에 관심이 모인다. 홈플러스와 MBK, 채권단 등이 오는 9월 4일까지 어떤 수정 회생계획안을 마련할지에도 업계는 촉각을 곤두세우고 있다.\n\n15일 업계에 따르면 메리츠와 MBK는 각각 DIP 2000억원 지원과 김병주 MBK파트너스 회장의 연대보증을 잠정 수용했다. MBK에서 먼저 김 회장의 연대보증 수용 의사를 이날 오후 메리츠에 전달했고, 메리츠에서 이를 받아들여 16일 이사회 일정을 잡은 것으로 알려졌다.\n\n민병덕 더불어민주당 을지로위원장은 이날 '홈플러스 노동자·상인 총궐기대회'에서 "오전 중 마트 노조 지도부와 긴급 미팅을 통해 긴밀히 협의했고 내일(16일) 중으로 2000억원 문제가 해결될 것"이라고 강조했다."이를 통해 홈플러스의 파산을 막고, 본격적으로 홈플러스를 살리는 작업이 시작될 것"이라고 강조했다.\n\nDIP 2000억원 해결은 홈플러스가 다시 회생 가도에 들어서기 위한 유일한 방안이었다. 메리츠는 지난달 이 중 1000억원 대출 지원 여부를 확정한 바 있다. 잔여 1000억원의 대출을 두고 지원 주체, 대출 지원 시 MBK의 연대보증 범위를 두고 양측은 한 달여간 설전을 벌여왔다.\n\n양측이 가장 먼저 풀어야 할 단기 과제는 16일 메리츠 이사회다. 메리츠그룹은 이날 메리츠화재·메리츠증권·메리츠캐피탈 이사회에서 해당 안건을 논의할 계획이다. 하지만 사외이사들이 해당 안건에 대해 동의할지는 미지수다. 지난달 1000억원 지원에 대해 논의할 당시에도 일부 이사들은 다소 부정적인 의견을 밝혔던 것으로 전해진다.\n\ni사회 문턱을 넘으면 20일까지 즉시항고에 착수해야 한다. 법원이 즉시항고를 받아들일 경우 회생절차는 최종 만기인 9월 4일까지 진행된다. 제출 기한을 맞추기 위해서는 8월 초까지 수정 회생계획안을 구체적으로 확정해야 한다. 이 계획안에 대해 채권자들의 동의를 구해야 하는 작업도 남아있다. 계획안이 인가되면 법원은 회생계획안 수행 여부를 지켜보고 최종 종결한다. 이행이 제대로 되지 않아 회생에 실패하면 다시 파산 절차를 밟을 수도 있다.\n\ny통업계에서는 회생절차가 재개되더라도 경영 정상화까지는 갈 길이 멀다는 평가가 나온다. 이미 점포 축소와 영업 중단으로 시장 경쟁력이 약화된 데다 협력사와 소비자 신뢰 회복까지 갈 길도 멀기 때문이다. 가장 큰 과제는 영업 재개와 상품 공급 정상화다. 홈플러스는 운영자금 고갈로 지난 13일부터 대형마트 영업을 임시 중단했다. 갑작스러운 영업 중단에 협력사들이 당황했고, 납품대금 회수 등에 대해서도 염려를 떨치지 못하고 있다. 이들 협력사의 신뢰를 회복해야 상품 재공급도 원활하게 진행될 수 있을 것으로 보인다. 그동안 홈플러스 일부 매장에서는 신선식품 매대가 비는 등 상품 수급 불안이 이어져 왔다.\n\n회생절차 연장에 실패할 경우 홈플러스는 즉각 파산 절차에 돌입한다. 회생이 폐지돼도 재신청은 가능하지만, 한 번 불발된 회생절차를 법원이 받아들일 가능성은 극히 낮다. 채무자(홈플러스)나 대주주(MBK파트너스), 또는 채권자 측에서 홈플러스의 파산을 법원에 신청하면 법원의 관리하에 잔여 자산을 채권자들에게 분배하고 홈플러스 법인은 청산된다. 이 절차에만 1년 이상 소요된다. 홈플러스와 연계된 중소기업이나 소상공인은 줄도산이 불가피하다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005708099' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005708099</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
