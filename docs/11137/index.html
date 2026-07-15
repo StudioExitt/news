@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>골드만 “코스피 급락, 레버리지 ETF 때문”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.15</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='원문링크 없음 (기사 기반 분석)' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11137" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>골드만 “코스피 급락, 레버리지 ETF 때문”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">골드만삭스는 최근 코스피 급락의 주 원인을 반도체 펀더멘털 훼손보다 레버리지 ETF가 촉발한 프로그램 매도 및 수급 왜곡에 따른 것으로 진단했습니다. 다만, 단일 종목 레버리지 ETF의 거래 비중이 지나치게 높아 시장 구조적 과열 우려가 제기되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 산업의 본질적인 강점에도 불구하고, 최근 시장 급락은 투자자들이 지나치게 레버리지 ETF에 의존하면서 발생한 과도한 포지션 청산(매도) 물량이 주된 원인으로 분석됩니다. 이는 기술적/수급 측면의 경고를 담고 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#프로그램매매</span> <span class="tag tag-hash">#반도체사이클</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■AI 프리즘 [주식 뉴스]
+레버리지發 프로그램 매도가 급락 키워
+거래대금 톱10 중 4개, 하이닉스 레버리지가 점령
+블룸버그 “삼성전자, 美 ADR 상장 초기 검토”
+▲ AI 프리즘* 맞춤형 경제 브리핑
+* 편집자 주: ‘AI PRISM’(Personalized Report & Insight Summarizing Media)은 한국언론진흥재단의 지원을 받아 개발한 ‘인공지능(AI) 기반 맞춤형 뉴스 추천 및 요약 서비스’입니다. 독자 유형별 맞춤 뉴스 6개를 선별해 제공합니다.
+[주요 이슈 브리핑]
+■ 레버리지 매도 논란: 골드만삭스는 최근 국내 증시 급락의 배경으로 레버리지 상장지수펀드(ETF)가 촉발한 프로그램 매도를 지목했다. 월가 주요 투자은행들은 이번 변동성이 수급 왜곡에 따른 것일 뿐, 반도체 펀더멘털 훼손은 아니라고 진단했다.
+■ 단일종목 쏠림: 국내 증시 거래대금 상위 10개 종목 중 4개를 SK하이닉스(000660)와 삼성전자(005930) 관련 단일종목 레버리지·인버스 ETF가 차지했다. 이에 따라 개별 종목 매매보다 파생상품 거래가 시장을 주도하는 구조가 굳어지는 양상이다.
+■ 삼성전자 ADR 검토: 블룸버그통신은 삼성전자가 투자은행들과 미국 주식예탁증서(ADR) 상장을 위한 예비 논의를 진행했다고 보도했다. 다만 논의는 초기 단계이며, 최종 상장 여부는 아직 확정되지 않은 상황이다.
+[주식 투자자 관심 뉴스]
+1. “장기 투자 이탈은 없다”…골드만삭스, 반도체 레버리지 매도 진단
+- 핵심 요약: 골드만삭스는 최근 코스피 급락의 원인으로 레버리지 상장지수펀드(ETF)가 촉발한 프로그램 매도를 지목했다. 14일 한국거래소에 따르면 전날 코스피가 8.95% 급락할 당시 외국인과 기관 순매도 중 45.4%가 프로그램 물량이었던 것으로 나타났다. 골드만삭스는 기관순매도의 62%가 ETF 관련 청산 물량에서 발생했다며 이를 단순한 포지션 조정으로 평가했다. 이에 따라 JP모건과 뱅크오브아메리카(BofA), 모건스탠리 등 월가 주요 투자은행들도 메모리 반도체 펀더멘털은 견고하다며 최근 주가 조정을 매수 기회로 보고 있다고 밝혔다.
+2. 시장 삼킨 단일종목 레버리지…거래대금 톱10 중 4개 차지
+- 핵심 요약: 단일 종목 레버리지 상장지수펀드(ETF)가 국내 증시 거래를 주도하는 구조가 뚜렷해졌다. 14일 한국거래소에 따르면 거래대금 상위 10개 종목 중 KODEX SK하이닉스(000660) 단일종목레버리지 등 4개가 이름을 올렸으며, 이들 ETF 거래대금만 16조 6809억 원에 달했다. SK하이닉스 현물과 이를 추종하는 레버리지 상품의 거래대금을 합치면 33조 3982억 원을 넘어섰다. 이진우 메리츠증권 리서치센터장은 개별 종목이 설 자리를 잃고 단일종목 레버리지 ETF가 거래를 주도하는 시장으로 바뀌고 있다고 말했다.
+3. 블룸버그 “삼성전자, 美 ADR 상장 재검토”
+- 핵심 요약: 삼성전자가 미국 주식예탁증서(ADR) 발행을 통한 미국 증시 상장을 검토하고 있다고 블룸버그통신이 14일 보도했다. 복수의 관계자에 따르면 삼성전자는 최근 투자은행들과 예비 논의를 진행했으나, 상장 추진 여부는 확정되지 않았다. 관계자들은 SK하이닉스가 미국 상장으로 265억 달러(약 39조 원)를 조달한 사례가 이번 검토의 배경으로 떠올랐다고 전했다. 다만 업계에서는 삼성전자가 이미 시가총액 1조 달러를 넘어선 데다 까다로운 미 증권거래위원회(SEC) 등록 절차를 감안하면 실익이 크지 않다는 평가도 나온다.
+[주식 투자자 참고 뉴스]
+4. 6월 외국인 주식자금 순유출 또 역대 최대
+- 핵심 요약: 지난달 외국인 투자가들의 국내 주식 순유출 규모가 또다시 역대 최대치를 경신했다. 한국은행에 따르면 6월 외국인의 국내 주식 자금은 323억 7000만 달러(약 48조 3100억 원) 순유출되며 기존 최대치였던 5월 기록을 넘어섰다. 한은은 글로벌 AI 투자에 대한 경계감에 따른 투자 심리 위축과 그간의 주가 상승에 따른 비중 조절이 영향을 미쳤다고 설명했다. 이에 따라 주식 자금은 6개월 연속 순유출 흐름을 이어가며 올 들어 누적 순유출 규모는 1102억 1000만 달러(약 164조 5500억 원)에 달했다.
+5. 반도체 타고 IMF 이후 최고 경상성장률…3高·고용없는 성장은 과제
+- 핵심 요약: 정부가 14일 올해 경제성장률 전망치를 3.0%로 상향 조정했다. 반도체 수출 단가가 전년 대비 163.3% 상승하며 상반기 반도체 수출이 1924억 달러로 지난해 연간 실적을 이미 넘어선 점이 배경이 꼽혔다. 이에 따라 정부는 올해 경상성장률이 12.3% 늘며 국제통화기금(IMF) 외환위기 이후 30년 만에 가장 높은 수준을 기록할 것으로 전망했다. 다만 고물가·고환율·고금리의 ‘3고’ 리스크와 취업자 증가 전망 하향 등 고용 둔화는 여전히 과제로 남은 모습이었습니다.
+6. 개미 “떨어지면 산다”…7월 6거래일 하락장서 적극 매수
+- 핵심 요약: 개인투자자들이 7월 조정장에서도 하락할 때마다 저가 매수에 나서는 패턴을 이어갔다. 한국거래소에 따르면 이달 10거래일 중 6거래일이 하락 마감했으며, 코스피가 8.95% 급락한 13일에도 개인은 3887억 원을 순매수했다. 반면 지수가 반등한 날에는 4조 1524억 원의 대규모 순매도가 나타나며 차익 실현 움직임도 뚜렷했다.
+글로벌 경제 환경과 반도체 업황 개선 기대감으로 긍정적 요인이 있으나, 레버리지 ETF 과잉 거래 및 외국인 자금 순유출 등 구조적 위험이 상존하여 변동성이 클 것으로 예상됩니다.</div><div class='news-src'>원문링크: <a href='원문링크 없음 (기사 기반 분석)' style='color:#64748b;word-break:break-all'>원문링크 없음 (기사 기반 분석)</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
