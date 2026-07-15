@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>李 지시에 단일종목 레버리지 ETF 손본다…변동성 대책 마련</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.15</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/020/0003734186' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11214" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>李 지시에 단일종목 레버리지 ETF 손본다…변동성 대책 마련</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">단일 종목 레버리지 ETF를 통한 과도한 투자 및 거래가 국내 증시의 극심한 변동성 원인으로 지적되면서, 대통령이 관련 보완대책 마련을 지시했습니다. 대형 반도체주에 쏠린 레버리지 투자는 주가 하락 시 강제 청산 위험을 높이고 시장 취약성을 확대했다는 비판이 제기되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">레버리지 ETF를 둘러싼 정부의 개입과 정책적 논쟁이 핵심을 이루며, 시장 구조적인 취약성(반도체주 집중 및 투기성 거래)에 대한 경고가 크므로 영향도가 매우 높습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#변동성경고</span> <span class="tag tag-hash">#정책리스크</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">15일 스마트폰 주식거래 앱 화면을 통해 SK하이닉스 단일종목레버리지 상품이 반등하는 모습을 보이고 있다. 2026.7.15/뉴스1
+15일 스마트폰 주식거래 앱 화면을 통해 SK하이닉스 단일종목레버리지 상품이 반등하는 모습을 보이고 있다. 2026.7.15/뉴스1이재명
+d대통령이 15일 청와대에서 열린 업무보고에서 단일종목 레버리지 상장지수펀드(ETF)와 관련해 "보완대책을 잘 신속하게 마련하라"고 지시한 것은 국내 증시에 극심한 변동성을 유발하는 원인이라는 판단에서다. 실제로 전날 코스피 전체 거래대금 40%에 달하는 자금이 단일종목 레버리지 상품에 몰렸고, 일부 상품은 하루 새 손 바뀜이 24차례나 일어나는 등 개인투자자의 초단타 거래가 몰리기도 했다.
+
+● 단일종목 인버스 ETF, 하루 회전율 2432%
+
+15일 한국거래소에 따르면 14일 삼성전자와 SK하이닉스 단일종목 레버리지·인버스 ETF 16종의 거래대금은 18조2827억원으로 집계됐다. 당일 코스피 전체 거래대금의 약 40%를 차지하는 규모다.
+
+레버리지 ETF는 짧은 기간 내 사고 팔아 수익률을 얻는 단타 상품인 만큼 기본적으로 회전율이 높지만 2000%를 넘어서는 '초단타' 거래가 이뤄지고 있는 것으로 나타났다. 14일 ‘SOL SK하이닉스선물단일종목인버스2X’ 회전율은 2431.93%로 하루 동안 실제 주식수보다 24배 넘는 거래가 일어났다. 회전율은 유통주식 수 대비 거래량을 나타내는 지표로 수치가 높을수록 단기매매가 활발했다는 의미다.
+
+일각에서는 투자자들이 레버리지 ETF를 빠르게 사고 팔면서 대규모 자금이 이동했고, 이 과정에서 주가 변동 폭이 커졌다는 분석이 나온다. 특히 삼성전자와 SK하이닉스가 코스피 전체 시가총액의 50%를 웃도는 상황에서 해당 주가를 ±2배로 추종하는 상품에 돈이 쏠리면서 국내 증시 전체의 변동성이 더욱 확대됐다는 것이다.
+
+gㅗ태봉 iM증권 리서치본부장은 "단일종목 레버리지 상품이 삼성전자와 SK하이닉스로 제한되면서 투자자의 '쏠림' 현상이 더 심해진 측면도 있다"고 설명했다. 삼성전자(우선주 포함)와 SK하이닉스의 코스피 시가총액은 15일 종가 기준으로 54.88%를 차지한다.
+
+오를 때 추격 매수하고, 내릴 때 투매하는 이른바 '숏 감마(Short Gamma) 현상'이 변동성에 영향을 미치고 있다는 분석도 있다. 숏감마 현상은 시장에 참여하는 대형 기관들이 목표 레버리지 비율을 유지하기 위해 기초자산이 오르면 현물이나 선물을 추가 매수하고, 반대로 하락하면 매도해 보유 물량을 줄이는 상태다. 이로 인해 주식 시장이 상승장에서 상승 폭을 더 키우고 하락장에서 하락폭을 더 키우는 등 비정상적으로 급등하거나 급락하게 된다.
+
+● “韓 증시 변동성, 레버리지 ETF 강제 청산 때문”
+
+해외 투자은행(IB)과 외신들도 최근 국내 증시의 극심한 변동성을 주목하고 있다. 글로벌 투자은행(IB) 골드만삭스는 "지수 급락은 레버리지 상품의 강제 청산 성격이 강하다"고 진단했다. 코스피가 삼성전자와 SK하이닉스 등 대형 반도체주에 집중되어 있는 상황에서 개인들의 레버리지 투자 확대가 시장의 취약성을 높이고 주가 하락폭을 증폭시켰다는 지적이다.
+
+중국 후투증권은 "개인투자자 상당수가 레버리지를 활용하면서 시장에 하락을 방어할 구조적 완충지대가 부재했다"며 "이로 인해 반도체주 하락 직후 마진콜과 강제청산이 도미노처럼 이어지면서 기계적인 폭락 장세로 확대됐다"고 분석했다.
+
+단일종목 레버리지 ETF 상품의 판매를 허용한 정부의 판단 착오라는 비판도 나온다. 미국 블룸버그통신은 15일(현지 시간) "SK하이닉스가 미국주식예탁증서(ADR) 상장으로 265억 달러를 조달했는데도, 정작 한국 투자자들은 안타깝게도 전재산을 잃다시피 했다"며 "레버리지 ETF 상품을 개인 투자자에게 판매하는 것을 허용해야 했는지 의문이고 정책적 판단 착오가 있었던 것 아니냐는 질문을 피할 수 없다"고 지적했다.
+
+dan일종목 레버리지 ETF를 둘러싼 지적이 계속되자 금융당국은 14일 긴급회의를 열고 단일종목 레버리지의 시장 상황과 투자자 보호 방안을 논의했다. 16일 재정경제부·한국은행·금융위원회·금융감독원이 참여하는 시장상황점검회의에서도 이와 관련한 주요 내용이 논의될 것으로 보인다.
+원문링크: https://n.news.naver.com/mnews/article/020/0003734186</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/020/0003734186' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/020/0003734186</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
