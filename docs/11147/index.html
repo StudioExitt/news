@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"지수만 보면 본전인데"…非반도체 업종 두자릿수 폭락</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.15</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014067839' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11147" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"지수만 보면 본전인데"…非반도체 업종 두자릿수 폭락</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 지수는 반도체 덕분에 회복세를 보이며 7,000선을 회복했으나, 실제로는 비반도체 업종들이 두 자릿수의 폭락을 기록하며 개별 투자자의 체감 손실률은 매우 높게 나타났다. 전문가들은 높은 반도체 이익 성장세 때문에 단기적으로는 순환매가 어려울 것으로 분석했다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">시장 상승을 반도체 섹터에 대한 의존도가 지나치게 높음을 보여주며, 다른 업종의 극심한 부진으로 투자 심리 위축이 우려됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체독주</span> <span class="tag tag-hash">#지수착시</span> <span class="tag tag-hash">#순환매실패</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피는 반도체 훈풍에 7000선을 회복해 3.30% 오른 7082.91개장했다. 최근 코스피가 7000선을 내주며 두 달 전 수준으로 밀려났던 가운데 이 기간 반도체를 제외한 나머지 업종들이 속수무책으로 무너지면서 투자자들의 체감 수익률이 처참한 수준으로 곤두박질치고 있다. 지수만 보면 본전이지만, 비반도체 업종 낙폭이 워낙 깊어 반도체 편중 포트폴리오가 아닌 이상 손실을 피하기 어려웠을 것으로 풀이된다.
+
+사실상 반도체를 제외하면 대부분의 업종 지수가 두달 전 대비 폭락세를 나타냈기 때문이다. 실제 지난 5월 4일 이후 전날까지 코스피 수익률(-1.16%)을 웃돈 업종은 보험(15.93%), 전기전자(12.17%), 제조업(0.94%) 등 단 3개에 불과했다.
+
+반면 기계·장비(-42.34%), 금속(-38.28%), 건설(-37.18%), 증권(-34.74%), 운송장비·부품(-25.94%), 종이·목재(-25.82%), 일반서비스(-25.56%), 화학(-24.52%), 전기·가스(-22.95%), 비금속(-20.57%), 오락·문화(-19.42%), 부동산(-17.53%), 통신(-13.76%), IT서비스(-12.33%), 섬유·의류(-11.95%), 음식료·담배(-11.73%), 제약(-11.19%), 운송·창고(-10.52%), 의료·정밀기기(-10.41%), 금융(-3.04%), 유통(-2.48%) 등 24개 업종 가운데 21개가 대부분 두자리수 하락률을 기록하며 사실상 초토화됐다.
+
+삼성전자와 SK하이닉스 등 반도체 투톱이 만든 랠리가 중단되며 지수가 두달 전으로 회귀한 상황 속 상당수 투자자들의 손실 충격을 더욱 크게 받아들이고 있을 것으로 추정되는 대목이다. 그동안 반도체 업종의 독주에 가려져 보이지 않던 비반도체 업종의 극심한 부진과 '지수 착시' 민낯이 고스란히 드러났다는 평가다.
+
+이를 두고 시장에서는 반도체 외 업종으로 순환매가 이어질 것이란 기대감도 나오지만, 전문가들은 반도체 외 업종으로 순환매가 쉽지 않을 것이란 분석을 내놓고 있다. 삼성전자와 SK하이닉스 등 반도체 이익 성장세가 코스피 전체 순이익 증가율 평균치를 압도한다는 이유에서다.
+
+이재만 하나증권 연구원은 "반도체라는 벽을 넘기가 어려운 상황"이라며 "이익을 기준으로 봤을 때 순환매가 쉽지 않다"고 말했다. 이 연구원은 "주도주의 고점은 결국 영업이익률이 정점을 통과할 때 형성된다"며 "삼성전자와 SK하이닉스의 영업이익률 정점은 빠르면 내년 1분기로 예상되는 만큼 올해 연말까지는 반도체가 시장을 이끄는 주도 업종 역할을 이어갈 가능성이 높다"고 설명했다. 그러면서 "실제로 영업이익률이 하락세로 전환되는 것을 확인한 뒤 대응해도 늦지 않다"고 덧붙였다．</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014067839' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014067839</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
