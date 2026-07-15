@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>‘추세적 반등이냐, 개미 꼬시기냐?’ 7000피 탈환에도 개미는 불안</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.16</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/005/0001861299' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11265" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>‘추세적 반등이냐, 개미 꼬시기냐?’ 7000피 탈환에도 개미는 불안</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피와 코스닥이 반도체 낙관론과 미국 CPI 안정화에 힘입어 7000선 등을 회복하며 급등했으나, 극심한 변동성에 대한 개인 투자자들의 장기 불신은 여전히 남아있음을 보여준다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 메모리 반도체의 낙관론 재점화와 미국 CPI 안정화 같은 거시경제 지표 개선이 단기적인 주가 급등을 이끌었으나, 개인 투자자들의 심리가 매우 불안정하고 주요 위험 요인(실적 발표, 유가 변동)이 남아있어 변동성 확대 가능성이 높음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#투자심리</span> <span class="tag tag-hash">#거시경제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피·코스닥이 15일 나란히 급등하며 7000피·800스닥을 회복했다. 하지만 최근 한 달간 극심한 변동성을 보이며 주가가 급락한 데다,
+반도체 피크아웃(고점 이후 하락 국면) 우려도 해소되지 않아 개미 투자자들의 국장 불신은 가라앉지 않고 있다.
+
+코스피는 이날 전장보다 427.58포인트(6.24%) 오른 7284.41로 거래를 마쳤다. 지난 13일 8.95% 급락한 ‘검은 월요일’ 이후
+이틀 연속 상승해 7200선을 회복했다. 외국인 투자자가 약 2조3000억원 순매수하며 지수를 이끌었다. 코스닥도 이날 전거래일보다 45.45포인트(5.80%) 오른 829.43에 장을 마감했다.
+
+외국계 글로벌 금융그룹의 SK하이닉스 낙관론과 미국 소비자물가지수(CPI) 발표 등이 한국 증시 반등에 영향을 줬다는 분석이 나온다. 영국계
+글로벌 투자은행(IB) 바클레이스의 사이먼 콜스 연구원은 전날 보고서에서 메모리 반도체 공급 부족 사태가 지속할 것으로 내다보며 SK하이닉스
+미국주식예탁증서(ADR) 목표 주가를 330달러로 제시했다. 메모리 반도체 낙관론이 되살아나자 미국 나스닥에 상장된 SK하이닉스 ADR은 지난 14일(현지시간)
+전장보다 27.29% 급등한 193.92달러에 마감했다.
+
+이효섭 자본시장연구원 선임연구위원은 “바클레이스가 목표 주가를 2배나 올리면서 SK하이닉스 ADR 가격이 급등한 점이 반도체 비중이 큰 한국
+증시에도 큰 영향을 줬다”고 설명했다. 미국 노동부가 6월 소비자물가 상승률(전년 동기 대비)
+이 시장 예상치(3.8%)보다 낮은 3.5%로 집계됐다고 발표하면서 인플레이션 우려가 누그러진 투심 회복에 영향을 미쳤다.
+
+SK하이닉스 이날 8.83% 급등하며 208만2000원에 마감했고, 삼성전자도 6.27% 오른 27만9500원에 거래를 마쳤다. 이밖에
+SK스퀘어(16.13%), 삼성전기(12.14%), 현대차(2.24%), 한미반도체(29.88%) 등 주요 종목들도 일제히 올랐다. 시총 50위
+종목 중 한국전력(-0.15%)을 뺀 49개 종목이 상승했다.
+
+하지만 극심한 변동성에 코스피 장기투자를 불신하는 개인투자자도 늘고 있다. 직장인 이모(41)씨는 “코스피 대장인 ‘삼전닉스’가 (고위험
+자산인) 코인보다 심하게 오르내린다. 예정된 이벤트가 많은데 매번 롤러코스터를 타면 어떻게 사람이 견디나”라며 “국장은 계속 휘청일 것 같아서
+기회 될 때마다 정리하고 미국 지수 투자로 방향을 바꾸려 한다”고 했다. 온라인 카페, 종목토론방 등에서도 “국장은 외국인과 기관 놀이터”
+“스트레스가 너무 심해서 국장 절반은 덜어냈다” “국장은 장기투자용이 아니다” 등 성토가 잇따른다.
+
+증권가는 당분간 큰 변동성 장세가 이어질 것으로 전망한다. 이 선임연구위원은 “7월 말 빅테크 실적발표, 유가 상승과 월드컵에 따른 물가 상승
+압력, 여전한 반도체 수급 우려 등 불안 요인이 여전히 큰 상황”이라고 내다봤.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/005/0001861299' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/005/0001861299</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
