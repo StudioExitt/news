@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 7000피 탈환, 진짜 반등 시작?… 증권가 "아직 이르다"</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.15</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/469/0000942453' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11213" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 7000피 탈환, 진짜 반등 시작?… 증권가 "아직 이르다"</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">급락세에 빠졌던 코스피가 이틀 연속 반등하며 7,000선을 회복했습니다. 이는 주로 반도체주 강세와 외국인/기관의 순매수에 기인했으나, 전문가들은 이번 상승을 본격적인 추세 전환으로 보기엔 이르다고 진단하며 단기적 변동성 장세를 경고했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업종의 명확한 반등과 외부 호재(CPI 하락)가 단기 상승을 유발했으나, 증권가 전문가들은 여전히 기준금리 및 지정학적 리스크를 지적하며 '변동성 장세'만 예상하고 있어 추격 매수에는 신중해야 합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피 #반도체주 #변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">급락을 거듭하던 코스피가 이틀 연속 반등하며 7,000선을 회복했다. 전문가들은 최근 낙폭이 과도했던 만큼 호재에 대한 시장의 민감도가 높아졌다면서도, 이번 반등을 추세적 상승으로 단정 짓기엔 이르다고 진단했다.
+
+15일 코스피는 전 거래일 대비 427.58포인트(6.24%) 급등한 7,284.41에 거래를 마쳤다. 외국인과 기관이 각각 2조3,230억 원, 1,830억 원어치를 순매수하며 상승을 주도했다. 개인은 2조4,680억 원어치를 순매도했다. 코스닥은 45.45포인트(5.80%) 오른 829.43에 마감했다. 양 시장에서 나란히 매수 사이드카(프로그램매매 일시 효력 정지)가 발동됐다. 코스피 기준 올해 36번째 사이드카다.
+
+그간 고전하던 반도체주가 급등하면서 지수를 견인했다. 이날 SK하이닉스는 8.83% 상승한 208만2,000원에, 삼성전자는 6.27% 오른 27만9,500원에 거래를 마쳤다. SK스퀘어와 삼성전자 우선주도 각각 16.13%, 5.38% 올랐다. 글로벌 투자은행(IB) 바클레이스가 SK하이닉스 미국 주식예탁증서(ADR) 목표주가를 330달러로 제시하면서 투자심리가 개선된 것으로 풀이된다. 이에 14일(현지시간) SK하이닉스 ADR은 27.29% 급등한 193.92달러에 마감했다.
+
+미국 소비자물가지수(CPI)가 시장 전망치를 밑돌면서 인플레이션 우려가 다소 완화된 점도 호재로 작용했다.
+
+"낙폭 과대 인식에 반등… 변동성 이어질 것"
+
+코스피가 약 한 달 새 2,300포인트가량 급락한 만큼 낙폭 과대 인식이 향후 지수 하단을 받칠 것이라는 의견이 나온다. 김학균 신영증권 리서치센터장은 "여러 우려가 이미 주가에 상당 부분 반영됐다"며 "코스피가 하방 경직성을 보일 가능성이 높다"고 전망했다. 노근창 현대차증권 리서치센터장도 "코스피가 바닥을 찍었다고 판단한다"고 말했다. 실제 코스피는 지난달 22일 종가 기준 사상 최고치(9,114.55)를 기록한 뒤 하락세로 돌아서며 이달 13일 6,806.93까지 빠졌다. 고점 대비 단기간에 25.32% 급락한 셈이다.
+
+변준호 IBK투자증권 연구원은 "과거 코스피가 고점 대비 20% 이상 뚜렷하게 하락한 사례는 금융위기, 코로나19 등 2005년 이후 다섯 번 정도"라며 "현 상황이 이런 위기 국면과 비견될 정도로 불확실한 상황은 아니다"라고 진단했다. 이어 "지수가 증시 환경, 펀더멘털(경제 기초체력) 대비 단기적으로 과도하게 하락한 상황인 만큼 단기적으로 국내 증시는 악재보다 호재에 좀 더 민감하게 반응할 것"이라고 내다봤.
+
+다만 이날 급등을 본격적인 상승 전환으로 해석하긴 어렵다는 시각이 우세하다. 한 증권사 관계자는 "기준금리 인상, 지정학적 리스크 등 외부 요인이 여전히 증시를 위협하고 있다"며 "7,000~8,500포인트 박스권에서 등락을 이어갈 것"이라고 분석했다. 당분간 급등과 급락을 반복하며 변동성 장세를 이어갈 것이란 설명이다. 안현국 한화투자증권 연구원은 "7월과 8월에도 변동성이 지속될 것으로 판단한다"며 "7,300포인트 이하를 분할 매수 구간, 6,600포인트 이하를 적극 매수 구간으로 제시한다."
+</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/469/0000942453' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/469/0000942453</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
