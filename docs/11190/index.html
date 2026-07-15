@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>두 달 새 주가 반 토막…모건스탠리, 비츠로셀 저가 매수 나서</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.15</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006330933' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11190" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>두 달 새 주가 반 토막…모건스탠리, 비츠로셀 저가 매수 나서</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">글로벌 투자은행 모건스탠리가 주가 조정 국면 속에서 비츠로셀 지분을 확보하며 저가 매수 의지를 보였습니다. 비츠로셀은 2분기 실적 호조와 더불어 AI 데이터센터, 방산 등 신성장 사업 확대를 통해 중장기 성장이 기대되며, 코스닥150 편입 및 주주환원 정책 강화 등으로 기관 및 장기 자금 유입이 예상됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 기관(모건스탠리)의 저가 매수 진입과 코스닥150 편입 등의 외부 자금 유입 기대감이 확인된 상황에서, 방산 및 AI 데이터센터라는 확실한 중장기 테마를 바탕으로 실적 성장성까지 뒷받침되면서 강력한 상승 모멘텀이 구축되었습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">첨단 소재</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#모건스탠리매수</span> <span class="tag tag-hash">#방산테마</span> <span class="tag tag-hash">#AI데이터센터</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">두 달 새 주가 50% 넘게 조정…지분 5.48% 확보
+2분기 매출 35%·영업익 21% 증가…AI·방산 신사업 확대
+2030년 매출 6000억 목표…밸류업·주주환원 강화 추진
+코스닥150 지수 편입…패시브 자금 유입 기대 글로벌 투자은행 모건스탠리가 비츠로셀(082920) 주요주주로 올라섰다. 최근 두 달 사이 주가가 반토막 나는 등 큰 폭의 조정을 받는 과정에서도 지분을 확보하며 저가 매수에 나섰다. 시장에서는 방산과 인공지능(AI) 데이터센터 등 신규 사업 성장성과 견조한 실적 흐름을 보고 투자에 나선 것으로 해석한다.
+15일 금융감독원 전자공시시스템에 따르면 전날 모건스탠리 앤 씨오 인터내셔널 피엘씨는 비츠로셀 주식 248만5587주(5.48%)를 보유하고 있다고 공시했다. 보유 목적은 단순투자다. 이번 공시는 장내 매수를 통해 지분율이 5%를 넘어서면서 신규 보고 의무가 발생한 데 따른 것이다.
+모건스탠리의 지분 확보 시점은 주가 조정 국면과 맞물렸다. 비츠로셀 주가는 지난 5월 12일 장중 6만7800원까지 치솟아 52주 신고가를 기록한 이후 최근 2만7000원대까지 하락하며 두 달 만에 50% 넘게 조정을 받았다. 이날은 8거래일 만에 4%대 반등하며 2만9100원에 장을 마쳤다.
+시장에서는 모건스탠리가 단기 주가보다 중장기 성장 가능성에 무게를 두고 비중을 확대한 것으로 보고 있다.
+비츠로셀은 리튬 일차전지 전문기업으로 스마트그리드용 전지와 방산용 열전지, 앰플전지, 석유·가스 시추용 고온전지 등을 주력으로 생산하고 있다. 최근에는 신성장 사업으로 AI 데이터센터용 리튬이온캐패시터(LIC), 이차전지 소재, 리튬메탈 밸류체인 확대에도 속도를 내고 있다.
+실적도 성장세를 이어가고 있다. 올해 2분기 연결 기준 매출액은 763억원으로 전년 동기 대비 35.0% 증가했고 영업이익은 196억원으로 같은 기간 21.3% 늘었다. 상반기 누적 기준으로는 매출액 1446억원, 영업이익 398억원을 기록하며 지난해 같은 때보다 각각 30.9%, 27.7% 증가했다.
+증권가 역시 방산과 AI 데이터센터를 중심으로 성장성이 이어질 것으로 전망하고 있다.
+이병화 신한투자증권 연구위원은 “고온전지는 북미 시장 점유율 확대가 이어지고 있고 열전지는 유도무기 체계 수요 증가에 따른 성장이 지속되고 있다”며 “AI 데이터센터용 캐패시터와 전고체 배터리 소재 등 신규 사업도 중장기 성장동력이 될 것”이라고 분석했다.
+심의섭 NH투자증권 연구원은 “지난해 인수한 북미 이노바(Innova) 연결 편입 효과가 본격화되면서 고온전지 매출이 빠르게 확대될 것”이라며 “미군 특수전지와 함께 지난해 둔화됐던 스마트그리드향 매출도 다시 성장세를 보일 것”이라고 전망했다.
+기업가치 제고에도 적극 나서고 있다. 비츠로셀은 이달 기업가치 제고 계획을 발표하고 2030년까지 매출 6000억원, 영업이익 1600억원 달성을 목표로 제시했다. AI 데이터센터용 캐패시터와 자폭드론용 배터리 시장 진출을 추진하는 한편 배당성향 확대와 자기주식 소각 등 주주환원 정책도 강화할 계획이다.
+특히 비츠로셀은 코스닥150(6월 12일 편입), 코스닥 글로벌 세그먼트(6월), 코리아 밸류업 지수(6월 29일 적용)에 연이어 편입되며 패시브 자금과 장기 투자자 유입 기대도 커지고 있다.
+장정훈 삼성증권 연구원은 “최근 주가 조정은 단기 변수에 따른 영향이지만 중장기 성장성은 여전히 유효하다”며 “코스닥150 지수 편입으로 해당 지수를 추종하는 패시브 자금 유입이 기대되는 만큼 중장기 수급에도 긍정적인 영향을 미칠 것”이라고 진단했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006330933' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006330933</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
