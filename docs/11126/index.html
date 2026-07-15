@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK하이닉스 미국 주식, 왜 한국보다 50% 비싸졌나 [마켓무버의 국장 힌트]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.15</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001258763' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11126" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>SK하이닉스 미국 주식, 왜 한국보다 50% 비싸졌나 [마켓무버의 국장 힌트]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 슈퍼사이클에 힘입어 SK하이닉스 주가 급등세가 확인되었으며, 이는 메모리 반도체 업황의 강한 회복세를 시사합니다. 또한, 미국 금리 정책 변화(물가 지표)와 연준 의장의 발언을 통해 거시경제 변수까지 종합적으로 분석하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 인프라 확장에 따른 메모리 슈퍼사이클 지속 전망이 강력한 매수 모멘텀을 제공하며, 이는 중장기적인 반도체 업황 개선 기대감으로 작용합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">AI 관련주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체슈퍼사이클</span> <span class="tag tag-hash">#AI인프라</span> <span class="tag tag-hash">#메모리반등</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미 증시 살펴보며 한국 증시 투자아이디어까지 찾는 마켓 무버입니다.
+
+간밤 주목할 만한 장면이 크게 세 가지 정도 있었습니다. 중동 문제, 물가 이후의 국채시장의 변동, 그리고 SK하이닉스 미국 주식의 급등입니다.
+
+중동 문제는 헤드라인만 살펴보셔도 될 듯합니다. 호르무즈 해협을 통과하는 선박에 화물 가격의 20%를 통행료로 부과하겠다는 도널드 트럼프 대통령의 요구는 철회됐습니다.
+이후 미군 중부사령부가 이란에 대한 추가 공습을 단행했으며 이란 항구에 대한 봉쇄를 재개하겠다고 발표했습니다. 국제유가는 전일 대비 2%대 상승폭 보였습니다.
+
+해설이 좀 더 길게 필요한 부분은 물가 관련입니다. 통화정책에 민감한 2년물 미 국채 수익률(=국채금리)가 연 4.2% 아래로 내려왔습니다. CPI 데이터 나오기 전까지 4.3%선에 근접했던 2년물 국채 수익률의 장중 하락폭이 10bp 가까이 된 거죠.
+
+미국의 6월 소비자물가지수가 예상을 밑돌았기 때문입니다. 전월 대비로는 0.4% 줄었습니다.
+
+시카고 기금금리 선물에 나타난 자금 흐름을 보면, 이달 말 예정된 FOMC에서 미국 기준금리가 올라갈 확률은 41.7%에서 15.5%로 급감했습니다.
+
+미국의 통화정책, 그러니까 금리 결정을 포함해 미국에 돈을 어떻게 푸느냐 혹은 줄이느냐를 결정하는 연준의 움직임도 긴 호흡에서는 놓쳐서는 안 될 오늘의 장면이었습니다. 케빈 워시 연준 의장의 의회 청문회 발언이 있었지요.
+
+워시 의장은 '연준이 집중해야 하는 것은 통화정책이지, 재정정책에 연준이 관여해서는 안 된다'고 했는데요. 앞으로 연준의 방향성과 워시 의장의 독립성 의지를 재차 강조한 겁니다.
+
+대차대조표 정책과 관련한 답변에서 나온 이 발언의 맥락을 조금 더 쉽게 풀어보면, 앞으로 재무부가 무작정 찍어내는 국채 연준이 사줄 일은 없을 거라는 뜻으로도 볼 수 있겠습니다. 백악관의 금리 압박에도 '법을 준수하고 데이터에 따른 가장 최선의 판단을 내리겠다'고도 했지요.
+
+투자자분들이 가장 관심가질 부분은 SK하이닉스 미국 주식의 급등일 겁니다. 간밤 나스닥 반등을 주도한 것은 메모리, 반도체, 스토리지, 서버, AI 인프라 하드웨어 관련주들이었는데요. SK하이닉스 ADR은 전날 9% 하락을 딛고 이날 27% 이상 급등했습니다.
+
+SK하이닉스 ADR을 포함한 미국 메모리주 반등은 복합적인 요인들이 함께 작용했습니다.
+
+우선 “고객사들이 우리 소프트웨어 구매 예산을 줄여 AI 하드웨어에 우선 배분하고 있다”면서 실망스러운 실적을 발표한 IBM의 영향이 있고요.
+
+JP모건과 골드만삭스가 연달아 최근 코스피와 메모리 반도체 하락에 대해 “과도한 레버리지 포지션이 정리되면서 나타난 기술적 조정”이라면서 펀더멘털에는 문제가 없다고 주장한 것도 투심 회복에 기여했습니다.
+
+월가의 환호가 SK하이닉스 본주를 비롯한 한국 증시에 전파될지를 따져봐야겠습니다.
+
+이날 바클레이즈는 SK하이닉스 ADR에 대해 ‘비중확대’ 의견과 목표주가 330달러로 커버리지를 개시했는데요. 메모리 공급 부족이 2027년 이후로 계속될 것이며, HBM 가격 상승과 SK하이닉스의 시장 지배력을 감안했을 때 내년 매출이 시장 예상보다 훨씬 높을 것이라고 분석했습니다. 
+
+AI 붐에 따른 메모리 슈퍼사이클이 아직 끝날 조짐이 보이지 않는다는 것입니다. 바클레이즈는 향후 SK하이닉스가 자사주 매입을 통해 주주 환원을 강화할 여력이 높다는 점도 강조했습니다.
+
+SK하이닉스 ADR을 두배 추종하는 레버리지 상품들도 대거 출시됐습니다. 뉴욕증권거래소에 상장된 렉스셰어즈의 하이닉스 ADR 2배 추종 레버리지(HYNX)를 비롯해 나스닥의 SKUU, 시카고거래소의 SKHX 등 2배 상품들의 첫날 거래량이 의미있는 수준이라는 게 업계의 설명이고요.
+
+그런데 말입니다. 아마 투자하시는 분들 가운데는 '아니 오늘 하이닉스 ADR은 하루 27% 올랐는데 왜 미국 시장에 오른 2배짜리 상품들은 당일 수익률이 54%가 아니라 28% 정도인가' 하고 궁금해하실 분들이 계실 텐데요.
+
+결론부터 말씀드리면 이들 레버리지 상품이 SKHY의 시가부터 반영해서 그렇습니다. 기사로 보시는 하이닉스 미국 주식의 상승률은 전일 종가 대비이고요. 현지시간 오늘부터 미국 시장에서 출시된 레버리지 상품들은 개장 이후 시초가부터 SKHY의 주가 추종을 시작했습니다.
+
+실제 미국 증시 장중에서 SK하이닉스 ADR 주가는 168달러에서 193달러로 14% 정도 움직였기 때문에, 현지 시간 9시 30분부터 첫 거래를 시작한 레버리지 상품들은 이 장중의 상승폭만 두 배로 따라간 겁니다.
+
+그러니 소위 말하는 현선물 꼬임이나 스퀴즈 현상은 레버리지 거래 첫 날 일어나지 않았고, 시간외 거래에서 나온 낙폭을 감안하더라도 이제 SK하이닉스 ADR은 코스피에 상장된 보통주 대비 40% 이상 더 비싼 주식이 됐습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001258763' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001258763</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

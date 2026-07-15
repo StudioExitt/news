@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"어제 살 걸 그랬나"…SK하이닉스 ADR 27% 폭등하더니 결국</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.15</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005310147' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11124" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"어제 살 걸 그랬나"…SK하이닉스 ADR 27% 폭등하더니 결국</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 관련 반도체 수요 폭발 기대감과 공급 부족 전망에 힘입어 주가가 급등했다. 주요 투자은행의 목표가 상향 및 ETF 거래 활성화로 단기적인 수급적 모멘텀까지 강화되며 긍정적 시장 신호가 나타났다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI라는 거대한 메가 트렌드가 명확하게 포착되었으며, 전문 투자 기관(바클레이스)의 목표주가 상향과 공급 부족 전망이라는 정성적/정량적 요인이 결합하여 매우 강력한 매수 심리를 형성했기 때문이다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">AI 데이터센터 관련주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI</span> <span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#ADR폭등</span> <span class="tag tag-hash">#D램공급부족</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">SK하이닉스와 삼성전자가 이틀째 반등에 나섰다.
+
+15일 오전 9시8분 현재 SK하이닉스는 전일 대비 9.2% 오른 208만9000원에 거래되고 있다. 장 초반 10% 넘게 오르면서 210만원대를 회복하기도 했다. 삼성전자도 6%대 뛰고 있다.
+
+인공지능(AI) 투자 확대에 따른 메모리 반도체 업황 개선에 대한 낙관론이 다시 살아난 데다 글로벌 투자은행(IB)의 목표 주가 상향이 투자 심리를 끌어올린 영향으로 풀이된다.
+
+사이먼 콜스 바클리 애널리스트는 이날 SK하이닉스 미국 주식예탁증서(ADR)에 대해 '비중 확대(Overweight)' 의견을 펼치고 목표주가를 330달러로 제시했다.
+
+바클리는 AI 데이터센터 투자 확대에도 메모리 공급 증가 속도가 이를 따라가지 못하면서 D램 공급 부족이 내년에 더욱 심화하고 2028년에도 빠르게 해소되기 어려울 것으로 예상했다.
+
+특히 SK하이닉스 ADR의 목표 밸류에이션으로 주가수익비율(PER) 8배를 적용했는데, 이는 미국 경쟁사인 마이크론보다도 낮은 수준이라며 여전히 저평가돼 있다고 분석했다.
+
+SK하이닉스가 내년 말까지 현재 시가총액의 40%를 웃도는 현금성 자산을 확보할 것으로 예상하며 자사주 매입 등 주주환원 확대 가능성도 전망했다.
+
+이에 간밤 미국 뉴욕 증시에 상장한 SK하이닉스 ADR은 27% 넘게 급등했다.
+
+메모리 전반에 대한 수요가 강하다는 점 역시 재차 확인됐다.
+
+IBM은 이날 2분기 잠정 실적을 발표하면서 고객들이 가격 인상 가능성에 대비해 서버와 스토리지, 메모리 확보를 위해 지출을 앞당겼다고 밝혔다.
+
+레버리지 ETF 거래도 본격화됐다. 이날부터 시카고옵션거래소(CBOE)는 SK하이닉스 ADR을 기초자산으로 하는 옵션 거래를 시작했다.
+
+레버리지셰어즈, 그래나이트셰어즈, 프로셰어즈, 코기펀즈 등 미국 운용사들이 SK하이닉스 ADR을 기초자산으로 한 레버리지 ETF를 잇달아 선보이면서 수급적으로 단기 주가 상승을 뒷받침했을 가능성이 커보인다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005310147' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005310147</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
