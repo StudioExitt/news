@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>묘안 없는 레버리지 대책, 금융위 업무보고서도 빠져</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.15</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/648/0000048926' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11158" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>묘안 없는 레버리지 대책, 금융위 업무보고서도 빠져</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">단일종목 레버리지 ETF를 둘러싼 시장 변동성 대책 마련에 금융당국이 난항을 겪고 있으며, 제시된 보완책들은 실효성에 의문이 제기되고 있습니다. 규제 당국은 대응 방안을 명확히 결정하지 못한 채, 관련 논의가 정부 주요 업무보고 자료에서도 빠지는 등 고민만 깊어지고 있는 상황입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 투자 상품인 레버리지 ETF에 대한 규제 당국의 정책적 미흡과 논의 부재는 시장 참여자들에게 불확실성과 불안감을 증폭시키며 중장기적인 투자 심리 위축 요인으로 작용할 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자산운용</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#금융규제</span> <span class="tag tag-hash">#시장변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">상장폐지 불가론에 나온 대안들도 실효성 의문 지적
+교육·예탁금 규제와 먼 외국인·기관투자자 거래비중이 더 높아
+배수 조정은 상품변경에 해당, 투자자 동의 받아야 할 수도
+운용사 간담회 취소한 금융위, 靑 업무보고 자료에도 제외
+이찬진 금융감독원장이 13일 서울 영등포구 금융투자협회에서 열린 자산운용사 CEO 간담회에 참석하고 있다./사진=이명근 기자 qwe123@
+금융당국이 증시 변동성 대책마련에 고심을 거듭하고 있다. 단일종목 레버리지 상장지수펀드(ETF)가 증시 변동성의 기폭제로 지목되고있지만, 마땅한 대안을 찾지 못하고 있는 모습이다.
+15일 금융투자업계에 따르면 금융위원회는 14일 오후 한국거래소에서 단일종목 레버리지 ETF를 운용하는 대형 운용사 실무진들을 불러 긴급대책회의를 진행하려했으나 오전 중 급작스럽게 일정을 취소했다.
+자산운용사 관계자는 "금융위에서 대형사 ETF 실무 담당자들을 소집했다가 급히 일정을 취소한 것으로 안다"며 "레버리지 ETF에 대해 정치권에서까지 상장폐지 등을 거론하며 너무 많은 주목을 받으면서, 당국이 관련논의 자체와 그 결과의 노출에 대해 상당한 부담을 느낀 것으로 보인다"
+실제로 단일종목 레버리지ETF는 상장폐지보다는 보완책 마련에 무게가 실린다. 제도적으로는 상폐도 가능하지만 이미 13조원에 달하는 관련 ETF자산총액을 한 번에 정리하는 것도 시장에 상당한 위협이 되기 때문이다.
+삼성전자와 SK하이닉스 현물과 선물, 스와프 포지션을 한꺼번에 정리하면 기초자산 수급에 큰 타격을 줄 수 있고, 이미 주가가 상장가 아래로 떨어진 상황에서 투자자들이 대규모 손실을 실현해야하는 부담도 생긴다. 글로벌 투자자들에겐 정책 혼선에 따라 상품이 순식간에 사라지는 후진적인시장 구조를 보여주며 코리아 디스카운트를 키우는 결과도 초래할 수 한다.
+하지만 보완책으로 거론되는 것 역시 실효성에 물음표가 붙는다. 
+금융투자업계에 따르면 현재 레버리지ETF 보완책으로는 레버리지 투자를 위한 투자자 진입문턱을 높이는 것과 레버리지 배수하향 및 유동성공급자(LP) 관리강화 등 시장 왜곡 완화대책 등이 핵심으로 거론된다. 
+투자 진입문턱을 높이는 방안으로는 투자자 기본예탁금을 올리고 의무교육 시간을 늘리는 등의 방안이 거론되는데, 업계에선 사실상 의미없는 대책이라는 비판이 거세다. 한 자산운용사 관계자는 "투자를 불편하게 해서 관심을 덜받게 하는 전략인지 모르겠으나 교육시간 늘리고 예탁금 키우는 건 정말 쓸모 없는 대책"이라며 "레버리지ETF는 교육을 덜받고 예탁금이 적어서 생긴문제가 아니다"
+레버리지 ETF교육과 예탁금 기준이 국내 개인투자자들에게만 적용된다는 점도 실효성을 떨어뜨린다. 단일종목 레버리지의 상장 이후 거래대금을 투자자별로 보면 개인이 40%, 외국인과 기관이 60%를 차지한다. 다수가 외국인과 기관인데, 이들은 레버리지 의무교육을 면제받는데다 기본거래단위가 커서 예탁금 기준도 무의미하다. 보완책은 사실상 개인투자자만 견제하는 데 국한된다는 얘기다.
+현재 2배수인 레버리지 비율을 1.5배수 등으로 낮추는 방안도 거론되는데, 이 경우에도 상품변경에 따른 절차를 거쳐야 하고, 상폐와 마찬가지로 투자자들의 손실을 키울 수 있다는 문제가 있다.
+금융투자업계 관계자는 "2배수 상품에 투자하고 손실이 나 있는데, 1.5배수로 레버리지 비율을 낮추면 이후 주가가 상승할 때 손실을 만회하는 폭이 크게 줄어들텐데 그 피해는 어떻게 감당할 수 있는지 의문"이라고 꼬집었다.
+ETF 역시 펀드로 구분되기 때문에 배수를 조정하는 경우 상품변경에 따른 투자자동의가 필요하다는 지적도 나온다. 자산운용사 관계자는 "펀드는주목적 투자를 변경하게 되면 수익자총회를 해야하는데, ETF도 펀드여서 들고 있는 사람들이 수익자가 된다"며 "이들을 불러다 과반의 동의를 얻어야 할 수도 있다"
+실제로 과거 2011년 한국투자신탁운용이 베트남펀드의 경우 시장이 무너지면서 수익자총회를 통해 만기연장 여부를 결정한 적이 있다. 최근에는 러시아-우크라이나 전쟁으로 러시아펀드들이 환매중단에 걸리면서 수익자총회를 열었다. ETF도 주식처럼 명부폐쇄일을 정해 수익자를 구분할 수 있겠지만, 아직 한 번도 없었던 일을 치러야 하는 부담이 생긴다.
+뾰족한 대책이 나오지 못하면서 당국의 고민은 더 커지는 모습이다. 이찬진 금감원장은 13일 금융투자협회 및 20개 자산운용사 CEO들과 만났지만 레버리지ETF 얘기는 의미있는 수준으로 꺼내지 못한 것으로 전해진다. 당초 운용사들의 의결권 문제를 논하는 자리였다지만, 앞서 "드러누워서라도 반대했어야 했다"며 후회한 이 원장의 발언을 감안하면 가장 시급한 과제에 대해 언급도 없었던 점은 그만큼 꺼낼 카드가 없다는 뜻으로도 해석된다.
+14일 오후 금투협이 급하게 마련한 증권사 CEO간담회에서도 갑론을박 끝에 업계의 자율대응 수준의 결론을 도출하는데 그쳤다. 금투협은 간담회 후 증권업계가 레버리지 투자자 보호를 위해 건전한 투자문화 확산에 노력하고, 거래동향과 투자행태를 지속 점검하며 정부의 추가 조치에 적극 협조하겠다는 의견을 모았다고 밝혔다.
+운용사 간담회도 취소했던 금융위는 아직 명확한 대응방안을 결정하지 못한 것으로 보인다. 때마침 15일 금융위의 대통령 업무보고가 열리지만, 이날 업무보고자료에도 레버리지ETF 관련 대책은 빠졌다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/648/0000048926' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/648/0000048926</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
