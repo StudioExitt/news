@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TSMC가 걷어낸 반도체 고점론?…“AI 수요 더 강해졌다”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.17</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006332077' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11293" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>TSMC가 걷어낸 반도체 고점론?…“AI 수요 더 강해졌다”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">TSMC가 시장 예상치를 크게 웃도는 사상 최대 실적을 기록하고 연간 매출 및 설비투자 전망까지 상향 조정하며 AI 수요의 강력함을 재차 확인했다. 대규모 미국 내 투자 확대 계획은 중장기적으로 반도체 업황에 긍정적인 신호로 해석된다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">TSMC가 기록적인 실적을 발표하고 향후 연간 매출 성장률을 기존 전망치보다 높게 상향 조정한 점은 AI 기반의 구조적 수요 증가를 강력하게 뒷받침한다. 대규모 미국 내 투자 계획은 중장기적인 업황 개선 기대감을 높여 반도체 섹터 전반에 긍정적인 모멘텀으로 작용할 것이다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">HBM 제조사</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#TSMC</span> <span class="tag tag-hash">#AI반도체</span> <span class="tag tag-hash">#설비투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">2분기 순이익 77% 급증…시장 전망치 큰 폭 상향
+연간 매출 성장률 40%대로 상향…AI 수요 자신감 확인
+세계 최대 파운드리(반도체 위탁생산) 업체인 대만 TSMC가 시장 기대를 크게 웃도는 사상 최대 실적에 이어 연간 매출과 설비투자 전망까지 상향하면서 인공지능(AI) 반도체 고점론을 누그러뜨렸다. 16일 국내 반도체주는 차익실현 매물에 급락했지만, AI 반도체 생산을 사실상 독점하는 TSMC가 중장기 수요를 근거로 대규모 투자 확대에 나선 만큼 업황 성장세가 이어질 것이라는 기대에는 오히려 힘이 실리는 분위기다.
+
+TSMC는 16일 오후 올해 2분기(4~6월) 순이익이 7066억대만달러로 전년 동기 대비 77.4%, 전분기 대비 23.4% 증가했다고 밝혔다. 이는 금융정보업체 LSEG가 18명의 애널리스트 전망을 토대로 집계한 예상치 6326억대만달러(약 29조1000억원)를 크게 웃도는 수준이다.
+
+매출액은 1조2704억대만달러로 전년 동기 대비 36.0% 늘었고 영업이익은 7666억대만달러로 65.4% 증가했다. 영업이익률은 전년 동기 대비 10.7%포인트 상승한 60.3%를 기록해 처음으로 60%를 넘어섰다. 고성능컴퓨팅(HPC) 매출이 전분기보다 20% 급증하면서 AI 수요의 견조함을 재차 확인했다.
+
+특히 시장이 주목한 것은 실적보다 강한 향후 전망이었다. TSMC는 3분기 매출액으로 시장 예상치를 웃도는 446억~458억달러를 제시했다. 연간 달러 기준 매출 증가율 전망도 기존 30% 초과에서 40%를 소폭 웃도는 수준으로 높였다. 스마트폰 등 기업·소비자간거래(B2C) 수요 둔화를 AI 반도체 수요만으로 충분히 상쇄할 수 있다는 판단이다.
+
+설비투자 계획 역시 기존 520~560억달러 수준에서 600억~640억달러로 상향했다. 전체 투자의 70~80%를 선단 공정에, 10~20%를 첨단 패키징과 테스트에 투입하기로 했다. 단기 실적뿐 아니라 2027년 하반기 이후의 수요까지 감안해 생산능력 확대에 나선 셈이다.
+
+미국 내 반도체 생산능력 확대를 위해 현지 투자액을 대폭 늘린다는 계획도 공개했다. 웨이저자 TSMC 회장은 이날 실적 발표 콘퍼런스콜에서 “미국 애리조나에 1000억달러(한화 약 147조8000억원)를 추가 투입하기로 했다”며 “미국 주요 고객사의 강력한 장기 수요를 지원하기 위한 것”이라고 말했다.
+
+다만 이날 국내 증시에서는 TSMC 호실적의 온기가 즉각 반영되지는 않았다. 삼성전자(005930)는 전 거래일보다 8.77% 내린 25만5000원, SK하이닉스(000660)는 11.53% 하락한 184만2000원에 마감했다.
+
+중국발 메모리 공급 확대와 데이터센터 투자 둔화 우려에 전날 뉴욕증시에서 마이크론(-8.0%), 샌디스크(-8.1%), 웨스턴디지털(-8.8%) 등 반도체주가 급락하며 투자심리가 악화한 영향이다.
+
+이경민 대신증권 연구원은 “TSMC가 예상치를 웃도는 실적과 설비투자 확대 방침을 제시했지만 시장에서는 ‘셀 온’ 매물이 출회됐다”고 분석했다. 다만 이는 TSMC의 실적이나 AI 수요 전망보다는 중국발 메모리 공급 확대와 데이터센터 투자 둔화 우려가 단기 투자심리를 압박한 결과에 가깝다.
+
+TSMC의 공격적인 설비투자는 단기 실적 개선을 넘어 향후 AI 반도체 수요에 대한 자신감을 보여주는 대목으로 해석된다. 올해 투자 확대분이 2027년 하반기 이후 생산능력으로 이어지는 만큼 중장기 AI 업황에도 긍정적인 신호라는 평가가 나오는 이유다.
+
+문준호 삼성증권 연구원은 “TSMC는 설비투자를 통해 AI 수요의 강력함을 재차 증명했다”며 “AI 가속기를 유사 독점 중인 회사가 이토록 급격히 투자를 늘리는 것은 TSMC와 고객사들이 AI 수요의 급증을 전망하고 있다는 것을 시사한다”고 말했다. 이어 “TSMC는 물론 반도체와 AI 밸류체인 전반에 걸쳐 긍정적인 시각이 유효하다”고 했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006332077' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006332077</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
