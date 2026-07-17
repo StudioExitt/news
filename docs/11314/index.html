@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반도체 흔들리자 코스피 롤러코스터…레버리지 ETF가 키웠다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.17</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004642501' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11314" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>반도체 흔들리자 코스피 롤러코스터…레버리지 ETF가 키웠다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 수요 둔화 우려와 금리 인상 기조가 맞물리며 코스피 지수가 급락하고 역대급 변동성을 기록했습니다. 정부의 확장재정과 한은의 긴축 정책이 충돌하며 경제 양극화 심화에 대한 우려가 커지고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">메모리 사이클 우려와 금리 인상 기조가 결합되며 단기적인 시장 급락과 변동성 확대가 발생하여 투자 심리가 매우 위축됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피급락</span> <span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#금리인상</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">
+■AI 프리즘 [주식 뉴스]
+코스피 6.37% 급락…사이드카·서킷브레이커 남발
+h안은 3년 6개월 만에 금리인상…연 2.75%로
+800조 슈퍼예산 vs 긴축 기조…엇갈린 처방
+
+▲ AI 프리즘* 맞춤형 경제 브리핑
+* 편집자 주: ‘AI PRISM’(Personalized Report &amp; Insight Summarizing Media)은
+한국언론진흥재단의 지원을 받아 개발한 ‘인공지능(AI) 기반 맞춤형 뉴스 추천 및 요약 서비스’입니다. 독자 유형별 맞춤 뉴스 6개를 선별해
+제공합니다.
+
+[주요 이슈 브리핑]
+
+■ 변동성 장세: 코스피가 하루 만에 6.37% 급락하며 전날 반등분을 고스란히 반납했다. 메모리 피크아웃 우려가 다시 불거지며 사이드카와
+서킷브레이커가 잇달아 발동되는 등 증시 변동성이 역대 최고 수준으로 치닫는 모습이다.
+
+■ 긴축 전환: 한국은행이 기준금리를 연 2.5%에서 2.75%로 올리며 3년 6개월 만에 긴축 국면으로 돌아섰다. 물가 상승 압력과 금융
+리스크가 지속되는 가운데 8월 추가 인상 여부로 시장의 관심이 옮겨가는 분위기다.
+
+■ 정책 엇박자: 정부가 내년 800조 원 이상의 확장재정을 예고한 반면 한은은 통화 긴축에 나서며 정책 방향이
+엇갈리는 양상이다. 반도체 훈풍이 경제 전반으로 확산되지 못할 경우 양극화가 심화될 수 있다는 분석도 나온다.
+
+[주식투자자 관심 뉴스]
+
+1. 코스피 하루새 -6.37%…전날 상승분 고스란히 반납
+- 핵심 요약: 코스피 지수가 16일 전 거래일 대비 463.81포인트(6.37%) 급락한 6820.60으로 장을 마쳐 전날 6.24% 반등하며
+기록한 7284.41 상승분을 하루 만에 반납했다. 삼성전자(005930)가 8.77%,
+SK하이닉스(000660)가 11.53% 동반 급락하며
+지수 하락을 주도했으며, ASML과 TSMC의 호실적에도 불구하고 메모리 가격 정점 통과 및 수요 둔화 우려가 다시 부각된 영향으로 풀이된다.
+올해 들어 코스피가 하루 만에 5% 이상 등락한 날이 28일(21.2%)에 달했고,
+사이드카와 서킷브레이커 발동 횟수도 역대 최고 수준을
+기록했다. 단일 종목 레버리지 상장지수펀드(ETF) 거래액이 코스피 전체 거래의 96.3%를 차지하며 변동성 확대의 주요 배경으로 지목하는
+상황이다.
+
+2. 한은, 3년 6개월 만에 금리인상…연 2.75%로
+- 핵심 요약: 한국은행이 16일 금융통화위원회에서 기준금리를 연 2.5%에서 2.75%로 0.25%포인트 인상하며 2023년 1월 이후 3년
+6개월 만에 긴축 기조로 전환했다. 신현송 한은 총재는 물가 상승률이 상당 기간 목표 수준을 웃돌 것으로 보이고 금융 리스크도 지속되고 있다며
+금통위원 7명이 만장일치로 인상을 결정했다고 밝혔다. 중동 전쟁 장기화로 소비자물가 상승률이 5월과 6월 연속 3%대를 기록하고 수입물가와
+생산자물가도 전년 대비 각각 20.6%, 8.5% 뛴 점이 인상 배경으로 작용했다. 이에 따라 시장의 관심은 8월 금통위에서의 추가 인상 여부로
+옮겨갈 것이라는 전망이다.
+
+3. 800조 슈퍼예산 vs 긴축…엇갈린 정책 처방 우려
+- 핵심 요약: 한국은행이 3년 6개월 만에 기준금리를 인상하면서 내년 800조 원 이상의 ‘슈퍼 예산’을 예고한 정부 재정정책과의 엇박자를
+우려하는 목소리가 나온다. 기획예산처는 내년도 총지출을 올해 본예산보다 10% 이상 늘어난 ‘800조 원+α’ 수준으로 편성하며 인공지능(AI)·반도체 투자와 지역 균형 성장 등을 내걸고 확장재정을
+추진하고 있다. 반도체 수출 호조로 올해 성장률이 3%에 이를 것으로
+전망되지만 내수와 건설 경기는 여전히 부진해 반도체 온기가 경제 전반으로 확산되지 않을 경우 양극화가 심화될 수 있다는 분석이다. 신현송 총재는
+취약 계층 부담이 늘어날 수 있다는 지적에 통화정책보다 선별적 효과를
+낼 수 있는 재정·금융정책이 가장 적합하다고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004642501' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004642501</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
