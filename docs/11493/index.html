@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中, 첫 자체개발 SC시밀러 허가하나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.19</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004642742' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11493" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>中, 첫 자체개발 SC시밀러 허가하나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">독자 개발한 히알루로니다제를 기반으로 SC 바이오시밀러를 개발하는 헨리우스의 임상 진행 소식입니다. 규제기관별(중국, 유럽, 미국) 해석 차이와 기술적 난관이 존재하며, 이는 글로벌 시장 진입에 중요한 변수로 작용합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 시장(중국, 유럽)에서 자체 개발 히알루로니다제를 활용한 SC 바이오시밀러 개발 시도가 발표되었으며, 이는 플랫폼 기술 경쟁과 관련하여 제약/바이오 업계에 중요한 기술 트렌드를 제시함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">제약</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#SC시밀러</span> <span class="tag tag-hash">#히알루로니다제</span> <span class="tag tag-hash">#바이오시밀러</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">헨리우스 로고. 사진 출처=헨리우스
+중국 포순제약 자회사 헨리우스가 자체 개발한 히알루로니다제 효소를 활용해 피하주사(SC) 제형 바이오시밀러
+development에 착수했다. 특허 장벽으로 히알루로니다제를 적용한 SC 바이오시밀러 상용 사례가 없는 가운데 첫 시도로 평가된다.
+
+19일 제약·바이오업계에 따르면 헨리우스는 로슈의 페스고 바이오시밀러 ‘HLX319’의 임상 1상을 진행 중이다. 헨리우스는 “히알루로니다제 관련 특허 제약으로 아직 SC 복합제 바이오시밀러가 승인된 사례는 없다”며 “HLX319는 독자 개발한 히알루로니다제 ‘헤노자이즈’를 기반으로 한다”고 밝혔다. 페스고는 허셉틴과 퍼제타를 하나로 결합한 제품으로 할로자임의 SC 플랫폼 기술이 적용됐다.
+
+헨리우스의 이번 임상은 중국과 유럽 시장 진출을 고려한 것으로 해석된다. 회사는 중국 규제 기준은 물론 유럽 바이오시밀러 가이드라인을 참고했으며 대조약으로 유럽 판매용 페스고(EU-Phesgo)를 사용하고 있다. 유럽의약품청(EMA)과 중국 국가약품감독관리국(NMPA)은 히알루로니다제를 핵심 성분이 아닌 변경 가능한 부분 부형제로 분류하는 것으로 알려졌다. 다만 규제기관의 허가를 득하더라도 다른 바이오시밀러와 마찬가지로 상업화를 위해서는 투여 용량과 투여 방법 등에 대한 특허 문제를 추가로 해결해야 한다.
+
+반면 미국식품의약국(FDA)은 히알루로니다제를 핵심 성분으로 판단해 동일한 물질을 사용하지 않을 경우 바이오시밀러가 아닌 별도 의약품으로 취급한다. 바이오시밀러로 허가 받지 못할 시 임상, 개발 비용이 많이 드는 것은 물론 상용화 이후에도 대체 조제 등의 혜택을 받지 못해 경제성이 떨어진다. 국내 플랫폼 기업 알테오젠이 “미국 규정상 키트루다 SC 제형(큐렉스)의 바이오시밀러 개발은 불가능하다”고 설명한 이유기도 하다.
+
+헤노자이즈는 헨리우스가 지난해 공개한 히알루로니다제 기반 SC제형 변경 플랫폼이다. 회사는 기존 플랫폼사들의 특허군(할로자임 5개, 알테오젠 4개, 캉쥬 2개)을 고려해 헤노자이즈를 설계했다고 강조했다. 다만 개발 과정에서 “기존 특허를 피하면서 효능을 발휘하기 위해 변형 가능한 아미노산 위치가 전체의 10%도 안 된다”며 자체 히알루로니다제 개발에 있어 기술적 난이도 토로하기도 했다. 당초 SC제형변경 기술을 자체개발한 삼성바이오에피스도 배양, 정제와 달리 사용하는 물질은 할로자임의 ‘인핸즈’를 기반으로 한 것으로 확인됐다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004642742' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004642742</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
