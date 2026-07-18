@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>성공적인 AI 투자 여부를 판단할 세 가지 핵심 지표: IBM 주가 급락 분석</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.18</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006332417' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11474" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>성공적인 AI 투자 여부를 판단할 세 가지 핵심 지표: IBM 주가 급락 분석</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">IBM이 예상치를 하회하는 잠정 실적을 내놓으며 주가가 36% 급락했습니다. 시장은 AI 투자 확대에 따른 하드웨어 비중 증가가 소프트웨어 매출 성장을 위협하는지 우려하고 있습니다. 향후 실적 발표에서는 연간 FCF 가이던스, 대형 계약 체결 시기 등을 핵심 변수로 살펴야 합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">대형 기술 기업의 실적 발표와 급락은 IT 산업 전반의 투자 사이클 변화(하드웨어 vs 소프트웨어)에 대한 근본적인 의문을 제기하며 주식 시장에 큰 영향을 미칩니다. 특히 AI 트렌드 속에서 나타나는 소프트웨어 성장 둔화 우려는 중장기적 관점에서 중요하게 다루어져야 합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">Microsoft (MS)</span> <span class="tag stock-tag">NVIDIA (NVDA)</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#IBM</span> <span class="tag tag-hash">#AI투자</span> <span class="tag tag-hash">#실적분석</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">IBM 잠정 실적 발표 후 한 달여 만에 주가 36% 하락
+AI 인프라 투자 확대에 소프트웨어 예산 잠식 우려
+22일 정기 실적서 연간 추정치·SW업계 분위기 확인 필요 IBM이 최근 시장 예상치를 하회하는 잠정 실적을 내놓은 뒤 급락했다. 시장에서는 인공지능(AI) 투자 확대 과정에서 서버와 메모리 등 하드웨어 투자가 소프트웨어 예산을 잠식하기 시작한 것 아니냐는 우려가 확산하는 분위기다. 증권가에서는 오는 22일(현지시간) 정기 실적 발표에서 연간 실적 추정치, 대형 계약 회복 여부, 업계 전반의 수요 흐름을 주목해야 한다고 평가했다.
+
+이 사진은 생성형 인공지능(AI)을 활용해 제작했습니다.
+
+17일(현지시간) 뉴욕증권거래소에서 IBM은 전 거래일보다 2.91%(6.38달러) 내린 212.67달러에 거래를 마쳤다. 지난달 2일 기록한 52주 최고가(332.46달러)와 비교하면 약 36% 낮은 수준이다.
+
+IBM은 지난 14일 2분기 잠정 실적 발표 후 25% 이상 하락했다. 2분기 매출은 172억달러로 추정치(178억6000만달러)를 약 3.7% 밑돌았고, Non-GAAP(일회성 비용 등을 제외한 조정 기준) 주당순이익(EPS)은 2.93달러로 예상치(3.03달러)를 약 3% 하회한 것으로 공개되면서다.
+
+급락 이유는 시장이 잠정 실적을 소프트웨어 성장 둔화로 받아들였기 때문이다. 증권가에서는 이번 실적에서 인수·합병 효과를 제외하면 IBM 자체 성장률이 사실상 0~1% 수준으로 떨어진 것으로 추정했다.
+
+박기현 키움증권 연구원은 “시장이 반응한 것은 3~4% 수준의 실적 하회 자체가 아니라 ‘두 자릿수 성장하는 소프트웨어 회사’라는 프리미엄 멀티플의 근거가 흔들린 것”이라고 분석했다.
+
+소프트웨어 성장 둔화는 IT 예산 재편의 신호로 해석된다. IBM 소프트웨어 사업은 다년 단위 대형 계약 비중이 높은데, 고객사들이 메모리와 서버, 스토리지 등 하드웨어 확보를 우선하면서 소프트웨어 계약 체결 시점이 뒤로 밀렸다는 것이다.
+
+다만 이를 소프트웨어 수요 자체 붕괴로 단정하기는 이르다는 시각도 내놨다.
+
+박 연구원은 “긍정적으로 해석하면 이번 잠정 실적은 수요가 줄어든 것이 아닌 고객사의 일시적인 투자 우선순위 변화로 대형 계약 체결이 지연된 영향이 크다”고 말했다.
+
+향후 주가의 핵심 변수는 기업들의 IT 투자 예산이 하드웨어 중심으로 얼마나 오래 이동할지 여부라는 의견이 나온다. 오는 22일 정기 실적 발표에서는 이 같은 흐름이 일시적인지, 장기화될지를 가늠할 수 있는 단서들이 제시될 전망이다. 박 연구원은 핵심 확인 요소로 △연간 잉여현금흐름(FCF·Free Cash Flow) 가이던스가 150억달러 수준을 방어하는지 △지연된 대형 계약들이 3분기 중 실제로 체결되는지 △이번 실적 시즌에 마이크로소프트(MS) 등 다른 소프트웨어 업체에서도 동일한 현상이 나타나는지를 꼽았다.
+
+박 연구원은 “세 가지가 확인되기 전까지 최근의 급락은 확정된 펀더멘털 훼손이라기보다 시장이 최악의 시나리오를 선반영한 결과로 이해하는 것이 타당하다”고 언급했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006332417' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006332417</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
