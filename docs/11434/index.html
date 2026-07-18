@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오빠도 '레버리지' 한건 아니지? 망연자실한 개미들[인치범의 주식투자 부트캠프]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026-07-18</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005549551' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11434" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>오빠도 '레버리지' 한건 아니지? 망연자실한 개미들[인치범의 주식투자 부트캠프]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">급등장세 속 20대 초보 투자자들이 빠지기 쉬운 과신과 레버리지 위험성을 경고하는 내용입니다. 단순한 부채 차입뿐만 아니라, 파생상품을 이용한 간접적 레버리지가 손실 규모를 통제 불능 수준으로 키울 수 있음을 지적하며 신중한 접근을 강조합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">레버리지라는 구체적인 금융 위험 요소를 다루며 초보 투자자들의 심리적 과신(Overconfidence)을 경계하므로 시장 전반의 투자 행태에 중대한 영향을 미칠 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융상품</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지위험성</span> <span class="tag tag-hash">#투자심리</span> <span class="tag tag-hash">#파생상품</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">영화 '빅 쇼트'의 한 장면
+'당신을 곤경에 빠뜨리는 것은 당신이 모르는 것 때문이 아니다. 틀렸는데도 확실하다고 믿는 것이
+때문이다.'
+(마크 트웨인)
+이 문구처럼 우리는 명백하게 안다고 확신하지만 사실이 아닌 것으로 밝혀졌을 때 비로소 자신이 곤경에 빠진 것을 깨닫게 되는 것 같습니다. 최근 들어 20대 초보 투자자가 확실하다고 믿지만 곤경에 빠질 수 있는 함정은 무엇이 있을까요? 아마 1년 가까이 지속된 국내 증시 폭등의 영향으로 '레버리지(leverage)를 이용해 보자'는 생각도 그중 하나일 것입니다. 오늘은 20대 초보 투자자들이 꼭 살펴봐야 할 '레버리지'의 위험성에 대해 알아보겠습니다.
+
+'사천피'에서 '1만피' 기대감까지
+2025년 국내 증시는 역사에 남을 정도의 강세장을 기록했습니다. 코스피 지수는 2025 한 해 동안 급등하여 75.63% 상승률로 4,214.17포인트로 마감했으며, 2026 상반기에도 96.62%가 급등하는 등 시장은 폭발적인 성장을 경험했습니다.
+이 시기에 주식에 입문한 20대 초보 투자자들은 대체로 만족할 만한 성과를 거두었으나, 기회를 놓친 이들 사이에서는 FOMO와 상대적 박탈감이 존재했습니다. 투자 금액의 한계를 극복하려는 두 가지 선택지 중 하나가 '레버리지'입니다.
+
+레버리지는 '적은 자기자본으로 더 큰 규모의 투자 효과를 얻도록 만든 구조'라는 넓은 의미로 이해해야 합니다. 가장 흔한 방식은 부채(신용융자, 미수거래 등)를 이용하는 것으로, 이익과 손실이 모두 배가 됩니다. 문제는 투자가 실패할 경우 빚(부채)은 그대로 남는다는 점입니다.
+
+다음으로 금융상품을 이용한 레버리지입니다. 대표적으로 2배·3배 레버리지 ETF, 선물, 옵션 등 파생상품이 있습니다. 이들은 적은 증거금만으로 큰 규모의 계약을 거래할 수 있게 합니다(예: 증거금 1천만 원으로 1억 원 규모 계약). 문제는 시장 변동성이 예상과 다를 경우 손실 역시 레버리지 효과로 크게 확대되어, 추가 증거금 납부와 강제청산에 이를 수 있다는 것입니다. 특히 선물 같은 파생상품은 손실 규모가 통제 불가능할 정도로 커질 수 있어 매우 큰 위험을 수반합니다.
+
+초심자의 행운을 실력이라 믿지 마라
+한동안의 급속한 성장기에 진입한 20대 초보 투자자들은 높은 성과에 '단기간에 부자가 될 수 있겠다'는 과신(overconfidence)이 들기 쉽습니다. 소셜 미디어에서는 자극적인 레버리지 수익 인증만 보게 됩니다.
+
+다만 이런 환경에서 레버리지는 단순한 투자 기법을 넘어 생존의 문제를 야기합니다. 성과를 낸 분들은 초심자 행운을 실력이라 믿지 않는 겸손함이 필요하며, 급하게 투자를 고민하는 이들은 잠시 멈춰 자신의 심리를 살펴볼 필요가 있습니다.
+
+결론적으로 레버리지와 빚은 수백 년간 금융의 핵심 경고 대상이었습니다. 투자에서 가장 위험한 것은 무지가 아니라 '나는 알고 있다'는 확신입니다. 그리고 레버리지는 그 확신이 틀렸을 때 가장 먼저, 가장 크게 대가를 치르게 만드는 도구인 것입니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005549551' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005549551</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
