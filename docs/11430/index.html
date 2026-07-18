@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[주간코인] 비트코인, 오르고 내렸지만…시장 체력은 살아났다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.18</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003112464' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11430" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[주간코인] 비트코인, 오르고 내렸지만…시장 체력은 살아났다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">CPI 둔화에 따른 긍정적 신호와 지정학적 리스크로 인해 변동성이 높았으나, ETF 자금 유입과 온체인 매수세 증가 등 시장 내부 구조의 체력은 개선된 것으로 분석되었습니다. 다만 거시경제 및 지정학적 불확실성으로 인해 단기적인 상승장 진입에는 신중해야 합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 CPI 둔화 및 금리 인상 우려 완화 등 거시경제적 요인이 위험자산(주식 포함)의 투자 심리를 지지하는 근거를 제공했기 때문입니다. 이는 시장 전반에 대한 긍정적인 기대를 반영합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#CPI</span> <span class="tag tag-hash">#거시경제</span> <span class="tag tag-hash">#위험자산</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">CPI·중동 리스크에 출렁인 한 주…ETF·온체인 지표는 개선
+기관 자금은 이더리움으로 이동…매도 압력 완화 조짐
+해당 이미지는 AI로 제작됨.
+해당 이미지는 AI로 제작됨. 이번 주 가상자산 시장은 하루가 멀다 하고 분위기가 뒤바뀌었다.
+
+미국 소비자물가지수(CPI) 둔화에 힘입어 반등했던 비트코인은 중동의 지정학적 긴장이 고조되자 다시 하락했고, 투자심리도 좀처럼 회복되지
+못했다.
+
+다만 가격 흐름과 달리 시장 내부에서는 변화의 조짐이 나타났다.
+
+미국 현물 상장지수펀드(ETF)로 자금이 다시 유입되고 온체인 매수세가 살아나는 등 매도 압력이 완화되는 신호가 잇따랐다.
+
+기관 자금이 비트코인보다 이더리움으로 빠르게 이동하는 흐름도 두드러졌다.
+
+주 초 시장은 레버리지 해소와 함께 출발했다.
+
+글로벌 가상자산 시황 플랫폼 코인게코에 따르면 지난 13일 비트코인은 레버리지 롱 포지션 청산 여파로 6만3000달러 아래까지 밀렸다.
+
+다만 하락세가 대규모 투매로 번지지는 않았다.
+
+청산 규모도 최근 한 달간 발생한 주요 청산과 비교해 크지 않았다.
+
+시장에서는 이번 하락을 과도하게 쌓인 레버리지가 일부 정리되는 과정으로 해석했다.
+
+이후 분위기는 빠르게 반전됐다.
+
+미국 CPI가 시장 예상보다 낮게 나오면서 연방준비제도(Fed)의 금리 인상 우려가 완화됐고, 비트코인은 한때 6만5000달러선을 회복했다.
+
+미국 현물 비트코인 ETF도 순유입으로 전환하며 기관 자금이 다시 들어오기 시작했다.
+
+온체인 지표에서도 시장 체력이 이전보다 개선됐다는 신호가 포착됐다.
+
+장기 보유자와 신규 투자자의 보유 자산을 비교하는 ‘실현가치 보유기간 비율(RHODL Ratio)’은 하락했지만 비트코인 가격은 크게 무너지지
+않았다.
+
+장기 보유자의 물량이 신규 투자자에게 넘어가는 이른바 ‘손바뀜’이 진행되는 동안에도 시장이 매물을 소화했다는 의미다.
+
+자금조달금리(Funding Rate) 역시 주 후반 들어 빠르게 낮아졌다.
+
+가격 하락폭은 제한된 가운데 레버리지가 상당 부분 해소되면서 시장의 과열 부담도 줄어든 것으로 분석됐다.
+
+그러나 투자심리는 여전히 얼어붙어 있었다.
+
+공포·탐욕지수는 한 주 내내 ‘공포’ 구간을 벗어나지 못했다.
+
+미국의 이란 공습으로 중동의 지정학적 불확실성이 커지자 비트코인은 다시 6만3000달러대로 밀렸다.
+
+국제유가 상승과 미국 통화정책을 둘러싼 불확실성도 위험자산 투자심리를 위축시켰다.
+
+한편 이번 주 시장에서 가장 두드러진 자산은 이더리움이었다.
+
+미국 현물 이더리움 ETF는 주 초 3거래일 동안 지난주 전체를 웃도는 순유입을 기록했다.
+
+특히 블랙록의 ETHA를 중심으로 기관 자금이 몰렸다.
+
+여기에 로빈후드의 레이어2 네트워크 출범 등 생태계 확장에 대한 기대가 더해지면서 이더리움은 최근 7거래일 동안 약 11% 상승했다.
+
+같은 기간 비트코인보다 높은 수익률이다.
+
+비트코인 역시 ETF 순유입과 현물 매수세가 이어졌지만, 하루 만에 대규모 유출과 유입이 반복돼 기관의 방향성이 뚜렷하게 정해졌다고 보기는
+어려웠다.
+
+반면 이더리움은 ETF 자금 유입과 네트워크 활용 확대가 맞물리며 상대적인 강세를 이어갔다.
+
+이처럼 이번 주 시장은 가격보다 내부 구조의 변화가 두드러진 한 주였다.
+
+단기적으로는 지정학적 리스크와 미국 통화정책에 따라 변동성이 이어질 수 있지만, ETF 자금 유입과 매도 압력 완화, 레버리지 정상화 등 시장
+체력은 이전보다 개선됐다는 분석이다.
+
+다만 이를 본격적인 상승장의 시작으로 단정하기에는 이르다는 평가가 많다.
+
+거시경제 변수와 지정학적 불확실성이 여전히 남아 있는 만큼, 현재 시장은 추세 전환보다는 바닥을 다져가는 과정에 가깝다는 진단이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003112464' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003112464</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
