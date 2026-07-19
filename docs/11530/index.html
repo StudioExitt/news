@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'나스닥 입성' SK하닉 ADR, 국내 11개 액티브 ETF가 담았다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.19</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014074058' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11530" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'나스닥 입성' SK하닉 ADR, 국내 11개 액티브 ETF가 담았다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스의 ADR이 나스닥에 상장된 후, 국내 다수의 액티브 ETF들이 SK하이닉스를 포트폴리오에 대거 편입하며 주목받고 있습니다. 이는 해외 투자자들의 강력한 관심을 입증했으며, 미국 주요 반도체주 하락세 속에서도 높은 프리미엄을 유지하며 글로벌 시장에서의 가치를 확인했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">SK하이닉스의 나스닥 상장은 기업 가치와 글로벌 접근성을 크게 높였으며, 다수의 국내 액티브 ETF가 이를 편입한 것은 기관 투자자들의 구조적인 수요를 방증하여 장기적인 긍정적 모멘텀을 제공합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#나스닥상장</span> <span class="tag tag-hash">#ADR</span> <span class="tag tag-hash">#ETF투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">SK하이닉스는 10일(현지시간) 오전 미국 뉴욕 타임스퀘어에 위치한 나스닥 마켓사이트에서 ADR 상장 기념 '오프닝 벨' 행사를 열었다. 이날 행사에는 최태원 SK그룹 회장, [서울=뉴시스] SK하이닉스는 10일(현지시간) 오전 미국 뉴욕 타임스퀘어에 위치한 나스닥 마켓사이트에서 ADR 상장 기념 '오프닝 벨'(Opening Bell) 행사를 열었다. 이날 행사에는 최태원 SK그룹 회장, 최재원 SK스퀘어 수석부회장, 곽노정 SK하이닉스 최고경영자(CEO) 등 그룹과 회사의 주요 경영진이 대거 참석했다. (사진=SK하이닉스 공식 유튜브 생중계 화면) *재판매 및 DB 금지 [서울=뉴시스] 강수윤 기자 = SK하이닉스의 미국 주식예탁증서(ADR)가 나스닥 시장에 상장되자마자 국내 액티브 상장지수펀드(ETF)들이 대거 편입에 나섰다. SK하이닉스를 담지 못했던 해외 주식형 ETF 포트폴리오에 직접 투자의 길이 열리게 됐기 때문이다.
+
+19일 자산운용업계와 자산구성내역(PDF)에 따르면 지난 16일 공시 기준 SK하이닉스 ADR을 편입한 국내 ETF는 총 11개로 집계됐다. 미국 등 글로벌 거래소 상장 주식에 투자하는 이들 해외주식형 ETF는 SK하이닉스 ADR이 10일(현지시간) 미 증시에 상장한 직후인 지난 13일부터 포트폴리오에 이름을 올렸다.
+
+운용사별로는 삼성액티브자산운용과 타임폴리오자산운용이 각각 4개 종목으로 가장 많았다. 에셋플러스자산운용과 미래에셋자산운용도 2개, 1개 종목을 편입했다.
+
+편입 비중 면에서는 에셋플러스자산운용이 가장 적극적이었다. '에셋플러스글로벌일등기업포커스10액티브'가 전체 ETF 중 가장 높은 6.25%의 비중으로신규 편입했다. 이로써 이 ETF가 보유한 SK하이닉스의 총 비중(국내 본주 포함)은 지난 16일 자산구성내역 기준 7.94%에 달하는 것으로 확인됐다. '에셋플러스글로벌대장장이액티브' 역시 5.44%를 담았다.
+
+타임폴리오는 'TIME글로벌AI인공지능액티브', 'TIME 미국빅테크액티브', 'TIME 글로벌AI반도체액티브', 'TIME 미국S&P500액티브' 등 4개 종목에 투자했다. 이 가운데 'TIME글로벌AI인공지능액티브' 편입 비중은 3.26%로 금액으로는 약 789억원에 달해 단일 상품 기준 최대 규모를 기록했다.
+
+이어 삼성액티브자산운용은 'KoAct 팔란티어밸류체인액티브’에 5.04%, 'KoAct 글로벌AI&로봇액티브', 'KoAct 미국나스닥성장기업액티브', 'KoAct 미국로봇피지컬AI액티브 ETF' 등 나머지 3개 상품에는 2%대 비중으로 고루 담았다. 특히 'KoAct글로벌AI&로봇액티브'의 경우 기존에 보유하던 SK하이닉스 본주(3.27%)에 더해 ADR(2.38%)을 추가 편입하는 전략을 취했다.
+
+미래에셋자산운용도 'TIGER글로벌AI액티브'에 2.49% 비중으로 신규 편입했다. 다만 최근 시장 상황에 따른 포트폴리오 리밸런싱을 거쳐 1.97% 수준으로 비중을 조절한 것으로 나타났다.
+
+한편, 미국 나스닥에 입성한 SK하이닉스 주식예탁증서(ADR)는 최근 미국 주요 반도체주의 일제 하락 속에서도 25%에 달하는 '역 김치 프리미엄'을 유지했다. 지난 17일 SK하이닉스 미국예탁주식(ADS)은 전장 대비 1.13% 상승한 154.03달러로 거래를 마쳤다.
+
+이는 국내 코스피 시장의 본주 가격보다 미국 현지 거래 가격이 훨씬 높은 수준으로, 글로벌 투자자들의 견조한 매수세를 입증했다는 분석이 나온다.
+
+김재승 현대차증권 연구원은 "ADR이 본주 대비 25% 이상의 프리미엄을 받는 상황에서 양쪽 시장에 모두 접근할 수 있는 글로벌 투자자 입장에서는 비싼 ADR 보다 저렴한 본주를 매수하려는 움직임이 나타날 수 있다"며 "ADR 프리미엄을 통해 미국과 한국 증시 사이에 새로운 가격 발견 경로가 만들어지는 기회로 보는 것이 타당하다"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014074058' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014074058</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
