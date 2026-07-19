@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"이자 1%인데 3000만원 묶으라고?"... 개미만 옥죄는 레버리지 대책</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/469/0000943068' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11616" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"이자 1%인데 3000만원 묶으라고?"... 개미만 옥죄는 레버리지 대책</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금융당국이 단일종목 레버리지 ETF의 기본예탁금 기준을 1,000만원에서 3,000만 원으로 상향하고 현금만 인정하는 등 규제를 강화했습니다. 이는 개인 투자자들에게 높은 진입 장벽과 자금 부담으로 작용하며 '개미'를 위축시킨다는 비판이 거셉니다. 전문가들은 단순한 단기 처방보다는 레버리지 ETF 운용 구조 자체의 근본적인 개선책 마련을 촉구하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">규제 강화가 단기적으로 투자 심리를 위축시키며 시장의 구조적 문제(과도한 레버리지)에 대한 논의를 불러일으킴.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#규제강화</span> <span class="tag tag-hash">#투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">예탁금 상향·현금만 가능, 당국 대책에
+"시장 개입… 쏠림 심화" 투자자 비판↑
+전문가 "투자자 억제보단 구조 개선을"
+16일 서울 중구 하나은행 딜링룸 전광판에 지수가 표시되고 있다. 뉴시스
+"이제 손실 복구를 위한 물타기(주가가 내려가면 매수해 평균 매입 단가를 낮추는 것)는 어떻게 하나요?"
+단일종목 레버리지 상장지수펀드(ETF) 투자자 전모(21)씨는 "주가가 추락하는데 방어는커녕 원하는 단위로 매수하는 것조차 어려워졌다"고
+토로했다.
+금융당국이 내놓은 삼성전자·SK하이닉스 단일종목 레버리지 ETF 보완책을 둘러싼 개인 투자자 반발이 거세다. 현금이 부족한 투자자의 매수 여력을제약하는 데다, 규제가 개인 투자자에게만 집중됐다는 비판이 나온다. 전문가들은 과열을 식히기 위한 단기 처방을 넘어 시장 구조를 손보는 근본적 대책을 마련해야 한다고 입을 모았다.
+
+예탁금 1000만→3000만 원… 투자자 원성
+금융위원회는 16일 단일종목 레버리지 ETF 보완 방안을 발표했다. 국내와 해외 단일종목 레버리지 ETF 기본예탁금 기준을 1,000만 원에서 3,000만 원으로 높이고, 현금만 기본예탁금으로 인정하겠다는 게 골자다. 매매수량 단위는 1주에서 20주로 확대하고, 사전교육 시간도 2시간에서 3시간으로 늘렸다. 유동성공급자(LP)에 대해서는 종가 괴리율 관리 의무 기준을 3%에서 2%로 강화하기로 했다.
+
+진입 문턱이 크게 높아지자 투자자들은 원성을 쏟아냈다. "은행 예금보다 못한 이자만 주면서 예탁금 3,000만 원을 항상 예치하란 게 말이되느냐", "예탁금 마련을 위해 대출을 받아 빚투(빚내서 투자)하라는 얘기인가"와 같은 비판이 쇄도하고 있다. 예탁금 기준만 대폭 높였을 뿐예탁금 이자는 그대로인데다, 규제 역시 개인 투자자에게 집중됐다는 불만이다. 증권사 예탁금 이율은 1%가량이다.
+
+"예탁금을 확보하려고 삼성전자, SK하이닉스가 아닌 다른 종목을 매도하는 사례가 더 많아질 것 같다"며 쏠림 현상이 심화할 수 있다는 우려도
+이어진다.
+
+"단기 처방은 되겠지만…"
+전문가들은 이번 조치로 레버리지 투자 열풍이 다소 가라앉는 효과가 있을 걸로 본다. 이효섭 자본시장연구원 선임연구원은 "일반 ETF, 채권 등대용 증권이 아닌 현금만 예탁금으로 인정하는 만큼 실제 참여가 현저히 줄어 레버리지 ETF의 쏠림 현상이 완화될 것"이라고 말했다.
+
+금융당국은 2011년 주식워런트증권(ELW) 시장 과열 당시 1,500만 원의 기본예탁금 제도를 도입했던 사례를 근거로 이번 조치 역시 시장 안정 효과를 낼 것으로 보고 있다.
+
+다만 상품을 승인한 금융당국과 이를 출시한 증권사보다 개인 투자자에게만 규제를 집중하는 것은 형평성에 맞지 않는다는 지적도 나온다. 투자 수요만억누르기보다 레버리지 ETF의 운용자산이 과도하게 늘어나는 구조를 손질하는 것이 우선이라는 것이다.
+
+증권사는 레버리지 ETF에 매수세가 몰려 보유 물량이 부족해지면 자산운용사에 ETF 신규 설정을 요청한다. 운용사는 이에 맞춰 ETF를 추가발행하고, 순자산이 늘어난 만큼 기초자산도 추가로 사들인다. 이 과정에서 기초자산 매수세가 커지면 증시 변동성도 덩달아 커진다.
+
+윤선중 동국대 경영학과 교수는 "증권사가 자산운용사에 레버리지 ETF의 신규 설정을 요청할 때 부담하는 비용을 높여야 한다"고 말했다. 신규설정 수수료가 높아지면 증권사도 물량 조절을 할 유인이 생겨, 적어도 지금처럼 ETF 규모가 과도하게 불어나는 것은 막을 수 있다는 설명이다.
+
+이런 관점에서 괴리율 기준 강화 조치를 재검토해야 한다는 의견도 나온다. 이준서 동국대 경영학과 교수진은 "괴리율 기준을 2%로 낮춘 건 시대에역행하는 정책"이라며 "괴리율 허용 범위를 지나치게 좁히면 가격을 맞추기 위해 신규 설정이 되레 늘어날 수 있다"고 경고했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/469/0000943068' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/469/0000943068</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
