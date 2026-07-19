@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>버핏 지표로 ETF 만들었더니…미친 변동장서 우뚝 섰다[이번주 찜할 ETF]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.19</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005709276' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11608" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>버핏 지표로 ETF 만들었더니…미친 변동장서 우뚝 섰다[이번주 찜할 ETF]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 변동성 심화로 인해 본질적인 우수성을 지닌 '퀄리티' 주식에 대한 관심이 높아지고 있습니다. 특히 ROE(자기자본이익률)와 같은 기본 재무지표를 활용하여 개별 종목의 리스크를 줄이고 시장 변동성에 대비하는 액티브 ETF 전략이 주목받고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">변동성 국면에서 재무 건전성을 기본으로 하는 '퀄리티' 투자 전략과 특정 ETF(ROE 기반)의 우수성을 제시하며, 장기적인 포트폴리오 가이드라인을 제공하기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#퀄리티투자</span> <span class="tag tag-hash">#ROE</span> <span class="tag tag-hash">#ETF전략</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">마음편하게 시장 이기는 ETF 전략
+
+아스토리아 포트폴리오 어드바이저스를 창립한 존 다비 최고투자책임자. [아스토리아]
+<플러스 포인트>
+▶AI 관련주 변동성에 퀄리티 주식 수요↑
+▶4대 퀄리티 ETF 중 ROE만 시장 이겨
+▶ROE·ROIC 등 고마진株 동일비중 담아
+
+인공지능(AI) 관련주의 변동성이 극심해지자 다시 한번 ‘퀄리티’ 주식에 대한 갈증이 커지고 있다. 퀄리티(Quality)의 어원은 그리스어 포이오테스(poiotēs)다. ‘어떤 종류의 것인가’라는 본질적 속성을 뜻한다. 이것이 라틴어 <0xEC><0xBD><0xB8>리타스(qualitas)로 넘어오면서 ‘사물의 고유한 특성이나 우수성’까지 담게 됐다. 뾰족한 특징이 있으면서 우수한 주식이야말로 장기 투자하기 좋은 주식이라는 평가다.
+
+이런 퀄리티 계열의 미국 주식 ETF는 크게 네 가지가 있다. Astoria US Equal Weight Quality Kings ETF(ROE), VanEck Morningstar Wide Moat ETF(MOAT), iShares MSCI USA Quality Factor ETF(QUAL), Pacer US Cash Cows 100 ETF(COWZ)다.
+
+버핏도 말했었지…ROE가 중요해
+이중 ROE는 반도체 투자자들에게 잘 알려진 DRAM 처럼 티커명(ETF 이름)이 직관적이다. DRAM과 ROE 모두 티커명이 자신의 ETF 전략을 설명해주니 친절한 상품이라고 할 수 있다. DRAM은 D램 반도체 매출 비중이 높은 회사, ROE는 ROE가 높은 주식들로 구성했다는 것을 한 눈에 보여준다.
+
+ROE(Return On Equity)는 자기자본이익률이란 뜻이다. 기업이 주주로부터 받은 돈(자기자본)으로 얼마나 많은 이익을 냈는지를 보여주는 수익성 지표다. 순이익을 자기자본으로 나눈 값이다. ROE가 20%면 100만원을 맡겼더니 1년에 20만원을 벌어왔다는 의미다.
+
+워런 버핏 버크셔해서웨이 회장은 ROE가 최소 15% 이상 지속되는 기업에 투자한다고 밝히기도 했다. 그만큼 장기 투자 세계에선 기본이 되는 지표다. ETF가 지루해 ‘도파민’을 위해 개별 종목에 투자하더라도 ROE 기준으로 종목을 골라야 한다. ROE ETF는 이런 개별주 투자의 수고를 덜어주는 상품이다. 학생들로 비유하면 선생님이 내준 숙제를 깔끔하게 해내는 모범생으로 이뤄진 ETF다.
+
+이 ETF 운용사 역시 마찬가지다. 아스토리아 포트폴리오 어드바이저스(Astoria Portfolio Advisors)는 뉴욕 맨해튼에 본사를 둔 소규모 독립 운용사(부티크)다. 그래도 운용자산 규모가 약 3조원에 달해 작지만 단단한 회사다.
+
+창업자이자 최고투자책임자(CIO)는 존 다비(John Davi)다. 맥쿼리·크레디트스위스·바클레이즈 출신으로 25년 이상의 크로스에셋(주식·채권·대안투자 혼합) 운용 경험을 갖고 있다. 운용팀 역시 자신과 비슷한 평균 경력이 25년 이상이다.
+
+ROE는 미국 대형·중형주 전체를 투자 풀(범위)로 삼아 ROE(자기자본이익률)·ROIC(투하자본이익률)등 퀄리티 지표가 높은 상위 100개 종목을 선별한다. 그리고 업종 비중을 고려한다. 월드컵 조 편성할 때 대륙별 안배를 하듯 S&P500의 업종(섹터) 비중을 일단 그대로 따라간다. 각 섹터 안에서 퀄리티 최상위 종목을 고른다.
+
+선별된 100개 종목은 리밸런싱 시점마다 각각 1%씩 균등 가중으로 편입해 단일 종목 집중 리스크를 원천 차단한다. 리밸런싱은 정기 일정이 따로 없는 대신 운용역이 퀄리티가 유지됐는 지 여부를 수시로 따진다. 분기 실적이나 증권사의 밸류에이션 평가(실적 대비 주가 적정도) 점검도 기본이다. 거시 변수도 따지는데, 경기 트렌드에 중대한 변화가 생기면 즉시 리밸런싱을 단행한다. 매니저들의 역량이 매우 큰 액티브 ETF다. ETF에서 ‘패시브’는 특정 지수를 그대로 따라가는 것이고, 액티브는 지수를 기본으로 하되 사람의 역량이 투입된다는 뜻이다.
+
+기사 전문은 매일경제신문의 프리미엄 재테크 콘텐츠 플랫폼 매경플러스에서 확인할 수 있습니다. 네이버에서 ‘매경플러스’를 검색하거나, 스마트폰으로 아래 QR코드를 찍으면 연결됩니다.
+원문링크: https://n.news.naver.com/mnews/article/009/0005709276</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005709276' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005709276</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
