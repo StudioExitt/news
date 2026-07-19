@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'예금 탈출' 1인 가구…주식·ETF로 갈아탔다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.19</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001259140' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11505" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'예금 탈출' 1인 가구…주식·ETF로 갈아탔다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">1인 가구의 자산이 예금 중심에서 주식 및 ETF 등 투자 자산으로 빠르게 이동하는 추세가 확인되었습니다. 특히 해외 주식·ETF 보유율 증가와 더불어, 대출을 활용한 '빚투' 경험률 역시 높아지며 투기 심리가 고조되고 있습니다. 이러한 자본의 흐름은 증권사 비중 증가로 나타나고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">자산가들이 안전 자산(예금)에서 고위험 투자 자산(주식/ETF)으로 자금을 이동시키면서 증권사 수요와 시장 거래액 증가를 예고함. 이는 자본시장 전반의 활성화 신호이나, 과도한 '빚투'는 위험 요인임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권사</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융자산</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#1인가구투자</span> <span class="tag tag-hash">#예금탈출</span> <span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#레버리지</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">1인 가구의 돈이 예·적금에서 주식과 상장지수펀드(ETF) 등 투자자산으로 빠르게 옮겨가고 있는 것으로 나타났다.
+
+KB금융지주 경영연구소가 19일 발표한 '2026 한국 1인 가구 보고서'에 따르면 1인 가구 금융자산에서 예·적금 비중은 올해 28.3%로 2024년(36.2%)보다 7.8%포인트(p) 낮아졌다. 반면 국내외 주식·ETF 비중은 같은 기간 15.0%에서 21.1%로 6.1%p 높아졌고, 가상자산 비중도 2.2%에서 3.5%로 확대됐다.
+
+자산을 맡긴 금융회사의 경우 시중은행 예치 비중은 45.6%에서 43.1%로 줄어든 반면, 증권사 비중은 22.6%에서 28.6%로 늘었다.
+금융상품 보유율에서도 예·적금은 여전히 63.9%로 가장 높았지만 2024년(73.8%)보다 9.9%p 하락했고, 해외주식·ETF 보유율은 24.1%에서 34.4%로 뛰었다.
+
+이런 '머니무브'는 아직 정점이 아닌 것으로 보인다. 향후 1년 안에 가입할 의향이 있는 상품으로 국내 주식·ETF가 42.1%로 가장 많이 꼽혔는데, 2024년보다 18.7%p 급증한 수치다. 해외주식·ETF 가입 의향도 24.8%에서 37.8%로 높아졌다.
+
+'빚투'(빚내서 투자) 증가세도 확인됐다. 대출 보유 1인 가구 중 대출금으로 금융상품에 투자한 경험이 있다는 응답은 34.0%로 2년 전보다 5.2%p 늘었고, 현재도 대출 자금으로 운용 중이라는 비중은 11.3%에서 15.5%로 높아졌다. 대출을 활용한 평균 투자 금액은 약 3,000만원이었으며, 이런 경험 비율은 남성(42.4%)이 여성(21.7%)의 약 두 배였다. 연구소는 "레버리지 투자는 1인 가구 전반의 현상이라기보다 남성에게 쏠려 있다"며 "대출을 동반한 투자가 확대될수록 남성 1인 가구의 위험도 높아질 가능성이 있다"고 지적했다.
+
+이번 보고서는 지난 2월 25일부터 3월 23일까지 전국 주요 도시의 25∼59세 경제활동 1인 가구 2,000명을 대상으로 한 설문조사를 토대로 작성됐다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001259140' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001259140</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
