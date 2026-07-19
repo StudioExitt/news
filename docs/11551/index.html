@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>딱딱한 증권사 SNS는 잊어라…"투자자 '놀이터' 되겠다"</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.19</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006332588' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11551" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>딱딱한 증권사 SNS는 잊어라…"투자자 '놀이터' 되겠다"</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">증권사들이 딱딱한 정보 전달 방식을 넘어, 밈과 공감, 위로를 나눌 수 있는 놀이터 같은 SNS 콘텐츠를 제작하며 투자자들과 소통하고 있다. 이는 전문성 외에 친근함으로 신뢰를 쌓는 새로운 브랜딩 전략의 성공 사례이다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">증권사의 소통 방식 혁신은 금융회사의 브랜드 이미지와 고객 유입에 매우 긍정적이며, 장기적인 투자 심리를 개선하는 계기가 될 수 있다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">미디어</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증권사브랜딩</span> <span class="tag tag-hash">#투자심리</span> <span class="tag tag-hash">#MZ세대마케팅</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">주식 투자자라면 한 번쯤 겪어봤을 법한 상황을 재치 있게 풀어낸 밈(Meme)들이 연이어 올라온다. ‘조금만 떨어지면 사야지’를 되내다 결국 아무것도 사지 못하는 투자자, 한 주만 샀을 때 수익률이 가장 높다는 자조, 급등·급락장을 바라보는 복잡한 심리까지. 게시물마다 투자자들은 자신의 경험을 댓글로 보태며 함께 웃고 이야기를 나눈다. 딱딱한 금융 정보를 전달하던 증권사 공식 사회관계망서비스(SNS)가 어느새 투자자들의 놀이터로 변하고 있다.
+
+이 같은 변화를 이끈 사람은 김현우(38) LS증권 선임매니저다. 커피 전문 잡지와 취업 플랫폼 잡코리아, 웹에이전시를 거쳐 2020년 LS증권에 합류한 그는 “왜 증권사는 이런 콘텐츠를 하지 않을까”라는 의문에서 출발해 금융권에서는 보기 드문 밈 콘텐츠를 꾸준히 선보이고 있다.
+
+“왜 증권사는 안 하지?”…금융권 밖에서 답 찾다
+김 선임의 아이디어는 금융투자업계 안에만 머물지 않는다. 온라인 커뮤니티에서 유행하는 표현을 그대로 옮기기보다 여러 업종의 기업 SNS 운영 사례를 참고해 증권사 계정에 맞게 재해석한다. 특정 커뮤니티 안에서만 통하는 표현이나 맥락은 공식 계정에서 오해를 불러올 수 있기 때문이다.
+
+다양한 업계를 경험한 이력도 영향을 미쳤다. 김 선임은 증권사 입사 전 잡지와 취업 플랫폼, 웹에이전시 등에서 홍보와 디지털 콘텐츠 업무를 맡았다. 금융권 밖에서 쌓은 경험은 기존 증권사와 다른 방식으로 투자자와 소통하는 밑거름이 됐다.
+
+그는 “코로나19 이후 주식 관련 밈 콘텐츠가 인기를 끄는 모습을 보며 ‘왜 증권사는 이같은 콘텐츠를 하지 않을까’라는 생각을 했다”며 “막상 입사해 보니 증권사들이 하지 않았던 이유도 금방 알겠더라”고 웃으며 말했다.
+
+초기 반응이 모두 긍정적이었던 것은 아니다. 금융회사의 공식 계정이 콘텐츠를 지나치게 가볍게 만들 경우 오히려 신뢰감을 떨어뜨릴 수 있다는 우려가 있었다.
+
+김 선임은 신뢰를 쌓는 방식이 하나만 있는 것은 아니라고 봤다. 정확하고 전문적인 투자 정보를 제공하는 것이 전통적인 방식이라면, 투자자들의 경험에 공감하고 때로는 위로를 건네며 가까워지는 것도 또 다른 신뢰가 될 수 있다는 판단이다.
+
+그는 “금융기업에 신뢰가 중요하다는 점에는 동의하지만 신뢰를 주는 방식은 다양할 수 있다고 생각했다”며 “전문적인 정보뿐 아니라 친근한 콘텐츠로 함께 웃고 공감하고 위로를 전하는 과정에서도 신뢰를 만들 수 있다고 봤다”고 말했다.
+
+“똑똑해진 투자자…정보만 전해선 부족”
+밈을 활용한다고 해서 모든 소재를 자유롭게 다루는 것은 아니다. 증권사 공식 계정인 만큼 특정 종목을 추천하거나 투자 판단을 대신하는 콘텐츠는 만들지 않는다는 원칙을 세웠다.
+
+김 선임은 “투자 판단은 결국 투자자의 몫”이라며 “회사가 판단을 대신하기보다는 브랜드를 친숙하게 만들고 투자자들과 공감하는 역할에 집중하고 있다”고 말했다.
+
+투자자들의 콘텐츠 소비 방식이 달라진 점도 운영 방향에 영향을 미쳤다. 과거에는 금융회사가 정보를 선별해 전달하는 것만으로도 의미가 있었지만 최근 투자자들은 시장과 상품에 대한 이해도가 높아졌고 필요한 정보를 직접 찾아 비교하는 데도 익숙해졌다는 설명이다.
+
+그는 “요즘 투자자들은 과거보다 훨씬 똑똑해졌고 정보도 빠르게 찾아본다”며 “금융·증권회사가 단순히 정보를 알려주는 것만으로는 관심을 얻기 어려워졌다”고 말했다.
+
+i 같은 시도는 팔로워 증가로 이어졌다. 김 선임이 2020년 LS증권으로 이직했을 당시 회사 인스타그램 팔로워는 2000명 중반 수준이었다. 지난해까지도 2000명대에 머물렀지만 지난 5월18일 처음으로 1만명을 넘어섰고, 19일 기준 1만8000명으로 늘었다. 이직 당시와 비교하면 약 7배 수준이다.
+
+계정을 운영하며 기억에 남는 에피소드도 생겼다. 일부 투자자는 다이렉트 메시지(DM)를 통해 “지점에 방문해 SNS를 보고 왔다고 말해도 되느냐”고 묻거나, 온라인으로 계좌를 개설했다는 소식을 직접 전하기도 했다. 김 선임은 “유입 경로를 수치로 정확히 확인하기는 어렵지만 이렇게 직접 알려주는 분들이 있어 감사하다”고 말했다.
+
+“급락장에도 웃고 쉬어가는 놀이터 되길”
+김 선임이 그리고 있는 것은 투자자들이 시장 상황과 관계없이 편하게 드나들 수 있는 공간이다. 인스타그램에서는 밈을 통해 웃음과 공감을 나누고, 유튜브에서는 경제 트렌드를 팟캐스트 형식으로 보다 편안하게 풀어낼 계획이다.
+
+그는 “상승장에만 사람들이 찾는 계정이 아니라 시장이 급락했을 때도 잠시 웃고, 위로받고, 공감하며 쉬어갈 수 있는 공간이 됐으면 좋겠다”며 “인스타그램과 유튜브 모두 투자자들이 자연스럽게 모여 이야기를 나누는 놀이터 같은 채널로 만들고 싶다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006332588' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006332588</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
