@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“코스피 극단적 변동성, 강세장 끝 아니다…답은 실적 가시성”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006332785' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11641" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“코스피 극단적 변동성, 강세장 끝 아니다…답은 실적 가시성”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 높은 변동성을 보이지만, 근본적인 이익 증가세와 통화 긴축 신호가 부족해 강세장 지속 가능성이 높다는 분석입니다. 투자처로는 실적 가시성을 확보한 AI 인프라 업종, 저평가 실적주(에너지/증권), 프리미엄 소비재 등이 제시되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">변동성에 대한 경계심을 유지하면서도, '실적 가시성'이라는 명확한 기준으로 투자 방향(AI 인프라, 실적주, 프리미엄 소비)을 제시하여 투자자들의 포트폴리오 재편에 큰 영향을 줄 수 있는 구체적인 전략 보고서이기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">AI 인프라</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">에너지 시설 및 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">백화점/호텔</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI인프라</span> <span class="tag tag-hash">#실적가시성</span> <span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#투자전략</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">NH투자증권 보고서\n상반기 101% 급등 뒤 고점 대비 25% 조정\n1999년과 달리 반도체 쏠림은 이익에 근거\nAI 인프라·에너지·증권·프리미엄 소비 주목 최근 국내 증시가 뚜렷한 악재 없이 급등락을 반복하고 있지만, 이를 강세장의 종료로 단정하기는 이르다는 분석이 나왔다. 대형 반도체주에 대한 쏠림과 단일종목 레버리지 상장지수펀드(ETF)가 변동성을 키웠으나, 기업 이익 전망과 통화정책 여건을 고려하면 상승 추세를 끝낼 조건은 아직 나타나지 않았다는 판단이다.\n\n나정환 NH투자증권 연구원은 20일 보고서에서 “고점 신호가 나타나고 있지만 강세장을 끝내는 방아쇠인 이익 증가세 둔화와 유동성 긴축은 아직 확인되지 않았다”며 “당분간 이익을 안정적으로 확인할 수 있는 업종으로 자금이 몰리는 흐름이 이어질 것”이라고 말했다.\n\n(표=NH투자증권)\n\n코스피는 올해 상반기에만 101% 상승했지만, 지난달 고점을 기록한 뒤 이달 16일 종가인 6820까지 25.2% 하락했다. 통상 지수가 고점 대비 20% 넘게 떨어지는 데 수개월이 걸렸던 것과 달리 이번에는 불과 2주 안에 급락했다. 금융위기나 코로나19 당시와 달리 하락을 설명할 명확한 악재가 없었다는 점도 이례적이다.\n\n시장 변동성 역시 과거 위기 수준을 넘어섰다. 코스피200 변동성지수인 VKOSPI는 지난달 말 96.9까지 치솟아 2008년 금융위기 당시 고점인 89.3과 코로나19 당시의 69.2를 모두 웃돌았다.\n\n개별 종목 간 주가 차별화도 극심해졌다. 종목별 수익률이 시장 평균에서 얼마나 벌어졌는지를 나타내는 지표는 지난 5월 말 대형주에서 39.6%포인트를 기록했다. 중형주 32.6%포인트와 소형주 26.2%포인트보다 높았다. 통상 개별 이슈가 많은 중소형주의 변동성이 더 크지만, 이번에는 반도체주로 매수세가 몰리면서 대형주 사이의 수익률 격차가 더 벌어진 것이다.\n\n단일종목 레버리지 ETF도 변동성을 키운 요인으로 지목됐다. 이 상품은 삼성전자(005930)나 SK하이닉스(000660) 주가가 오르면 목표 수익률을 맞추기 위해 기초주식을 추가로 사고, 하락하면 다시 팔아야 한다. 기존 주가의 움직임과 같은 방향으로 매매가 발생하면서 상승과 하락 폭을 모두 확대하는 구조다.\n\nd만 현재의 반도체 쏠림을 거품으로만 보기는 어렵다고 분석했다. SK하이닉스가 지난달 보통주 기준으로 삼성전자를 제치고 한때 시가총액 1위에 오른 모습은 1999년 한국통신이 삼성전자를 넘어섰던 때와 닮았다. 신기술에 대한 기대와 소수 대형주 쏠림, 대장주 교체가 동시에 나타났다는 점에서다.\n\n그러나 1999년 통신주 쏠림은 주가를 뒷받침할 이익이 부족했다. 반면 지금은 인공지능(AI)과 고대역폭메모리(HBM) 수요에 따른 실적이 반도체주의 상승을 뒷받침하고 있다. 올해 실적 전망 기준 SK하이닉스의 영업이익률은 76.7%로 삼성전자 51.8%를 웃돈다. 삼성전자와 SK하이닉스가 코스피 전체 순이익에서 차지하는 비중도 71.2%로, 두 종목의 시가총액 비중인 54.9%보다 높다.\n\n과거 강세장은 통상 기업 이익 증가세가 꺾이고 미국 연방준비제도가 통화 긴축에 나설 때 종료됐다. 현재는 국내 기업의 이익 전망이 여전히 상향되고 있고, 통화정책도 본격적인 긴축 국면으로 돌아섰다고 보기 어렵다는 게 나 연구원의 판단이다.\n\n투자 대상으로는 우선 반도체와 전력기기 등 AI 인프라 업종을 제시했다. AI 투자가 늘어날수록 공급이 부족해지는 분야로, 가격 결정력과 실적 가시성을 동시에 확보할 수 있어서다.\n\n실적에 비해 주가 상승이 더<0xEB><0x8E><0xA0>던 에너지와 증권도 관심 업종으로 꼽았다. 두 업종은 반도체를 제외하면 코스피 이익 증가에 대한 기여도가 높지만, 시가총액 증가에는 아직 충분히 반영되지 않았다는 분석이다.\n\n백화점과 호텔을 중심으로 한 프리미엄 소비도 주목했다. 원화 약세로 국내 명품 가격의 경쟁력이 높아진 가운데 내국인 소비와 외국인 관광객의 쇼핑 수요가 동시에 유입되고 있기 때문이다. 하반기에는 외국인 입국자가 계절적으로 늘어나는 만큼 호텔과 관광 소비도 확대될 것으로 전망했다.\n\n나 연구원은 “변동성이 커질수록 투자자는 먼 미래의 불확실한 수익보다 가까이 있는 확실한 이익을 선호한다”며 “이익 증가세가 둔화하고 유동성 긴축이 확인되기 전까지는 AI 인프라와 저평가 실적주, 프리미엄 소비 업종이 대안이 될 것”이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006332785' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006332785</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

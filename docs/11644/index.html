@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'AI 비관론' 잠재울까...이번주 빅테크 실적 발표, 관건은</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001259203' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11644" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'AI 비관론' 잠재울까...이번주 빅테크 실적 발표, 관건은</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 낙관론이 식으며 기술주 전반의 조정세가 나타나자, 빅테크 기업들은 다가오는 실적 발표를 통해 AI 투자의 실제적인 수익성을 입증해야 한다는 압박에 직면했다.
+투자자들은 거품을 우려하며 매출 재가속 및 클라우드와 AI 관련 핵심 지표에 관심을 집중하고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업황 악화와 빅테크의 실적에 대한 높은 의구심으로 인해 시장 전반의 투자 심리가 위축되었기 때문에 중장단기에 큰 영향을 미칠 수 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">애플</span> <span class="tag stock-tag">마이크로소프트</span> <span class="tag stock-tag">테슬라</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#빅테크실적</span> <span class="tag tag-hash">#AI비관론</span> <span class="tag tag-hash">#반도체주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미 증시에서 지난주 반도체주가 급락하면서 기술주 전반이 흔들리자 빅테크 기업들이 인공지능(AI) 투자 성과를 실적으로 입증해야 한다는 압박이 커지고 있다
+
+한 달 전 미국 증시를 사상 최고치로 밀어 올렸던 AI 낙관론이 식어가는 가운데 지난주 S&P500지수는 1.6%, 나스닥100지수는 4.1% 하락했다고 19일(현지시간) 블룸버그 통신이 보도했다. 필라델피아반도체지수(SOX)는 10% 급락해 2025년 4월 이후 최악의 한 주를 보냈다.
+
+사상 최대 규모 상장을 기록한 일론 머스크의 스페이스X도 2주 연속 급락해 공모가를 밑돌았다. 고점 대비해서는 시가총액이 1천500조원(1조달러) 증발했다.
+
+제이크 셀츠 올스프링글로벌인베스트먼츠 포트폴리오매니저는 "투자자들은 지출 규모에 대해 불편함을 느끼는 지점에 다다랐고 거품을 우려하고 있다"며 "결국 매출 재가속을 확인해야 할 시점"이라고 말했다.
+
+앞으로 2주간 빅테크 실적 발표가 이어질 예정인 가운데 투자가 더 큰 수익을 내고 있다는 증거를 찾는 시험대가 될 것이라고 블룸버그는 전망했다.
+
+오는 22일 테슬라와 알파벳이 빅테크 실적 시즌의 문을 연다. 다음 주에는 마이크로소프트와 메타플랫폼(29일), 애플과 아마존닷컴(30일)이 뒤를 잇는다. 이들 6개 종목이 S&P500지수 시가총액의 4분의 1을 차지한다.
+
+알파벳은 올해 설비투자가 작년의 두 배가 넘는 1천870억달러(약 280조원)에 달할 것으로 예상돼 관심이 모인다. 최근 2거래일간 주가는 6.5% 하락했다. 플래그십 모델 '제미나이 3.5 프로' 출시 지연 보도가 악재로 작용했다.
+
+자산운용사 파르나서스인베스트먼츠의 토드 알스텐 최고투자책임자(CIO)는 "어느 시점부터는 실적에 대한 의문이 너무 커져 높은 밸류에이션을 줄 수 없게 된다"며 "클라우드 매출총이익률과 컴퓨팅 1달러당 AI 매출에 관심이 쏠릴 것"
+
+이라고 말했다.
+
+AI 인프라 지출의 상당 부분이 흘러든 반도체주는 최근 연일 출렁였다. 필라델피아반도체지수(SOX)는 올해 들어 65% 올랐지만 지난달 사상 최고치를 찍은 이후 20% 급락해 기술적 약세장(베어마켓) 기준선에 도달했다.
+
+실적발표의 긍정적 신호가 나와도 하락세가 멈추지 않자 알스텐 CIO는 "이런 문제들 때문에 이 시기에는 더욱 신중해질 것"이라며 "이들은 성장 가속화를 전제로 높은 가치를 인정받아왔는데, 실제로는 예상한 만큼 가속화하지 않을 수 있다"
+
+고 말했다.
+
+실제로 대규모 설비투자 대신 파트너십으로 AI 서비스를 구현해온 애플은 올해 M7 중 최고 성과(23% 상승)를 내고 있다.
+
+d만 올스프링의 셀츠는 클라우드 컴퓨팅 서비스 수요가 공급을 웃돌아 지출이 계속 늘어날 것이라고 예상한다.
+
+그는 "이들 종목이 몇 주에서 몇 달간 매도세를 겪은 뒤 다시 반등하는 것은 드문 일이 아니었다"며 "나라면 이런 약세를 매수 기회로 활용하겠다. 사이클은 아직 끝나지 않았다"
+
+고 밝혔다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001259203' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001259203</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
