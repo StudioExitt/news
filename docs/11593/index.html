@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>하이닉스 ‘ADR 25% 전환’은 낭설…“추가공모 없이는 2.5%가 한계”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.19</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004642872' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11593" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>하이닉스 ‘ADR 25% 전환’은 낭설…“추가공모 없이는 2.5%가 한계”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스의 대규모 ADR 추가 전환에 대한 시장의 기대가 사실은 구조적 한계에 부딪혔습니다. 현재로서는 거대한 프리미엄을 단기에 해소하기 위해서는 주주 요구, 이사회 승인 등 '추가 공모'와 같은 절차가 선행되어야 하므로 어려움이 크다는 분석입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">ADR 전환을 통한 단기적인 프리미엄 해소 기대감을 부정하며, 추가 자본 유입이 위해서는 복잡한 절차(추가 공모 등)가 필요함을 명시했기 때문에 단기 투자 심리에 영향을 줄 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ADR제한</span> <span class="tag tag-hash">#반도체주가</span> <span class="tag tag-hash">#밸류에이션</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">상장분 10배 수탁 한도 잡았지만
+국내 전환 소각 대비한 예비 물량
+본주 대비 프리미엄 24.6% 유지
+SK하이닉스가 나스닥 ADR 거래를 개시한 10일(현지시간) 최태원 SK그룹 회장 등 주요 경영진이 미국 뉴욕 타임스퀘어 나스닥 타워 앞에서
+기념 촬영을 하고 있다. 로이터연합뉴스
+SK하이닉스가 기발행한 미국 주식예탁증서(ADR)의 10배인 25%(17억 7900만 주)를 수탁 한도로
+등록했지만, 실제로는 미국에 상장된 2.5% 이상 추가 전환이 불가능한 것으로 확인됐다. 이는 ADR의 국내 전환시 소각을 대비한 여유물량이기
+때문이다. SK하이닉스(000660) ADR은 17일 154.03달러로 마감해 국내 본주(184만 2000원) 대비 약 24.60% 프리미엄을
+유지하고 있어 본주 매수세 유입이 기대된다.
+
+19일 금융투자 업계에 따르면 SK하이닉스는 미국 증권거래위원회(SEC)에 제출한 예탁증권서류(F-6)에 ADR 물량 2.5%(1억 7790만
+주)의 10배인 17억 7900만 주를 수탁 한도로 명시했다. 이로 인해 시장에서는 한국예탁결제원이 SK하이닉스가 ADR을 위해 발행한 신주를
+국내에 상장하는 29일을 기점으로 22.5%가 전환돼 한미간 주가 프리미엄을 좁힐 것이라는 기대감이 제기된 바 있다.
+
+익명의 정통한 관계자는 “25% 등록은 ADR이 국내로 전환돼 미국에서 소멸한 후 다시 부활할 경우에 대비한 여유 물량일 뿐 본주의 전환 한도를
+의미하지 않는다”고 설명했다. 즉, 추가 상장에 준하는 절차 없이 2.5% 이상 본주를 ADR로 전환하는 것은 현 시점에서 불가능하다는 뜻이다.
+
+일례로 ADR 1억 7790만 주 중 1000만 주가 본주로 전환돼 국내로 유입되면 미국 증시에선 이 주식이 사라진다. 이후 다시 본주가
+ADR로 돌아갈 때 소각됐던 1000만 주가 부활해야 한다. 이 같은 왕복 과정에서 매번 소각됐던 주식을 재상장해야하는 번거로움을 피하기 위해
+상장된 ADR의 10배를 형식적인 수탁 한도로 등록해놨다는 의미다.
+
+유사 사례인 TSMC도 자연적인 전환이 아닌, 수년간 추가 상장에 준하는 절차를 통해 ADR 비중을 늘려왔다. TSMC의 ADR 비중은 상장
+당시인 1997년 2.9%에 불과했으나 현재 20.5%다. SEC에 따르면 TSMC 초기 투자자인 대만 국가발전기금과 필립스는
+2001년부터 2007년까지 수차례에 걸쳐 구주를 ADR로 전환했다. 이 과정에서 개별 주주 임의 신청이 아닌 TSMC 이사회와 대만 금융감독위원회(FSC)의
+승인, SEC 등록 등 사실상 추가 공모와 다름 없는 절차를 밟아야 했다.
+
+결과적으로 예탁원의 신주 등록 시점과 무관하게 본주를 ADR로 넘겨 프리미엄을 지우는 방식은 현시점에서 불가능한 셈이다. 금융투자 업계 관계자는
+“TSMC처럼 주주 요구와 당국 및 SK하이닉스 이사회 승인을 거친 추가 전환 절차가 선행되거나 본주와 ADR 간 자유로운 양방 전환이
+가능하도록 국내 제도를 개편하지 않는한 ADR 전환을 통해 프리미엄을 단기에 해소하는 방안은 불가능하다”며 “당분간 시장 흐름에 따라 자연적으로
+프리미엄 격차가 줄어들기를 바라는 수밖에 없다”고 했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004642872' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004642872</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
