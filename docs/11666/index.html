@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>하닉 평균 181만원에 샀다…손실구간 목전</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/021/0002805572' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11666" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>하닉 평균 181만원에 샀다…손실구간 목전</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스가 급락세 속에 투자자들의 손실 구간이 가속화되고 있습니다. 이는 AI 데이터센터 투자의 지속성에 대한 의문과 미국 증시의 반도체 업종 동반 약세가 주요 원인으로 작용했습니다. 향후 미국의 빅테크 실적 발표와 SK하이닉스의 분기 실적이 중요한 변수로 작용할 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 인프라 수요에 대한 의구심 및 대형 기술주의 실적 발표 전까지 관망세가 예상되며 투자 심리가 크게 위축됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #AI투자 #증시전망</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 다시 7,000선을 내어준 16일 서울 중구 하나은행 딜링룸 현황판에 코스피·코스닥 종가 및 원·달러 환율이 표시돼 있다. 연합뉴스
+
+SK하이닉스가 최근 급격한 하락을 겪으며 지난달 중순 300만 원에 육박했던 고점 대비 18거래일 만에 약 37% 급락한 가운데 개인 투자자들의 손실도 불어나는 분위기다.
+
+20일 네이버파이낸셜에 따르면 SK하이닉스 투자자 29만5591명의 평균 매수 단가는 181만1094원이었으며 평균 수익률은 1.71%에 불과한 것으로 나타났다. 특히 지난 16일 SK하이닉스 종가는 전거래일 대비 11.53% 하락한 184만2000원으로 대다수의 투자자가 손실 구간을 목전에 뒀다는 의미다.
+
+최근 SK하이닉스를 비롯한 반도체 업종의 동반 급락은 메모리 반도체 슈퍼 사이클을 견인해 온 ‘AI 인프라 투자’의 지속성에 의문이 제기되었기 때문이다. 그동안 AI 데이터센터와 서버용 메모리 수요가 폭발하면서 국내 반도체 기업들은 역사적인 실적을 기록했다. 하지만 최근 미국 뉴욕주가 전력 및 수자원 부족, 전기요금 인상 등을 이유로 데이터센터 건설 계획을 중단했고, 중국 창신메모리(CXMT)가 기업공개(IPO)로 확보한 자금을 투입해 생산능력을 대폭 확대하면 메모리 가격 하락을 유발할 수 있다는 전망 등이 나오면서 투자 심리가 급격히 위축됐다.
+
+i같은 이유로 지난 16일(현지시간) 미국 증시에서도 반도체 기업들이 일제히 약세를 보였다. SK하이닉스 ADR(-13.69%)을 비롯해 마이크론(-5.65%), 샌디스크(-12.63%), 웨스턴디지털(-9.15%), 엔비디아(-2.40%) 등이 동반 하락하며 필라델피아 반도체 지수는 하루 새 4.29% 하락했다.
+
+d만 증권가에서는 최근 약세가 기업의 기초체력(펀더멘털) 악화보다는 일시적인 수급 불안정에 따른 현상이라는 분석이 나온다. 옵션거래와 레버리지 ETF, 추세를 추종하는 자금에 더해 퀀트·알고리즘 매매 비중이 커지면서 가격 움직임이 기계적으로 증폭되고, 하락이 시작되면 헤지 거래와 ETF 리밸런싱이 동시에 맞물려 낙폭을 키운다는 것이다.
+
+이번 조정의 본질을 AI 설비투자 주체인 빅테크로부터 시작된 의구심이 국내 시장에 전달되며 증폭된 구조로 보는 시각도 있다. S&P500과 나스닥100의 변동성 지수가 불안정한 흐름을 보이는 만큼 방향성을 섣불리 예단하기 어렵고, 7월 말 예정된 미국 빅테크 기업들의 실적 발표와 설비투자 가이던스를 확인하기 전까지는 호재보다 악재에 민감하게 반응하는 구간을 통과할 것이라는 전망이 우세하다.
+
+한편 SK하이닉스는 오는 29일 2분기 실적을 발표한다. 최근 일부 기관이 보수적인 보고서를 내놓으며 주가에 부담을 주기도 했다. 이와 비슷한 시기에 발표되는 알파벳(구글), 아마존, 마이크로소프트 등 주요 하이퍼스케일러의 AI 투자 계획이 SK하이닉스 주가 방향성의 중요한 가늠자가 될 전망이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/021/0002805572' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/021/0002805572</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
