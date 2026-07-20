@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>삼성·SK 대신 소부장…반도체 돈줄 옮겨갔다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004643036' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11690" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>삼성·SK 대신 소부장…반도체 돈줄 옮겨갔다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 수요에 힘입어 반도체 산업의 성장 모멘텀이 지속되며, 대형주(삼성·SK)에서 중소형 소재·부품·장비 기업으로 자금이 이동하는 '순환매'가 관찰되고 있습니다. 2분기 국내총생산 성장률 서프라이즈 전망은 물론, 데이터센터 확장 등 전반적인 AI 관련 투자가 이어질 것으로 분석됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 수요 기반의 반도체 업황 자체가 장기적 성장 동력이며, 자금 흐름이 대형주에서 소부장 밸류체인으로 확산되는 추세는 산업 전반에 걸친 강력한 매수 신호입니다. 다만 거시경제 리스크(금리 인상, 네덜란드병)가 상존하여 중장기적 관점의 변동성을 키우고 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">주성엔지니어링</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">소재/부품/장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">데이터센터</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI반도체</span> <span class="tag tag-hash">#소부장</span> <span class="tag tag-hash">#순환매</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">
+■AI 프리즘 [주식 뉴스]
+반도체 소부장 ETF 수익률 싹쓸이
+2분기 GDP 서프라이즈 전망…금리 인상 변수 부각
+samsungSDS 데이터센터 확장
+▲ AI 프리즘* 맞춤형 경제 브리핑
+* 편집자 주: ‘AI PRISM’(Personalized Report &amp; Insight Summarizing Media)은
+한국언론진흥재단의 지원을 받아 개발한 ‘인공지능(AI) 기반 맞춤형 뉴스 추천 및 요약 서비스’입니다. 독자 유형별 맞춤 뉴스 6개를 선별해 제공합니다.
+
+[주요 이슈 브리핑]
+■ 소부장 순환매: 반도체 소재·부품·장비(소부장) 관련주로 매수세가 몰리며 관련 ETF들이 일제히 강세를 나타냈다. 대형 반도체주가 단기 급등 이후 조정을 받는 사이 자금이 장비·소재주로 옮겨가는 순환매가 나타나는 모습이다.
+
+■ 성장률 서프라이즈: 반도체 수출 호조에 힘입어 2분기 국내총생산(GDP) 성장률도 시장 예상치를 웃돌 것이란 관측이 확산되는 분위기다. 이에 따라 강한 성장세가 이어질 경우 추가 기준금리 인상 논의에도 탄력이 붙을 수 있다는 분석이다.
+
+■ 네덜란드병 경고: 한국은행이 반도체 중심 성장이 다른 산업의 성장 기반을 잠식할 수 있다는 이른바 ‘네덜란드병’ 우려를 제기했다. 다만 환율 상황 등이 과거 사례와 다르다는 반론도 함께 제기되며 논쟁이 이어지는 상황이다.
+
+[주식투자자 관심 뉴스]
+1. 반도체 순환매 타고…소부장 ETF 날았다
+- 핵심 요약: 지난 한 주간 상장지수펀드(ETF) 수익률 상위권을 반도체 소부장 관련 상품이 휩쓸었다. 삼성전자(005930)와 SK하이닉스(000660) 등 대형 반도체주가 단기 급등 이후 조정에 들어간 사이 매수세가 장비·소재 기업으로 확산된 데 따른 것이다. 주성엔지니어링(036930), 원익IPS(240810), 피에스케이(319660) 등 개별 소부장 종목의 주가도 나란히 강세를 나타냈다. 이에 따라 증권가에서는 AI 반도체 투자 사이클이 이어지는 만큼 밸류체인 전반으로 순환매 흐름이 당분간 지속될 가능성이 있다는 전망이 나온다.
+
+2. 韓 2분기도 깜짝 성장률 이어가나…ECB 금리 결정
+- 핵심 요약: 한국은행이 오는 23일 2분기 실질 GDP 성장률 속보치를 발표한다. 앞서 1분기 성장률은 예상치를 크게 웃돈 1.7%(전 분기 대비)를 기록했으며 잠정치는 1.8%까지 상향 조정된 바 있다. 반도체 수출 호조가 이어지면서 2분기에도 서프라이즈 성장률 가능성이 거론되며, 일부 투자은행(IB)은 0.3% 이상의 성장률도 전망하고 있다. 한편 강한 성장세가 이어질 경우 추가 기준금리 인상 논의에도 탄력이 붙을 수 있다는 관측이다.
+
+3. ‘반도체 네덜란드병’ 경고한 한은…“환율 등 상황 달라” 반론도
+- 핵심 요약: 한국은행이 반도체 중심 성장이 다른 산업의 성장 기반을 잠식할 수 있다는 ‘네덜란드병’ 가능성을 경고했다. 올해 1분기 국내총소득(GDI)은 전년 동기 대비 13.2% 증가해 GDP 증가율(3.8%)을 크게 웃돌았으며, 이 격차는 관련 통계 집계 이후 최대폭이다. 한은은 반도체 호황으로 늘어난 소득과 임금 인상이 전체 가계 구매력 확산으로 이어지기 어렵다는 점을 우려로 짚었다. 다만 한국의 반도체 경쟁력은 수십 년간 축적된 기술자본의 성과인 만큼 자원 의존형 호황을 겪은 네덜란드와 단순 비교하기 어렵다는 반론도 함께 제기되는 상황이다.
+
+[주식투자자 참고 뉴스]
+4. AI데이터센터 힘주는 삼성SDS “5년 후 매출 6.6조 목표”
+- 핵심 요약: 삼성SDS가 2031년까지 데이터센터 사업을 확장해 관련 매출을 연 6조 원대까지 끌어올리겠다는 목표를 제시했다. 인공지능(AI) 추론 수요 급증에 대응해 해남 한국AI컴퓨팅센터와 구미AI데이터센터를 주축으로 인프라를 확충하는 것이 핵심이다. 설계·구축·운영을 일괄 수행하는 DBO(Design Build Operate·설계구축운영) 사업도 함께 확대해 2031년까지 500메가와트(㎿) 이상의 데이터센터를 확보할 계획이다. 업계에서는 AI 추론 작업이 2030년까지 4배 이상 늘어날 것으로 전망되는 만큼 관련 기업의 매출 증가가 가시화할 것이라는 평가가 나온다.
+
+5. 한화(000880) 필리조선소 美 ‘골든돔’ 핵심전력 수주 잭팟
+- 핵심 요약: 한화그룹이 인수한 미국 필리조선소가 미국 미사일방어청(MDA)의 해상 미사일 시험 계측선(MRIV) 건조 사업자로 선정됐다. 이는 도널드 트럼프 미국 대통령이 추진하는 미사일 방어 구상 ‘골든돔 프로젝트’의 핵심 전력에 해당한다. 해상·해운 전문매체는 이번 2척 건조에 20억 달러(약 3조 원) 규모가 투입될 것으로 전했으며, 1번함 인도 시기는 2030년이다. 이에 따라 한화그룹이 한미 조선 협력 프로젝트 ‘마스가(MASGA)’에서 존재감을 한층 확대하게 됐다는 평가가 나온다.
+
+6. 출렁이는 삼전닉스에…퇴직연금 개미들도 한숨
+- 핵심 요약: 반도체 대형주 주가 변동성이 커지면서 개인형퇴직연금(IRP) 계좌에 관련 ETF를 담은 가입자들의 희비가 엇갈리고 있다. 올 3월 말 상품을 편입했다면 최근까지 50%를 웃도는 수익률을 기록했지만 5~6월 편입한 가입자는 마이너스 수익률로 돌아선 것으로 나타났다. 삼성전자와 SK하이닉스가 지난달 10% 넘게 하락하며 높은 변동성을 나타낸 것이 영향을 미쳤다는 분석이다. 이에 증권가에서는 퇴직연금 계좌도 증시 상황에 맞춰 안전자산 비중을 조절하는 등 적극적인 리밸런싱이 필요하다는 조언이 나온다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004643036' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004643036</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
