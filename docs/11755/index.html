@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피, 반도체 약세에 4% 털썩…석 달 만에 6500선 후퇴</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014076630' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11755" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피, 반도체 약세에 4% 털썩…석 달 만에 6500선 후퇴</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 업종의 글로벌 약세와 미국-이란 간 지정학적 리스크 심화가 국내 증시의 하방 압력으로 작용하며, 코스피 및 코스닥이 2거래일 연속 큰 폭으로 급락했습니다. 이 과정에서 프로그램 매도 사이드카가 연이어 발동되는 등 투자심리가 극도로 위축되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 반도체 업황 악화 및 미국-이란 군사적 충돌 리스크 등 연휴 기간에 누적된 대외 악재가 한꺼번에 반영되며 투자심리가 급격히 위축되었고, 지수와 주요 종목들이 2거래일 연속 큰 폭으로 하락했습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#증시</span> <span class="tag tag-hash">#투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[서울=뉴시스] 김혜진 기자 =20일 오후 서울 중구 하나은행 딜링룸 전광판에 주요 지수가 표시 되고 있다. 코스피는
+304.33포인트(4.46%) 내린 6516.27 마감했다. 코스닥 지수도 전 거래일 대비 5.
+[서울=뉴시스] 김혜진 기자 =20일 오후 서울 중구 하나은행 딜링룸 전광판에 주요 지수가 표시 되고 있다. 코스피는
+304.33포인트(4.46%) 내린 6516.27 마감했다. 코스닥 지수도 전 거래일 대비 5.33% 하락한 749.64에 거래를 마쳤다.
+원·달러 환율은 전 거래일 종가보다 0.1원 내린 1,478.4원에 주간 거래를 종료했다. 2026.07.20.
+jini@newsis.com[서울=뉴시스] 김경택 기자 = 연휴를 지난 국내 증시가 거래 재개 첫날부터 혹독한 후유증을 겪었다. 제헌절 휴장으로
+하루 쉬어간 사이 미국 증시에서 반도체주가 급락한 영향에 코스피는 4% 넘게 내렸고 코스닥 지수는 5%대 급락세를 연출했다. 특히 코스피와 코스닥 양 시장에서 2거래일 연속 매도 사이드카(프로그램 매도호가 일시 효력정지)가 발동하는 등 투자심리가 꽁꽁 얼어붙은 장세가 펼쳐졌다.
+
+20일 코스피는 전 거래일 대비 304.33포인트(4.46%) 내린 6516.27에 장을 마쳤다. 지난 16일 6.37% 급락한 데 이어
+2거래일 연속 큰 폭으로 하락하며 6500선까지 후퇴했다. 지수가 6500선에서 마감한 것은 지난 4월 30일(6598.87) 이후 약 석 달
+만이다.
+
+이날 177.02포인트(2.60%) 하락 출발한 지수는 장 초반 약보합권까지 오르며 낙폭을 줄였지만, 장중 반등에 성공한 반도체 투톱이 재차
+하락 전환해 낙폭을 키우면서 지수 또한 힘이 빠졌다.
+
+특히 지난 16~17일(현지시간) 뉴욕증시에서 반도체 업종이 큰 폭으로 하락하면서 연휴간 이벤트를 일시적으로 반영, 낙폭을 5% 넘게 확대하면서
+오전 11시21분께에는 프로그램 매도 호가를 5분간 정지하는 매도 사이드카가 발동되기도 했다. 올 들어 유가증권시장에 매도 사이드카가 발동된
+것은 이번이 20번째로 앞서 지난 16일에도 매도 사이드카가 발동된 바 있다.
+
+i경민 대신증권 연구원은 "국내 증시는 반도체 관련 악재와 미국-이란 간 군사적 충돌 리스크가 심화되며 투자심리가 위축됐다"면서 "수급 주체들도 뚜렷한 방향성을 보이지 못하면서 변동성이 확대됐고, 지수는 약세 전개하며 장중 매도 사이드카가 발동했다"
+고 설명했다.
+
+이 연구원은 "지난주 금요일 제헌절로 국내 증시가 휴장한 사이 미국 증시는 반도체 업종을 중심으로 재차 약세를 나타냈는데 중국 문샷의 AI
+'Kimi K3'가 오픈AI와 앤트로픽의 최상위 모델에 근접한 성능을 기록한 것으로 평가되면서, 막대한 투자를 이어온 하이퍼스케일러의 자본지출
+정당성에 대한 의구심이 확대됐다"
+며 "이에 AI 인프라 및 반도체 수요 둔화 우려가 재차 부각되며 증시 하방 압력으로 작용했다"고 평가했다.
+
+여기에 미국과 이란의 군사적 충돌 과정에서 미군 사상자가 발생하면서 양국 간 긴장도 한층 고조됐다. WTI 선물은 배럴당 83달러, 브렌트유
+선물은 90달러를 돌파했고, 고유가에 따른 인플레이션 압력 재확대 우려가 위험자산 선호심리를 더욱 위축했다.
+
+그는 "국내 증시는 휴장 기간 누적된 대외 악재를 한꺼번에 반영하며 하락했다"며 "키옥시아가 미국 특허소송에서 패소해 3000억원대 배상 명령을
+받은 점과 문샷의 홍콩 증시 IPO(기업공개) 준비 소식도 반도체 업종의 투자심리를 추가로 위축시키는 요인으로 작용했다"고 짚었다.
+
+이날 유가증권시장에서 기관이 9201억원을 순매도한 반면 외국인과 개인은 각각 5235억원, 3493억원을 순매수했다.
+
+업종별로는 보험(-8.98%), 기계·장비(-7.22%), 유통(-6.27%), 의료·정밀기기(-5.86%), 증권(-5.79%),
+운송장비·부품(-5.75%), 금속(-5.06%) 등이 하락했다.
+
+시가총액 상위 종목들은 대부분 하락했다. 대장주 삼성전자와 SK하이닉스가 각각 4%대 하락세를 나타낸 가운데 현대차, LG에너지솔루션,
+삼성바이오로직스, 삼성생명, KB금융, 기아, 삼성물산, 신한지주, HD현대중공업, 한화에어로스페이스 등이 3~9% 하락했다.
+
+코스닥 지수는 42.20포인트(5.33%) 급락한 749.64에 마감했다.
+
+코스닥 지수 역시 장중 5% 넘게 급락하면서 올해 10번째 매도 사이드카가 발동했다. 지난 16일에 이어 2거래일 연속 매도 사이드카다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014076630' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014076630</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
