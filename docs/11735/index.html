@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>100조 던진 외국인…8부능선 지났다 [마켓딥다이브]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001259268' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11735" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>100조 던진 외국인…8부능선 지났다 [마켓딥다이브]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">최근 국내 증시 하락 기간 동안 외국인 투자자들은 MSCI EM지수 내 반도체 비중 초과에 따른 기계적 리밸런싱 과정에서 100조원 이상의 매도를 진행했습니다. 현 급매물 폭탄은 일단 완화 국면에 진입했으나, 국내 반도체주가 여전히 오버웨이트 상태로 남아 있어 추가적인 수급 변동성에 주의가 필요합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 펀드매니저들의 움직임(리밸런싱)에 의해 국내외 주가가 영향을 받는 구조적 문제를 다루며, 반도체 초과 비중에 대한 지속적인 매물 출회 위험성을 경고하고 있어 시장 전체의 투자심리에 매우 큰 영향을 줄 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #증시 #외국인투자금 #리밸런싱</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">제목: 100조 던진 외국인…8부능선 지났다 [마켓딥다이브]
+언론사: 한국경제TV
+날짜: 2026.07.20. 오후 2:24
+본문: 최근 국내 증시가 조정을 받는 동안 외국인 투자자들의 강한 매도세가 이어져 왔습니다. 지난 석달간 국내 증시에서 100조원을 넘게 팔아치웠는데요, 이같은 매도 행렬은 과연 언제까지 이어질지 증권부 전효성 기자와 짚어봅니다.
+
+<기자>
+6월 한 달 동안 외국인이 우리 증시에서 팔아치운 금액은 47조원에 달합니다. 같은 기간 대만 증시에서도 184억 달러(27조원)를 순매도했는데요. 이 같은 대량 매도는 단순히 단기 급등에 따른 차익실현 때문만은 아닙니다. 핵심은 MSCI 신흥국(EM) 지수 내에서 한국과대만의 비중이 반도체주를 중심으로 비정상적으로 부풀어 올랐기 때문입니다.
+
+지난해 말 MSCI EM 지수의 대만 비중은 20%, 한국은 12.2% 수준이었는데 지난달 대만 26.4%, 한국 23.1%까지 뛰어올랐습니다.두 나라 합산 비중이 50%에 육박하면서, 신흥국 펀드매니저들이 기계적인 리밸런싱을 나서야 하는 상황이 온 겁니다.
+
+<앵커>
+한국과 대만, 당연히 반도체 비중이 너무 커지다 보니 위험 관리 차원에서 기계적인 매물이 나올 수밖에 없는 구조군요. 글로벌 펀드매니저들사이에서도 반도체 쏠림에 대한 경계감이 상당하다고요?
+
+<기자>
+뱅크오브아메리카가 7월 전 세계 펀드매니저들을 대상으로 설문조사를 진행했습니다. 현 시점에서 가장 붐비는, '과밀한 트레이드가 이뤄지고 있는 부분이 어디냐'라고 물은 거죠.
+
+응답자의 82%가 '글로벌 반도체'를 과밀 트레이드 1위로 꼽았습니다. 2위인 M7 응답률이 7%였고요. 결국 이 얘기는 이미 대부분이포트폴리오에 반도체를 가득채워 담고 있다 보니 덜어내는 과정이 불가피하다는 얘기로 해석됩니다.
+
+모건스탠리가 EM 지수를 기반으로 하는 신흥국 액티브 펀드(GEM)의 포트폴리오를 분석한 보고서가 있습니다. 6월 대만 TSMC는 EM 액티브펀드에서 비중이 '언더웨이트'로 전환됐습니다. MSCI EM 지수에서는 14.5% 비중으로 설정돼 있지만 발 빠른 액티브펀드들은 13.9%만담으면서 조정에 나서기 시작했던 거죠.
+
+<앵커>
+대장주인 TSMC가 비중축소로 돌아섰다면 국내 반도체 투톱의 상황도 안심할 수 없겠습니다. 신흥국 액티브 펀드에서 삼성전자와 SK하이닉스는 어느정도 비중으로 담겨 있습니까?
+
+<기자>
+TSMC는 지수보다 덜 담는 언더웨이트로 전환됐지만 삼성전자와 SK하이닉스는 오버웨이트 상태입니다. 지난달 기준 삼성전자는 벤치마크(8.6%)대비 9.0%를 보유해 소폭 오버웨이트 상태고, SK하이닉스는 벤치마크 6.6% 대비 1.4%P를 더담은 8.0% 비중입니다.
+
+신흥국 주식에 공격적으로 투자하는 신흥국 액티브 펀드의 운용자산은 약 1조 3000억달러, 원화로 1800조원 규모로 추산됩니다. 비중대로계산해본다면 신흥국 액티브 펀드에서 삼성전자와 SK하이닉스는 각각 162조, 144조원 정도가 담겨있겠죠. TSMC가 한박자 빠르게 비중 하향조정(언더웨이트)로 전환됐잖아요. 국내 반도체 기업의 초과 비중도 TSMC처럼 비중 조절 매물로 나올 수 있는 단계입니다.
+
+<앵커>
+대장주가 비중축소로 돌아섰다면 국내 반도체 투톱의 상황도 안심할 수 없겠습니다. 신흥국 액티브 펀드에서 삼성전자와 SK하이닉스는 어느정도 비중으로 담겨 있습니까?
+
+<기자>
+(반복된 내용)
+
+가장 중요한 질문을 해보죠. 앞으로도 더 나올 외국인 물량이 많을까요?
+
+<기자>
+최근한달간 47조원이라는 엄청난 매물 폭탄이 나온 이유가 앞서 말씀드린 초과 비중을 털어냈기 때문입니다. 그래서 외국인 매도의 7~8부 능선은지났다고 보는 겁니다. 다만 워낙처음에 담겨 있던 반도체덩어리가 컸던데, TSMC와 달리 국내 반도체 투톱은 여전히 '오버웨이트' 상태가일부 남아있습니다. 이걸 어느 정도로 정리하느냐에 따라서 향후 수급의 방향성이 갈릴 전망입니다.
+
+먼저 '완만한 박스권' 시나리오입니다. 가장 가능성이 높게 평가되는데요. 신흥국 액티브 펀드가 쥐고 있는 삼성전자·SK하이닉스 초과비중 중에서남은 오버웨이트 물량을 중립(0%p)까지 줄이는 과정에서 10조원 내외의 기계적 매물이 추가로 출회될 수 있습니다.다만 올해 두 반도체 기업의순이익 성장률이 304.4%에 달해 실적 발표와 함께 하방을 지지하는 시나리오입니다.
+
+두번째는 추가 투매가 나오는 '비관 시나리오'입니다. TSMC가 벤치마크 대비 비중을 적게 가져가는 언더웨이트로 전환됐다고말씀드렸잖아요. 국내 반도체주 포지션마저 언더웨이트로 전환돼 현재 비중보다 2%P이상 비중이 줄어들 경우입니다. 빅테크가 AI 설비투자를 줄이겠다는 신호를 비추거나, 중국 반도체의 부상으로 국내 반도체 기업의 점유율이 도전을 받는 상황에서 현실화될 전망입니다. 이 경우 반도체주에서 20조원 이상의 매도가쏟아지며 지수 방어선을 위협할 수 합니다.
+
+마지막으로 수급이 급반전되는 낙관 시나리오입니다. SK하이닉스 ADR이 나스닥100 지수에 편입되는 경우인데요. 이 경우 글로벌 패시브 자금이 20조원 가량 기계적으로 유입되면서 액티브 매도를 완전히 상쇄하고 바이코리아로 반전될 수 있습니다. 다만 SK하이닉스 ADR이 나스닥100에편입되려면 100위권 시가총액 요건도 채워야하는데다 상장 후 6개월 유동성 모니터링 기간도 거쳐야 해서 나스닥100 편입 시기는 일러야 내년 9월은 돼야 할 것으로 보입니다.
+
+<앵커>
+증시를 짓누르는 수급이 개선돼서 국내 증시가 하반기 본격적인 반등에 나서주면 좋겠는데, 아쉽게도 외국인이 한국과대만을 파는 사이, 그 자금이일본과 중국으로 이동하는 이른바 '아시아 머니무브' 현상도 나타나고 있다고요?
+
+<기자>
+글로벌 펀드는 한정된 자산을 배분하는 제로섬 게임입니다. 신흥국 펀드로묶이진 않았지만 글로벌 액티브 포트폴리오에서 일본 주식이 지난해 말-0.17%P 언더웨이트에서지난달 +0.05%P 오버웨이트로 역사적인 전환을 맞이했습니다. 일본 증시 전망에 따라 비중이 더 높아질 수 있죠.
+
+중국 주식또한 저점 매수세가 유입되며 반년만에 신흥국 액티브 펀드 내 언더웨이트 폭을 -3.5%P에서 -2.1%P로 줄였습니다. 결국 펀드라는바구니 안에서일본과 중국을새롭게 채우기 위해, 부풀어 있던 한국과 대만 반도체를 팔아 자금을 마련하는 압박이 발생하는 구간입니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001259268' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001259268</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
