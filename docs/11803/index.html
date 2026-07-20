@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>추락하는 삼전닉스…반도체주 반등의 조건은? [분석+]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005311861' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11803" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>추락하는 삼전닉스…반도체주 반등의 조건은? [분석+]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체주가 급락하는 상황에서, 증권가는 이달 말 미국 하이퍼스케일러(구글, MS 등)의 실적 발표를 반등의 주요 촉매제로 주목하고 있습니다. 특히 기존 사업의 수익성, AI 클라우드 매출 증가율 모멘텀, 그리고 대규모 설비투자(CAPEX) 가이던스가 핵심 관전 포인트로 꼽힙니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업황의 방향성을 결정할 핵심적인 외부 트리거(하이퍼스케일러 실적)를 명확히 제시하며 투자자들의 집중 관전 포인트를 알려주기 때문에 영향력이 매우 높습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">통신장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체주 #AI클라우드 #실적발표</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">7월 삼성전자·SK하이닉스 주가 26%·33% 급락
+증권가 "이달 말 예정된 하이퍼스케일러 실적 발표 주목"
+사진=연합뉴스
+사진=연합뉴스
+반도체주가 글로벌 기업의 호실적 발표에도 맥을 못 추는 흐름을 이어간 가운데 증권가에서는 이달 말 예정된 미국 하이퍼스케일러(초대형 데이터센터 운영사) 실적 발표가 반등의 트리거(방아쇠)가 될 수 있다는 전망이 나온다.
+
+20일 한국거래소에 따르면 이달 들어 코스피지수는 23.13% 급락했다. 같은 기간 '반도체 투톱' 삼성전자와 SK하이닉스는 각각 26.95%, 33.43% 떨어졌다. 그간 코스피지수를 견인한 반도체주가 약세를 보이면서 국내 증시가 조정받는 모습이다.
+
+이 같은 상황 속에서 증권가에서는 구글과 마이크로소프트(MS), 아마존, 메타 등 하이퍼스케일러 실적 발표가 반도체주 반등 계기가 될 수 있다는 분석이 제기된다.
+
+김재승 현대차증권 연구원은 "투자자들은 프론티어 인공지능(AI) 모델 기업들과 하이퍼스케일러가 AI 투자를 수익화해 내후년 이후에도 꾸준히 설비투자(CAPEX)를 이어갈 수 있는지 확인하고 싶어 한다"며 "오픈 AI와 앤트로픽 등 주요 프론티어 AI 모델 기업들이 비상장이라는 점에서 AI 수요 확대와 수익화, 미래 CAPEX 확대 지속에 대한 단서는 하이퍼스케일러의 실적 발표에서 찾을 수밖에 없다"
+
+금융투자업계에 따르면 구글의 모기업 알파벳이 오는 22일, MS와 메타가 오는 29일, 아마존이 오는 30일 실적을 발표한다.
+
+우선적으로 주목할 부분은 기존 사업의 실적이다. 하이퍼스케일러의 AI 관련 대규모 CAPEX는 기존 사업의 이익과 현금흐름에 기반하기 때문이다.
+
+김 연구원은 "이번 실적 시즌에서 본업의 이익과 현금흐름이 중요하다"며 "기존 사업의 수익성이 둔화하거나 마진이 하락할 경우 CAPEX 축소에 대한 압력이 높아질 수 있다"고 설명한다.
+
+AI 매출액 증가율 확대도 주목할 요소로 꼽힌다. 현재 시장은 성장률 변화인 모멘텀에 더욱 민감하게 반응하고 있기 때문이다.
+
+김 연구원은 "올해 1분기 AI 클라우드 부문의 매출액 증가율 확대가 본격화됐다는 점에서 매출액 증가율이 전 분기 대비 낮아질 경우 시장에 상당한 충격으로 다가올 수 있다"며 "AI 클라우드 부문의 매출액 증가율 둔화는 중국산 AI 모델의 성장과 멀티모델 활용 확대, 이에 따른 토큰당 비용 하락과 같은 AI 범용화 우려를 키울 수 있다"
+
+이어 "반대로 AI 클라우드 부문 매출액 증가율 모멘텀이 확대될 경우 '제번스의 역설'에 대한 낙관론을 높일 수 있을 것"이라고 부연했다.
+
+하이퍼스케일러의 CAPEX 가이던스 확대 여부도 주목된다. 특히 알파벳과 마이크로소프트의 CAPEX 가이던스가 관건이 될 것으로 보인다.
+
+김 연구원은 "알파벳과 마이크로소프트는 AI 경쟁을 이어가고 있지만 영업현금흐름 대비 CAPEX 규모는 오라클, 아마존, 메타에 비해 보수적"이라며 "AI 경쟁에서 알파벳과 마이크로소프트가 소극적으로 비치는 상황에서 AI 투자에 상대적으로 보수적인 두 기업이 CAPEX 전망을 상향 조정하거나 AI 경쟁에 더욱 적극적으로 나설 경우 AI 인프라 투자 사이클 지속 기대감이 높아질 수 있다"고 설명한다.
+
+그러면서 "반대로 AI 데이터센터 투자에 대한 지역사회 반발과 규제, 반도체 가격 등을 이유로 후발주자로 포지셔닝을 강화할 경우 AI 범용화로 인한 투자 사이클 정점 우려가 가속화할 수 있다"고 덧붙인다.
+
+시장의 우려와 별개로 하이퍼스케일러의 CAPEX 증가세는 당분간 이어질 것이라는 전망이 나온다.
+
+이재만 하나증권 연구원은 "반도체 기업의 주가 반등 트리거는 7월 말부터 시작되는 미국 하이퍼스케일러의 실적 발표라고 판단한다"며 "알파벳, 마이크로소프트, 메타, 아마존의 CAPEX 합산 증가율은 올해 1분기 80%에서 2분기 83%, 3분기 92%까지 높아질 것으로 예상된다"
+
+이어 "4분기 전망치는 79%로 다소 낮아지긴 하지만 절대적인 증가율이 여전히 높다"며 "투자 수요 증가를 감안하면 반도체의 높은 영업이익률 유지도 가능하다"
+
+하이퍼스케일러의 어닝 서프라이즈 여부에 따라 삼성전자와 SK하이닉스의 주가 향방이 갈릴 것이라는 분석도 제기된다.
+
+이 연구원은 "지난해 이후 알파벳은 분기 기준으로 주당순이익(EPS)이 예상치를 밑돈 적이 없다"며 "매출액 기준으로 어닝 서프라이즈를 기록한 이후 삼성전자와 SK하이닉스의 1개월 평균 주가 수익률은 각각 11%, 17%로 어닝쇼크 이후의 2%, -3%와 확실한 차이가 있다"
+
+그러면서 "메타와 아마존은 EPS 예상치 초과 또는 미달 여부가, 마이크로소프트는 CAPEX 예상치 초과 또는 미달 여부가 글로벌 반도체 기업들의 주가 수익률에 영향을 준다"고 덧붙인다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005311861' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005311861</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
