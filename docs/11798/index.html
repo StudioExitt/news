@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>액트 "삼성전자 40조 성과급, 국민연금이 나서야"</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000517423' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11798" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>액트 "삼성전자 40조 성과급, 국민연금이 나서야"</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">소액주주 플랫폼 액트가 삼성전자 특별경영성과급 합의안에 대해 주주총회 승인 절차 없이 대규모 재원이 집행되는 것을 우려하며, 국민연금에 수탁자 책임 이행을 촉구했습니다. 해당 서한에는 소액주주 696명의 서명이 포함되었으며, 임시주주총회 소집 등 적극적인 주주권 행사를 예고했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">삼성전자의 대규모 성과급 지급 구조와 주주 자본의 배분 방식에 대한 소액주주들의 공개적인 이의 제기 및 법적 행동 예고는 단기적인 기업 거버넌스 이슈이자 투자 심리에 직접적인 영향을 미칠 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주주행동주의</span> <span class="tag tag-hash">#기업거버넌스</span> <span class="tag tag-hash">#국민연금</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">소액주주 플랫폼 액트는 삼성전자 특별경영성과급 합의안과 관련해 국민연금의 수탁자 책임 이행을 촉구했다. /더팩트 DB
+소액주주 플랫폼 액트는 삼성전자 특별경영성과급 합의안과 관련해 국민연금에 공식 면담을 요청했다. 주주총회 승인 없이 대규모 성과급 재원이 집행될 경우 주주가치 훼손으로 이어질 수 있다며 국민연금의 수탁자 책임 이행을 촉구했다.
+액트는 20일 서울 서대문구 충정로에 있는 국민연금공단 사옥을 방문해 삼성전자 특별경영성과급 합의안에 대한 우려와 수탁자 책임 이행을 요구하는 주주서한을 제출했다고 밝혔다. 같은 날 국민연금 수탁자책임실장 앞으로도 해당 서한을 이메일로 발송했다.
+이번 주주서한에는 지난 19일까지 마이데이터 연동을 통해 삼성전자 주주 여부를 확인한 소액주주 696명, 총 37만7526주의 서명이 담겼다. 액트는 단순한 여론 취합이 아니라 실제 의결권을 보유한 주주들의 의견이 확인된 만큼 삼성전자 2대 주주인 국민연금이 이를 무겁게 받아들여야 한다고 주장했다.
+액트는 삼성전자 노사의 성과급 합의가 주주총회 승인 없이 최대 40조원의 재원을 유출할 수 있는 구조라고 보고 있다. 이번 서한에는 국민연금 기금운용본부 관계자와의 공식 면담 요청, 수탁자책임전문위원회 정식 안건 상정, 직접 주주권 행사가 어렵다면 소액주주 연대에 주주권 위임을 검토해 달라는 요구가 담겼다.
+액트 측은 "오늘도 주가가 하락하는 등 연일 무너지는 주가에 소액주주들은 피를 토하는 심정"이라며 "주주만 온전히 주가 하락의 리스크를 부담하고, 임직원은 아무리 주가가 하락해도 영업이익에 연동된 성과급을 마치 고정적인 채권처럼 무위험으로 챙겨가는 심각한 리스크 비대칭 구조에 주주들의 불만이 임계점에 달했다"고 밝혔다.
+국민연금 손실 문제도 거론했다. 액트는 국민연금이 보유한 삼성전자 주식 약 4억6428만주, 지분율 7.84%의 평가액이 최근 한 달 새 주가가 35만원대에서 24만원대로 떨어지면서 약 53조원 감소한 것으로 추산했다.
+액트 측은 "국민연금의 막대한 손실은 곧 전 국민의 노후자산 손실인 만큼, 국부 유출을 방관할 것이 아니라 적극적으로 나서 무너진 노후자산을 회복하고 주주가치 제고를 이끌어야 한다"고 촉구했다.
+이상목 액트 대표는 "마이데이터로 검증된 실주주들의 서명을 직접 전달한 것은 주주들의 분노가 단순한 불만을 넘어 실제적인 행동으로 전환되었음을 의미한다"며 "매년 수십조원을 10년간 꾸준히 지급하는 막대한 규모의 이익 배분은 당연히 그 위험을 감수하는 진짜 주인인 주주들의 엄격한 승인을 거쳐야 마땅하다"고 말했다.
+액트는 이번 주주서한 제출과 별도로 임시주주총회 소집 절차도 이어간다. 액트는 플랫폼에서 진행한 임시주총 소집 안건 투표에서 99.7%의 찬성을 확인했으며, 이달 말부터 관련 절차를 본격화할 계획이다.
+아울러 이번 주 중 삼성전자 이사회에도 주주서한을 보낼 예정이다. 액트는 해당 서한을 통해 자사주 매입 후 미국 시장 주식예탁증서(ADR) 상장 등을 요구하며 주주가치 제고 방안을 촉구한다는 방침이다. 해당 서한에는 현재까지 소액주주 361명이 동참한 상태다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000517423' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000517423</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
