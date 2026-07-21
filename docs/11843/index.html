@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>‘하닉 ADR 14%↑’ 뉴욕증시, 반도체주 급반등에 일제히 상승…빅테크 실적 ‘분수령’ [투자360]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002673125' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11843" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>‘하닉 ADR 14%↑’ 뉴욕증시, 반도체주 급반등에 일제히 상승…빅테크 실적 ‘분수령’ [투자360]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체주의 저가 매수세 유입 및 기업 실적 호조에 힘여 뉴욕증시 주요 지수가 일제히 상승 마감했습니다. 다만, 시장의 관심은 이번 주 예정된 알파벳과 테슬라 등 빅테크의 핵심 실적으로 쏠리며 다음 투자 사이클을 가늠할 중요한 변수가 될 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업황 개선 기대감과 우수한 기업 실적 발표가 시장을 견인했으나, 향후 빅테크 실적이 AI 투자 사이클의 지속 여부를 가늠할 핵심 변수이므로 주의해야 합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">마이크론</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">NVIDIA</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #AI #빅테크 #증시분석</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미국 뉴욕증시가 반도체주 급반등과 기업 실적 호조에 힘입어 일제히 상승 마감했다. 최근 중국 인공지능(AI) 기업들의
+초거대 AI 모델 공개 이후 급락했던 반도체주에 저가 매수세가 유입된 가운데 투자자들의 관심은 이번 주 예정된 알파벳과 테슬라 등 빅테크
+실적으로 옮겨가는 모습이다.
+
+21일(현지시간) 뉴욕증권거래소(NYSE)에서 다우존스30산업평균지수는 전 거래일보다 385.38포인트(0.74%) 오른 5만2224.64에
+거래를 마쳤다. 스탠더드앤드푸어스(S&P)500지수는 65.92포인트(0.89%) 상승한 7509.20, 나스닥지수는
+329.13포인트(1.29%) 오른 2만5837.21로 장을 마감했다.
+
+지수 상승은 반도체주가 이끌었다. 필라델피아반도체지수는 5.21% 급등했고, 지난주 큰 폭으로 조정을 받았던 마이크론은 12.17% 뛰었다.
+엔비디아는 1.97%, 인텔은 8.39% 상승했으며 SK하이닉스 미국주식예탁증서(ADR)도 13.75% 급등했다. 최근 AI 투자 둔화 우려로
+낙폭이 컸던 반도체주에 저가 매수세가 집중된 영향으로 풀이된다.
+
+시장에서는 이번 반등을 새로운 상승 추세의 시작이라기보다 낙폭 과대에 따른 되돌림으로 보는 시각도 나온다. 필라델피아반도체지수는 지난 17일
+6월22일 기록한 사상 최고치 대비 20% 이상 하락하며 기술적 약세장에 진입했지만 이후 이틀 연속 반등하며 낙폭을 고점 대비 15% 수준으로
+줄였다. 최근 헤지펀드들이 반도체주 비중을 큰 폭으로 줄인 만큼 이번 주 실적 발표를 앞두고 다시 비중을 늘리려는 매수세가 유입됐다는 분석이다.
+
+기업들의 2분기 실적도 투자심리를 뒷받침했다. 산업재 업체 3M은 시장 예상치를 웃도는 실적과 연간 이익 전망 상향 조정에 힘입어 7.32%
+상승했고, 제너럴모터스(GM)도 북미 판매 호조를 바탕으로 시장 기대를 웃도는 실적을 발표하며 4.91% 올랐다.
+
+다만 중동 지역의 지정학적 긴장으로 국제유가는 상승세를 이어갔다. 9월물 브렌트유는 전 거래일보다 2.01% 오른 배럴당 91.01달러, 8월물
+서부텍사스산원유(WTI)는 2.02% 상승한 배럴당 84.91달러에 거래를 마치며 각각 약 5주 만의 최고치를 기록했다.
+유가 상승으로 미국 10년 만기 국채금리는 전 거래일보다 4bp(1bp=0.01%포인트) 오른 4.63%를 나타냈다.
+
+유가와 국채금리 상승은 달러화 강세로도 이어졌다. 주요 6개 통화 대비 달러화 가치를 나타내는 달러인덱스는 101.188로 전 거래일보다
+0.226 상승했다. 엔/달러 환율은 달러당 163.205엔으로 1986년 12월 이후 처음으로 163엔을 넘어섰고, 원/달러 환율도
+1482.0원을 나타냈다.
+
+시장의 시선은 이번 주 본격화하는 빅테크 실적으로 향하고 있다. 22일 장 마감 후 알파벳과 테슬라, IBM, 텍사스인스트루먼트가 실적을
+발표하는 데 이어 23일에는 인텔이 성적표를 공개할 예정이다. 이번 실적은 AI 투자 사이클의 지속 여부와 반도체 업황을 가늠할 핵심 변수로
+꼽힌다. UBS의 키스 파커 전략가는 “AI 중심의 이익 성장세가 이어지고 있으며 기술주가 추가 상승 여력을 뒷받침하고 있다”고 평가했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002673125' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002673125</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

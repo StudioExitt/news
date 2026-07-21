@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반도체 비이성적 주가 하락...메모리 가격 더 날카롭고 오래간다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006334295' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11842" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>반도체 비이성적 주가 하락...메모리 가격 더 날카롭고 오래간다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">대신증권은 최근 반도체 주가 하락을 '비이성적'이라고 평가하며, 메모리반도체의 강력한 가격 상승 사이클과 수요 기반의 구조적 강세를 예측했습니다. 특히 공급업계의 맞춤형 가격 전략 실효성과 장기계약(LTA) 확산에 주목할 것을 강조하며 긍정적인 투자 의견을 유지했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단기 주가 하락에 대한 부정적인 시선을 반박하며, 실제 시장 구조(가격 상승세, LTA 확대)와 근본적인 수요 증가를 제시함. 메모리 가격의 지속적이고 강력한 강세는 산업 전반의 가치를 끌어올리는 핵심적인 긍정 신호입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#메모리가격</span> <span class="tag tag-hash">#LTA</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">대신증권 보고서 대신증권은 22일 최근 주가 급락이 이어진 반도체 산업에 대해 ‘비이성적 주가 하락’이라며 투자의견을
+‘비중확대’로 유지한다고 밝혔다.
+
+기존 의견에는 변화가 없다며 종목별로는 삼성전자(005930)에 대해 투자의견 ‘매수(Buy)’, 목표주가 56만원을 제시했다. 
+SK하이닉스(000660)는 투자의견 ‘매수’, 목표주가 390만원을 유지했다.
+
+류형근 대신증권 연구원은 보고서에서 “때아닌 고점 논란 속 시장은 과도한 주가 하락을 경험했다”며 “주가 급락 과정에서는 수많은 이유들이 제시되기 마련인 만큼 이제 얽힌 실타래를 하나씩 풀어갈 때”라고 말했다.
+
+“공급업계 맞춤형 가격 전략, 실효성 재차 증명할 것”
+
+류 연구원은 올해 3분기 범용 D램(DRAM)과 낸드플래시(NAND) 가격이 전분기 대비 각각 20% 초중반, 10% 중후반 상승할 것으로 전망했다. 글로벌 기준이며, 공급업계별 기저 부담이 상이한 만큼 가격 상승률에는 편차가 있을 수 있다고 봤다.
+
+그는 “시장이 초점을 둬야 하는 부분은 공급업계의 맞춤형 가격 전략이 재차 그 실효성을 증명할 것이라는 점”이라며 “공급 부족 환경에선 고객별, 응용처별 가격 전략도 상이해지는 경향이 있고, 당장 더 많이, 앞으로도 더 많이 살 것으로 예상되는 고객에게 우선순위가 주어지는 것은 자연스러운 수순”이라고 설명했다.
+
+이어 “메모리반도체발 파워게임(Power Game)이 지속되고 있다”며 “칩 디플레이션(Chip Deflation)의 수혜로 버텨온 일부 고객들의 경우 단기 이익 훼손이 불가피하다”고 진단했다.
+
+레거시(Legacy) 반도체에 대해서는 “다수의 응용처에서 수요가 지속 발생하는 중”이라며 “공급업계의 생산은 제품 믹스 전환 속 추가 축소되고 있고, 극단적인 수급 불균형 속에서 고객들은 가격의 급격한 인상도 수용하겠다는 분위기”라고 전했다. 이에 따라 고대역폭메모리(HBM)보다 비싸게 레거시 제품이 거래되는 이상 현상도 일부 관측된다고 덧붙였다. 제품군별로는 DDR4·LPDDR4에서 가장 강력한 가격 상승이 발생할 것이라는 판단이다.
+
+출처:대신증권
+
+“장기계약, 시장은 숨은 가치 못 보고 있다”
+
+류 연구원은 장기계약(LTA) 확산과 관련해 “격변의 시기에는 승자와 패자가 나뉘기 마련”이라며 “현재 인공지능(AI) 사이클에서 승자로 거듭나기 위해선 안정적인 메모리반도체 공급망 구축이 필요하고, 고객과 공급업계의 이해관계가 일치되면서 LTA의 확산이 지속되고 있다”고 밝혔다.
+
+다만 그는 시장에 두 가지 오해가 있다고 짚었다. 첫째는 LTA는 모든 고객을 대상으로 적용되는 계약이 아니다라는 점이다. 그는 “공생이 가능한, 강력한 파트너십 구축을 통해 시너지를 낼 수 있는 핵심 고객들을 중심으로 체결되고 있다는 점을 상기할 필요가 있다”고 말했다.
+
+둘째는 LTA의 단기 가격 억제 효과에만 주목하는 시각이다. 류 연구원은 “LTA가 단기 가격 상승을 억제할 것이라는 좁은 관점보다 LTA가 가져올 중장기 가치에 보다 주목할 필요가 있다”며 “사이클의 지속기간(Duration) 연장 효과, AI에 맞춤화된 신사업 구축에서의 시너지 효과 등에 집중할 때”라고 강조했다.
+
+그는 초기 계약의 경우 가격 상·하한선이 동시에 설정된 구조로 체결된 것으로 추정된다면서도, 공급 부족 강도가 심화되면서 후속 계약에서는 가격 하한선만 설정하거나 계약 기간 내 가격이 고정되는 식으로 가격 요건이 강화되고 있다고 전했다.
+
+아울러 “계약의 가치를 높이기 위한 선행적 조치도 강화되고 있다”며 대표 사례로 사전계약 연장 옵션을 꼽았다. 류 연구원은 “장기계약의 연장 여부를 기존 계약의 종료 시점 근처가 아닌 조기에 결정하게 하는 옵션을 추가하면서 탄력적인 생산능력(Capa) 운영을 가능하게 할 것”이라며 “사이클의 변동성 축소 가시성을 높일 수 있는 변화가 될 것”이라고 내다봤.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006334295' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006334295</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
