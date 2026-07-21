@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“레버리지·인버스 투자 멈춰라” vs “규제로 유동성 줄면 변동성 더 커져”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/023/0003988845' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11828" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“레버리지·인버스 투자 멈춰라” vs “규제로 유동성 줄면 변동성 더 커져”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">ETF 전문가들은 단일 종목 레버리지/인버스 ETF의 구조적 위험성을 경고하며 투자를 자제할 것을 주장했습니다. 한편, 해외 자산운용사는 규제 강화가 오히려 유동성 감소를 초래하여 시장 변동성을 키울 수 있다며 규제 완화를 촉구하는 상반된 시각을 제시했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">레버리지/인버스 ETF의 구조적 위험성 경고와 함께 국내외 금융 당국의 규제 동향 및 그로 인한 시장 유동성 변화 가능성을 다루어 투자 전략 수립에 매우 중요한 참고 자료를 제공하기 때문입니다. 이는 단기적인 가격 변동보다는 제도 및 상품 이해도의 측면에서 영향력이 큽니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자산운용</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#인버스상품</span> <span class="tag tag-hash">#금융규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">지난 2002년 우리나라에 ETF(상장지수펀드)를 처음 도입해 ‘ETF의 아버지’라 불리는 배재규 한국투자신탁운용 대표가 20일 단일 종목 레버리지 상장지수 상품과 관련해 “비난을 하겠지만 지금이라도 투자를 멈추길 바란다”고 당부했다. 배재규 한국투자운용 사장은 자신의 페이스북에 ‘개별 종목 레버리지 인버스 2배 상품 성과 분석’이라는 제목의 글을 올려 “개별 종목 레버리지 ETF를 운용하고 있는 운용사 대표로서 이런 말씀을 드려 죄송하다”며 “결론은 개별 종목 레버리지와 인버스 2배 ETF에는 투자하지 말라는 이야기”라고 밝혔다. 한투운용은 ‘ACE 삼성전자 단일 종목 레버리지’와 ‘ACE SK하이닉스 단일 종목 레버리지’ 상품을 운용하는 업계 3~4위권 자산운용사다. 배 대표는 “시간이 흘러 원주가 제자리에 와도 ETF 가격은 제자리에 오지 못할 가능성이 크다”며 “특히 원주의 변동성이 지금처럼 크면 매일 손실이 늘어나는 구조”라고 말했다. 자료에 따르면 SK하이닉스는 지난 5월 27일 224만3000원에서 지난 16일 184만2000원으로 17.9% 하락했다. 같은 기간 SK하이닉스 단일 종목 레버리지 상품 중 거래량과 운용 자산(AUM)이 가장 큰 상품의 손실률은 47.5%에 달했다. 단순 원주 하락률의 2배를 적용한 이론상 손실률은 35.8%지만 실제 손실은 이보다 11.7%포인트 더 컸던 것이다. SK하이닉스 단일종목 ‘곱버스(인버스 2배)’ 상품 역시 원주가 17.9% 하락한 만큼 35.8%의 수익을 거둘 수 있을 것이라 생각하기 쉽지만, 실제로는 31.1% 손실을 냈다. 일반 투자자들의 기대수익률과 실제 성과 간 괴리는 66.9%포인트에 달했다. 주가 하락 방향 자체는 맞췄지만 잦은 등락 과정에서 수익이 잠식된 결과다. 이 같은 현상은 레버리지·인버스 상품이 일일 수익률을 기준으로 목표 배수를 맞추기 위해 매일 수익률을 재설정하는 구조에서 비롯된다. 미국 자산운용사 그래닛셰어즈의 윌 린드 최고경영자(CEO)는 지난 20일 본지와의 화상 인터뷰에서 이같이 말했다. “단일 종목 레버리지 상품의 유동성을 과도하게 제한하면 오히려 변동성을 키울 수 있다는 점도 유의해야 합니다.” 그는 “기본 예탁금을 크게 올리면 이전에는 레버리지 상품을 살 수 있었던 투자자들이 더 이상 매수할 수 없게 되고, 일부는 기존 보유분을 줄여야 할 수도 있다”며 “새로 매수할 수 있는 투자자가 줄고 매도만 가능한 투자자가 늘어나면 시장의 매수·매도 균형이 깨져 오히려 변동성이 더 크게 확대될 수 있다”고 했다. 린드 CEO는“주요 메모리 업체들의 재고는 최소 내년 중반까지 완판된 상태”라며 “메모리 수급 불균형이 단기간에 해소될 가능성이 적은 만큼 현재 시점에서 메모리 피크아웃을 우려할 필요는 크지 않다”고 했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/023/0003988845' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/023/0003988845</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
