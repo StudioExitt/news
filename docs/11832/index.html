@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스닥 역주행에 커지는 '상폐 공포'... 이재명 취임 전으로 회귀</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/469/0000943610' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11832" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스닥 역주행에 커지는 '상폐 공포'... 이재명 취임 전으로 회귀</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스닥 지수가 급락하며 고점 대비 큰 폭의 하락을 기록하고 있으며, 높아진 상장폐지 기준과 관리종목 지정 증가로 시장 전반에 퇴출 공포가 확산되고 있다. 대형 반도체 ETF로 자금이 쏠리면서 성장주 섹터에서 자금 이탈 현상이 심화되어 투자심리가 위축되며 지수가 과거 수준으로 회귀하는 모습을 보이고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">과도하게 강화되는 상장폐지 기준과 레버리지 ETF로의 수급 쏠림 현상이 코스닥 전반에 구조적 위협 요인으로 작용하며 투자 심리를 크게 악화시키고 있다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥</span> <span class="tag tag-hash">#상장폐지</span> <span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#투자위험</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스닥, 올해 고점 대비 480p 빠져
+레버리지 ETF 쏠림으로 지수 하락
+이달 상폐 위기 기업 9곳으로 급증
+이재명 대통령이 21일 청와대에서 열린 제31회 국무회의에서 발언하고 있다. 왕태석 선임기자
+이재명 대통령이 21일 청와대에서 열린 제31회 국무회의에서 발언하고 있다. 왕태석 선임기자
+
+이재명 정부 출범 후 상승세를 타던 코스닥이 결국 취임 당시보다 낮은 수준으로 내려앉았다. 대형 반도체주로 수급이 쏠리면서 코스닥 기업의 퇴출 공포가 커지고 있다.
+
+21일 코스닥은 전 거래일 대비 3.70포인트(0.49%) 오른 753.34에 거래를 마쳤다. 외국인과 기관이 각각 1,340억 원, 140억 원어치를 순매도했지만 개인이 1,450억 원어치를 순매수했다. 유가증권시장은 올해 19번째 매수 사이드카(프로그램 매매 일시 효력 정지)가 발동될 정도로 가파른 상승세를 보였지만, 전날 연중 최저치를 기록한 코스닥은 반짝 반등에 그쳤다.
+
+코스피는 231.68포인트(3.56%) 상승한 6,747.95에 거래를 마쳤다. 삼성전자가 6.15% 오른 25만9,000원에, SK하이닉스가 4.08% 상승한 183만6,000원에 마감하며 상승을 주도했다.
+
+g래픽=강준구 기자
+그래픽=강준구 기자
+
+코스닥은 이재명 대통령 취임 후 정부·여당의 '삼천스닥' 청사진 등에 힘입어 반등에 성공하는 듯했다. 올해 1월 26일엔 2022년 이후 처음으로 천스닥(1,000선)을 돌파했고, 4월 27일엔 1,226.18까지 치솟으며 연중 최고치를 기록했다.
+
+그러나 3개월 만인 이날 코스닥은 750선까지 밀리며 상승분을 모두 반납했다. 지수가 480포인트가량 빠지면서 고점 대비 시가총액은 258조 원(38.04%) 감소했다. 올해 급등과 급락을 거듭하면서 매수와 매도 사이드카가 각각 13회, 10회 발동되는 등 극심한 변동성을 보였다.
+
+시장은 5월 27일 삼성전자·SK하이닉스 레버리지 상장지수펀드(ETF) 출시 이후 코스닥 하락세가 가팔라졌다고 평가했다. 막대한 수급이 반도체주로 쏠리면서 코스닥 성장주로 향하던 투자자금이 대거 이탈한 영향이 크다. 실제 최근 한 달간 이들 단일종목 레버리지 ETF 14종에 유입된 개인 순투자금만 5조8,500억 원에 이른다. 이 같은 수급 쏠림의 영향으로 핵심 150개 종목으로 구성된 KODEX 코스닥150은 단일종목 레버리지 ETF 출시 이후 35.01% 급락했다.
+
+g래픽=신동준 기자
+그래픽=신동준 기자
+
+정부가 내놓은 코스닥 활성화 정책 부작용을 우려하는 목소리도 커지고 있다. 한국거래소는 상장 유지 기준을 지난해 시가총액 40억 원에서 올해 1월 150억 원으로 올렸으며, 이달 1일엔 200억 원으로 재차 상향했다. 내년 1월부터는 문턱이 300억 원으로 높아질 예정이다. 그 결과 올해 상반기(1~6월) 시가총액 미달을 이유로 관리종목에 지정된 코스닥 기업 수는 6곳에 그쳤지만, 이달(1~21일)에만 9곳이 추가로 지정됐다. 이날 기준 시총 300억 원에 못 미치는 기업은 코스닥 전체 상장사의 24%를 차지했다.
+
+문제는 소명 기회가 제한돼 있어 성장 가능성이 있는 기업도 퇴출 위기에 놓일 수 있다는 점이다. 코스닥 시장에서 시총 200억 원 기준을 30거래일 연속 충족하지 못한 기업은 관리종목으로 지정된다. 이후 90거래일 중 45거래일 연속으로 기준을 상회하지 못하면 별도 심사 없이 즉시 상장폐지 절차가 진행된다. 상장폐지 리스크가 커질수록 투자자로선 자금을 뺄 유인이 커지고, 이는 기업의 펀더멘탈과 무관하게 주가를 끌어내리는 악순환으로 이어질 수 있다는 우려도 나온다.
+
+양준석 가톨릭대 경제학과 교수는 "현재 코스닥에 좀비 기업이 포진해 있어 시장 신뢰가 하락한 만큼 상장폐지 기준 강화는 반드시 필요한 절차"라면서도 "다만 일시적으로 어려움을 겪고 있거나 성장 여력이 충분한 기업이 있을 수 있기에 상장폐지 전 충분한 소명 기회를 보장해야 한다"고 조언했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/469/0000943610' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/469/0000943610</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
