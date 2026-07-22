@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>실적 발표 후 주가 하락한 구글...컨퍼런스 콜 직접 들어보니 [마켓무버의 국장 힌트]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001259650' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12021" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>실적 발표 후 주가 하락한 구글...컨퍼런스 콜 직접 들어보니 [마켓무버의 국장 힌트]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">구글은 시장 예상치를 상회하는 실적을 기록했으나, 잉여현금흐름이 마이너스를 기록하며 투자자들의 우려를 샀습니다. 그러나 구글 경영진은 AI가 가져올 '대단히 특별한 기회'에 대한 압도적인 낙관론과 장기 투자를 강조했습니다. 단기적 주가 하락에도 불구하고, 첨단 기술 투자를 지속하겠다는 확신을 보여주었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">실적 수치 자체는 긍정적이나(매출 상회), 핵심 재무지표(영업현금흐름 마이너스)와 시장의 냉정한 반응(시간외 주가 하락)이 충돌하며 투자 심리에 불확실성을 가중시켰기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">Alphabet (GOOGL)</span> <span class="tag stock-tag">NVIDIA (NVDA)</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">AI 인프라</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">클라우드 컴퓨팅</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#Google #AI투자 #실적분석</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미 증시 3대지수 하락했습니다. 중동 문제로 인한 유가 급등과 그에 따른 기준금리 인상 심리가 시장에 부담을 준 것으로 해석됩니다.
+
+오늘은 하나의 주제에 집중해 살펴보겠습니다. 장 마감 이후 나온 구글의 실적을 시장이 어떻게 보느냐, 하는 점인데요. 컨퍼런스 콜을 들어보면 초기 시장의 해석과 구글 내부의 전망과 차이가 있는 점이 확인됩니다.
+
+구글이 이번에 발표한 실적은 분기 매출 구글이 분기 매출 1,198억 달러, 주당 순이익 9.11달러의 실적을 기록했습니다. 이는 시장 예상치를 상회한 수준이지만, 잉여현금흐름이 -58억 6천만 달러를 기록했습니다.
+
+구글은 앞선 올해 1분기 들어 100억 달러 수준으로 영업흐름이 감소한 데 이어 이번에는 마이너스로 돌아선 건데요.
+
+지금 구글의 잉여현금흐름이 마이너스라는 건 영업으로 벌어들인 현금보다 설비투자, 운전자본 증가 같은 투자성 지출이 더 컸다는 뜻입니다.
+
+그래서일까요. 장마감 후 진행된 구글의 어닝 콜에서 월가는 이 숫자에 문제가 없는가, 를 집중적으로 파고들었습니다.
+
+첫 번째 질문이 모건 스탠리의 브라이언 노왁으로부터 나왔는데요. 생성형 AI의 투하자본이익률(ROIC) 전망, 1년 전과 지금의 전망이 어떻게 달라졌는지 비교해 답해달라는 질문이었습니다.
+
+반도체 공급 부족이 해결되지 않는 측면에서 반도체 가격 상승이 구글 내부의 수익성 전망을 낮추지는 않았는지를 우회적으로 물어본 것이죠. 
+
+순다 피차이 구글 CEO는, 이에 대해 순다 피차 CEO는 비록 차분한 어조였지만 '대단히 특별한 기회 (extra ordinary oppurtuity)'라는 표현을 중복해가며 AI가 미래 구글의 이익을 크게 높여줄 것이라고 답했습니다.
+
+고객사들을 포함한 다른 기업들이 AI 활용의 아주 초기 단계에 진입했을 뿐이라며 지난 한 해 동안 오히려 앞으로의 기회에 대해 더욱 낙관적으로 생각하게 되었다고 답했습니다.
+
+아나트 아슈케나지 구글 CFO는 "매력적인 투자 수익률이 확보되는 한 투자를 지속하는 것이 목표"라며 공급이 제한된, 즉 반도체 가격이 비싸지는 상황에서도 장기적으로 수요를 충족하겠다고 덧붙였습니다.
+
+그러니까 구글 내부적으로는 이번에 기록한 영업현금흐름의 마이너스가 장기적으로 큰 문제가 되지 않는다고 본 겁니다.
+
+구글은 채권 발행 등으로 160억 달러 수준이었던 부채 규모가 1년새 1,000억 달러까지 증가했습니다. 이것을 이사회는 부채 포트폴리오라고 표현했습니다. 앞으로 성장이 전망되니, 지금 번 돈 투입하고 돈 더 빌려서 투자를 계속한다는 것이지요. 단 유상증자 등으로 주식시장에서 자금을 조달할 계획은 현재로서는 없다고 했습니다.
+
+구글이 자체 설계한 AI 전용 칩 TPU에 대해서는 자체 사용 뿐 아니라 고객사의 데이터센터에 설치할 수 있는 기회를 점점 더 많이 찾아가고 있다고 했고, 이번 분기에는 회계상 판매 계약이 수익으로 인식되지 않았지만(수주잔고가 수익으로 실현되지 않았지만) 2027년부터 이 부분들이 제무재표에 반영될 것이라는 내용이 컨퍼런스 콜에서 나왔습니다.
+
+구글의 AI 첨단 모델이 내부 이슈로 출시가 늦어지는 점에 대해서는 순다 피차이 CEO가 '앞으로 더욱 속도를 높여갈 것'이라는 등의 의례적 방어멘트를 했지만 정확한 시점이 나온 것은 아니었고요. 대체로 구글의 낙관론에 대해서 월가가 약간은 우려하는 것은 아닌가, 하는 점이 어닝콜 중 움직인 구글의 시간외 주가와 관련해 관측됩니다. 구글의 모회사 알파벳의 주가는 시간외 거래에서 2.75% 가량 하락 중입니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001259650' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001259650</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
