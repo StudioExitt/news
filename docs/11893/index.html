@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"AI 불씨 안꺼졌다"…코스피 7000 탈환</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005792948' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11893" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"AI 불씨 안꺼졌다"…코스피 7000 탈환</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 낙관론과 반도체 저점 매수세가 시장을 견인하며 코스피가 7000선을 회복, 강세 출발했습니다. SK하이닉스와 삼성전자의 로봇 사업 진출 모멘텀이 상승에 크게 기여했으며, 향후 빅테크 기업들의 실적이 추가 상승의 핵심 동력이 될 것으로 전망됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 산업을 필두로 한 기술 테마주의 강력한 순환매와 글로벌 투자은행들의 긍정적 전망이 맞물려 시장 전체의 낙관론과 매수세를 폭발적으로 증가시켰습니다. 이는 단기적인 수급 개선을 넘어 구조적인 성장 동력에 대한 기대감으로 해석됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">레인보우로보틱스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">로봇</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI낙관론 #반도체사이클 #코스피상승</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미국서 인공지능(AI) 낙관론 다시 퍼져
+22일 코스피 지수가 7000선을 단숨에 회복하며 강세로 출발했다.
+인공지능(AI) 낙관론과 반도체 저점 매수론, 삼성전자 로봇사업 진출 등이 힘을 받으면서 코스피가 7000을 탈환했다.
+미국주식예탁증서(ADR)가 14% 가까이 급등한 SK하이닉스 본주가 7% 이상 오르면서 코스피 상승을 견인했다.
+
+22일 코스피는 오전 10시1분 기준 전 거래일 대비 5.12% 오른 7093.50에 거래 중이다. 장 초반 급등으로 오전9시6분께 매수 사이드카가 발동됐다. 코스피가 7000을 회복한 것은 지난 15일 이후 4거래일 만이다. 같은 시간 코스닥도 전장 대비 2.33% 오른 770.92에 거래되고 있다.
+
+AI 낙관론이 퍼지면서 뉴욕증시가 상승한 영향을 한국 증시도 받았다. 간밤 다우존스는 0.74%, 스탠더드앤드푸어스(S&P)500은 0.89% 올랐고, 나스닥도 1.29% 뛰었다. 마이크론(12.17%), 샌디스크(14.27%), 웨스턴디지털(12.51%) 등 주요 메모리 반도체 기업 주가가 두 자릿수 상승을 기록하면서 필라델피아 반도체 지수도 5.21% 급등했다. SK하이닉스 미국주식예탁증서(ADR)도 13.75% 급등한 171.94달러를 기록했다.
+
+글로벌 투자은행(IB)에서 잇따라 AI 긍정론과 메모리 반도체주 낙폭 과대 등을 주장하면서 증시 상승에 힘을 보탰다. UBS는 최근 AI 반도체 하락에 대해 펀더멘털(기초체력) 약화가 아닌 헤지펀드들의 대규모 포지션 축소에 따른 수급 충격이라고 분석했다. 모건스탠리도 메모리 반도체 부족현상이 내후년까지 심화할 것이라며 조정이 매수 기회라고 주장했다.
+
+서상영 미래에셋증권 연구원은 "미국 증시는 중동 불안에 따른 유가와 금리 상승 등 우려감에도 최근 하락이 컸던 반도체 기업들에 대한 반발 매수가 나타나면서 상승했다"며 "한국의 반도체 수출 호조와 AI 투자 확대 기대 등도 미국 반도체주에 긍정적으로 작용했다"고 분석했다.
+
+내일 발표될 알파벳 실적이 이정표 될 듯
+이날 코스피도 반도체주 위주로 급등세를 보였다. 미국 ADR과 가격차가 30% 이상 벌어진 SK하이닉스가 오전 10시4분 현재 7.73% 상승한 197만8000원을 기록했다. SK하이닉스의 전날 종가는 183만원인데 ADR은 171.94달러로 본주 전환 가치가 254만원에 달해 가격차를 좁히는 시도 중이다.
+
+삼성전자도 전장 대비 5.60% 오른 27만3500원에 거래되고 있다. SK스퀘어(7.42%), 삼성전기(9.92%), 현대차(7.46%), LG에너지솔루션(4.10%), 삼성생명(5.85%) 등 시총 상위주가 대부분 상승세다.
+
+삼성전자가 미래 성장동력인 로봇사업 조직을 신설한다고 전날 밝히면서 로봇주도 급등 중이다. 삼성전자 자회사 레인보우로보틱스는 오전 10시16분 기준 전 거래일 대비 25.15% 오른 51만5000원에 거래 중이다. 두산로보틱스(13.46%), 로보티즈(20.30%), 로보스타(19.69%) 등 로봇 관련 기업들도 급등했다.
+
+전문가들은 코스피가 여전히 실적 개선 가능성이 높아 추가 반등을 시도할 것으로 예상했다. 이달 중 발표될 알파벳과 마이크로소프트, 메타 등 미국 빅테크 실적과 자본지출(CAPEX) 계획 등이 증시 추가 상승의 계기가 될 것으로 전망했다.
+
+한지영 키움증권 연구원은 "시장은 이제 내일 새벽 발표되는 알파벳의 실적에 주목할 것"이라며 "2분기에도 알파벳의 본업 성장률이 견조하고 CAPEX 확대 기조가 재확인된다면 반도체를 포함한 증시 전반의 위험 선호 심리 개선에 기여할 것"이라고 강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005792948' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005792948</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
