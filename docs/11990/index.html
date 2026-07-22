@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>한 달 만에 주가 54% 폭등…급락장에 날아오른 종목 정체</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005312669' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11990" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>한 달 만에 주가 54% 폭등…급락장에 날아오른 종목 정체</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국제 유가 상승과 정부의 PPA 정책 활성화, KKR과의 협업 기대감이 겹치며 SK이터닉스의 주가가 한 달 만에 크게 급등했습니다. 이는 신재생에너지 분야의 강력한 성장 동력과 시장 투자심리 개선을 반영하며 높은 주목을 받고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">국제 유가 상승이라는 거시 경제적 흐름과 정부의 정책 변화, 그리고 대형 사모펀드(KKR)와의 전략적 제휴 기대감이 복합적으로 작용하며 산업 전반의 투자 심리가 매우 강하게 개선되었기 때문입니다. 다만 단기적인 실적 우려(2분기 적자 가능성)가 상존합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">에너지 시설 및 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#신재생에너지</span> <span class="tag tag-hash">#PPA</span> <span class="tag tag-hash">#ESG</span> <span class="tag tag-hash">#유가상승</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">국제 유가 고공행진에…SK이터닉스 <0xEB><0x9C><0x80>박질
+정부 신재생 활성화 정책도 호재
+한달 주가 상승률 54% 넘어
+한국경제신문의 투자 전문 유료 플랫폼 '한경 프리미엄9'(www.hankyung.com/premium9)에 실린 기사입니다. '한경
+프리미엄9'을 구독하시면 더 많은 주식 투자 기사를 찾아볼 수 있습니다.
+SK이터닉스가 운영 중인 풍력 발전소. 사진=SK이터닉스
+SK이터닉스가 운영중인 풍력 발전소. 사진=SK이터닉스
+SK이터닉스 주가가 최근 한 달간 50% 넘게 급등했다. 국제 유가 상승으로 신재생에너지의 경제성이 부각된 데다 정부의 직접
+전력구매계약(PPA) 활성화 정책, 콜버그크래비스로버츠(KKR)와의 협업 기대가 겹친 영향이다.
+22일 유가증권시장에서 SK이터닉스는 10.91% 오른 6만2000원에 거래를 마쳤다. 이날 5만7000원에 출발한 주가는 장 초반
+6만9800원까지 치솟은 뒤 상승 폭을 일부 반납했다. 최근 한 달간 상승률은 54.36%다. 지난 15일 종가(5만3300원)와 비교해도
+5거래일 만에 16.32% 올랐다.
+국제 유가 급등이 신재생에너지주 투자심리를 끌어올린 것으로 풀이된다. 21일(현지시간) 미국 뉴욕상업거래소에서 8월 인도분
+서부텍사스원유(WTI) 선물은 전 거래일보다 2.02% 오른 배럴당 84.91달러에 마감했다. 이날 15일 마감가(79.60달러)와 비교하면
+6.67% 상승했다. 화석연료 가격이 오를수록 태양광과 풍력 등 대체에너지의 가격 경쟁력이 상대적으로 부각될 수 있다는 기대가 반영됐다.
+정부의 재생에너지 정책 기대도 주가를 밀어 올렸다. 정부는 과거 낮은 가격으로 장기계약을
+맺은 태양광 발전사업자가 기존 계약을 중도에 끝내고
+기업과 직접 전력구매계약을 새로 맺을 수 있도록 하는 방안을 검토하고 있다. 확정된 정책은 아니지만 기존 계약에
+묶여 있던 태양광 발전 물량이
+PPA시장으로 나오면 SK이터닉스가 맡을 신규 개발 사업도 늘어날 수 있다는 분석이다.
+KKR과의 협업 기대는 최근 한 달간 이어진 주가 상승의 또 다른 배경이다. SK그룹이 KKR과 신재생에너지 합작법인을 설립한다는 소식이 알려진
+지난달 10일 SK이터닉스는 상한가를 기록했다. 박세라 신영증권 연구원은 “자본 부담은 낮아지고 개발 파이프라인의 회전율은 높아지는 구조”라며
+“직접 PPA가 누적될수록 안정적인 현금흐름이 쌓일 것”이라고 말했다.
+다만 증권가에선 2분기 실적이 시장 기대치를 밑돌 수 있다는 추정이 나온다. 태양광 사업의 잔여 20㎿ 매출이 3분기로 넘어가고 대구 군위
+풍력사업의 실적 반영도 늦어질 것으로 예상돼서다. 에너지저장장치(ESS) 부문은 전기요금 할인 종료로 소폭 적자를 냈을 것으로 추정됐다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005312669' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005312669</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
