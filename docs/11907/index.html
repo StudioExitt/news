@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>가비아, 중복상장 해소 시험대 오르나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002673359' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11907" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>가비아, 중복상장 해소 시험대 오르나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">가비아가 중복상장 구조 해소를 목표로 모회사의 상장폐지 및 공개매수 절차를 진행하고 있습니다. 이는 첫 사례로 평가되나, 행동주의 펀드들이 공정성 및 가격 책정에 문제를 제기하며 전반적인 거래 성사 여부에 큰 불확실성이 존재합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">중복상장 해소라는 구조적 변화는 시장의 큰 관심을 받지만, 핵심 지분 보유자들이 공개매수 가격과 과정에 대해 강력하게 이견을 제시하고 있어 성공 여부가 불투명하여 높은 변동성 예상.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#상장폐지</span> <span class="tag tag-hash">#공개매수</span> <span class="tag tag-hash">#기업거버넌스</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">클라우드 및 IT 인프라 전문기업 가비아가 중복상장 구조 해소를 위해 상장폐지 절차를 밟는다.
+자회사가 아닌 모회사를 비상장화하는 첫 사례란 점에서 의미가 크다.
+행동주의펀드 얼라인·미리캐피탈 반발
+가비아는 맥쿼리자산운용과 손잡고 지난 21일부터 오는 9월 17일까지 주당 4만8000원에 공개매수를 진행한다. 맥쿼리는 김홍국 가비아 공동대표와 특수관계인 지분 24.4%를 인수하고 같은 가격으로 일반주주 지분을 매수해 가비아를 비상장사로 전환할 계획이다.
+가비아와 맥쿼리 측은 공개매수 목적을 ‘중복상장 해소 및 상장 구조 단순화’라고 밝혔다. 가비아는 인터넷데이터센터 사업을 영위하는 KINX를 비롯해 에스피소프트, 엑스게이트 등 코스닥 상장사를 계열사로 두고 있다. 이밖에 가비아씨엔에스, 놀멍쉬멍, 후이즈 등 다수 비상장 계열사도 보유 중이다.
+IB업계는 이번 거래를 모회사 상장폐지를 통해 중복상장 구조를 해소하는 첫 사례로 평가하고 있다. 자회사를 상장폐지하거나 합병하는 방안이 일반적으로 거론되지만 가비아는 다른 방식을 택했다.
+이미 다수 상장 자회사를 거느린 지주회사로서 할인받고 있어 공개매수 비용이 상대적으로 적게 들고, 향후 다른 계열사의 기업공개(IPO) 가능성까지 열어둘 수 있다는 점이 고려된 것으로 풀이된다.
+IB업계 관계자는 “중견기업이나 코스닥 상장사들은 가이드라인 발표 전부터 이 같은 거래 구조를 실제 검토하고 있었다”며 “금융당국이 상장폐지 과정에서 소액주주를 충분히 설득했는지 절차적 정당성을 중요하게 보고 있는 만큼 공개매수 가격과 의사결정 과정이 핵심이 될 것”이라고 말했다.
+일반주주 권한이 강화되는 상황에서 시장의 평가도 관전 포인트다. 실제 가비아 상장폐지 시도를 놓고 얼라인파트너스와 미리캐피탈 등 기존 행동주의 투자자들은 공개매수 가격과 절차 모두에 문제를 제기하고 있다.
+가비아 지분 14.3%를 보유한 얼라인파트너스는 공개매수를 발표한 지난 20일 곧바로 입장문을 내고 오는 31일까지 가비아 이사회의 공식 답변을 요구했다.
+얼라인파트너스는 ▷더 유리한 조건 제시할 잠재적 인수후보 탐색 ▷공개매수 가격 공정성 검증 ▷독립적 특별위원회 설치 ▷매수인에 대한 정보 제공 과정과 이해상충 등에 대한 설명을 요구했다.
+맥쿼리가 유통주식 전부를 대상으로 공개매수를 실시하고 있지만 김 대표 등이 매각대금을 재투자해 향후 맥쿼리와 공동 경영을 실시하는 방식이기 때문이다. 얼라인파트너스는 “실질적으로 지배주주에 의한 폐쇄기업화 거래로 구조적 이해 상충 우려가 크다”며 “일반적인 제3자 M&A(인수·합병)보다 일반주주의 이익 보호를 위한 엄격한 절차가 요구된다”고 지적했다.
+미국계 투자사 미리캐피탈매니지먼트도 이날 공개서한을 발표했다. 미리캐피탈은 가비아 지분 24.2%를 보유하고 있고 KINX 지분도 15% 이상 가지고 있다. 미리캐피탈은 보다 직접적으로 공개매수 가격이 지나치게 낮다고 비판했다. 미리캐피탈은 “공개매수 가격은 가비아의 기업가치를 현저히 저평가하고 있다”며 “글로벌 유사기업의 거래 배수를 감안한 주가는 최소 6만6200원”이라고 했다.
+투자업계 관계자는 “상장폐지는 소액주주 반발이 가장 큰 변수다. 통상 개인주주는 의견을 모으기 어렵지만 이번에는 행동주의 투자자들이 상당한 지분을 확보하고 있다”며 “공개매수 성패와 향후 협상 과정도 앞선 상장폐지 사례와 다르게 전개될 가능성이 있다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002673359' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002673359</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
