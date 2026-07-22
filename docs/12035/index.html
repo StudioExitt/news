@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“코스피 오늘도 불안하네” 뉴욕증시, 유가 급등에 동반 하락…나스닥 0.57%↓</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002673717' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12035" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“코스피 오늘도 불안하네” 뉴욕증시, 유가 급등에 동반 하락…나스닥 0.57%↓</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">뉴욕증시는 유가 급등으로 인한 인플레이션 우려와 빅테크 실적 발표를 앞둔 경계감에 전반적인 약세를 보였습니다. AI 투자 기대에도 불구하고 기업들의 수익성(ROIC) 검증 요구가 높아지며 시장 불안감이 고조되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">유가 급등에 따른 물가 및 금리 인상 우려가 시장 전반의 투자 심리를 크게 위축시켰으며, 빅테크 기업들의 'AI hype'를 넘어선 실제 수익성(ROIC) 입증 요구가 강화되어 하방 경직성이 무너진 매우 중요한 분석입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">엔비디아</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#유가급등</span> <span class="tag tag-hash">#금리인상우려</span> <span class="tag tag-hash">#빅테크실적</span> <span class="tag tag-hash">#AI수익성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">뉴욕증시가 국제유가 급등에 따른 인플레이션 우려와 주요 빅테크 기업의 실적 발표를 앞둔 경계감에 일제히 약세로 마감했다.
+22일(현지시간) 뉴욕증권거래소(NYSE)에서 다우존스30산업평균지수는 전 거래일보다 6.06포인트(0.01%) 내린 5만2218.58에 거래를 마쳤다.
+스탠더드앤드푸어스(S&P)500지수는 전장보다 10.24포인트(0.14%) 하락한 7498.96에, 기술주 중심의 나스닥종합지수는 146.30포인트(0.57%) 내린 2만5690.90에 각각 마감했다.
+이날 장 마감 이후 구글 모기업 알파벳과 테슬라 등 빅테크의 2분기 실적 발표가 예정돼 있어 시장은 신중한 모습을 보였다. 인공지능(AI) 투자와 대규모 자본지출이 실제 수익성 개선으로 이어질 수 있을지에 대한 의구심이 여전히 높아서다.
+장 마감 이후 알파벳은 2분기 매출 1198억달러를 기록해 시장 기대치를 웃돌았다고 발표했다. 다만 AI 인프라 투자 확대의 영향으로 현금흐름은 마이너스로 돌아섰다.
+테슬라의 경우 매출은 시장 전망치를 웃돌았지만 주당순이익(EPS)은 전망치를 크게 밑돌았다. 로보택시와 AI 인프라 등에 대한 투자가 늘면서 잉여현금흐름은 마이너스 10억9000만달러로 적자 전환했다.
+종목별로는 서버 제조업체 슈퍼마이크로컴퓨터가 실적 전망치 상향과 주문 잔고 호조 소식에 19.84% 급등했다. 인공지능(AI) 서버 수요가 여전히 견조하다는 기대가 반영되면서 엔비디아도 2.30% 올랐다.
+SK하이닉스 미국주식예탁증서(ADR)는 3.88% 하락했다. 서상영 미래에셋증권 상무는 “인텔 오하이오 공장 인수 루머를 부인 공시하자 한국 시장에서 하락 전환했고 ADR도 하락했다”고 설명했다.
+마크 말렉 시버트 파이낸셜 최고투자책임자(CIO)는 “AI 낙관론은 여전히 유효하지만 이제 경영진에게 입증 책임이 넘어갔다”며 “향후 실적 발표에서는 AI 관련 포부보다 자본수익률(ROIC)에 더 초점이 맞춰질 것”이라고 말했다.
+중동 지역의 지정학적 긴장이 고조된 점도 투자심리를 위축시켰다. 미국과 이란의 강 대 강 대치가 이어지면서 국제유가는 4거래일 연속 상승했다.
+이날 9월 인도분 서부텍사스산원유(WTI) 선물 가격은 전장 대비 2.95% 오른 배럴당 86.83달러에 거래를 마쳤다. 9월 인도분 브렌트유 선물은 3.36% 급등한 배럴당 94.07달러로 마감했다.
+유가 급등으로 인플레이션 우려가 커지면서 미국 국채 금리도 상승했다. 10년 만기 미 국채 금리는 3bp(1bp=0.01%포인트) 오른 4.657%, 2년 만기 미 국채 금리는 4bp 상승한 4.301%를 나타냈다.
+이에 다음주 미국 연방준비제도(Fed·연준)의 연방공개시장위원회(FOMC)를 앞두고 기준금리 인상 가능성에 대한 시장의 경계감도 커졌다.
+시카고상품거래소(CME) 페드워치에 따르면 연준이 오는 28∼29일 통화정책 회의에서 기준금리를 인상할 확률은 지난 16일 약 10%에서 이날 오후 34% 수준까지 상승했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002673717' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002673717</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

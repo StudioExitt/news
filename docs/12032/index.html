@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'주가누르기 방지법', PBR 0.8배 미만이면 무조건?…정부안 달라질까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/648/0000049113' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12032" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'주가누르기 방지법', PBR 0.8배 미만이면 무조건?…정부안 달라질까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">상속 및 증여세 부담 완화를 위해 주가를 의도적으로 낮게 유지하는 행위(주가누르기)를 막으려는 법안이 논의되고 있습니다. PBR 0.8배 기준 적용에 대한 의견 충돌이 커 정부 개편안의 구체적인 기준 마련이 관건입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">정부 정책 및 규제 변화와 직결된 이슈입니다. 주주가치 제고(배당 확대, 자사주 소각 등)를 기대하게 만들며 시장 전체의 투자 심리를 개선할 수 있는 잠재력을 가집니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">부동산</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주가누르기방지법</span> <span class="tag tag-hash">#PBR개선</span> <span class="tag tag-hash">#주주환원</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">주가를 낮게 유지해 상속·증여세 부담을 줄이는 행위를 막자는 이른바 '주가누르기 방지법'의 입법 논의가 본격화하고 있다. 다만
+주가순자산비율(PBR) 0.8배를 기준으로 과세 방식을 달리하는 안이 업종별 특성과 시장 변동성을 충분히 반영하지 못한다는 지적도 나온다.
+정부가 이달 말 내놓을 세제개편안에는 법안의 취지를 살리되 다른 적용 기준을 담을 가능성이 거론된다.시가 대신 보충평가…'주가누르기' 차단
+PBR은 기업의 시가총액을 순자산과 비교한 지표다. 통상 1배 미만이면 시가총액이 장부상 순자산가치보다 낮다는 의미다. PBR 0.8배는
+시가총액이 순자산가치의 80% 수준이라는 뜻이다.
+지난해 이소영 더불어민주당 의원이 대표발의한 '상속세 및 증여세법 일부개정법률안'은 PBR이 0.8배 미만인 상장주식에 보충적 평가방식을
+적용하는 내용을 담고 있다. 보충적 평가방식은 시장 주가만으로 가치를 산정하지 않고 기업의 순자산가치와 수익가치를 함께 반영해 주식 가치를
+계산하는 방식이다.
+현행법은 상장주식을 상속하거나 증여할 때 평가 기준일 전후 2개월씩 총 4개월간의 평균 주가를 기준으로 가치를 산정한다. 상속을 앞둔 최대주주가
+배당과 자사주 매입·소각 등 주주환원에 소극적으로 대응해 주가를 낮게 유지하면 세금 부담도 줄어드는 구조라는 지적이 제기돼 왔다.
+개정안은 주가가 순자산가치에 비해 지나치게 낮은 기업에 평가 하한을 두겠다는 취지다. 시장에서 형성된 주가만으로 세금을 매기지 않고 회사가
+보유한 순자산가치도 반영해 주가를 의도적으로 낮게 유지할 유인을 줄이겠다는 것이다.
+업계에서는 제도 도입 시 배당 확대와 자사주 소각 등 주주환원이 늘어날 것으로 기대하고 있다. 사내에 과도한 현금을 쌓아두거나 계열사 간
+내부거래 등을 통해 기업가치를 낮출 유인도 줄어들 수 있다."0.8배 정하면 0.81배 맞출 수도"
+d만 PBR 0.8배를 일률적인 기준으로 적용하는 것이 적절한지를 두고는 의견이 엇갈린다. 수익성과 성장성이 낮아 시장에서 할인받는 기업도 있어
+낮은 PBR만으로 최대주주의 주가누르기 의도를 판단하기 어렵다는 지적이다. 금융과 제조업, 건설업 등은 산업 구조와 자산 구성에 따라 PBR이
+낮게 형성될 수 있다는 특성도 있다.
+지난 21일 열린 '코리아 디스카운트 해소를 위한 주가누르기방지법 입법과제 토론회'에서 고영호 금융위원회 자본시장과장은 "PBR은 시장 평가가
+반영되는 밸류에이션 지표인 만큼 변동성이 굉장히 크다"며 "토지 가격을 재평가하면 순자산이 늘어 PBR이 낮아질 수 있고
+반대로 자본잠식으로 순자산이 줄면 기업가치가 개선되지 않았는데도 PBR은 높아질 수 있다"
+고 지적했다.
+이어 "경기순환 업종 여부와 회계 평가 방법 등 여러 요인이 있기 때문에 최대주주의 사익 목적에 따른 주가누르기와 일반적인 저평가를 구별할 수
+있는 정교한 제도 설계가 필요하다"고 강조했다.
+한국거래소도 획일적인 수치 적용에 신중한 입장을 보였다. 조진우 한국거래소 부장은 "PBR은 업종별 편차가 매우 크다"
+며 "업종 평균이나 업종 중간값 대비 미달한 기업 등을 기준으로 해야 정책 수용성이 확보될 수 있다"고 말했다.
+저평가를 근본적으로 해소하기보다 PBR을 기준선 바로 위에 맞추는 새로운 왜곡이 나타날 수 있다는 우려도 나온다. PBR 0.8배 아래에서는
+순자산가치를 반영하고 이를 넘으면 시가를 적용할 경우, 기업이 제도 적용을 피할 수 있는 수준까지만 주가를 관리할 수 있다는 것이다.
+이상목 소액주주 플랫폼 액트 대표는 "PBR이 0.8배가 되면 0.81배에 맞추는 일이 많이 벌어질 수 있다"며 "일감 몰아주기 규제 기준을
+29.9%나 19.9%에 맞춘 것과 같은 일이 반복될 수 있다"고 짚었다."재무곤경 기업 예외두자"…정부도 신중론
+VIP자산운용은 업종별 예외를 두기보다 재무적
+곤경 기업만 예외로 인정하는 방안을 제안했다. 업종은 경기 사이클과 기업별 수익성, 재무구조에
+따라 저평가 수준이 크게 달라지고 정책이나 기술 변화에 따라 단기간에 재평가되는 경우도 적지 않아 업종 전체를 일률적으로 제외하면 형평성 문제가
+생길 수 있다는 이유에서다.
+예를 들어 최근 3개 사업연도 연속 당기순손실을 기록한 법인과 채권금융기관의 경영정상화 계획을 이행 중인 법인, 산업 구조조정 대상 업종에
+해당하는 법인 등은 예외를 두는 식이다.
+
+정부도 PBR을 일률적인 적용 기준으로 삼는 데 신중한 입장이다. 주가를 낮게 유지할 세제상 유인을 없애겠다는 취지에는 공감하지만,
+PBR만으로 적용 대상을 정하면 업종별 특성과 회계상 차이를 충분히 반영하기 어렵다는 판단이다.
+김만기 재정경제부 재산세제과 사무관은 "제도의 취지와 필요성에는 적극 공감한다"면서도 "PBR이 낮은 기업만 주가를 낮게 유지할 유인이 있는
+것은 아니다"
+고 말했다.
+이어 "PBR도 중요한 고려 요소지만 여러 요소 가운데 하나로 봐야 한다"
+며 "현재 상장주식 평가 방식이 적절하지 않다면 정상가치를 어떻게 찾을
+것인지가 핵심"이라고 설명했다.
+
+정부는 지난 14일 발표한 '2026년 하반기 경제성장전략'에서 지나치게 저평가된 상장주식의 상속·증여세 평가 방식을 개선하겠다고 밝혔다.
+구체적인 적용 대상과 평가 기준은 이달 말 발표할 세제개편안에 담길 예정이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/648/0000049113' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/648/0000049113</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
