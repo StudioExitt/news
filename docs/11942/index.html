@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>단타도 사라져가는 코스닥, 유동성 가뭄에 상폐 공포까지</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005389407' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11942" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>단타도 사라져가는 코스닥, 유동성 가뭄에 상폐 공포까지</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스닥 시장의 거래량과 거래대금이 역사적 최저 수준으로 급감하며 유동성 가뭄을 겪고 있다. 여기에 강화된 상장폐지 요건이 맞물려 투자자들의 불안감이 높아지고 있으며, 이는 악순환적인 매도 분위기를 조성하는 핵심 요인으로 작용하고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">유동성 급감과 상폐 공포라는 구조적 불안감이 시장 전반의 투자 심리를 위축시키고 있어 단기적인 매도 압력이 높을 것으로 예상됨. 이는 중장기적으로 코스닥 생태계 자체에 리스크를 던진다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥</span> <span class="tag tag-hash">#유동성가뭄</span> <span class="tag tag-hash">#상장폐지공포</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">올해 코스닥 거래량(1000주)과 거래대금(백만원) 추이/그래픽=김지영코스닥 거래량과 거래대금이 2020년 이후 최저 수준으로 급감했다. 여기에
+강화된 상장폐지 요건까지 겹치며 시장 전반에 불안감이 확산하고 있다.
+
+22일 금융투자업계에 따르면 한국거래소(KRX) 기준 지난 9일 코스닥 시장 거래량은 4억4279만주로 지난 2011년 8월 이후 약 15년
+만에 최저를 기록했다.
+
+코스닥 거래량은 이달 들어 급감하는 추세다. 연초 10억주대에서 4월 한때 19억주까지 증가하기도 했지만 이달 들어 5억주대로 거래량이
+떨어졌다. 지난 9일뿐 아니라 이날과 21일과 15일, 10일에도 코스닥 거래량이 5억주선 아래로 내려갔었다.
+
+코스닥 거래량이 4억주대로 내려간 것도 지난 2017년 9월 이후 9년여 만이다. 지난 2020년 이후 최근까지 거래량 하위 12거래일이 모두
+올해 7월에 속해있을 정도로 극심한 거래 가뭄 양상이 이어진다.
+
+거래대금 역시 말라간다. 이달 초만해도 12조원에 가까웠던 거래대금은 지난 15일 4조원대로 감소한 이후 21일에는 4조6210억원까지 줄었다.
+2019년 11월 이후 첫 4조6000억원대 거래대금 기록이다. 이날 5조원대를 회복했는데 4거래일 만에 4조원대 거래대금에서 벗어났다.
+
+코스닥은 그동안 개인 투자자 중심 시장으로 여겨지며 시가총액이 작은 중소형주나 테마주 비중이 높았다. 소수 주도주에 의한 급등락이 반복되는 일이
+자주 일어나다 보니 단타 매매가 성행하는 시장이라는 시선도 있었다. 그러나 최근 거래액과 거래대금 추이를 보면 이마저도 사라져가는 양상이라는
+것이 업계 관계자들의 공통된 의견이다.
+
+특히, 삼성전자와 SK하이닉스 단일종목 레버리지 ETF(상장지수펀드) 출시 이후 이 같은 유동성 가뭄 흐름이 더욱 뚜렷해지고 있는 상황이다.
+
+이달 부터 적용되는 강화된 상장폐지 정책도 코스닥 상장 기업들을 흔드는 요인이란 주장이 제기된다. 시가총액 200억원 미만 또는 주가 1000원미만인 상태가 30거래일 동안 이어지면 관리종목 지정 후 상장폐지가 될 수 있다. 최근 코스닥 지수와 주가가 급락하면서 상장폐지 요건에 포함되는
+기업들이 점차 늘고 있다.
+
+실제로 코스닥협회 자료를 보면 2025년 1월 기준 시총 200억원 미만 기업은 47개에 불과했지만 최근엔 200개가 넘는다. 코스닥 업계 한
+관계자는 "시총 상폐 요건이 적용되면서 시장은 기업 펀더멘탈보다 상장폐지 가능성에 먼저 반응한다"며 "불안 심리가 매도 분위기를 더 키우고
+주가가 다시 내려가는 악순환이 반복될 수 있다"
+고 말했다.
+
+정부가 올해 초부터 코스닥 시장 활성화를 위한 대책을 잇달아 발표했지만 시장에 긍정적인 에너지를 불어넣고 있지 않은 점도 문제다.
+
+구체적으로 맞춤형 기술특례상장 도입, 코스닥 승강제 마련, 코스닥 액티브 ETF 상장, 국민성장펀드와 같은 정책 자금의 적극적인 투자 등 정부의
+코스닥 활성화 방안이 시행 혹은 시행 예정이다. 하지만 대형주 쏠림과 변동성 확대에 효과가 반감되는 양상이다.
+
+증권업계 한 관계자는 "최근 단일종목 레버리지 ETF 보완책도 수급면에서 보면 코스닥 관련 정책으로도 볼 수 있는데 당장 적용되기보다는
+다음달이나 연말에 적용하는 방안이 있을 정도로 정부의 입장이 다소 느긋해 보인다"며 "물론 장기 계획이 필요하지만 당장 효과가 날 수 있는
+긴급처방도 지금의 코스닥에는 필요하다"
+고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005389407' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005389407</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
