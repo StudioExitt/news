@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>구글은 AI칩 키우고 중국은 메모리 늘리고…삼성·SK 웃나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004643872' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11886" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>구글은 AI칩 키우고 중국은 메모리 늘리고…삼성·SK 웃나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">구글과 중국 AI 스타들의 '연산 효율화 역설'이 오히려 HBM 수요를 촉발시키고 있으며, 이는 국내 메모리 반도체 기업(삼성, SK하이닉스)에 긍정적인 환경을 조성할 전망입니다. 한편, 중동 지역의 지정학적 리스크와 트럼프의 관세 폭탄 발언 등 거시경제 변수들이 투자 심리를 위축시키는 요인으로 작용하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 기술 발전(HBM 수요 증대)에 따른 반사 이익과 지정학적 리스크 및 거시경제 불안 요소가 복합적으로 작용하고 있습니다. 당장의 수급 이슈는 국내 메모리 반도체 기업에 강력한 모멘텀을 제공하지만, 원유 가격 급등 등 외부 변수 리스크도 커서 주가 방향성이 불확실합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">에너지 시설 및 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#HBM</span> <span class="tag tag-hash">#AI칩</span> <span class="tag tag-hash">#글로벌경제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■AI 프리즘 [글로벌 뉴스]
+구글·키미 연산 효율화 역설…HBM 수요 확대 기대
+트럼프, 관세법 338조 꺼내 캐나다에
+호르무즈 봉쇄 공포 재점화…원유 ETF 수익률 최상위권
+
+▲ AI 프리즘* 맞춤형 경제 브리핑
+* 편집자 주: ‘AI PRISM’(Personalized Report &amp; Insight Summarizing Media)은 한국언론진흥재단의 지원을 받아 개발한 ‘인공지능(AI) 기반 맞춤형 뉴스 추천 및 요약 서비스’입니다. 독자 유형별 맞춤 뉴스 6개를 선별해 제공합니다.
+
+[주요 이슈 브리핑]
+■ 구글·키미 역설: 구글과 중국 AI 스타트업 문샷AI가 나란히 연산량 감소를 내세웠지만, 각각의 전략이 오히려 메모리 수요를 확대하는 역설적 구도를 낳고 있다는 분석이 제기됐다. 중국 당국이 자국 AI 기업의 미국 파운드리(반도체 위탁 생산) 이용을 제한하는 방향으로 움직이면서 한국 고대역폭메모리(HBM) 업계에 훈풍이 불 수 있다는 전망이다.
+
+■ 오라클 신용위험: 중국 AI 모델 키미 K3의 성공으로 빅테크의 AI 설비투자 수익화에 대한 시장 불안이 확산되면서 오라클의 신용부도스와프(CDS·기업 부도에 대비한 파생상품) 프리미엄이 2008년 이후 사상 최고치를 경신했다. S&P글로벌레이팅스가 이달 초 AI 투자 확대에 따른 재무 부담을 이유로 오라클의 신용등급을 강등한 데 이어 무디스의 추가 조정 여부에 시장의 이목이 쏠리는 양상이다.
+
+■ 호르무즈 충격: 미국과 이란 간 무력 충돌이 원유시설과 발전소 등 에너지 인프라로 확대되면서 국제유가가 다시 급등하고 원유 관련 상장지수펀드(ETF) 수익률이 글로벌 시장에서 일제히 최상위권으로 치솟았다. 뱅크오브아메리카(BofA)는 교전이 더 확대될 경우 국제유가가 배럴당 100달러를 웃돌 수 있다고 경고.
+
+[글로벌 투자자 관심 뉴스]
+1. 연산량 줄여도 메모리 더 쓴다…구글·키미의 ‘역설’
+- 핵심 요약: 구글이 AI 모델 제미나이에 특화된 신형 칩 ‘프로즌 v2’ 개발에 나서면서 연산 효율화와 메모리 수요 확대가 동시에 진행되는 역설적 구도가 형성되고 있다. 구글은 프로즌 v2가 전력 단위당 토큰 처리량을 기존 텐서처리장치(TPU)보다 6~10배 높일 것으로 기대하며, 2028년 데이터센터 배치를 목표로 삼고 있다. 한편 중국 AI 스타트업 문샷AI의 키미 K3는 파라미터(매개변수) 수가 2조 8000억 개에 달하는 거대 모델로, 구동 시 최소 1.4테라바이트의 메모리가 필요하다는 분석이 나왔다. 중국 당국이 자국 AI 기업의 미국 파운드리 이용을 제한하려는 입장이어서 삼성전자(005930)와 SK하이닉스(000660)에 유리한 환경이 조성될 수 있다는 평가가 제기된다.
+
+2. 커지는 AI 투자 불안감…‘풍향계’ 오라클 신용위험 역대 최고
+- 핵심 요약: 오라클의 5년 만기 CDS(신용부도스와프) 프리미엄이 장중 연 2.03%포인트까지 치솟으며 2008년 통계 집계 이후 사상 최고치를 갱신했다. 중국 AI 모델 키미 K3가 상대적으로 낮은 비용으로 미국 주요 AI 모델에 근접한 성능을 내면서 빅테크의 대규모 AI 설비투자 수익화 능력에 대한 시장 의구심이 커진 결과로 해석된다. S&P글로벌레이팅스는 이달 초 AI 투자 확대에 따른 재무 부담을 이유로 오라클의 신용등급을 투기등급(정크) 바로 한 단계 위 수준으로 강등했으며, 무디스는 현재 Baa2 등급에 ‘부정적(Negative)’ 전망을 유지하고 있다. 모건스탠리의 신용 애널리스트 린지 타일러는 당장 폴른 엔젤(fallen angel·투자적격등급에서 투기등급으로 강등되는 기업) 위험은 크지 않다면서도 중기적으로 AI 투자 집행과 수익화 성공 여부가 관건이라고 지적했다.
+
+3. 100년 전 법까지 꺼낸 트럼프…캐나다에 50% 관세 폭탄
+- 핵심 요약: 도널드 트럼프 미국 대통령이 1930년 제정 후 사문화됐던 관세법 338조를 사상 처음 활용해 오는 8월 19일부터 캐나다산 제품 대부분에 50%의 관세를 부과하는 포고문에 서명했다. 미국 무역대표부(USTR)에 따르면 적용 대상은 약 200억 달러(약 29조 5000억 원) 규모의 캐나다산 제품으로, 미국·멕시코·캐나다 협정(USMCA)에 따라 무관세 혜택을 받던 품목에도 예외 없이 적용된다. 관세법 338조는 부과 기간 제한이 없고 대상·범위를 자유롭게 결정할 수 있어 유효기간 150일에 불과한 무역법 122조와 근본적으로 다른 성격이다. 워싱턴DC 소재 로펌 킹앤드스폴딩의 라이언 마제러스 변호사는 이 조치가 USMCA 후속 협상에서 더 큰 협상력을 확보하기 위한 포석일 수 있다고 분석했다.
+
+[글로벌 투자자 참고 뉴스]
+4. 하이닉스 효과에 환율 1470원 초반으로…원·엔 환율 20개월래 최저
+- 핵심 요약: SK하이닉스가 미국 주식예탁증서(ADR) 상장으로 조달한 265억 달러(약 40조 원)를 순차적으로 환전하면서 원·달러 환율이 1473.4원으로 6거래일 연속 하락세를 이어갔다. 수출·중공업체 중심의 달러 매도(네고) 물량과 외국인 순매수가 맞물리며 원화가 강세를 나타낸 반면, 엔화는 미국 경제 호조에 따른 달러 강세 기조 속에서 좀처럼 반등하지 못하는 상황이다. 엔·달러 환율은 이달 1일 162.837엔까지 치솟아 플라자 합의 직후인 1986년 12월 이후 39년 반 만에 최고치를 기록한 바 있으며, 현재도 161~162엔대에서 횡보하고 있다. 이에 따라 원·엔 재정환율은 100엔당 906.54원으로 2024년 11월 이후 최저 수준까지 밀린 모습.
+5. 호르무즈 리스크 재점화…원유 ETF 일제히 불기둥
+- 핵심 요약: 미국과 이란 간 무력 충돌이 에너지 인프라 전반으로 번지면서 이달 14일부터 20일까지 국내 ETF 시장에서 WTI 원유 선물 추종 상품인 ‘KODEX WTI원유선물(H)’과 ‘TIGER 원유선물Enhanced(H)’가 각각 13.29%, 12.95% 급등하며 수익률 1·2위를 차지했다. 미국 ETF 시장에서도 WTI 원유 선물 일간 수익률의 2배를 추종하는 레버리지 ETF ‘프로셰어즈 울트라 블룸버그 크루드오일(UCO)’이 같은 기간 18.26% 폭등하는 등 에너지 섹터 전반이 들썩였다. 브렌트유는 20일 장중 배럴당 90달러를 다시 넘어서며, BofA는 교전이 더 확대될 경우 유가가 배럴당 100달러를 웃돌 수 있다고 전망했다. 김재승 현대차증권(001500) 연구원은 국내 주식시장이 중동발 불확실성에 이전보다 크게 반응하고 있다며 반등을 위해서는 유가의 ‘피크아웃(peak out·최고점 통과)’ 신호가 포착돼야 한다고 짚었다.
+6. 석유 최고가격제 유지…홍해 수입길 막히면 수에즈로
+- 핵심 요약: 미국과 이란의 긴장 재고조로 8차 석유제품 최고가격제 고시를 앞둔 한국 정부의 셈법이 복잡해졌다. 20일 기준 9월 인도분 브렌트유 선물 가격은 전 거래일 대비 3.12% 급등한 배럴당 90.85달러를 기록했으며, 지난달 말 배럴당 64달러에 머물렀던 두바이유도 79달러까지 치솟았다. 이재명 대통령은 21일 국무회의에서 “중동 상황이 다시 악화하고 있어 석유제품 최고가격을 더 강화해야 할 것 같다”고 밝히자, 구윤철 부총리 겸 재정경제부 장관은 유가 상승 상황을 감안해 8차 최고가격을 결정하겠다고 전했다. 산업통상부에 따르면 7~8월 도입 원유는 전년 평균 대비 110% 이상 확보됐으나, 수급 차질 장기화 가능성에 대비해 나프타 수입 단가 차액 지원 등 기존 정부 지원 정책을 재개해야 한다는 산업계의 목소리가 커지는 상황이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004643872' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004643872</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
