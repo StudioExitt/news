@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>서킷 2회·사이드카 11회…7월 코스피 역대급 롤러코스터</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='원문링크: https://n.news.naver.com/mnews/article/003/0014082529' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12008" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>서킷 2회·사이드카 11회…7월 코스피 역대급 롤러코스터</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 7월 들어 사이드카 및 서킷브레이커 등 안전장치가 역대급으로 많이 발동되며 전례 없는 높은 변동성을 기록하고 있다. AI 기대감과 피크아웃 우려가 공존하며 시장의 방향성이 불분명하다. 전문가들은 수급의 확실한 추세 전환보다는 변동성 자체가 높은 '레짐'에 머무르고 있다고 분석했다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">역대급으로 높은 시장 변동성(사이드카, CB 발동) 자체가 투자 심리에 경고 신호로 작용하며 방향성 불확실성을 극대화했기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주식시장변동성</span> <span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#서킷브레이커</span> <span class="tag tag-hash">#반도체주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">사이드는 7월 코스피가 국내 증시 역사상 전무후무한 변동성을 기록한 달로 남을 전망이다. 이달 들어서만 사이드카가 11회, 서킷브레이커(CB)가 2회 발동되면서 역대 최다 수준의 발작 장세를 이어가고 있기 때문이다. 한여름 무더위가 이어지는 가운데 증시는 살얼음판을 걷는 듯한 긴장감 속 하루하루 롤러코스터 흐름이 펼쳐지고 있다.
+
+23일 한국거래소에 따르면 이달들어 전날까지 유가증권시장에서 발동된 매수·매도 사이드카(프로그램 호가 일시 효력정지)는 총 11회로 집계됐다. 올해 누적 발동 횟수인 40회의 4분의 1 이상이 이달 집중된 것이다. 특히 전날에도 코스피가 한때 6% 넘게 뛰며 급등하는 과정 속 매수 사이드카가 다시 발동하면서 종전 월간 최다 기록이었던 지난달 10회를 불과 한 달 만에 넘어섰다.
+
+시장 충격을 막기 위한 최후의 안전장치인 서킷브레이커 역시 이달에만 2회 발동됐다. 지난달 기록한 월간 3회에 바짝 다가선 수준으로 남은 기간 시장 변동성이 이어질 경우 최다 기록을 새로 쓸 가능성이 제기된다.
+
+유례없는 변동성 장세는 멈출 기미를 보이지 않고 있다. 매수 사이드카가 발동한 전날에도 예측 불허의 장세가 이어졌다. 미국발 반도체 훈풍에 힘입어 전날 6% 넘게 폭등하던 코스피는 오후 들어 300포인트 이상 반납하며 단 0.74% 상승으로 허무하게 장을 마감했다.하루 동안 펼쳐진 극심한 등락폭이 이달 증시의 전무후무한 변동성을 여실히 보여준 셈이다.
+
+증시 전문가들은 당분간 코스피가 극단적인 롤러코스터 장세를 이어갈 것으로 보고 있다. 인공지능(AI) 관련 기대감과 피크아웃(정점 통과) 우려가 맞물리면서 대형 반도체주를 중심으로 주가 변동성이 좀처럼 진정되고 있지 않기 때문이다. 특히 외국인이 최근 코스피 순매수를 나타내며 급락 압력이 일부 완화되고 있지만, 수급의 확실한 추세 전환이나 시장 전반의 안정세를 논하기에는 아직 시기상조라는 평가가 지배적이다.
+
+노동길 신한투자증권 연구원은 "변동성 지표인 VKOSPI가 이달에도 85~87에 고착돼 있는데, 이를 옵션시장의 공포가 전혀 풀리지 않은 것으로 읽으면 틀리다"면서 "지금 VKOSPI가 높은 주된 이유는 실제 변동성이 높기 때문이지 옵션시장이 과도한 공포 프리미엄을 지급하고 있어서가 아니다. 절대 변동성 레짐(Regime)은 여전히 비정상적으로 높지만 초과 공포는 뚜렷이 정상화되고 있다"고 설명했다.
+
+노 연구원은 다만 "수급의 경우 급락 압력이 완화되는 단계에 들어섰으나 추세 전환은 미확인"이라며 "외국인 현물의 주간 단위 순매수 전환과 신용의 안정이 확인돼야 반등에 지속성을 부여할 수 있다. 수급은 상방의 동력이 아니라 반등의 확인 변수로, 단일종목 레버리지 규제가 가동되는 다음 달 초가 이 구조의 첫 시험대"라고 덧붙였다.</div><div class='news-src'>원문링크: <a href='원문링크: https://n.news.naver.com/mnews/article/003/0014082529' style='color:#64748b;word-break:break-all'>원문링크: https://n.news.naver.com/mnews/article/003/0014082529</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
