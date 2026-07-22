@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대주주 사망이 상승 재료?…주가 누르기 방지법으로 끝내야</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/421/0009073617' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/11985" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>대주주 사망이 상승 재료?…주가 누르기 방지법으로 끝내야</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">대주주의 세금 부담을 줄이기 위해 낮은 주가가 이용되던 관행적 '주가 누르기' 문제를 해결하기 위한 법안이 논의되었습니다. 이 법은 상속·증여세 평가 시 주가를 순자산가치 대비 80% 하한선으로 규정하여, 대주주가 세금 절감을 위해 주가를 낮게 유지할 유인을 차단하고 기업의 적정 가치 제고를 촉구합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">대주주의 절세 목적의 주가 통제를 규제하는 근본적인 세법 및 제도 변화를 담고 있어, 저평가된 기업(저PBR) 전체와 상장사 전반에 걸쳐 구조적 개선 기대감을 높입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">지배구조 개선</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자산운용</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주가누르기방지법</span> <span class="tag tag-hash">#저PBR</span> <span class="tag tag-hash">#기업가치제고</span> <span class="tag tag-hash">#상속증여세법</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">박승희 기자 = "주가 누르기 방지법은 낮은 주가가 대주주의 절세로 이어지는 잘못된 유인을 바로잡는 제도입니다." 김민국 VIP자산운용 대표는 지난 21일 이훈기·이소영 의원 공동 주최로 국회에서 열린 '코리아 디스카운트 해소를 위한 주가 누르기 방지법 입법과제 토론회'에 참석해 이같이 밝혔다. 김 대표는 이날 '주가 누르기 방지법, 왜 지금 필요한가'를 주제로 발제하며 법안의 조속한 입법을 촉구했다. 김 대표는 최근 1년간의 지수 상승은 사실상 반도체 업종이 이끈 것이라고 짚었다. 반도체 주요 5개 기업을 제외하면 코스피는 7월 21일 기준 6748포인트가 아니라 2787포인트에 그친다는 설명이다. 시가총액이 순자산에도 못 미치는 PBR 1배 미만 기업은 586곳으로 코스피 상장사의 73%에 달해, 1년 전보다 오히려 늘었다. 김 대표는 이러한 저평가의 원인으로 낮은 주가가 대주주에게 유리하게 작용하는 세금 구조를 지목했다. 상속·증여세는 기준일 전후 각 2개월, 총 4개월간의 평균 주가로 계산되기 때문에 주가가 낮을수록 대주주의 세 부담도 줄어든다는 것이다. 그는 이 때문에 오너의 건강 이상설이 돌 때마다 주가가 급등하는 이른바 '승계 랠리'가 반복돼 왔다고 지적하며 "대주주의 건강 악화나 사망 소식이 주가 상승 재료가 되는 비극을 이제는 끝낼 때가 됐다"고 말했다. 김 대표는 시세조종 같은 불법적 방법이 아니더라도 경영 판단을 통해 얼마든지 주가를 낮게 유지할 수 있다고 봤다. 배당 축소, 현금 사내유보, 자사주를 활용한 우호 지분 확보, 중복상장, 승계 전후 보수적 실적 관리, 소극적 IR 등이 대표적 사례로 꼽혔다. 이런 결정들은 개별적으로는 처벌 대상이 되기 어려운 경영상 판단이지만, 반복될 경우 기업가치가 제대로 알려지지 않고 주주환원이 줄어 주가가 장기간 낮게 머무는 결과로 이어진다는 설명이다. 김 대표는 "행위 규제는 두더지 잡기와 같다"며, 낮은 주가를 유지해 얻는 이익 자체를 없애는 것이 가장 효율적인 해법이라고 강조했다. 법안의 핵심 내용은 최대주주가 상장주식을 상속·증여할 때 주가가 세법상 순자산가치의 80%에 못 미치면, 비상장주식에 적용돼 온 평가방식을 준용해 순자산가치의 80%를 하한으로 평가하는 것이다. 주가를 아무리 눌러도 세금이 그 아래로 내려가지 않게 되면 주가를 누를 유인 자체가 사라진다는 논리다. 이 제도는 최대주주의 상속·증여 시점에만 작동하며 평상시 거래나 일반투자자와는 무관하다. 김 대표는 이 평가방식이 새로운 개념이 아니라는 점도 강조했다. 비상장주식에는 이미 순자산가치 80% 하한 규정이 약 10년간 적용돼 왔으며, 이를 상장주식에 준용하면 제도 혼란을 줄이면서 공정한 가치평가가 가능하다는 것이다. 법이 시행되면 대주주 입장에서는 주가를 눌러도 세금이 줄지 않고, 오히려 현금과 유휴자산을 쌓아둘수록 세금 부담이 늘어나는 구조로 바뀐다. 이에 따라 기업이 쌓아둔 현금을 신규 투자와 배당·자사주 소각 등 주주환원으로 돌릴 유인이 생기고, 저PBR 기업은 재평가 후보로 부상할 수 있다는 전망이다. 법안에는 최대주주 20% 할증과세 폐지와 상장주식 물납 허용 방안도 함께 담겼다. 이는 저평가 여부와 관계없이 모든 최대주주에게 일률 적용되는 내용으로, 저평가를 이용한 절세는 막되 정상적으로 기업가치를 높여온 기업의 승계 부담은 완화하는 취지다. 상속인이 세금 재원 마련을 위해 주식을 대량 매도할 필요성이 줄어들면서, 매도 물량 부담에 따른 주가 충격도 완화될 것이란 기대가 나온다. 김 대표는 "대주주와 소액주주는 같은 배를 탄 사람들인데 지금 제도는 서로 반대 방향으로 노를 젓게 만들고 있다"며 "주가 누르기 방지법은 그 동상이몽을 끝내고 모두가 기업가치 제고라는 같은 방향을 보게 만드는 법"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/421/0009073617' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/421/0009073617</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
