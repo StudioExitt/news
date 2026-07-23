@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반도체 살아나자…월가 “코스피 더 간다”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.23</span>
+        
+        <a class="more-btn" href="https://studioexitt.net/news/12056" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>반도체 살아나자…월가 “코스피 더 간다”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">글로벌 투자은행들이 서버용 DRAM 가격 급등과 높은 수출 단가를 근거로 코스피 지수가 저점 매수 기회라고 분석했습니다. AI 랙 시장은 엔비디아와 AMD의 경쟁이 심화되고 있으며, 전반적인 반도체 수요 회복세가 확인되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 핵심 제품인 D램 현물가격 급등(146%)과 국내 수출단가 대폭 상승(523%)은 반도체 산업의 사이클 재점화 신호로 해석되며, 글로벌 IB들의 저점 매수론 강화는 코스피 전반에 긍정적인 모멘텀을 제공합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#D램가격폭등</span> <span class="tag tag-hash">#월가매수론</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■AI 프리즘 [글로벌 뉴스]
+메모리값 폭등에 랠리 재점화 조짐
+엔비디아·AMD AI 랙 경쟁 격화
+엔화 39년 만 최저…일본은행 금리인상 저울질
+
+▲ AI 프리즘* 맞춤형 경제 브리핑
+* 편집자 주: ‘AI PRISM’(Personalized Report &amp; Insight Summarizing Media)은 한국언론진흥재단의 지원을 받아 개발한 ‘인공지능(AI) 기반 맞춤형 뉴스 추천 및 요약 서비스’입니다. 독자 유형별 맞춤 뉴스 6개를 선별해 제공합니다.
+
+[주요 이슈 브리핑]
+
+■ 반도체 바닥론: 코스피지수가 6000선대로 밀리자 모건스탠리·JP모건·UBS 등 글로벌 투자은행(IB)들이 일제히 저점 매수 기회라는 분석을 내놓았다. 서버용 D램 현물가격이 7월 중순부터 최대 146% 급등한 데다 국내 D램 수출단가도 전년 대비 523% 치솟으며 반등 신호가 뚜렷해지는 모습이다.
+
+■ AI 랙 전쟁: 엔비디아가 오픈AI에 차세대 AI 서버 랙 공급 계획을 공개하자 AMD도 마이크로소프트를 고객사로 확보하며 맞불을 놓았다. 두 기업이 랙 단위 판매를 강화하면서 구매 기업들은 개별 구성품을 골라 쓸 여지가 줄어드는 부담을 안게 됐다는 지적이다.
+
+■ 엔화 40년 최저: 엔화 가치가 달러당 163엔대까지 밀리며 1986년 12월 이후 39년 7개월 만에 최저 수준으로 내려갔다. 이에 따라 일본은행이 시장 예상보다 빠른 금리 인상 방안을 논의 중인 것으로 전해지며 이달 말 금융정책결정회의에 관심이 쏠리는 상황이다.
+
+[글로벌 투자자 관심 뉴스]
+
+1. 韓증시 바닥론 띄운 월가…“반도체 매도세 멈출것”
+- 핵심 요약: 코스피지수가 6000선대로 밀리자 모건스탠리·JP모건·UBS 등 글로벌 IB들이 일제히 저점 매수 기회라는 분석을 내놓았다. 서버용 D램 현물가격이 7월 중순부터 최대 146% 급등했고 국내 D램 수출단가도 전년 대비 523% 뛴 것으로 나타났다. 슈퍼마이크로가 AI 서버 수주 잔액이 600억 달러(약 89조 원)를 넘어섰다고 밝히면서 빅테크 설비투자 위축 우려도 다소 누그러지는 모습이다. 삼성전자(005930)는 이날 0.58% 오른 26만 500원에 거래를 마쳤고 전날 S&P 글로벌은 삼성전자 신용등급 전망을 ‘긍정적’으로 상향 조정했다.
+
+2. 엔비디아·AMD ‘끼워팔기’…양자택일 강요받는 기업들
+- 핵심 요약: 엔비디아는 21일(현지 시간) 차세대 AI 서버 랙 ‘베라 루빈 NVL72’를 오픈AI에 공급할 계획이라고 밝혔다. 이는 AMD가 마이크로소프트(MS)에 AI 랙 ‘헬리오스’ 공급을 시작한 데 따른 견제 성격으로 풀이된다. 두 기업이 랙 단위 판매를 강화하면서 구매 기업들은 개별 구성품을 선택할 여지가 줄어드는 부담을 안게 됐다는 지적이다. 한편 세계 최대 파운드리(반도체 위탁 생산) 기업 TSMC까지 내년 위탁 생산 가격을 최대 10% 인상할 방침이어서 칩 비용 부담이 한층 커질 전망이다.
+
+3. 엔화 40년 만 최저에…“日銀, 금리 인상 가속화 검토”
+- 핵심 요약: 엔화 가치가 달러당 163엔대까지 밀리며 1986년 12월 이후 39년 7개월 만에 최저치로 떨어졌다. 블룸버그통신은 일본은행이 시장 예상보다 빠른 금리 인상 방안을 논의 중이라고 관계자를 인용해 보도했다. 다카이치 사나에 내각이 확장적 재정 기조를 재확인하고 중동 정세 불안에 따른 달러 매수세까지 겹치면서 엔화 약세가 심화한 것으로 풀이된다. 가타야마 사쓰키 일본 재무상은 “필요하다면 언제라도 단호하게 대응하겠다”고 밝혔지만 엔화는 좀처럼 약세를 벗어나지 못하는 상황이다.
+
+[글로벌 투자자 참고 뉴스]
+
+4. 일부러 손실내는 헤지펀드 절세 전략에…美 재무부 “용납 안 할것”
+- 핵심 요약: 미국 재무부가 헤지펀드들의 공격적인 절세 전략에 대한 점검에 나설 방침이다. 케빈 샐린저 미 재무부 세제정책 담당 부차관보는 “너무 좋아 보이는 투자라면 사실이 아닐 가능성이 높다”고 경고했다. 이른바 ‘택스 알파’ 전략에는 2025년 초부터 올해 4월까지 900억 달러 이상이 유입된 것으로 추산된다. 재무부는 당장 새로운 규제 도입 계획은 없다면서도 업계와 충분한 대화를 거치겠다는 입장이다.
+
+5. WSJ “트럼프, 사우디와 ‘우라늄 농축 가능’ 협정 승인”
+- 핵심 요약: 도널드 트럼프 미국 대통령이 사우디아라비아의 우라늄 농축을 잠재적으로 허용하는 원자력협정을 승인했다고 월스트리트저널(WSJ)이 보도했다. 양국은 사우디 영토 내 우라늄 농축 시설 건설의 상업성을 검토하는 공동 연구를 2년간 수행하며 협정 규모는 향후 30년간 수백억 달러에 이를 것으로 추산된다. 로이터통신은 이번 협정에 핵무기 전용을 막는 세이프가드(핵 안전 조치)가 포함되지 않았다고 지적했다. 한편 이번 협정은 한미 핵추진잠수함 협력 논의가 지연되는 가운데 나온 것으로, 미국의 전략적 우선순위가 중동으로 옮겨가고 있다는 분석도 제기된다.
+
+6. 中 공급과잉 직격탄…석화업계 신용도 줄하향
+- 핵심 요약: 중국발 공급 과잉에 따른 수익성 악화가 장기화하면서 국내 석유화학 기업들의 신용도가 잇달아 하락하고 있다. 올해 상반기 정기평정에서 LG화학(051910)·롯데케미칼(011170) 등 5개 기업의 신용등급 또는 장기 전망이 하향 조정됐다. 2026~2028년 글로벌 에틸렌 약 2800만 톤, 프로필렌 약 1800만 톤의 신규 증설이 예정돼 단기간 수급 개선은 어렵다는 관측이 지배적이다. 하나증권은 대산·여수산단 사업 재편이 마무리되면 롯데케미칼의 부채비율이 76.0%에서 52.8%로 낮아질 것으로 추정.</div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
