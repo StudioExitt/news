@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[마켓인]'AA'급 고려아연 PRS 금리, 왜 5%대였나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006335427' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12071" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[마켓인]'AA'급 고려아연 PRS 금리, 왜 5%대였나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">고려아연이 호주 계열사 지분을 기초자산으로 활용한 첫 PRS 계약의 금리가 5%대 중반인 배경을 분석했습니다. 이 높은 금리는 원화와 달러 기준금리 차이 및 비상장 주식 기반 자산의 유동성 위험도가 반영된 구조적 결과로 풀이됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">고려아연이 거대 해외 프로젝트(CAPEX)를 수행하며 재무구조 악화 없이 자본을 조달하는 새로운 금융 메커니즘을 활용한 성공적인 사례로 평가되며, 이는 비철금속 및 광물 섹터의 중장기 자금 조달 방안에 대한 관심을 높임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">고려아연</span> <span class="tag stock-tag">구리 관련주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금속 및 광물</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">건설자재</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#PRS</span> <span class="tag tag-hash">#지분투자</span> <span class="tag tag-hash">#자본조달</span> <span class="tag tag-hash">#비철금속</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">고려아연(010130)이 호주 계열사 지분을 활용해 창사 이래 첫 주가수익스와프(Price Return Swap·PRS) 계약을 체결한 가운데 PRS 금리가 연 5%대 중반으로 설정된 배경에 시장의 관심이 쏠리고 있다. 그간 PRS를 활용한 국내 주요 기업들 사이에선 중간 수준으로 평가받지만, 실상 조달 통화와 기초 자산이라는 구조적 차이가 반영된 결과라는 분석이 나온다.
+
+23일 투자은행(IB) 업계에 따르면 고려아연의 호주 계열사인 리치몬드 밸리 에너지 리저브 홀딩스(Richmond Valley Energy Reserve Holdings)는 메리츠증권이 설립한 특수목적법인(SPC)을 대상으로 4005억원 규모의 제3자배정 유상증자를 단행한다. 고려아연 본사는 계열사 신주를 기초자산으로 메리츠 측과 3년 만기 PRS 계약을 별도 체결했다.
+
+이번 고려아연의 PRS 금리는 연 5%대 중반으로 결정됐다. 과거 PRS를 발행했던 주요 대기업들과 비교하면 SK온·LG화학(4%대 초반)보다는 높고, 에코프로(5%대)와 유사하며, 롯데케미칼(6%대)보다는 낮은 수준이다. 고려아연과 같은 AA등급 3년 만기 회사채 민평금리(4.571%)와 비교해봐도 1%포인트 가량 높다.
+
+이같은 금리 격차는 조달 통화 및 기준금리 차이에서 비롯된 것으로 보인다. 고려아연은 이번 자금을 원화가 아닌 3억8700만 호주달러(AUD)로 조달했다. 현재 호주 기준금리는 연 4.35%로, 2.75% 수준인 한국과는 격차가 있다. 원화 기준 금리와 호주 달러 기준 금리의 베이스 자체가 다르기 때문에 단순 일대일 비교는 무리가 있다는 평가다.
+
+기초자산이 되는 고려아연 호주 계열사의 유동성 위험도 반영됐을 가능성이 크다. 그간 국내 대기업들은 SK이노베이션(096770), LG에너지솔루션(373220), 에코프로비엠(247540) 등 국내 증시 상장사 지분을 기초자산으로 활용했다. 반면 고려아연이 기초자산으로 삼은 호주 법인은 올해 4월 신설된 현지 비상장사로, 아직 재무제표조차 작성되지 않았다. 상장주식에 비해 환금성이 떨어지는 비상장사 주식 특성상 프리미엄이 금리에 일부 반영될 수밖에 없다.
+
+일각에서는 메리츠증권이 호주 비상장 계열사의 자체 사업 가치보다는, 고려아연 본사 신용을 실질적 담보로 삼았을 거라는 분석도 나온다. PRS는 만기 시 주가를 기준가와 비교해 손익을 물어주는 파생상품이다. PRS 구조상 만기 3년 뒤에 계열사 주가가 하락하더라도 해당 손실분 전액을 AA급 신용도를 가진 고려아연 본사가 보전해주게 된다.
+
+IB 업계 관계자는 “고려아연이 장부상 부채 비율을 늘리지 않는 자본 조달 형태를 택하면서 5%대 금리로 타협점을 찾은 것”이라며 “해외 대규모 CAPEX 추진과 경영권 분쟁 국면 속 우회 조달 방식을 적극적으로 확대한 사례”라고 설명했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006335427' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006335427</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
