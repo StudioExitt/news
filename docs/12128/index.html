@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>금리 오르자 배당으로 눈 돌려…한국판 슈드에 ‘뭉칫돈’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004644543' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12128" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>금리 오르자 배당으로 눈 돌려…한국판 슈드에 ‘뭉칫돈’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">장기금리 상승과 증시 변동성 확대 속에서 투자자들의 자금이 안정적인 현금흐름을 제공하는 미국 배당 ETF(슈드 등)로 집중되고 있습니다. 국내 상장 상품뿐 아니라 해외 직투 매수세도 꾸준히 유입되며, 시장의 관심이 고성장이 아닌 가치/배당성장주 쪽으로 이동하고 있음을 보여줍니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">금리 상승 및 변동성 심화라는 거시적 환경 속에서 투자 트렌드가 성장이 아닌 배당 및 현금 흐름 중심으로 변화하고 있음을 보여주는 명확한 자금 이동 데이터이기 때문에 시장 전반의 투자 심리에 영향을 줄 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">부동산</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#배당투자</span> <span class="tag tag-hash">#슈드ETF</span> <span class="tag tag-hash">#현금흐름</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">국내상장 美배당 ETF 한달새 3200억 유입
+미국 SCHD ETF도 서학개미 1000억 매수
+美 장기금리 상승 증시 변동성 확대 속
+안정적 현금 흐름·배당성장 매력 부각
+국내 배당 관련 ETF서는 1100억 이탈
+클립아트코리아
+미국 대표 배당 상장지수펀드(ETF)인 ‘슈드(SCHD)’의 투자 전략을 따르는 국내 상장 ETF로 투자자들의 자금이 다시 몰리고 있다. 이들 상품은 지난해까지만 해도 인공지능(AI) 성장주 열풍에 밀려 잠시 소외되기도 했다. 최근에는 미국 장기금리 상승과 증시 변동성 확대 속에서 안정적인 현금 흐름을 기대할 수 있는 상품으로 재조명되는 모습이다.
+
+23일 코스콤 ETF체크에 따르면 최근 한 달간 국내 상장 ‘미국배당다우존스’ ETF 4종에는 총 3236억 원의 자금이 유입됐다. ‘TIGER 미국배당다우존스’가 2332억 원으로 가장 많은 자금을 끌어모았고 ‘ACE 미국배당다우존스(364억 원)’ ‘SOL 미국배당다우존스(271억 원)’ ‘KODEX 미국배당다우존스(269억 원)’가 뒤를 이었다. 올해 들어 4개 상품으로 유입된 자금도 1조 8000억 원을 넘어섰다.
+
+이들 ETF는 미국 자산운용사인 찰스슈와브의 대표 배당 ETF인 SCHD와 동일한 ‘다우존스 US 디비던드 100 인덱스’를 추종한다. 단순히 배당수익률이 높은 기업을 담는 것이 아니라 배당 성장성과 재무건전성 등을 함께 고려해 종목을 선별하는 것이 특징이다. 아울러 매월 지급되는 분배금을 재투자하거나 현금 흐름으로 활용할 수 있어 연금계좌를 통한 장기 투자 수요를 끌어모으고 있다.
+
+올해 지수 성과 역시 뒷받침되고 있다. SCHD의 기초지수인 ‘다우존스 US 디비던드 100 인덱스’는 올해 들어 19.54% 상승하며 같은 기간 스탠더드앤드푸어스(S&P)500 지수 상승률(9.55%)을 두 배가량 웃돌았다. AI 투자 열풍은 이어지고 있지만 미국 증시의 상승 동력이 메가캡 기술주뿐 아니라 가치주와 배당성장주 등으로 확산하면서 안정적인 실적과 주주환원 역량을 갖춘 기업에 대한 관심도 높아지는 양상이다.
+
+국내 상장 ETF뿐만 아니라 미국 증시에 직접 상장된 ‘원조’ 상품을 향한 서학개미들의 매수세도 이어졌다. 한국예탁결제원에 따르면 국내 투자자들은 최근 한 달간 SCHD ETF를 7012만 달러(약 1030억 원)어치 순매수했다. 해당 상품의 보관액도 연초 23억 1820만 달러에서 현재 33억 5230만 달러로 약 45% 증가했고, 미국 주식 종목별 보유 규모 순위 역시 15위에서 12위로 세 계단 올라섰다.
+
+이정환 미래에셋자산운용 전략ETF운용본부장은 “2022년 금리가 급격히 오르고 증시 변동성이 극심했던 시기에도 ‘슈드’는 견고한 방어력을 입증한 바 있다”며 “배당뿐 아니라 자기자본이익률(ROE), 잉여현금흐름(FCF) 등 질적 요소를 반영해 종목을 고르는 만큼 뛰어난 섹터 분산 효과에 힘입어 올해 성과도 상당히 좋다”고 말했다.
+
+반면 국내 배당 관련 패시브 ETF 상품들은 자금 이탈이 두드러졌다. 최근 한 달간 ‘PLUS 고배당주채권혼합’에서는 349억 원이 순유출됐고 ‘RISE 대형고배당10TR(-297억 원)’ ‘KODEX 고배당주(-210억 원)’ 등에서도 일제히 자금이 빠져나갔다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004644543' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004644543</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
