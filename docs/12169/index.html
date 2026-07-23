@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[머스트노우5]AI가 흔든 시장…인텔 호실적·테슬라 부담 확대</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006335867' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12169" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[머스트노우5]AI가 흔든 시장…인텔 호실적·테슬라 부담 확대</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 수요 폭증에 힘입어 인텔이 전례 없는 호실적을 기록하며 서버용 CPU 시장의 강력한 성장세를 증명했습니다. 반면, 구글은 EU 규제 리스크를, 테슬라와 알파벳은 대규모 미래 투자에 따른 현금 흐름 부담 증가라는 상반된 이슈로 주목받았습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 데이터센터 인프라 수요 증가로 인해 핵심 하드웨어 공급망(CPU)의 가격 협상력이 매우 높아졌음을 입증하는 강력한 신호입니다. 이는 반도체 및 전자기기 섹터에 구조적 상승 모멘텀을 제공합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">인텔</span> <span class="tag stock-tag">AMD</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI #반도체황소 #디지털규제 #테슬라투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">머스트노우 5입니다. 개장 전 알아야 할 5가지 뉴스 만나보시죠.
+
+인텔, AI 수요 힘입어 호실적 발표…“전례 없는 수요”
+인텔이 시장 예상치를 크게 웃도는 2분기 실적과 강한 실적 전망을 발표했습니다. 2분기 조정 주당순이익은 42센트, 매출은 161억달러로 모두시장 전망치를 웃돌았습니다. 매출은 전년 동기 대비 25% 증가하며 2011년 이후 약 15년 만에 가장 높은 분기 성장률을 기록했습니다.실적을 이끈 것은 AI였습니다. 데이터센터 및 AI 사업부 매출은 59% 급증했고, AI 인프라 투자 확대에 따라 서버용 CPU 판매가 크게늘었습니다. 립부 탄 CEO는 “AI가 전례 없는 컴퓨팅 수요를 만들고 있다”며 CPU 사업의 지속적인 성장을 자신했습니다. 회사는 서버용 CPU 고객들과 가격과 공급 물량을 미리 정하는 장기 계약도 확대하고 있다고 밝혔습니다. 이는 AI 투자 열풍으로 GPU뿐 아니라 서버용CPU까지 공급이 빠듯해지고 있다는 의미로 풀이됩니다. 또 인텔은 내년 자본지출을 의미 있는 수준으로 확대해 파운드리 사업 경쟁력을 강화하겠다고 밝히ました. 다만 시장이 기대하는 대형 파운드리 고객사는 아직 공개하지 않았습니다.
+
+EU, 구글에 1조5000억원 과징금…“검색·앱스토어 독점 남용”
+유럽연합이 구글에 약 1조5000억원 규모의 과징금을 부과했습니다. EU는 구글이 검색엔진과 구글플레이의 시장 지배력을 활용해 자사 서비스를경쟁사보다 우대했다며 디지털시장법, DMA를 위반했다고 판단했습니다. 검색 결과에서 쇼핑과 교통, 관광 등 자사 서비스를 우선 노출한 행위와구글플레이에서 이용자의 외부 결제를 제한한 행위가 각각 과징금 대상이 됐습니다. 구글은 60일 안에 시정 조치를 완료해야 하며, 이를 이행하지 않을 경우 전 세계 매출의 최대 5%에 해당하는 이행강제금이 반복적으로 부과될 수 있습니다. 구글은 향후 법적 대응 여부를 검토할 것으로 예상됩니다.
+
+인텔·AMD, 중국 고객사에 장기계약 요구…AI 열풍에 CPU도 품귀
+인텔과 AMD가 중국 서버 제조업체들을 대상으로 서버용 CPU 장기 구매 계약을 추진하고 있는 것으로 알려졌습니다. 로이터에 따르면 두 회사는구매 물량을 미리 확정하는 계약을 제안하고 있으며 일부 고객에게는 2년 이상 장기 계약도 요구한 것으로 전해졌습니다. 업계에서는 CPU 시장도메모리처럼 장기 공급계약 중심으로 재편될 가능성이 커지고 있다고 보고 있습니다. 이는 AI 인프라 확대로 CPU 업체들의 가격 협상력이 높아지고있다는 신호라는 분석도 나옵니다.
+
+모간스탠리 “테슬라, 대규모 투자 부담”…목표가 400달러로 하향
+모간스탠리가 테슬라의 목표주가를 기존 417달러에서 400달러로 낮췄습니다. 향후 2~3년간 대규모 설비투자가 이어지면서 현금 유출이 예상보다오래 지속될 것으로 판단한 데 따른 것입니다. 모간스탠리는 자동차와 에너지 사업의 수익성 둔화와 연구개발비 증가를 반영해 2026년 EBITDA전망치를 7% 낮췄습니다. 또 2027년 자본지출이 약 300억달러에 이를 것으로 전망했습니다. 이는 기존 전망치보다 100억달러 늘어난규모입니다. 다만 자율주행과 옵티머스 로봇 개발을 위한 투자라는 점에서 장기 성장 전략에는 변함이 없다고 평가했습니다. 하지만 대규모 로보택시사업과 옵티머스가 언제 실질적인 수익을 낼지는 여전히 불확실하다고 덧붙였습니다.
+
+알파벳, 실적은 호조…월가 “AI 투자 부담 커진다” 목표가 줄하향
+al파벳이 시장 예상치를 웃도는 2분기 실적을 발표했지만 월가는잇따라 목표주가를 낮췄습니다. 파이퍼 샌들러는 목표주가를 395달러로,오펜하이머는 400달러로 각각 하향했지만 두 회사 모두 매수 의견은 유지했습니다. 2분기 구글 클라우드 매출은 전년 동기 대비 82% 증가했고유튜브와 검색 사업도 견조한 성장세를 이어갔습니다. 반면 회사는 올해 설비투자 계획을 상향하고 내년에도 대규모 AI 투자 기조를 이어가겠다고 밝히었습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006335867' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006335867</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
