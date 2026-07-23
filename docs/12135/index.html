@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>삼전닉스 레버리지 덕 본 증권사...2분기도 최대 실적</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001259775' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12135" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>삼전닉스 레버리지 덕 본 증권사...2분기도 최대 실적</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">높은 국내 주식 거래대금과 단일종목 레버리지, ETF 활용 증가에 힘입어 증권사들이 2분기 역대급 호실적을 기록할 전망입니다. 특히 ETF 시장의 중요성이 커지고 있으며, 한국투자증권이 DMA 서비스 등을 통해 기존 강자를 추격하며 브로커리지 경쟁 구도가 변화하고 있습니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#브로커리지</span> <span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#증권사실적</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open"><앵커>
+
+오늘(23일) 실적을 발표한 NH투자증권을 필두로 증권사들의 2분기 성적표가 줄줄이 공개될 전망입니다.
+
+올해 초부터 이어진 국내 주식 호황에 더해 단일종목 레버리지의 등장으로 변동성 장에서도 폭증한 거래대금이, 
+
+1분기에 이어 2분기에도 증권사들의 곳간을 톡톡히 채울 것으로 예상되는데요.
+
+취재기자와 자세히 짚어봅니다. 증권부 방서후 기자 나와 있습니다.
+
+방 기자. 우선 시작이 좋았습니다. NH투자증권이 컨센서스를 웃도는 호실적을 냈죠?
+
+<기자>
+
+그렇습니다. NH투자증권은 올해 2분기 6,812억원의 영업이익을 기록했습니다.
+
+지난해 같은 기간 대비 112% 성장한 것은 물론, 컨센서스를 10% 웃도는 규모입니다.
+
+곧 실적 발표를 앞둔 다른 증권사들도 비슷한 분위기가 감지되면서 역대급 실적 잔치를 예고하고 있습니다.
+
+에프앤가이드에 따르면 주요 증권사 4곳(미래에셋·한국투자·삼성·키움증권)의 2분기 영업이익은 4조2,400억원으로, 지난해 같은 기간(1조8천억원) 대비 2배 넘게 불어날 전망입니다.
+
+미래에셋증권이 1년 전보다 4배 가까이 불어난 1조9천억원을 기록하면서 분기 기준으로만 영업익 2조원에 육박할 전망이고요.
+
+한국투자증권(한국금융지주)도 같은 기간 2배 가까운 성장과 함께 영업익 1조 클럽이 점쳐집니다.
+
+이밖에 삼성증권이 6,600억원, 키움증권은 6,400억원으로 역시 전년 동기 대비 각각 114%, 60% 증가한 영업익이 기대되는 상황입니다.
+
+<앵커>
+
+비록 최근 변동성이 높아지긴 했지만 어쨌든 상반기 내내 줄어들 줄 모르던 증시 거래대금이 이번에도 효자 노릇을 했죠?
+
+<기자>
+
+그렇습니다. 2분기 국내 증시 거래대금은 전분기 대비 40%, 전년 동기 대비 288% 폭증한 5,500조원을 기록했습니다.
+
+때문에 1분기부터 지속된 국내 증시 거래대금 증가세와 이에 따른 브로커리지 호조, 대규모 평가이익 등이 2분기 실적을 견인하는 것은 충분히 예상된 바입니다.
+
+당장 오늘 실적을 발표한 NH투자증권만 봐도 상반기 신규 계좌수가 1년 전보다 270% 늘었고, 계좌 평균 잔액도 13% 증가했습니다.
+
+거래 회전율이 높았던 날은 평균 1,700%에 달할 만큼 실제로 거래가 빈번하기도 했고요.
+
+그런데 2분기에는 또 다른 관전 포인트가 있습니다. 바로 상장지수펀드, ETF입니다.
+
+퇴직연금이나 ISA, 연금저축 계좌에서 활용도가 높아지면서 전체 거래대금에서 차지하는 ETF 비중이 1분기보다 증가해 어느덧 50%에 육박한
+상황이고요.
+
+여기에 단일종목 레버리지까지 가세하면서 거래 수수료 뿐 아니라 유동성공급자(LP) 역할로 인해 발생하는 수익도 실적에 적잖이 기여할 전망입니다.
+
+이렇듯 ETF 시장이 급격하게 팽창하면서 증권사들의 브로커리지 경쟁 구도에도 변화가 감지되고 있습니다.
+
+<앵커>
+
+기존에는 하루 평균 주식 거래대금으로 브로커리지 업황을 판단했다면, ETF 거래대금까지 신경써야 한다는 거죠?
+
+리테일 강자, 하면 키움증권 떠올리시는 분들 많은데 누가 그 자리를 위협하고 있나요?
+
+<기자>
+
+바로 한국투자증권입니다.
+
+ETF는 일반 주식과 달리 외국인 거래와 유동성공급자(LP), 설정·환매(AP) 거래 비중도 높은 만큼 기존 브로커리지 시장과 다른 양상이 나타날 수밖에 없는데요.
+
+실제로 주식 거래만 놓고 보면 올해 2분기 약정 점유율은 키움증권이 약 17%로 1위를 달리고 있고, 미래에셋증권(10.3%),
+한국투자증권(9.2%), 삼성증권(7.6%), NH투자증권(7.4%) 등이 뒤를 잇는 모양새입니다.
+
+그런데 ETF를 포함하면 키움증권이 여전히 1위긴 하지만 점유율이 15%대로 줄어들었고, 오히려 한국투자증권이 12%를 넘기면서 맹추격
+중입니다.
+
+ETF 거래 약정 점유율만 따로 보면 한국투자증권이 22%로 선두고요. 키움증권은 10%로 떨어집니다.
+
+이렇게 한국투자증권의 점유율이 급증한 배경에는 SK하이닉스 단일종목 레버리지와 직접전용주문, 즉 DMA 서비스가 시너지 효과를 낸 것으로
+풀이됩니다.
+
+DMA는 기관이나 외국인이 보다 빠른 주문 경로로 활용하는 서비스인데요.
+
+이미 한국투자증권이 대거 보유한 해외 대형 고객을 기반으로 이들이 선호하는 초단기 매매를 DMA 서비스를 통해, 반도체주 쏠림 장세에서 외국인
+수급을 대거 흡수할 수 있었다는 거죠.
+
+<앵커>
+
+그런데 퇴직연금 시장도 경쟁이 치열해지면서 ETF 매매 수수료 무료 서비스가 등장하고 있고,
+
+단일종목 레버리지는 금융당국의 규제가 발표되면서 거래가 위축될 것이란 예상도 나옵니다.
+
+이런 상황에서 ETF가 브로커리지 판도를 바꾼다든지, 또 지금처럼 풍부한 거래대금을 계속 지킬 수 있을 지도 궁금해지는데요.
+
+<기자>
+
+그렇지만 ETF가 증권업황을 설명하는 척도가 된 것은 분명합니다.
+
+증권업종을 분석하는 증권사 애널리스트들도 브로커리지 업황을 판단하는 거래대금 기준을 '주식'에서 '주식+ETF'로 변경하는 추세고요.
+
+무엇보다도 채찍이 있다면 당근도 있기 마련입니다.
+
+금융당국은 하반기 중 외국인 통합계좌 거래 대상에 ETF와 ETN을 포함시킬 것으로 예상되는데요.
+
+외국인 투자자들이 별도의 국내 계좌를 개설하지 않고도 현지 증권사를 통해 국내 주식을 거래할 수 있도록 하면서 외국인의 국내 ETF 거래가
+활발해진다면,
+
+이미 해당 서비스를 시작한 삼성증권이나 한창 준비 중인 NH투자증권도 새로운 브로커리지 경쟁에서 존재감을 드러낼 수 있다는 분석이 나옵니다.
+
+<앵커>
+
+잘 들었습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001259775' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001259775</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
