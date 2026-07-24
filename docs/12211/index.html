@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>두산밥캣 어닝 서프라이즈…증권가, 목표주가 줄줄이 상향</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005711621' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12211" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>두산밥캣 어닝 서프라이즈…증권가, 목표주가 줄줄이 상향</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">두산밥캣이 대규모 어닝 서프라이즈를 기록하며 강력한 실적 개선을 입증했습니다. 북미와 유럽 시장의 견조한 수요, 판매가 인상 효과 지속, 그리고 멕시코 신공장 가동에 따른 비용 절감 기대감이 하반기까지 주가를 지지할 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">일회성 요인 제외 후에도 판매가 인상 및 북미/유럽 시장 성장세를 바탕으로 실적 우상향이 예상되는 점과 신규 공장 가동이라는 명확한 미래 성장 동력이 확인되었기 때문입니다. 증권가의 목표주가 상향 조정은 강력한 컨펌 역할을 합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">건설자재</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">기계</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#어닝서프라이즈</span> <span class="tag tag-hash">#두산밥캣</span> <span class="tag tag-hash">#목표주가상향</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">두산밥캣이 미국 관세 환급 효과에 힘입어 올해 2분기 시장 예상을 크게 웃도는 영업이익을 기록하자 증권가에선 제품 판매가 인상 효과와 하반기 멕시코 신공장 가동에 따른 실적 개선 기대감이 높아지고 있다. 앞서 두산밥캣은 지난 23일 2분기 잠정 실적을 발표하며 매출액 2조4479억원, 영업이익 2917억원으로 각각 전년 동기 대비 11.2%, 42.9% 증가했다고 공시했다. 특히 영업이익은 당초 증권사들이 예상했던 컨센서스(약 1940억~2050억원)를 42~50%가량 상회하는 대규모 ‘어닝 서프라이즈’였다. 영업이익률 역시 전년 동기 대비 2.6%포인트 상승한 11.9%를 기록하며 수익성 개선을 명확히 드러냈다. 이에 따라 주요 증권사들은 24일 두산밥캣에 대해 관세 환급과 같은 일회성 요인을 제외하고서도 올 하반기 견조한 실적을 예상하며 목표주가를 일제히 상향 조정했다. 이날 신한투자증권과 삼성증권은 투자의견 ‘매수’를 유지하며 각각 목표가를 기존 보다 상향한 9만원, 9만8000원으로 조정했다. 키움증권은 투자의견 ‘매수’와 목표주가 9만6000원을 유지했다. 이번 분기 실적 호조의 가장 큰 원인은 미국에서 위헌 판결을 받은 상호관세에 대한 환급분 약 8100만달러(약 1100억원 규모)가 2분기 회계상 손익에 반영됐기 때문이다. 지난 2월 미국 연방대법원이 국제비상경제권한법(IEEPA)에 근거해 부과된 상호관세와 펜타닐 관세를 위법하다고 판단하면서 미국 수입업체들이 기납부 관세를 돌려받게 된 데 따른 것이다. 다만 실제 현금 유입은 하반기 이후 순차적으로 이뤄질 예정이다. 한영수 삼성증권 연구원은 “2분기 영업이익이 시장 예상을 상회한 주요 원인은 관세비용 환급 8100만달러가 반영됐기 때문이며 이를 제외한 2분기 실적은 시장 예상과 유사한 수준이었을 것”이라고 평가했다. 다만 일회성 요인을 걷어내도 증권가는 주요 제품군의 판매가 인상을 근거로 두산밥캣의 실적이 우상향할 것으로 전망하고 있다. 두산밥캣이 작년 말부터 단행한 컴팩트(소형장비) 제품 3%, 물류장비(MH) 8%의 판매가 인상 효과가 2분기 중에 반영됐고, 2분기 중 추가로 인상한 컴팩트 2% 인상분은 아직 실적에 완전히 반영되지 않아 올 하반기 이익 개선 요인으로 작용할 전망이다. 지역별 판매 실적에선 북미와 유럽 시장의 성장세가 두드러졌다. 주력 시장인 북미 지역은 단독주택 착공 부진 등 거시경제 불안정성에도 불구하고 전체 착공 건수가 늘어나면서 매출액이 전년 동기 대비 3% 증가한 11억6000만달러를 기록했다. 북미 지역의 핵심 제품 수주 잔고는 여전히 5개월치를 상회하고 있으며 제품의 실질 수요를 보여주는 리테일 판매 역시 전년 동기 대비 7% 성장해 견조한 수요를 뒷받침했다. 무엇보다 전문가들은 두산밥캣의 유통망 내 ‘딜러 재고’가 역대 최저 수준으로 관리되고 있다는 점에 주목했다. 현재 북미 시장의 딜러 재고는 약 3개월치, 유럽은 약 3.5개월치로 보통주문잔고(MOH) 기준 4개월을 하회하고 있다. 낮은 딜러 재고는 향후 딜러들의 재고 축적 수요로 이어져 강력한 매출 견인차 역할을 할 뿐만 아니라, 추가적인 판가 인상 시 회사 손익에 반영되는 속도를 빠르게 만드는 긍정적 기제로 작용한다. 유럽 및 중동·아프리카(EMEA) 지역은 에너지 인프라와 전력망, 철도 등 공공부문 투자가 확대되면서 매출액이 전년 대비 10% 증가한 2억8000만달러를 달성했다. 반면, 아시아·중남미·오세아니아(ALAO)는 한국 내 지게차 판매 부진 여파로 역성장했다. 이한결 키움증권 연구원은 “하반기에도 북미와 유럽 시장을 중심으로 견조한 성장세가 지속되어 연간 실적 전망치에 충분히 부합할 것”이라고 내다봤다. 올 하반기부터 본격적인 가동에 들어갈 멕시코 신공장이 가져올 비용 절감 효과에 대한 기대도 높다. 두산밥캣 멕시코 공장은 올해 1~2분기 사이 양산에 들어갔으며 4분기부터 전면 가동에 돌입할 예정이다. 이지한 신한투자증권 연구원은 “올 4분기부터 멕시코 신공장이 풀가동에 들어가며 비용 절감 효과가 더해질 예정이어서 실적 우상향 방향성만 남아있다”고 분석했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005711621' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005711621</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
