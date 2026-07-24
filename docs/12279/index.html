@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>가비아 공개매수가 두고…맥쿼리 vs 얼라인 공방 격화</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005711828' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12279" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>가비아 공개매수가 두고…맥쿼리 vs 얼라인 공방 격화</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">맥쿼리자산운용이 가비아 주식에 대해 공개매수를 진행하며 적정 가격을 주장하자, 행동주의펀드 얼라인파트너스가 이사회 절차의 공정성과 지배주주의 이해상충 문제를 제기하며 반박에 나섰다. 양측은 valuation 방법론과 기업 거버넌스 측면에서 격렬한 공방을 벌이고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">대형 기관의 공개매수 및 기업 구조 변경 이슈는 주주 행동주의와 지배구조 리스크에 대한 관심을 최고조로 높이며 단기적인 변동성을 유발한다. 특히 이사회의 절차적 공정성 문제가 제기되면서 투자 불확실성이 높아졌다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#공개매수</span> <span class="tag tag-hash">#가비아</span> <span class="tag tag-hash">#행동주의펀드</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">맥쿼리자산운용그룹과 행동주의펀드 얼라인파트너스자산운용이 가비아 공개매수 가격의 적정성을 놓고 공방을 벌이고 있다. 맥쿼리가 가격 산정 근거를 상세히 공개하며 저평가 논란에 반박하자, 얼라인파트너스는 이사회 절차적 공정성을 문제로 들며 재반박에 나섰다.
+
+맥쿼리 맥쿼리는 24일 “지난 30여년간 축적된 글로벌 디지털 인프라 투자 경험과 전문성을 바탕으로 가격산정을 진행했다”며 “이번 공개매수는 모든 주주에게 과거 거래가격을 상회하는 의미 있는 프리미엄과 함께 확정적인 유동성 기회를 제공하기 위해 추진됐다”고 밝혔다.
+
+이어 “공개매수 가격 4만8000원은 역사적 시장가격 분석, 대상회사 매물대 분석, 유사 공개매수 사례 할증률 분석, 상대가치 평가지표 분석, 과거 공개매수 사례 분석, 주식매매계약(SPA) 주당 매매가격 분석 등을 종합해 산출됐다”며 “공개매수 직전 가격 대비 41.6%, 직전 1개월산술평균 대비 56.0%의 프리미엄이 반영됐다”고 설명했다.
+
+맥쿼리는 얼라인파트너스가 제기한 가치평가 방식에 대해서도 반박했다. 얼라인이 가비아 가치를 종속회사 시장가치를 제외한 개별 기준으로 산정해왔는데, 공개매수가 4만8000원에 종속회사 시장가치를 반영하면 가비아 개별 상각전영업이익(EBITDA)의 12.9배에 이르러 동종업종 평균(7.6배)의 거의 두 배에 달하는 프리미엄이라고 밝혔다.
+
+또 얼라인이 KINX 과천 데이터센터 램프업 이후 예상 EBITDA에 20배에 근접한 멀티플을 적용해 KINX 가치를 1조3600억원으로 주장한 데 대해서도 “글로벌 M&A 시장에서 관찰되는 일반적인 거래 멀티플과는 괴리가 있다”고 반박했다.
+
+KINX는 상장 20년간 시장에서 이미 12배의 EBITDA 멀티플로 평가받고 있고, 경쟁 통신사들의 밸류에이션이 5~7배 EBITDA 멀티플인 점을 감안하면 얼라인이 제시한 21.3배는 글로벌 비교기업이나 유사 거래사례에서 찾아보기 어려운 가정이라는 설명이다.
+
+얼라인파트너스도 반박에 나섰다. 얼라인은 “맥쿼리가 인용한 KINX 가치평가는 중복상장 구조로 가비아 기업가치가 시장에서 할인되는 문제를 설명하기 위한 분석일 뿐, 공개매수 가격의 적정성을 평가하거나 가격이 낮다는 취지로 작성된 것이 아니다”라고 밝혔다.
+
+그러면서 “이번 공개매수와 관련해 배포한 언론 입장문과 가비아 이사회에 보낸 공개주주서한 어디에서도 공개매수 가격이 지나치게 낮다고 주장한 바 없고, 맥쿼리자산운용 자체를 비판한 사실도 없다”고 선을 그었다.
+
+얼라인파트너스는 문제 삼는 대상이 맥쿼리나 공개매수 조건이 아니라 거래를 검토하는 가비아 이사회라는 점을 분명히 했다. 최대주주 김홍국 공동대표 등이 매각대금 중 세후 금액을 맥쿼리의 투자목적회사 디씨케이인베스트먼트에 재투자해 거래 이후에도 경영권을 유지하는 구조인 만큼, 거래 조건과 절차를 둘러싸고 지배주주와 일반주주 간 구조적 이해상충 우려가 있다는 것이다.
+
+얼라인파트너스는 개정 상법 제382조의3의 이사 충실의무와 법무부 ‘기업 조직개편 시 이사의 행위규범 가이드라인’에 따라 이사회가 독립적인 특별위원회 구성, 공개매수 가격의 독립적 공정성 검증, 시장검증 또는 경쟁입찰 절차 실시를 통해 더 우월한 거래 조건이 있는지 확인해야 한다고 요청했다.
+
+한편 맥쿼리의 투자목적회사 디씨케이인베스트먼트는 지난 17일 최대주주 지분 24.37%를 주당 4만8000원에 인수하는 SPA를 체결하고, 같은 가격으로 잔여 보통주 73.1%에 대한 공개매수를 진행 중이다. 최소 응모 수량은 발행주식 총수의 24.3%이며, 최대 물량이 모두 응모되면 맥쿼리는 지분 97.4%를 확보해 가비아를 완전자회사로 편입한 뒤 자진 상장폐지를 추진할 계획.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005711828' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005711828</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
