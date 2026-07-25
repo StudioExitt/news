@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>테슬라 주가 15% 급락 쇼크...로봇 성과 내라는 월가 [김기혁의 테슬라월드]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.25</span>
+        
+        <a class="more-btn" href="https://studioexitt.net/news/12393" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>테슬라 주가 15% 급락 쇼크...로봇 성과 내라는 월가 [김기혁의 테슬라월드]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">테슬라가 예상치를 크게 밑도는 2분기 순이익을 기록하며 주가가 급락했습니다. 시장은 차량 인도량만으로는 수익성이 확보되지 않았다고 평가했으며, 막대한 설비투자(CAPEX)로 인해 옵티머스나 로보택시의 가시적 성과를 요구하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">실적 미스 및 막대한 CAPEX로 인한 현금 흐름 악화 우려가 주가에 즉각적인 타격을 주었으며, 핵심 미래 사업(로봇/자율주행)의 가시성 부재가 투자심리를 위축시키고 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">테슬라 (TSLA)</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주가급락</span> <span class="tag tag-hash">#실적쇼크</span> <span class="tag tag-hash">#로보틱스투자부담</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">설비투자 확대 전망 와중에
+휴머노이드·로보택시 지연 우려
+일론 머스크 테슬라 CEO가 2025년 미국 메릴랜드주에서 열린 선거 운동 당시 전기톱을 드는 퍼포먼스를 하고 있다. 로이터연합뉴스테슬라 주가가
+2분기 실적 발표일인 23일(현지시간) 뉴욕증시에서 14.5% 급락한 319.69달러로 마감했습니다. 하루 만에 시가총액 2150억달러(약
+320조 원)가 증발한 것인데요. 시장의 평가는 부정적입니다. 주가 반등에는 상당한 기간이 걸릴 것이라는 전망도 나왔습니다.
+
+우선 실적을 살펴보면 2분기 조정순이익이 전년 동기 대비 17.0% 감소한 12억달러를 기록했습니다. 이는 시장 전망치(19억달러)를 크게 밑돈
+수치입니다. 전기차 인도량은 사상 최대인 48만대였지만 가격 할인 정책으로 인해 수익성이 크게 훼손된 탓으로 분석됩니다.
+
+실적 콘퍼런스콜도 투심을 악화시켰습니다. 올 초만 해도 로보택시는 연내 미국 25% 이상 지역에서 운영될 것이라는 목표였지만 아직 7개 도시에
+그친 상태입니다. 더구나 휴머노이드 로봇인 3세대 옵티머스에 대한 언급이 없었던 점이 치명적이었다는 분석입니다.
+
+모건스탠리는 미래 사업이 가시화되지 않은 상태라고 우려하며 목표 주가를 417달러에서 400달러로 하향했습니다. 옵티머스의 생산 개시가
+임박했으나 공급망 구축, 로봇 손기술 구현, 범용 작업 기술 개발 등 문제으로 인해 본격적인 양산 단계까지 기간이 길어질 수 있다고
+전망했습니다.
+
+막대한 설비투자도 부담이라고 평가했습니다. 설비투자(CAPEX)는 올해 250억 달러 이상이라고 제시됐으며 로보택시, 옵티머스,반도체(테라<0xED><0x8C><0xB9>), 태양광 제조, AI 연산 자원 확장으로 향후 2~3년간 증가할 전망입니다. 모건스탠리는 2027년 예상 설비투자 규모를 기존
+200억 달러에서 약 300억 달러로 50%나 상향 조정했습니다. 이에 따라 2027년 잉여현금흐름(FCF) 소진 예상치는 기존 50억 달러
+수준에서 약 140억 달러로 확대됐습니다. 현금 소진이 2020년대 말까지 이어질 것으로 전망된 것입니다.
+
+테슬라 옵티머스. 테슬라 홈페이지 캡처
+테슬라 옵티머스. 테슬라 홈페이지 캡처모건스탠리는 “테슬라의 가속화되는 CAPEX 사이클은 자율주행과 로보틱스 리더십 확보를 위한 필수
+투자”라면서도 “이 투자가 FCF를 더욱 악화시킨 만큼 테슬라가 로보택시와 옵티머스에 대한 가시적 성과를 보여야 한다는 시장의 요구가 커지고
+있다”고 진단했습니다.
+
+이런 가운데 테슬라 주가의 하락은 스페이스X와 테슬라 간 합병 이슈에도 영향을 미치고 있습니다. 미국 매체 일렉트렉에 따르면 일론 머스크
+CEO는 컨퍼런스콜에서 ‘두 회사가 합병할 경우 궁극적으로 시너지 효과를 기대할 수 있느냐’는 질문에 대해 “스페이스X와는 다양한 분야에서
+긴밀히 협력하고 있으며 그 과정에서 점점 더 많은 부분이 겹치고 있다. 테라<0xED><0x8C><0xB9>은 매우 큰 프로젝트가 될 것”이라고 답변했습니다. 이어 “물론
+지금 이 자리에서 회사 합병에 대해 이야기할 수는 없다”며 “그런 문제는 적절한 절차를 거쳐야 한다”고 덧붙였다.
+
+여기서 테라<0xED><0x8C><0xB9>이 중요한데요. 시장에서는 테라<0xED><0x8C><0xB9>에서 생산될 반도체가 테슬라, 스페이스X 두 회사에서 모두 사용되는 필수 부품인 만큼 원활한 사업을
+진행하기 위해 결국 합병 수순을 밟는 게 아니냐는 전망을 내놓고 있습니다. 우주, 전기차, 인공지능(AI) 사업에 필요한 핵심 반도체 공급망을
+확보하기 위한 차원이죠.
+
+앞선 외신 보도에 따르면 스페이스X는 텍사스 그라임스카운티에 제출된 공개 청문회 공고를 통해 테라<0xED><0x8C><0xB9> 1단계에 최소 550억달러를 투입할
+계획이라고 밝혔습니다. 전체 계획이 완료될 경우 투자 규모는 1190억달러까지 확대될 수 있다고 합니다.</div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
