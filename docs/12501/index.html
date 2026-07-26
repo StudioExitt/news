@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>호르무즈에 이어 이곳도 막혔다...유가 어쩌나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005794668' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12501" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>호르무즈에 이어 이곳도 막혔다...유가 어쩌나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">호르무즈 해협에 이은 홍해까지의 봉쇄 사태로 인해 아시아 국가들의 운송 비용 증가와 유가 급등 우려가 커지고 있으며, 이는 장기적인 에너지 공급망 불안을 초래할 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 해운로 봉쇄는 국제 운임 및 에너지 원가에 치명적인 영향을 미치며, 이는 광범위한 산업 전반의 실적 악화 요인이 됩니다. 유가 급등은 시장 전체의 하방 압력으로 작용합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">해상운수</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">화학</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자동차부품</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#유가급등</span> <span class="tag tag-hash">#공급망위기</span> <span class="tag tag-hash">#지정학리스크</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">호르무즈 해협에 이어 예멘 후티 반군 공격으로 홍해까지 막히면서 한국을 포함한 아시아 국가들의 운임비 부담 및 유가 상승에 대한 우려가 커지고
+있다. 내년 사상 최고치 유가가 예상되는 가운데 그 시점은 더 빨라질 수 있다는 전망이 나온다.
+
+지난 23일 홍해상에서 사우디아라비아 국적 유조선 2척이 공격받았다. 앞서 예멘 후티 반군(친이란)은 사우디 측이 예멘 소재 사나 공항(예멘
+소재)을 공격했다는 이유로 사우디에 대한 해상 봉쇄를 시행하겠다고 선언한 바 있다. 이미 일부 선박들은 해상 봉쇄가 현실화됨에 따라 회항을
+시작했다.
+
+이는 한국, 일본, 중국, 인도 등 아시아 국가들의 운임비 부담으로 연결될 수밖에 없다. 최진영 대신증권 연구원은 "그간 사우디는 동-서
+송유관(아브카이크 유전-얀부항)을 통해 호르무즈 해협을 우회해왔다. 이렇게 우회된 원유는 419만 배럴(6월 기준)로 이중 약 350만 배럴이
+바브엘만데브 해협을 통해 아시아로 향한다"면서 "만일 수에즈 운하-희망봉을 통해 수출할 경우 운송 기간만 약 4주가 더 소요된다. 비용 압박이
+가중되는 순간"이라고 분석했다.
+
+홍성기 LS증권 연구원은 "기존 바브엘만데브 해협의 석유 통행량은 약 400만 배럴 수준이었으나 호르무즈 해협 봉쇄로 인해 사우디의 대체 송유관
+가동으로 인해 2분기 통행량은 900만 배럴로 증가한 것으로 파악된다"면서 "수에즈 운하를 통한 대체 운송 방법이 있으나 이 또한 안전 보장을
+장담할 수 없으며 일일 최대 통행량이 2023년 기록한 750만 배럴 수준인 만큼 추가 운송 여력에 한계가 있을 것으로 예상된다"
+고 설명했다.
+이어 "아시아로의 석유 수송 거리 급증이 불가피하며 이에 따라 가용 재고는 더욱 빠르게 감소할 수 있다"를 덧붙였다.
+
+문제는 중동 공급망 사태의 장기화 여부다. 최 연구원은 "유가는 아시아 국가들의 수요 억제(차량 2·5부제, 자차 이용 제한, 재택 근무 등)
+조치와 4억1000만 배럴에 달하는 전략비축유(SPR)로 인해 상단이 제한될 수 있었다"면서 "그러나 수요는 영구적으로 억제할 수 없다.
+전략비축유 역시 7월 이후에는 방출 효과가 종료된다"고 설명했다. 국제에너지기구(IEA)는 측은 10억 배럴 이상의 재고가 남아 있다고
+강조했지만 호르무즈와 바브엘만데브 해협 봉쇄가 장기화된다면 임시방편에 그칠 수밖에 없다. 최 연구원은 "2014년 이래 최저 수준까지 급감한
+경제협력개발기구(OECD) 석유 재고는 역설적으로 불안감만 안겨줄 뿐"이라고 말했다.
+
+중동뿐 아니라 2대 산유국인 러시아도 문제다. 4월 말부터 우크라이나군의 거세진 공격으로 러시아 내 10대 정유 시설들이 가동을 중단하면서
+휘발유 생산량은 계절 평균 소비량의 65%까지 떨어졌다.
+
+당초 예상보다 유가 상승세가 더욱 가팔라질 것으로 예상된다. 최 연구원은 "유동성 효과가 뒤늦게 반영되기 시작한다면 사상 최고치 유가는 당초
+예상(2027년 WTI 가격 연평균 130달러)보다 이른 시점에 도달이 가능하다"면서 "내년 말까지 우상향이라는 기존 시각을 유지한다"
+고 말했다.
+
+홍 연구원은 "이란 전쟁에 가려져 덜 알려져 있으나 러시아와 카자흐스탄의 생산 감소 및 석유제품 수출 감소도 석유 공급 차질의 주요 원인"이라며
+"최악의 시나리오가 지속될 경우 전세계적으로 본격적인 석유 부족 사태가 닥칠 수 있고 재고 소진이 가속화되며 유가는 기존 월평균 5~10달러의
+상승보다 더욱 가파른 상승이 불가피할 것"이라고 내다봤.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005794668' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005794668</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
