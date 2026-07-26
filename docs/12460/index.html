@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>증시 활황에 '역대급 실적'…은행계 증권사 줄줄이 최대 실적</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014088360' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12460" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>증시 활황에 '역대급 실적'…은행계 증권사 줄줄이 최대 실적</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">상반기 증시 활황에 힘입어 NH투자증권, KB증권 등 주요 은행계 증권사들이 브로커리지 수익 및 WM 부문 성장을 바탕으로 역대 최대 실적을 기록했다. 업계 전반의 고른 성장세를 보였으나, 대형사들의 실적 격차가 더욱 벌어지는 모습이다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 증권사들의 역대급 실적은 금융 투자 수요가 매우 활발함을 보여주어 단기적인 시장 기대감을 크게 높이는 긍정적 신호이다. 다만, 이미 큰폭 상승한 수치이므로 단기 고점 논란을 불러일으키거나 과열 지표로 작용할 여지도 있다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융산업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자본시장</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증권사실적</span> <span class="tag tag-hash">#주식활황</span> <span class="tag tag-hash">#WM</span> <span class="tag tag-hash">#IB</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[서울=뉴시스] 박주연 기자 = 은행계 증권사들이 상반기 증시 활황에 힘입어 잇따라 사상 최대 실적을 갈아치웠다.
+
+주식 거래대금 증가로 브로커리지 수익이 급증한 데다 자산관리(WM)와 투자은행(IB), 금융상품 판매 등 전 사업 부문이 고르게 성장하며 실적을 견인했다. 다만 고객 기반과 자산관리(WM)·기업금융(IB) 경쟁력을 갖춘 대형사들이 시장 호황의 수혜를 더 크게 누리며 업계 내 실적 격차가 더 벌어지는 모습이다.
+
+26일 금융권에 따르면 NH투자증권은 상반기 지배주주 기준 순이익 9652억원을 기록하며 반기 기준 사상 최대 실적을 달성했다. 전년 동기 대비 107.6% 증가한 규모다.
+
+브로커리지 수수료 수지는 상반기 누적 7950억원으로 전년 동기 대비 211.7% 급증했다. 국내외 주식 거래가 크게 늘면서 국내주식과 해외주식 수수료 수익이 모두 큰 폭으로 증가했다. 금융상품 판매 수수료도 전년 대비 두 배 이상 늘었고, IB 부문은 기업공개(IPO)와 채권발행시장(DCM) 경쟁력을 앞세워 리그테이블 상위권을 유지했다. 고객자산은 612조원으로 확대됐다.
+
+KB증권도 역대 최대 반기 실적을 새로 썼다. 상반기 순이익은 7963억원으로 지난해 같은 기간보다 135% 증가했다.
+
+증시 강세에 따른 거래대금 증가로 수수료 수익이 확대된 가운데 WM 부문이 실적을 이끌었다. 개인고객 자산(AUM)은 처음으로 200조원을 돌파했다. IB 부문도 대형 대표주관과 인수금융, 프로젝트파이낸싱(PF) 등을 중심으로 안정적인 수익을 냈으며, 자본시장과 홀세일 부문 역시 역대 최대 반기 실적을 기록했다.
+
+신한투자증권 역시 상반기 순이익 5777억원으로 전년 동기 대비 123.1% 증가한 실적을 기록했다.
+
+주식 거래 증가에 따른 위탁매매 수수료와 금융상품 판매 확대가 실적 개선을 이끌었다. 2분기에는 시장금리 상승에 대응한 보수적인 운용으로 상품운용수익이 일부 감소했지만, 전체적으로는 주식위탁과 금융상품 수수료 증가 효과가 이를 상쇄했다.
+
+하나증권도 전 사업 부문의 고른 성장세를 바탕으로 호실적을 냈다. 상반기 순이익은 2731억원으로 155.7% 증가했다.
+
+WM 부문에서는 거래대금 증가에 따른 브로커리지 수수료와 금융상품 판매 확대가 실적을 견인했고, IB 부문에서는 인수금융과 부동산금융을 중심으로 안정적인 수익을 거뒀다. 세일즈앤트레이딩(S&T) 부문도 전략적 자산배분과 리스크 관리로 수익성을 개선했다.
+
+우리투자증권도 외형 성장을 이어갔다. 상반기 순이익은 247억원으로 47.1% 늘었다. 영업이익은 294억원으로 93.3% 증가했다.
+
+증자 후 IB 사업 확대 효과가 본격화되며 비이자이익이 전년 대비 110% 증가했고, IB 등 수수료수익은 206% 급증했다. 비이자이익 비중도 지난해 상반기 43%에서 올해 58%로 높아지며 수익구조 다변화가 진행됐다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014088360' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014088360</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
