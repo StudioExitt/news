@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>널뛰는 변동성, 빠른 대응 가능한 '액티브ETF' 쏟아진다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005391080' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12499" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>널뛰는 변동성, 빠른 대응 가능한 '액티브ETF' 쏟아진다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">변동성이 큰 시장에서 적극적인 대응이 가능한 액티브 ETF가 주목받으며 관련 상품 출시가 급증하고 있다. 특히 금융당국의 규제 완화(상관계수 규제 폐지) 추진은 액티브 ETF 시장의 성장을 가속화할 것으로 예상된다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">시장 변동성 심화와 자산 운용사들의 차별화 전략에 따라 액티브 ETF가 금융 상품의 주류 흐름으로 자리 잡고 있으며, 규제 완화 기대감까지 더해져 시장 구조적 호재로 작용하기 때문.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">미래금융지주</span> <span class="tag stock-tag">키움증권</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자산운용사</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#액티브ETF</span> <span class="tag tag-hash">#변동성투자</span> <span class="tag tag-hash">#규제개혁</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">최근 상장 액티브 ETF/그래픽=김다나
+최근 상장 액티브 ETF/그래픽=김다나
+연일 사이드카가 발동되는 등 변동성이 극심한 시장에서 빠른 대응이 가능한 액티브ETF(상장지수펀드)가 주목받고 있다. 특히 AI(인공지능) 투자와 관련한 새로운 뉴스들이 시장을 흔들고 금리 불확실성, 지정학적 이슈 등 글로벌 주요 이슈에 따라 시장이 출렁대면서 편입 종목에 따른 수익률 격차가 커지며 액티브 ETF 출시도 증가하는 추세다.
+
+26일 금융투자업계 등에 따르면 현재 상장된 액티브ETF 316개 종목의 순자산은 총 103조4900억원으로 올 들어 12조9000억원이 증가했다. 전년말 대비 12.5% 성장했다. 액티브 ETF는 지수를 그대로 추종하게 설계된 패시브 ETF와 달리 비교지수를 참고하되 추가 수익을 거두기 위해 편입 종목을 탄력적으로 조절할 수 있는 ETF다.
+
+다양한 이슈가 증시에 영향을 주고 있는 최근 들어 액티브 ETF에 투자 수요가 몰리고 있는 셈이다. 증시가 급등락을 반복하면서 업종, 종목별 수익률 격차가 커지고 있어 적극적인 액티브 운용이 수익률 개선에 더 적합하기 때문이다.
+
+문홍철 DB증권 연구원은 "글로벌 AI 시장이 복합적인 다변수 국면에 진입하면서 패시브 대비 액티브 투자 방식의 매력이 높아지고 있다"며 "선별적인 비중 조절이 가능해 기민하게 대응할 수 있는 액티브 ETF를 활용하는 것이 유리하다"고 했다.
+
+패시브 ETF 시장이 성숙 단계에 접어들면서 새로운 상품에 대한 수요가 늘난 것도 영향을 미쳤다. 동일한 지수를 추종하는 상품들이 대거 출시되고 인기를 끈 유형의 ETF가 나오면 비슷한 ETF가 동시에 나오면서 운용사들의 차별화 포인트가 크지 않다. 운용력을 차별화할 수 있는 액티브 ETF가 주목받는 이유다.
+
+이에 따라 액티브 ETF 출시 붐도 이어지고 있다. 이달 들어 국내 증시에 상장한 ETF 12개 종목 가운데 절반인 6개가 액티브 ETF다. 올들어 액티브 ETF는 73개 늘어나 전체 ETF 가운데 27.5%인 316개에 달한다. 액티브 ETF 전문 운용사들도 늘고 있다. 타임폴리오자산운용, 삼성액티브자산운용 등이 좋은 성과를 거두며 시장에서 빠르게 성장하면서 ETF 시장에 새로 진입하거나 시장을 키우려는 중소형 운용사들도 액티브 전략을 선택하는 추세다. 최근 마이다스에셋자산운용, DS자산운용이 대표적인 예다.
+
+특히 보다 자유로운 운용을 위해 액티브 ETF 규제 완화도 추진되고 있어 액티브ETF 시장은 더욱 활성화 될 것으로 보인다. 현재 국내에서는 액티브 ETF가 비교지수와의 상관계수를 0.7 이상으로 유지해야 하지만 금융당국은 상관계수 규제를 없앤 완전한 액티브 ETF 출시를 추진하고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005391080' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005391080</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
