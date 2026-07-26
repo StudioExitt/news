@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI·반도체 파티 안 끝났다 … 피지컬AI·전력 랠리도 기대</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005712389' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12524" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>AI·반도체 파티 안 끝났다 … 피지컬AI·전력 랠리도 기대</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">최근 증시 조정은 기업 이익 훼손이 아닌 단기 수급 과열 해소에 따른 조정이며, AI·반도체 업황의 근본적 낙관론이 지배적입니다. 향후 시장 주도권은 단순 컴퓨팅을 넘어 실생활과 결합하는 '피지컬 AI'와 데이터센터 구축에 필수적인 '전력 인프라'로 확장될 것으로 전망됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단순한 반도체 업황 회복을 넘어, AI의 활용 범위가 '서버'에서 '실생활 기기(피지컬AI)'와 '전력 인프라'까지 광범위하게 확장되면서 폭넓은 산업 섹터에 순환매 기회가 열릴 것이라는 구조적 전망이 제시됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">효성중공업</span> <span class="tag stock-tag">HD현대일렉트릭</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전력기기(S0025)</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자동차부품(S0041)</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI사이클</span> <span class="tag tag-hash">#반도체슈퍼사이클</span> <span class="tag tag-hash">#피지컬AI</span> <span class="tag tag-hash">#전력인프라</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">주가가 하루가 다르게 널뛰는 '시계제로' 롤러코스터 장세에 개인투자자들의 불안감이 커지고 있다. 올해 상반기 내내 증시를 견인했던
+인공지능(AI)·반도체 열풍이 거품으로 판명 난 것은 아닌지, 기업의 이익 체력이 꺾인 것은 아닌지 우려의 목소리도 나오기 시작했다. 하지만
+120명의 금융투자업계 전문가들은 현 장세에 대해 기업 체력이 꺾인 '펀더멘털 훼손'이 아니라고 단언했다. 이들은 최근 폭락 장세를 외부
+거시경제 악재와 개인들의 투기성 수급이 얽히며 만들어 낸 '단기 성장통'으로 바라보고 있었다.
+
+◆ '거품론'은 매크로·빚투 합작품
+설문조사 결과, 최근 변동성 장세의 성격을 규정하는 가장 큰 원인으로 37.5%가 '단일 종목 레버리지 상장지수펀드(ETF) 등 수급
+취약성'을, 30%가 '단기 과열 해소·이익 실현 매물 소화'를 택했다. 수급 왜곡과 단기 과열이 시장을 흔든 핵심 원인이라는 응답이 전체의
+67.5%를 차지한 셈이다. 'AI 수익성 미흡에 따른 회의론'을 원인으로 지적한 응답은 16.7%에 그쳤다.
+
+전문가들은 증시가 바닥을 다지고 안정을 찾기 위해 가장 먼저 선결되어야 할 조건으로 '고물가·고금리·고유가'로 대변되는 매크로 악재의 해소를
+꼽았다. 김용구 유안타증권 투자전략팀장은 "최근 증시 조정은 기업 이익 훼손 때문이 아니라, 금리 부담이 촉발한 AI 설비투자 슈퍼사이클의 지속
+가능성에 대한 의구심 확대로 봐야 한다"며 "유가와 물가가 진정돼 미국 연방준비제도(Fed·연준)의 추가 긴축 우려가 걷히고, 시장 금리가
+내려앉을 때 비로소 밸류에이션 정상화가 이뤄질 것"
+이라고 진단했다.
+
+김연수 브이아이자산운용 국내주식운용본부장 역시 "인플레이션 지표의 하향 안정을 통한 금리 인하 기대로의 전환이 급선무"라며 "이는 성장주의
+밸류에이션을 억누르는 가장 큰 족쇄를 푸는 요인"
+이라고 말했다.
+
+거시경제의 불안감이 지수에 불을 질렀다면, 변동성의 폭을 키운 것은 시장 내부에 누적된 '수급 왜곡'이었다. 박진호 NH아문디자산운용
+주식부문장은 "최근 장세는 단기 과열 해소를 위한 건전한 조정 국면이지만, 시장 안정을 위해서는 단일 종목 2배 레버리지 거래 축소 등 개인
+수급 쏠림 해소가 급선무"라며 "과도하게 쌓인 투기성 수급이 청산되는 디레버리징(부채 축소)이 완료돼야 바닥을 확인할 수 있다"고 지적했다.
+
+시장의 투심을 되돌리기 위해서는 글로벌 빅테크들이 막대한 자본 투자를 멈추지 않을 것이란 확신이 필요하다는 의견도 나왔다. 김석환 미래에셋증권
+수석연구위원은 "글로벌 하이퍼스케일러(거대 데이터센터 운영 빅테크)들의 실적 발표를 통해 그들의 AI 설비투자 계획이 축소되지 않고 유지됨을
+숫자로 확인해야만 투심이 회복될 것"이라고 말했다.
+
+◆ 주도주, 피지컬 AI로 확장
+매크로 족쇄가 풀리고 빚투 물량이 소화되면 증시는 어디로 향할까. 향후 1년간 반도체 업황에 대해 전문가의 68.3%가 '신중한 낙관론',
+26.7%가 '매우 낙관'을 선택해 무려 95%가 압도적인 신뢰를 나타냈다. 변동성 장세 이후 시장을 선도할 차기 핵심 주도 업종(복수
+응답)에서도 반도체(72.5%)가 1위를 지켰다.
+
+주목할 대목은 피지컬 AI·자율주행·로봇(46.7%)이 2위에 오르며 2차전지(16.7%)나 방산·우주항공(14.2%)을 앞질렀다는 점이다.
+기존 주도주 쏠림 현상에 대해서도 전문가의 55.8%가 '향후 완화될 것'이라고 응답해 주도주 저변이 확대될 것임을 예고했다. 단순히 AI
+연산을 위한 서버용 메모리를 넘어 AI가 실생활 기기와 결합하는 '온디바이스 AI'와 스스로 움직이는 '피지컬 AI'로 주도권의 외연이 넓어질
+것이란 분석이다.
+
+이경준 키움투자자산운용 ETF운용본부장은 "AI 산업은 이제 막대한 돈이 들어가는 초기 인프라 구축 단계를 지나 실생활에 적용되는 응용 서비스
+단계로 진화하고 있다"며 "과거처럼 소수 종목에만 돈이 몰리는 쏠림 현상이 완화되고, AI 기반의 확실한 수익 구조를 증명해 내는 기업들로
+순환매가 이어질 것"이라고 전망했다.
+
+◆ 반도체와 현대차가 반등 이끈다
+확장되는 AI 생태계 속에서 롤러코스터 장세를 뚫고 올라갈 가장 유망한 기업으로는 삼성전자, SK하이닉스 등 반도체 투톱이 압도적인 표를
+얻었다. 단순한 가격 반등을 넘어 다가올 피지컬 AI 시대에 가장 완벽하게 대응할 수 있는 포트폴리오와 기술력을 갖췄다는 이유에서다.
+
+최현재 유안타증권 리서치센터장은 "삼성전자는 메모리와 파운드리, 스마트폰·가전 등 완제품으로 다변화된 사업 구조를 갖춰 특정 사이클 부침을
+흡수하는 이익 방어력이 매우 우수하다"며 "고대역폭메모리(HBM)와 서버용 D램은 물론, 온디바이스 AI 기기까지 전방위적인 AI 수요를
+다각도로 받아 낼 수 있는 유일한 기업"이라고 평가했다. 윤제민 인테그랄투자자문 대표 또한 삼성전자에 대해 "AI 산업 발전 과정에서 발생하는
+병목 현상 중 가장 큰 수혜를 볼 기업"이라고 강조했다.
+
+박진호 부문장도 "HBM 경쟁력 회복과 일반 메모리 비중 확대를 기반으로 한 반도체 대형주가 증시 안정을 이끌 것"이라고 진단했다.
+
+피지컬 AI를 이끌 차기 주도주로는 '현대차그룹'과 '전력기기' 관련주가 조명을 받았다. 한 자산운용업계 관계자는 "현대차는 본업에서 나오는
+현금 창출력을 바탕으로 로보틱스와 자율주행이라는 확실한 미래 성장 옵션을 동시에 쥐고 있다"며 "피지컬 AI 시대가 도래하면 가장 돋보일 전통
+산업 기업"이라고 평가했다.
+
+AI 인프라 확장의 필수재인 전력기기 산업에 대한 긍정적인 평가도 잇따랐다. 윤원태 SK증권 리서치센터 연구위원은 "AI 데이터센터 설비투자
+과정에서 변압기 등 전력기기 수요 확대는 필연적"이라며 효성중공업과 HD현대일렉트릭, LS일렉트릭 등을 유망주로 꼽았다.
+김석환 수석연구위원역시 "AI 데이터센터의 막대한 전력 소모와 북미 중심의 전력망 노후 교체 수요가 맞물리면서 국내 주요 전력기기 업체들은 슈퍼사이클의
+수혜를 누릴 것"이라고 분석했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005712389' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005712389</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
