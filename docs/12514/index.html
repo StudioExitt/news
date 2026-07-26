@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WSJ "SK하이닉스 지나친 ADR 프리미엄은 과열 신호"</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006337088' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12514" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>WSJ "SK하이닉스 지나친 ADR 프리미엄은 과열 신호"</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">WSJ는 SK하이닉스 ADR이 한국 보통주 대비 과도한 프리미엄을 형성하고 있는 점을 지적하며, 이는 AI·반도체 시장의 과열 신호로 분석했습니다. 또한, 높은 프리미엄은 투자자가 추가 비용을 지불하게 만드는 비효율적인 거래 양상이라고 평가했습니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ADR프리미엄</span> <span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#과열시장</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">SK하이닉스 ADR, 韓 원주보다 28%↑
+"거래 편의성·비용 감안해도 너무 높아"
+"韓투자자 ADR 투자는 자멸적" 지적도 미국 증시에 상장된 SK하이닉스 주식예탁증서(ADR)가 한국 증시에서 거래되는 보통주보다 최대 50% 이상 높은 가격에 거래되면서 인공지능(AI)·반도체주 투자 열기가 과도하게 달아올랐다는 지적이 나왔다.
+
+지난 10일(현지시간) 최태원(가운데) SK회장이 임원진들과 함께 나스닥증권거래소에서 상장 기념 오픈벨을 누르고 있다. (사진=나스닥)
+
+월스트리트저널(WSJ)은 25일(현지시간) SK하이닉스 ADR과 한국 상장 주식 간 가격 차이(프리미엄)에 대해 동일한 기초자산을 기반으로 하는 두 증권 사이에서 이처럼 큰 프리미엄이 형성되는 것은 이례적이라고 보도했다. 나스닥 상장 이후 약 2주 동안 SK하이닉스의 ADR 프리미엄은 16~51% 범위에서 형성됐으며, 현재는 28% 수준이다.
+
+통상 동일한 기업의 주식이 두 시장에서 서로 다른 가격에 거래될 경우 차익거래가 이뤄지면서 가격 차이가 줄어든다. 가격이 낮은 시장에서 주식을 매수해 가격이 높은 시장에서 매도하면 차익을 얻을 수 있기 때문이다.
+
+하지만 SK하이닉스 ADR은 양방향 전환에 제약이 있어 안전한 차익거래가 어렵다. ADR을 한국 보통주로 전환하는 것은 가능하지만, 한국 주식을 다시 ADR로 전환하려면 규제상 제약이 있다. 이에 따라 헤지펀드가 한국 주식을 매수해 ADR로 전환하는 동시에 미국에서 ADR을 공매도하는 전통적인 차익거래 전략을 활용하기 어렵다. 프리미엄이 추가로 확대될 경우 ADR 공매도에서 큰 손실이 발생할 수 있기 때문이다.
+
+거래 편의성 측면에서도 차이가 있다. 한국 증시에는 거래세가 부과되는 반면 미국에는 관련 세금이 없고, 미국 시장의 거래 및 보관 비용도 상대적으로 낮다. ADR이 달러로 거래돼 미국 투자자가 원화 환율 변동을 직접 관리할 필요가 없다는 점도 장점이다.
+
+다만 SK하이닉스의 ADR 프리미엄은 이 같은 거래 편의성과 비용 차이를 감안하더라도 지나치게 높다는 지적이다. 미국 투자자들이 한국 주식을 직접 매수하는 번거로움을 피하고 뉴욕에서 SK하이닉스 주식을 거래하기 위해 상당한 추가 비용을 지불하고 있는 셈이다. WSJ는 “미국 시장에서 반도체주, 특히 메모리 반도체주에 대한 수요가 과열되고 있음을 보여주는 사례”라고 평가했다.
+
+앞서 한국 투자자가 SK하이닉스 ADR에 투자하는 것은 이해할 수 없는 자멸적 행태라는 지적도 나왔다. 글로벌 퀀트 헤지펀드 아카디안자산운용의 오웬 라몬트 수석 부사장은 지난 23일 SK하이닉스의 ADR 프리미엄에 대해 “완전히 미친 수준의 가격 오작동”이라며 “외국인 투자자가 ADR을 매수하는 논리는 그나마 이해할 수 있지만 한국인들이 ADR을 매수하는 건 정말 이해할 수 없다”고 지적했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006337088' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006337088</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
