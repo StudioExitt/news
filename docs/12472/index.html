@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>금감원 "RIA 계좌 해외주식 매도, 매도결제완료일 확인해야 세제혜택"</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006337000' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12472" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>금감원 "RIA 계좌 해외주식 매도, 매도결제완료일 확인해야 세제혜택"</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금감원이 금융투자 상품(RIA, IMA 등) 이용자들을 대상으로 세제 혜택 조건과 숨겨진 수수료 부담에 대한 주의사항을 안내했다.
+특히 RIA 계좌 사용자는 해외주식 매도 시 공제율이 '결제 완료일'을 기준으로 변동되므로 거래 일정을 철저히 확인해야 하며, 추가 비용 발생 가능성이 높은 금융 상품의 위험성을 인지할 필요가 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">금융감독원이 세제 혜택 및 투자 상품 구조적 위험에 대해 상세한 가이드를 제공하여 개인투자자들의 자금 운용 계획을 변경하게 만들 수 있기 때문입니다. 특히 결제일 확인은 필수적인 행동 지침입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">보험</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#세제혜택</span> <span class="tag tag-hash">#RIA계좌</span> <span class="tag tag-hash">#금융규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">RIA·IMA·ETF 특정금전신탁 등 금융투자상품 소비자 유의사항 안내
+금융감독원은 국내시장복귀계좌(RIA), 종합투자계좌(IMA), 은행 특정금전신탁을 통한 상장지수펀드(ETF) 투자와 관련한 금융소비자 유의사항을 26일 안내했다.
+
+금감원에 따르면 최근 금융소비자의 자산관리에 대한 관심이 커지고 투자상품 범위도 다양해지면서 관련 민원이 이어지고 있다. 이에 금감원은 4가지
+금융투자상품 소비자 유의사항을 정리해 발표했다。
+
+특히 해외주식 양도소득세 세제혜택이 있는 RIA 계좌 이용자가 꾸준히 늘면서 양도소득 공제 요건을 정확히 안내할 필요가 있다고 금감원은
+설명했다. RIA 누적 가입계좌는 지난 3월 말 8만3035좌에서 6월 말 31만3594좌로 늘었다. 같은 기간 총 잔고는 4140억원에서
+2조6560억원으로 증가했다。
+
+금감원이 안내한 첫 번째 유의사항은 RIA 계좌에서 해외주식을 매도할 경우 매도 주문체결일이 아닌 매도결제 완료일을 기준으로 양도소득 공제율이
+결정된다는 점이다. 실제 한 소비자는 증권사 안내를 보고 5월 31일까지 매도하면 양도소득을 100% 공제받을 수 있다고 판단해 5월 29일
+해외주식을 매도했지만, 매도결제 완료일이 6월 2일로 넘어가면서 양도소득의 80%만 공제받은 사례가 있었다。
+
+개인투자자가 지난해 12월 23일까지 취득한 해외주식을 RIA 계좌에 입고해 매도한 뒤 매도대금을 1년간 국내 주식 등에 투자하면 해외주식
+양도소득을 공제받을 수 있다. 다만 공제율은 올해 7월 말까지는 80%, 12월 말까지는 50%로 단계적으로 축소된다. 해외주식은 통상
+주문체결일과 결제일 사이에 하루 이상 시차가 있는 만큼, 공제 기준일인 결제완료일을 거래 증권사에 반드시 확인해야 한다고 금감원은
+강조했다. 예컨대 매도주문 체결일이 7월 27일이라도 매도결제 완료일이 7월 29일이면 공제율 80%가 적용되지만, 매도주문 체결일이 7월 31일이고
+결제완료일이 8월 4일로 넘어가면 공제율은 50%로 낮아진다.
+
+RIA 계좌는 조세특례제한법에 따라 해외 주식을 국내 증권사의 해외 주식계좌에서 RIA 계좌로 이전해 매도한 뒤 매도대금을 1년간 국내 주식·펀드에 투자하면 해외주식 매도차익에 부과되는 양도소득세(22%)를 감면해주는 계좌다. 양도소득금액 2000만원이 발생했다고 가정하면, 7월
+31일까지 매도결제를 완료할 경우 양도소득의 80%를 공제받아 양도소득세는 33만원이지만, 12월 31일까지 결제를 완료하면 공제율이 50%로
+낮아져 세액은 165만원으로 늘난다.
+
+두 번째 유의사항은 해외주식 매도 후 매도대금을 RIA 계좌에서 국내 상장주식 등에 투자해 1년간 보유해야 세제혜택을 받을 수 있다는 점이다.
+RIA 계좌는 국내 자본시장 활성화를 위해 도입된 만큼, 계좌 내 투자 가능 자산은 국내 상장주식과 국내 주식형 펀드(ETF 포함), 예탁금으로
+한정된다.
+
+아울러 올해 중 RIA 계좌를 통한 해외주식 양도소득 세제혜택이 있는 경우, RIA 외 계좌에서 해외주식 등을 순매수하면 순매수 금액에 비례해
+양도소득 세제혜택이 줄어드는 점도 유의해야 한다. 금감원이 제시한 단순 예시에 따르면 RIA 계좌에서 매도결제금액 1000만원, 취득가액 400만원으로 양도소득금액 600만원이 발생한 상태에서 RIA 외 계좌에서 해외주식을 매수·매도한 경우, RIA 공제액은 조정 전 450만원으로
+줄고 최종 양도소득세액은 110만원으로 산출된다.
+
+세 번째 유의사항은 종합금융투자사업자(종투사)가 운용하는 IMA와 관련한 것이다. IMA는 통상 중도해지가 불가능하며 운용보수 외에도 판매보수, 
+성과보수 등이 추가로 부과될 수 있어 가입 시 상품설명서를 꼼꼼히 확인해야 한다. 한 소비자는 증권사 직원 권유로 만기 2년짜리 IMA 상품에
+가입했다가 다음 날 가입취소를 요청했으나, 중도해지가 불가능하다는 이유로 거절당한 사례도 있었다.
+
+IMA는 자기자본 8조원 이상인 종투사가 고객 예탁자금을 주식, 채권, 기업대출 등으로 운용해 실적에 따라 수익을 지급하는 상품이다. 만기 시
+원금손실이 발생하면 종투사가 원금을 지급하지만 예금자보호법은 적용되지 않는다. 6월 말 기준 한국투자증권, 미래에셋증권(006800),
+NH투자증권(005940) 등 종투사 3개사의 11개 IMA 상품 총자산은 3조6100억원 규모로, 수익증권이 1조4500억원, 대출이
+1조4000억원, 채권이 3800억원, 머니마켓펀드(MMF)·머니마켓신탁(MMT)이 2200억원, 기업어음(CP) 등이 1600억원이었다.
+보수율은 판매보수 연 0.100~0.500%, 운용보수 연 0.085~0.100%, 사무관리보수 연 0.005~0.085% 수준이며,
+기준수익률(4.0~5.0%) 초과 수익에 대해서는 30~50%의 성과보수가 추가로 부과될 수 있다.
+
+네 번째 유의사항은 은행 특정금전신탁을 통한 ETF 투자다. 은행 특정금전신탁으로 ETF에 투자하면 거래수수료, 세금 외에
+신탁수수료(0.03~2.0%)와 중도해지수수료(0.00~1.0%)가 추가로 부과돼 실제 수익률이 목표수익률보다 낮아질 수 있다. 한 소비자는
+은행에서 특정금전신탁으로 ETF에 가입했는데, ETF 거래수수료 외에 추가로 신탁수수료가 있다는 사실을 가입 당시 안내받지 못한 사례도 있었다.
+
+금감원에 따르면 특정금전신탁 ETF는 가입 시 통상 1.0% 수준의 높은 선취 신탁수수료가 부과된다. 신탁을 중도해지하면 선취 신탁수수료 중
+신탁기간 미경과분을 환급해주지만, 환급액 한도 내에서 통상 1.0%의 중도해지수수료가 부과돼 단기 투자 시에도 높은 수수료 부담이 발생할 수있다. 시중은행 5개사 기준 신탁수수료는 선취형 0.03~1.0%, 후취형 0.03~2.0%이며 중도해지수수료는 0.0~1.0% 수준이다.
+
+한편 특정금전신탁을 통해 ETF에 투자하더라도 직접 매매할 때와 동일한 세금이 부과된다. 국내 주식형 ETF는 분배금(배당금)에 대해서만
+15.4%의 배당소득세가 과세되고 매매차익은 비과세이지만, 해외주식·채권 ETF 등 주식형 외 국내상장 ETF는 분배금과 매매차익 각각에 대해
+과세표준가격 증가분을 한도로 15.4%의 배당소득세가 부과된다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006337000' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006337000</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
