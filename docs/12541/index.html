@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>삼전닉스 주가 보려면 이번주 챙길 기업…월가도 ‘돈 버는 AI’를 원한다 [동여의도 위클리]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #6b7280; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005712399' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12541" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>삼전닉스 주가 보려면 이번주 챙길 기업…월가도 ‘돈 버는 AI’를 원한다 [동여의도 위클리]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">미분류</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">—</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">최근 빅테크 기업들은 AI 매출 급증에도 불구하고 대규모 설비투자(CapEx)로 인해 잉여현금흐름 적자를 기록하고 있습니다. 투자자들의 관심이 단순한 '매출'에서 '설비투자를 감당할 수 있는 현금 흐름'으로 옮겨가면서, 반도체 수요에 대한 시장의 기대치가 더욱 엄격해지고 있음을 보여줍니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI투자 #잉여현금흐름 #반도체주가</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">빅테크 3사 실적에 쏠리는 시선
+미국 캘리포니아주 마운틴뷰에 위치한 구글 본사. 2분기 클라우드 매출은 82% 늘었지만 데이터센터 투자를 더 늘리겠다고 밝히자 알파벳 주가는  6% 넘게 떨어졌습니다. 이제 AI가 잘 팔려도 투자자는 현금이 남아야 안심합니다.
+<플러스 포인트>
+▶빅테크 실적이 2027년 AI 투자 규모 결정
+▶AI 매출보다 서버 투자비를 벌었는지가 중요
+▶투자가 늘면 삼성·하이닉스 HBM 주문도 증가
+요즘 증시에서는 역대 최대 실적을 발표하고도 주가가 급락하는 일이 잇따릅니다.
+삼성전자는 7월 7일 2분기 영업이익 89조4000억원원을 발표했습니다. 시장 예상치 85조~86조원을 웃돈 사상 최대 실적이었지만 주가는 당일 7% 가까이 떨어졌습니다.
+구글도 호실적 발표 뒤 주가가 하락했습니다. 구글 클라우드 매출은 1년 전보다 82% 늘어난 248억달러를 기록했고 검색 광고 매출도 17% 증가했습니다. 전체 매출과 이익이 시장 예상을 웃돌았는데도 모회사 알파벳 주가는 7월 23일 6% 넘게 하락했습니다.
+주가를 끌어내린 것은 2분기 실적이 아니라 이후의 전망이었습니다. 삼성전자 투자자들은 미국 빅테크가 내년에 서버 주문을 줄이면 메모리 매출이 감소할 수 있다고 봤습니다. 반면 알파벳 투자자들은 구글이 설비투자를 계속 늘리면 잉여현금흐름(FCF)이 더 줄어들 수 있다고 판단했습니다.
+두 회사의 주가를 움직인 요인은 빅테크의 서버 투자였습니다. 빅테크가 투자를 줄이면 삼성전자와 SK하이닉스의 반도체 주문이 감소합니다. 그러나 보유 현금만으로 설비투자를 계속할 수도 없습니다. AI 사업에서 투자비를 회수해야 다음 서버 주문도 가능합니다.
+삼성전자는 주문 감소, 구글은 현금 고갈 우려
+삼성전자 주가에는 내년 주문 감소 가능성이 먼저 반영됐습니다. 삼성전자가 올해 큰 이익을 내더라도 빅테크가 서버 발주를 줄이면 메모리 매출은 감소합니다. 데이터센터 착공이 늦어지면 엔비디아 그래픽처리장치(GPU) 주문이 줄고, GPU에 들어가는 고대역폭메모리(HBM) 발주도 뒤로 밀립니다. 투자자들이 2분기 이익보다 2027년 메모리 주문을 더 중요하게 여긴 이유입니다.
+이재용 삼성전자 회장이 2021년 미국 구글 본사에서 순다르 피차이 최고경영자(CEO)를 만났을 때 모습입니다. 스마트폰에서 오랫동안 손잡아온 두 회사의 협력 무대가 이제 AI 데이터센터로 넓어지고 있습니다. [연합뉴스]
+빅테크의 설비투자는 삼성전자에는 반도체 주문이지만 구글에는 현금 지출입니다. 구글이 투자를 늘리면 HBM 수요는 커질 수 있지만, 설비투자액이 본업에서 벌어들인 현금을 웃돌면 구글에 남는 현금은 줄어듭니다.
+실제로 구글은 올해 2분기 영업활동으로 391억달러의 현금을 벌어들였지만 설비투자에는 449억달러를 썼습니다. 영업활동으로 벌어들인 현금에서 설비투자비를 뺀 잉여현금흐름이 적자로 돌아선 것은 2004년 상장 이후 처음입니다.
+구글은 올해 설비투자 계획을 1800억~1900억달러에서 1950억~2050억달러로 올렸고, 내년에는 올해보다 더 많이 쓰겠다고 밝혔습니다.
+그렇다고 AI와 클라우드 사업이 부진한 것도 아닙니다. 기업들이 AI 연산과 데이터 저장을 늘리면서 클라우드 매출은 82% 증가했습니다. 다만 이용량이 늘어날수록 이를 처리할 서버도 더 필요했습니다. 매출과 설비투자가 함께 늘어난 것입니다.
+AI가 많이 쓰일수록, 반도체 수요도 늘어난다
+AI 매출이 급증했는데도 구글의 잉여현금흐름이 적자로 돌아선 이유는 생성형 AI의 비용 특성에 있습니다. 생성형 AI는 이용량이 늘어날 때마다 더 많은 반도체와 전력을 투입해야 합니다.
+생성형 AI는 손님이 늘 때마다 주방을 확장해야 하는 식당과 비슷합니다. 주문이 늘면 매출도 증가하지만 더 많은 손님을 받으려면 주방과 조리기구에 다시 투자해야 합니다.
+기존 검색과 소프트웨어 사업은 달랐습니다. 구글은 검색엔진에 광고를 붙여 수십억 명에게 제공했고, 마이크로소프트는 개발을 마친 소프트웨어를 여러 기업에 판매했습니다. 이용자가 늘어도 비용은 매출만큼 빠르게 증가하지 않았습니다.
+다리오 아모데이 앤트로픽 CEO와 최태원 SK 회장이 7월 24일 이재명 대통령이 지켜보는 가운데 AI 데이터센터 구축 협약을 체결했습니다. 앤트로픽이 SK텔레콤의 데이터센터 사업에 참여하면 HBM 수요도 자연스럽게 늘어날 수 있습니다. [연합뉴스]
+반면 생성형 AI는 이용자가 질문할 때마다 GPU와 AI 가속기가 돌아갑니다. 질문이 많아지면 더 많은 서버와 전력이 필요하고 냉각 설비도 추가해야 합니다. 완공 뒤에도 전기료와 유지 및 보수비가 발생하고 몇 년 뒤에는 GPU를 교체해야 합니다.
+투자액이 영업활동으로 벌어들인 현금을 웃돌면 빅테크는 보유 현금을 사용하거나 회사채와 주식을 발행해 자금을 마련해야 합니다. 사들인 GPU와 데이터센터는 이후 감가상각비로 반영돼 영업이익도 줄입니다.
+2022년 11월 챗GPT가 공개된 직후에는 수익성보다 GPU 확보가 급했습니다. 서버 도입이 늦으면 AI 서비스를 이용하려는 기업이 다른 클라우드 업체를 선택할 수 있었기 때문입니다. 그러나 이제 빅테크는 AI로 광고 매출과 구독료, 클라우드 사용료를 올리고 있습니다. 앞으로는 매출을 늘리는 데 그치지 않고 설비투자비를 쓰고도 잉여현금흐름을 남겨야 합니다.
+빅테크 3사, AI 투자비 회수 가능할까
+구글이 AI 매출 증가에도 잉여현금흐름 적자를 기록하면서 이번 주 마이크로소프트와 메타, 아마존 실적도 중요해졌습니다.
+빅테크 3사는 AI 매출을 올리는 방식이 서로 다릅니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005712399' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005712399</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
