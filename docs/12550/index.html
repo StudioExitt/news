@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내 주식 계좌 녹는다' 변동성에 지친 개미…'22조' 뭉칫돈 몰린 곳은</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001260012' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12550" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>내 주식 계좌 녹는다' 변동성에 지친 개미…'22조' 뭉칫돈 몰린 곳은</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">주식 시장 변동성과 금리 인상에 지친 투자자들이 활동성이 높은 요구불예금과 증권사 예탁금을 줄이고, 안전하고 확정적인 수익을 기대할 수 있는 은행 정기예금으로 대규모 자금을 옮기고 있다. 이는 단기적으로 주식 및 금융상품의 수요 위축세를 반영한다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">높아진 금리와 주식 시장 변동성에 대한 투자 심리 위축으로 인해 대규모 '대기 자금'이 안전한 예금(Fixed Income) 상품으로 이동하는 추세가 명확하게 포착되었다. 이는 단기적으로 유동성 축소 및 매수 동력 약화 신호로 해석되어 주식 시장에는 부정적 영향을 미칠 수 있다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#금리인상</span> <span class="tag tag-hash">#대기자금</span> <span class="tag tag-hash">#안전자산선호</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">5만원권 지폐. 한경DB
+5만원권 지폐. 한경DB
+국내 5대 은행의 요구불예금이 이달 들어서만 40조원 넘게 급감했다. 한 달째 이어진 증시 조정에 지친 투자자가 한국은행의 기준금리 인상 이후 금리가 높아진 정기예금으로 다시 대이동하는 조짐이다.
+
+26일 한국경제신문에 따르면 국민·신한·하나·우리·농협은행의 지난 23일 기준 요구불예금 잔액은 681조2,585억원으로 지난달 말보다 41조343억원 감소했다. 이달 말까지 비슷한 흐름을 유지하면 2022년 7월(-38조2,454억원) 후 4년 만에 가장 큰 감소폭을 기록하게 된다.
+
+개인 예금은 14조9,242억원, 기업 예금이 22조8,006억원 줄었다. 요구불예금은 언제든 꺼내 쓸 수 있어 대표적인 투자 대기자금으로 꼽힌다.
+
+또 다른 대기자금인 증권사 투자자예탁금도 이날 기준 104조2,975억원으로 이달 들어 17조3,365억원 감소했다. 투자자예탁금은 투자자가 주식, 펀드 등 금융투자 상품을 거래하기 위해 증권사에 맡겨 놓은 자금으로 언제든 증시로 유입될 수 있어 증시 대기자금으로 분류된다.
+
+투자자예탁금은 지난달 4일 139조원6,948억원으로 역대 최고치를 기록한 이후 코스피지수가 사상 최고치인 9,114.55를 기록한 직후인 지난달 23일 136조8314억원까지 불어났으나 증가세가 꺾였다. 통상 주가 상승 기대감이 커지면 예탁금 잔고도 늘어나는 경향을 보인다.
+
+23일에는 소폭 늘었으나 여전히 100조원대 유지가 위태로운 상황이다.
+
+서울시내에 설치된 시중은행 현금지급기. 연합뉴스
+서울시내에 설치된 시중은행 현금지급기. 연합뉴스
+한국은행의 기준금리 인상과 시장금리 상승을 반영해 주요 은행의 대표 정기예금 금리는 모두 연 3%대에 진입했다. 저축은행에서는 4%대 상품이 줄줄이 나오고 있다.
+
+신한은행은 21일 만기 1년의 쏠편한 정기예금 금리를 연 2.9%에서 3.2%로 조정했다. 올해 창립 44주년 기념으로 특판 중인 신한 My플러스 정기예금은 이달 말까지 1조원 한도로 만기 1년 예금을 최고 연 3.3%에 판매한다.
+
+앞서 우리은행도 지난 20일부터 예·적금 금리를 0.25~0.30%포인트 인상, 첫거래우대 정기예금은 연 3.30%를 적용한다.
+
+저축은행에서는 최고 4%대 중반까지 정기예금 금리를 경쟁적으로 내놓고 있다. 이날 기준으로 가장 높은 금리는 더블저축은행의 복리정기예금(4.45%)이고, 동원제일저축은행 회전정기예금(4.41%), 바로저축은행 SB톡톡 정기예금(4.40%) 등이 뒤를 이었다.
+
+기준금리 인상과 증시 조정이 맞물리며 개인 및 기업의 대기자금이 정기예금, 채권 등 확정금리형 상품으로 이동하고 있다. 5대 은행의 정기예금 잔액도 이를 뒷받침한다. 한국은행의 기준금리 인상 여파로 시중은행들이 일제히 수신(예·적금) 금리를 끌어올리자 5대 은행의 정기예금 잔액은 이달 들어 22조3374억원 늘어난 971조7372억원으로 집계됐다. 한은이 기준금리를 연 2.50%에서 연 2.75%로 올린 뒤 은행이 수신금리를 잇달아 높이자 투자처를 잃고 대기하던 시중의 부동자금이 안전 자산인 은행 정기예금으로 대거 회귀하고 있는 모습이다.
+
+이달 들어 5대 은행의 요구불예금과 증권사 투자자예탁금이 급감한 반면 정기예금에는 22조원 넘는 자금이 몰렸다. 기업도 수시입출식 통장에서 돈을 빼 연 3~4%대 이자수익을 기대할 수 있는 상품에 여윳돈을 넣고 있는 상황이다.
+
+금융권에서는 기준금리 추가 인상 여부와 시장금리 흐름에 따라 예금 및 채권으로 향하는 자금이 더 늘어날 것으로 내다보고 있다. 예금금리 경쟁도 당분간 이어질 것으로 보고 있는 한편 시중은행들이 수신 기반 확대를 위해 금리 경쟁에 나설 경우 예금상품의 금리 매력은 한층 높아질 것이라는 전망이 나온다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001260012' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001260012</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
