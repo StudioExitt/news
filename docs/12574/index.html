@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“이건 비정상”…WSJ, SK하이닉스 ADR 괴리에 ‘AI 과열’ 경고</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.27</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005712440' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12574" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“이건 비정상”…WSJ, SK하이닉스 ADR 괴리에 ‘AI 과열’ 경고</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">WSJ는 SK하이닉스 ADR과 본주 간의 비정상적인 가격 프리미엄을 지적하며 AI 과열 경고를 보냈다. 이는 구조적 결함과 'FOMO(놓칠까 두려운 심리)'에 의한 수요 폭증이 복합적으로 작용한 결과로 분석되었다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 주요 경제지(WSJ)가 반도체 섹터의 시장 과열 현상을 구조적 문제와 행동 심리(FOMO) 측면에서 경고함. 장기적인 투자 심리 위축 가능성을 제기함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">TSMC</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#ADR괴리</span> <span class="tag tag-hash">#AI과열</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">SK하이닉스가 나스닥 ADR 거래를 개시한 지난달 10일(현지시간) 뉴욕 타임스퀘어 전광판에 SK하이닉스의 ADR 거래 개시 기념 브랜드 캠페인 영상이 재생되고 있다. [연합뉴스]지난달 미국 증시에 상장한 SK하이닉스 미국주식예탁증서(ADR)가 한국 본주보다 비싼 가격에 거래되는 것을 두고 월스트리트저널(WSJ)이 “인공지능(AI) 거래 과열의 또 다른 신호”라며 경고의 목소리를 냈다.
+
+26일(현지시간) WSJ 선임 시장 칼럼니스트 제임스 매킨토시는 칼럼에서 SK하이닉스 ADR과 한국 본주 사이의 가격 차이가 시장 원리만으로는 설명하기 어려운 수준이라고 진단했다. 그는 “SK하이닉스 한국 상장 주식 대비 엄청나게 형성된 ADR의 프리미엄은 시장에선 일어나선 안 되는 일”이라고 평가했다.
+
+WSJ에 따르면 지난 10일 뉴욕증시 거래를 시작한 SK하이닉스 ADR은 이후 한국 본주보다 16~51% 높은 가격에서 거래됐다. 신문은 가격 괴리의 가장 큰 원인으로 제한적인 ADR 공급을 꼽았다. 한국 상장 주식을 ADR로 전환하는 것은 가능하지만, 반대로 ADR을 한국 주식으로 바꾸는 과정에는 규제상 제약이 있어 가격 차이를 활용한 차익거래가 쉽지 않다는 것이다.
+
+원칙적으로는 본주를 싼값에 매수한 뒤 ADR로 전환해 매도하면 가격 차이가 빠르게 줄어들어야 하지만, 이러한 구조가 막혀 있어 높은 프리미엄이 유지되고 있다는 설명이다. 매킨토시는 환율과 거래 비용, 세금 등의 요인이 ADR 가격에 일부 반영될 수는 있지만 현재의 가격은 이를 감안해도 과도한 수준이라고 지적했다.
+
+그는 “이는 게임처럼 즐기는 ‘포모’(FOMO·남들이 돈을 벌 때 나만 뒤처지는 데 대한 불안감) 트레이딩의 본고장인 한국보다도 미국에서 반도체 주식 거래에 대한 수요가 통제 불능 상황임을 나타낸다”고 평가했다. 그러면서 “한국 주식이 격차를 따라잡으면서 프리미엄이 줄어든다면 ADR 매수자들은 괜찮을 것”이라면서도 “하지만 회사가 미국 주식을 돼지저금통처럼 활용한다면 타격을 입을 것이고, 한국과 미국 양국에서 반도체 주식이 폭락해 프리미엄이 사라진다면 훨씬 더 큰 타격을 입을 것”이라고 우려했다.
+
+WSJ는 비슷한 사례로 대만 반도체 기업 TSMC를 언급했다. TSMC ADR은 2010~2020년에는 본주 대비 프리미엄이 3% 안팎에 머물렀지만, 챗GPT 출시 이후 AI 투자 붐이 본격화된 2022년부터는 평균 15% 수준으로 확대됐다.
+
+매킨토시는 “미국인들이 대만 투자자들보다 기꺼이 훨씬 더 많은 돈을 지불했음을 보여준다”고 분석했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005712440' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005712440</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
