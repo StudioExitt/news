@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10거래일 연속 사이드카…'롤러코스피'에 지친 개미들</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.27</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003115334' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12740" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>10거래일 연속 사이드카…'롤러코스피'에 지친 개미들</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피와 코스닥 시장에서 10거래일 연속으로 사이드카가 발동되며 극심한 변동성(롤러코스피)을 보이고 있습니다. 이로 인해 개인 투자자들의 심리가 위축되고 증시 대기 자금이 빠르게 이탈하는 모습입니다. 전문가들은 높은 변동성에 대응하여 단기 추격 매수보다는 현금 비중 확보와 분할 매수를 권고했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">잦은 사이드카 발동과 급격한 지수 등락으로 인해 시장 전체의 변동성이 극대화되었고, 이는 단기적으로 투자 심리 위축 및 자금 이탈로 이어져 전반적인 투자 전략을 재검토해야 할 필요성을 제기했기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">신한지주</span> <span class="tag stock-tag">KB금융</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#롤러코스피</span> <span class="tag tag-hash">#변동성</span> <span class="tag tag-hash">#투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">올해 코스피·코스닥 총 66회 발동
+2008년 금융위기 때보다 잦은 변동성
+본문: 올해 코스피·코스닥 총 66회 발동
+2008년 금융위기 때보다 잦은 변동성
+올해 코스피에서는 총 41차례, 코스닥에서는 25차례 사이드카가 발동했다.
+시장에서 10거래일 연속 사이드카가 발동하면서 개인투자자들이 '롤러코스피(롤러코스터+코스피지수)'에 휘청이고 있다.
+지수가 하루에도 5~10%씩 급등락하자 투자심리가 급격히 얼어붙고 증시 대기자금도 빠르게 이탈하는 모습이다.
+27일 한국거래소에 따르면 코스피와 코스닥 시장에서는 이달 10일부터 24일까지 10거래일 연속으로 프로그램 매매를 일시 중단하는 사이드카가
+발동됐다.
+사이드카는 시장이 급등락할 때 프로그램 매매를 5분간 일시 중단해 과도한 변동성을 완화하기 위한 안전장치다.
+상승장에서는 매수 사이드카, 하락장에서는 매도 사이드카가 번갈아 발동하며 극심한 변동성을 나타냈다.
+실제 코스피는 지난 13일 8.95% 급락한 뒤 15일에는 6.24% 반등, 다음 거래일인 16일에는 다시 6.37% 하락했다.
+이후에도 20일(-4.46%), 21일(+3.56%), 23일(+4.40%), 24일(-5.72%) 등 하루 만에 방향이 뒤바뀌는 장세가
+이어졌다.
+올해 들어 코스피에서는 총 41차례(매수 20회·매도 21회), 코스닥에선 25차례(매수 14회·매도 11회) 사이드카가 발동했다.
+이 가운데 7월에만 코스피 13회, 코스닥 10회가 집중되며 연중 가장 많은 발동 횟수를 기록했다.
+올해 코스피 사이드카는 41차례 발동해 금융위기(26차례) 당시보다 더 잦은 변동성을 나타냈다.
+올해 코스피 사이드카는 41차례 발동해 2008년 연간 발동 횟수(26차례)보다 15차례 많았다.
+이는 금융위기 당시보다 약 58% 많은 수준이다.
+시장에서는 반도체 랠리와 인공지능(AI) 투자 기대, 'AI 피크아웃' 우려, 중동 지정학적 리스크, 도널드 트럼프 미국 대통령의 대이란 강경
+발언 등이 잇따라 투자심리를 흔들면서 변동성이 확대된 것으로 보고 있다.
+급등락이 반복되자 개인투자자들의 자금도 빠르게 이탈하고 있다.
+금융투자협회에 따르면 투자자예탁금은 지난 23일 기준 104조원으로 지난 2월 이후 처음으로 100조원 초반대로 추락했다.
+증권가에서는 중동 갈등 등을 이유로 당분간 높은 변동성이 이어질 가능성이 있는 만큼 단기 이슈에 따른 추격매수보다는 분할매수로 대응해야 한다고
+조언했다.
+증권업계 관계자는 "최근처럼 하루 만에 5~10%씩 지수가 움직이는 장세에서는 수익보다 손실을 피하는 전략이 중요하다"며 "레버리지를 활용한
+추격매수는 변동성을 키울 수 있는 만큼 현금 비중을 확보하고 투자 시점을 나눠 접근할 필요가 있다"
+.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003115334' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003115334</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
