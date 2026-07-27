@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 41회·코스닥 25회…사이드카 66번 울린 롤러코스피, 언제 멈출까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.27</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000519163' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12640" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 41회·코스닥 25회…사이드카 66번 울린 롤러코스피, 언제 멈출까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 증시가 롤러코스터 장세를 연출하며 사이드카(안전장치)가 역대급인 66회 발동되는 등 극심한 변동성을 보이고 있습니다. 외부 악재와 외국인 수급 불안정으로 하락세가 지속되면서, 향후 SK하이닉스의 실적 발표에 시장의 관심이 집중되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">극심한 변동성과 대외 악재(중동 정세, 금리)로 인한 투자 심리 위축이 시장 전반의 하락 압력을 키우고 있어 단기적인 부정적 영향도가 매우 높음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증시변동성</span> <span class="tag tag-hash">#사이드카</span> <span class="tag tag-hash">#반도체실적</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">국내증시가 급등과 급락을 반복하며 롤러코스터 장세를 연출하고 있다. /서예원 기자
+올해 국내 증시에서 사이드카가 66차례 발동하며 2008년 글로벌 금융위기 당시 연간 기록을 넘어섰다. 증권가에서는 외국인 수급과 반도체주 향방이 안정될 때까지 롤러코스터 장세가 이어질 가능성에 무게를 두고 있다.
+
+◆ 금융위기 기록 넘긴 '66회'…안전장치가 일상 됐나
+한국거래소에 따르면 올해 들어 지난 24일까지 유가증권시장에서는 사이드카가 41차례 발동했다. 매수 사이드카가 20회, 매도 사이드카가 21회다. 코스닥시장에서는 매수 14회와 매도 11회 등 총 25회 작동했다. 두 시장을 합하면 매수 34회와 매도 32회 등 총 66회에 달한다.
+
+글로벌 금융위기가 발생한 지난 2008년 연간 기록도 이미 넘어섰다. 당시 유가증권시장에서는 매수 14회와 매도 12% 등 총 26회, 코스닥시장에서는 매수 6회와 매도 13회 등 19회의 사이드카가 발동했다. 올해 발동 횟수는 유가증권시장이 2008년보다 15회, 코스닥시장이 6회 많다.
+
+사이드카는 선물가격이 일정 폭 이상 급변할 때 프로그램매매 호가의 효력을 5분간 정지하는 제도다. 유가증권시장에서는 코스피200 선물 최근월물이 기준가격보다 5% 이상 오르거나 내린 상태가 1분간 지속되면 발동한다. 코스닥시장에서는 코스닥150 선물이 6% 이상, 코스닥150지수가 3% 이상 같은 방향으로 움직인 상태가 1분간 이어져야 한다.
+
+다만 사이드카가 발동돼도 전체 주식 거래가 중단되는 것은 아니다. 프로그램매매의 매수 또는 매도 호가만 일시적으로 정지된다. 발동 횟수가 시장 변동성을 보여주는 지표일 수는 있지만, 사이드카 자체를 급등락의 원인으로 보기는 어렵다.
+
+◆ 매도 뒤 매수, 다시 매도…'양방향 변동성' 커졌다
+올해 사이드카는 매수 34회, 매도 32회로 양쪽 발동 횟수가 비슷하다. 지수가 한 방향으로 움직이기보다 급락한 뒤 반등하고, 반등 직후 다시 낙폭을 확대하는 흐름이 반복됐다는 의미다. 시장 안전장치가 이례적인 상황에서만 작동하는 제도를 넘어 일상적인 장중 변수로 자리 잡은 것 아니냐는 볼멘소리도 나온다.
+
+최근 5거래일의 흐름도 양방향 변동성을 고스란히 보여준다. 지난 20일 코스피와 코스닥에서 매도 사이드카가 나란히 발동한 뒤 21일과 22일에는 코스피에서 매수 사이드카가 작동했다. 23일에는 코스닥에서 매수 사이드카가 발동했지만, 24일에는 두 시장에서 다시 매도 사이드카가 울렸다. 닷새 동안 급락과 반등, 재차 급락이 이어진 셈이다.
+
+특히 지난 24일에는 변동성이 다시 하방으로 쏠렸다. 코스피는 전 거래일 대비 5.72% 내린 6690.62로 거래를 마치며 하루 만에 7000선을 내줬다. 코스닥지수도 5.32% 하락한 748.22로 마감했다. 유가증권시장에서는 오전 11시23분, 코스닥시장에서는 오전 11시47분 각각 매도 사이드카가 발동했다.
+
+수급에서도 위험 회피 움직임이 뚜렷했다. 유가증권시장에서 외국인은 3조2828억원, 기관은 1조9513억원을 각각 순매도했다. 개인이 5조1783억원을 순매수하며 물량을 받아냈지만 지수 하락을 막지는 못했다. 삼성전자와 SK하이닉스도 각각 7.59%, 8.34% 떨어지며 코스피 낙폭을 키웠다.
+
+최근 증시를 끌어올린 반도체 집중 구조가 조정장에서는 변동성을 키우는 요인으로 되돌아왔다. 시가총액 비중이 큰 삼성전자와 SK하이닉스에 외국인 매매가 쏠리면서 두 종목의 등락이 코스피 전체의 방향을 좌우하는 모습이다.
+
+중동의 군사적 긴장과 국제유가 상승, 미국 시장금리 부담이 외국인의 위험 회피를 촉발하자 반도체주에 집중됐던 자금도 빠르게 이탈했다. 반도체 업황의 추세가 꺾였다기보다 대외 악재와 수급 충격이 한꺼번에 반영된 조정이라는 분석이 나오지만, 일부 대형주에 의존하는 시장 구조가 지수의 낙폭을 키웠다는 지적도 제기된다.
+
+올해 코스피와 코스닥에서는 사이드가 도합 66회 발동됐다. /이새롬 기자
+
+◆ 롤러코스터 증시 언제까지…29일 하이닉스 실적 분수령
+증권가에서는 단기간에 변동성이 완전히 가라앉기는 쉽지 않을 것으로 보고 있다. 중동 정세와 국제유가, 미국 시장금리 등 대외 변수가 남아 있는 데다 반도체 업황의 정점 여부와 인공지능(AI) 투자 수익성을 둘러싼 경계심도 커지고 있기 때문이다.
+
+이경민 대신증권 연구원은 "중동 긴장 고조로 위험자산 선호 심리가 후퇴한 상황에서 장중 낙폭이 확대됐다"고 진단했다. 특히 "코스피와 코스닥에서 5거래일 연속 사이드카가 발동할 만큼 극심한 변동성 장세가 이어졌다"고 설명한다.
+
+국제유가와 시장금리도 향후 증시 방향을 가를 변수다. 갈등이 장기화해 유가와 미국 국채금리가 추가로 오르면 외국인의 국내 주식 매도 압력이 다시 커질 수 있다. 반대로 대외 불확실성이 완화되고 외국인이 반도체 대형주를 다시 사들이면 지수의 장중 진폭도 줄어들 가능성이 있다.
+
+가장 가까운 시험대는 오는 29일 예정된 SK하이닉스의 2분기 실적 발표다. 최근 코스피의 급등락이 삼성전자와 SK하이닉스 등 반도체 대형주를 중심으로 나타난 만큼, SK하이닉스가 내놓을 실적과 하반기 전망이 외국인 수급을 되돌릴 수 있을지가 관건이다.
+
+시장에서는 발표되는 영업이익 규모뿐 아니라 고대역폭메모리(HBM) 수요와 메모리 가격, 하반기 출하 계획 등을 주시할 것으로 보인다. AI 인프라 투자 확대를 업고 형성된 반도체 기대가 실제 실적과 향후 전망으로 뒷받침되는지 확인하는 자리가 될 수 있기 때문이다. SK하이닉스도 올해 HBM 중심의 메모리 시장 성장 전망과 함께 가격·공급 확대, 지정학적 불확실성을 주요 변수로 제시한 바 있다.
+
+d만 호실적만으로 투자심리가 안정될지는 미지수다. 실적이 시장 예상에 부합하더라도 하반기 수요와 가격에 보수적인 전망을 내놓으면 차익실현 물량이 재차 출회될 수 있다. 반대로 HBM 수요와 수익성에 대한 자신감을 확인할 경우 반도체주를 중심으로 외국인 매수세가 복귀하는 물꼬를 틀 가능성도 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000519163' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000519163</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
