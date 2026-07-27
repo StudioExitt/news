@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>레버리지 투자, 야수의 심장 아니라 겁쟁이들이 더 낫다고 [너드의 투자법]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.27</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005713014' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12782" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>레버리지 투자, 야수의 심장 아니라 겁쟁이들이 더 낫다고 [너드의 투자법]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">본 기사는 레버리지 투자(ETF 및 빚투 포함)가 초래할 수 있는 과도한 위험성을 경고하며, 일반 개미투자자들이 비이성적으로 행동하는 심리적 문제점을 행동경제학 논문을 인용해 지적합니다. 결론적으로 수익률 극대화보다 '심리적 안정'을 확보할 수 있는 포트폴리오 구성법과 변동성 노출도 관리가 핵심임을 강조합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">이 기사는 특정 업황의 단기적인 영향을 주기보다, 대중 투자자들의 과도한 심리적 투자를 경계하고 안정적인 포트폴리오 구성을 조언함으로써 장기적인 투자 마인드셋에 영향을 미치기 때문에 점수를 부여했습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지경고</span> <span class="tag tag-hash">#행동경제학</span> <span class="tag tag-hash">#포트폴리오관리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">2026년 한국 투자자들의 가슴을 가장 뜨겁게 만드는 단어는 단연 ‘레버리지(leverage)’입니다. 레버리지는 현재 주식시장에서 크게 2가지 갈래로 불을 지피고 있죠.
+
+첫 번째는 지난 5월 말 출시된 삼성전자, SK하이닉스 단일종목 레버리지입니다. 이 상품은 글로벌 인공지능(AI)·반도체 시장의 선도주에 등극한 두 종목의 등락률을 2배로 추종하는 상장지수펀드(ETF)입니다.
+
+7월 들어 삼전닉스 레버리지 ETF에 대한 투자 과열 양상은 누그러졌지만, 정책을 도입한 금융당국의 책임을 묻는 비판 여론은 점점 거세지는 중입니다.
+
+두 번째는 보유현금을 넘어, 대출자금을 더한 ‘빚투’를 뜻하는 레버리지입니다. 코스피가 9000을 돌파했던 6월에 빚투도 사상 최대치를 기록했고, 이후 조정장에서도 삼성전자·SK하이닉스 빚투는 되레 증가한 것으로 나타났습니다.
+
+매일경제신문에 23일 보도된 <여전한 삼전닉스 쏠림 … 증시 조정에도 ‘빚투’ 1조 더 늘었다>기사에 따르면 두 종목에 한 달간 유입된 신용자금은 9047억원에 달했습니다. SK하이닉스 모기업인 SK스퀘어까지 합치면 규모는 1조 241억원으로 늘어납니다.
+
+이처럼 두 개의 레버리지가 구체적으로 의미하는 바는 다르지만, 같은 단어를 사용하고 있는 만큼 그 본질은 동일합니다. 본체가 가진 힘·무게 이상의 힘을 내게 해주는 지렛대처럼, 본래 투자원금으로 기대할 수 있는 것 이상의 수익률을 노린다는 점이 일치하기 때문이죠. 주가가 하락할 경우 더 큰 손해를 감수하는 것도 마찬가지입니다.
+
+크게 벌고 크게 잃을 수 있다는 특성은 한국 국민의 입맛에 안성맞춤이었습니다. 수많은 투자자가 불나방처럼 레버리지 열풍에 몸을 던졌습니다. 해외 투자 커뮤니티에서 한국인들의 과감함·무모함을 보고 놀라워하는 게시물들이 올라오자, 그런 반응을 다시 한국 커뮤니티로 가져와 음미하는 현상도 이어졌습니다.
+
+한국 투자자들이 ‘야수의 심장’을 지녔다는 것이 전세계로부터 인정받고 있다는 데서 일종의 만족감을 느끼는 모양이었죠.
+
+그런데 한국의 레버리지 투자자들에게 경종을 울릴 수 있는 연구논문이 올해 세계적 금융·재무 학술지에 등재됐습니다. 매일경제의 프리미엄 재테크 플랫폼 ‘매경플러스’가 해당 논문을 알기 쉽게 해설하고, 실제 투자에 어떻게 적용할지 연구해봤습니다.
+
+“레버리지 투자, 변동성 낮은 상품에 투자해야” 국제학술지에 소개된, 투자에 도움 될만한 논문을 소개하는 ‘너드의 투자법’ 이번 회차에서는 홍콩대·컬럼비아대 연구로 올해 The Journal of Finance에 실린 <(이익 또는 손실)실현이 가져다주는 심적 만족감에 따른 동적 투자(Dynamic Trading with Realization Utility)>를 다룹니다. 이 연구는 냉철하고 이상적인 투자자가 아닌, 우리 같은 일반 투자자들이 주가 상승과 하락에 비이성적으로 반응하는 것을 상정합니다.
+‘행동경제학(behavioural economics)’이나 재무학이란 개념을 알고 계신다면 그렇게 이해하시면 됩니다.
+
+예를 들어 냉정하고 이상적인 투자자라면 100원의 이익에서 느끼는 만족감과 100원의 손실에서 느끼는 괴로움의 크기가 일치해야 합니다. 하지만 현실은 그렇지 않죠. 이번 논문은 행동경제학에서 유명한 1992년 실험을 인용해 100원의 손실이 주는 고통이 225원 이익이 주는 기쁨과 같은 양이라는 수치 등을 적용했습니다.
+
+이처럼 비이성적인, 보통의 개미투자자들은 조금만 이익이 났을 때 재빨리 매각하고 싶어 하고, 주가가 매입가보다 하락했을 때는 손실 실현을 두려워해 좀처럼 이를 처분하지 못합니다. 그러다 강제처분까지 가면 개미투자자의 손실은 더욱 커지죠.
+
+이번에 소개하는 논문은 이런 비이성적 투자성향을 고칠 방법에 관한 연구가 아닙니다. 오히려 철저하게 인정합니다. 그래서 개미투자자가 마음의 안정을 찾을 수 있는 포트폴리오 구성법을 도출하는 게 핵심이죠.
+
+개미투자자, 몰라서 실패하는 게 아니다 주가 전망 맞춰도 손실 보는 이유는? 예를 들어 전 재산이 1000만원인 A와 B가 ‘하락애플’이란 가상의 주식을 매입했다고 가정해 봅시다. A는 1000만원을 모두 하락애플에 투자했습니다. B는 10만원만 사들이고 990만원은 통장에 넣어뒀습니다. 그런데 하락애플 주식이 반토막이 났습니다. 이 시점에 A와 B 모두 하락애플이 90% 확률로 추가 하락할 것까지 알고 있다고 생각해보시죠. 그렇다면 A와 B 모두 주식을 당장 처분하는 게 옳은 선택입니다. 하지만 A와 B가 행동주의 경제학이 실험과 연구로 증명해 온 평균치의 개미투자자라면 둘의 선택은 엇갈립니다. A는 재산이 반토막 난 것을 도저히 받아들이지 못합니다. 그래서 10%의 상승확률에 기대 주식을 팔지 못하고 있다가 높은 확률로 더 큰 손해를 봅니다. B는 통장에 990만원이 남아있는 덕분에 상대적으로 이성적인 판단을 내리고 손절매를 할 수 있죠. 조금만 복잡한 용어를 쓰자면 하락애플의 변동성에 노출도를 줄여버린 겁니다. -50%의 폭락이 예비자산 990만원을 구축해둔 덕에 -5% 하락으로 버틸 만해졌습니다.
+
+반대로 변동성이 너무 낮은 주식에 투자할 때는 레버리지를 써서 억지로 변동성을 높여줘야 합니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005713014' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005713014</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
