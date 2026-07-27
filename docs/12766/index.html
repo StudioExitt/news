@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>두산에너빌, 中서도 원전용 부품 영토 확장</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.27</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005712943' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12766" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>두산에너빌, 中서도 원전용 부품 영토 확장</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">두산에너빌리티가 중국 라이양 원전 5·6호기에 초대형 증기발생기 단조품 공급 계약을 연속 체결하며 현지 입지를 강화했습니다. 전반적인 실적이 호실적을 기록했으며, 하반기 미국 및 베트남 등 글로벌 시장 확대를 통해 성장 동력을 확보할 것으로 기대됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">원자력 발전 분야에서의 대규모 연속 수주와 호실적 발표는 장기적인 매출 안정성과 시장 지배력을 입증하며 강력한 상승 모멘텀으로 작용합니다. 특히 글로벌(미국/베트남) 시장 확대를 언급하여 성장 스토리가 탄탄합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">두산에너빌리티</span> <span class="tag stock-tag">현대일렉트릭</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">에너지 시설 및 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">기계</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">건설</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#원자력발전</span> <span class="tag tag-hash">#수주실적</span> <span class="tag tag-hash">#글로벌에너지</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">두산에너빌리티가 중국 산둥성 라이양 원자력발전소용 핵심 소재 공급 계약을 체결하며 현지 입지 강화에 나섰다. 27일 두산에너빌리티는 중국 둥팡전기그룹 계열사인 DEI, DFHM과 라이양 원전 5·6호기에 적용되는 증기발생기용 초대형 단조품 공급 계약을 체결했다고 밝혔다. 지난해 라이양 3·4호기 증기발생기용 단조품에 이어 이번 5·6호기까지 연속 수주했다.
+
+두산에너빌리티는 이번 계약을 통해 라이양 5·6호기에 투입되는 증기발생기용 채널헤드 4개와 튜브시트 4개 등 총 8개의 초대형 단조품을 2029년까지 차례로 공급한다. 채널헤드는 원자로 냉각재가 증기발생기로 유입·유출되는 통로 역할을 하는 증기발생기 하부 단조품이다. 튜브시트는 수천 개의 전열관을 지지하고 원자로 냉각재와 2차 계통의 물을 분리하는 증기발생기의 핵심 단조품이다.
+
+라이양 5·6호기는 중국의 1400㎿급 차세대 원전 모델인 '캡(CAP)1400' 노형이 적용된다. 두산에너빌리티의 이번 수주는 과거 하이양 AP1000 원전 증기발생기 단조품 공급 당시 품질과 납기 수행 역량을 높이 평가받은 결과라는 해석도 뒤따른다.
+
+두산에너빌리티가 공급하는 단조품은 직경 5m, 최대 130t 규모의 초대형 제품으로 원전 증기발생기의 핵심 소재에 해당한다. 두산에너빌리티는 세계 최대급 1만7000t 프레스와 초대형 단조 기술을 바탕으로 원전 핵심 기자재를 세계 시장에 공급하고 있다.
+
+두산에너빌리티는 원전 기자재와 가스터빈 매출 상승에 힘입어 올 상반기 연결 기준 매출 8조9859억원, 영업이익 5478억원의 실적을 거뒀다. 지난해 같은 기간보다 각각 8.0%, 32.4% 증가한 수치이다. 에너빌리티 부문 상반기 수주 규모는 7조1225만원을 달성했다. 수주 잔액은 상반기 말 기준 26조3509억원으로 직전 분기와 비교했을 때 약 2조1000억원 증가했다.
+
+두산에너빌리티는 하반기 미국 대형 원전 시장 물량을 중심으로 매출을 확대한다는 방침이다. 미국 대형 원전 시장은 애초 상반기부터 본격화할 것으로 전망됐지만 민간 업체 주도로 진행되던 사업이 자금 조달 과정에서 병목현상이 발생하며 시장 자체가 지연 현상을 겪고 있다. 다만 하반기에는 미국 정부 정책에 힘입어 현지 원전 건설도 가속화할 것이라는 분석이다.
+
+베트남 원전 시장도 변수로 떠오르고 있다. 베트남 정부는 2035년 가동을 목표로 한 닌투언 2원전의 해외 파트너사 선정 절차를 밟는 중이다.
+'팀코리아'가 선정될 경우 2027년 내로 설계·조달·시공(EPC) 계약 체결과 주기기 발주가 가능할 전망이기도 하다.
+
+김종두 두산에너빌리티 사장은 "축적된 제작 경험과 초대형 단조 기술을 바탕으로 글로벌 원전 공급망에서 경쟁력을 지속 강화하겠다"고 강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005712943' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005712943</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
