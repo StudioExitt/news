@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주가 널뛰는데…레버리지 ETF 9개 '출격 대기'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.27</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001260079' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12678" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>주가 널뛰는데…레버리지 ETF 9개 '출격 대기'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">일본 반도체 기업 키옥시아 주가에 연동한 레버리지 ETF 등 총 9개의 상품이 미국 증시 상장을 준비 중이다. 이는 일본 내 규제 우회를 통한 움직임으로 해석되며, 기초자산의 변동성을 더욱 확대시킬 수 있다는 시장 분석이 나온다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단일 종목 기반 레버리지 ETF 상장 움직임은 일본 증시 전반에 '변동성'이라는 큰 리스크를 노출시키고 있다. 이는 투자자들에게 높은 관심을 불러일으키지만, 동시에 과도한 투기 심리를 유발하고 기초 자산의 가격 변동성을 가속화할 수 있어 단기적인 시장 불안정성이 높다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">키옥시아홀딩스</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">일본 반도체 기업 키옥시아홀딩스 주가에 연동한 레버리지 상장지수펀드(ETF)가 미국 증시 상장을 앞두고 있다. 단일 종목 레버리지 ETF 상장은 일본 기업 중 처음이어서 키옥시아 주가의 변동성이 더욱 커질 수 있다는 전망이 나온다.
+
+26일(현지시간) 블룸버그에 따르면 키옥시아 주가 또는 미국예탁증서(ADR)의 하루 수익률을 2배로 추종하거나 반대로 2배 역추종하는 ETF 최소 9개가 현재 상장 승인을 기다리고 있다. 이 가운데 터틀 캐피털이 운용하는 상품은 이르면 다음 달 미국 시장에 상장될 예정이다.
+
+매튜 터틀 터틀 캐피털 최고경영자(CEO)는 해당 상품에 대한 관심이 미국뿐 아니라 한국 투자자들 사이에서도 높다며, 한국발 자금이 운용자산의 3분의 1가량을 차지한다고 밝혔다.
+
+키옥시아는 일본 반도체 대표 종목이자 일본 증시에서도 변동성이 큰 종목으로 꼽힌다. 주가는 지난달 초 도쿄증시에서 11만2천700엔까지 오르며 일본 시가총액 1위 기업에 올랐지만, AI 과잉 투자 우려가 커지면서 27일 오전 현재 5만2천500엔까지 하락했다. 두 달도 채 되지 않아 고점 대비 53.4% 급락한 셈이다.
+
+인공지능(AI) 투자 열풍과 함께 전세계 레버리지 ETF 시장 규모는 2천700억달러(약 396조원)까지 커진 상태다.
+
+터틀 캐피털은 키옥시아 외에도 소프트뱅크그룹·닌텐도·메타플래닛 연동 상품을, 디렉시온은 도쿄일렉트론·도요타자동차 연동 상품을 준비하고 있어 일본 대형주 전반으로 레버리지 ETF 상장이 확산하는 양상이다.
+
+이들 상품이 일본이 아닌 미국에서 상장되는 것은 일본 내 규제 때문이다. 현행 제도상 단일종목 레버리지 ETF는 분산 투자 요건을 충족하지 못해 일본 내 공모 상장이 허용되지 않는다.
+
+이런 변동성은 수년간 글로벌 투자자들의 관심에 밀려나 있던 일본 증시 전반으로 번지고 있다.
+
+최근 30거래일 변동성을 연율화한 지표를 보면 닛케이225지수는 37%를 웃돌아 홍콩 항셍지수(22%)나 S&P 500 지수(13%)보다 높다.
+
+코스피의 변동성은 75%로 일본보다 더 높은 수준이다. 높은 변동성이 지수에 부담을 준다는 이유로 삼성전자·SK하이닉스를 기초자산으로 한 레버리지 ETF의 신규 상장은 중단된 상태다.
+
+시장에서는 레버리지 ETF가 목표 수익률을 맞추기 위해 매일 리밸런싱을 진행하는 과정에서 기초자산의 가격 변동성을 더욱 키울 수 있다는 분석도 나온다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001260079' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001260079</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
