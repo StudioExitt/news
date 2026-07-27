@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반도체 무너진 한 달…마진 좋은 정유, 변동성 버틴 금융만 살았다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.27</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='원문링크: https://n.news.naver.com/mnews/article/421/0009080987' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12690" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>반도체 무너진 한 달…마진 좋은 정유, 변동성 버틴 금융만 살았다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 등 대형 성장주가 큰 폭의 조정을 겪으며 시장 전반의 하락세를 보였습니다. 그러나 정유주는 마진 개선 기대감으로, 금융주는 상대적 안정성 및 실적 개선 가능성으로 강세를 나타내며 업종별 차별화 장세가 심화되었습니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">S-Oil</span> <span class="tag stock-tag">하나금융지주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">에너지 시설 및 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #정유 #금융 #차별화장세</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">한달 새 코스피 27% 급락…대형주 가운데 19개 종목만 상승
+정유·금융·바이오 일부 상승…"순환매보다 종목별 차별화"
+코스피 지수가 하루 만에 7000선을 반납한 24일 서울 중구 하나은행 본점 딜링룸 전광판에 종가가 나오고 있다. 2026.7.24 
+김성진 기자
+(서울=뉴스1) 서한샘 기자 = 코스피가 사상 최고치를 기록한 이후 한 달여 동안 26.6% 급락하면서 시가총액 10조 원 이상 대형주 10개 가운데 7개의 주가가 하락한 것으로 나타났다. 삼성전자(005930)와 SK하이닉스(000660)를 비롯한 반도체·정보기술(IT)주와 자동차주가 큰 폭으로 조정받은 반면 업황과 실적 등 뚜렷한 상승 요인이 있는 일부 대형주만 상승세를 유지했다.
+27일 한국거래소에 따르면 코스피는 사상 최고치를 기록한 지난달 22일 9114.55에서 이달 24일 6690.62로 26.6% 하락했다. 지난달 22일 종가 기준 시가총액 10조 원 이상 코스피 보통주 65개 가운데 이달 24일 주가가 당시보다 낮아진 종목은 46개로 전체의 70.8%를 차지했다. 상승한 종목은 19개에 그쳤다.
+하락 폭은 주가 상승을 주도했던 반도체·IT 대형주에서 두드러졌다. 이 기간 삼성전자는 35만 3500원에서 24만 9500원으로 29.4% 하락했다. SK하이닉스는 291만 9000원에서 175만 9000원으로 39.7% 떨어졌다.
+SK스퀘어(402340)와 삼성전기(009150)는 각각 43.7%, 40.5% 내렸고 LG이노텍(011070)도 44.7% 급락했다. 한미반도체(042700)의 낙폭도 33.7%에 달했다.
+자동차주의 하락세도 뚜렷했다. 현대차(005380)는 58만 1000원에서 40만 1000원으로 31.0%, 기아(000270)는 13.8%, 현대모비스(012330)는 15.3%, 현대오토에버(307950)는 39.3% 떨어졌다.
+반면 정유주는 대형주 상승률 1·2위를 차지했다. S-Oil(010950)은 10만 7000원에서 15만 1200원으로 41.3% 올라 상승률 1위를 기록했다. SK이노베이션(096770)도 29.8% 상승했다.
+유가 상승과 정제 마진 개선, 윤활기유 공급 부족에 따른 실적 기대가 주가를 밀어 올린 것으로 풀이된다. BNK투자증권에 따르면 6월 배럴당 29달러까지 낮아졌던 현물 정제 마진은 7월 평균 40달러, 지난 17일에는 48달러까지 상승했다.
+김현태 BNK투자증권 연구원은 "당초 2분기 배럴당 38달러까지 급등한 정제 마진이 하반기 하향 안정화되는 것을 가정했는데 현재까지 분위기는 전혀 그렇지 않다"며 "원료 공급에 큰 차질만 없다면 정유 실적은 3분기에도 예상보다 높은 수준이 유지될 전망"이라고 내다봤.
+상승한 19개 종목 가운데 금융주는 7개로 가장 많았다. 메리츠금융지주(138040)는 16.6%, 하나금융지주(086790)는 10.6%, KB금융(105560)은 9.2% 올랐다. 신한지주(055550)도 7.1%, 카카오뱅크(323410)는 5.0%, 기업은행(024110)은 3.9%, 우리금융지주(316140)는 3.3% 상승했다.
+최정욱 하나증권 연구원은 "시장 변동성이 확대되고 있는데 은행주는 타업종 대비 변동성이 매우 낮아 상대적인 안정성이 크게 부각되고 있다"고 설명했다. 2분기 순이자마진(NIM) 부진은 하반기에 다시 개선될 가능성이 크고 국채금리 상승과 원·달러 환율 하락 등도 은행주에 우호적인 환경이라는 평가다.
+바이오주도 하락장에서 선방했다. 삼성바이오로직스(207940)는 129만 5000원에서 151만 8000원으로 17.2% 상승했고, 셀트리온(068270)은 5.4% 올랐다.
+삼성바이오로직스는 2분기 매출 1조 3209억 원, 영업이익 5864억 원으로 분기 최대 실적을 기록했다. 1~4공장 풀가동과 우호적인 환율효과가 실적을 뒷받침했으며 회사는 연간 매출 성장률 전망도 20%로 높였다.
+이 밖에 HMM(011200)은 10.7%, 크래프톤(259960)은 7.8%, 한국항공우주(047810)는 6.4%, SK텔레콤(017670)은 6.2% 상승했다.
+상승세를 유지한 대형주가 정유와 금융, 바이오 등 여러 업종에 흩어진 것은 시장의 주도 업종이 교체됐다기보다 개별 실적과 상승 재료에 따른 차별화로 풀이된다. 김병연 NH투자증권 투자전략총괄은 "한국 증시는 IT가 약해질 때 다른 업종도 함께 밀리면서 업종 간 순환매가 원활하게 작동하지 않고 있다"며 "종목 간 변동성이 사상 최고 수준으로 확대돼 소수 종목이 시장 성과를 좌우하는 구조가 이어지고 있다"고 분석했다.</div><div class='news-src'>원문링크: <a href='원문링크: https://n.news.naver.com/mnews/article/421/0009080987' style='color:#64748b;word-break:break-all'>원문링크: https://n.news.naver.com/mnews/article/421/0009080987</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
