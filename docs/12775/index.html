@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[투자의 창] 슈퍼사이클은 어떻게 끝나는가</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.27</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004645748' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12775" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[투자의 창] 슈퍼사이클은 어떻게 끝나는가</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 슈퍼사이클의 지속 가능성에 대한 경고와 리스크 분석을 담은 기사입니다. 공급 과잉, 금리/수요 둔화, 부채 증가 등 세 가지 관점에서 잠재적 하락 위험 요인을 제시하며, 투자자들에게 시장에 대한 높은 신중함을 촉구합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 슈퍼사이클의 장기 지속 가능성을 세 가지 경제적 위협(공급 과잉, 수요/금리 둔화, 부채 리스크)과 역사적 사례를 들어 다각적으로 경고했기 때문에 시장 전반에 매우 큰 영향을 미칩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">반도체 대형주</span> <span class="tag stock-tag">클라우드 서비스 기업</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI리스크</span> <span class="tag tag-hash">#슈퍼사이클종료</span> <span class="tag tag-hash">#반도체투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">허재환 유진투자증권 매크로분석실장
+허재환 유진투자증권 매크로분석실장6~7월 반도체를 비롯한 국내 증시 하락 충격은 엄청났다. 이번 변동성을 경험한 투자자들이 다시 시장에 참여할까 싶은 걱정마저 들 정도다. 국내 증시의 장기 추세가 하락 반전됐다는 신호는 보이지 않는다. 다만 이번 기회에 인공지능(AI) 슈퍼사이클이 어떤 식으로 끝날 것인지에 대한 고민은 필요하다. 세 가지 경로를 생각해봤다.
+
+첫째, 1999년과 같은 공급 과잉 형태다. 투자자들은 1999~2000년 닷컴버블 당시 수익이 나지도 않는 닷컴기업들의 무리한 밸류에이션을 기억할 것이다. 당시 인터넷 버블 붕괴는 통신장비, 인터넷 중계기, 광케이블 등 인터넷 인프라가 실제 필요보다 많이 공급됐기 때문이다. 인터넷포털 업체에 이어 시스코 등 장비 업체들의 주가가 큰 폭으로 오르다가 결국 무너졌다. 이번 반도체 주가 하락이 심상치 않은 이유다. 현재 미국의 기술 투자 비중(GDP 대비)은 당시 수준에 근접하고 있다. AI와 인터넷 사이클을 단순 비교하기는 어렵지만, 데이터센터 공실률과 그래픽처리장치(GPU) 임대료 하락은 공급 과잉 여부를 판단할 중요한 지표다. 아직은 공급 과잉 징후가 심하지는 않다.
+
+둘째, 2022년과 같은 금리와 수요 둔화다. 당시 미국 연방준비제도의 급격한 금리 인상 이후 기업들은 비용 절감에 나섰고 클라우드를 비롯한 IT 투자를 줄였다. 지금은 금리 인상 속도가 가파르지 않을 것으로 보인다. 빅테크들의 영업활동은 양호하며 데이터센터 투자 의지도 건재하다. 그러나 투자 증가율은 전년 대비 81%인 반면 매출 증가율은 21%에 그쳐 투자와 실적의 괴리가 커지고 있다. 잉여현금흐름은 2025년 이후 감소 중이다. 향후 실적 시즌마다 빅테크들의 클라우드 매출 둔화 여부를 주시할 필요가 있다.
+
+셋째, 2008년 금융위기와 같은 자금조달 리스크다. 당시에는 주택담보대출 부실이 금융 시스템 전반으로 확산됐다. 현재 오라클을 포함한 주요 빅테크의 부채는 빠르게 늘고 있으며, 회사채 발행 증가로 부채 증가 속도가 투자 증가 속도에 육박하고 있다. 여기에 사모대출과 네오클라우드 기업을 중심으로 대출채권담보부증권(CLO)과 자산유동화증권(ABS) 발행도 확대되고 있다. 실제로 부채 부담이 큰 오라클과 코어위브의 주가는 고점 대비 60% 이상 하락했다.
+
+AI 사이클의 종료를 논하기에는 아직 이르다. 기술 측면에서의 AI 사이클은 정말 초기일지 모른다. 그러나 6개월, 1년 전과 비교하면 우려의 조짐이 늘어나고 있다. AI 주가 급등과 급락을 경험한 지금, 투자자들은 이전보다 신중해질 필요가 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004645748' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004645748</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

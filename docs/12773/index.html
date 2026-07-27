@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>증시 이제 빠질만큼 빠졌나…'하락 베팅' 공매도 주춤</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.27</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005553573' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12773" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>증시 이제 빠질만큼 빠졌나…'하락 베팅' 공매도 주춤</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">공매도 잔액과 대차거래 잔고의 급감은 시장에서 추가 하락에 베팅하는 움직임이 완화되었음을 시사한다. 전문가들은 국내 증시가 밸류에이션 매력(PER) 측면에서 중기 바닥권 진입 가능성을 높게 보고 있으며, 향후 빅테크 및 국내 주도주의 실적이 시장의 최대 변수가 될 것이라고 분석했다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">공매도 및 대차거래 잔고 감소는 하락세에 대한 베팅이 줄었음을 의미하며 단기적인 매도 압력이 완화될 수 있음을 시사하지만, 금리 인상과 빅테크 실적 악화 우려는 여전히 주요 위험 요인으로 남아있어 명확한 방향성을 제시하지 못함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#공매도주춤</span> <span class="tag tag-hash">#밸류에이션</span> <span class="tag tag-hash">#반도체사이클</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">이달 들어 주가 하락에 베팅하는 공매도와 대차거래 잔고가 급격하게 줄고 있다. 최근 국내 증시 조정이 과도하다는 시각이 확산되며, 추가 하락 가능성을 낮게 점치고 있는 것으로 풀이된다.
+
+27일 한국거래소에 따르면 지난 22일 유가증권시장의 공매도 순보유 잔고액은 16조8492억원으로, 이달 들어서만 3조4761억원(17.10%) 줄었다. 사상 최대치를 기록한 지난달 1일(22조8164억원)과 비교하면 한 달 반 만에 6조원 가까이 급감했다.
+
+코스닥 시장도 비슷한 흐름을 보이고 있다. 지난 22일 코스닥 시장의 공매도 순보유 잔고액은 5조8586억원으로, 이달 들어 6886억원(10.52%) 줄었다.
+
+공매도 '실탄'으로 여겨지는 대차거래 잔고도 감소하는 추세다. 금융투자협회 집계 결과 지난 24일 기준 주식 대차거래 잔고는 148조8825억원으로, 이달 들어 29조894억원(16.34%) 급감했다. 대차거래 잔고는 지난달 15일 195조3006억원으로, 200조원에 근접하며 사상 최대치를 경신한 뒤 감소하고 있다.
+
+대차거래는 외국인이나 기관이 다른 투자자에게 일정 수수료를 받고 주식을 빌려주는 거래로, 공매도 선행지표로 꼽힌다. 대차거래 잔고 감소는 공매도로 전환될 수 있는 잠재 매도 물량이 줄어들고 있다는 것으로, 증시 하락에 베팅하는 움직임이 완화됐다는 의미다.
+
+국내 증시가 극심한 변동성을 보이며 크게 출렁이자, 추가 하락 가능성을 낮게 본 투자자들이 늘어난 것으로 해석된다. 최근 국내 증시는 '반도체 고점론' 속 중동 정세 불안에 따른 유가 급등, 금리인상 우려 등이 맞물리며 투자심리가 크게 위축된 상황이다. 이달 들어 이날까지 코스피는 20.30%, 코스닥은 16.52% 하락했다.
+
+증권가에선 국내 증시가 과도한 저평가 국면에 진입한 만큼, 점차 회복세를 보일 것으로 예상한다. 허재환 유진투자증권 연구원은 "단기 주가 하락 폭이 이례적이기 때문에 국내 증시의 하락 압력은 점차 진정될 것"이라며 "다만 금리인상 가능성이 높은 데다, 빅테크들의 이익률 둔화와 현금흐름 악화에 따른 설비투자 지속성에 대한 의구심이 지속되고 있어 주가 회복에는 시간이 필요할 것"이라고 내다봤.
+
+이번 주는 빅테크 실적 발표가 몰려 있는 만큼, 국내 증시의 최대 분수령이 될 것으로 보인다. 이번 주 마이크로소프트, 메타플랫폼, 애플, 아마존닷컴 등이 실적을 발표할 예정이다. 삼성전자와 SK하이닉스 등 국내 주도주의 실적 발표도 예정돼 있다.
+
+한지영 키움증권 연구원은 "코스피 선행 주가수익비율(PER)이 6배를 하회할 정도로 밸류에이션 매력이 높다"며 "밸류에이션, 기술적 관점에서 중기 바닥권에 진입한 만큼, 이번 주 예정된 대내외 대형 이벤트를 통해 반등의 에너지를 얼마나 확보해 나갈 수 있는지가 관건"이라고 짚었다. 이를 이어 "지난주 알파벳과 인텔 모두 호실적에 설비투자 상향이 확인됐음에도 대규모 투자에 따른 현금흐름 악화 우려가 퍼지면서 반도체 주가에도 악재로 작용했다"며 "결국 반도체 주가를 결정하는 무게 중심이 고객사들의 수익성으로 이동하고 있어, 현금흐름, 영업이익률과 같은 지표 개선 여부를 주시할 필요가 있다"고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005553573' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005553573</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
