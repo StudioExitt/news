@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사이드카 42번·서킷브레이커 22번… 변동성 질린 개미들 ‘국장 탈출’ 가속</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/005/0001863696' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13078" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>사이드카 42번·서킷브레이커 22번… 변동성 질린 개미들 ‘국장 탈출’ 가속</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">잦은 사이드카 및 서킷브레이커 발동과 개미 투자자들의 막대한 손실이 이어지면서, 개인 자금이 국내 증시(국장)에서 미국 주식이나 은행 예적금 등 안전자산으로 급격히 이동하고 있는 추세입니다. 이는 국내 시장의 단기적인 매수 동력 약화를 시사합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">극심한 시장 변동성과 개인 투자자의 대규모 손실 발생은 단기적인 투매를 유발하며, 자금의 해외 및 안전자산 이동은 국내 시장에 심각한 매수세 감소 신호를 보내고 있기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주가급락</span> <span class="tag tag-hash">#자금흐름</span> <span class="tag tag-hash">#국장탈출</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">‘국장(국내 증시) 탈출은 지능 순’이라는 자조적인 말이 다시 개인투자자 입에 오르내리기 시작했다. 28일 장중 6000선과 700선이 각각
+붕괴된 코스피와 코스닥에 투자해 막대한 손실을 보면서다. 투자자 예탁금은 줄고 자금은 부동산과 미국 주식, 은행 예적금 등으로 분산하는
+양상이다.
+
+28일 한국거래소에 따르면 올해 한국 증시에서는 사이드카가 42번, 서킷브레이커가 22번 발동됐다. 전례 없는 변동성이다. 개인투자자들
+사이에서는 “도저히 개인으로서는 수익을 낼 수 없는 시장”이라는 말이 나온다. 이날 코스피는 올해 장중 고점 대비 36%, 코스닥은 43% 각각
+폭락했다.
+
+정부가 환율 안정책으로 내놓은 삼성전자·SK하이닉스 단일종목 레버리지는 개인투자자에게 독이 됐다. 단일종목 레버리지에 투자한 개인은 원금의 반
+이상을 잃었다. 24일 기준 NH투자증권을 통해 ‘코덱스(KODEX) SK하이닉스단일종목레버리지’에 투자한 이들의 평균 수익률은 -45.43%로
+집계됐다. 전체 투자자의 0.01%만이 수익을 냈다. 99.99%는 손실이다.
+
+증시 대기자금 성격의 투자자 예탁금은 쪼그라들고 있다. 금융투자협회에 따르면 27일 기준 투자자 예탁금은 109조1674억원으로 지난달
+4일(139조6947억원) 기록한 올해 고점보다 30조원 줄었다. 상반기 지수 상승을 이끌어온 개인의 매수 여력이 약해졌다는 의미다.
+이재원 유안타증권 연구원은 “개인의 저가 매수 여력은 이달 이후 지속해서 둔화됐다”며 “수급상 지수 반등을 견인할 순매수 주체가 없다”고 설명했다.
+
+반면 미국 주식에는 자금이 가파르게 유입되고 있다. 이날 한국예탁결제원에 따르면 지난 1~27일(조회일 기준) 국내 투자자의 미국 주식
+순매수액은 35억8999만 달러(5조2762억원)에 이르렀다. 지난 23일까지 순매수액은 25억3026만 달러(3조7181억원)였는데 2거래일
+만에 10억5973만 달러(1조5581억원)가 늘었다.
+
+예적금을 깨서 주식을 매매했던 자금은 다시 은행으로 ‘유턴’할 조짐을 보인다. 5대 시중은행(KB국민·신한·하나·우리·NH농협)
+의 지난 15일
+기준 정기예금 잔액(총 965조2949억원)은 지난달 말보다 15조8950억원 증가했다. 지난해 5월(18조3953억원) 이후 1년2개월 만에
+가장 큰 증가폭이다. 이 속도가 월말까지 이어진다면 2022년 10월(47조7231억원) 이후 3년9개월 만에 최대 증가폭이 될 수 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/005/0001863696' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/005/0001863696</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
