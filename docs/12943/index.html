@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>급락장에 AI 만능론 제동…"증시 변동성 예측해도 줄이진 못해"</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.28</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006338336' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12943" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>급락장에 AI 만능론 제동…"증시 변동성 예측해도 줄이진 못해"</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">글로벌 자산운용사는 AI가 시장의 변동성을 예측할 수는 있으나, 그 자체를 낮추거나 투자 수익을 보장하지 못한다고 경고했습니다. 또한 'AI 만능론'과 '슈퍼사이클'에 대한 기대 심리를 누그러뜨리며 신중한 관점을 제시했습니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI위험관리</span> <span class="tag tag-hash">#투자원칙</span> <span class="tag tag-hash">#거시경제분석</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피 10%·코스닥 8% 급락 '검은 화요일'\nAI 슈퍼사이클에도 신중론…"모든 것은 영원하지 않다"\nAI, 코딩은 잘했지만 투자수익은 '글쎄' 코스피와 코스닥 양 시장에 서킷브레이커가 발동할 정도로 국내 증시 변동성이 커진 28일, 운용자산 1조달러 규모의 글로벌 자산운용사 디멘셔널펀드어드바이저스(DFA)는 “인공지능(AI)이 시장 변동성을 예측하는 데는 도움이 될 수 있지만, 변동성 자체를 줄여주지는 못한다”는 진단을 내놨다.
+
+피터 딜라드 디멘셔널펀드어드바이저스(DFA) 글로벌 투자 엔지니어링 대표. (사진=DFA)
+
+“AI는 정보를 더 빨리 반영할 뿐…시장 안정시키진 못해”
+세계경제연구원은 이날 'AI 시대의 포트폴리오 투자 전략'을 주제로 웨비나를 개최했다. 연사로 나선 피터 딜라드 DFA 글로벌 투자 엔지니어링 대표는 AI의 실제 자산운용 활용 사례와 한계, AI 시대의 투자 전략을 소개하며 AI를 둘러싼 과도한 기대에 선을 그었다.
+
+딜라드 대표는 한국 증시처럼 변동성이 큰 시장에서 AI가 시장을 더 안정적으로 만들 수 있느냐는 질문에 “AI를 활용해 시장 변동성이 커지는 시기나 패턴을 예측하는 데는 도움을 받을 수 있다”면서도 “시장 변동성을 줄여주는 것과는 다른 문제”라고 말했다.
+
+그는 “금융시장에는 가격과 옵션 등 변동성과 관련된 정보가 매우 많다”며 “AI는 이런 정보를 더 빠르게 수집하고 분석하는 데 유용하다”고 설명했다. 이어 “새로운 정보가 시장에 더 빠르게 반영될수록 가격 변동 역시 커질 수 있다”며 “AI는 정보를 더 빨리 반영하게 만들 수는 있지만 시장을 더 안정적으로 만들지는 못한다”고 강조했다.
+
+이어 “AI가 시장 변동성을 완화해 줄 것으로 보지는 않는다”며 “거래 중단(서킷브레이커)과 같은 제도는 투자자들이 잠시 시장을 냉정하게 바라볼 수 있도록 만든 장치이며, AI가 시장의 변동성 자체를 줄이는 역할을 하는 것은 아니다”라고 덧붙였다.
+
+이 같은 발언은 이날 국내 증시가 미국 반도체주 급락 여파로 코스피와 코스닥이 각각 10%, 8% 넘게 급락하며 양 시장에 서킷브레이커가 발동된 가운데 나와 더욱 눈길을 끌었다.
+
+최근 시장의 최대 화두인 AI 슈퍼사이클에 대해서도 신중한 입장을 보였다. 딜라드 대표는 “AI 슈퍼사이클이 얼마나 지속될지는 말하기 어렵다”며 “현재는 수요가 공급을 크게 웃돌고 있기 때문에 이런 현상이 나타나고 있다”고 설명했다. 이어 “수요가 계속된다면 기업들은 장기적으로 인프라 투자와 생산 확대에 나설 것이지만, 모든 것이 영원히 지속되지는 않는다”고 말했다.
+
+향후 AI의 역할에 대해서도 ‘만능론’을 경계했다. 그는 “AI가 모든 직업을 없애거나 대규모 해고를 가져올 것이라고는 생각하지 않는다”며 “AI는 결국 하나의 도구가 될 것이며 개인의 삶과 업무 전반에 활용될 것”이라고 말했다. 이어 “지금 우리가 해야 할 일은 AI를 배우고 연구하고 탐구하는 것”이라며 “대부분의 일은 양극단보다 그 중간 어디 쯤에 답이 있다”고 강조했다.
+
+딜라드 대표는 AI를 실제 자산운용에 적용한 사례도 소개했다. 그는 AI가 코딩 지원이나 복잡한 기업 활동 문서를 요약·분석하는 업무에서는 높은 효율을 보였지만, 데이터 이상 탐지나 방대한 채권 약정에서 핵심 정보를 추출하는 작업에서는 비용 대비 효과가 기대에 미치지 못했다고 설명했다.
+
+이에 따라 AI를 무조건 도입하기보다 업무 특성에 맞게 활용 여부를 판단하는 ‘평가 프레임워크’가 필요하다고 제안했다. AI가 정확한 답을 요구하는 업무인지, 초안 작성만으로 충분한 업무인지, 전문가가 결과를 빠르게 검증할 수 있는지, 오류 발생 시 쉽게 되돌릴 수 있는지 등을 먼저 따져봐야 한다는 것이다.
+
+시장 관심이 높은 ‘AI가 투자 성과를 높일 수 있는가’에 대해서도 신중한 견해를 내놨다. 딜라드 대표는 “AI가 방대한 정보를 빠르게 종합하고 예측의 정확도를 높인다고 해서 항상 포트폴리오 성과가 개선되는 것은 아니다”라며 “시장 가격은 수많은 투자자의 정보와 판단이 반영된 결과인 만큼 AI가 이 집단지성을 지속적으로 이기기는 쉽지 않다”고 말했다.
+
+이어 “범용 데이터와 범용 AI를 활용한다면 경쟁자들 역시 비슷한 도구를 사용할 가능성이 높다”며 “범용 AI만으로 지속적인 경쟁 우위를 확보하기는 어렵다”고 진단했다.
+
+그러면서 “운용사는 고객으로부터 단순히 업무를 위임받는 것이 아니라 문제 해결에 대한 책임까지 맡고 있다”며 “최종 투자 판단과 그에 따른 책임은 AI가 아닌 사람이 져야 한다”고 강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006338336' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006338336</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>토스도 거른 '국내 소수점'…카카오페이증권이 꺼낸 속사정</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.28</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000519671' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12942" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>토스도 거른 '국내 소수점'…카카오페이증권이 꺼낸 속사정</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">카카오페이증권이 토스증권 등 경쟁사들이 회피했던 국내 주식 소수점 거래 시장에 8월부터 전격 도입합니다. 이는 단순한 수수료 수익보다 카카오뱅크 연동을 통한 강력한 고객 락인(Lock-in) 효과와 미래 사용자 기반 확보를 목표로 합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">카카오페이증권의 주도적인 행보는 국내 증권 업계 전반에 경쟁과 트렌드 변화를 야기하며, 플랫폼 금융 기업들의 리테일(Retail) 부문 확장에 대한 기대감을 높입니다. 특히 2000만 명 규모의 기존 사용자 기반을 활용하려는 시도가 주목됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">소비자 금융</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증권업</span> <span class="tag tag-hash">#플랫폼금융</span> <span class="tag tag-hash">#소액투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">28일 금융투자업계에 따르면 카카오페이증권은 오는 8월부터 국내 주식 소수점 거래를 전격 도입할 예정이다. 
+카카오페이증권이 금융당국으로부터 투자매매업 본인가를 취득하자마자 국내 주식 소수점 거래에 나섰다. 이는 경쟁사인 토스증권이 비용 대비 수익성이 없다는 이유로 진입을 유보한 시장이다. 플랫폼 증권사 간 전략이 이처럼 엇갈린 가운데 카카오페이증권이 국내 주식 소수점 시장에 속도를 낸 배경을 두고 관심이 쏠린다.
+28일 금융투자업계에 따르면 카카오페이증권은 지난 7월 투자매매업 인가 취득 후 오는 8월부터 국내 주식 소수점 거래 서비스를 도입하고, 인터넷전문은행 계열사인 카카오뱅크와 앱 연동을 시작한다고 밝혔다.
+국내 주식 소수점 거래는 1주 단위로만 거래할 수 있던 기존 방식과 다릴 고가의 우량주를 0.1주나 0.01주 등 소수점 단위로 쪼개서 사고팔 수 있는 서비스다. 주당 수십만원을 호가하는 대형주도 단돈 1000원만 있으면 원하는 만큼 매수할 수 있어 자본이 적은 소액 투자자들의 진입 장벽을 낮추는 핵심 서비스로 꼽힌다.
+국내 증권사들 사이에서도 대형사와 중소형사를 가리지 않고 투자매매업 인가만 있으면 대부분 도입해 서비스하고 있다. 다만 토스증권은 다르다. 토스증권은 해외 주식 소수점 거래만 제공할 뿐, 국내 주식 소수점 시장에는 진입하지 않고 있다. 토스증권은 시스템 구축 비용과 한국예탁결제원 정산 절차 등 복잡한 인프라 대비 거래 수수료 수익성이 떨어진다는 이유로 신중론을 유지 중이다.
+이처럼 토스증권이 돌아선 시장에 카카오페이증권이 정반대로 발을 들이면서 두 회사의 행보는 더 대비되는 분위기다. 양사 모두 모바일 환경에 최적화된 사용자 인터페이스(US)를 무기로 전통 증권사와 차별화하며 2030 세대와 초보 투자자를 선점해 성장한 플랫폼 기반 증권사이기 때문이다.
+카카오페이증권이 토스증권과 달리 국내 주식 소수점 거래부터 나선 배경은 당장 수수료 수익보다 미래 잠재 고객을 가두는 락인(Lock-in) 효과에 무게를 둔 결과로 풀이된다. 주당 가격이 높아 접근하기 어려웠던 대형 우량주를 소액으로 살 수 있게 유도함으로써 투자에 처음 입문하는 젊은 층을 카카오 플랫폼의 단골 손님으로 조기에 선점하겠다는 계산이다.
+여기에 2000만명이 넘는 이용자를 보유한 카카오뱅크와 앱 연동이 결합하면서 카카오페이증권의 독자 행보는 한층 탄력받을 것이라는 기대감이 깔려 있다. 별도의 증권 앱을 깔지 않아도 카카오뱅크 안에서 국내 소수점 주식을 일상처럼 거래할 수 있는 환경을 제공해 후발주자로서 한계를 지우고 시장에서 존재감을 드러내겠다는 복안이다.
+신호철 카카오페이증권 대표가 지난 23일 서울 여의도 콘래드호텔에서 열린 기자간담회에서 투자매매업 인가를 획득한 카카오페이증권의 청사진에 대해 설명하고 있다. 
+실제로 신호철 카카오페이증권 대표는 최근 기자간담회를 통해 "현재 모바일트레이딩시스템(MTS) 출시가 상대적으로 늦어 시장을 따라잡는 단계"라면서도 "3년 내 2000만명이 투자하는 시대를 만들어 보고 싶다"며 리테일 확장 의지를 강력히 피력했다. 당장 실리보다는 소액으로 주식을 시작하는 사용자들을 유입시켜 육성하겠다는 구상이다.
+일각에서는 우려의 목소리도 나온다. 국내 증시는 이미 소액 분산 투자가 가능한 상장지수펀드(ETF) 시장이 고도로 활성화돼 있는 데다, 소수점 거래 역시 대부분 증권사가 수년 전 도입을 마친 상태로 후발주자로서 서비스 자체의 차별성을 가지지 어렵다는 이유에서다.
+특히 해외 주식과 달리 환전 수익 등을 기대할 수 없는 국내 주식 소수점 거래 특성상 신규 유입 효과에 비해 실익이 크지 않을 것이라는 시각도 존재한다.
+여기에 카카오페이증권이 지난해 창사 이래 첫 연간 흑자 전환에 성공했으나, 과거 적자 시절 누적된 수백억원대 결손금 부담이 여전하다는 점도 우려되는 대목이다. 고객 유입 효과가 불확실한 상황에서 카카오뱅크 연동과 시스템 구축을 위한 대규모 마케팅이나 인프라 비용을 투자하는 행보가 재무 구조에 다시 부담을 줄 수 있다는 지적이다.
+한 금융투자업계 관계자는 "국내 주식 소수점 거래는 증권사 입장에서 마진이 거의 남지 않는 대표적인 유인용 서비스"라며 "카카오페이증권이 후발주자로서 한계를 깨기 위해 카카오뱅크와 손을 잡고 정면 돌파를 선택했으나, 고정비 부담을 넘어서는 유입 효과를 낼 수 있을지가 관건"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000519671' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000519671</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
