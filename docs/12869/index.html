@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KB증권 "반도체 우려 과도…삼성전자·SK하이닉스 매수 적기"</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.28</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006338035' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/12869" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>KB증권 "반도체 우려 과도…삼성전자·SK하이닉스 매수 적기"</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">KB증권은 반도체 시장의 공급 과잉 우려가 해소될 것이며, AI 데이터센터를 중심으로 수요 증가세가 강력하다고 분석했다. 2027년부터 B2C 시장에서 메모리 부족이 심화될 것으로 전망하며, 현재 시점을 주요 메모리 업체의 매수 적기로 제시했다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 증권사가 AI 수요 기반의 공급 과잉 해소 및 장기적(2027년) 공급 부족을 예상하며 현 시점 매수를 강력하게 추천하고 있어 투자심리 개선에 매우 긍정적임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#AI</span> <span class="tag tag-hash">#매수적기</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">KB증권이 반도체 업종을 둘러싼 과도한 우려가 빠르게 해소될 것으로 전망했다. 중국 메모리 업체 CXMT의 생산능력(Capa) 증설이 향후 수년간 이어지더라도 D램 시장 전반의 공급 과잉으로 이어질 가능성은 제한적이라는 분석이다.
+
+28일 KB증권은 보고서를 통해 삼성전자와 SK하이닉스 등 주요 메모리 업체에 대한 긍정적인 시각을 유지한다고 밝혔다. 최근 주가 급락에도 불구하고 신규 D램 생산능력의 상당 부분이 고대역폭메모리(HBM)에 집중되면서 범용 D램의 실질적인 공급 증가는 제한적인 반면, 인공지능(AI) 데이터센터를 중심으로 수요는 꾸준히 증가하고 있다는 설명이다.
+
+특히 CXMT의 D램 생산능력이 현재 월 24만장(240K) 수준에서 수년 내 60만장(600K)까지 확대될 것으로 예상하면서도, 증설 물량 대부분이 화웨이와 텐센트, 알리바바 등 중국 AI 인프라와 내수 IT 기기에 사용될 것으로 전망했다. 중국 정부의 AI 산업 육성에 힘입어 중국 내 메모리 수요 증가가 공급 증가를 웃돌 것으로 예상되는 만큼 글로벌 시장의 공급 과잉으로 이어질 가능성은 크지 않다는 분석이다.
+
+또 삼성전자와 SK하이닉스는 미국 빅테크를 중심으로 장기공급계약(LTA)을 확대하고 있어 CXMT와 주력 고객층이 겹치지 않는다고 평가했다. 애플의 중국산 메모리 채용 가능성도 미국의 대중 규제와 중국 정부의 전략 자산 통제 등을 고려하면 현실화될 가능성이 제한적이라고 봤다.
+
+아울러 2027년부터 메모리 업체와 미국 빅테크 간 장기공급계약(LTA)이 본격 확대되면서 생산 물량의 상당수가 AI 서버용으로 우선 배정될 것으로 내다봤다. 이에 따라 스마트폰·PC·가전 등 B2C 시장에서는 메모리 부족 현상이 더욱 심화될 것으로 전망했다. KB증권은 반도체 역사상 2027년이 공급 부족이 가장 심한 시기가 될 것으로 예상된다며, 최근 주가 하락으로 밸류에이션 부담이 완화된 만큼 현 시점은 메모리 업체들의 매수 적기라고 판단했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006338035' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006338035</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
