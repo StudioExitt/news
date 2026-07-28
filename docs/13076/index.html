@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>나스닥100 조정권 근접에도…장중 S&P 상승 전환·다우 강세</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006338622' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13076" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>나스닥100 조정권 근접에도…장중 S&P 상승 전환·다우 강세</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">나스닥 조정 우려로 출렁였던 뉴욕 증시는 장중 S&P 500지수가 상승 전환하며 반등했고, 다우존스는 실적 호조를 바탕으로 강세를 보였습니다. 하지만 핵심 기술주인 반도체 지수는 낙폭을 줄이는 데 그쳤으며, 유가 하락과 연준의 금리 결정이라는 주요 변수로 인해 시장은 방향성을 놓고 불확실성이 높은 상황입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">S&P 기록 경신 및 다우 강세 등 일부 업종에서 펀더멘털 기반 반등을 보였으나, 핵심 기술주(반도체)와 거시경제 변수(유가/금리)의 불확실성이 높아 전방위적 확신이 부족합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">헬스케어</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#글로벌증시</span> <span class="tag tag-hash">#거시경제</span> <span class="tag tag-hash">#금리결정</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">필라델피아반도체지수 낙폭 축소
+유가는 오히려 3%대로 낙폭 확대
+빅테크 실적·연준 결정이 분수령[뉴욕=이데일리 성주원 특파원] 뉴욕증시가 28일(이하 현지시간) 장 초반 반도체주발 조정 우려로 출렁였다가 오전 중반 들어 낙폭을 상당 부분 만회했다. 나스닥100지수는 여전히 기술적 조정권에 근접해 있지만, 스탠더드앤드푸어스(S&P)500지수는 플러스로 돌아섰고 다우존스30산업평균지수는 1%대 강세로 상승폭을 키웠다.
+
+뉴욕증권거래소.(사진=AFP)
+
+블룸버그에 따르면 이날 오전 11시22분 기준 S&P500지수는 0.3% 상승, 나스닥100지수는 0.9% 하락을 기록했다. 개장 초반 나스닥100이 2%, 필라델피아반도체지수(SOX)가 6%대 급락했던 것과 비교하면 낙폭이 크게 줄어든 수치다. 블룸버그는 S&P500 구성종목 중 상승 종목이 하락 종목의 3배에 달했고, 시가총액 편중을 제거한 동일가중 S&P500지수는 사상 최고치를 새로 썼다고 전했다.
+
+반도체주 낙폭 축소…SOX 4.5%대로
+
+CNBC에 따르면 오전 11시28분 기준 반도체 상장지수펀드(ETF)인 SMH는 3% 하락으로, 개장 초반 4%대에서 낙폭이 줄었다. 마이크론은 9% 하락해 개장 초반 10% 낙폭보다는 소폭 완화됐고, ARM홀딩스와 테라다인은 7% 하락해 역시 개장 초반(-8%)보다 낙폭을 줄였다. 개장 초반 6%대 급락했던 SOX 역시 낙폭이 4.5% 정도로 줄었다.
+
+i 같은 흐름에 대해 베어드의 로스 메이필드 투자전략가는 “매우 광범위한 로테이션이 진행되고 있다”며 “이번 모멘텀 되돌림은 6~8주째 이어지고 있는 이야기로, 펀더멘털 변화보다는 시장의 기술적 요인과 관련이 크다”고 진단했다. 메이필드는 이번 주 빅테크 실적이 양호하더라도 “그것만으로는 (반도체·기술주의) 최근 상승을 정당화하기에 충분하지 않을 것”이라며, 경기순환주로의 로테이션이 지속되려면 유가와 금리가 현 수준을 유지해야 한다고 덧붙였다.
+
+다우 1%대·나스닥종합은 보합권
+
+CNBC에 따르면 다우지수는 1%대 상승하며 개장 초반 0.7% 상승보다 오름폭을 키웠다. 미국 페인트·도료 전문 제조업체 셔윈윌리엄스가 2분기실적 호조로 8% 급등하며 지수 상승을 이끌고 있고, 코카콜라도 실적 호조에 약 6% 오름세다. 나스닥종합지수는 “소폭 하락”(down marginally)한 수준으로, 개장 초반 0.8~1.16%대 하락에서 낙폭을 대부분 만회했다.
+
+i 같은 로테이션 속에 스테이트스트리트 헬스케어(XLV)·금융(XLF) 섹터 ETF는 장중 사상 최고치를 새로 썼고, 기술주 중심의 테크놀로지 셀렉트 섹터 스파이더펀드(XLK)는 지난 5월7일 이후 최저 수준까지 밀렸다고 CNBC는 전했다.
+
+유가는 낙폭 확대…WTI 배럴당 80달러선
+
+국제유가는 낙폭을 키웠다. 블룸버그에 따르면 서부텍사스산원유(WTI)는 이 시각 약 3% 내린 배럴당 80달러 선까지 떨어졌다. 개장 초반 1~2% 하락보다 낙폭이 확대된 것이다. 이란이 사우디아라비아·오만과 호르무즈해협 항행 재개를 논의하는 가운데, 도널드 트럼프 미국 대통령과 베냐민 네타냐후 이스라엘 총리는 이날 백악관에서 이란 문제를 논의할 예정이다.
+
+스페이스X 주가도 흐름이 반전됐다. 개장 초반 블룸버그는 스페이스X 주가가 3.8% 급락해 기업공개(IPO) 공모가 대비 20% 가까이 밀렸다고 전했으나, 이후 낙폭을 만회해 3% 상승으로 돌아서는 데 성공했다.
+
+이번 주 빅테크 실적·연준 결정이 분수령
+
+제프리스의 윌리엄 비빙턴 애널리스트는 “시장이 인공지능(AI)에 대한 흥분에서 벗어나 경제성을 입증하라는 국면으로 이동하고 있다”며 “AI 설비투자 붐이 무너질 경우 긴축에서 완화로의 급격한 정책 전환이 나타날 수 있다”고 전망했다고 블룸버그는 전했다. 마이크로소프트(MS)와 메타플랫폼스는 오는 29일, 아마존과 애플은 30일 각각 실적을 발표한다.
+
+연준은 오는 29일 금리 결정을 발표한다. ING 아메리카 지역 리서치 총괄 패드레익 가빈은 “동결이 우리의 예상”이라며 “수익률 곡선 구조도 금리 인상 사이클과는 맞지 않는다”고 말했다. 다만 CNBC는 CME 페드워치 도구 기준 선물시장이 9월 0.25%포인트 인상 가능성을 반영하고 있다고 전해, ING의 진단과 다소 결이 다른 신호도 함께 나타나고 있다.
+
+한편 메타플랫폼스는 블랙록과 함께 텍사스에 1기가와트(GW)급 데이터센터를 140억달러(약 20조3700억원) 규모로 구축하기로 했다고 블룸버그는 전했다.
+
+메이필드 전략가의 지적대로 로테이션(순환매)이 펀더멘털보다 기술적 요인에 가깝다면, 이번 주 발표될 빅테크 실적이 예상을 웃돌더라도 반도체·기술주의 낙폭을 완전히 되돌리기는 쉽지 않을 수 있다. 유가마저 3%대로 낙폭을 키운 상황에서 29일 연준의 금리 결정이 시장 분위기를 어느 쪽으로 이끌지 주목된다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006338622' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006338622</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
