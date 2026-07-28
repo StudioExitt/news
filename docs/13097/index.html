@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'AI 부진아' 비난받던 애플, 오히려 'AI의 저주' 피해가는 중 [마켓무버의 국장 힌트]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001260333' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13097" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'AI 부진아' 비난받던 애플, 오히려 'AI의 저주' 피해가는 중 [마켓무버의 국장 힌트]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">기술주 중심의 나스닥은 하락했으나, 외부 환경과 달리 AI 투자심리가 약세를 보이는 국면을 분석했습니다. 애플처럼 CAPEX(설비투자) 비율이 낮은 종목이 주목받고 있으며, 반도체 경기 사이클에 따라 금융, 바이오 등 다른 섹터로 자금이 순환하는 전략적 투자가 필요하다고 조언합니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">애플</span> <span class="tag stock-tag">마이크로소프트</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI사이클</span> <span class="tag tag-hash">#주식투자전략</span> <span class="tag tag-hash">#섹터분할</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미 증시 살펴보며 한국 증시 투자아이디어까지 찾는 마켓 무버입니다.
+
+간밤 뉴욕증시 3대지수 보면 미국 기업들의 호실적과 함께, 반도체 투자심리 약세가 함께 확인됩니다.
+
+7월 29일(한국시간) 미 증시 S&P 500 내 섹터별 등락
+7월 29일(한국시간) 미 증시 S&P 500 내 섹터별 등락
+다우지수는 1.03%, S&P 500 지수는 0.21% 오른 반면 기술주 중심의 나스닥은 0.22% 하락했습니다. 세계에서 가장 큰 반도체 ETF의 벤치마크인 미국 SMH반도체지수도 3.5% 내렸지요.
+
+이란이 중재국인 오만 등과 대화에 나서며 국제유가가 서부텍사스산중질유(WTI) 선물 기준 배럴당 80달러 아래로 내려갔고, 코카콜라 등 오늘실적을 발표한 주요 기업들의 성적표도 대체로 좋았습니다. 2분기 S&P 500 기업들의 주당순이익 성장률이 역대급이 될 것이란 시장의 믿음이유지되는 국면입니다.
+
+외부 환경이 나쁘지 않은데 AI 투자심리는 왜 좋지 않을까, 에 대한 궁금증이 커지는데요. 이 궁금증을 해결해줄 수 있는 한 단면을 애플이라는종목이 보여주고 있습니다.
+
+엔비디아를 제치고 세계 시가총액 1위 기업이라는 자리를 탈환한 데 이어, 애플 시가총액은 장중 한 때 5조 달러를 돌파하기도 했습니다.
+
+모건스탠리에 따르면 알파벳이나 아마존, 메타 등 하이퍼스케일러 기업들의 설비 투자 비율은 연매출 대비 34%에 달하지만 애플의 설비 투자 비율은올해 예상 매출의 2.5% 수준에 불과합니다.
+
+최근 순환 금융 논란 등 AI 투자에 대한 시장의 의구심이 커지면서 오히려 투자에 신중했던 애플이 시장의 관심을 받고 있는데요.
+
+반도체 투자자분들께 다행스러운 일은, 시간외 거래에선 장중 낙폭을 보인 주요 반도체와 장비 기업들이 대체로 상승하고 있다는 점입니다. 마이크론이1% 이상 상승 중인 것을 비롯해 장마감 후 실적을 내놓은 하드디스크 전문 기업 시게이트도 애프터마켓에서 5%대 오르고 있습니다. 반도체 장비기업 KLA는 시장 예상을 넘는 실적에도 낙폭(-7.49%)을 이어가고 있지만요.
+
+최근 지속된 반도체 매도세가 언제까지 이어질지가 관건인데, 물론 앞으로 예정된 주요 이벤트가 변수가 될 수 있겠습니다. 
+
+메타와 마이크로소프트 실적, 그리고 FOMC 결과가 확인될 내일이 큰 변곡점이 될 수 있겠지요.
+
+마이크로소프트의 경우 클라우드 사업부가 30% 이상의 매출 성장을 이뤄내면서 자본지출이 계속 높아질지가 관건입니다. 이같은 숫자가 나와준다면AI 비관론이 불식될 가능성이 있다는 게 월가의 분석입니다.
+
+조금 다른 관점에서, 반도체 선호 심리가 잦아들고 완연한 순환매로 나아가는 국면이라면 어떤 식의 투자가 지금 단기적으로 유효한가, 하는 질문을던져볼 수도 있겠습니다. 
+
+미국 증시는 반도체가 안 좋을 때 유틸리티, 금융, 부동산, 바이오 등이 강세를 보여왔습니다.
+
+한국 증시의 경우 반도체의 두 기둥, 삼성전자가 하이닉스가 주춤 할 때는 다른 대형주들의 수급도 함께 묶이며 동반 하락하는 경향이 나타나고있는데요.
+
+황산해 LS증권 연구원은 "K-뷰티로 불리는 화장품과 엔터 등 개별 수출 모멘텀이 존재하는 영역과 바이오 섹터 등이 반도체가 흔들릴 때방어전략으로 유효한 흐름이 관측되고"고 분석했습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001260333' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001260333</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
