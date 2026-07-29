@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>많이 오른만큼 많이 떨어졌다… 대형주 이달에만 34% 급락</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005554804' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13309" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>많이 오른만큼 많이 떨어졌다… 대형주 이달에만 34% 급락</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 주가 급락과 맞물려 대형주가 이달 들어 큰 폭의 조정(34% 급락)을 겪었다. 전문가는 낮은 밸류에이션(PER)과 향후 AI 투자 지속성을 근거로 기술적 반등 가능성을 제기했으나, 수급 개선 여부가 핵심 변수다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업황 우려와 대형주 급락으로 인한 극도의 투자심리 위축이 나타나며 중장기적인 조정 국면 진입 가능성을 시사.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#대형주조정</span> <span class="tag tag-hash">#AI투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">국내 증시를 주도하던 반도체주가 휘청이면서 대형주가 중·소형주보다 극심한 조정을 받고 있다.
+29일 한국거래소에 따르면 이달 들어 이날까지 코스피 대형주는 34.47% 급락하며, 중형주(-16.53%), 소형주(-9.20%) 대비 큰 낙폭을 기록했다. 올해 상반기까지만 해도 대형주가 115.22% 급등하는 동안 중형주는 11.79% 오르는 데 그쳤고, 소형주의 경우 8.67% 하락한 바 있다. 월별 기준으로도 지난 5월 대형주가 33.01% 오르는 동안 중형주와 소형주는 각각 8.80%, 14.47% 하락하며 격차가 심화되는 모습을 보였다.
+대형주가 상승장에서 많이 올랐던 만큼, 하락장에서는 차익실현 매물 등으로 인해 조정 폭이 더욱 큰 것으로 풀이된다. 실제 중동전쟁으로 증시가 출렁였던 지난 3월에도 대형주는 20.04% 급락하며, 중형주(-10.97%), 소형주(-9.00%) 대비 크게 떨어졌다.
+특히나 이달에는 주도주인 반도체주가 흔들린 영향이 컸다. 지정학적 리스크, 금리인상 등 불확실성이 큰 상황에 반도체를 둘러싼 잡음이 잇따르자, 삼성전자·SK하이닉스 등 대형주 중심으로 조정이 극심했던 것으로 풀이된다.
+'반도체 고점론'은 빅테크 기업들의 인공지능(AI) 설비투자 지속성 여부에 대한 의구심이 나오면서 확산됐다. 설비투자 확대 기조가 확인됐지만, 현금이 줄어들면서 투자를 이어갈 수 있는지에 대한 우려가 제기된 데 따른 것이다. 금리 인상기에 접어들면서 회사채 발행 등에 제약이 생겼다는 점도 이러한 우려를 키웠다.
+투자심리가 악화된 상황에 중국발 리스크는 투매로 이어졌다. 중국 최대 D램 업체 창신메모리테크놀로지가 상하이 증시에 성공적으로 상장한 데 이어, 중국 국영기업이 반도체 제조용 심자외선(DUV) 노광장비 양산을 시작했다는 소식에 메모리 업계의 경계감이 커진 탓이다.
+증권가에선 이같은 우려를 감안해도 과매도 구간에 진입한 것으로 보고 있다. 코스피 12개월 선행 주가수익비율(PER)이 금융위기 당시 저점 6.27배보다 낮은 5배 수준으로, 밸류에이션이 지나치게 낮다는 분석이다.
+한지영 키움증권 연구원은 "메모리 피크아웃 우려, 중국 경쟁업체들의 점유율 확대 우려, 연준의 금리인상 우려 등이 존재하더라도, 다분히 과매도에 해당한다고 볼 수 있다"며 "현재 밸류에이션상 코스피 위치는 바닥을 잡아가고 있는 영역에 있는 것으로 보는 게 타당하다"
+김동원 KB증권 리서치본부장은 "미국 빅테크 기업들은 AI 투자 부족이 과잉 투자보다 리스크가 크다고 생각하기 때문에, 재무 여력이 충분한 경우 외부 차입을 확대해서라도 수년간 AI 인프라 투자를 이어갈 가능성이 높다"며 "산업 버블은 통상 미국 GDP 대비 투자 비중이 5~7% 도달한 시점부터 형성됐는데, 올해 비중은 2.5%에 불과해 아직 버블을 논하기에는 이른 단계"
+라고 분석했다.
+이어 "삼성전자와 SK하이닉스는 고점 대비 반토막 조정을 겪었고, 이에 따라 12개월 선행 PER은 4배를 밑돌며 우려를 선반영한 상태"라며 "이번 조정은 펀더멘털이 아닌 심리적 요인에서 비롯된 극단적 하락으로, 오히려 강력한 반등의 발판이 될 것으로 보인다"
+고 분석했다.
+다만 투자심리가 크게 위축된 만큼, 수급 개선이 뒤따르지 않는다면 주가 회복이 어려울 수 있다는 목소리도 나온다. 김석환 미래에셋증권 연구원은 "낮은 PER만으로 추세 전환을 판단하기는 어려우며, 지금 필요한 것은 추가적인 밸류에이션 하락 여부보다 반도체 이익 전망과 수급의 안정 여부"라며 "단기적으로 낙폭 과대에 따른 반등은 가능하지만, 이는 추세 전환을 의미하지는 않는다"</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005554804' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005554804</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
