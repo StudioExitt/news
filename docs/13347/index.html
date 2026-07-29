@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“아 옛날이여” 증권사의 꽃, IPO맨들 짐 싸는 이유</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006339538' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13347" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“아 옛날이여” 증권사의 꽃, IPO맨들 짐 싸는 이유</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">신규 상장사 감소와 규제 강화로 증권사의 IPO(기업공개) 시장이 쇠퇴기에 접어들었습니다. 일감은 줄었으나 실사, 책임 부담 등 업무 난도는 높아져 증권사들이 조직 축소에 나섰으며, 과거와 같은 IPO 호황기는 어려울 것으로 전망됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">IPO 시장의 구조적 침체와 증권사의 역량 축소는 금융투자업 전반의 성장 동력 약화를 시사하며 장기적인 투자심리 위축을 유발할 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">증권사 주요 주식군 (예: 한국투자)</span> <span class="tag stock-tag">종합금융회사주식</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자산관리</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#IPO시장 #IB산업 #증권사위기 #자본시장축소</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[마켓인]
+중복상장도 안 되고, '적자 유니콘'도 슬슬 사라져가고
+시들어가는 IB의 꽃 'IPO'...짐싸는 IB맨들
+일거리 줄었는데 업무 어려움은 가중
+이 기사는 2026년07월29일 16시50분에 마켓인 프리미엄 콘텐츠로 선공개 되었습니다.
+
+증권사 기업공개(IPO) 부서의 일감은 줄어든 반면, 업무 부담과 사후 책임은 한층 무거워지고 있다. 상장 후보 기업 감소로 수임 경쟁이 치열해진 데다 기업실사, 거래소 심사 대응, 상장 이후 주가·공시 책임까지 주관사 부담으로 가중되면서다. 호황기 인력을 대거 늘렸던 증권사들은 조직 축소에 나섰고, 경력직 인력의 이탈 및 이동도 본격화하는 양상이다.
+
+상장 건수 감소 지속…시들어가는 IB의 꽃 'IPO'
+29일 투자은행(IB) 업계와 한국거래소에 따르면 올해 상반기 국내 증시 신규 상장사(스팩·코넥스 포함)는 27곳으로 집계됐다. 지난해 상반기(40곳) 및 2024년 상반기(53곳) 대비 감소세가 지속하고 있다.
+
+일감 감소가 경쟁 완화로 이어지진 않았다. 상장 후보군 자체가 줄면서 중소형 딜 하나를 놓고도 다수 증권사가 경합을 벌이는 상황이다. 낮은 수수료율을 감수하고 딜을 수임하더라도 거래소 심사 장기화나 기업 실적 악화로 공모가 철회될 경우, 수개월간 투입한 인력과 비용을 회수하기 어렵다. 업계에서는 일부 증권사의 경우 IPO 사업만으로는 조직의 손익분기점(BEP)을 맞추기 힘든 수준이라는 평가가 나온다.
+
+증권사들은 2020년 SK바이오팜 상장을 전후로 대형 공모와 유니콘 기업 상장이 이어지자 IPO 조직을 잇달아 확대했다. 외부 인재를 영입하고 부서를 신설하는 등 몸집을 키운 것도 대형 IPO 시장이 계속 성장할 것이라는 기대에서였다.
+
+그러나 당시 시장을 떠받쳤던 대기업 계열사와 적자 유니콘의 상장 여건이 모두 달라졌다. 중복상장에 대한 투자자 반발이 거세지면서 대기업 계열사의 상장 추진이 조심스러워졌고, 금리 상승 이후에는 수익을 내지 못하는 유니콘 기업도 과거와 같은 높은 몸값을 인정받기 어려워졌다. 증권사들이 기대했던 대형 상장 후보군이 줄면서 호황기에 확대했던 조직을 유지하기도 쉽지 않아졌다는 평가다.
+
+실무 난도는 오히려 높아졌다. 주관사는 단순 상장 주선 업무를 넘어 기업의 실적과 지배구조, 내부통제 등을 상장 가능 수준으로 정비하는 일종의 '컨설팅' 역할까지 병행해야 한다. 상장 이후 주가 부진이나 회계·공시 문제가 불거질 경우 부실 실사나 고평가 주선에 대한 책임론도 주관사가 뒤집어쓰기 일쑤다.
+
+특히 비상장 단계에서 형성된 과도한 기업가치 역시 걸림돌이다. 기존 재무적투자자(FI)의 회수 단가에 맞추기 위해 공모가를 높게 책정하면 상장 후 주가 상승 여력이 제약된다. 이는 후속 딜의 공모가 산정과 기관 수요예측에 악영향을 미치는 악순환으로 이어진다는 평가다.
+
+[본 이미지는 AI 기술을 활용해 제작되었습니다.]
+
+조직 축소 및 인력 이동 본격화… 시장 구조 재편 여파
+수익성 저하와 업무 강도 증가가 맞물리면서 증권가 내부의 인력 재편도 이어지고 있다. 신한투자증권은 지난해 IPO 조직을 기존 3개 부서에서 2개 부서로 축소했다. 최근 부서장급인 최훈·양근창 이사가 메리츠증권으로 자리를 옮길 예정인 것으로 알려졌다. 한국투자증권 역시 지난해 초 IPO 부서 인력을 축소한 바 있다. 반면 전통 IB 역량 강화를 추진하는 메리츠증권은 경력직 인력을 영입하며 조직을 보강 중이다.
+
+업계에서는 이 같은 인력 이동을 개별 회사의 이슈가 아닌 시장 체질 변화에 따른 구조조정 과정으로 본다. 과거 ‘IB의 꽃’으로 꼽히던 IPO 업무가 성공 가능성은 낮고 실패 위험과 책임은 큰 고강도 사업으로 변모하면서 핵심 인력 유지가 과제로 떠올랐다는 분석이다.
+
+한 IPO 업계 관계자는 “호황기에 확충한 인력을 현재 시장 규모로 유지하기는 구조적으로 어렵다”며 “심사 기준 강화도 부담이지만, 근본적으로 상장 적격 기업과 대형 딜 자체가 감소한 것이 주요 원인"이라고 말했다. 이어 "이제 중복상장 금지와 기업 체질을 깐깐하게 따지는 시대라, 과거 같은 IPO 시장 호황은 돌아오지 않을 것”이라고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006339538' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006339538</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
