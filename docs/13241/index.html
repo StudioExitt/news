@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비트코인 하반기 상승론, 근거는 충분한가[엠블록레터]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005713869' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13241" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>비트코인 하반기 상승론, 근거는 충분한가[엠블록레터]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">비트코인 시장의 하반기 상승 가능성에 대한 세 가지 근거(ETF 자금, 금리 완화, 4년 주기)를 분석했으나, 현재 데이터만으로는 상승론이 충분히 뒷받침된다고 보기 어렵다는 결론입니다. ETF 자금 흐름은 단기 회복에 그쳤으며, 금리와 사이클 변수도 여전히 불확실합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">비트코인 시장의 주요 상승 요인들(ETF 유입, 금리)을 분석하며 거시경제 변수의 중요성을 부각시키지만, 현 시점에서는 모든 근거가 불확실하거나 역행할 가능성이 높아 투자에 신중해야 함을 강조함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융투자</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#비트코인</span> <span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#금리</span> <span class="tag tag-hash">#가상화폐</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">올해 상반기 비트코인 시장은 기대만큼 강하지 않았습니다.
+
+비트코인은 지난해 10월 기록한 사상 최고가에서 큰 폭으로 하락했고, 7월 초에는 5만8,000달러선까지 내려갔습니다. 미국 현물 비트코인 상장지수펀드(ETF)에서도 자금 유출이 이어졌습니다.
+
+하지만 7월 중순부터 분위기가 조금 달라졌습니다. 비트코인 가격이 한때 6만6,000달러를 넘어섰고, 미국 현물 ETF에도 다시 자금이 들어오기 시작했습니다. ETF 자금 흐름을 집계하는 파사이드 인베스터스에 따르면 7월 14일부터 22일까지 7거래일 연속 순유입이 이어졌습니다. 가격과 자금 흐름이 함께 회복되자 시장에서는 하반기 반등 가능성이 다시 거론되기 시작했습니다.
+
+상승론의 근거는 크게 세 가지입니다. ETF를 통해 기관과 전통 금융시장 투자자의 자금이 다시 들어올 수 있다는 점, 금리 부담이 완화되면 주식과 가상자산 같은 위험자산의 투자 환경도 나아질 수 있다는 기대, 그리고 비트코인이 약 4년을 주기로 움직여왔으니 이번 사이클도 아직 끝나지 않았다는 오래된 논리입니다.
+
+이번 엠블록레터에서는 세 가지 요인이 현재 시장에서 실제로 얼마나 확인되고 있는지 살펴보겠습니다.
+
+ETF 자금은 정말 돌아오고 있을까?
+가장 먼저 살펴볼 것은 미국 현물 비트코인 ETF의 자금 흐름입니다.
+
+현물 ETF는 비트코인을 직접 보관하지 않고도 일반 증권계좌를 통해 투자할 수 있도록 만든 금융상품입니다. 기관투자자와 전통 금융시장 투자자의 수요를 가늠할 수 있는 대표적인 지표이기도 합니다.
+
+파사이드 인베스터스 집계에 따르면 7월 14일부터 22일까지 미국 현물 비트코인 ETF에는 약 9억8,000만달러가 순유입됐습니다. 7월 13일 하루 동안 약 4억2,500만달러가 빠져나간 뒤 자금 흐름이 빠르게 반전된 것입니다.
+
+다만 이를 기관 자금의 본격적인 복귀로 해석하기에는 아직 이릅니다.
+
+가상자산 금융회사 NYDIG에 따르면 올해 2분기 미국 현물 비트코인 ETF에서는 총 49억달러가 순유출됐습니다. 7월 중순 자금이 다시 유입됐지만, 2분기 전체 유출 규모를 만회하기에는 부족했습니다. 연속 순유입 이후 다시 순유출을 기록한 날도 나타났습니다.
+
+현재 확인되는 변화는 기관 수요의 완전한 회복이라기보다, 약해졌던 ETF 자금 흐름이 단기적으로 개선됐다는 점입니다. 상승론이 힘을 얻으려면 순유입이 수주 또는 수개월 동안 이어지는지 확인할 필요가 있습니다.
+
+금리는 정말 내려갈까?
+두 번째 변수는 금리입니다.
+
+금리가 내려가면 예금과 국채의 수익률도 낮아집니다. 투자자들이 더 높은 수익을 기대할 수 있는 주식이나 가상자산으로 자금을 옮길 가능성이 커지는 만큼, 금리 인하는 일반적으로 비트코인에 긍정적인 요인으로 평가됩니다.
+
+다만 현재 미국의 기준금리는 동결 상태입니다. 미 연방준비제도에 따르면 연방공개시장위원회(FOMC)는 지난 6월 기준금리 목표 범위를 연 3.50~3.75%로 유지했고, 위원 12명 모두 동결에 찬성했습니다.
+
+7월 회의를 앞둔 시장에서도 인하보다는 동결 전망이 우세했습니다. 국제유가 상승에 따른 물가 부담이 커지면서 인상 가능성까지 반영됐습니다. CME 페드워치 기준으로 7월 27일 시장이 반영한 동결 확률은 68.5%, 0.25%포인트 인상 확률은 31.5%였습니다.
+
+따라서 금리 부담 완화는 이미 나타난 변화가 아니라 앞으로 확인해야 할 조건입니다. 연준의 7월 통화정책 결정은 한국시간 7월 30일 새벽 발표될 예정입니다.
+
+‘4년 주기’는 지금 무엇을 가리키나
+세 번째로 살펴볼 근거는 비트코인 시장에서 오랫동안 통용돼 온 4년 주기론입니다.
+
+비트코인은 약 4년마다 채굴 보상이 절반으로 줄어드는 반감기를 겪습니다. 과거에는 반감기를 시작으로 가격이 크게 오른 뒤 다시 큰 폭으로 조정받는 흐름이 반복됐습니다. 이러한 패턴이 여러 차례 나타나면서 4년 주기론은 지금도 비트코인 시장을 설명하는 대표적인 근거 중 하나로 언급되고 있습니다.
+
+다만 같은 논리를 현재 시점에 적용하면 해석은 달라질 수 있습니다. 가장 최근 반감기는 2024년 4월이었고, 비트코인은 약 1년 반 뒤인 지난해 10월 사상 최고가를 기록했습니다. 과거와 비슷한 흐름이 이어진다고 가정하면, 현재는 상승 초기보다 고점 이후의 조정 구간에 가까울 수 있습니다.
+
+미국 비트코인 금융서비스 기업 NYDIG는 현재 하락의 시점과 구조가 2014년, 2018년, 2022년의 조정 국면과 점차 닮아가고 있다고 분석했습니다. 다만 과거와 같은 낙폭과 기간이 반복될 가능성은 기본 전망이 아니라 하나의 시나리오라고 설명했습니다.
+
+정리하면 4년 주기론만으로 현재 비트코인의 상승 가능성을 설명하기는 어렵습니다. 반감기에 따른 공급 감소는 여전히 의미가 있지만, ETF 자금 흐름과 금리 등 다른 변수도 함께 살펴볼 필요가 있습니다.
+
+그래서 상승론의 근거는 충분한가?
+세 가지 근거가 현재 시장을 뒷받침하는 정도는 서로 다릅니다.
+
+ETF 자금은 7월 중순 잠시 회복됐지만, 2분기의 대규모 순유출을 만회하지 못한 채 다시 유출로 돌아섰습니다. 금리 인하 역시 아직 시작되지 않았고, 시장에서는 동결뿐 아니라 인상 가능성까지 거론되고 있습니다. 4년 주기론도 현재 시점을 상승 초기보다는 고점 이후의 조정 구간에 가깝게 보고 있습니다.
+
+따라서 비트코인 하반기 상승론을 근거 없는 낙관론이라고 단정하기는 어렵습니다. 다만 현재까지 확인된 데이터만으로 상승 가능성이 충분히 뒷받침됐다고 보기도 어렵습니다.
+
+가장 눈에 띄는 변화는 ETF 자금이 단기적으로 회복됐다는 점입니다. 이 흐름이 수개월간 이어지고 연준의 통화정책도 완화되는 모습을 보인다면 상승론의 근거는 더 강해질 수 있습니다. 반대로 ETF 순유출이 이어지거나 높은 금리가 장기간 유지된다면 반등 기대는 다시 약해질 수 있습니다.
+
+과거에는 반감기와 4년 주기가 비트코인 시장을 설명하는 대표적인 기준으로 활용됐습니다. 하지만 지금은 이러한 주기뿐 아니라 ETF를 통해 실제 자금이 얼마나 들어오고 있는지, 금리 환경이 투자에 유리하게 바뀌고 있는지도 함께 살펴봐야 합니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005713869' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005713869</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
