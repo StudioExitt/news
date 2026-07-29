@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사상 첫 연이틀 양시장 서킷…10%대 폭락에 '악 소리'도 못냈다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001260450' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13319" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>사상 첫 연이틀 양시장 서킷…10%대 폭락에 '악 소리'도 못냈다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 업황 부진과 패닉셀링으로 인해 국내 증시가 이틀 연속 폭락하며 양 시장에서 서킷브레이커가 사상 처음으로 연속 발동되었다. 코스피와 코스닥 모두 10%대의 급락을 기록하며 대형주 시가총액이 크게 감소했다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 성장 동력으로 여겨졌던 반도체 업황의 피크아웃 우려가 현실화되면서 대형주의 급격한 하락이 발생했고, 이것이 패닉셀링과 시스템적 거래 정지(서킷브레이커)로 이어진 상황은 시장에 매우 큰 부정적 충격을 주고 있다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #증시폭락 #패닉셀링</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">급락장이 이어지면서 29일 국내 증시 시가총액이 장중 한때 5,000조원 아래로 밀려났다.
+
+한국거래소에 따르면 이날 장 마감 시점 기준 국내 증시(코스피·코스닥·코넥스) 시가총액 합계는 5,041조1,930억원으로 집계됐다.
+
+시장별로는 코스피 시가총액이 4,669조1,010억원, 코스닥과 코넥스는 각각 368조7,340억원, 3조3,580억원이다.
+
+이날 국내 증시 시가총액은 전장 대비 288조원 줄어든 것으로, 장중에는 한때 4,700조원대까지 밀리며 지난 4월 2일 이후 약 4개월 만에 5,000조원을 밑돌기도 했다.
+
+지난 4월 27일 역대 처음 6,000조원을, 8거래일 뒤인 5월 11일에는 7,000조원마저 넘어섰다. 지난달 22일에는 7,997조원까지 치솟아 8,000조원 돌파를 눈앞에 뒀지만, 반도체 업황 피크아웃(정점 후 하락) 우려가 불거지며 하락 곡선을 그리기 시작했다. 이달 2일 7,000조원선이 무너진 데 이어 20일에는 6,000조원 아래로 내려앉았고, 이날도 감소세가 이어지며 이달 들어서만 시총이 2,400조원 넘게 줄었다.
+
+이날 코스피는 5.98% 내린 5,663.24, 코스닥은 6.12% 내린 662.68에 장을 마쳤다. 전날 각각 10.84%, 7.72% 급락한 데 이은 이틀째 폭락으로, 이틀간 하락률은 코스피 16.2%, 코스닥 13.4%에 달한다. 코스피는 이틀 만에 1,092.51P가 빠졌으며, 지난달 19일 기록한 전고점(9,385.59) 대비로는 약 40% 내렸다. 코스닥지수도 지난 4월 27일 올해 장중 고점(1,229.42) 대비 46% 급락한 상태다.
+
+변동성이 커지면서 매매 제동 장치도 잇달아 발동됐다. 이날 오전 유가증권시장과 코스닥시장에서는 프로그램매도호가 일시효력정지(사이드카)가 전날에 이어 발동돼 코스피는 올해 들어 43번째, 코스닥은 27번째를 기록했다.
+
+지수가 급락한 것은 대형 반도체주의 부진의 영향이다. SK하이닉스는 9.61% 급락해 140만원대로, 삼성전자는 5.23% 내려 20만원대로 각각 밀려났다. 이틀 연속 급락으로 두 종목 주가는 불과 2거래일 만에 각각 22.85%, 17.91% 빠졌다. 이날 종가 기준으로 보면 삼성전자는 지난달 19일 장중 고점(37만4,500원) 대비 44%, SK하이닉스는 지난달 25일 장중 고점(298만7,000원) 대비 53% 하락한 상태다.
+
+이에 따라 거래를 일시 중단하는 서킷브레이커도 양 시장에서 이틀 연속 발동됐는데, 두 시장에서 이틀 연속 서킷브레이커가 함께 발동한 것은 이번이 처음이다. 이날 하루 삼성전자 시가총액은 약 67조원, SK하이닉스는 81조원 넘게 증발했으며, SK하이닉스 시가총액은 장중 한때 3개월 만에 1,000조원 아래로 내려앉기도 했다.
+
+한지영 키움증권 연구원은 "어제 급락한 이후 오늘은 반등에 나설 것이라는 기대감이 후퇴했다"며 "이는 대다수 주식 보유자들로 하여금 손실을 확정짓고, 패닉셀링을 초래했다"고 설명.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001260450' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001260450</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
