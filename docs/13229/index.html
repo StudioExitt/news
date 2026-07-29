@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"AI 수익성 논란 확산이냐 기우냐"...증시 '분수령'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001260416' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13229" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"AI 수익성 논란 확산이냐 기우냐"...증시 '분수령'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 투자 경쟁이 지속되지만, 시장의 관심사는 '투자 규모'가 아닌 '지속 가능한 수익성(현금 창출 능력)'으로 옮겨가고 있습니다. 빅테크 기업들의 다가오는 실적 발표는 AI 투자가 실제 이익으로 이어지는지를 판단하는 분수령이 될 것이며, 이는 국내 반도체 업황과 직결됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 대형 기술 기업들의 향후 실적이 반도체 수요 예측에 가장 중요한 단기 리스크 요인이므로 시장 전반의 투자심리에 큰 영향을 미침.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #AI수익성 #빅테크실적</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open"><앵커>
+SK하이닉스가 사상 최대 실적을 냈는데도 우리 증시는 영 힘을 못 쓰고 있습니다.
+
+양 시장 동반 매도 사이드카를 울리며 투자자들의 우려를 더하고 가운데,
+우리 시간으로 내일(30일)부터 발표될 미국 빅테크들의 성적표가 중대한 분수령이 될 전망입니다.
+
+하이퍼스케일러들의 대규모 투자가 국내 반도체주들의 이익과 직결된 상황에서, 더 이상 숫자가 아닌 숫자의 지속성이 중요해졌기 때문입니다.
+
+취재기자와 자세한 이야기 나눠봅니다. 증권부 방서후 기자 나와 있습니다.
+
+방 기자. 인공지능(AI) 투자 경쟁의 판도가 바뀌고 있다고요?
+
+<기자>
+사실 알파벳(구글)이 2분기 실적을 발표했을 때부터 예견된 일이긴 합니다.
+지난해까지만 해도 데이터센터 투자액이 얼마나 큰지, 여기에 들어갈 반도체는 누가 더 많이 확보했는지가 중요했다면,
+이제는 말로 내뱉었던 투자를 실제로 이행할 만한 현금을 지속적으로 창출해낼 수 있는지가 관건이라는 뜻입니다.
+
+실제로 알파벳의 올해 2분기 구글 클라우드 매출은 전년 동기 대비 82% 폭증하는 성과를 거뒀지만,
+자본지출이 449억 달러로 전년대비 두 배 가량 늘면서 잉여현금흐름(FCF)은 -59억 달러를 기록했습니다.
+올해 자본지출 전망도 상향 조정하면서 당분간 현금 유출 압력이 이어질 것이란 전망에 주가는 약세를 보였습니다.
+
+문제는 다른 빅테크들도 이렇게 매출에서 자본지출이 차지하는 비중이 높아지면서, 투자 속도가 현금 창출 능력을 앞지를 지도 모른다는 점입니다.
+
+월가에서는 알파벳을 비롯해 마이크로소프트(MS), 메타, 아마존 등 4개사의 올해 자본지출이 약 7,240억 달러, 내년에는 9,500억 달러로
+늘어날 것이라 전망했습니다.
+
+이에 따라 AI 투자 경쟁이 지속될 것이라는 전망에는 이견이 없지만, 그 막대한 투자가 실제 수익으로 이어지는 지에 따라 AI 정점론의 향방이
+갈릴 것이라는 분석이 나옵니다.
+<앵커>
+이제는 투자 규모가 아닌 투자 대비 성과에 집중하야 한다는 거잖아요?
+그럼 차례대로 살펴보죠. 우선 당장 내일 실적을 발표할 마이크로소프트. 일단 예상치는 나쁘지 않습니다. 뭘 더 확인해야 하나요?
+
+<기자>
+시장에서는 마이크로소프트의 2분기 매출이 전년 동기 대비 약 15% 증가한 877억1천만 달러, 주당순이익(EPS)은 같은 기간 16% 늘어난 4.25달러를 각각 기록할 것으로 예상합니다.
+핵심인 인텔리전트 클라우드 부문 매출이 1년 새 30% 가까이 증가하면서 실적을 견인할 것이라는 분석입니다.
+
+하지만 앞서 말씀드린 것처럼 숫자보다 중요한 건 AI 사업의 성장성과 투자 효율성이죠.
+회사가 지난 1분기 실적발표에서 올해 자본지출 규모를 약 1,900억 달러로 제시했는데, 이미 지난해 자본지출 대비 60% 이상 늘어난
+규모입니다.
+
+그런데 매출에서 이 자본지출 비중을 따져봤더니 올해 1분기는 약 39%, 2분기에는 48%로 확대될 전망입니다. 매출 1달러를 벌면 반 정도를
+AI 인프라 투자에 다시 쏟아 넣어야 한다는 의미입니다.
+
+그렇다면 이렇게 돈을 태우는 것이 과연 남는 장사냐. 이것이 바로 마이크로소프트의 이번 실적 관전 포인트가 되겠습니다.
+
+마이크로소프트의 클라우드 서비스 '애저'의 수익성이 안정적으로 유지되고 있는지, 늘어난 AI 수요가 실제 매출 확대와 연결되고 있는지를
+봐야한다는 건데요.
+이런 관점에서 뱅크오브아메리카(BofA)는 애저의 성장률이 최소 39~40%는 기록해줘야 그동안의 투자 확대에 대한 우려를 완화시킬 수 있다고
+분석했습니다.
+<앵커>
+같은 날 실적을 발표하는 메타 역시 AI 투자 성과를 입증해야 하는 과제를 안고 있죠?
+<기자>
+시장에서는 메타의 2분기 매출이 전년 동기 대비 27% 증가한 602억 달러, EPS는 전년 동기(7.14달러)와 비슷한 7.19달러를 각각
+기록할 것으로 내다봤습니다.
+다만 AI 투자 확대에 따른 비용 증가로 이익 증가세는 제한되고, 잉여현금흐름은 -8억10만 달러로 적자 전환이 유력합니다.
+올해 초 제시한 1,250억~1,450억 달러의 자본지출 규모도 확대될 가능성이 높습니다.
+
+그나마 다행인 건 기존 광고 사업 외에도 AI 수익화 기반을 마련하고 있다는 점입니다.
+지난 4월 공개한 '뮤즈 스파크 1.0'에 이어 이달에는 '뮤즈 이미지'와 '뮤즈 스파크 1.1'을 출시했는데요.
+이 뮤즈 스파크 1.1이 바로 경쟁력 있는 AI 에이전트 코딩 기능을 갖춘 메타의 첫 모델이자, API를 통해 처음으로 수익화된 AI 모델이라고
+합니다.
+조시 벡 레이먼드제임스 애널리스트는 이런 메타의 전략에 대해 "AI 사업의 판도를 바꿀 수 있는 변화"라면서 "자체 AI 모델이나 AI 에이전트
+사업이 기대에 미치지 못하더라도 새로운 수익원을 확보할 수 있는 출구 역할을 할 것"이라고 평가했습니다.
+<앵커>
+다른 빅테크 기업들의 실적 전망은 어떻습니까?
+<기자>
+마이크로소프트와 메타에 이어 우리 시간으로 31일에는 아마존과 애플도 2분기 실적을 발표합니다.
+아마존의 올해 2분기 매출 가이던스는 1,940억~1,990억 달러로 집계됐습니다.
+이런 가운데 세계 최대 클라우드 서비스로 꼽히는 아마존웹서비스(AWS)의 매출 증가율이 다시 30%대로 올라설지가 최대 관심사입니다.
+또 연간 2천억 달러 규모의 자본지출 계획을 추가로 확대할지, AI 인프라 투자가 AWS의 수익성 개선으로 이어지고 있는지도 검증 대상입니다.
+애플의 경우 3분기 실적을 발표합니다.
+회계연도 기준이 다른 빅테크들과 상이하기 때문에 3분기라고 칭하는 것이지, 실제로는 다른 빅테크들의 2분기 실적과 동일한 의미라고 보시면
+되겠습니다.3분기 매출은 1,089억 달러를 기록할 것으로 전망되는 가운데, 아이폰 판매량이 시장 전망에 부합할 지, 온디바이스 AI 기능 강화를 위한
+메모리 탑재량 증가 여부가 핵심 관전 포인트로 거론됩니다.
+<앵커>
+하이퍼스케일러들의 실적이 예상대로 잘 나와준다면 우리 반도체주들도 숨통이 좀 트일까요?
+<기자>
+올해 코스피 상승을 이끌었던 반도체 기업들의 이익 성장세가 슬슬 한계에 다다랐다는 분석도 나오는 이상,
+고객사인 하이퍼스케일러들의 투자 확대로 인한 EPS 상향 전망이 반드시 필요하다고 전문가들은 강조합니다.
+실제로 유진투자증권은 반도체 영업이익 증가율이 올해 640%를 정점으로 내년 42%까지 꺾이고, 코스피 전체 영업이익 증가율도 220%에서
+35%로 내려앉을 것이라고 전망했습니다.
+국내 반도체주 입장에서는 빅테크들의 설비 투자 규모와 클라우드 성장률을 따로 봐야 한다는 시각도 나옵니다.
+하이퍼스케일러들의 주가가 투자 부담으로 하락하더라도 그들에게 메모리를 공급하는 삼성전자와 SK하이닉스는 오히려 주문이 늘어나는 호재를 맞을 수
+있어서입니다.
+증권가에서는 반도체를 중심으로 코스피가 회복되는 가장 긍정적인 시나리오로 클라우드 성장세가 AI 수익화로 이어지고, 스마트폰 수요도 저점을
+통과하는 때라고 꼽았습니다.
+반대로 클라우드 성장 둔화와 투자 축소가 동시에 나타나거나, 투자 확대에도 불구하고 수익성이 개선되지 않는다면, 반도체 피크아웃과 AI 거품론이
+함께 부각되면서 당분간 시장의 변동성을 더욱 키울 수도 있다는 지적입니다.
+<앵커>
+잘 들었습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001260416' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001260416</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
