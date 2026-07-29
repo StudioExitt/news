@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>‘정책 실기’ 무너진 투심… 개미들 패닉셀 ‘피눈물’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/005/0001863877' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13323" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>‘정책 실기’ 무너진 투심… 개미들 패닉셀 ‘피눈물’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스 실적에 대한 시장 기대치 하락과 더불어, 개인 투자자들의 빚투(레버리지) 청산 물량 및 주주환원 부재 등의 불신이 겹치며 코스피가 폭락하고 사상 초유의 연이틀 서킷브레이커가 발동되는 등 극심한 패닉셀 현상이 발생했습니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#패닉셀</span> <span class="tag tag-hash">#서킷브레이커</span> <span class="tag tag-hash">#반도체주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">사상 첫 연이틀 동반 서킷브레이커
+하이닉스 최대 실적에도 시장 실망
+반대매매 청산 등 개인들 2조 투매
+레버리지 투자로 56조원 손실 추정
+29일 서울 영등포구 여의도 국회의사당 정문 앞에 삼성전자·SK하이닉스 단일종목 레버리지 상품 상장 폐지를 촉구하는 근조화환이 놓여 있다.
+SK하이닉스 분기 실적이 시장 기대치를 밑돌고, 반도체주에 대한 투자심리가 급격히 얼어붙으면서 이날 코스피는 장중 5200선까지 떨어졌다. 금융 당국은 시장 변동성을 완화할 수 있는 추가 대책을 검토할 방침이다.
+한국 증시가 연이틀 추락하며 코스피 6000, 코스닥 700선이 무너졌다. 사상 초유의 ‘2거래일 연속 서킷브레이커(거래정지)’도 발동됐다.
+결정적인 요인은 개인투자자의 ‘패닉셀’(투매)이 지목된다. 누적된 빚투(빚내서 투자)로 인한 반대매매 청산, 단일종목 레버리지 상품 정책 실기, 주주환원 부재 등이 시장 불신을 키운 결과라는 지적이 나온다.
+29일 코스피는 전 거래일보다 360.42포인트(5.98%) 내린 5663.24로 거래를 마쳤다. 전날보다 65.45포인트(1.09%) 오른
+6089.11로 개장해 6228.52(3.40%)까지 올랐지만 하락 전환하며 장중 한때 5262.77(-12.63%)까지 폭락했다. 이날 고점과 저점 격차는 965.75포인트로 장중 변동성 역대 2위를 기록했다.
+SK하이닉스가 2분기 사상 최대 실적을 기록했지만, 시장의 기대치에는 못 미쳤다는 평가가 나오며 코스피 하락세를 추동했다. SK하이닉스는 올해 2분기 매출이 전년 동기보다 257% 증가한 79조3187억원, 영업이익은 557% 증가한 60조5426억원으로 잠정 집계됐다고 공시했다.
+정용택 IBK투자증권 수석연구위원은 “좋은 실적에도 불구하고 높아진 시장 눈높이를 맞추지는 못했다”고 말했다.
+SK하이닉스는 전장보다 9.61% 하락한 140만1000원에 장 마감했다. 장중 124만6000원(-19.61%)까지 추락했으나 반등하며 ‘140만닉스’를 지킨 데 만족해야 했다. 삼성전자도 5.23% 하락한 20만8500원에 거래를 마쳤다. 이번 급락으로 전날에 이어 이틀 연속 매도 사이드카(프로그램 매도호가 효력 정지)와 서킷브레이커가 코스피·코스닥 시장에 모두 발동됐다. 코스닥도 롤러코스터를 타다 662.68(-6.12%)로 장을 마감했다.
+특히 개인투자자의 투매가 지수를 끌어내렸다. 기관이 이날 3조1603억원 순매수한 가운데 개인은 1조9700억원, 외국인은 1조2281억원 순매도했다. 개인은 앞선 3거래일간 11조원 이상을 순매수했지만 코스피 하락이 멈추지 않자 공포 매도에 나선 것으로 보인다.
+이번 매도세에는 빚투족의 반대매매 청산 물량이 대거 포함됐을 것으로 추정된다. 이효섭 자본시장연구원 선임연구위원은 “이날 개인 매도 물량 중에는 반대매매 비중이 상당할 것 같다”며 “반대매매가 예상돼서 미리 판 물량도 많아 보인다”고 말했다. 정 수석연구위원도 “신용, 레버리지 투자를 했다가 반대매매를 당하거나 손절매를 한 물량도 있을 것으로 본다.”
+주주환원 실망감도 투매를 촉발했다. SK하이닉스는 이날 실적 발표 콘퍼런스콜에서 추가 주주환원을 검토 중이라면서도 ‘미국주식예탁증서(ADR) 공모 관련 규제 절차상 제약’을 이유로 구체적 안을 밝히진 않았다. 강진혁 신한투자증권 연구원은 “주주환원 내용 부재 등으로 실망 매물이 출회됐다”고 했다.
+단일종목 레버리지 지수상장펀드(ETF)로 인한 시장 불신도 여전하다. 투자은행(IB)업계에 따르면 씨티글로벌마켓증권의 모하메드 아파바이 아시아태평양 트레이딩 전략 헤드는 기관투자가 대상 시장 논평에서 한국 개인투자자들이 최근 조정 과정에서 레버리지 ETF 투자로 약 387억 달러(약 56조3000억원)의 손실을 본 것으로 추정된다고 했다. 전문가들도 “단일종목 레버리지 ETF가 최근 한국 증시 변동성의 직접적 원인은 아니지만, 변동성이 생기면 더 키우는 요인이 됐다”고 지적했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/005/0001863877' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/005/0001863877</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
