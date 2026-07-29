@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>靑은 한국만 이런 게 아니라는데… 코스피 변동성, 美보다 5배 커</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/023/0003990409' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13341" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>靑은 한국만 이런 게 아니라는데… 코스피 변동성, 美보다 5배 커</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부 정책으로 도입된 단일종목 레버리지 상품이 코스피의 극심한 변동성을 초래했으며, 이는 주요국 대비 최대 5배에 달하는 수치이다. 개인 투자자들이 이 과정에서 막대한 손실을 입었고, 시장 구조적 불안정성이 심화되고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단기적인 정부 정책(레버리지 상품 도입)이 시장 구조적 위험을 키우고, 개인 투자자들의 막대한 손실로 인해 국내 금융 시장의 불안정성과 신뢰도가 크게 하락했기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피변동성</span> <span class="tag tag-hash">#레버리지상품</span> <span class="tag tag-hash">#개인투자자손실</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">레버리지 도입 후 한국 증시 보니
+김용범 청와대 정책실장이 최근 극심한 국내 주식시장 변동성에 대해 “지난 2~3개월은 우리만 그런 것은 아니다”라고 말했다. 국내뿐 아니라 세계적으로 증시가 출렁였다는 의미였다. 김 실장 발언은 28일(현지 시각) 이재명 대통령이 국빈 방문한 브라질 현지 기자 브리핑에서 나왔다.
+그는 또 “(단일종목) 레버리지 상품 문제 하나로 귀결되는 것처럼 보이는데 꼭 그렇지는 않다”고 했다.
+
+김용범 청와대 정책실장
+투자자들과 전문가들은 즉각 입을 모아 “현실과 동떨어진 상황 판단”이라고 반박했다. 역대급 변동성으로 증시는 물론 온 나라가 난리통이 됐는데도 마치 남의 일인 양 ‘유체 이탈’ 화법을 썼다는 것이다.
+
+김 실장의 발언은 미국·일본 등 다른 주요국 증시와 비교해도 맞지 않는다. 단일종목 레버리지 상품을 정부가 도입한 지난 5월 27일 이후 두 달여간 코스피는 사흘에 한 번꼴로 5% 이상 폭락하거나 폭등했다. 반면 미국과 일본은 같은 기간 5% 이상 등락한 날이 단 하루도 없었다.
+한국의 증시 변동성도 최근 두 달간 주요국 대비 최대 5배나 컸다.
+
+코스피는 4월 이후 석 달 만에 80% 급등하며 지난달 22일 역대 최고점(9114.55)을 찍었다. 그리고 한 달여 만에 상승분을 반납하고 지난 4월 초 수준인 5600선으로 돌아갔다.
+
+정책이 초래한 증시 변동성에 손실을 본 건 개인 투자자들이었다. 29일 글로벌 투자은행 씨티그룹은 최근 증시 조정 과정에서 레버리지 상품 투자로 개인들이 약 387억달러(약 56조2000억원)의 손실을 본 것으로 추정했다. 이 중 단일종목 레버리지 상품으로 인한 손실이 상당 부분을 차지한다.
+
+주요국보다 코스피 변동성 극심
+코스피는 5월 27일 이후 지난 28일까지 두 달여 동안 24일(56%)을 3% 이상 등락했다. 해당 기간 중 절반 이상 거래일에 주가가 널뛰기를 한 셈이다. 3% 이상 등락률은 통상 급등락의 기준으로 여겨진다. 미국은 같은 기간 하루도 없었고, 일본은 8일이었다.
+증시가 급등락하면 수치가 커져 공포지수라 불리는 변동성 지수는 코스피가 주요국의 3~5배에 달했다. 미래에셋증권에 따르면 코스피의 변동성 지수는 지난 5월 27일 이후 일평균 86.2를 기록했다. 닛케이평균(33.9)의 2.5배, S&P500(17.3)의 5배 수준의 변동성을 보였다.
+
+‘손실의 눈덩이’ 현상 키운 레버리지
+일각에선 코스피 변동성이 너무 커서 코인 시장이 죽었다는 말이 나올 정도다. 외신들은 ‘코스피가 도박판이 됐다’고 전하기도 했다.
+이 같은 출렁임을 정책이 초래한 측면이 매우 크다. 정부는 지난 1월 출시 검토 후 5개월도 안 돼 법까지 고쳐가며 속전속결로 단일종목 레버리지 상품을 내놓게 했다.
+
+하지만 이미 삼성전자·SK하이닉스의 시가총액이 코스피의 절반을 차지하고 있는 상태에서 이를 기초로 한 레버리지 상품까지 나오자 꼬리가 몸통을 흔드는 현상이 초래됐다. 매일 장 마감쯤 2배의 수익률을 맞추기 위해 기초 자산이 되는 주식을 팔거나 사야 해, 주가가 하락할 때는 하락폭을 거세게 하고, 상승장에선 상승폭을 키우는 식이다.
+
+투자자 손실은 누적됐다. 만약 기초 주식이 하락한 경우 레버리지 상품 투자자가 그다음 날 원금을 회복하려면 전날 하락 폭보다 훨씬 더 큰 폭으로 올라야 한다. 이 과정에서 기초 주식이 원금을 회복했을 때에도, 레버리지 상품은 여전히 손실을 볼 수 있는 구조다.
+
+이 같은 ‘손실의 눈덩이’ 현상을 우려해 최근 한 자산운용사 대표는 투자자들에게 “단일종목 레버리지 상품 투자를 멈추라”고 요구하기도 했다.
+
+외국인 역대 최대 순매도
+4월 이후 지금까지 외국인은 110조원 가까이 유가증권시장에서 순매도(매도가 매수보다 많은 것)했다. 4개월 순매도 규모만으로 이미 글로벌 금융위기 때인 2008년 한 해 역대 최대 순매도 기록(34조5858억원)을 3배 넘게 경신했다. 정확한 손익을 추산하긴 어렵지만 대부분 큰 이익을 보고 떠났을 것으로 보인다.
+
+반면, 지난 4월 이후 개인들은 80조원 가까이 순매수했다. 기관보다 4배 가까이 많은 규모였다. 7월 들어서만 외국인이 17조1810억원을 순매도하는 동안 개인은 17조560억원을 반대편에서 사들였다. ‘떨어지는 칼날을 잡으면 안 된다’는 증시 격언이 있는데, 외국인이 떨구는 칼날을 개인들이 맨손으로 붙들다 출혈을 보게 된 셈이다.
+
+높은 수익률을 기대하며 투자한 단일종목 레버리지 상품으로 인한 손해도 상당했다. 씨티글로벌마켓증권은 “한국 자산을 기초로 한 레버리지 상품의 시가총액이 지난달 22일 약 525억달러로 정점을 찍은 뒤 최근 최근 190억달러 수준까지 감소했다”고 했다.
+
+손실의 상당 부분은 개인에게 돌아갔을 것으로 추정된다. 이찬진 금융감독원장은 지난달 기자간담회에서 “(단일종목 레버리지 상품의) 92% 정도를 개인투자자가 보유하고 있다.”</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/023/0003990409' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/023/0003990409</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
