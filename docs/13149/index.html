@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엔비디아 500억 달러 데이터센터 임차에 ‘순환금융’ 논란 재점화</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004646352' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13149" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>엔비디아 500억 달러 데이터센터 임차에 ‘순환금융’ 논란 재점화</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">엔비디아의 대규모 데이터센터 임차 계약이 '순환금융' 논란을 재점화시켰으며, 중국 국영기업의 반도체 기술 자립 가속화 소식으로 코스피가 급락했다. 다만, 한미 간 LNG 전력 협력이 AI 데이터센터의 전력난 해소 대안으로 제시되며 상충하는 이슈들이 발생함.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">중국 반도체 기술 자립 가속화 소식과 엔비디아 관련 '순환금융' 논란이라는 이중 악재가 발생하며 시장 전반의 투자 심리가 극도로 위축되었기 때문입니다. 이는 단기적인 매도세와 패닉 셀링을 유발할 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전력</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#순환금융논란</span> <span class="tag tag-hash">#차이나칩포비아</span> <span class="tag tag-hash">#AI전력수급</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">• 순환금융 논란: 엔비디아가 텍사스 데이터센터를 500억 달러(약 73조 원) 규모로 15년간 장기 임차하는 계약을 헛8(Hut8)과 체결했다. 이는 오픈AI 오하이오 프로젝트 지급보증 논의에 이어 나온 것으로 AI 칩 제조사와 고객사 간 자금이 맞물리는 순환금융 구조에 대한 우려를 다시 키우는 모습이다.
+• 차이나칩 포비아: 중국 국영기업이 침지형 DUV(심자외선) 노광장비 양산에 착수했다는 소식이 전해지며 코스피가 전 거래일 대비 732.09포인트(10.84%) 급락한 6023.66에 마감했다. 이에 따라 코스피와 코스닥에서 올해 세 번째 매도 사이드카와 서킷브레이커가 동시에 발동되는 등 투자 심리가 급격히 얼어붙는 양상이다.
+• 한미 LNG 협력: 정부가 2000억 달러 규모 대미 투자 프로젝트의 첫 사업으로 텍사스 소재 LNG(액화천연가스) 복합화력발전소 건설을 검토하고 있다. 미국의 데이터센터 전력 수요 급증과 한국의 전력 구매 계약(PPA)을 통한 수익 확보라는 양측의 이해관계가 맞아떨어진 결과라는 평가다.
+‮[글로벌 투자자 관심 뉴스]
+1. 엔비디아, 73조 데이터센터 임차 계약…‘순환금융’ 논란 재점화
+- 핵심 요약: 엔비디아가 미국 텍사스에서 헛8(Hut 8)이 건설 중인 1GW 규모 데이터센터 전체를 15년간 장기 임차하는 계약을 체결했다고 파이낸셜타임스(FT)가 보도했다. 계약 규모는 196억 달러이며 갱신 시 30년간 최대 500억 달러(약 73조 원)에 이를 전망이다. 이 시설은 완공 후 네오클라우드(신생 클라우드 사업자)에 재임대돼 AI 서비스 거점으로 활용될 계획이며, 헛8은 이번 임차 계약을 바탕으로 지난 6월 43억 달러 규모 회사채를 연 6.129% 금리로 발행한 바 있다. 앞서 월스트리트저널(WSJ)이 엔비디아의 오픈AI 오하이오 프로젝트 지급보증 논의를 보도한 데 이어 이번 계약까지 알려지면서 AI 칩 제조사와 고객사 간 자금이 맞물리는 순환금융 구조에 대한 우려가 재차 불거지는 상황이다.
+2. 차이나칩 포비아, 시장 덮쳤다
+- 핵심 요약: 중국 반도체 기술 자립이 예상보다 빨라질 수 있다는 우려가 확산되며 28일 코스피가 전 거래일 대비 732.09포인트(10.84%) 급락한 6023.66에 마감했다. 로이터통신에 따르면 중국 국영기업인 상하이 아이싱나 전자기술그룹이 침지형 DUV(심자외선) 노광장비 양산을 주도하며 올해 5대, 내년 20대를 창신메모리(CXMT) 등에 공급할 계획인 것으로 전해졌다. 여기에 엔비디아의 대규모 금융보증이 순환금융 논란을 부각시키며 겹악재로 작용했고 삼성전자(005930)(-13.39%), SK하이닉스(000660)(-14.65%) 등 반도체주가 직격탄을 맞았다. 이날 코스피·코스닥 양 시장에서는 올해 들어 세 번째로 매도 사이드카와 서킷브레이커가 동시에 발동됐고 코스피 시가총액은 이달 들어서만 2000조 원 가까이 증발한 것으로 나타났다.
+3. 美 ‘전력난 해소’ 韓 ‘상업적 합리성’…이해관계 맞아떨어져
+- 핵심 요약: 정부가 2000억 달러 규모 대미 투자 프로젝트의 첫 사업으로 텍사스주 LNG(액화천연가스) 복합화력발전소 건설을 검토하고 있다. AI 데이터센터 확산으로 미국 내 전력 수요가 급등하면서 2030년 데이터센터 전력 수요는 지난해의 2배인 426TWh(테라와트시)까지 늘어나 전체 전력 수요의 9%를 차지할 것으로 전망된다. 텍사스와 버지니아주에 데이터센터 용량의 42%가 몰려 있지만 발전소 부족과 송전망 병목으로 안정적 전력 공급이 어려운 상황이며, 태양광·풍력은 24시간 가동이 어렵고 원전은 건설에 8년 이상이 걸려 LNG 발전이 현실적 대안으로 꼽힌다. 한국이 미국 전력 수요 기업과 전력 구매 계약(PPA)을 체결하면 안정적 수익을 확보할 수 있어 양국의 이해관계가 맞아떨어졌다는 평가다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004646352' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004646352</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
