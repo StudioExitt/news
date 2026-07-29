@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK하닉 본주 18% 떨어질 때 반토막…제자리 돌아와도 손실</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001260372' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13153" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>SK하닉 본주 18% 떨어질 때 반토막…제자리 돌아와도 손실</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">단일종목 2배 추종 레버리지 ETF가 SK하이닉스 주가 하락 시 본주보다 훨씬 큰 손실을 기록한 것이 밝혀졌다. 이는 레버리지 ETF가 기초자산 수익률의 두 배를 누적적으로 추종하지 않기 때문에 발생하는 구조적 위험(음의 복리효과) 때문이다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">기업 실적이나 거시경제 지표 변화보다는 특정 금융 상품(레버리지 ETF)의 구조적 위험을 경고하는 내용으로, 투자자들에게 높은 수준의 주의를 환기시키지만 즉각적인 시장 방향성에 미치는 영향은 제한적입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#음의복리효과</span> <span class="tag tag-hash">#투자주의</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">단일종목 레버리지 ETF가 상장된 지난 5월 27일부터 이달 22일까지 SK하이닉스 주가가 18.4% 하락하는 동안 단일족목 레버리지 ETF의 평균 수익률은 -49.4%를 기록한 것으로 분석됐다. 2배를 추종하지만 음의 복리효과로 인해 실제로는 두 배 이상의 손실이 발생한 것이다.
+
+29일 한양증권은 단일종목 2배 추종 레버리지 ETF의 구조와 투자 유의사항을 쉽게 이해할 수 있도록 금융교육 콘텐츠 '레버리지 투자주의보'를 공개하고 이 같은 분석 결과를 밝혔다. 이번 콘텐츠는 단일종목 2배 추종 레버리지 ETF가 기간 전체 수익률의 두 배를 추종하는 상품이 아니라 기초자산의 일간 수익률을 두 배로 추종하는 구조라는 점을 설명한다.
+
+한양증권은 삼성전자와 SK하이닉스의 해당 기간 종가와 국내 상장된 단일종목 레버리지 ETF의 종가를 비교·분석했다. 그 결과 삼성전자 주가는 15.2% 하락한 반면 삼성전자 단일종목 레버리지 ETF의 평균 수익률은 -40.2%를 기록했다. SK하이닉스 역시 주가는 18.4% 하락했지만 SK하이닉스 단일종목 레버리지 ETF의 평균 수익률은 -49.4%를 나타냈다.
+
+일간 수익률이 매일 누적되는 구조에서는 레버리지 ETF의 최종 수익률이 단순히 기초자산 수익률의 두 배와 일치하지 않을 수 있음을 보여줬다. 콘텐츠에는 같은 기간의 기초자산 일간 변동률을 그대로 유지하면서 최종 누적수익률만 0%가 되도록 가정한 시뮬레이션도 담았다. 분석 결과 삼성전자 단일종목 레버리지 ETF의 평균 수익률은 -14.4%, SK하이닉스 단일종목 레버리지 ETF의 평균 수익률은 -21.1%로 나타났다.
+
+또한 동일한 변동성이 6개월, 1년간 지속된다는 가정에서는 기초자산이 제자리(0%)로 돌아오더라도 2배 레버리지 수익률은 6개월 후 평균 -39.8%(삼성전자), -50.3%(SK하이닉스)를 기록했다. 1년 후에는 -63.4%(삼성전자), -75.4%(SK하이닉스)까지 확대되는 것으로 나타났다. 이는 가격 변동이 반복되는 과정에서 레버리지 ETF의 수익률이 크게 달라질 수 있음을 보여주는 사례다.
+
+한양증권 관계자는 "단일종목 2배 추종 레버리지 ETF는 투자자들의 관심이 높은 상품이지만 상품 구조를 충분히 이해하지 못한 채 투자하는 경우도 적지 않다"며 "고객이 금융상품의 특성과 유의사항을 쉽게 이해할 수 있도록 금융교육 콘텐츠를 지속 확대하고, 건전한 투자문화 확산에 앞장서겠다"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001260372' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001260372</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
