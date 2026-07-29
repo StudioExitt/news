@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"평생 본적 없는 폭락"…사상 첫 이틀 연속 서킷브레이커 '패닉'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005315136' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13212" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"평생 본적 없는 폭락"…사상 첫 이틀 연속 서킷브레이커 '패닉'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">—</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">기업 실적 악화(SK하이닉스)와 글로벌 AI 기술 자금 조달 불확실성이라는 이중 압박으로 국내 증시가 사상 초유의 폭락을 겪으며 서킷브레이커를 연속 발동하는 패닉 상태에 진입했습니다. 이는 단기적인 과도한 공포 심리가 반영된 것으로 보입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단기적인 실적 쇼크와 글로벌 거시 경제 불확실성이 결합되어 극심한 공포 심리를 유발했으며, 이는 단기 투자 심리에 매우 큰 악영향을 미칩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#패닉셀링</span> <span class="tag tag-hash">#서킷브레이커</span> <span class="tag tag-hash">#AI투자</span> <span class="tag tag-hash">#실적쇼크</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피 사상 첫 이틀 연속 서킷브레이커 발동
+AI 투자 둔화에 실적 쇼크·ETF 논란까지
+김용범 "레버리지 ETF 때문만은 아냐"
+국내 증시가 이틀 연속 서킷브레이커(20분간 매매 중단)가 발동되는 초유의 폭락장을 맞았다. SK하이닉스 실적 실망과 글로벌 인공지능(AI)
+투자 둔화 우려가 겹치면서 코스피와 코스닥지수는 장중 8% 넘게 급락했다. 이런 가운데 증시 변동성을 키운 원인으로 지목된 단일종목 레버리지
+상장지수펀드(ETF)를 둘러싸고 투자자의 원성이 높아지고 있다.
+글로벌 AI 투자 불안에 외국인 매도 겹쳐
+AI 기반 투자정보 플랫폼 에픽AI에 따르면 이날 낮 12시19분 코스닥지수가 전일 종가 대비 8.05% 급락한 649.00을 기록하며
+1단계 서킷브레이커가 발동됐다. 이어 12시32분 코스피지수마저 전일 대비 8.15% 폭락한 5532.33으로 추락하며 1단계 서킷브레이커가
+걸렸다. 두 시장 모두 20분간 모든 호가 접수와 매매 거래가 중단됐다.
+이에 앞서 현물 시장을 끌어내린 선물 시장의 폭락으로 매도 사이드카(프로그램매매 매도 호가 일시 효력정지)도 연달아 발동됐다. 오전 10시55분
+코스피200 선물 가격이 5.15% 하락하며 유가증권시장 매도 사이드카가 발동됐고, 1분 뒤인 10시56분에는 코스닥150 선물 가격이
+6.21% 급락해 코스닥 시장에도 사이드카가 걸렸다.
+유가증권시장에서 이틀 연속 서킷브레이커가 발동된 것은 1998년 제도 도입 이후 한국 증시 역사상 최초다. 전일 10.84% 급락에 이어 연이은
+폭락장이 연출되자 여의도 증권가에서는 "평생동안 이런 장은 처음 본다"며 망연자실한 분위기가 역력하다.
+이날 지수 폭락의 도화선은 SK하이닉스의 실적 실망으로 인한 매물 출회다. SK하이닉스의 2분기 영업이익은 60조5426억원으로 시장
+컨센서스(63조6668억원)를 밑돌았다.
+SK하이닉스는 이날 콘퍼런스콜에서도 메모리 생산능력 확대에 따른 공급 과잉 가능성은 제한적이라고 일축했지만 명확한 실적 가이던스를 제시하지 않으면서 시장의 불안을 잠재우지 못했다. 투자심리가 급랭하면서 SK스퀘어(-12.54%), 삼성전기(009150)(-11.31%),
+현대차(005380)(-3.30%) 등 다른 시총 상위주들도 동반 하락했다.
+여기에 글로벌 빅테크 기업들의 AI 자금 조달 우려가 투심을 더욱 얼어붙게 했다. 구글의 잉여현금흐름(FCF) 마이너스 전환,
+엔비디아의 신용보증에 따른 신용부도스와프(CDS) 스프레드 확대 등으로 하이퍼스케일러들의 자본지출(CAPEX) 집행 및 자금 조달 여력에 대한 의구심이
+확산했다. 이에 전일 미 필라델피아 반도체 지수는 4.5% 급락했다.
+"모든 것이 레버리지 ETF 때문 아니다" 발언에 투자자 '부글'
+사진=뉴스1
+사진=뉴스1
+i같은 상황에서 김용범 청와대 정책실장은 증시 변동성을 키운 단일종목 레버리지 ETF에 대해 "모든 것이 레버리지 ETF 때문은 아니다"라며
+'구조적 요인'을 언급했다.
+이재명 대통령의 브라질 국빈 방문을 수행 중인 김 실장은 이날 상파울루 현지 브리핑을 통해 "레버리지 ETF뿐 아니라 변동성이 두드러지는 구조적
+요인을 전반적으로 금융위원회·금융감독원에서 점검해 보려 한다"고 밝혔다.
+김 실장은 "우리나라 시장 변동성이 큰 것은 개인투자자와 파생상품 비중이 높은 점과도 관련이 있다"
+"레버리지 ETF로 이런 현상이 더욱 두드러져 보일 수는 있지만 꼭 그런 것만은 아니다"라고 설명했다.
+앞서 정부는 김 실장 주도 아래 초고속으로 레버리지 ETF 도입을 밀어붙였다. 이후 논란이 확산하자 주무부처인 금융위는 기본예탁금 상향 등
+보완책을 부랴부랴 내놓기도 했다.
+김 실장은 중국 반도체의 급성장 등과 맞물리면서 국내는 물론 세계 증시 역시 출렁이고 있다고 진단했다. 그는 "중국
+창신메모리테크놀로지(CXMT) 상장과 노광장비 제조기술 확보 등 2가지 현상에서 비롯된 과거의 '딥시크 쇼크'처럼 보인다"
+"한국에서 변동성이 더 크게 나타나는 측면도 있으나 지난 2∼3개월은 우리만 그런 것은 아니다"라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005315136' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005315136</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
