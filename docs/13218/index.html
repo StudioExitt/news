@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>6,200→5,260→5,500, 장중 변동폭 16%…“이게 국장인가요?”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/243/0000101017' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13218" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>6,200→5,260→5,500, 장중 변동폭 16%…“이게 국장인가요?”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 지수가 장중 6,200선에서 5,260선까지 급락하는 등 극심한 변동성을 보이며 큰 폭의 낙폭을 기록했습니다. 개인과 외국인의 동반 매도세가 지수 하락을 주도했으며, 반도체 및 AI 관련 투자 심리 위축과 글로벌 경기 우려가 복합적으로 작용하며 시장 전반에 약세를 키웠습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">미국 반도체주 약세와 AI 투자 수익성 경계감이 맞물려 국내 시장 변동성을 극대화함. 급격한 수급 불균형과 대형주의 동반 하락은 단기적인 심리 위축을 유발할 가능성이 높음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#변동성</span> <span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#시장심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">오후 2시30분 코스피 5,598.89…고점과 저점 차이만 965.75포인트
+개인·외국인 2조8,780억원 순매도…기관 2조8,623억원 매수로 방어
+코스피·코스닥 하락 (연합뉴스)
+
+코스피·코스닥 하락 (연합뉴스)
+
+코스피가 29일 장중 6,200선을 넘어섰다가 5,260선까지 추락한 뒤 다시 5,500선을 회복하는 극심한 변동성을 나타냈다. 하루도 지나지 않아 지수 3개 구간을 오간 데다 장중 고점과 저점의 차이는 전일 종가의 16%를 넘어섰다.
+
+이날 오후 2시30분 기준 코스피는 전 거래일보다 424.77포인트(7.05%) 내린 5,598.89를 기록했다.
+
+지수는 전 거래일보다 65.45포인트 오른 6,089.11로 출발해 장중 6,228.52까지 상승했다. 그러나 이후 매도 물량이 쏟아지며 5,262.77까지 밀린 뒤 저점에서 336포인트가량 반등했다.
+
+장중 고점과 저점의 차이는 965.75포인트다. 전일 종가인 6,023.66과 비교하면 16.03%에 해당한다. 장중 고점에서 저점까지의 낙폭도 15.5%에 달했다.
+
+상승 출발한 지수가 불과 몇 시간 만에 두 자릿수 비율로 추락했다가 낙폭 일부를 만회하면서 투자자들 사이에서는 방향성을 가늠하기 어렵다는 반응이 나오고 있다.
+
+수급에서는 개인과 외국인의 동반 매도가 지수를 끌어내렸다. 개인은 1조9,013억원, 외국인은 9,767억원을 각각 순매도했다. 두 투자 주체가 내놓은 물량은 총 2조8,780억원 규모다.
+
+기관은 2조8,623억원을 순매수하며 지수 방어에 나섰다. 프로그램 매매는 차익거래에서 2,774억원 순매수, 비차익거래에서 2,442억원 순매도를 기록해 전체적으로는 332억원 순매수로 집계됐다.
+
+거래량은 3억7,863만주, 거래대금은 39조3,779억원에 달했다. 급락과 반등이 반복되면서 단기 매매 물량이 집중된 것으로 풀이된다.
+
+시장 전반의 체감 낙폭은 지수보다 컸다. 유가증권시장에서 상승 종목은 68개에 그친 반면 하락 종목은 839개로 집계됐다. 보합은 9개였으며 상한가와 하한가 종목은 각각 1개였다.
+
+시가총액 상위 종목도 대부분 약세를 나타냈다. 삼성전자는 전 거래일보다 6.14% 내린 20만6,500원, SK하이닉스는 10.45% 떨어진 138만8,000원에 거래됐다.
+
+SK스퀘어는 10.38%, 삼성전기는 9.61%, 삼성생명은 9.47% 하락했다. LG에너지솔루션은 4.78%, 삼성바이오로직스는 3.87%, KB금융은 3.27%, 현대차는 2.88% 내렸다.
+
+이날 급락에는 미국 반도체주 약세와 중국 메모리 업체의 추격 우려, 인공지능 투자 수익성에 대한 경계감이 복합적으로 작용했다. SK하이닉스의 실적 발표 이후 주주환원과 향후 성장성에 대한 기대가 충분히 충족되지 못했다는 평가도 매도세를 키웠다.
+
+국제유가가 재차 반등한 점 역시 투자심리에 부담을 줬다. 위험자산 회피 심리가 확산하면서 반도체와 금융, 2차전지 등 시가총액 상위 업종이 동시에 흔들렸다.
+
+급격한 매도세로 코스피와 코스닥 시장에서는 매도 사이드카와 서킷브레이커가 발동됐다. 양대 시장에서 이틀 연속 서킷브레이커가 내려진 것은 이례적인 사례다.
+
+코스피는 장중 저점에서 빠르게 반등했지만 시장이 안정됐다고 판단하기는 이르다. 개인과 외국인의 매도세가 이어지고 하락 종목이 전체의 대부분을 차지한 만큼, 지수 반등과 개별 종목의 투자심리 사이에는 상당한 간극이 남아 있다.
+
+하루 사이 6,200선과 5,200선, 5,500선을 차례로 경험한 국내 증시는 이제 상승과 하락의 방향보다 변동성 자체가 가장 큰 위험 요인이 됐다. 5,500선 회복이 바닥 확인의 신호가 될지, 급락 과정의 일시적 반등에 그칠지는 장 마감까지 이어질 수급과 반도체주의 움직임에 달릴 전망.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/243/0000101017' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/243/0000101017</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
