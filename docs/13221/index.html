@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>서킷브레이커 후 반등은 '데드캣바운스'…장초반 반짝 상승 '물거품'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/421/0009085882' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13221" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>서킷브레이커 후 반등은 '데드캣바운스'…장초반 반짝 상승 '물거품'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 연속적인 급락과 서킷브레이커 발동을 겪은 후, 단기적 반등 시도가 나타났으나 이는 일시적인 '데드캣바운스'에 그쳤다는 분석입니다. 시장 전문가들은 실질적인 추세 전환을 위해서는 이익, 수급, 금리 등 거시 경제 변수의 동시 개선이 필수적이라고 경고했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">서킷브레이커 연속 발동 및 급락은 시장의 극심한 공포와 불안정성을 반영하며, 추세 전환에 대한 확신을 주기보다 보수적 관망세를 유발하기 때문에 부정적이다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#서킷브레이커</span> <span class="tag tag-hash">#데드캣바운스</span> <span class="tag tag-hash">#기술적분석</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">과거 발동 다음 날 69% 반등…첫 반등 뒤 56% 다시 저점
+"코스피 200일선 지켜낼지 관심…이익·수급 개선 여부 관건"
+코스피 지수가 장중 6000선이 붕괴된 28일 서울 중구 하나은행 본점 딜링룸 전광판에 장중 코스피 지수가 표시되고 있다. 이날 코스피는 전일 종가와 비교해 732.09포인트(p)(10.84%) 하락한 6023.66
+코스피 지수가 장중 6000선이 붕괴된 28일 서울 중구 하나은행 본점 딜링룸 전광판에 장중 코스피 지수가 표시되고 있다. 이날 코스피는 전일 종가와 비교해 732.09포인트(p)(10.84%) 하락한 6023.66으로 마감했다. 2026.7.28 
+
+(서울=뉴스1) 서한샘 기자 = 코스피에서 29일 사상 처음으로 이틀 연속 서킷브레이커가 발동했다. 급락 직후 기술적 반등이 나타나는 경우가 많았던 과거와 달리 장 초반 반등 시도가 빠르게 무산되면서 다시 폭락장이 연출됐다. 시장은 저점이 어디인지 알수 없는 시계 제로의 상태로 치닫고 있다.
+
+29일 오후 1시 34분 기준 코스피는 전 거래일보다 754.38포인트(12.52%) 내린 5269.28을 기록하고 있다. 개장 직후 한때 강보합을 보였던 지수는 반도체주를 중심으로 매도세가 확대되면서 하락 전환한 뒤 낙폭을 키웠다.
+
+코스피 시장에서는 이날 오전 10시 55분 코스피200 선물 가격 급락으로 매도 사이드카가 발동했다. 이후 코스피가 전일 대비 8% 이상 하락한 상태를 1분간 유지하면서 오후 12시 32분부터 20분간 유가증권시장 매매가 중단됐다. 코스닥시장에서도 매도 사이드카에 이어 서킷브레이커가 발동했다.
+
+전날 코스피는 10% 넘게 급락했다. 증권가에서는 중국 반도체 업체의 기술 추격과 공급 확대 우려, 인공지능 투자 둔화 가능성, 반도체와 단일종목 레버리지 상품에 집중됐던 포지션 청산 등을 급락 배경으로 꼽았다. 장중 매도 사이드카와 서킷브레이커도 잇달아 발동했다.
+
+2000년 이후 코스피 서킷브레이커는 모두 15차례 발동했다. 최근 이틀을 제외한 13차례 중 9차례(69.2%)는 다음 거래일 종가가 발동일 종가보다 높았다. 평균 상승률도 2.97%로 급락 직후 기술적 반등은 비교적 자주 나타났다.
+
+그러나 다음 날 반등한 9차례 가운데 5차례(55.6%)는 이후 10거래일 안에 발동일 장중 저점을 다시 밑돌았다. 전체 13차례를 기준으로 보면 10거래일 내 저점 재이탈 사례는 9차례(69.2%)에 달했다. 일시적 반등 후 추가 하락하는 '데스캣바운스(Dead cat bounce)'의 전형적인 형태다.
+
+10거래일 뒤 종가가 발동일 종가보다 높았던 사례는 7차례(53.8%)였다. 평균 수익률은 2.62%였지만 상승과 하락 사례는 7대 6으로 근소하게 갈렸다.
+
+올해는 첫 반등 이후 다시 밀리는 흐름이 더 뚜렷했다. 최근 이틀을 제외한 올해 7차례 가운데 다음 날 상승한 경우는 5차례였지만 10거래일 뒤에도 발동일 종가를 웃돈 사례는 3차례에 불과했다.
+
+지난달 23일에는 서킷브레이커 발동 다음 날 코스피가 3.26% 상승했지만 10거래일 뒤에는 발동일 종가보다 6.67% 낮아졌다. 이달 13일에도 다음 날 0.73% 반등한 뒤 10거래일 뒤에는 11.51% 하락했다.
+
+28일 코스피는 전일 종가와 비교해 732.09포인트(p)(10.84%) 하락한 6023.66로 거래를 마쳤다. 코스닥은 전일 대비 59.01포인트(p)(7.72%) 하락한 705.85로 마감했다.
+
+28일 코스피는 전일 종가와 비교해 732.09포인트(p)(10.84%) 하락한 6023.66로 거래를 마쳤다. 코스닥은 전일 대비 59.01포인트(p)(7.72%) 하락한 705.85로 마감했다. 
+
+증권가에서는 낙폭 과대에 따른 기술적 반등 가능성은 열려 있지만 첫 반등을 곧바로 추세 전환으로 판단해서는 안 된다는 분석이 나온다. 특히 이날은 장 초반의 제한적인 반등 시도마저 무산된 뒤 양 시장의 거래가 다시 중단되면서 냉각된 투자심리를 드러냈다.
+
+김석환 미래에셋증권 연구원은 "낙폭 과대와 공매도 환매, 선물 쇼트커버링, 상장지수펀드(ETF) 리밸런싱만으로도 반등은 발생할 수 있고 견조한 실적이나 투자 계획이 확인될 경우 되감김이 빠르게 나타날 수 있다"며 "그러나 급락 이후 첫 반등은 출발점일 뿐이며 실제 추세 전환에는 이익·수급·금리의 동시 개선이 필요하다"고 설명했다.
+
+그중에서도 첫 반등 뒤 시장이 다시 조정을 받을 때 이전 저점을 지키는지가 중요하다고 봤다. 하이퍼스케일러의 자본적 지출과 인공지능(AI) 투자의지, 국내 반도체 이익과 메모리 가격 전망, 외국인 수급과 레버리지 상품 환매 안정 여부 등을 함께 확인해야 한다는 분석이다.
+
+한지영 키움증권 연구원은 향후 반등 강도를 좌우할 변수로 국내 주요 기업의 실적을 통한 이익 신뢰성 회복, 미국 하이퍼스케일러 기업의 수익성 개선, 단일종목 레버리지 상품의 영향력 축소를 꼽았다.
+
+한 연구원은 "단기적으로는 지난해 4월 이후 한 번도 이탈한 적 없었던 코스피 200일선(5696선)을 지켜낼지 관건"이라며 "투자심리가 여전히 냉각된 상태이기 때문에 일시적으로 해당 레벨을 터치하거나 이탈할 가능성 자체는 존재한다"고 분석.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/421/0009085882' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/421/0009085882</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
