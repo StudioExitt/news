@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"삼전닉스 개인 투매물량 아직 안나왔다"...지금 바닥 아니라는 IB</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005555147' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13451" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"삼전닉스 개인 투매물량 아직 안나왔다"...지금 바닥 아니라는 IB</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">글로벌 IB 분석에 따르면 개인투자자들의 레버리지 ETF 투자 손실액은 약 56조원대에 달하며, 높은 신용융자 잔액이 변동성 우려를 키우고 있습니다. 다만, 대규모 투매물량은 아직 나오지 않았으며, 현재는 단기 과열을 벗어난 조정 구간일 뿐 바닥이라고 보기 어렵다는 진단입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">투자자들의 막대한 손실 규모와 높은 빚(신용융자) 수준은 단기적인 변동성 리스크로 작용하며, 시장 전체의 투자심리 위축 및 경계감을 높이는 계기가 될 수 있기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#신용융자</span> <span class="tag tag-hash">#투자위험</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">/사진=연합뉴스
+/사진=연합뉴스
+[파이낸셜뉴스] 국내 개인투자자들이 레버리지 상장지수펀드(ETF) 투자로 약 56조3000억원 규모의 손실을 입했다는 글로벌 투자은행(IB)의 분석이 나왔다. 주가 급락에도 불구하고 빚을 내서 투자하는 이른바 '빚투(신용융자)' 잔액은 여전히 32조 원을 웃돌고 있어 시장의 변동성 확대에 대한 우려가 제기된다.
+
+씨티 아태 헤드 "韓 개미 레버리지 ETF 투자로 시총 56조 증발"
+30일 IB 업계에 따르면, 전날 모하메드 아파바이 씨티글로벌마켓증권 아시아태평양 트레이딩 전략 헤드는 기관투자자 대상 보고서를 통해 "한국 자산 기반 레버리지 ETF 시가총액이 지난달 22일 약 525억달러(약 76조3700억원)에서 최근 190억달러(약 27조6400억원)로 감소했다"고 밝혔다.
+
+아파바이 헤드는 누적된 개인투자자들의 총 손실액을 387억 달러(약 56조3000억원) 집계하며 "레버리지 ETF 상품의 시가총액이 연말 이전 80억달러(약 11조6300억원) 밑으로 떨어질 가능성이 있다"고 경고했다.
+
+신용융자 잔액 역시 여전히 시장의 부담 요인으로 지목됐다. 아파바이 헤드는 "지난 27일 기준 코스피와 코스닥 시장의 신용융자 잔액은 32조7000억원으로 집계됐다"며 "지난달 24일 기록한 38조6000억원보다는 감소했지만, 올 들어 신용융자 포지션 청산은 약 65%만 진행된 것으로 추정된다"고 밝혔다.
+
+"코스피 단기 과열 벗어났을 뿐" 저평가 구간 진입 분석
+한편, 주가 하락 국면에서도 국내 개인투자자들은 대형 반도체주 중심의 매수세를 이어간 것으로 나타났다.
+
+보고서에 따르면 개인은 지난달 23일 이후 SK하이닉스를 160억달러 이상 순매수했으나 해당 매수분에서 약 57억달러(약 8조3000억원)의 손실을 냈다. 삼성전자에서도 약 24억달러(약 3조5000억원)의 손실을 기록했다.
+
+막대한 손실에도 개인의 본격적인 투매 물량은 아직 나오지 않았다고 아파바이 헤드는 진단했다. 코스피가 단기 과열 국면을 벗어났을 뿐, 바닥을 다지는 저평가 구간에 진입한 것은 아니라는 분석.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005555147' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005555147</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
