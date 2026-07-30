@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>미 기준금리는 분명 동결인데…장기채 금리는 왜 오르나 [마켓무버의 국장 힌트]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001260477' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13371" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>미 기준금리는 분명 동결인데…장기채 금리는 왜 오르나 [마켓무버의 국장 힌트]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미 연준이 기준금리를 동결했음에도 불구하고, 장기 국채 금리가 급등하며 시장의 불확실성을 높이고 있습니다. 빅테크 실적은 견조한 매출을 기록했지만, 대규모 투자 비용과 주당순이익(EPS) 하회 이슈가 포착되어 거시 경제 불안정성과 함께 단기적 부정적 영향을 미칠 수 있다는 분석입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">기준금리 동결에도 불구하고 급등한 장기 국채 금리는 연준의 미래 물가 통제 능력에 대한 시장의 근본적인 의구심을 반영합니다. 여기에 빅테크 기업들이 매출은 좋으나 비용 증가 및 높은 자본 지출로 인해 '수익성' 측면에서 어려움을 보여주면서, 투자 심리 전반에 걸쳐 거시적 하방 압력을 가하는 구조입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">Microsoft Corp.</span> <span class="tag stock-tag">Meta Platforms Inc.</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#장기채금리</span> <span class="tag tag-hash">#FOMC</span> <span class="tag tag-hash">#빅테크실적</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미 증시 살펴보며 한국 증시 투자아이디어까지 찾는 마켓 무버입니다.\n\n간밤 미 증시 3대지수 모두 하락했습니다. 다우지수는 2.19%, S&P 500은 1.52%, 나스닥 지수는 1.74% 후퇴했습니다. 장 마감\n후 나온 주요 빅테크의 실적도 시장의 공포심리를 가중시키는 면이 있었습니다.\n\n미국의 기준금리를 동결한 FOMC부터 살펴보겠습니다. 시장의 예상대로 기준금리가 동결하며 잠시 상승하던 시장은, 케빈 워시 연준 의장의 기자회견\n이후 하락 반전했습니다.\n\n오늘 케빈 워시 의장은 '느슨한 인플레이션 목표는 없다'며 물가 상승률 관리 목표를 2%에서 타협하는 일은 없을 것이라는 점을 분명히 했습니다.\n\n그러나 한편으로 인플레이션을 통제 가능한 수준으로 유지할 수 있다는 확신을 심어주는 게 더 중요하다며 '금리 인상만이 물가를 잡는 유일한 방법은아니'라는 발언을 내놓았죠.\n\n시장은 이번 기자회견 이후 오히려 인플레이션이 통제 가능한 수준인가에 대한 의문을 제기하는 모습입니다.\n\n워시 의장은 왜 금리 동결을 결정했가에 대해 명확한 답을 내놓지 않았습니다. 기자들의 연이은 질문에도 이 부분이 해소되지 않은 상황에서 30년만기 미 국채 수익률이 급격하게 오르기 시작했습니다. 현재 미 국채 30년물 수익률은 연 5.21%를 돌파하며 17년만에 가장 높은 수준으로 올라왔습니다.\n\n장기채 수익률이 급격히 올랐다는 것은 채권시장에서 장기채를 팔아치우기 시작했다는 것과 같은 말입니다. 이는 연준이 금리를 너무 올릴까가 아니라반대로 연준이 금리를 제때 올리지 않아서 물가를 잡지 못할까 우려해서 나온 흐름입니다.\n\n신 채권왕으로 불리는 제프리 건들락 더블라인 캐피털 CEO가 실제로 이런 점을 지적하기도 했습니다. '연준이 정말로 물가를 안정시키려 한다면,말이 아니라 행동에 나서야 한다'고 본 것이죠.\n\n즉 이번 기자회견 이후 워시 의장이 인플레를 장기적으로 극복할 수 있을지에 대한 시장의 우려가 커졌다는 뜻으로 해석할 수 합니다.\n\n이번 기준금리 동결과 관련한 도널드 트럼프 미 대통령의 행보도 눈여겨볼 부분입니다. 우선 트럼프 대통령의 발언이 오늘 유가 급등을 유도한 측면이있습니다. 요르단 내 미군 기지를 공격한 이란에 대해 (이란을) '두들겨 팰 것'이란 강한 표현을 사용하며 고강도 대응을 예고했습니다.국제유가는 간밤 8%대 급등하며 브렌트유 선물이 다시 배럴당 90달러를 넘어갔습니다.\n\n트럼프 대통령은 이후 기자들과 답하는 과정에서 "워시 의장이 더 낮은 금리를 보고 싶어한다는 것을 알고 있다”면서도 "연준에는 이사회가 있고,통화정책 결정 위원회는 정치적인 위원회이며, 그들은 금리를 유지하려 한다"고 말했습니다.\n\n이는 현재까지 도널드 트럼프 대통령이 케빈 워시 의장을 신뢰하고 있다는 것으로도 해석할 수 있지만, 한편으로 이런 발언들은 시장엔 연준 의장의독립성을 의심하게 만드는 요인으로 작용할 수 합니다.\n\n장 마감 후 나온 빅테크 실적도 주목할 부분입니다. 마이크로소프트와 메타의 실적 발표 후 주가 흐름이 엇갈렸습니다.\n\n마이크로소프트는 컨센서스를 뛰어넘는 실적을 발표했습니다. 분기 매출은 900억 달러, 주당순이익은 4.74달러를 기록했습니다. 회계연도 기준2026년 자본 지출은 1,750억달러로 늘어나고, 내년에도 지출이 계속 증가할 것이라는 자체 전망도 나왔습니다.\n\n애저를 포함한 클라우드 사업부 매출은 1년 전보다 31.6% 늘면서 시장의 기대를 충족시켰습니다. 단 대규모 투자로 인한 잉여현금흐름의 감소는마이크로소프트에서도 확인됩니다.\n\n메타 매출은 시장 기대를 넘어섰지만 주당순이익(EPS)이 6.18달러로 시장 기대치(7.22달러)를 밑돌았습니다. EPS가 시장 기대에하회했다는 건 주당순이익이 기대에 못미쳤다는 것은 메타의 비용 증가 속도가 매출 증가 속도를 앞지르고 있다는 뜻으로 해석될 수 있습니다. 시장이생각하는 것보다 돈을 잘 못 번다면, 그 기업이 계획한대로 AI 투자를 잘 할 수 있겠느냐 하는 논쟁을 불붙일 촉매가 될 수 있겠지요.\n\n3분기 매출 전망이 시장 가이던스보다 소폭 낮은 점, 어닝 콜에서 내년 자본지출 전망을 제시하지 않은 점도 투자심리엔 좋지 않은 요인으로 작용한것으로 보입니다.\n\n메타는 실적 발표 이후 시간외 거래에서 (한국시간 오전 7시 35분 기준) 7.79% 하락 중입니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001260477' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001260477</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
