@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>연 이틀 폭락했던 코스피, 보합권에서 혼조세 양상</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006339757' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13401" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>연 이틀 폭락했던 코스피, 보합권에서 혼조세 양상</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">연이은 하락세 이후 코스피는 방향성을 탐색하는 혼조세를 보이고 있다. 기관과 외국인의 순매수가 상승을 이끌고 있으나, 간밤 미국 시장의 급락 및 30년물 국채금리 급등으로 인해 변동성이 커지고 있어 투자심리가 위축된 상황이다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업황 악화 우려와 금리 급등이라는 거시적 부담 속에서, 경기민감주 및 방산 등 특정 테마를 중심으로 순환매가 나타나는 혼조세로 전개되고 있어 방향성을 잡기 어렵다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">LG에너지솔루션</span> <span class="tag stock-tag">엔비디아</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">우주항공과국방</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">조선</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#금리변동</span> <span class="tag tag-hash">#혼조세</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피, 0.33%↑ 5681.77, 코스닥 654.72
+상승 출발 이후 장 초반 방향성 탐색 '혼조세'
+간밤 뉴욕증시 급락…30년물 국채금리 ‘껑충’
+“과매도 국면에 진입, 반등 시도 있을 것” 연 이틀 장중 10%가 넘는 낙폭을 보였던 코스피가 30일 간밤 뉴욕증시 하락 충격에도 불구하고 상승 출발한 이후 방향성을 탐색하며 혼조세를 보이고 있다.
+
+코스피 하락 마감 (서울=연합뉴스) 이진욱 기자 = 코스피가 전장보다 360.42p(5.98%) 내린 5,663.24로 마감한 29일 오후 서울
+여의도 한국거래소 홍보관에 지수가 표시되고 있다. 2026.7.29
+
+엠피닥터에 따르면 이날 오전 9시 15분 현재 코스피는 전 거래일보다 15.34포인트(0.27%) 오른 5678.58에 거래되고 있다. 지수는 장중 5572.10까지 밀렸지만 이후 낙폭을 빠르게 만회하며 5740.72까지 오르는 등 변동성을 보이고 있다.
+
+수급별로는 기관과 외국인이 지수 상승을 이끌고 있다. 기관은 1760억원, 외국인은 2011억원을 각각 순매수하며 상승 행렬에 가담했다. 반면 개인은 3901억원을 순매도하며 차익실현에 나서는 모습이다.
+
+장 초반 시가총액 ‘톱2’ 반도체주 주가는 엇갈렸다. 올해 2분기 확정 실적을 발표한 삼성전자(005930)는 전 거래일보다 2.16% 오른 21만3000원에 거래되며 반등에 성공했다. 반면 SK하이닉스(000660)는 4.43% 내린 133만9000원으로 약세를 이어갔다.
+SK스퀘어(402340)는 3.18%, 삼성전기(009150)는 1.55% 각각 하락하며 투자심리를 제약했다.
+
+이외에 LG에너지솔루션(373220)도 4.33% 상승하며 시가총액 상위 종목 가운데 가장 높은 상승률을 기록했고, KB금융(105560)은 4.12%, 현대차(005380)는 1.27%, 삼성바이오로직스(207940)는 1.01%, 삼성생명(032830)는 1.13% 각각 오르며 상승 행렬에 가담했다.
+
+같은 시간 코스닥은 지수는 전 거래일보다 10.35포인트(1.56%) 오른 673.03에 거래되고 있다. 지수는 장중 652.22까지 밀린 뒤 매수세가 유입되며 675.91까지 오르는 등 강세 흐름을 이어가고 있다.
+
+수급별로는 외국인과 기관이 지수 상승을 이끌고 있다. 외국인은 330억원, 기관은 401억원을 각각 순매수하며 상승 행렬에 가담했다. 반면 개인은 741억원을 순매도하며 차익실현 매물을 내놓고 있다.
+
+알테오젠(196170)은 전 거래일보다 3.89% 오른 29만3500원에 거래되며 반등에 성공했다. 2차전지 대표주인 에코프로(086520)는 4.90%, 에코프로비엠(247540)은 4.54% 각각 상승하며 강세 흐름에 동참했고, 레인보우로보틱스(277810)도 3.23% 오르며 상승세를 이어갔다.
+
+반도체 장비주는 차익실현 매물에 약세를 나타냈다. 주성엔지니어링(036930)은 7.24% 급락하며 낙폭이 가장 컸고, 원익IPS(240810)는 0.72%, 리노공업(058470)은 0.69% 각각 내렸다.
+
+업종별로는 방산과 조선, 유통, 엔터테인먼트 등 경기민감 업종을 중심으로 매수세가 유입되며 업종 전반에 온기가 번지고 있다.
+
+가장 높은 상승률을 기록한 업종은 우주항공과국방으로 7.62% 오르며 강세 흐름을 주도했다. 이어 중동 긴장 고조에 조선업종이 6.65% 상승세로 뒤를 이었고, 무역회사와판매업체(6.15%), 석유와가스(4.73%) 업종도 강세를 보이고 있다.
+
+반면 기술주 중심 업종은 약세를 면치 못했다. 반도체주 약세로 인해 반도체와 반도체장비는 1.42%, 전자장비와 기기는 2.18% 각각 내리며 업종별 낙폭 상위권에 이름을 올렸다.
+
+가장 높은 상승률을 기록한 업종은 우주항공과국방으로 7.62% 오르며 강세 흐름을 주도했다. 이어 중동 긴장 고조에 조선업종이 6.65% 상승세로 뒤를 이었고, 무역회사와판매업체(6.15%), 석유와가스(4.73%) 업종도 강세를 보이고 있다.
+
+반면 기술주 중심 업종은 약세를 면치 못했다. 반도체주 약세로 인해 반도체와 반도체장비는 1.42%, 전자장비와 기기는 2.18% 각각 내리며 업종별 낙폭 상위권에 이름을 올렸다.
+
+간밤 미국 뉴욕증시는 일제히 하락 마감했다. 미 연방준비제도(Fed·연준)가 현행 연 3.50~3.75%의 기준금리를 동결했음에도 “연준이 인플레이션 대응에 뒤처지고 있다”는 우려가 촉발, 미국채 30년물 국채금리가 5.2%대로 급등하는 등 시장을 짓눌렀다.
+
+다우존스30 산업평균지수는 전장보다 1153.18포인트(-2.19%) 하락한 5만1594.14에 마감해 2025년 4월 이후 최대 하루 낙폭을 기록했다.
+
+대형주 중심의 스탠더드앤드푸어스(S&P) 500 지수는 전장보다 112.63포인트(-1.52%) 내린 7316.15에, 기술주 중심의 나스닥 지수는 전장보다 433.97포인트(-1.74%) 내린 2만4442.94에 각각 마감했다.
+
+미국 상장 30개 주요 반도체 종목으로 구성된 필라델피아 반도체지수는 5.33% 급락해 5거래일 연속 하락세를 이어갔다.
+엔비디아(-3.55%). 브로드컴(-2.78%). 마이크론(-9.94%) 등이 큰폭의 낙폭을 기록했고, SK하이닉스 미국예탁증서(ADR)도 2.60% 내려갔다.
+
+한지영 키움증권 연구원은 “7월 FOMC 여진, 내일 예정된 아마존 실적 대기심리도 개입이 되고 있는 시기인 만큼, 금일 국내 증시 및 미국 증시 본장에서 변동성이 높아질 듯 하다”며 “다만, 과매도 국면에 진입한 만큼 장 초반 변동성 확대 이후 반등을 시도하는 흐름을 보일 것”이라고 말했다.
+
+이어 “현재는 주도주인 반도체를 둘러싼 부정적인 내러티브(이익 피크아웃, AI 투자사이클 종료 등)가 형성되고 있는 시기일 뿐, 실적 추정치가 본격적으로 꺾이는 등 펀더멘털 훼손이 현실화되고 있지 않다는 점도 주목할 필요가 있다”고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006339757' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006339757</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
