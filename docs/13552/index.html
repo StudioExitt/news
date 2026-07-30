@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반도체주 변동성, 런던 금융가도 흔들어</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.31</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/023/0003990591' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13552" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>반도체주 변동성, 런던 금융가도 흔들어</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">아시아 AI 관련 반도체 주식에 자금이 과도하게 쏠리고 높은 레버리지로 투자되면서 금융 시스템의 위험이 커지고 있습니다. 영국 영란은행(BoE)은 이로 인한 연쇄 디폴트 및 전반적인 건전성 리스크를 우려하며 규제 감시를 강화하고 나섰습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 글로벌 중앙은행(BoE)이 반도체 섹터의 과도한 레버리지 및 변동성으로 인한 시스템적 위험을 공식적으로 경고하며 규제 개입 가능성을 제기했기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">TSMC</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #AI리스크 #시스템위험</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">한국을 비롯해 아시아에서 시작된 반도체주 변동성이 런던 금융가마저 흔들고 있다. 29일 파이낸셜타임스(FT)에 따르면, 영국 영란은행(BoE) 산하 건전성감독청(PRA)은 런던에 거점을 둔 투자은행과 헤지펀드들의 아시아 주식 위험을 들여다보기 시작했다. 소수 아시아 AI 관련 기업에만 지나치게 쏠리는 투자를 막겠다는 취지다.
+FT는 영국에서 영업하는 헤지펀드 등 기관투자자들이 한국 SK하이닉스, 대만 TSMC, 중국 캄브리콘테크놀로지 등 아시아의 AI 기업에 돈을 쏟아부었다고 전했다. 하지만 이 종목들이 급락하면 대형 은행에 위험이 전이되고 연쇄 디폴트(채무불이행)로 이어질 수 있는 점을 위험 요소로 지적했다.
+이 투자 구조는 5년 전 글로벌 투자은행 크레디트스위스(CS)를 몰락시킨 한국계 월가 큰손 빌 황(한국명 황성국)의 사태를 떠올리게 한다. 빌 황이 세운 아케고스캐피털은 파생상품을 통해 가진 돈의 5배나 빌려서 중국 주식 등에 투자했다. 그러나 투자한 주식의 폭락으로 연쇄 부실이 발생하면서 ‘황의 저주’는 결국 CS를 무너뜨리며 끝났다.
+AI 인프라 관련 기업 가치가 치솟자 헤지펀드들은 앞다<0xED><0x89><0x88> 자금을 쏟았고, 보유 자산 가치가 불어나면서 차입도 함께 늘었다. 주식의 담보 가치가 커지며 차입 한도도 자동으로 늘어난 것이다.
+문제는 이 종목들의 등락이 빠르다는 점이다. FT는 지난 28일 SK하이닉스가 하루에만 약 15% 급락해 시가총액이 1000억달러 이상(약 190조원) 증발한 점을 위험 요소로 지적했다. 중국 반도체 기업 창신메모리(CXMT)가 27일 상하이 증시에 상장하며 주가가 466% 폭등했지만 언제든 급락할 수 있다고 꼽았다.
+영란은행은 연쇄 부실을 우려한다. 돈을 빌려 한 투자가 해당 종목 급락으로 큰 손실을 내면 고객이 채무를 갚지 못하고, 그 손실이 다시 은행으로 번진다. 차입 투자를 하는 고객이 파생상품(옵션)으로 돈을 거는 규모(배수)를 더 키우거나, 헤지펀드가 아시아의 단기 개인 자금을 끌어다가 투자하는 정황도 감시 대상이라고 FT는 전했다.
+영란은행이 위험하다고 판단하면 은행이 보유해야 할 유동자산 기준을 높일 수 있다고 FT는 전했다.
+빌 황의 ‘아케고스 사태’ 데자뷔
+2021년 한국계 미국인 빌 황의 아케고스캐피털은 총수익스와프(TRS) 기법 등을 활용해 원금 100억달러의 5배인 500억달러를 중국 주식, 미국 미디어주 등에 투자했다. TRS는 투자은행이 대신 주식을 사서 보유하고, 그 주식에서 나오는 손익을 고객에게 그대로 넘기는 대신 수수료를 받는 계약이다. 주식은 은행이 형식적으로 갖고, 오르든 내리든 손익은 고객이 온전히 가져간다. 투자가 실패하면 그 손실도 고객이 진다.
+고객은 증거금만 맡기고 그보다 훨씬 큰 자산에 돈을 걸 수 있다. 이 구조 자체가 곧 차입 효과(레버리지)를 낸다. 아케고스가 원금의 5배를 굴릴 수 있었던 것도 이 때문이었다.
+아케고스 사태 때 빌황은 여러 투자은행에 나눠서 주식 거래를 맡겼다. TRS의 특성상 각 은행은 자신이 맡은 투자만 볼 수 있어, 전체 투자가 얼마나 크고 어디에 집중됐는지 제대로 보지 못했다.
+2021년 3월 미국 미디어주인 비아콤CBS 주가가 급락했다. 담보 가치가 최저 기준을 밑돌자 담보를 채워 넣으라는 마진콜이 아케고스에게 걸려왔다. 아케고스는 이틀 만에 약 200억달러(약 28조7800억원)를 잃고 무너졌다.
+불똥은 자금을 빌려준 은행으로 튀었다. 글로벌 투자은행들의 손실 합계는 100억달러(약 14조3900억원)를 넘었다. CS가 가장 많은 55억달러(약 7조9150억원)를 잃었고, 이 충격은 CS가 2023년 UBS에 흡수되는 몰락의 주요 원인이 됐다. 일본 투자은행 노무라도 28억5000만달러를 물렸다. 골드만삭스와 모건스탠리는 담보로 갖고 있던 주식을 바로 팔아서 손실을 줄였다. 빌 황은 사기와 시세조종 등 혐의로 2024년 11월 18년형을 선고받고 수감됐다.
+아케고스 사태는 한 운용사가 집중적으로 베팅하다가 터졌다. 반면 최근 상황은 다수의 헤지펀드와 개인 자금이 아시아 AI주에 몰린 형태다. 투자 주체가 흩어져 있어 한 곳이 무너져도 아케고스처럼 즉각적인 대형 디폴트로 번질 가능성은 크지 않다는 게 전문가들 의견이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/023/0003990591' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/023/0003990591</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
