@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TPG는 서두르는데 카카오는 미온적...카카오모빌리티, 美 ADR 상장 가능할까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/366/0001183295' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13520" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>TPG는 서두르는데 카카오는 미온적...카카오모빌리티, 美 ADR 상장 가능할까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">카카오모빌리티 2대 주주인 TPG가 ADR 상장을 통해 투자금 회수를 시도하고 있으나, 최대주주 카카오의 미온적 태도와 국내 규제(중복상장) 문제로 속도를 내지 못하고 있다. 유통 DR 방식 자체가 큰 걸림돌이며, 결국 회사 측의 적극적인 협조 없이는 상장이 어렵다는 분석이다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 주주(TPG)의 지분 회수 시도가 국내 규제와 최대주주의 비협조로 인해 난관에 봉착하여 단기적인 불확실성이 매우 높기 때문.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">카카오모빌리티</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ADR상장 #PEF투자 #기업거버넌스 #중복상장규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">카카오모빌리티 2대주주인 사모펀드(PEF) 운용사 텍사스퍼시픽그룹(TPG)이 미국 주식예탁증서(ADR) 상장을 통한 투자금 회수를 추진하고 있으나, 최대주주 카카오가 적극적으로 협조하지 않으면서 실제 절차가 좀처럼 속도를 내지 못하고 있는 것으로 파악됐다. TPG가 보유한 카카오모빌리티 구주를 기초로 ADR을 발행하는 일 자체는 가능하다. 그러나 원주 발행사인 카카오모빌리티의 동의와 실무 협조 없이는 미국 증시 상장을 완주할 수 없다는 게 전문가들의 중론이다. 카카오모빌리티 경영에 사실상 결정적인 영향력을 행사하는 카카오가 움직이지 않는 한, TPG가 독자적으로 ADR 상장을 밀어붙이기는 어렵다.
+
+유통DR 방식 택할듯…등록권 있어도 회사 협조 필수
+30일 투자은행(IB) 업계에 따르면, TPG는 카카오모빌리티의 미국 주식예탁증서(ADR) 상장을 통해 엑시트(투자금 회수)하는 방안을 적극 추진 중이다. 이를 위해 최근 법률자문사로 법무법인 광장을 선임한 것으로 파악됐다. 앞서 주관사로는 뱅크오브아메리카(BofA), 모건스탠리, UBS를 선정한 상태다.
+
+TPG 컨소시엄(TPG·한국투자PE·오릭스PE·JC파트너스·블랙록·GEM캐피탈·OA모빌리티유한회사·토팡가)은 2017년부터 카카오모빌리티에 총 6400억원을 투자해 지분 약 29%를 확보한 2대 주주다. 이번 거래는 TPG 등 기존 주주가 보유한 구주를 ADR로 전환해 미국 투자자에게 매각하는 방식으로 추진될 가능성이 크다. 다만 ADR 전환 대상이 TPG의 보유 지분에 한정될지, 컨소시엄 소속 다른 투자자들의 지분까지 포함할지는 아직 확정되지 않았다.
+
+DR은 기초가 되는 원주를 어떻게 마련하느냐에 따라 실무 상 크게 세 가지 유형으로 나뉜다. 회사가 주식을 새로 발행해 이를 기초로 DR을 만들면 ‘신주 DR’, 회사가 보유한 자기주식을 활용하면 ‘구주 DR’이다. TPG와 같은 기존 주주가 보유 주식을 예탁기관에 맡겨 DR로 전환하는 방식은 이른바 ‘유통 DR’로 불린다.
+
+최근 SK하이닉스의 ADR은 회사가 신주를 발행해 미국에서 자금을 조달한 신주 DR이다. 반면 카카오모빌리티의 경우는 회사의 신규 자금 조달보다 기존 재무적 투자자(FI)의 지분 회수에 초점이 맞춰져 있어 유통 DR 방식으로 추진될 가능성이 크다. 회사가 새로운 주식을 발행하는 대신 기존 주주가 보유한 주식을 원주로 활용하는 구조다.
+
+다만 유통 DR이라고 해서 기존 주주가 발행회사를 배제한 채 자기 지분을 독자적으로 나스닥에 상장할 수 있는 것은 아니다. 주주가 보유 주식을 예탁은행에 맡기는 것만으로 상장 절차가 끝나는 게 아니기 때문이다. 카카오모빌리티가 발행사로서 미국 증권거래위원회(SEC)에 Form 20-F를 제출하고, 감사받은 재무제표와 사업 현황, 위험 요인, 주요 주주와 경영진, 중요 계약 및 소송 등 광범위한 재무·비재무 정보를 공개해야 한다. ADR 자체와 예탁계약은 예탁은행이 Form F-6를 통해 등록한다. TPG 보유 구주를 미국 투자자에게 공모하는 구조라면 거래 방식에 따라 Form F-1 등 별도의 증권신고서도 필요할 수 있다.
+
+국내 절차에서도 카카오모빌리티의 동의가 필요하다. 자본시장법 시행령 제187조 제3항은 외국예탁결제기관이 해외에서 DR을 발행하기 위해 국내 법인이 발행한 기존 주식을 취득하는 경우, 원칙적으로 해당 발행사의 사전 동의를 받도록 규정하고 있다. 결국 카카오모빌리티가 외국예탁결제기관의 원주 취득에 동의하고 SEC 신고와 실사, 자료 제공 등 상장 절차에 협조하지 않으면 TPG가 독자적으로 ADR 상장을 마무리하기 어렵다.
+
+TPG가 카카오모빌리티와 체결한 주주 간 계약에는 상장과 증권 등록에 관한 일정한 협조 요구권이 포함된 것으로 전해진다. 업계에서는 보유 주식을 공개시장에서 매각할 수 있도록 회사에 증권 등록 절차의 협조를 요구하는 ‘등록권(registration rights)’이 포함됐을 가능성을 거론한다. 다만 해당 권리가 미국 ADR 상장까지 포괄하는지와 구체적인 행사 요건은 확인되지 않았다.
+
+다만 등록권이 있다고 해서 TPG가 카카오모빌리티를 배제한 채 ADR 상장을 직접 실행할 수 있는 것은 아니다. 카카오모빌리티가 계약상 협조의무를 이행하지 않을 경우 TPG는 이행청구나 손해배상 등 계약상 책임을 물을 수 있지만, 구체적인 구제 수단은 주주 간 계약 내용에 따라 달라진다. TPG가 카카오모빌리티 경영진을 대신해 SEC 등록 서류를 제출하거나 감사인과 예탁은행, 주관사 등에 자료를 제공할 수는 없다.
+
+미온적인 카카오…TPG는 강제 수단 제한
+이처럼 TPG가 ADR 상장을 성사시키기 위해서는 카카오 측 협조가 필수적이지만, 업계 관계자들에 따르면 카카오는 미온적 태도를 유지하고 있는 것으로 전해졌다. 일각에서는 더 나아가 ‘카카오가 ADR 상장을 원치 않는다’는 얘기도 나온다.
+
+카카오가 ADR 상장에 대해 미지근한 태도를 취하는 이유로는 강화된 중복상장 규제가 꼽힌다. 카카오모빌리티가 나스닥에 입성하면 국내 상장사인 카카오가 핵심 자회사를 해외 증시에 별도로 상장하는 중복상장 구조로 해석될 여지가 크다.
+
+금융당국이 최근 공개한 중복상장 세부기준안은 자회사를 해외 거래소에 상장하는 경우에도 국내 상장과 동일한 수준의 주주 보호 절차를 적용하도록 했다. 이에 따르면 카카오 이사회는 카카오모빌리티 상장이 일반주주에게 미치는 영향을 평가하고 주주 보호 방안을 마련해야 한다. 주주들과 소통해 의견을 수렴하고 필요할 경우 주주총회 등을 통해 동의 여부도 확인해야 한다. 이후 이사회가 상장 추진에 대한 찬반을 결의해 카카오모빌리티에 통보하고, 각 단계의 이행 내용도 공시해야 한다. 이 과정은 독립적인 특별위원회의 사전 심의·의결을 거쳐야 한다.
+
+이번 ADR이 카카오모빌리티의 성장 자금 조달보다는 TPG 등 재무적 투자자(FI)의 지분 회수에 초점이 맞춰져 있다는 점도 카카오 입장에서는 부담이다. FI의 구주만을 원주로 ADR을 발행할 경우 상장 대금은 카카오모빌리티로 유입되지 않고 주식을 매각한 투자자들에게 돌아간다. 카카오일반주주로서는 핵심 자회사의 별도 상장에 따른 모회사 할인 우려를 떠안으면서도 카카오나 카카오모빌리티가 직접 확보하는 자금은 없는 구조인 셈이다.
+
+법조계 관계자는 “형식적으로 미국 증시에 상장하는 거래라고 하더라도 카카오모빌리티가 국내 회사이고 카카오가 국내 상장 모회사인 이상 국내 금융당국의 중복상장 정책과 주주 보호 요구를 피하기 어렵다”며 “TPG가 등록권을 보유하고 있더라도 카카오와 카카오모빌리티가 명확하게 협조하지 않는 상태에서는 연내 ADR 상장을 현실화하기 쉽지 않을 것”이라고 말했다.
+
+업계 일각에서는 카카오 측이 TPG 컨소시엄의 계약상 권한만으로는 카카오에 매각이나 상장 협조를 실질적으로 강제하기 어렵다는 점을 인지하고 있어, 엑시트 논의에 미온적인 태도를 보이는 것이라는 분석이 나온다. IB 업계 관계자는 “중복상장 부담은 표면적인 명분일 뿐, 실제로는 TPG가 카카오를 강제로 움직일 만한 수단이 제한적이라는 판단 아래 카카오가 서둘러 협조할 필요성을 느끼지 못하고 있는 것일 수 있다”고 말했다.
+
+TPG 컨소시엄은 카카오 보유 지분까지 함께 매각하도록 요구할 수 있는 드래그얼롱은 갖고 있지 않고, 카카오가 경영권 지분을 외부에 매각할 때 같은 조건으로 컨소시엄 보유 지분도 함께 팔 수 있는 태그얼롱만 확보한 것으로 파악됐다. 이에 따라 컨소시엄이 독자적으로 카카오 지분을 거래에 끌어들여 경영권 매각을 성사시키는 것은 불가능하다. 컨소시엄을 구성하는 재무적 투자자(FI)들 사이에는 상대방이 지분을 매각할 경우 이를 우선적으로 인수할 수 있는 우선매수권이 설정돼 있지만, 카카오와 TPG 컨소시엄 사이에는 이 같은 권리도 없는 것으로 전해졌다.
+
+이에 대해 카카오 관계자는 “투자자 가치 제고를 위해 모든 가능성을 열고 검토 중이나 세부적인 사항은 확인해주기 어렵다.”</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/366/0001183295' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/366/0001183295</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
