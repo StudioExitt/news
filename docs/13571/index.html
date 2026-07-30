@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주가 반토막 났는데…"지금이 매수 기회" 외친 이 종목 [종목+]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.31</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005315885' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13571" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>주가 반토막 났는데…"지금이 매수 기회" 외친 이 종목 [종목+]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">한화솔루션이 2분기 시장 예상치를 크게 상회하는 실적을 발표했음에도 불구하고, 과거 주가 하락으로 인해 목표주가는 대폭 하향 조정되었다. 그러나 증권사들은 미국의 강력한 반(反)중국 정책과 IRA 기반의 현지 생산 수직계열화 완성이라는 구조적 강점을 들어 '매수' 의견을 유지하며 중장기 상승 여력을 높게 평가하고 있다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">화학</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#한화솔루션</span> <span class="tag tag-hash">#태양광</span> <span class="tag tag-hash">#미국정책</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">한화솔루션이 시장 예상을 크게 웃돈 2분기 실적을 내놨지만, 증권사의 평가는 냉랭했다. 최근 석 달 동안 반토막 난 주가를 반영해 대부분증권사가 목표주가를 하향했다. 다만 미국 현지 공장 가동에 따른 실적 개선 가능성, 차세대 태양광 소재인 페로브스카이트의 수주 데이터센터 활용가능성 등이 향후 주가를 끌어올릴 모멘텀으로 기대됐다.
+
+금융정보업체 에프앤가이드에 따르면 지난 30일 한화솔루션의 목표주가 컨센서스(증권사 추정치 평균)는 4만4238원으로 하루 전(5만2831원)대비 16.27% 하향 조정됐다. 2분기 실적 리뷰(분석) 보고서를 통해 증권사들이 목표주가를 대거 깎은 결과다.
+
+한화솔루션은 이날 2만3500원에 거래를 마쳤다. 5월(4만7822원) 들어선 이후 석 달여 동안 50.86% 하락했다.
+
+하지만 우려가 지나치게 주가에 반영됐다며 2분기 실적 리뷰 보고서를 낸 증권사들 전부 투자의견은 '매수'를 제시했다. 특히 삼성증권과미래에셋증권은 투자의견을 기존 '중립'에서 '매수'로 올렸다. 현재 주가 대비 목표주가까지의 상승 여력이 50~80%에 달해 가격 메리트가 커졌다는 분석이다.
+
+조현렬 삼성증권 연구원은 "미국 신규 공장 상업화로 실적 회복이 지속될 것"이라며 "현재 주가는 위험 대비 보상이 커진 구간"이라고 평가했다.
+
+한화솔루션의 올해 2분기에 연결 기준 매출액은 4조5826억원, 영업이익은 3065억원을 기록했다. 전년 동기 대비 매출과 영업이익이 각각47%, 200.3% 증가했다. 영업이익은 실적 발표 직전 집계된 컨센서스(1877억원)를 63.31% 웃돌았다.
+
+호실적의 중심은 신재생에너지(태양광) 부문이었다. 신재생에너지 영업이익은 1664억원을 달했다. 주택용 비중 확대로 모듈 평균판매단가(ASP)가5% 상승한 데다, 기존 납부했던 상호관세(IEEPA) 환급금 약 900억원이 일회성 이익으로 반영된 영향이다. 미 인플레이션감축법(IRA)상의 첨단제조생산세액공제(AMPC)는 2140억원이 반영됐다.
+
+케미칼 부문(영업이익 871억원)과 첨단소재 부문(영업이익 288억원) 역시 유가 상승에 따른 스프레드 개선과 북미 태양광 소재 판매 풀가동에힘입어 전분기 대비 큰 폭으로 반등했다.
+
+전문가들은 한화솔루션이 향후 미국의 대중국 태양광 제재 강화에 따른반사이익을 직접적으로 누릴 것으로 분석했다. 미국 정부가 우회 수입 통로인동남아 4개국산 모듈에 대한 제재 및 관세장벽을대폭 높이면서, 미국 현지에서 밸류체인 전체를 생산할 수 있는 한화솔루션의 독보적인 희소성이부각되고 있다는 분석이다.
+
+특히 6~7월 준공 및 가동에 들어간 미국 조지아주 카터스빌 공장(셀·웨이퍼 3.3GW)은 미국 내 잉곳-웨이퍼-셀-모듈로 이어지는 완전한수직계열화를 완성시켰다. 이를 통해 미국산 부품 추가 세액공제 인센티브인 DCA(Domestic Content Adder) 요건을 완벽히충족하게 된다.
+
+전유진 iM증권 연구원은 "미국의 중국산 배제 강화로 비중국산 제품에 대한 프리미엄이 한층 강화되고 있다"며 "카터스빌 가동으로 동사 모듈이DCA 조건을 충족함에 따라 현지 고객사들의 선호도는 더 높아질 수밖에 없다"고 분석했다. 이어 "이는 동남아 제재로 강세를 보이는 미국 모듈가격과 별개로 한화솔루션이 독자적인 판가 추가 인상력을 확보했다는 의미"라고 덧붙였다.
+
+최영광 NH투자증권 연구원도 "미국의 탈중국 정책 강화와 관세장벽으로 모듈 가격 상승세가 지속되는 가운데, 미국 내 태양광 밸류체인 수직계열화를 완성한 한화솔루션의 중장기 실적 개선 방향성은 매우 명확하다"고 강조했다.
+
+카터스빌 램프업(가동률 상승)에 따라 한화솔루션이 누릴 첨단제조생산세액공제(AMPC) 수수액도 급증할 것으로 전망된다. AMPC는 3분기2300억원, 4분기 3000억원으로 가파르게 증가해 올해 연간 약 9500억원, 2027년에는 1조1000억~1조2000억원에 달할 것으로예상된다.
+
+차세대 기술 및 시장 확장성에 대한 긍정적 평가도 잇따랐다.
+
+황성현 유진투자증권 연구원은 "한화솔루션이 2분기 중 페로브스카이트 셀·모듈에 대한 국제 인증을 확보해 계통 연계 테스트베드 진입이라는 주요마일스톤을 달성했다"며 "글로벌 우주 태양광 기술 협력과 우주 인프라 이슈가 하반기 이후 새로운 모멘텀이 될 것"이라고 평가했다.
+
+전유진 iM증권 연구원도 "기존 육상 발전에 한정되어 있던태양광 시장이 우주 및 인공지능(AI) 인프라 소재로 한층 더 확장되고 있다"면서 "AI 데이터센터(AIDC) 관련 발전 수요 증가와 비중국산 프리미엄 강화가 한화솔루션의 중장기 주가 재평가를 이끌 것"이라고 전망했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005315885' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005315885</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
