@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“아파트 잔금인데…” 피같은 돈 손실에 개미들 피눈물</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.31</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/005/0001864126' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13551" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“아파트 잔금인데…” 피같은 돈 손실에 개미들 피눈물</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 폭락세로 인해 수많은 개인 투자자(개미)들이 막대한 평가 손실을 입으며 극심한 정신적 고통과 재정적 어려움을 겪고 있다. 주가 급락은 내 집 마련이나 이사 계획 등 투자자들의 일상생활 전반에 심각한 차질을 야기하고 있으며, 불안감 속에 투매 현상이 나타나고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">급격한 시장 하락으로 인한 개인 투자자들의 재정적 어려움과 투매 심리를 강조하며, 주가 변동성이 높음을 보여준다. 이는 단기적인 시장 불안감을 증폭시킬 수 있다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주식시장</span> <span class="tag tag-hash">#개미투자자</span> <span class="tag tag-hash">#하락장</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">“일이 도무지 손에 안 잡히네요. 본전만 찾으면 팔고 다시는 ‘국장’(국내 주식)에 투자하지 않으려고요.”
+공무원 고모(40)씨는 최근 연이은 코스피 폭락 여파로 수천만원의 손실을 본 뒤 이같이 말했다. 고씨는 너도나도 주식을 하자 ‘포모’(FOMO·유행에서 나만 뒤처질 것 같다고 느끼는 불안심리) 분위기에 휩쓸려 올해 첫 주식 투자를 시작했다. 평단가 220만원대에 매수했던 SK하이닉스 주식은 30일 종가 기준 129만7000원까지 떨어졌다. 고씨의 직장 단체 대화방에는 ‘같이 울자’ ‘복원될 거야. 시간이 걸리더라도…’ 등 서로를 위로하는 메시지가 이어졌다고 한다.
+
+주식시장이 단기간 폭락하면서 ‘개미’(개인투자자)들의 비명이 곳곳에서 터져나오고 있다. 갑작스러운 주가 폭락으로 내 집 마련이나 이사 계획에 차질이 빚어지는 등 투자자들의 삶 전반에도 파급 효과가 나타나는 모습이다.
+
+결혼 3년 만에 서울 아파트를 매수해 내 집 마련을 앞둔 직장인 A씨(33)는 불과 며칠 새 파란색(하락)으로 뒤덮인 주식 계좌를 보며 망연자실한 상태다. 주식을 처분해 기존 세입자에게 전세보증금을 돌려주고 입주할 생각이었는데, 주가 급락으로 급전을 알아봐야 할 처지가 됐기 때문이다. A씨는 “레버리지 투자를 한 것도 아니고 우량주와 상장지수펀드(ETF) 위주로 투자했는데 이런 상황을 겪게 돼 당황스럽다”고 했다.
+그는 “정부가 부동산 자금을 주식시장으로 유도한다고 해서 믿었는데, 급락을 경험하니 앞으로는 주식으로 자산을 형성할 수 없겠다는 생각도 들었다”고 덧붙였다。
+
+코스피가 30일 전장 대비 1.23% 내린 5593.56으로 거래를 마쳤다. 장중 5976.82(5.54%)까지 오르기도 했으나 개인 매도세가 이어지며 약세로 마감했다. 서울 중구 하나은행 딜링룸 전광판에 이날 코스피 종가가 표시돼 있다.
+
+국내 증시에 1억5000만원을 쏟아부었던 직장인 B씨(39)도 내년 입주 예정인 청약 아파트 잔금 지급 계획에 차질이 생겼다. 투자금 일부를 잔금으로 치를 계획이었는데 최근 주가 급락으로 약 2000만원의 평가손실을 기록하면서다. 특히 믿었던 삼성전자 등 반도체주와 코스피200을 추종하는 ETF의 낙폭이 컸다. B씨는 “여기서 더 떨어지면 큰일난다”고 우려했다.
+
+회사원 박모(26)씨는 전세 만료를 앞두고 이사할 집의 전세자금을 마련하기 위해 주식 투자에 나섰다가 오히려 약 2000만원의 평가손실을 기록했다. 그는 “비상금으로 보유하려던 현금까지 분위기에 휩쓸려 투자한 게 후회된다”며 “결국 (지금 집보다) 직장에서 더 먼 곳에 있는 저렴한 전셋집을 알아보고 있다”고 말했다.
+
+공무원 이모(57)씨는 주식 투자 수익금으로 한 학기 남은 박사과정 학비를 내려다 최근 주가 급락으로 계획을 바꿔야 할 처지가 됐다. 그는 “불과 얼마 전까지 40% 가까이 찍혔던 수익률이 어느새 20% 손실로 바뀌어 있었다”고 토로했다.
+
+전문가들은 주가 급락에 놀라 ‘패닉 셀링’(주식 투매)하는 건 경계해야 한다고 조언한다. 김대종 세종대 경영학부 교수는 “시장이 단기적으로 흔들릴 수 있지만 장기적으로 주가를 결정하는 건 결국 기업의 실적과 성장성”이라며 “장기적 관점에서 대응해야 한다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/005/0001864126' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/005/0001864126</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
