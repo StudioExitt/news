@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>그린채널 가동...하이테크 상장 '속전속결' [레드 자본주의 대공습]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001260594' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13526" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>그린채널 가동...하이테크 상장 '속전속결' [레드 자본주의 대공습]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">중국 정부가 부동산 위기 속에서 은행 대출 의존도를 낮추고, 국가 주도의 계획에 따라 반도체, 로봇 등 핵심 전략산업 IPO를 통해 자금을 끌어모으며 시장을 통제하고 있습니다. 이러한 '레드 자본주의' 방식은 신규 상장 채널(그린채널) 및 정책적 지원으로 속도를 내며 글로벌 자금 흐름의 변화를 예고합니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레드자본주의</span> <span class="tag tag-hash">#IPO</span> <span class="tag tag-hash">#반도체</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open"><앵커>
+중국 정부가 반도체부터 로봇, 자동차, 배터리 등 핵심 전략산업을 국가 주도의 치밀한 계획에 따라 속전속결로 주식시장에 상장시켜 대규모 자금을
+끌어모으고 있습니다. 이는 중국 굴기의 실탄이 되고 있습니다.
+
+최근 국내 대표 반도체기업 삼성전자와 SK하이닉스를 움찔하게 만들었던 중국 창신메모리의 상하이거래소 상장은 '레드 자본주의 대공습'의 대표적인
+한 단면이 되고 있습니다.
+
+레드 자본주의의 대공습의 모습을 세 편으로 짚어봤습니다. 증권부 강미선 기자와 나와 있습니다.
+
+<기자>
+네, 최근 시장을 공포에 떨게 했던 중국의 창신메모리 그리고 이러한 IPO 랠리의 뿌리를 따라가 보면요. 반도체나 로봇 같은 전략산업 얘기이기도
+하지만 그보다 중국의 자금 조달 방식 자체가 바뀐 점을 주목해야 합니다.
+
+지금까지 중국 기업과 가계는 돈이 필요하면 은행에서 빌렸는데 2021년 이후 부동산 경기가 본격적으로 꺾이면서 이 돈줄 자체가 말라가고
+있습니다. 그래서 중국 정부가 택한 게 대출 대신 주식시장입니다.
+
+국가 주도로 증시를 키워서 반도체·로봇처럼 육성하고 싶은 전략산업으로 돈이 흐르게 만들고 있는 겁니다.
+
+겉으로는 우리와 같은 자본주의 시장경제처럼 보이지만요. 속을 들여다보면 국가가 설계도를 그려놓고 그 위에 기업들을 올려놓고 있는 셈입니다.
+
+<앵커>
+부동산이 왜 기업 대출까지 끌어내리는 건지 은행대출과 기업 IPO의 연결고리를 좀 더 구체적으로 짚어주시죠.
+
+<기자>
+은행이 안 빌려주는 게 아니라 기업들이 장기로 빌려서 투자할 이유 자체가 사라진 상태인데요. 이게 네 갈래로 퍼집니다.
+
+먼저 건설 경기가 죽고 집값이 떨어지면서 소비와 매출 전망이 나빠지니 기업들이 신규 투자를 미룹니다.
+
+여기에 담보 문제가 겹칩니다. 중국 기업들은 토지·공장을 담보로 대출을 받는 경우가 많은데, 부동산값이 떨어지면 담보가치도 낮아져 대출 한도가
+줄어듭니다.
+
+마지막으로 지방정부도 토지 매각 수입이 줄면서 신규 투자 대신 부채 관리에 매달리게 되고, 여기에 연결된 기업들의 투자·대출 수요도 함께
+줄어듭니다.
+
+하지만 반도체나 로봇처럼 국가가 밀어주는 신산업은 사정이 다릅니다. 이쪽은 오히려 투자를 더 늘려야 하는데 은행 문은 이미 막혔으니 남은 창구가
+주식시장뿐이고 정부가 이를 풀어주고 있는 건데요.
+
+중국 은행권 중장기대출 증가율을 보시면요. 2020년 초 15%대에서 올해 6월 4%대까지 떨어졌습니다.
+
+반대로 본토 IPO·증자 모집액 증가율은 2024년 말 -75%까지 곤두박질쳤다가 올해는 100%를 넘어서며 정반대로 튀어 올랐습니다. 대출길이
+막힌 자리를 증시로 메우고 있는 겁니다.
+
+<앵커>
+그래프로 보니 정확히 엇갈리네요. 이게 정말 국가가 의도한 방향 전환인가요?
+
+<기자>
+네, 한국의 박정희 정부 경제개발 5개년 계획과 비슷한 개념이 중국에도 있는데요. 지난해 10월 4중전회에서 15차 5개년 규획 건의로 처음
+문서화됐습니다.
+
+이 건의문 원문을 확인해보면 '금융강국 건설을 가속화한다'는 문구가 나옵니다.
+
+중국 신화통신은 '금융강국'이라는 단어가 5개년 계획 문서에 사상 처음 등장했고, 문서 전체에서 '금융'만 17번 반복됐다고 짚었습니다.
+'주식·채권 등 직접금융을 적극 발전시킨다'는 문구도 있고요. 작년 하반기 공개된 이 정책이 지금의 중국 IPO 러시를 가속화할 것으로 이해할
+수 있습니다.
+
+하지만 같은 문서에 '부동산·지방정부 채무 리스크를 질서있게 해소하고 시스템 리스크를 엄격히 방지한다'는 문구도 나란히 있는데요. 밀어주되
+감독의 고삐는 놓지 않겠다는 겁니다.
+
+<앵커>
+그래서 실제로 시장에서는 어떤 식으로 나타나고 있습니까? 한국과 비교해서 짚어주시죠.
+
+<기자>
+먼저 제도입니다. 작년 5개년 금융강국 정책에 힘입어 상장 일정의 단축시켜주는 패스트트랙인 그린채널이 올해부터 본격 가동하며 반도체·AI
+기업까지 상장 문이 더 열렸고요.
+
+또 올해 상하이 과창판에서 '1+6 개혁'이 도입되면서 아직 적자인 AI, 항공우주, 바이오, 반도체 기업의 상장까지 더 넓혀줬습니다.
+
+지난달 증감회 발표 직후 이틀 만에 28개 기업이 상장을 신청하기도 했습니다.
+
+다음은 무게중심 이동입니다. 지난해 홍콩에서 119개 기업이 상장하며 세계 IPO 1위를 기록했는데요. 세계 1위 중국 배터리 기업 CATL도
+작년 홍콩에서 이중상장했습니다.
+
+올해는 정책 가속화로 홍콩에서 중국 본토 IPO가 넘어오는 모습입니다. 올해 창신메모리와 유니트리 등 모두 정책 파이프라인의 결과물인 셈입니다.
+
+우리도 기술성과 성장성이 인정되는 기업에 한해 상장 요건을 일부 완화해주고 있지만요. 기업가치 1조 원 이상인 유니콘 기업 중 상당수는 국내
+특례보다 나스닥 등 미국 상장을 택하려는 경향이 있습니다. 중국의 이런 국가 주도 움직임과는 거리가 다소 있어 보입니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001260594' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001260594</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
