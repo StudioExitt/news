@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피, 사상 최대 17.91% 급등하며 하루 만에 86% 손실 만회</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.31</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/020/0003738053' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13745" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피, 사상 최대 17.91% 급등하며 하루 만에 86% 손실 만회</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 미국 반도체주 급등과 외국인의 저가 매수세에 힘입어 17.91% 폭등하며 사흘간의 손실을 대부분 만회했다. 하지만 금리 인상 가능성 및 높은 변동성은 여전하여 시장 전반의 신중한 접근이 요구된다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">강력한 반도체 업황 회복과 외국인 매수세가 주도했으나, 사상 최대 폭의 급등에도 불구하고 높은 변동성, 금리 인상 가능성 등 거시적 리스크 요인이 상존하여 추후 방향성이 불투명함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #코스피급등 #증시변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">사흘 연속 급락했던 코스피가 폭등하며 역대 최대 상승세를 보인 31일 오후 서울 중구 하나은행 딜링룸 전광판에 종가가 나타나고 있다. 이날 코스피는 전날보다 1,001.89포인트(17.91%) 오른 6,595.45로 장을 마감하며 역대 최대 상승률과 상승폭을 기록했다. 송은석 기자
+silverstone@donga.com코스피가 31일 사상 최대 상승률(17.91%)을 기록한 건 전날(현지시간) 미국 주식시장에서 나타난 반도체주의 급등 영향이 컸다. 여기에 최근 국내 증시의 큰 하락세 이후 외국인을 중심으로 ‘저가 매수’가 몰리며 반등에 성공했다. 코스피는 최근 사흘간 총 1162.19포인트가 빠졌는데, 이날 하루에 손실의 86%를 만회했다.
+하지만 증시 전체에 드리워진 공포 심리가 해소됐다고 보기엔 무리다. 개인 투자자는 ‘조금이라도 올랐을 때 팔아 치우자’는 전략으로 이날 유가증권시장에서 역대 가장 많은 8조2840억 원어치를 순매도했다. 계속되는 급등락에 투자자들의 피로감과 공포감이 커지며 작은 변수에도 증시 전체가 큰 폭으로 움직이는 현기증 장세가 이어지고 있다.
+● 사흘 하락 폭, 하루 만에 86% 회복
+이날 코스피는 개장 직후 1시간 만에 17% 넘게 뛰며 큰 변동성을 보였다. 오후 들어서는 18% 넘게 오르기도 했다.
+코스피에선 앞서 28, 29일 이틀 연속 서킷브레이커(주식 매매 일시 정지)가 발동한 데 이어 30일에도 하락하며 사흘간 922조 원의 시가총액이 증발했다. 이날 반등으로 하루 새 834조 원이 다시 늘어나며 만회했지만, 극심한 변동성은 여전하다. 코스닥지수도 이날 3거래일 만에 700선을 회복하며 장을 마쳤다.
+30일(현지 시간) 미국 주요 반도체 종목 30개로 구성된 필라델피아 반도체 지수는 6거래일 만에 반등하며 전장 대비 8.19% 올랐다.마이크로소프트(MS)가 예상을 웃도는 실적을 발표하고, 삼성전자도 메모리 품귀 상황이 내년 더욱 심해질 것이라고 밝히면서 미국 반도체 업종이 큰 폭으로 반등했다. 샌디스크(25.99%), 마이크론(18.36%) 등 주요 반도체주가 일제히 급등했다.
+시장에서는 미국 대형 헤지펀드의 강제 청산 우려가 완화된 점도 투자심리를 회복시킨 요인으로 꼽힌다. 자기자본의 4~5배에 이르는 자금을 빌려 반도체주 등에 투자했다가 강제 청산(반대 매매) 위기에 놓인 대형 헤지펀드를 시타델이 인수하며 하락 압력이 해소됐다는 분석이 나왔다.
+● 엇갈리는 코스피 전망… “금리 인상이 변수”
+코스피가 일단 반등에 성공했지만 앞으로 상승세를 이어갈지는 불투명하다. 최근 급락장에서 손실을 본 개인 투자자들의 투자심리가 크게 위축된 데다, 한국은행이 연내 추가 기준금리 인상을 예고하면서 증시 유동성이 줄어들 것이라는 지적이 나온다. 올해 들어 하락 때 저가 매수에 나서며 지수를 방어했던 개인 투자자는 3거래일 연속 순매도를 이어갔다.
+금융투자협회에 따르면 29, 30일 국내 주식시장에서 투자자의 누적 강제 청산 금액은 1649억 원으로 나타났다. 레버리지 상품 등에서 ‘빚투’(빚내서 투자)에 나선 개인 투자자의 보유 주식이 급락 영향으로 강제 처분되면서 손실이 컸다. 이정환 한양대 경제금융학부 교수는 “8, 9월 코스피 변동성은 예측하기 매우 어려운 상황”이라며 “이런 상황에서 단타 매매에 나서는 것은 자제해야 한다”고 말했다.
+증권가 전망은 엇갈린다. 허재환 유진투자증권 연구원은 “국내 증시 신뢰가 흔들린 상황에서 한은이 기준금리를 추가로 올리면 유동성이 빠르게 예·적금으로 빠져나갈 수 있다”고 짚었다.
+일각에선 삼성전자와 SK하이닉스 같은 반도체 제조사는 물론 국내 주요 배터리 업체 등 주요 기업의 실적 개선세가 확인된 만큼 반등이 이어질 것이라는 전망이 나온다. 김동원 KB증권 리서치본부장은 “삼성전자, SK하이닉스를 포함한 국내 주요 기업의 실적이 견고한 만큼 코스피가 다시 우상향할 것”이라고 말했다.
+글로벌 반도체주 급등 영향으로 이날 일본 닛케이평균주가는 4.03%, 대만 자취안지수는 7.98% 상승 마감했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/020/0003738053' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/020/0003738053</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
