@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'SK하닉 채권주문 담당' 브로커 대→중소형 증권사 이직 '뒷말'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.31</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016226857' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13670" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'SK하닉 채권주문 담당' 브로커 대→중소형 증권사 이직 '뒷말'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스의 대규모 채권 주문을 담당하던 증권사 직원이 대형사에서 중소형사로 이직한 과정에 문제가 있다는 의혹이 제기되었습니다. 해당 전 직원이 근무지 간 성과급 차이를 이용해 거래 실적을 미리 빼돌렸다는 '파킹' 논란입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">대형 금융기관 내부 직원의 고객 정보 및 거래 실적 유출 의혹은 투자자들의 불신을 야기하여 단기적으로 증권사 전반의 평판과 건전성 우려를 높일 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#채권시장</span> <span class="tag tag-hash">#브로커</span> <span class="tag tag-hash">#내부정보유출</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">여의도 증권가 [촬영 안 철 수] 2025.8
+여의도 증권가
+[촬영 안 철 수] 2025.8
+(서울=연합뉴스) 정회인 기자 = SK하이닉스가 '반도체 머니'를 바탕으로 국내 회사채 시장에서 '큰 손'으로 떠오르는 가운데 한 대형 증권사에서
+SK하이닉스의 채권 투자 주문을 담당하던 한 대형 증권사 직원이 중소형사로 이직한 것을 두고 뒷말이 나오고 있다. 
+채권 거래시 중소형사에서 더 많은 성과급을 받을 수 있다는 점을 노리고 대형사에 재직시 확보한 SK하이닉스의 채권 매수 주문을 중소형사의 거래 실적으로 미리 배분한 것 아니냐는 의혹이다. 대형 증권사는 감사에 나섰다.
+
+31일 금융투자업계에 따르면 대형 A증권사는 최근 중소형 B증권사로 이직한 전 직원 C씨가 재직 당시 담당했던 채권 거래 내역과 증권사별 주문 배분 과정 등에 대해 자체 감사를 진행 중이다.
+
+특히, C씨가 SK하이닉스의 채권 주문을 담당했다는 점에서 이 주문을 다른 증권사에 배분하는 과정에 문제가 없었는지 들여다보고 있다.
+
+C씨는 A사 신탁 관련 부서에서 SK하이닉스의 채권 거래를 담당하다 최근 B사의 채권 중개 부문으로 자리를 옮겼다.
+
+이직 후 C씨가 B사에서 SK하이닉스의 채권 주문을 상당 부분 중개하고 있는 것으로 알려지면서 A사에 재직 당시 확보한 SK하이닉스의 채권 매수 주문을 B사 거래 실적으로 미리 '파킹'한 뒤 이직한 것 아니냐는 의혹이 제기됐다. '파킹'은 향후 발생할 거래나 수익을 특정 증권사에 미리 배분해두는 것을 말한다.
+
+투자은행(IB) 업계 한 관계자는 "채권거래는 매수 기관과 매도 증권사, 거래 수량 등이 모두 전산에 남기 때문에 재직 당시 주문과 B사의 내역을 대조하면 회사의 고객 관계와 영업 기반을 이용해 거래 실적을 미리 만들어줬는지 여부를 확인할 수 있을 것"이라고 말했다.
+
+한국 채권 시장 한국 채권 시장 [챗GPT 제작]
+한국 채권 시장
+한국 채권 시장 [챗GPT 제작]
+
+대개 증권사 채권 브로커는 기관투자자의 주문과 증권사의 물량을 연결하고 거래 규모에 따라 중개 수수료를 받는데, 같은 거래 중개에도 대-중소형 증권사 간 성과 보상 방식에 상당한 차이가 있다. 
+대형사는 대개 브로커가 벌어들인 수익을 부서와 본부, 회사 전체 손익에 반영한 뒤 연간 평가를 거쳐 성과급을 지급하고, 중소형사는 월별손익분기점(BEP) 초과 수익의 일정 비율을 해당 브로커에게 성과급으로 배분한다.
+
+예를 들어 한 브로커가 한 달간 6천만원의 채권 중개 수익을 올리고 월 BEP이 2천만원, 초과 수익의 성과배분율이 50%라면 개인에게 2천만원의 성과급이 돌아간다.
+
+특히, SK하이닉스처럼 개별 채권을 수천억 원 단위로 매수하는 '큰 손' 기관의 주문을 확보하면 중소형사에서 브로커의 성과급은 억원대로 불어난다.
+
+대형사에서 기관투자자와 거래 관계를 쌓은 브로커가 상대적으로 성과 보상이 직접적인 중소형사로 옮길 유인이 생기는 이유다. 
+
+다만, 이전 회사에서 취득한 고객 정보 등을 퇴사 전부터 새 회사에 거래를 넘겼다면 정상적인 활동을 넘어선 것으로 문제가 될 수 있다.
+
+A사는 이에 대해 "내부감사 진행 여부를 포함해 회사 내부 사항은 확인해주기 어렵다"고 했고, B사는 "C씨는 채권 소싱(발굴) 역량이 뛰어나고 SK하이닉스와도 오랜 거래 관계를 쌓아온 인력으로 채권 브로커는 매수와 매도 수요를 연결하는 업무를 담당하는 만큼 정상적인 중개 영업을 불법이나 도덕적 문제로 볼 수는 없다"고 말했다.
+
+C씨는 연합뉴스의 관련 질의에 구체적인 언급을 피했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016226857' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016226857</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
