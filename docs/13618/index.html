@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>메모리 비싸도 더 산다…삼적닉스 ‘청신호’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.31</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001260668' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13618" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>메모리 비싸도 더 산다…삼적닉스 ‘청신호’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">아마존의 AWS 클라우드 매출이 시장 예상을 뛰어넘으며 급성장세를 보였고, 메모리 가격 상승에도 불구하고 자본적지출 계획을 증액하며 강력한 수요를 입증했습니다. 이는 데이터센터 공급 부족 우려와 AI 확장으로 인해 삼성전자 및 SK하이닉스의 HBM뿐 아니라 일반 DRAM과 SSD 시장 전반에 걸쳐 긍정적인 장기 투자 신호로 해석됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 클라우드 및 AI 시장의 강력한 성장세가 구체적인 투자 증액 계획(CapEx Hike)으로 제시된 점은 메모리 반도체 수요의 지속성과 규모 성장을 매우 높은 확신도를 가지고 예측할 수 있게 합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI투자</span> <span class="tag tag-hash">#클라우드성장</span> <span class="tag tag-hash">#반도체사이클</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">아마존이 시장 예상을 뛰어넘는 클라우드 성장에 힘입어 분기 매출 2000억달러를 처음 돌파했다. 메모리 가격 상승을 반영해 올해 자본적지출
+계획을 2000억달러에서 2200억달러로 높이고, 2027년까지 데이터센터 공급 부족이 이어질 것으로 전망하면서 삼성전자와 SK하이닉스의 메모리
+수요에도 긍정적인 신호를 보냈다.
+
+아마존은 30일(현지시간) 2분기 매출이 전년 동기 대비 20% 증가한 2006억1000만달러를 기록했다고 밝혔다. 시장 전망치인 1964억~1970억달러 수준을 웃돌았다. 영업이익도 43% 증가한 274억6000만달러로 집계됐다.
+
+실적 성장을 이끈 것은 클라우드 사업인 아마존웹서비스(AWS)였다. AWS 매출은 422억달러로 전년 동기 대비 36.7% 증가했다. 시장이
+예상한 31% 안팎을 크게 웃돌았으며 18분기 만에 가장 높은 성장률이다. AWS 영업이익은 166억달러로 전년 동기 102억달러보다 63%가량
+늘었다.
+
+아마존의 AI 사업과 자체 반도체 사업도 각각 연환산 매출 250억달러를 돌파하며 전년 대비 세 자릿수 성장률을 기록했다. AWS 수주잔고는
+4960억달러로 전년 대비 두 배 이상 증가했다.
+
+순이익은 626억달러, 주당순이익(EPS)은 5.75달러로 시장 전망치 1.82달러를 크게 웃돌았다. 다만 순이익에는 앤트로픽 투자에서 발생한
+534억달러의 세전 평가이익이 반영돼 본업의 수익성과는 구분해서 볼 필요가 있다.
+
+국내 반도체 업계가 주목할 부분은 실적보다 아마존의 투자계획과 공급 부족에 관한 설명이다.
+
+앤디 재시 아마존 최고경영자(CEO)는 콘퍼런스콜에서 올해 현금 기준 자본적지출 전망을 기존 약 2000억달러에서 2200억달러로 상향한다고
+밝혔다. 증액 이유로는 메모리 가격 상승을 직접 지목했다.
+
+메모리 가격이 오르자 서버 구매량을 줄이거나 투자를 연기하는 대신 예산을 200억달러 늘려 비용 증가분을 흡수하기로 한 것이다. 아마존은 기존
+AWS 장기계약 가격은 유지하지만 새로 체결하는 계약에는 메모리와 하드디스크, SSD 등 부품 원가 상승을 반영하겠다고 설명했다.
+
+투자액을 늘려도 공급 부족은 해소되기 어려울 것으로 내다봤다. 재시 CEO는 2200억달러를 투자해도 올해 수요를 모두 충족할 수 없으며 이러한
+상황이 2027년에도 이어질 것으로 예상했다. 2027년에 추가할 설비의 대부분이 이미 예약됐고, 2028년 공급분에 대해서도 상당한 수요가
+확보됐다는 설명이다.
+
+아마존은 데이터센터의 경우 가동 약 2년 전부터 투자를 시작하지만 서버와 네트워크 장비는 고객 수요를 확인한 뒤 투입 수개월 전에 구매한다고
+밝혔다. 현재 서버 투자가 실제 계약과 수주잔고를 바탕으로 집행되고 있다는 의미다.
+
+아마존의 투자 확대는 삼성전자와 SK하이닉스의 HBM뿐 아니라 서버 D램과 기업용 SSD 수요에도 긍정적으로 작용할 전망이다.
+
+아마존은 AI 수요가 기존 클라우드 사업까지 함께 끌어올리고 있다고 설명했다. AI 학습 이후의 강화학습과 AI 에이전트의 도구 사용에는 일반
+CPU가 활용되고, AI 데이터 저장과 벡터 데이터베이스 운영에는 추가적인 메모리와 스토리지가 필요하다는 것이다.
+
+이는 AI 투자 수혜가 GPU에 탑재되는 HBM에서 범용 서버와 서버 D램, 기업용 SSD로 확산하고 있다는 신호다. HBM 경쟁력을 확보한
+SK하이닉스는 물론, 범용 D램과 낸드 비중이 큰 삼성전자에도 유리한 흐름이다.
+
+아마존의 최근 12개월 기준 유형자산 순매입액은 1690억달러로 전년보다 64% 증가했다. AI 투자 확대로 잉여현금흐름은 181억8000만달러
+흑자에서 76억달러 적자로 전환했다. 그런데도 아마존 주가는 실적 발표 후 시간외거래에서 8% 넘게 급등했다.
+
+마이크로소프트와 메타에 이어 아마존까지 클라우드 성장과 AI 투자 확대, 공급 부족을 재확인하면서 하이퍼스케일러의 설비투자가 정점을 지났다는
+우려는 한층 완화될 전망이다. 특히 아마존이 메모리 가격 상승에도 구매량 조정보다 예산 증액을 선택했다는 점은 하반기 삼성전자와 SK하이닉스의
+실적 전망을 뒷받침하는 신호로 평가된다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001260668' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001260668</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
