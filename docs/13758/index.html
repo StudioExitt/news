@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>단일종목 레버리지 ETF '예탁금 상향' 단기 효과 있었다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005394186' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13758" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>단일종목 레버리지 ETF '예탁금 상향' 단기 효과 있었다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금융당국이 단일종목 레버리지 ETF의 기본예탁금을 현금 3,000만 원으로 강화하며 시장에 규제 대책을 시행했다. 이로 인해 거래량 급감 등 단기적인 수요 억제 효과가 있었으나, 이는 근본적인 주식 시장 쏠림 문제 해결에는 미흡하다는 분석이 나온다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">강력한 정부 규제(예탁금 상향)가 단기적으로 투자 심리를 급격히 위축시켜 레버리지 상품의 거래량을 크게 감소시킴. 이는 시장 참여자들에게 경각심을 주지만, 투기적 자금에 대한 접근성 제한이 핵심이므로 중장기적인 구조 개편 논의를 촉발함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#규제개편</span> <span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#레버리지</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[MT리포트]ELW 벤치마킹VS반면교사? 레버리지 대책 방향은④
+[편집자주] 금융당국이 단일종목 레버리지 대책을 만들며 15년 전 ELW(주식워런트증권) 사태를 스터디하고 있다. 배경에는 지금까지 내놓은 대책만으로는 시장 과열을 잡기 어렵다는 절박한 고민이 깔려 있다. 결국 남은 카드는 시장 자체를 위축시킬 정도의 '특단의 대책' 뿐이다. 그 특단의 대책이 실제로 통했던 유일한 선례가 바로 ELW 규제다. 다만 강력한 규제가 시장을 사장시킨 전례였던 만큼 부작용을 최소화하는 게 핵심과제로 떠올랐다.
+KODEX 삼성전자단일종목레버리지/그래픽=최헌정
+KODEX 삼성전자단일종목레버리지/그래픽=최헌정
+
+단일종목 레버리지 ETF(상장지수펀드) 부작용을 줄이기 위해 금융당국이 거래를 위한 예치금을 '현금 3000만원'으로 강화한 대책이 시행 첫날 거래량 급감이라는 가시적 효과를 냈다. 다만 이는 진입장벽을 높여 수요를 일시적으로 억누른 결과일 뿐, 시장 쏠림이라는 근본 원인을 해소한 것은 아니라는 지적이 나온다. 업계에서는 지금의 대책만으로는 역부족이며 보다 근본적인 제도 개편이 필요하다는 목소리가 힘을 얻고 있다.
+
+31일 한국거래소에 따르면 이날 'KODEX 삼성전자단일종목레버리지'는 전일 대비 4270원(51.17%) 급등한 1만2615원으로 정규장을 마감했다. 이 종목의 추종 대상인 삼성전자 주가가 20%대 뛰면서 최고점 대비 하락분을 일부 회복했다.
+
+이날 주식시장이 반도체 투톱 삼성전자와 SK하이닉스를 중심으로 오른 상황에도 단일종목레버리지 거래량은 감소했다. 특히 주가가 오르면 동반 상승하는 거래대금도 뚝 떨어졌다. 당국의 단일종목 레버리지 대책이 발표된 후 뚜렷한 감소세를 보인 것이다.
+
+KODEX 삼성전자단일종목레버리지 거래량은 이날 4334만주를 기록했다. 1개월 전인 지난달 말 8982만주에서 절반 이상 줄었다. 금융당국이 시장 변동성을 줄이기 위해 단일종목 레버리지 ETF에 대한 대책을 내놓겠다고 밝힌 지난 16일 이후 최소치다. KODEX 삼성전자단일종목레버리지의 일평균 거래대금은 이날 5102억원을 기록, 지난달 말(2조1710억원)에 비해 약 4분의1 수준으로 감소했다.
+
+다른 ETF에서도 이와 같은 추세는 나타났다. 'TIGER 삼성전자단일종목레버리지'의 31일 거래량과 거래대금은 2063만주, 2228억원으로 지난달 말에 비해 각각 2695만주, 8401억원 줄었다. 'ACE 삼성전자단일종목레버리지'의 거래량도 같은 기간 78만주에서 50만주, 거래대금은 174억원에서 54억원으로 각각 감소했다.
+
+SK하이닉스단일종목레버리지도 마찬가지다. 한 달 새 'TIGER SK하이닉스단일종목레버리지' 거래량은 766만주 514만주, 거래대금은 2조2293억원에서 4508억원으로 각각 감소했다. 같은 기간 'ACE SK하이닉스단일종목레버리지'의 거래량은 109만주에서 143만주로 소폭 늘었지만 거래대금은 316억원에서 124억원으로 줄었다.
+
+업계에서는 삼성전자와 SK하이닉스의 주가가 하락과 변동성이 커진 장세를 잡기 위한 당국의 대책이 단일종목레버리지 상품에 대한 투자심리를 위축시켰다는 평가가 나온다. 실제로 금융당국은 이날부터 레버리지 상품의 기본예탁금 강화 방안을 시행했다. 시행일은 당초 밝힌 '8월중'에서 앞당겼다.
+
+당국 대책의 핵심은 단일종목 상품의 기본예탁금을 현금 3000만원으로 한정한 것이다. 대용증권(주식·ETF·채권 등)은 더 이상 예탁금으로 인정하지 않기로 하면서, 기존 기본예탁금 1000만원에 대용증권 70%까지 허용됐던 것과 비교하면 투자 문턱이 크게 높아졌다. 당장 현금이 부족한 개인투자자는 신규 매수는 물론, 상품을 팔았다 다시 살 때도 더 많은 현금이 필요해져 사실상 비자발적 장기투자를 해야 하는 상황에 놓이게 됐다.
+
+문제는 이 효과가 어디까지나 '수요 억제'에 그친다는 점이다. 진입 문턱을 높여 거래를 일시적으로 줄이는 데는 성공했지만, 애초에 이런 변동성을 키운 근본 원인은 그대로 남아 있다는 지적이다.
+
+당국 대책에 대한 시장 의견은 분분하다. 한 금융투자업계 관계자는 "현금 3000만원으로 허들을 높인 것은 수요가 줄어드는 효과가 있을 것으로 보인다"며 "대책 시행전부터 거래량과 거래대금이 차츰 줄었고 결국 투자심리에 영향을 미친 것"이라고 말했다. 또 다른 관계자는 "변동성이 큰 위험상품에 모든 투자자가 참여할 수 있도록 해놔서 주가 변동성이 커진 것"이라며 "사모펀드처럼 일반투자자의 투자금은 3억원으로 높이고 전문투자자만 할 수 있도록 강력하게 조치하지 않으면 큰 변화는 없을 수 있다"고 했다.
+
+d만 예탁금 상향 같은 단기 처방을 넘어, 투자자 자격 제한이나 레버리지 배율 조정 등 구조적인 해법을 함께 고민해야 한다는 게 이들의 공통된 목소리다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005394186' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005394186</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
