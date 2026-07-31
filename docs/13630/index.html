@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>하닉 장중 '상한가' 근접…코스피 17%·코스닥 8% '초급등'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.31</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006341054' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13630" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>하닉 장중 '상한가' 근접…코스피 17%·코스닥 8% '초급등'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체주 반등 기대감과 외국인 대규모 매수세에 힘입어 코스피와 코스닥이 장 초반 급반등하며 신고가를 경신했습니다. 특히 SK하이닉스를 필두로 관련 기술주들이 상한가 근접 등 강세를 보여 증시 전반의 강력한 상승 모멘텀을 형성하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업황의 강력한 반등 기대감(뉴욕 증시 지표)과 외국인 자금 유입이 결합되어 국내 주요 기술주(특히 SK하이닉스)를 중심으로 초강세장 모멘텀을 형성하고 있기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전기</span> <span class="tag stock-tag">삼전(삼성전자)</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#급등장</span> <span class="tag tag-hash">#외국인매수</span> <span class="tag tag-hash">#코스피랠리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">장 초반 코스피·코스닥 동시 매수 사이드카
+코스피 16%↑ 6500선 탈환·코스닥700선
+삼전·닉스, 폭락 딛고 25% 넘게 폭등 중
+'외국인 5.7조 폭풍 매수'…7월 일일 최대치
+간밤 뉴욕증시 반도체주 일제히 반등 영향 코스피가 지난 사흘간 이어진 폭락을 딛고 31일 장 초반 16% 이상 급반등하면
+6500선을 탈환했다. 시가총액 2위 SK하이닉스(000660)는 장중 ‘상한가’에 근접했고, 3위 SK스퀘어·4위 삼성전기는 나란히 상한가에
+안착했다.
+이번 급등은 최근 주가가 과도하게 내린데 따른 반발 매수세가 강하게 들어온데다 간밤 뉴욕증시에서 반도체주가 크게 오르면서 투심이 회복된
+de 따른 것으로 풀이된다.
+엠피닥터에 따르면 이날 오전 10시 13분 현재 코스피는 전 거래일보다 924.14포인트(16.52%) 오른 6517.70에 거래되고 있다. 장
+초반 상승폭을 더욱 확대하며 6548.64까지 치솟았고, 시작과 동시에 프로그램매수호가 일시효력정지(매수 사이드카)도 발동했다.
+장초반 상한가에 근접했던 SK하이닉스 31일 서울 하나은행 본점 딜링룸에 SK하이닉스 주가가 표시되고 있다.(사진=연합뉴스)
+코스피 사이드카는 코스피200선물 가격이 기준 가격 대비 5% 이상 상승해 1분간 지속되는 경우 발동되며 프로그램 매수호가의 효력을 5분간
+정지한다.
+수급별로는 외국인이 5조7684억원을 순매수하며 지수 급등을 주도했다. 외국인은 전날 코스피 시장에서 1조 3299억원을 순매수한 데 이어 이틀
+연속 매수 우위를 나타내고 있다. 이날 장 초반 순매수액은 전날 하루 전체 순매수액의 3배를 넘어선 규모다. 반면 개인은 5조5171억원, 기관은 1819억원을 각각 순매도했다.
+장중 상한가에 근접한 29.13%(171만5000원)까지 치솟으며 주가 반등을 꾀한 SK하이닉스(000660)는 현재 28.14% 오른
+169만4000원으로 강세를 이어가고 있으며, 삼성전자우(005935) 역시 24.83% 상승하며 매수세가 집중되고 있다.
+이외 시총 3위 SK스퀘어(402340)는 29.91%, 4위 삼성전기(009150)는 29.92% 급등하며 상한가에 거래되고 있다.
+현대차(005380)도 10.61% 오르며 두 자릿수 상승률을 나타냈고, 삼성생명(032830)은 18.18%, LG에너지솔루션(373220)은 1.41% 상승했다.
+같은 시간 코스닥은 전 거래일보다 63.24포인트(9.81%) 오른 708.02에 거래되고 있다. 반도체와 IT, 2차전지 등 성장주 전반으로
+매수세가 확산되면서 코스닥은 장중 700선을 회복한 뒤 상승 폭을 확대하고 있다.
+코스닥도 코스피와 마찬가지로 장 초반 매수 사이드카가 발동했다. 코스닥 사이드카는 코스닥150선물 가격이 기준 가격 대비 6% 이상 상승하고
+코스닥150지수가 직전 매매거래일의 최종수치 대비 3% 이상 상승해 동시에 1분간 지속되는 경우 발동된다.
+수급별로는 기관이 936억원, 외국인이 875억원을 각각 순매수하며 지수 상승을 견인했다. 반면 개인은 1813억원을 순매도했다.
+코스닥 1467개 종목이 상승한 반면 222개 종목이 하락해 대부분 종목이 강세를 나타냈다.
+코스닥 시총 상위 종목 중에서는 알테오젠(196170)이 전 거래일보다 8.41% 오른 30만3000원에 거래되고 있다. 2차전지 대표주인
+에코프로(086520)는 14.31%, 에코프로비엠(247540)은 8.81% 상승했다. 레인보우로보틱스(277810)(14.75%),
+주성엔지니어링(036930)(27.26%), 원익IPS(240810)(24.51%)도 크게 오르며 지수 전반의 강세에 힘을 보탰。
+이날 증시 급등은 최근 주가가 과도한 조정을 받은 데다 간밤 뉴욕증시에서 반도체주가 크게 오르면서 투심이 회복된 데 따른 것으로 풀이된다.
+30일(현지시간) 미국 상장 30개 주요 반도체 종목으로 구성된 필라델피아 반도체지수는 8.19% 상승했고, 마이크론
+테크놀로지스(18.36%), 샌디스크(25.99%), AMD(13.00%), 인텔(11.30%) 등 주요 반도체 종목은 두 자릿수 상승 폭을
+기록했다.
+한지영 키움증권 연구원은 “반도체에 대한 디레버리징(레버리지 축소) 해소 기대감, 어닝 서프라이즈를 기록한 아마존의 시간 외 주가 9%대 급등, 
+코스피200 야간선물 상한가 등에 힘입어 코스피는 반등에 나설 것”이라고 전망했다.
+원문링크: https://n.news.naver.com/mnews/article/018/0006341054</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006341054' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006341054</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
