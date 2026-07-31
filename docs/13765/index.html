@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[주식 소화불량①] ‘예측 불가’ 증시에 지친 개미, 3%대 예금 찾는다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.01</span>
+        
+        <a class="more-btn" href="https://studioexitt.net/news/13765" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[주식 소화불량①] ‘예측 불가’ 증시에 지친 개미, 3%대 예금 찾는다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 증시의 급격한 변동성(레버리지 상품 등)으로 투자자들의 피로감이 누적되면서, 원금 보장 및 확정 금리를 제공하는 은행 정기예금으로 대규모 자금이 이동하는 '역머니무브' 현상이 감지됩니다. 이는 단기적으로 위험자산 회피 심리가 강해지고 있음을 보여줍니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">지나친 주가 변동성으로 투자자들이 위험자산(주식)에서 안전자산(예금)으로 자금을 이동시키면서 단기적인 투심 위축을 가져오고 있기 때문입니다. 이는 시장 전반의 매수세 약화 요인으로 작용할 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자산운용</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#역머니무브</span> <span class="tag tag-hash">#안전자산선호</span> <span class="tag tag-hash">#금리매력</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">국내 증시 시총 15% 감소…ETF 몸집은 22% ‘뚝’
+예금 24조 늘어…극단적 변동성, 안전자산 수요↑
+‘고금리’ 고객 유치 나선 은행권…4% 돌파 전망도
+“롤러코스피, 피로감 누적…확정 금리 예금 매력” 배부르게 수익을 누리던 개미들이 난데없는 ‘급체’에 시달리고 있다. 끝없이 오를 것 같던 코스피는 급격한 변동성을 마주했고, 투자자들의 마음은 요동치기 시작했다. 반등을 기대하는 대신 ‘일단 피하자’는 심리가 커지면서 돈의 흐름도 달라지는 분위기다. 투자자들이 선택한 피난처는 어디인지, ‘주식 소화불량’에 걸린 자금의 행방을 추적해봤다. 
+
+(중략)
+1일 한국거래소에 따르면 지난달 31일 기준 국내 증시(코스피·코닥스·코넥스)의 합산 시가총액은 3059조1509억원으로, 6월 말(3605조5233억원) 대비 15.15% 감소했다.
+국내 상장지수펀드(ETF)의 몸집도 쪼그라들었다.
+국내 ETF 순자산총액은 512조4080억원(6월 30일)에서 398조339억원(7월 30일)으로 22.32% 줄었다.
+반면 은행의 정기예금 잔액은 단기간 급증했다.
+국내 5대 은행(KB국민·NH농협·신한·우리·하나)의 정기예금 잔액은 7월 29일 기준 973조4942억원으로, 6월 30일(949조3398억원)과 비교하면 무려 24조원 넘게 증가했다.
+국내 증시가 단기간 폭락과 폭등을 오가는 등 예측 불가한 흐름을 보이자 원금이 보장되는 예금으로 수요가 옮겨간 것으로 풀이된다.
+(중략)
+정부의 안일한 대응으로 국장 신뢰도가 낮아지면서 증시 이탈이 가속화하는 모습이다.
+증시 변동성이 커질수록 높은 수익률보다 안정성을 우선시하는 투자자들이 늘어나는 만큼, 원금 손실 우려가 적은 예금 매력이 커질 수밖에 없다.
+국내 5대 의 정기예금 금리가 3%대로 올라서고 있다. 
+(중략)
+그러면서 “극심한 변동성에 투자자들의 피로감이 누적되고 있다”며 “롤러코스터 장세에도 일일비하지 않고, 확정 금리를 받을 수 있는 정기예금의 매력이 부각될 것”이라고 내다봤.</div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
