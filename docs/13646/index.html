@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>율곡 품은 VIG, 토종 PEF 신뢰로 승부수</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.31</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002677882' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13646" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>율곡 품은 VIG, 토종 PEF 신뢰로 승부수</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">항공우주 부품업체 율곡이 국내 PEF의 자금력과 신뢰도를 바탕으로 대규모 M&A에 성공하며, 국내 방산 공급망 및 토종 금융권의 강점을 입증했다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">항공우주</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">방위산업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#M&A</span> <span class="tag tag-hash">#PEF</span> <span class="tag tag-hash">#방산</span> <span class="tag tag-hash">#기업가치제고</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">항공우주 부품업체 율곡의 새 주인으로 VIG파트너스가 낙점됐다. 치열한 경쟁 끝에 방산 보안성과 사업 연속성, 인수 후 성장 전략을 앞세워
+스틱인베스트먼트와 앵커에쿼티파트너스, KCGI 등 쟁쟁한 후보자를 넘어선 것으로 보인다.
+
+31일 투자은행(IB) 업계에 따르면 JKL파트너스·WJ 프라이빗에쿼티(PE) 컨소시엄은 율곡 우선협상대상자(우협)로 VIG파트너스를 최근
+선정했다. 거래 대상은 JKL파트너스·WJ PE 컨소시엄이 보유한 지분 47.09% 전량과 창업주이자 현재 최대주주인 위호철 대표의
+지분(47.23%) 중 일부다.
+
+위 대표가 보유하게 될 잔여 지분율은 현재 세부 상의 중이며, 향후 VIG파트너스와의 주주간 계약 체결을 통해 최종 확정될 예정이다. 율곡의
+기업가치는 지분 100% 기준 4000억원대로 거론된다.
+
+이번 인수전에서 성패를 가른 요인은 단순히 ‘누가 더 높은 가격을 제시했는가’하는 정량적 조건보다 딜의 정성적 완성도에 있었다는 평가가 나온다.
+국가 안보 및 공급망과 직결된 방산 보안성, 그리고 창업자와 글로벌 고객사 등이 요구한 사업 연속성이 딜의 판도를 바꾼 것으로 분석된다.
+
+율곡은 한국항공우주산업(KAI)의 핵심 협력사로 보잉·에어버스 공급망에 부품을 납품할 뿐만 아니라 일부 방산 사업 부문도 영위하고 있다. 이에
+따라 매각 측에선 방산 부문의 특수성을 고려해 외국계 자본이 아닌 국내 토종 펀드를 선호했던 것으로 알려졌다.
+
+IB 업계 관계자는 “방산 및 항공 부품 사업의 특성상 해외 자본에 대한 검증 절차가 까다로울 수밖에 없다”면서 “(매각 측이)
+기술 유출 우려 등의 문제를 차단하고 고객사와의 장기적인 파트너십을 유지하기 위한 전략을 고민했을 것”이라고 말했다.
+
+VIG파트너스가 순수 국내 자본으로서
+쌓아온 신뢰와 딜 경험이 우협 선정에 결정적인 강점이 된 것으로 풀이된다.
+
+인수 이후의 기업가치 제고(밸류업) 가능성 측면에서도 VIG파트너스가 우위를 점한 것으로 파악됐다. 매각 측 역시 피인수기업의 실질적인 성장을
+이끌어낼 수 있는 파트너를 선호했기 때문이다.
+
+VIG파트너스는 추가 유상증자와 볼트온(Bolt-on) 등 적극적인 자금 투입 및 성장 전략을 제시해 매각 측의 긍정적 평가를 끌어낸 것으로
+전해진다. 아울러 이스타항공 등 기존 항공 산업 포트폴리오를 운용하며 쌓은 높은 업계 이해도 역시 주요 경쟁력으로 작용했다는 분석이다.
+
+지분 구조 역시 사업의 지속성을 다각도로 고려해 설계됐다. 이번 거래는 컨소시엄 보유 지분 매각과 함께 창업자 위 대표의 지분 중 일부가 함께
+인수되는 방식이다.
+
+위 대표는 잔여 지분을 보유한 채 경영 및 주요 의사결정에 계속 참여할 전망이다. 위 대표가 그간 프로젝트 수주와 관련한 핵심 역할을 전담해 온
+만큼, 그의 부재를 우려한 글로벌 고객사의 요청과 창업자의 경영 의지가 종합적으로 고려된 결과다.
+
+한편 이번 인수는 VIG파트너스의 5호 블라인드펀드를 통해 진행된다. 율곡 인수가 최종 마무리되면 해당 펀드의 소진율은 약 80% 수준에 달할
+것으로 보인다. 업계에서는 VIG파트너스가 5호 펀드 소진을 기점으로 조만간 6호 블라인드펀드 결성 작업에 본격 나설 것으로 전망하고 있다.
+
+안효정 기자
+원문링크: https://n.news.naver.com/mnews/article/016/0002677882</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002677882' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002677882</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
