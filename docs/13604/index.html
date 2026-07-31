@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK하이닉스 등 AI주식 변동에 헤지펀드·가상자산 파생상품 청산</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.31</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005797178' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13604" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>SK하이닉스 등 AI주식 변동에 헤지펀드·가상자산 파생상품 청산</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 관련 주식의 급변동으로 신생 헤지펀드는 유동성 위기를 겪었으며, 주가 하한가 체결이 가상자산 파생상품 오라클에 의해 연쇄적인 강제 청산을 유발하며 시스템적 위험을 드러냈습니다. 금융 구조 및 시장 안전장치 개선의 필요성이 제기되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 섹터의 급격한 변동성이 헤지펀드와 가상자산 파생상품 시장에 시스템적 위험을 노출시켰으며, 금융 인프라(오라클, 프리마켓 장치) 개선의 필요성을 강력하게 시사합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI주식</span> <span class="tag tag-hash">#파생상품</span> <span class="tag tag-hash">#리스크관리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">SK하이닉스를 포함한 인공지능(AI) 관련 주식들의 주가가 출렁이면서 월가에서 후폭풍이 일었다. 국내 프리마켓에서 SK하이닉스 1주가 하한가에 체결되자 수백억원 규모의 해외 가상자산 파생상품 롱(매수) 포지션 강제 청산도 발생했다.
+
+30일(현지시간) 미 경제매체 CNBC방송에 따르면, AI 관련주에 전문적으로 투자하는 신생 헤지펀드인 시추에이셔널 어웨어니스(시추에이셔널)는 최근 보유주식의 주가가 급락하면서 유동성 위기에 처했다. SK하이닉스 같은 AI 인프라 투자 자산이 하락한 반면, 어도비 등 소프트웨어 기업에 대한 공매도 포지션은 가격이 급등해 이중손실에 처하자 마진콜(추가 증거금 요구)에 직면했다.
+
+25세 오픈AI 연구원 출신의 레오폴트 아<0xEC><0x85><0xB4>브레너 대표가 설립한 이 신생 펀드는 7월 초 한때 운용자산이 450억달러에 달하며 SK하이닉스 ADR 다량 보유자로 이름을 올렸다. 영국 파이낸셜타임스(FT)에 따르면 앞서 시추에이셔널은 베일리 기포드, 코튜 매니지먼트 등 다른 헤지펀드와 함께 SK하이닉스 ADR 기업공개(IPO) 당시 최대 70억달러(약 9조9800억원) 규모의 투자 의사를 밝혔다.
+
+다만 헤지펀드업계 대부인 켄 그리핀이 이끄는 시타델이 구원투수로 나서면서 시추에이셔널은 최종적으로 고사 위기는 면할 것으로 알려졌다. FT는 인수 규모가 약 160억달러(약 22조8000억원)로, 월가 역사상 가장 큰 규모의 긴급 블록딜(시간 외 대량매매)이라고 짚었다. 시추에이셔널은 약 50억달러(약 7조1300억원) 규모의 앤스로픽 등 비상장 자산은 계속 보유하며 투자회사 형태로 영업을 이어갈 것으로 알려졌다.
+
+SK하이닉스 주가가 출렁이자 가상자산 파생상품 시장에도 영향이 미쳤다. 지난 28일 오전 8시 NXT 프리마켓이 열리자마자 SK하이닉스 주식 1주가 전일 종가 대비 29.99% 하락한 127만2000원에 체결됐다. 신규 매수 주문이 유입되면서 주가는 곧바로 170만원대로 회복했다. 문제는 가상자산 탈중앙화 거래소 하이퍼리퀴드에서 SK하이닉스 주식 연동 무기한 선물을 운영하고 배포한 트레이드닷엑스와이지(Trade.xyz)가 NXT 체결가를 실시간으로 참조하고 있었다는 점이다. 배포사는 국내 원화 표시 주가를 원·달러 환율로 환산해 가격을 산출한다. 배포사의 오라클은 NXT에서 체결된 단 한건의 127만원을 실제 한국 시장의 유효한 주가로 인식하고 환율을 적용했으며 선물 지수가 순간적으로 1127.9달러에서 917달러까지 17.9% 떨어졌다. 이 과정에서 롱포지션 5740만달러(약 827억원)가 2분 만에 강제 청산됐다.
+
+블록체인 데이터업체 얼리엄에 따르면 900명 이상의 이용자가 1740만달러에 이르는 실제 확정 손실을 본 것으로 추정된다. 배포사는 성명을 통해 시스템 자체는 설계된 대로 작동했으나 이번 이상 파동으로 인해 이용자들이 입은 청산 손실을 보상하겠다고 밝혔다. 그러면서 "향후 이 같은 극단적인 꼬리 위험(Tail Event)에 대응할 수 있도록 오라클을 고도화하겠다"고 덧붙였다.
+
+업계에서는 이번 사태가 배포사의 오라클과 넥스트레이드 프리마켓 특유의 구조가 결합해 벌어진 일이라고 평가했다. 우선 배포사의 오라클은 유동성이 부족한 프리마켓 가격을 거래량이나 거래대금 검증 없이 지수에 그대로 반영했다. 청산을 막기 위해 가격이 바뀔 때마다 직전가 대비 최대 1%까지만 떨어질 수 있는 장치가 있었지만, 오라클이 3초마다 가격을 매우 빠르게 업데이트하도록 설계돼있는 점이 문제였다. 현물에서 하한가가 찍히자 3초마다 ?1%씩 떨어지는 현상이 연쇄 발생했다. 현물 하한가 폭을 전부 따라가지는 않았으나 3초 간격의 하락이 누적되면서 선물 가격이 17.9% 하락해 강제 청산으로 이어졌다는 것이다.
+
+박성제 신한투자증권 연구원은 "현재 가격 제한은 충격 속도를 낮추는 장치지만, 잘못된 가격 반영 자체를 차단하는 장치는 아니다"며 "단일 체결이 정상적인 시장가격인지 판단하려면 가격 외에도 거래 수량과 거래대금 및 호가 깊이를 함께 확인해야 하는데, 가상자산에 적용하던 오라클 구조를 주식에 그대로 적용하기보다 거래 시간대와 시장구조를 반영한 별도의 설계가 필요해 보인다"고 말했다. 최소 체결 수량과 최소 거래대금 조건을 적용하고 거래 시간대별 유동성 차이를 반영해 프리마켓 가격 반영 한도를 정규장보다 낮게 설정하는 방안도 필요하다고 덧붙였다.
+
+NXT 프리마켓의 매매방식도 이번 사태에 영향을 끼쳤다는 평가다. 정규장에서는 거래량이 두껍고 변동성 완화 장치 등이 있어 이 같은 이상거래(팻핑거)가 가격 지수에 그대로 반영되지 않고 희석된다. 반면 NXT 프리마켓은 개장과 동시에 접속매매가 시작된다. 호가가 충분하지 않은 상황에서 시장성 주문이 들어오면 단 한 주의 거래도 가격제한폭 부근에서 체결될 수 있다. NXT는 오는 9월부터 변동성 완화 장치(정적 Ⅵ) 도입을 준비 중이다. 전일 종가나 기준 가격 대비 10% 이상 가격이 변하면 2분 동안 단일가 매매로 전환하는 방식이다. 제도 도입 이후에는 개장 직후 잠정 체결가격이 기준가격에서 크게 벗어날 경우 즉시 거래가 이뤄지지 않고 주문을 모아 새로운 균형가격을 산출하게 된다. 박 연구원은 "한 주 하한가 체결 발생 가능성을 낮출 수 있는 조치"라고 평가했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005797178' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005797178</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
