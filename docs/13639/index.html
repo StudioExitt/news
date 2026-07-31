@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"주식창 열기 무섭다"...코스피 1000포인트 출렁 '아찔한 7월'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.07.31</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002677848' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13639" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"주식창 열기 무섭다"...코스피 1000포인트 출렁 '아찔한 7월'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 지수가 7월 들어 평균 일중 변동폭이 올해 최고치를 기록하며 극도의 변동성을 보이고 있습니다. 당국은 레버리지 예탁금 상향 등 안정화 조치를 시행했으나, 시장의 불안정성이 지속되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">역대 최고 수준의 장중 변동성 기록은 투자자 심리에 부정적 영향을 미치며, 시장 불안정성이 지속되고 있음을 시사합니다. 당국의 안정화 조치는 단기적인 완충 작용으로 해석될 수 있으나, 근본적인 시장 위험은 여전히 높습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주식변동성</span> <span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#투자주의</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피 지수가 31일 장중 800포인트 넘게 출렁이며 올해 두 번째로 큰 장중 지수 변동폭을 기록했다. 이날 오전 9시 30분 기준 장중 고가와
+저가의 차이는 811.62포인트로, 29일(965.8포인트)에 이어 올해 두 번째로 크다. 하루에도 수백 포인트씩 흔들리는 장세가 7월 내내
+이어진 결과, 이달 월평균 일중 지수 변동폭은 468.2포인트로 올해 최고치를 기록한다.
+
+31일 한국거래소에 따르면 7월(1~30일) 코스피의 평균 일중 지수 변동폭(장중 고가-저가)은 468.2포인트로 집계됐다.
+6월(422.0포인트)보다 10.9%, 5월(306.6포인트)보다 52.7% 늘어난 것으로 올해 들어 가장 큰 폭이다.
+
+il중 지수 변동폭은 장중 고가와 저가의 차이다. 장중 변동폭이 클수록 투자자가 실제 시장에서 체감하는 가격 변동도 커지고, 같은 날 매매하더라도
+진입 시점에 따라 수익률 차이가 크게 벌어질 수 있다. 이는 코스피200 옵션 가격을 바탕으로 향후 30일간 시장의 예상 변동성을 나타내는
+변동성지수(VKOSPI)와 달리 실제 장중에 나타난 가격 변동을 보여주는 지표다.
+
+변동성 확대는 7월에 갑자기 나타난 현상이 아니다. 평균 일중 지수 변동폭은 5월 처음 300포인트를 넘어선 뒤 6월 400포인트대로 커졌고,
+7월에는 468.2포인트로 연중 최고치를 기록했다. 단순히 지수가 올라 장중 변동폭이 커진 것만은 아니었다. 지수 대비 장중
+변동 폭 자체도 연중 가장 컸다. 월평균 종가 대비 평균 일중 변동폭 비율은 7월 6.67%로 올해 들어 가장 높은 수준을 기록했다.
+
+이달 들어 장중에는 500포인트 이상 출렁이는 날도 잇따랐다. 29일 장중 변동폭은 무려 965.8포인트까지 벌어졌고, 3일(758.2포인트),
+13일(745.6포인트), 8일(605.5포인트), 7일(565.3포인트)에도 500포인트를 웃돌았다.
+
+코스피가 7월 1일 8303.41에서 30일 5593.56으로 32.6% 하락하는 과정에서는 하루 만에 5~10%씩 급락했다가 급반등하는 흐름이
+반복됐다. 장중 가격 변동이 워낙 컸던 만큼 같은 날에도 매수·매도 시점에 따라 투자 성과가 크게 엇갈리는 장세가 이어졌다.
+
+옵션시장은 당분간 높은 변동성이 이어질 가능성을 반영하고 있다. 코스피200 옵션 가격을 바탕으로 향후 30일간 시장의 예상 변동성을 나타내는
+VKOSPI는 30일 기준 86.18을 기록했다. 6월 기록한 역대 최고치(96.94)보다는 낮아졌지만 여전히 역사적으로 높은 수준이다. 다만
+극단적인 변동성은 다소 완화되는 조짐도 나타나고 있다. 권순호 대신증권 연구원은 “최근 증시가 급락했는데도 VKOSPI가 하락한 것은 투자자들이
+추가 급락 가능성을 이전보다 덜 우려하고 있다는 의미”라며 “빚을 내 투자하는 움직임(디레버리징)이 줄고 단기 매매도 감소하면서 수급에 따른
+급격한 변동성도 점차 완화되고 있다”고 설명했다.
+
+금융당국과 업계의 시장 안정화 정책이 통할 지도 주목된다. 이날부터 단일종목 레버리지 상품의 기본예탁금이 1000만원에서 3000만원으로
+상향되고, 자산운용사들은 종가에 집중됐던 리밸런싱 거래를 장중으로 분산하는 자율 개선방안을 시행한다. 이재원 유안타증권 연구원은 “단일종목
+레버리지 거래 비중이 감소하면 대형주로의 수급 쏠림이 완화될 수 있다”며 “단기적으로 시장 변동성을 낮추는 데도 도움이 될 것”이라고 말했다.
+</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002677848' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002677848</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
