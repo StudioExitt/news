@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>현금 대신 주식 내주고 특허 회수한 이오플로우의 승부수…상폐 땐 물거품</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/366/0001183644' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13779" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>현금 대신 주식 내주고 특허 회수한 이오플로우의 승부수…상폐 땐 물거품</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">이오플로우는 자금난을 겪으며 아이피브이로부터 현금 대신 특허권을 출자받아 핵심 특허를 되사오는 유상증자를 진행했습니다. 이를 통해 단기 사업 재개에 필요한 특허를 확보했으나, 지분 희석과 상장폐지 위험이라는 높은 리스크가 남아 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">회사의 핵심 자산(특허) 확보는 사업 재개에 매우 필수적이며 단기적인 경영 위기를 넘길 수 있는 중요한 계기가 되었습니다. 다만, 궁극적인 상장폐지 리스크가 여전히 남아있어 주가의 안정성에 큰 불확실성이 존재합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">의료 장비 및 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#이오플로우</span> <span class="tag tag-hash">#유상증자</span> <span class="tag tag-hash">#특허권</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스닥 상장사 이오플로우가 현금 대신 주식을 내주고 지난해 매각했던 핵심 특허권을 되사온다. 소송 장기화로 현금이 바닥난 이오플로우는 사업 재개에 필요한 특허를 확보하고, 특허권을 보유한 아이피브이는 이오플로우의 경영 정상화와 주가 회복 가능성에 베팅하는 구조다. 양측의 이해가 맞아떨어진 고육지책이지만, 이오플로우가 상장폐지 위기를 넘지 못할 경우 이번 승부수가 오히려 악수가 될 수 있다는 평가도 나온다.
+
+1일 금융감독원 전자공시시스템에 따르면, 이오플로우는 아이피브이를 대상으로 260억원 규모의 제3자 배정 유상증자를 진행하고 있다. 발행가액은 주당 6000원으로, 총 433만3333주의 신주를 발행한다.
+
+아이피브이는 신주 인수 대금을 현금으로 납입하는 대신 지난해 이오플로우로부터 샀던 특허권을 현물로 출자할 예정이다. 납입 절차가 마무리되면 이오플로우는 별도의 현금 지출 없이 사업에 필요한 주요 특허를 되찾게 된다.
+
+유상증자가 완료되면 아이피브이는 이오플로우의 새로운 2대주주가 된다. 기존 2대주주였던 창업자 김재진 대표는 3대주주로 내려가면서 지배력이 약해질 예정이다. 다만 이번 유증은 현금 여력이 거의 없는 회사가 핵심 특허를 회수하기 위해 불가피하게 감수한 지분 희석이라는 평가가 나온다.
+
+앞서 이오플로우는 지난해 미국 의료기기 업체 인슐렛과의 소송 비용을 마련하기 위해 주요 특허권을 아이피브이에 80억원에 매각했다. 대신 일정 기간 안에 260억원을 지급하면 특허권을 다시 사올 수 있는 환매수 조건을 계약에 포함했다. 일단 특허권을 활용해 긴급 자금 80억원을 마련하고, 향후 180억원의 추가 비용을 부담해 특허를 되찾을 수 있는 구조였다.
+
+당시 이오플로우로서는 선택지가 많지 않았다. 인슐렛과의 소송이 장기화하면서 정상적인 영업 활동에 차질을 빚었고, 법률 비용과 운영 자금 부담도 커지고 있었다. 핵심 특허를 넘기는 조건으로라도 자금을 조달해 소송을 이어갈 필요가 있었던 것이다.
+
+소송전은 최근 이오플로우에 유리한 방향으로 전개되고 있다. 이오플로우는 1심에서 일부 패소했지만, 지난 5월 항소심 재판부가 원심을 파기하고 인슐렛 측의 청구를 기각한 것이다. 이오플로우는 항소심 결과를 토대로 중단됐던 사업을 재개하고 경영 정상화에 나선다는 계획이다.
+
+문제는 본격적인 사업 정상화와 기술 경쟁력 회복을 위해 매각했던 핵심 특허를 되찾아야 하는데, 이를 현금으로 환매할 여력이 부족하다는 점이었다.
+
+이오플로우의 현금성 자산은 올해 1분기 말 기준 약 10억원까지 줄었다. 당초 계약대로 아이피브이에 260억원을 현금으로 지급하고 특허를 되사오는 것은 사실상 불가능한 상황이었다.
+
+아이피브이 입장에서도 이오플로우가 환매수권을 행사하지 못하면 260억원을 현금으로 받는 대신 특허권을 계속 보유하거나 별도로 처분해야 했다. 특허권을 계속 보유하더라도 이오플로우가 사업을 정상화하지 못하면 해당 특허의 활용 가치와 매각 가능성이 제한될 수 있다. 결국 아이피브이는 특허권을 돌려주는 대신 이오플로우 지분을 받아 회사의 회생 가능성에 직접 투자하는 방식을 택했다.
+
+이오플로우는 현금 없이 핵심 특허를 회수하고, 아이피브이는 이오플로우의 기업가치가 회복될 경우 주가 상승에 따른 이익을 기대할 수 있다는 점에서 당장은 양측 모두에 현실적인 거래인 셈이다.
+
+외부평가기관은 이오플로우의 주당 가치를 6146원으로 평가했다. 신주 발행가액 6000원은 이를 소폭 할인한 수준이다. 현물출자 대상 특허권 역시 약 342억원으로 평가됐지만, 양측은 거래 조건 등을 고려해 출자가액을 260억원으로 정했다. 단순히 거래정지 직전 주가인 1490원만을 기준으로 이번 거래가 아이피브이에 불리하다고 단정하기 어려운 이유다.
+
+다만 이번 거래의 성패는 이오플로우가 상장폐지 위기를 넘고 실제로 사업을 정상화할 수 있느냐에 달려 있다. 이오플로우는 2024년과 2025년 회계감사에서 의견거절을 받아 상장폐지 위기에 놓인 상태다. 주식 거래도 주당 1490원에서 정지됐다.
+
+아이피브이가 신주를 받는 가격은 거래정지 직전 주가의 약 4배에 해당한다. 이오플로우가 상장을 유지하고 사업을 재개하면 주당 6000원을 웃도는 지분 가치를 기대할 수 있지만, 상장폐지가 확정되면 신주의 환금성과 가치는 크게 떨어질 수 있다.
+
+이오플로우 관계자는 “현금이 아닌 주식으로 특허를 되사온 것은 아이피브이가 이오플로우의 성장성에 베팅했다는 의미”라며 “이오플로우는 유상증자 발행가액으로 8000원을 희망했으나, 양측이 합의하는 과정에서 6000원으로 조정됐다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/366/0001183644' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/366/0001183644</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

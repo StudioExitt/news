@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"횡보장에 레버리지 ETF 존버했는데 깡통됐네?"[인치범의 주식투자 부트캠프]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005555826' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13780" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"횡보장에 레버리지 ETF 존버했는데 깡통됐네?"[인치범의 주식투자 부트캠프]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">레버리지 ETF는 방향성이 분명한 추세장에서는 큰 수익을 줄 수 있으나, 등락이 반복하는 횡보장이나 변동성 장세에서는 '음의 복리 효과'와 '변동성 잠식' 같은 구조적 리스크로 인해 원금이 빠르게 손실될 수 있습니다. 특히 일일 재조정(Daily Reset) 과정이 이러한 리스크를 증폭시킵니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">레버리지 ETF의 구조적 위험성을 '음의 복리 효과', '변동성 잠식', '일일 재조정' 세 가지 키워드를 통해 심층 분석하며 투자자들에게 강력한 경고 메시지를 전달했기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#음의복리효과</span> <span class="tag tag-hash">#횡보장투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">상승장 계속되면 짜릿한 수익 안기지만\n같은 비율로 올랐다 내려도 손해\n같은 비율로 내렸다 올라도 손해\n횡보장 지속되면 레버리지는 '독'\n삼성전자, 하이닉스 레버리지 ETF. 출처=연합뉴스\n[파이낸셜뉴스] "내가 머릿속이 정리가 안돼... 그냥 마음이… 마음이…이상해서 그래" <영화 HOPE 주인공 범석(황정민)의 대사>'\n호불호가 갈리며 엄청나게 관객몰이 중인 나홍진 감독의 신작 영화 <HOPE(호프)>의 대사입니다. 영화 후반부에 주인공 범석은 "머릿속이 정리가
+안 된다"며 혼란스러워 합니다.\n\n최근 '변동성이 큰 횡보장세'에 레버리지 ETF를 매수했다 낭패를 본 초보 투자자 심정과 묘하게 닮았습니다. '단지 지수가 올랐다가 다시 내려서
+이젠 제자리일 뿐인데… 난 대체 왜 손실을 본 거지?' 등락 끝에 지수는 원래 내가 매수했던 자리로 돌아왔습니다. 그런데도 내 계좌는 생각보다
+큰 손실을 냈습니다. 왜일까요? 이번 시간은 이 질문에 대한 답을 하나씩 찾아보도록 하겠습니다. '꼬리에 꼬리를 무는 이해'가 필요하니
+집중하세요.\n\n① 10% 올랐다가 다음 날 10% 내리면 본전 아닌가 ?\n먼저 레버리지 상품이 아닌 1배수 ETF에 10,000원을 투자한 경우를 생각해 보겠습니다. 첫날 10% 상승과 다음 날 10% 하락이 있었다고
+가정해 보겠습니다. 먼저 10,000원에 매수 후 10%가 오릅니다. 11,000원이 되었습니다. 다음 날은 10% 하락해 이젠 9,900원이
+됩니다. 순서를 바꿔서 첫날 -10%(하락)와 다음 날 +10%(상승)를 가정해도 결과는 9,900원으로 동일합니다.\n\n얼핏 보면 같은 폭의 등(10%↑)과 락(10%↓)이 이어져 원금 10,000원이 그대로 남아 있을 것 같습니다. 그러나 같은 비율(%)
+로 자산이 오르고 내리더라도, 기준이 되는 원금이 매번 바뀌므로(10,000원→11,000원→9,900원), 결과적으로 항상 손실(이 경우 수익률
+-1%, 금액 100원 손실)이 발생합니다.\n\ni처럼 자산 가격이 동일 비율(%)로 등락(상승↔하락)할 때, 매번 계산의 기준이 되는 원금 자체가 달라집니다. 이 때문에 수익과 손실이 서로
+상쇄되지 않고 결과적으로 원금 손실이 발생하는 비대칭적 자산 감소 현상이 발생합니다. 이를 '음의 복리효과 (Negative
+Compounding Effect)' 라고 합니다. 자산가격은 덧셈이 아니라 곱셈(compounding)으로 누적됩니다. 즉, 올라갈 때는
+'작은 원금'에서 시작(10,000×1.1=11,000)하고, 내려갈 때는 이미 '불어난 원금'에서 시작(11,000×0.9=9,900)하므로,
+동일한 비율(%)이 움직여도 떨어지는 절대 금액이 항상 더 커지는 겁니다(10%상승 1,000 < 10%하락 1,100). 이 때문에 '손실을
+본 이후 원금을 회복하려면, 손실률과 같은 크기의 수익률이 아니라 그보다 훨씬 더 큰 수익률이 필요'하다는 비대칭적 구조가 발생하며, 이것이
+음의 복리 효과의 핵심입니다.\n\n② 1배수 ETF가 1% 손실나면 2배·3배 ETF는 2%, 3% 손실 아닌가?\ni젠 레버리지 ETF를 보겠습니다. 앞서 알게된 것처럼 1배수 ETF조차도 변동성이 큰 횡보장세에서는 '음의 복리 효과'
+에 기인한 손실이 발생할 수 있습니다. 그런데 그 위에 '레버리지'라는 배율이 곱해지면 어떻게 될까요? '음의 복리효과' X '변동성 잠식'
+에 대해서 설명드리겠습니다.\n\n'변동성 잠식(Volatility Drag)'은 자산 가격이 크게 오르내릴수록 복리효과 때문에 누적 수익률이 깎이는 현상(음의 복리효과가
+레버리지로 더욱 확대)입니다. 변동성이 큰 횡보장세에서 레버리지 ETF는 이러한 현상이 일반 ETF보다 훨씬 크게 나타냅니다. 초보 투자자가들이
+언뜻 보기에 "1배수 ETF가 1% 손실이 나면, 2배 레버리지 ETF는 2배니까 2% 손실, 3배 레버리지 ETF는 3배니까 3% 손실
+아닌가?"라고 생각할 수 있습니다. 계산해보겠습니다. 아래 계산식을 보시기 바랍니다.\n\n초기 투자 금액 1,000만 원(10,000,000원)을 기준으로 하루는 10% 상승, 다음 날은 10% 하락하는 변동성이 발생했을 때의 손실
+크기를 알아보겠습니다. 1배수 종목이 1% 손실이 나면, 2배 레버리지에서는 4% 손실, 3배 레버리지는 9% 손실이 나는 것을 알 수
+있습니다. 즉 1배수 손실의 2배, 3배 손실이 아닙니다. 단 이틀의 등락만으로 이런 결과가 나옵니다.\n\n[변동성 잠식 사례: 1,000만 원 투자 후 2일차 수익률 계산] 1배수 ETF( 1배→ ±10% 가정) : 1.10(1일차 +10%) ×
+0.90(2일차 -10%) = 0.99 (-1%=100,000원 손실)\n2배 레버리지 ETF(2배→±20%) : 1.20(1일차 +20%) ×
+0.80( 2일차 -20%) = 0.96 (-4%=400,000원 손실)\n3배 레버리지 ETF(3배→±30%) : 1.30(1일차 +30%) ×
+0.70(2일차 -30%) = 0.91 (-9%=900,000원 손실)\n이처럼 레버리지 ETF에서는 음의 복리효과가 더욱 심화됩니다. 약속한 레버리지(2배, 3배) 배율만큼 증폭되어 원금 손실이 나는 바람에('변동성
+잠식'으로 인해) 손실 규모가 더욱 커지는 것입니다. 일례로 상승과 하락이 반복되는 횡보장세가 100일(50회 등락)
+만 이어져도, 1,000만 원을 투자한 3배 레버리지 ETF의 최종 잔고는 89,600원이 됩니다. 투자원금 1,000만 원이 거의 사라져버린 것을 알 수 합니다.\n(±10% 50회 반복의 가정은 실제 시장이 위와 같이 움직인다는 의미는 아니며, 변동성 잠식이 얼마나 강력한지 이해하기 위한 단순화한
+simulation)\n\n듣다 보면, '이렇게 손해를 보는데 대체 왜 레버리지 ETF에 투자를 하지?'라고 생각할 수 있습니다. 설명한 사례는 주로 '변동성이 큰
+횡보장세'에서 그렇습니다. 강한 '상승장'이나 '하락장'같은 일방향 장세에서 레버리지 상품 투자는 매일 2배, 3배라는
+레버리지 만큼의 짜릿한 성과를 안겨줍니다(상승장 레버리지, 하락장 인버스 레버리지 투자). 다만, 다음 날이 상승장인지 하락장인지 매번 장세를 맞추는 것은 전문가도
+불가능합니다.\n\n지난 7월 29일 서울 여의도 국회의사당 정문 앞에 주식시장 정상화를 위한 모임이 설치한 단일종목 레버리지 ETF 상장 폐지 촉구 근조화환이
+설치돼 있다. 사진=뉴스1화상\n
+지난 7월 29일 서울 여의도 국회의사당 정문 앞에 주식시장 정상화를 위한 모임이 설치한 단일종목 레버리지 ETF 상장 폐지 촉구 근조화환이
+설치돼 있다. 사진=뉴스1화상\n\n③ 며칠 손해가 심하지만 '존버'하면 괜찮지 않을까?\n게다가 레버리지 ETF에는 이 '증폭(2배, 3배)'이 하루도 빠짐없이, 매일(거래일)마다 반복되도록 만드는 장치가 있습니다. 바로 '일일
+재조정(일일 리밸런싱)'입니다. 이는 오늘의 손익만큼 달라진 투자자의 실질 투자 금액을 기준으로 '내일도'
+정확히 2배, 3배 성과가 유지되도록 배율을 새로 맞추는(Daily Reset) 작업입니다.\n\n쉽게 말해, 투자자가 오늘 낸 수익의 2배, 3배(기초지수 하루 수익률의 2·3배)의 성과를 다음 날도 낼 수 있도록 설계하는 일입니다. 구조
+자체는 아무 문제가 없습니다. 매일 2·3배의 단기 고수익을 추구하는 투자자를 위해 만든 구조입니다. 다만 100일 만에 1,000만 원이
+89,600원이 되는 이 극단적인 손실도, 이 장치가 매일 반복된 결과입니다. 예를 들겠습니다. 1,000만 원을 투자해 첫날은 10% 상승, 
+둘째 날은 10% 하락을 가정해보겠습니다. 참고로 국내 주식형 레버리지 ETF는 순자산(NAV) 대비 현물(기초지수) 100% + 지수선물
+100% = 총 200% 익스포저 구조로 가정("이해를 돕기 위한 단순화 예시"로 실제로는 운용사·상품별로 현물·선물 비중이나 스왑 활용 여부가
+다를 수 있음)했습니다. [ ※ 순자산(NAV)→ 투자자의 진짜 돈(실제 자본금, 순수한 내 돈, 일일 재조정의 기준점이 됨) / 익스포저→
+'위험 노출액' 또는 '위험 노출도'로 부름. '총 투자 자산 규모'나 '실질 투자 금액'을 의미함 ]\n\n[시뮬레이션 : 1,000만원 → 첫째 날 +10% → 둘째 날 -10%]\n\n첫째 날 : 기초지수 +10% 상승
+현물 평가액: 1,000만 원 × 1.10 = 1,100만원 (+100만원 평가이익)
+선물 평가손익: 명목 1,000만 원 × 10% = +100만 원
+첫째 날 종가 NAV = 1,000 + 100 + 100 = 1,200만 원 → 수익률 +20% (기초지수 10%의 2배)\n\n첫째 날 마감 시 재조정(Daily Reset)
+다음 날 2배 유지를 위한 목표 총 익스포저 = NAV 1,200만 원 × 2배(200%) = 2,400만 원
+현재 보유 익스포저: 현물 1,100만 원(10%↑) + 선물 명목가치 1,100만 원(선물 10%↑) = 2,200만 원
+부족분 = 2,400 - 2,200 = 200만 원 → 선물 200만 원 추가 매수(롱 포지션 증대)\n재조정 후: 현물 1,100만 원 + 선물 1,300만원(1,100만 원+ 추가 매수 200만 원) = 총 2,400만 원(2배 레버리지 유지)\na지수 오른 날 재조정→ 선물 '추가 매수(여기서는 200만 원)'→ 그냥 두면 1.833배로 다음 날 2배 레버리지 안됨\n\n둘째 날: 기초지수 -10% 하락 (첫째 날 종가 대비)
+현물 평가액: 1,100만원 × 0.90 = 990만 원 (평가손 -110만 원)
+선물 평가손: 명목 1,300만 원 × (-10%) = -130만 원
+총 손실 = -110 - 130 = -240만 원 둘째 날 종가 NAV = 1,200 - 110 - 130 = 960만 원 → 일별 수익률
+-20% (기초지수 -10%의 2배)\n\n둘째 날 마감 시 재조정(Daily Reset) 다음 날 2배 유지를 위한 목표 총 익스포저 = NAV 960만 원 × 2배(200%) =
+1,920만 원\n현재 보유 익스포저: 현물 990만 원(10%↓)+ 선물 명목가치 1,300만 원 × 0.90 = 1,170만 원(10%↓) → 2,160만 원
+초과분 = 2,160 - 1,920 = 240만 원 → 선물 240만 원어치 매도(롱 포지션 축소)\n재조정 후: 현물 990만 원 + 선물 930만 원 = 총 1,920만원(2배 레버리지 유지)\nⓑ지수가 내린 날 재조정→ 2배를 맞추기 위해 남는 선물을 '매도'→ 그냥 두면 2.25배로 2배 레버리지가 안됨\n\n30일(현지 시간) 월스트리트저널(WSJ)에 따르면 헤지펀드 SA 설립자 레오폴드 아<0xEC><0x85><0xB4>브레너는 이날 투자자들에게 보낸 서한에서 "이번 달 우리는
+여러분을 실망시켰다"며 7월 손실을 인정했다. 사진은 3일(현지시간)
+30일(현지 시간) 월스트리트저널(WSJ)에 따르면 헤지펀드 SA 설립자 레오폴드 아<0xEC><0x85><0xB4>브레너는 이날 투자자들에게 보낸 서한에서 "이번 달 우리는
+여러분을 실망시켰다"며 7월 손실을 인정했다. 사진은 3일(현지시간) 미국 뉴욕증권거래소(NYSE) 객장 위 전광판에 다우존스산업평균지수의 마감
+지수가 표시돼 있는 모습.사진=뉴시스\n이처럼 지수가 오르내린 날 일일 재조정(Daily Reset) 과정 중 선물의 ⓐ추가 매수와 ⓑ추가 매도는 장 마감 시점에 변동성을 증폭시킬 수
+있습니다. 만약 위 시뮬레이션의 첫째 날 장 마감 전 재조정(선물 200만원 추가 매수)이 개별 ETF만의 이야기가 아니라면 어떨까요? 이런
+일이 시장 전체 레버리지 ETF 상품 잔고에 비례해 수천억 원이 넘는 규모로 동시 발생한다고 가정을 해보겠습니다. 이는 선물가 급변 → 차익거래
+프로그램 매매 유발 → 현물시장 추가 변동 → 다시 레버리지 ETF NAV 변화 → 다음 날 재조정 규모 확대로 이어지는 연쇄 반응을 만들 수
+있습니다. 실제 국내에서도 최근 장 마감 재조정 거래가 시장 변동성을 확대하는 요인 중 하나로 지적되고 있습니다.\n\n지금까지 '음의 복리 효과', '변동성 잠식', '일일 재조정' 3가지 키워드를 중심으로 레버리지 ETF가 가진 구조적인 리스크를
+말씀드렸습니다. 내용이 어렵습니다. 영화 <HOPE(호프)>에서 범석이 머릿속이 정리가 안 됐던 것처럼, 20대 초보 투자자들이 계좌를 보며
+혼란스러웠던 이유도 여기 있을 겁니다.\n\n(출처=연합뉴스)\n(출처=연합뉴스)\n몇일만 횡보장 겪어도 리스크는 커져\n정리하겠습니다. 레버리지 ETF는 방향성이 뚜렷한 상승장이나 하락장에서는 배율만큼의 드라마틱한 성과를 안겨주는 상품입니다. (즉 시장이 한
+방향으로 움직이는 추세장에서는 복리가 수익을 키우는 이른바 '양의 복리 효과'와 '일일 레버리지 효과'가 같은 방향으로 작용해 기대이상의
+수익률을 내기도 합니다.)
+그러나 등락을 반복하는 횡보장에서는 ①'음의 복리 효과(Negative Compounding Effect)', ②'변동성 잠식(Volatility Drag)', ③'일일 재조정(Daily Reset)' 등의 기전(機轉,mechanism)으로 인해 이익 아닌 손실을
+급속하게 불려나간다는 사실을 명심하시기 바랍니다. 며칠만 등락이 엇갈려도 원금이 눈에 띄게 깎여 나가는 구조적 리스크가 있습니다. 즉, 단기
+거래(트레이딩)를 전제로 설계된 상품이며, 장기 보유 시에는 구조적인 불리함이 발생할 수도 있는 상품입니다. 따라서 매매 전 반드시 금융당국의
+사전 교육이나 경제지에 게재된 다양한 분석을 사전에 참고하시면 좋을 것 같습니다.&#10;[필자소개]\n인치범 전무는 금융(삼성생명), IT(안랩, 한글과컴퓨터, SK커뮤니케이션즈), 유통(삼성테스코) 등의 분야에서 30년 간 일관되게 기업
+커뮤니케이션 업무(PR·IR·ESG·CSR) 책임자로 근무했다. 현재는 케이피아이투자자문에서 투자와 기업 커뮤니케이션 관련 서적을 집필하는 데
+힘쓰고 있다. '주식투자성공은 무엇보다 돈을 다루는 올바른 습관을 자동화하는 과정에서 비롯된다'는 지론을 갖고 있다.\n\n케이피아이투자자문 인치범 전무\n케이피아이투자자문 인치범 전무\n원문링크: https://n.news.naver.com/mnews/article/014/0005555826</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005555826' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005555826</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
