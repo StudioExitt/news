@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이번주 공모주 청약, 딜리셔스·케이앤에스아이앤씨 2개사</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003117287' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13891" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>이번주 공모주 청약, 딜리셔스·케이앤에스아이앤씨 2개사</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">패션 플랫폼 딜리셔스와 위성통신 안테나 전문기업 케이앤에스아이앤씨, 두 곳의 기업이 일반 투자자를 대상으로 공모주 청약을 진행한다. 각 사 모두 기술력과 사업 모델을 바탕으로 자금 조달 및 성장 동력을 확보할 계획이며, 이는 단기적인 시장 관심(IPO 테마)을 유발한다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">상장 초도 물량이 공모를 통해 공급되는 만큼 단기적인 투자 수요와 관심을 집중시키며 시장에 활기를 더하는 긍정적 요인입니다. 두 기업 모두 각자의 전문 분야(플랫폼/방산기술)에서 기술력과 성장 동력을 강조하고 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">딜리셔스 관련 주식</span> <span class="tag stock-tag">케이앤에스아이앤씨 관련 주식</span> <span class="tag stock-tag">플랫폼 기업주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">통신장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">온라인쇼핑</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#공모주청약</span> <span class="tag tag-hash">#IPO</span> <span class="tag tag-hash">#통신장비</span> <span class="tag tag-hash">#방산산업</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">위성통신 안테나 전문기업 케이앤에스아이앤씨 2개사가 일반투자자 대상 공모주 청약을 진행한다.
+
+2일 금융투자업계에 따르면 딜리셔스는 오는 3일과 4일, 케이앤에스아이앤씨는 4일과 5일 양일간 일반투자자 대상으로 공모 청약에 나선다.
+
+공모가는 희망밴드(5000~7000원) 상단인 7000원에 확정했다. 이에 따라 총 공모금액은 154억원, 예상 시가총액은 1532억원이다.
+
+수요예측에 참여한 기관 99.97%가 희망밴드 상단 이상의 가격을 제시했으며, 전체 수량 기준 상단 이상 비율은 71.33%를 달성했다.
+
+최근 국내 증시의 변동성이 확대됐음에도 딜리셔스의 본질 가치에 확신을 가지고, 회사의 플랫폼 경쟁력과 성장 가능성을 긍정적으로 평가했다.
+
+2001년 설립된 딜리셔스는 동대문 패션 시장을 기반으로 도·소매 사업자를 연결하는 B2B 플랫폼 ‘신상마켓’을 운영하고 있다.
+
+패션 플랫폼 외에도 현재 광고 서비스 ‘신상애드’와 구독 서비스 ‘신상멤버십’, 사업대행 서비스 ‘신상배송’, 소매사업자 대상 ‘플러스멤버십’ 등을 제공하고 있다.
+
+이번 공모를 통해 확보한 자금은 ▲플랫폼 고도화 및 신규 서비스 개발 ▲글로벌 시장 확장을 위한 마케팅 투자 ▲패션 관련 SaaS 사업 진출 등에 활용할 계획이다.
+
+딜리셔스는 오는 12일 코스닥 시장에 상장할 예정이며, 청약은 상장 주관을 맡은 한국투자증권을 통해 참여 가능하다.
+
+(중간 내용 삭제) ... 216억~264억원이다.
+
+2001년 설립된 케이앤에스아이앤씨는 위성통신 안테나 토탈 솔루션 전문기업이다.
+
+2003년 최초로 해상용 초소형 위성 송수신국(VSAT) 안테나를 개발·출시한 뒤 지속적인 연구개발을 통해 위성통신 안테나 기술을 고도화해왔다.
+
+회사는 외산 의존도가 높았던 위성통신 안테나 시장에서 핵심 기술 국산화를 추진하며 독자적인 경쟁력을 구축했다.
+
+이에 따라 미군 군사규격 기술 인증 33건과 국내외 제품 인증 65건, 국내외 특허 54건 등을 확보했다.
+
+이러한 기술 경쟁력을 바탕으로 해군 해상작전위성통신체계-II(MOSCOS-II) 사업에 위성통신 안테나를 독점 공급하는 등 군용 위성통신 핵심 장비 국산화를 주도했다.
+
+이번 공모를 통해 확보한 자금은 ▲상용·군용 및 저궤도 위성통신 안테나의 연구개발과 고도화 ▲생산능력 확대 및 설비 투자 등에 활용할 계획이다.
+
+오는 14일 코스닥 시장에 상장할 예정이며, 청약은 상장 주관사인 IBK투자증권을 통해 가능하다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003117287' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003117287</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

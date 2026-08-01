@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>국내 가상자산 거래소 활동 이용자 비율 20% 하회</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='원문링크: https://n.news.naver.com/mnews/article/001/0016228560' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13894" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>국내 가상자산 거래소 활동 이용자 비율 20% 하회</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 가상자산 거래소의 실질 활동 이용자 비율이 20% 아래로 급락하며 시장 침체가 뚜렷해졌다. 전문가들은 주식 시장 등 전통 자산에 투자 매력이 밀려나면서 국내 거래소가 위축되고 있으며, 제도적 개선이 필요하다고 지적했다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">가상자산 시장의 침체와 투자 매력도 하락세가 확인됨. 이는 국내외 자본 흐름과 규제 환경에 대한 관심을 높이며, 전통 금융 상품(주식 등)으로 자금이 이동하는 추세를 간접적으로 보여준다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#가상자산 #투자심리 #금융규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">(서울=연합뉴스) 한지훈 박수현 유동현 기자 = 국내 가상자산 거래소가 투자자들에게 외면받으면서 활동 이용자 비율이 20％ 아래로 떨어진 것으로 나타났다.
+
+2일 국회 재정경제기획위원회 소속 국민의힘 이종욱 의원이 금융감독원에서 제출받은 자료에 따르면, 올해 6월 말 기준 국내 5대 가상자산 거래소(업비트·빗썸·코인원·코빗·고팍스)의 활동 이용자 비율은 19.5%로 집계됐다.
+
+거래소에서 고객 신원 확인(KYC)을 이행해 거래가 가능한 전체 이용자 중 올해 6월 한 번이라도 가상자산 매매, 교환, 스테이킹(예치)을 한 이용자가 20%에도 못 미친다는 의미다.
+
+이 비율은 작년 1월 말 35.7%에 달하기도 했으나, 이후 20% 중반대로 주저앉았고, 올해 3월 말 19.5%, 4월 말 19.2% 등으로 추가 하락한 뒤 비슷한 수준을 유지하고 있다.
+
+올해 2분기 들어 신규 이용자 유입도 거의 끊기다시피 한 것으로 보인다.
+
+국내 5대 거래소에서 KYC를 거친 거래 가능 이용자 수는 올해 3월 말 1천156만3천661명으로 역대 최다를 기록했다. 그러나 이후 증가세가 눈에 띄게 꺾여 6월 말 1천115만3천38명으로 40만명 넘게 줄었다.
+
+i처럼 전체 이용자가 감소세로 돌아서고, 활동 이용자 비율도 크게 낮아진 일차적인 배경으로는 가상자산 시장 침체가 꼽힌다. 코인마켓캡에 따르면 가상자산 시가총액은 작년 10월 4조2천800억 달러(약 6천149조원)에서 지난달 말 2조1천800억 달러(약 3천133조원)로 반절 가까이 줄었다.
+
+가상자산 시세가 전반적으로 하락하고 거래가 줄면서 국내 거래소 이용자들의 가상자산 보유 금액과 예치금도 꾸준히 줄어든 것으로 나타났다.
+
+국내 투자자들의 가상자산 보유 총액은 작년 1월 말 125조7천533억원에서 올해 6월 말 56조9천606억원으로 줄어 1년 6개월 만에 54.7％ 감소했다.
+
+같은 기간 국내 투자자들의 국내 가상자산 거래소 예치금도 10조6천561억원에서 5조2천200억원으로 감소했다.
+
+업계에서는 과거 높은 변동성으로 투자자를 끌어들였던 가상자산의 투자 매력도가 삼성전자, SK하이닉스 등 국내외 주식에 밀린 탓이라고 평했다.
+
+윤승식 타이거리서치 리서치센터장은 "글로벌 주식 시장에서 알트코인보다 빠른 변동성이 나타나면서 알트코인을 통한 단기 차익 기회가 감소했고 투자자들의 (가상자산에 대한) 체감 매력도가 급격하게 하락했다"라고 분석했다.
+
+김민승 코빗 리서치센터장도 "가장 직접적인 원인은 가격"이라며 "국내 거래소는 비트코인보다 알트코인, 특히 신규 발행 코인들이 가격 변동성이 크게 작용하던 시장이었는데 신규 발행 코인들의 인기도 예전만 못하다"라고 설명했다.
+
+i 때문에 해외 가상자산 거래소는 SK하이닉스에 수십 배 레버리지를 걸 수 있는 무기한 선물 상품이나 토큰화 상품을 출시하며 상품 차별화에 나섰지만, 국내 거래소는 현물 거래만 가능해 더더욱 약세장을 피해 갈 수 없었다는 분석이 나온다.
+
+윤 센터장은 "국내 거래소가 유독 위축되는 가장 큰 이유는 '투자 상품의 단조로움'과 '금융 규제'"라며 "원화 현물 거래와 제한된 서비스에만 의존하다 보니 단기 트레이더와 고액 자산가들이 대거 해외나 온체인 시장으로 이탈했다"라고 했다.
+
+국내 가상자산 거래소가 가상자산 투자 심리가 위축되는 시기에도 살아남도록 하기 위해서는 제도 개선을 통해 활로를 터줘야 한다는 의견이 나온다.
+
+김 센터장은 "변동성 자체가 상품이 되는 시장과 가격이 올라야만 수익이 나는 시장은 침체기에 결과가 다를 수밖에 없다"라며 "수요를 막는 방식으로 자금 이동을 멈출 수 없는 만큼 규제된 국내 대체재를 만드는 쪽이 현실적"이라고 했다.</div><div class='news-src'>원문링크: <a href='원문링크: https://n.news.naver.com/mnews/article/001/0016228560' style='color:#64748b;word-break:break-all'>원문링크: https://n.news.naver.com/mnews/article/001/0016228560</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
