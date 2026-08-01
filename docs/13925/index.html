@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[공모주달력]증권신고서 4번 고친 빅웨이브로보틱스, 수요예측</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/648/0000049432' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13925" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[공모주달력]증권신고서 4번 고친 빅웨이브로보틱스, 수요예측</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">빅웨이브로보틱스를 비롯한 여러 성장 단계 테크 기업들이 공모주 수요예측을 진행합니다. 해당 기사는 이들 기업이 아직 적자 상태임에도 불구하고, 주로 PSR(주가매출비율) 등 매출 중심의 지표를 활용하여 높은 기업가치를 인정받으려는 시장 흐름과 그에 따른 밸류에이션 논란을 다루고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">전반적인 IPO 시장 동향과 함께 고성장 기술주(AI, 로봇, 바이오)의 공모가 산정 논란을 다루고 있어 투자자들에게 중요한 정보를 제공하지만, 직접적인 거시 경제 지표 변화는 없어 중립적 영향을 미칩니다. 다만, 섹터별 기대감이 반영되는 단기적인 모멘텀은 존재합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">빅웨이브로보틱스</span> <span class="tag stock-tag">해치텍</span> <span class="tag stock-tag">니어스랩</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오/제약</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#공모주</span> <span class="tag tag-hash">#AI산업</span> <span class="tag tag-hash">#기술주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">해치텍·니어스랩 수요예측 시작…기도산업은 일정 지속
+딜리셔스·케이앤에스아이앤씨 청약…인제니아테라퓨틱스 환불
+
+8월 첫째 주 공모주 시장에서는 빅웨이브로보틱스가 4번에 걸친 증권신고서 정정 끝에 기관투자자 대상 수요예측에 나서요.
+
+케이앤에스아이앤씨와 딜리셔스는 일반투자자 청약을 진행하고요. 기도산업과 해치텍, 니어스랩도 공모가 확정을 위한 기관 수요 확인에
+돌입해요.빅웨이브로보틱스, PSR 논란에도 산정 방식 유지
+
+가장 눈에 띄는 기업은빅웨이브로보틱스예요. 지난 5월 증권신고서를 처음 제출한 뒤 금융감독원으로부터 두 차례 정정 요구를 받았어요. 이후 네차례에 걸쳐 신고서를 수정하면서 수요예측 일정도 계속 뒤로 밀렸어요.
+
+공모 절차가 길어진 이유는 주가매출비율(PSR)을 활용한 기업가치 산정 논란 탓이에요. PSR은 주가가연간 매출의 몇 배 수준에서 평가받고있는지를 보여주는 지표예요. 순이익이아직 발생하지 않아주가수익비율(PER)을적용하기어려운성장기업이주로PSR을활용하죠.
+
+다만매출만볼 뿐 비용과수익성은충분히반영하지못한다는한계가있는데요. 매출이늘어도인건비와연구개발비등비용이더빠르게증가하면적자가커질수있는데 PSR만보면이런수익성악화를확인하기어려워요. 적자기업이높은희망공모가를정당화하는수단으로활용한다는비판이나오는이유예요.
+
+빅웨이브로보틱스는네 번째 정정에서도PSR 평가방식을유지했어요. 최근1년매출액을기준으로기업가치를계산했는데요. 비슷한상장사들이매출의평균15.41배수준에서평가받고있다는점을적용한거예요. 이전신고서보다적용배수는낮아졌지만투자자에게제시하는할인폭도함께줄여희망공모가2만~2만4000원을유지했어요.
+
+다만이회사는현재영업이익과당기순이익적자를기록하고있어요. 회사측은증권신고서에서PSR은손익과재무상태를충분히반영하지못해기업가치를과대평가할수있다고밝혔어요.
+
+빅웨이브로보틱스는4일부터10일까지유진투자증권과미래에셋증권을통해수요예측을진행해요. 공모주식은신주200만주예요.
+
+해치텍·니어스랩·기도산업도 수요예측
+
+해치텍은3일부터7일까지DB증권을통해기관투자자수요예측을진행해요. 희망공모가는2만3000~2만8000원. 신주100만주를전량공모해230억~280억원을조달할예정이죠.
+
+이회사는반도체생산시설을직접보유하지않고설계에집중하는<0xED><0x8C><0xB9>리스기업이에요. 지문인식센서집적회로(IC)와자동초점(AF)·손떨림보정(OIS)에쓰이는자계센서IC를개발해요.
+
+삼성전자와샤오미,오포,비보,원플러스,모토로라등국내외스마트폰제조사에제품을공급하는것으로알려져요.
+
+다만실적은아직적자예요. 올해1분기매출은42억5700만원으로지난해같은기간보다18.9%늘었어요. 같은기간영업손실은5억4000만원,순손실은2억9700만원을기록했어요. 지난해에도매출140억7900만원에영업손실23억9500만원,순손실54억7800만원을냈어요.
+
+해치텍은이번공모로유입되는자금대부분을연구개발에투입할계획이에요. 희망공모가하단기준순수입금약223억원가운데2027년부터2030년까지약222억원을연구개발비로사용할예정이에요. 지문인식센서와자계센서기술을고도화하고신규센서제품을개발하는데쓰겠다는구상이에요.
+
+인공지능(AI)자율비행드론기업니어스랩은3일부터7일까지삼성증권을통해기관투자자수요예측을진행해요. 희망공모가는3만~4만1200원. 보통주91만주를전량신주로공모해273억~374억9200만원을조달할예정이에요.
+
+니어스랩은드론이주변환경을스스로인식하고임무를수행하도록돕는자율비행소프트웨어'에어리얼 인텔리전스'를개발한기업이에요. 드론기체를직접만드는사업보다자율비행기술과드론운영플랫폼을제공하는데초점을맞고있어요.
+
+주력사업은풍력발전기점검이에요. 드론으로풍력발전기날개를촬영한뒤AI로손상여부를분석해요. 회사는전세계40개국이상에서누적10만개 이상의블레이드를점검했다고설명했어요.
+
+방산분야로도사업을넓히고있어요. AI기반대드론 하드킬솔루션'카이든'과군집타격솔루션'자이든'을개발했어요. 기업용점검시장에서확보한자율비행기술을방산과보안분야로확장한다는전략이에요.
+
+공모자금은자체공장설립과연구개발에사용해요. 희망공모가하단기준순수입금은약268억원이에요. 이가운데158억원은자체공장설립에투입하고약89억원은기술개발과연구인력확보에쓸계획이에요. 자체공장은2027년부터2028년까지단계적으로구축할예정이에요.
+
+다만공모가산정방식은살펴볼부분이에요. 니어스랩은비교기업을고를때최근1년기준주가수익비율(PER)이70배를넘는기업을제외했어요. 회사는드론산업의높은성장성을고려한기준이라고설명했지만적용배수가여전히높아질수있다는위험도신고서에담았어요.공모가가실제실적과성장성보다높게평가될수있다는점을유의해야해요.
+
+기도산업은지난주부터이어온수요예측일정을6일까지이어가요. 보통주170만주를전량신주로모집해요. 희망공모가는2만4800~2만8400원. 공모예정금액은421억6000만~482억8000만원이에요. 대표주관사는미래에셋증권이며삼성증권이인수회사로참여해요.
+
+아웃도어와모터사이클의류등고기능성특수복을생산하는주문자상표부착생산(OEM)업체예요. 방수와방풍기능을갖춘원단을가공해글로벌브랜드에공급하고있어요.딜리셔스·케이앤에스아이앤씨 청약
+
+지난주수요예측을마친기업들은이번주일반투자자청약과증거금환불일정을이어가요. 패션기업간거래(B2B)플랫폼운영사딜리셔스는3일부터4일까지한국투자증권을통해일반청약을받아요. 공모가는희망범위상단인7000원으로확정했어요. 신주220만주를공모해154억원을조달할예정이에요.
+
+딜리셔스는동대문패션도매사업자와국내외소매사업자를연결하는기업간거래(B2B)플랫폼'신상마켓'을운영해요. 도매사업자의상품광고서비스'신상애드'와도·소매사업자대상구독서비스등에서수익을내요.
+
+공모가는희망밴드(5000~7000원)상단인7000원으로결정했어요. 기관투자자수요예측에서신청수량기준67.09%가7000원을제시했고2.79%는7000원을웃도는가격을써냈어요. 가격을제시하지않은주문까지합치면전체주문의71%량이공모가이상에몰렸어요. 다만낮은가격을제시한기관도적지않았어요. 신청수량의27.73%는희망범위하단인5000원을제시했어요.
+
+위성통신안테나전문기업케이앤에스아이앤씨는3일공모가를확정한뒤4일부터5일까지IBK투자증권을통해일반청약을진행해요. 청약증거금은7일환불되며코스닥상장예정일은14일이에요.
+
+케이앤에스아이앤씨는2001년12월KT사내벤처로출발한위성통신안테나전문기업이에요. 선박과군함,잠수함,차량등에탑재하는안테나를개발·생산하고있어요.
+
+신약개발기업인제니아테라퓨틱스는지난달30일부터31일까지일반청약을진행했고4일증거금을환불해요. 미국보스턴에본사를둔바이오기업으로국내증시에는한국예탁증서(KDR)방식으로상장해요. 미국회사의주식을국내예탁기관에맡긴뒤이를바탕으로발행한증서를코스닥에서거래하는구조예요.
+
+회사는증권예탁증권500만DR을전량신주로공모하는데요. 지난주수요예측결과기관수요예측경쟁률은50.4대1에그쳤어요. 희망공모가1만2000~1만4500원가운데하단인1만2000원으로공모가를확정했어요. 공모금액은600억원이에요.대표주관사는삼성증권이에요.
+
+*공모주 수요예측 및 청약 일정은증권신고서중요내용정정으로 인한효력발생연기시미뤄질수 있어요.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/648/0000049432' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/648/0000049432</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
