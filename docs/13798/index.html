@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"열대야도 아닌데 잠이 안온다"...7월 최악의 변동성, 8월은 괜찮을까?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005715292' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13798" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"열대야도 아닌데 잠이 안온다"...7월 최악의 변동성, 8월은 괜찮을까?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">7월 국내 주식시장은 역대급 변동성(잦은 서킷브레이커 및 급락)을 경험했으나, 반도체주 강한 반발 매수세와 빅테크 실적 개선 기대감으로 반등 모멘텀이 생기고 있습니다. 금융 당국의 레버리지 상품 규제 강화가 단기적인 안정화 요인으로 작용할 것으로 예상됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">최근 시장의 극심한 변동성과 규제 도입(ETF 예탁금 상향)이라는 구조적 변화가 공존하며 혼조세를 보입니다. 다만, 반도체 업종 주도의 강력한 반등과 주요 해외 기업 실적 개선 기대감이 단기적인 매수 심리를 지지하고 있어 상승 기대감에 무게를 둡니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#코스피변동성</span> <span class="tag tag-hash">#ETF규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">31일 서울 하나은행 본점 딜링룸에 코스피가 표시되고 있다. 코스피가 역대 최대 상승 폭을 경신하면서 폭등했다. 간밤 되살아난 반도체 투자심리에
+반발 매수세가 쏟아졌다. [연합뉴스]
+31일 서울 하나은행 본점 딜링룸에 코스피가 표시되고 있다. 코스피가 역대 최대 상승 폭을 경신하면서 폭등했다. 간밤 되살아난 반도체 투자심리에
+반발 매수세가 쏟아졌다. [연합뉴스]7월 들어 국내 주식시장은 최악의 한 달과 최고의 하루를 보냈다. 코스피 시장은 7월 내내 계속 급락을
+맞다가 마지막 날 17% 급등을 하면서 일간 상승률 역대 1위를 찍었다. 또 사상 최초로 코스피·코스닥 시장에서 이틀 연속 서킷브레이커가 동반
+발동하는 초유의 사태가 벌어지기도 했다. 이에 최근 코스피 시장은 도박판 같다는 오명을 뒤집어쓰고 있다.
+
+1일 한국거래소에 따르면, 코스피는 종가 기준 지난달 1일부터 31일까지 21.19% 급락했다. 이는 외환위기 당시인 1997년 10월 27.25%와 금융위기인 2008년 10월 23.13%에 이은 역대 3위다.(7월 1일부터 30일까지 기준 역대 1위(-34%) 
+
+올해 들어 코스피 시장에서 사이드카(매수 21번·매도 23번)는 총 44번 발동했다. 주가가 8% 이상 급락할 때 시장 전체의 매매를 일시적으로
+중단하는 서킷브레이커도 총 9번(역대 15번) 발동했다. 이미 코스피 사이드카 발동 횟수는 글로벌 금융위기 당시인 2008년 연간
+기록(26차례)을 크게 넘어섰다. 코스닥 시장에서도 사이드카(매도 13번 매수 15번)는 총 28번 발동했다.
+
+1998년 처음 도입한 서킷브레이커는 2000년 미국 증시 급락과 유가 급등을 비롯해 2001년 미국 9·11 테러, 2020년 코로나19
+팬데믹 등 대형 시스템 리스크가 발생할 때 주로 발동됐다. 올해처럼 단기간에 여러 차례 발동된 것은 이례적이라는 평가다.
+1단계 서킷브레이커가
+발동되면 20분간 매매가 중단된다. 거래가 재개된 이후에도 10분간 단일가 매매가 이뤄진다.
+
+최근 급락의 중심에는 반도체주가 있다. 특히, 삼성전자와 SK하이닉스가 코스피 시가총액에서 차지하는 비중이 절반을 웃돌면서 반도체주의 하락이
+지수 전체를 끌어내렸다. 다만, 전날 삼성전자는 1975년 6월 상장 후 51년 만에 가장 높은 하루 상승률(26.81%)을 기록했다.
+SK하이닉스도 2009년 1월(당시 가격제한폭은 15%) 후 17년 만에 첫 상한가(29.95%)로 거래를 마쳤다.
+
+외신들은 과도한 단일종목 레버리지 ETF 투자와 구조적 불균형을 원인으로 지목하면서 현 증시를 ‘거대한 카지노’에 비유하기도 했다.
+
+영국 이코노미스트도 레버리지와 관련 “한국 투자자들은 이미 이 매혹적이고 위험천만한 상품에 너무 깊이 빠져들었다”며 “금융당국이 뒤늦게 규제의
+칼을 빼 들며 후회하더라도, 이미 ‘카지노’ 판에 뛰어든 한국 투자자들을 밖으로 끌어내기는 쉽지 않을 것”이라고 전망했다.
+
+이에 단일종목 레버리지 ETF 규제는 전날부터 본격 시행됐다. 금융위원회에 따르면, 단일종목 레버리지 상품의 기본예탁금은 기존 1000만원에서
+3000만원으로 올랐다. 금융위는 개인별 투자 한도를 설정해 총량관리에도 나설 예정이다.
+
+증권가에선
+서울 여의도 일대 증권가.[연합뉴스]
+서울 여의도 일대 증권가.[연합뉴스]증권가에서는 코스피 하단을 5000선 초반까지 보는 모습이다.
+
+김용구 유안타증권 연구원은 “8월 코스피 지수는 5150포인트선을 최악의 마지노선으로 둔다”며 “이후 잠복 불확실성 경과를 확인하며
+6350포인트선까지 기간 조정 국면 내에서 계단식 저점 상승 과정이 이어질 전망”이라고 분석했다.
+
+대신증권은 현재 코스피 급락세가 8월 초에서 중순 사이에 진정될 가능성이 높다고 진단했다.
+
+조재운 대신증권 연구원은 “31일 시행된 단일종목 레버리지 상장지수펀드(ETF) 예탁금 인상 및 투자 한도 제한 규제 일정을 고려할 때, 빚을
+내서 투자한 자금의 청산 압력이 해당 시기를 기점으로 완화될 것”이라며 “8월 초·중순 신용융자 30조 원 하회 등 급락 종료 신호가 확인되면,
+코스피 지수 ETF나 코스닥 등 비반도체 업종을 중심으로 목표 비중의 3분의 1만 우선 진입하는 것이 유리하다”고 했다.
+
+i경민 대신증권 연구원은 “7월 말∼8월 초 빅테크 및 하이퍼스케일러(대규모 데이터센터 운영사) 실적 확인이 필요하다”며
+“설비투자(CapEx) 확대 확인시 안도할 수 있고, 인공지능(AI)으로 수익성이 개선되고 있음이 확인될 경우 강력한 반전 트리거가 될
+전망”이라고 덧붙였다.
+
+반등이 이어질 수 있는 여건도 조금씩 갖춰지고 있다는 분석이 나온다. 미국 하이퍼스케일러와 삼성전자, SK하이닉스 등 주요 기업 실적을 통해
+코스피 이익 전망에 대한 신뢰가 회복되고 있어서다. 레오폴드의 테크 레버리지 펀드 강제 청산과 매각에 따른 악성 매물 출회 가능성이 줄어든 점도
+수급 불안을 낮출 요인으로 꼽혔다.
+
+한지영 키움증권 연구원은 “증시가 바닥권에서 반등 촉매를 확보해가고 있다”며 “다만 다음 주 AMD와 샌디스크 실적, 미국 고용지표 등 변동성을
+키울 수 있는 이벤트가 대기하고 있어 방심하기는 이르다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005715292' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005715292</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
