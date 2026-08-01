@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“하루짜리 반등은 아니겠지?” 8월 증시의 불안</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/021/0002808488' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13871" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“하루짜리 반등은 아니겠지?” 8월 증시의 불안</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 사상 최대 수준의 반등을 연출하며 7월을 마감했으나, 전문가들 사이에서는 이번 급반등의 지속 가능성에 대한 의견이 극명하게 갈리고 있다. '조울증'에 비유되는 시장 변동성이 크며, AI 중심의 회복세와 과도한 레버리지에 따른 조정 위험 사이에서 불안감이 감지된다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 테마 기반의 반등과 거시적 레버리지 해소 논쟁이 공존하며 시장의 불확실성이 매우 높기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#AI투자사이클</span> <span class="tag tag-hash">#시장변동성</span> <span class="tag tag-hash">#디레버리징</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 17.91% 오른 6595.45에 마감한 7월 31일 서울 하나은행 딜링룸에서 딜러들이 업무를 보고 있다. 뉴시스
+한국 증시가 극심한 폭락 끝에 지난달 31일 사상 최대 수준의 반등을 연출하며 7월 장을 마감한 가운데 8월 코스피 지수 향배에 대한 관심이 쏠린다. 외신들은 “한국 증시가 마치 양극성 장애(조울증)를 앓는 것처럼 하룻밤 사이 공포와 환희를 오가며 거래되고 있다”면서 앞으로 증시 향방에 대해 엇갈린 평가를 내놓고 있다.
+1일 금융투자업계에 따르면 미국 CNBC 방송은 지난달 30일(현지시간) “한 달 간 극심한 변동성을 보였던 한국 증시가 극적 반전(drastic reversal)을 연출하며 7월을 마무리했다”고 보도했다. 지난 6월 22일 고점(종가 9114.55) 이후 약 40% 하락하며 극심한 변동성을 보였던 7월 코스피는 마지막 날인 31일 전장보다 1001.89포인트 상승한 6595.45로 장을 마쳤다. 이는 역대 최대 상승률(17.91%)이다.
+
+이에 대해 CNBC 방송은 “투자자들은 숏커버링이 마무리된 이후에도 해외 투자자들의 매수세가 이어질지를 주목하고 있다”며 “그 결과에 따라 이번 급반등이 본격적인 회복의 출발점이 될지, 아니면 세계에서 가장 변동성이 큰 증시 가운데 하나인 한국 시장의 또 다른 급등락으로 끝날지가 결정될 것이라고 분석했다.
+
+피보나치자산운용의 정인윤 대표는 CNBC에 “한국 증시는 마치 양극성 장애(조울증)를 앓는 것처럼 하룻밤 사이 공포와 환희를 오가며 거래되고 있다”며 “오늘(31일) 반등은 지나치게 몰렸던 매도세가 급격히 되돌려진 결과”라고 분석했다. 호주 ANZ은행의 아시아 리서치 책임자인 쿤 고는 “코스피는 마치 밈주식이나 암호화폐처럼 거래되고 있다”며 “주요 국가의 대표 주가지수로서 정상적인 움직임이라고 보기 어렵다”고 말했다.
+
+향후 한국 증시에 대한 전망은 엇갈린다. AI 붐에 힘입은 견조한 반도체 수요로 관련주가 회복세를 이어갈 것이라는 전망과, 과도한 레버리지 탓에 증시가 다시 조정받을 수 있다는 우려가 나온다.
+
+퓨처럼그룹의 롤프 벌크 반도체 애널리스트는 “이번 반등은 AI 투자 사이클이 여전히 살아 있다는 시장의 신뢰가 회복된 결과이지 기업의 펀더멘털이 근본적으로 바뀐 것은 아니다”고 평가했다. 그는 “최근까지의 강제 매도는 대부분 마무리된 것으로 보이며, AI 인프라 구축이 둔화한다는 징후도 보이지 않는다”며 “AI 투자 사이클의 지속 가능성에 대해서는 여전히 긍정적으로 보고 있다”고 덧붙였다
+
+글로벌 투자은행(IB) JP모건 역시 6월 중순 이후 한국 증시를 강타한 디레버리징(차입 축소) 과정이 사실상 마무리 단계에 접어들었다고 진단했다. 급락으로 밸류에이션이 낮아진 데다 청산 압력이 대부분 해소되면서, 오히려 지금이 매수 관점에서 매력적인 국면이라는 분석이다.
+
+반면 MBMG패밀리오피스그룹 공동창업자인 폴 갬블스는 이날 급등 역시 불안정한 시장에서 나타나는 또 하나의 극단적인 움직임일 수 있다고 경고했다. 그는 “앞으로도 이런 날이 훨씬 더 많이 나타날 것”이라며 “자산 가격이 펀더멘털과 완전히 괴리돼 있다는 것은 시장에 엄청난 규모의 레버리지가 쌓여 있다는 의미”라고 지적했다. 이어 “이번 상승이 하루짜리 안도 랠리에 그칠 수도 있고 조금 더 이어질 수도 있지만 AI 열풍을 둘러싼 위험이 사라졌다고 해석해서는 안 된다”고 강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/021/0002808488' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/021/0002808488</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
