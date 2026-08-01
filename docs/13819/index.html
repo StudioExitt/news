@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>지도·펜슬도 한발짝 늦었지만 따라잡던 애플…AI도 역전극 펼칠까[주末머니]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005797582' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13819" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>지도·펜슬도 한발짝 늦었지만 따라잡던 애플…AI도 역전극 펼칠까[주末머니]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">애플은 전년 대비 높은 하드웨어 판매 증가율을 보이며 시가총액 1위를 되찾았으나, 수익성 전망 및 AI 서비스 도입 지연으로 인해 투자자들의 기대와 우려가 교차하고 있습니다. 그럼에도 불구하고 강한 생태계와 역사적 패턴(외부 기술 의존 → 자체 기술 전환)에 힘입어 장기적인 AI 반전 가능성이 높게 점쳐지고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">애플의 실적 자체는 좋았으나, 높은 수익성 전망 및 AI 경쟁에서 뒤처졌다는 우려(Guidance 하향 조정)가 주가를 하락시킨 것이 핵심입니다. 이는 단순히 단기적인 이슈라기보다 성장 동력과 미래 전략에 대한 근본적인 질문을 던지므로 시장 전반의 IT 섹터 투자 심리에 영향을 줄 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">애플</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI시대</span> <span class="tag tag-hash">#애플전략</span> <span class="tag tag-hash">#하드웨어사이클</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">4개월 만에 시총 1위…기대와 실망 교차\n시리 AI는 구글 제미나이 엔진으로 출발\n9월 취임 터너스 체제, 첫 무대는 폴더블세계 시총 1위 애플이 지난달 30일(현지시간) 내놓은 분기 실적은 숫자만 보면 나쁘지 않았다. 매출과 이익 모두 시장 예상치를 웃돌거나 부합했고, 아이폰은 1년 전보다 22%, 맥북은 29% 더 팔렸다. 그럼에도 시간외 주가는 6.3% 빠졌다.\n삼성증권 김경빈 연구원은 지난달 31일 낸 보고서에서 애플의 주가 하락에 대해 시장이 실적 자체보다 수익성 전망에 반응했기 때문이라고 분석했다. 애플이 제시한 9월 분기 매출총이익률(GPM·물건을 팔아 남기는 마진) 가이던스가 시장 기대에 못 미쳤고, 배경에 메모리 반도체 원가 상승이 있다는 것이다. 여기에 서비스 매출 성장률이 3월 분기 16%에서 6월 분기 12%로 낮아진 점, 중국 매출이 22% 늘고도 눈높이를 채우지 못한 점이 겹쳤다.\n시총 1위 되찾았지만…AI시대 준비는 여전히 물음표\n애플은 최근 4개월 만에 글로벌 시가총액 1위 자리를 되찾았지만 기대와 우려가 섞여있다. 무엇보다도 'AI시대에 뒤처졌다'는 평가가 따라붙는다.\nAI 시대의 승자 명단에서 애플의 이름이 빠지는 경우도 많다.\n그러나 애플의 그간 행보를 고려하면 낙관적 전망이 충분히 가능하다는게 이 연구원의 분석이다. 그는 애플의 기기 생태계, 이른바 '가든월(gardened wall)'이 여전히 단단하다는 점을 근거로 든다. 애플 기기를 한번 쓰기 시작하면 다른 진영으로 옮겨가기 어려운 구조가 유지되고 있다는 것이다.\n여기에 소비자용 AI 서비스에서 아직 뚜렷한 사용 사례가 나오지 않았다는 점도 오히려 기회로 봤다. 승부가 이미 끝난 시장이 아니라는 것이다.\n반도체 수급 부담을 하드웨어 경쟁력으로 비교적 무리 없이 넘기고 있다는 점도 긍정적으로 평가했다.\n시리AI, 남의 엔진으로 시작하지만…'삼성·퀄컴칩→애플칩'처럼 바꿀 수도\n애플은 수많은 AI 서비스 시행착오 끝에 최근 AI 플랫폼 시리(Siri)AI의 베타 테스트를 시작했다. 애플이 직접 만든 모델이 아니라, 구글의 AI 제미나이를 기반으로 돌아간다는 점이 눈에 띈다.\n이 연구원은 이를 애플의 또다른 강점이 드러나는 사례로 봤다. 검증된 시장에 한 박자 늦게 들어가되, 처음에는 남의 기술을 빌려 쓰다가 나중에 자체 기술로 바꿔 끼우는 방식이다.\n지도가 대표적인 사례다. 2007년 아이폰은 구글 지도를 얹고 나왔다. 5년 뒤인 2012년 애플은 자체 애플 지도로 교체했다.\n같은 패턴은 하드웨어에서도 반복됐다.\n각종 단말기의 두뇌인 칩의 경우, 초기 아이폰은 삼성이 설계하고 만든 칩을 썼다. 2010년 A4부터 자체 설계로 넘어갔고, 지금은 애플 실리콘이 경쟁력의 핵심으로 꼽힌다. 맥의 CPU도 마찬가지다. 2006년부터 인텔 칩에 기대다가 2020년 M1으로 갈아탔다. 통신 모뎀 칩은 오랫동안 퀄컴에 의존했는데, 2025년 자체 모뎀을 처음 탑재했다.\n신규 폼팩터 시장 진입 시점을 놓고 봐도 애플은 대체로 후발주자였다. MP3 플레이어는 아이팟보다 3년 앞서 나왔고, 스마트폰은 블랙베리와 노키아가 먼저였다. 스마트워치는 핏비트와 페블이, 무선 이어폰은 브라기와 삼성이 앞섰다. 애플펜슬 역시 스타일러스 시장에 한참 늦게 들어간 제품이다.\n'빌려 쓰다 바꿔 끼우고, 늦게 들어가 완성도로 자리를 잡는다'. 시리 AI에 거는 기대의 근거가 바로 이러한 이력이다.\n팀쿡 체제 끝나고 이제는 터너스 체제…첫 무대는 폴더블\n삼성전자의 갤럭시 Z8 시리즈 사전예약이 시작된 지난달 28일 서울 서초구 삼성 강남에서 시민들이 갤럭시 Z 폴드8·플립8 등 신제품을 살펴보고있다. 사진설명\n당장 넘어야 할 문턱도 남아 있다. AI를 돌리는 데 드는 비용을 어떻게 회수할지 애플 스스로 정하지 못했다. EU와는 아이폰 출시를 두고 협의가 진행 중이고, 중국에서도 추가 승인이 필요하다.\n여기에 경영진 교체도 겹쳤다. 2011년부터 애플을 이끈 팀 쿡이 물러나고, 9월 1일 존 터너스가 CEO로 취임한다.\n원가·공급망 관리의 귀재로 평가받던 팀 쿡이 떠나는 시기와, 메모리 수급 부담이 본격화하는 국면이 공교롭게도 맞물렸다.\n새 CEO 터너스는 하드웨어 엔지니어 출신이다. 취임 후 첫 무대가 폴더블 신제품 출시인 만큼, AI 시대에 맞는 새 형태의 기기가 나올지에 관심이 쏠린다.\n이 연구원은 "터너스 체제는 100년 만의 홍수와 같은 반도체 수급 리스크를 어떻게 극복할 것인지의 숙제를 안고 있다"면서도 "(AI시대) 청사진과 현실 사이의 간극을 애플이 성공적으로 메워가고 있다"고 분석했다.\n그러면서 "AI 인프라 투자가 결국 기기 환경과 소비자 서비스의 변화로 이어질 수밖에 없고, 애플이 그 역할을 맡을 것이라는 전제 아래 장기 관점으로 접근해야 한다"고 했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005797582' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005797582</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
