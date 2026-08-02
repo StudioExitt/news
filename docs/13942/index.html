@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>딜리셔스·케이앤에스아이앤씨 일반청약[증시캘린더]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006342253' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13942" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>딜리셔스·케이앤에스아이앤씨 일반청약[증시캘린더]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">차주(8월 2~7일) IPO 시장 일정에 대한 공지입니다. 기도산업, 해치텍, 니어스랩 등은 기관 수요예측을 진행하고, 딜리셔스와 케이앤에스아이앤씨는 일반청약을 통해 코스닥 입성을 추진하며 증시의 관심을 받고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">다양한 성장 섹터(AI, 반도체, 방산, 패션 B2B)에 속하는 기업들의 IPO 일정이 공개되어 투자 관심이 집중되는 '일정 공지' 성격의 뉴스입니다. 특정 주가 영향보다는 시장 분위기를 조성합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">AI 솔루션</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">방산</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#IPO</span> <span class="tag tag-hash">#증시캘린더</span> <span class="tag tag-hash">#상장주식</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">다음 주(8월 2~7일) 기업공개(IPO) 시장에서는 기도산업과 해치텍, 니어스랩이 기관투자자 대상 수요예측을 실시한다. 딜리셔스와 케이앤에스아이앤씨는 일반청약을 진행하며 코스닥 입성을 위한 공모 절차를 이어간다.
+
+8월 3~4일
+△딜리셔스 일반청약
+-패션 B2B 플랫폼 ‘신상마켓’ 운영사다. 동대문 의류 도매시장과 전국 소매사업자를 연결하는 플랫폼을 기반으로 누적 거래액 5조원을 넘겼다. 공모자금은 플랫폼 고도화와 물류 자동화, 구독형 소프트웨어(SaaS) 서비스 확대 등에 활용할 계획이다.
+-희망 공모가는 5000~7000원, 공모금액은 110억~154억원, 일반청약은 8월 3~4일
+-2025년 연결기준 영업이익 16억원
+
+8월 4~5일
+△케이앤에스아이앤씨 일반청약
+-군용 위성통신 안테나와 무선주파수(RF) 통신 시스템을 개발하는 방산 기업이다. 저궤도·정지궤도 위성통신 안테나와 전술통신 장비를 주력으로 하며, 공모자금은 생산능력 확대와 연구개발(R&D)에 활용할 계획이다.
+-희망 공모가는 9000~1만 1000원, 공모금액은 216억~264억원, 일반청약은 8월 4~5일
+-2025년 연결기준 영업손실 18억원
+
+8월 2~6일
+△기도산업 수요예측
+-오토바이 보호복과 방호복, 특수 기능성 의류를 제조하는 특수복 전문기업이다. 국내외 브랜드의 주문을 받아 제품을 생산하거나 설계·개발까지 맡아 공급하고 있으며, 공모자금은 생산설비 확충과 해외시장 확대에 활용할 계획이다.
+-희망 공모가는 2만 4800~2만 8400원, 공모금액은 422억~483억원, 수요예측일은 8월 2~6일
+-2025년 연결기준 영업이익 322억원
+
+8월 3~7일
+△해치텍 수요예측
+-반도체 공정용 검사·계측 장비를 개발하는 기술특례 상장 추진 기업이다. 반도체 제조 공정의 품질 검사 솔루션을 공급하고 있으며, 공모자금은 연구개발과 생산능력 확대에 활용할 계획이다.
+-희망 공모가는 2만 3000~2만 8000원, 공모금액은 230억~280억원, 수요예측일은 8월 3~7일
+-2025년 연결기준 영업손실 24억원
+
+8월 3~7일
+△니어스랩 수요예측
+-인공지능(AI) 기반 자율비행 드론 솔루션 기업이다. 풍력발전기 안전점검을 비롯해 산업 현장과 방산 분야에 드론 솔루션을 공급하고 있으며, 공모자금은 연구개발과 해외 사업 확대에 활용할 계획이다.
+-희망 공모가는 3만~4만 1200원, 공모금액은 273억~375억원, 수요예측일은 8월 3~7일
+-2025년 연결기준 영업손실 166억원</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006342253' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006342253</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
