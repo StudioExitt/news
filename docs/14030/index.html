@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"코스피 역대급 저평가" 투자의견 잇달아 상향</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005715511' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14030" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"코스피 역대급 저평가" 투자의견 잇달아 상향</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 고점 대비 40% 가까이 급락하자, 기업의 실적 전망치와 목표주가는 그대로임에도 불구하고 증권사들의 투자의견이 '매수' 쪽으로 대거 상향되고 있습니다. 이는 주가 하락에 따른 '역대급 저평가'라는 인식이 반영된 것으로 해석됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주가 급락이 단순한 하락장을 넘어 '저평가'라는 구조적인 투자 기회로 인식되면서, 증권가의 분석 및 컨센서스가 긍정적으로 변화하고 있기 때문입니다. 이는 매수 심리 반전을 유도할 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">KOSPI 지수</span> <span class="tag stock-tag">대형 우량주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융지주사</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권업종</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#저평가주</span> <span class="tag tag-hash">#밸류에이션</span> <span class="tag tag-hash">#투자의견상향</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 고점 대비 40% 가까이 급락하자 증권가의 투자의견이 매수 쪽으로 빠르게 기울고 있다. 기업 이익 전망과 목표주가는 여전한 반면 주가 하락폭은 극심하기 때문이다. 주가가 싸게 형성되면서 향후 기대수익률은 커졌다는 것이 증권가 분석이다.
+
+2일 금융정보업체 에프앤가이드에 따르면 코스피가 종가 기준 연중 최고점을 기록한 6월 22일 이후 7월 30일까지 국내 증권사가 낸 투자의견 상향 보고서는 58건으로 집계됐다. 하루 평균 2.15건으로, 올해 첫 거래일부터 6월 22일까지의 하루 평균 1.31건과 비교하면 64.4% 늘었다. '유지'를 제외한 의견 변경에서 상향이 차지한 비중도 63.4%에서 89.2%로 뛰었다.
+
+반면 같은 기간 투자의견 하향은 7건에 그쳤다. 하루 평균 하향 건수는 고점 이전 0.75건에서 이후 0.26건으로 65.6% 줄었고, 의견 변경 보고서에서 하향이 차지한 비중도 36.6%에서 10.8%로 급감했다. 이에 따라 상향이 하향보다 얼마나 많았는지를 보여주는 배율은 1.73배에서 8.29배로 확대됐다.
+
+시장의 방향은 정반대였다. 코스피는 6월 22일 9114.55로 마감한 뒤 7월 30일 5593.56까지 38.63% 떨어졌다. 주가가 무너질수록 증권사의 매수 의견은 오히려 늘어난 셈이다.
+
+증권가가 기업의 펀더멘털을 이전보다 낙관한다고 보기는 어렵다. 하지만 주가 급락으로 밸류에이션 부담이 빠르게 해소되고 있다. 투자의견은 통상 목표주가와 현재 주가의 차이에서 결정된다. 실적 추정치와 목표주가가 유지되는 가운데 현재 주가만 급락하면 예상 상승 여력이 커지고, 기존 중립 의견은 자연스럽게 매수 기준을 충족하게 된다. 상향 보고서의 세부 내역에서도 이런 흐름이 확인된다. 미래에셋증권은 6월 말부터 7월 중순까지 KB·iM·대신·BNK·메리츠·다올·SK증권 등 7개 증권사가 기존 보유·중립·시장수익률 수준의 의견을 매수로 잇달아 높였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005715511' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005715511</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
