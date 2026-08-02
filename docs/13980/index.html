@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'변동성 지옥' 겪은 코스피…8월엔 '반전 드라마' 쓸까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001260844' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/13980" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'변동성 지옥' 겪은 코스피…8월엔 '반전 드라마' 쓸까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">7월 코스피가 급락하며 큰 변동성을 겪었으나, 마지막 거래일 반등과 외국인 순매수 등 회복 신호가 포착되었습니다. 다만 미국 금리, 지정학적 리스크, 빅테크 실적 등의 주요 변수가 남아 있어, 8월에는 점진적인 회복세(계단식 반등)를 예상하는 분위기입니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#증시변동성</span> <span class="tag tag-hash">#AI투자사이클</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">인공지능(AI) 반도체를 둘러싼 불안과 단일종목 레버리지 ETF(상장지수펀드) 쏠림이 겹치면서 7월 코스피가 22.19% 급락했다. 다만 월말 사상 최대 상승률을 기록하며 분위기가 반전된 만큼 8월 증시가 회복세를 이어갈지 주목된다.
+
+2일 한국거래소에 따르면 7월 코스피는 종가 기준 22.19% 하락해 전 세계 주요 주가 지수 중 가장 큰 하락률을 기록했다. 상반기 101.14% 급등하며 글로벌 상승률 1위를 기록했던 코스피는 불과 한 달 만에 급락세로 돌아섰다.
+
+마지막 거래일인 지난달 31일을 제외하면 7월 1∼30일 하락률은 34.01%에 달했다. 이는 외환위기 당시인 1997년 10월(-27.25%)과 글로벌 금융위기였던 2008년 10월(-23.13%)보다도 큰 낙폭이다. 이 기간 코스피 시가총액은 약 1천484조원 감소했다.
+
+시장 충격은 각종 안전장치 발동 횟수에서도 확인됐다. 지난달 서킷 브레이커는 모두 4차례 발동됐으며, 역대 발동 사례 15건 가운데 약 4분의 1이 한 달 동안 집중됐다. 특히 지난달 28일과 29일에는 유가증권시장과 코스닥시장에서 이틀 연속 서킷 브레이커가 발동되는 사상 초유의 상황도 벌어졌다.
+
+사이드카 역시 7월 한 달 동안 코스피 시장에서만 15회 발동됐다. 매수 사이드카는 6회, 매도 사이드카는 9회였다. 올해 들어 발동된 사이드카 44회 가운데 34.09%가 지난달에 집중됐다.
+
+급락의 가장 큰 원인으로는 반도체 업황 둔화 우려가 꼽힌다. 메타발 반도체 수요 둔화 전망과 메모리 수출 단가 상승세 둔화, 장기 공급 계약(LTA) 논란 등이 겹치며 반도체 업황이 정점을 통과한 것 아니냐는 우려가 확산됐다.
+
+엔비디아발 '순환 거래' 우려는 이 같은 의구심에 기름을 부었다. 오픈AI에 대한 지급 보증과 대규모 투자 소식에 AI 업계 수요와 밸류에이션이 인위적으로 부풀려지고 있다는 지적이 나왔다.
+
+여기에 창신 메모리 테크놀로지(CXMT)의 상장 흥행과 국영 기업의 액침 심자외선(DUV) 노광 장비 제조 보도 등 중국의 'AI 굴기' 소식에 국내 반도체 기업의 시장 점유율이 축소되는 것 아니냐는 우려도 나왔다.
+
+중동 지역 지정학적 리스크와 국제유가 상승, 금리 부담 확대도 악재로 작용했다.
+
+여기에 5월 말 출시된 단일종목 레버리지 ETF가 삼성전자와 SK하이닉스 등 일부 종목으로 자금 쏠림을 심화시키며 변동성을 키웠다는 평가가 나온다.
+
+큰 변동성에 코스피 시장이 도박판이 됐다는 비판이 나오면서 금융 당국이 부랴부랴 단일 종목 레버리지 ETF에 대한 대책을 내놨지만, 이미 약해질 대로 약해진 투자 심리를 되돌리기에는 역부족이었다.
+
+삼성전자와 SK하이닉스는 물론, 미국 빅테크가 2분기 호실적을 발표했지만 호재를 호재로 인식하지 못할 정도로 투심은 무너졌다. 이에 삼성전자는 지난 한 달 동안 주가가 21.41% 내렸고, SK하이닉스는 35.17% 급락했다.
+
+그러나 지난달 마지막 거래일인 31일 분위기는 달라졌다. 코스피는 하루 만에 17.91% 급등하며 사상 최고 상승률을 기록했고 삼성전자는 26.81%, SK하이닉스는 29.95% 급등하며 지수 반등을 이끌었다.
+
+알파벳과 아마존, 마이크로소프트 등 빅테크가 AI 투자 확대 기조를 유지하며 시장의 우려를 일부 해소한 점이 반등 배경으로 꼽힌다. 차입을 통해 거액의 자금을 운용하던 헤지 펀드 '시츄에이셔널 어웨어니스'가 마진 콜(추가 증거금 요구)로 결국 포트폴리오를 정리한 것을 두고 시장이 최근 하락장의 단기 바닥 신호로 받아들인 점도 영향을 미쳤다.
+
+외국인 투자자들도 매수세로 돌아섰다. 지난달 31일 거래소(KRX)에서 외국인은 7조원 넘게 순매수했고, 코스피 거래대금은 49조원 가까이 늘어나며 시장에 활기가 되살아났다.
+
+증권가는 8월 코스피가 반등 흐름을 이어갈 가능성에 무게를 두고 있다. 다만 6월처럼 급격한 상승보다는 저점을 확인하며 점진적으로 회복하는 흐름을 예상했다.
+
+다만 변수는 여전히 남아 있다. 미국과 이란 간 전쟁이 이어지고 있는 데다 미국 국채 10년물 금리가 최근 4.74%를 넘어서는 등 금리 부담이 지속되고 있다. 오는 28∼29일 열리는 잭슨홀 미팅과 엔비디아를 비롯한 미국 빅테크의 실적 발표, 원/달러 환율 흐름도 8월 증시 방향을 좌우할 핵심 변수로 꼽힌다.
+
+나정환 NH투자증권 연구원은 "반도체 기업의 영업이익 레벨은 분기별로 내년까지 계단식으로 높아진다는 점에서 결국 주가는 증가율보다 이익 레벨을 보고 반등할 것"이라고 말했다.
+
+김용구 유안타증권 연구원은 "8월 코스피 지수는 5,150선을 최악의 마지노선으로 두고 이후 잠복한 불확실성 경과를 확인하며 6,350선까지의 기간 조정 국면 내 계단식 저점 상승 과정이 이어질 것"이라고 전망했다.
+
+노동길 신한투자증권 연구원은 8월 코스피 경로로 5,700, 6,500∼6,600, 7,200 등 세 개를 제시했다.
+
+그는 "5,700은 200일 선이 놓인 스트레스 기준 선이고, 6,500∼6,600은 적정 가치 밴드 재진입 선이며 7,200 안팎은 20일 선이 놓인 첫 저항"이라며 "월중 경로는 실적과 수급 이벤트에 따라 이 세 선 사이를 오갈 것"</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001260844' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001260844</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
