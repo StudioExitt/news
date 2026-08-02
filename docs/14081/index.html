@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>레버리지 ETF의 강제 매매…수급은 개인과 기관 혼선</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.03</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005394536' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14081" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>레버리지 ETF의 강제 매매…수급은 개인과 기관 혼선</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 증시는 종목(삼성전자, SK하이닉스) 및 상품(ETF) 쏠림과 높은 개인 투자자 비중이라는 '3중 쏠림' 구조로 인해 변동성이 매우 높습니다. 특히 레버리지/인버스 ETF를 활용한 개인의 단기 투자는 매매 과정에서 강제적인 자금 흐름을 만들며 시장 불안정성을 키우고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">레버리지 상품과 ETF 중심의 과도한 수급 쏠림 및 개인 투자자의 단기 매매 성향이 맞물려 높은 시장 변동성(사이드카/서킷브레이커 발동 빈번)을 야기했기 때문입니다. 이는 중장기적인 시장 구조적 불안정성을 시사합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF #레버리지ETF #개인투자자 #변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[MT리포트] K증시 흔드는 3중 쏠림③
+[편집자주] 국내 증시가 오르는 날에도, 내리는 날에도 유난히 크게 흔들린다. 삼성전자·SK하이닉스로의 종목 쏠림, 이 두 종목을 담은 ETF로의 상품 쏠림 그리고 유독 높은 개인투자자 비중이라는 수급 쏠림이 맞물리며 변동성을 키우고 있다는 진단이다. 코스피200 변동성 지수는 1년 전 20대에서 올해 80대까지 치솟았고, 사이드카·서킷브레이커도 양대 시장에서 85차례 발동됐다. '3중 쏠림'의 구조를 종목·상품·수급 세 갈래로 나눠 짚어보고, 시장 변동성을 낮출 해법도 함께 모색했다.
+올들어 코스피 수급에서 개인이 차지하는 비중/그래픽=최헌정ETF(상장지수펀드)가 상장한 후 개인으로 수급 쏠림이 심화했다. 코스피는 가뜩이나 해외 주요 시장 대비 개인 비중이 높은데 이런 상품들이 시장 시가총액의 절반 비중을 차지하는 삼성전자와 SK하이닉스에 투자하면서 개인의 단기매매 성향이 ETF를 거쳐 지수 변동성으로 전달됐다. 투자자별 수급 지표만으로 실제 자금의 주체와 성격을 파악하기도 어려워졌다.
+
+3일 한국거래소에 따르면 올 들어 7월까지 코스피 시장에서 개인들은 총 9763조5435억원어치(매수·매도 합산 거래대금) 주식을 거래했다. 올들어 개인 거래대금이 가장 컸던 때는 지난 6월 1일로 개인은 하루만에 167조7745억원어치 주식을 사고팔았다. 이 기간 코스피에서 개인의 거래대금이 차지하는 비중은 일 평균 58.4%. 해당 비중은 지난 4월 6일에 69%로 올들어 최고치를 나타냈다.
+
+미국 SIFMA(증권산업금융시장협회)에 따르면 뉴욕증시에서 개인의 주식 거래량(2024년 주식 수 기준)은 전체 시장 거래량의 17.9% 비중을 차지했다. 미국의 경우 개인은 저가주와 소형주를 주로 거래하고 대형 주문은 자산운용사가 대신 투자해주는 뮤추얼펀드를 통해 사고파는 것으로 알려져 있다. 때문에 현지 시장에서 개인의 거래대금은 거래량보다 더 낮은 비중을 차지할 것으로 업계는 보고 있다. 미국 증시에 비하면 국내 코스피의 개인 거래대금 비중이 약 40%포인트(P) 이상 높은 셈이다.
+
+개인 거래대금은 주식형 ETF로 더욱 확대됐다. 이어 지난 5월 27일 단일종목레버리지와 단일종목인버스 ETF 상품 14개가 상장 출시하면서 개인 투자자금을 빨아들였다. 자본시장포커스에 따르면 지난 6월 19일 레버리지 ETF의 누적 순매수 규모는 8조2000억원, 인버스 ETF는 3000억원을 각각 기록했다.
+
+레버리지·인버스 ETF 14개 종목의 거래대금은 상장 후 10거래일 만에 전체 ETF 거래대금의 비중 30%를 넘겼다. 문제는 개인의 단기 매매 성향이 ETF를 통해 시장 전체의 변동성으로 이어졌다는 점이다. 개인의 ETF 자금이 금융투자 매수 형태로 대형주에 유입되면서 개인의 단기매매 성향이 대형주와 지수 변동성으로 전달된 것이다. 실제로 최근 증시가 급락하면서 검은 목요일로 불렸던 지난달 30일 위탁매매미수금은 1조7249억원을 기록했다. 미수금 대비 반대매매 비중은 8.6%로 올 들어 역대 4번째로 높았다.
+
+업계에선 레버리지·인버스 ETF의 숏감마형 리밸런싱을 대표적인 사례로 꼽는다. 숏감마란 옵션거래에서 기초자산이 변동하면 헤지 물량이 늘어나는 구조를 뜻한다. 기초자산 가격이 상승하면 매수, 하락하면 매도하면서 개인 거래대금이 지속적으로 증가했다.
+
+금융투자업계 관계자는 "국내 주식형 ETF 순자산 가운데 코스피200 계열이 절반에 가깝고 업종·테마 ETF도 삼성전자와 SK하이닉스 등 대형주 편입 비중이 높아 상품이 수급 쏠림에 영향을 준 격"이라며 "MTS, HTS로 개인의 증시 접근성이 높아진 상황에서 연기금 비중은 낮고 개인들의 단타 거래(단기매매)로 인한 자금 회전율이 높아 시장이 불안정해진 것으로 보인다."</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005394536' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005394536</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
