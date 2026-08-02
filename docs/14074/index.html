@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>환율 금융위기 후 최대폭 하락…주가·환율공식 달라졌다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.03</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006342706' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14074" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>환율 금융위기 후 최대폭 하락…주가·환율공식 달라졌다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">원·달러 환율이 금융위기 이후 최대 폭 하락하며 시장의 주목을 받고 있으며, 통상 주가 급락 시 발생하는 환율 상승 공식이 깨졌다는 분석입니다. 이는 외국인의 투자 방식 변화와 달러 공급 우위에 기인하며, 향후 환율 변동성에 대한 구조적 재평가를 요구합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">거시경제 환경(환율/수급)의 구조적 변화를 다루고 있습니다. 주식과 환율의 전통적인 상관관계가 깨지면서 투자자들이 기존 분석 모델을 재검토하게 만들므로 시장 전반에 큰 관심을 유발합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#환율</span> <span class="tag tag-hash">#거시경제</span> <span class="tag tag-hash">#자본흐름</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피 22% 급락할 때 125원 떨어진 환율
+외국인 환헤지 확대·달러 공급 우위 '복합 작용'
+법인세 예납·서학개미 변수…1300원대 하락 전망도 7월 원·달러 환율이 125원 넘게 급락하며 글로벌 금융위기 이후 가장 큰 하락 폭을 기록했다. 특히 코스피가 22% 넘게 급락하는데도 환율이 함께 내려가는 이례적인 흐름이 나타나면서 시장에서는 주가하락이 환율상승으로 이어지는 공식이 깨졌다는 분석이 나온다.
+
+외국인 투자자의 투자 방식 변화와 달러 수급 영향력 확대 등 시장 구조가 달라지고 있다는 점에서 향후 환율 흐름을 가늠할 변수 역시 바뀌고 있다는 평가다.
+
+2일 엠피닥터에 따르면 지난달 31일 원·달러 환율은 주간거래 종가 기준 1424.0원으로 마감했다. 6월 말 1549.4원과 비교하면 한 달 동안 125.4원 떨어졌다. 월간 기준 글로벌 금융위기 당시인 2009년 3월 이후 가장 큰 하락폭이다.
+
+원·달러 환율은 장중 1559.2원까지 치솟았다가 1418원까지 떨어지는 등 한 달 내내 극심한 변동성을 나타냈다.
+
+원화 등락률은 주요국 통화와 비교해도 두드러지게 컸다. 7월 달러 대비 원화 가치는 8.8% 상승해 16개국 통화 가운데 절상률 1위를 기록했다. 뉴질랜드 달러화(3.6%)와 일본 엔화(3.3%), 영국 파운드화(1.7%) 등을 크게 웃도는 수준이다. 미국 달러화가 1.3% 하락한 것에 비해서도 원화 상승률은 압도적인 수치를 보였다.
+
+더 눈길을 끈 것은 주가와 환율의 움직임이다. 통상 국내 증시가 급락하면 외국인 주식 매도에 따른 달러 수요가 늘면서 환율이 오르지만, 지난달에는 코스피가 22% 넘게 급락하는 동안 환율도 함께 하락했다.
+
+시장에서는 외국인 수급 변화를 원인으로 손꼽고 있다. 5~6월 집중됐던 외국인 주식 매도가 상당 부분 마무리되면서 환율에 미치는 영향이 약해졌다는 분석이다.
+
+이민혁 KB국민은행 이코노미스트는 “6월에는 외국인 리밸런싱이 환율 상승으로 연결됐지만 7월에는 리밸런싱이 상당 부분 마무리된 것으로 보인다”며 “현재는 외국인 수급이 환율에 미치는 영향도 이전보다 크지 않을 수 있다”고 말했다.
+
+외국인의 투자 방식 자체가 달라졌다는 분석도 나온다. 환율의 변동성이 커진 탓에 외국인이 원화 가치의 상승이나 하락에 직접 베팅하기보다 선물환이나 역외차액결제선물환(NDF) 등을 통해 환율 위험을 미리 제거한 뒤 국내 주식에 투자하는 사례가 늘고 있다. 이 경우 외국인이 주식을 매도하더라도 현물환 시장에서 달러를 새로 사야 하는 수요가 크지 않아 증시 하락이 환율 상승으로 곧바로 이어지지 않을 수 있다.
+
+민경원 우리은행 이코노미스트는 “최근 우리나라 환율 변동성이 커지면서 외국인들이 환헤지를 한 뒤 국내 주식에 투자하는 사례가 늘고 있다”며 “일본처럼 주식과 환율이 같은 방향으로 움직이는 흐름이 나타날 가능성이 있다”고 말했다.
+
+여기에 SK하이닉스 미국 주식예탁증서(ADR) 환전과 수출업체 네고, 무역수지 흑자 등 달러 공급이 이어지면서 환율 하락 압력을 키웠다.
+
+시장에서는 8월에도 환율 하락 흐름이 이어질 가능성을 높게 보고 있다. 법인세 중간예납을 앞둔 기업들의 달러 매도와 남아 있는 SK하이닉스 ADR 환전 물량이 추가 하락 요인으로 꼽힌다. 다만 환율이 1400원대 초반까지 내려온 만큼 수입업체 결제 수요와 서학개미의 달러 매수가 확대될 경우 환율이 일시적으로 반등하거나 하락 속도가 둔화할 수 있다는 분석도 있다.
+
+박상현 iM증권 연구원은 “미국이 12월까지 금리를 올리지 못한다면 달러 약세가 이어질 수 있다”며 “기존에는 환율이 1400원 아래로 내려가기 어렵다고 봤지만 현재는 하반기 중 1380~1390원대까지 하락할 가능성도 열어둬야 한다”고 했다.
+
+이 이코노미스트는 “수급 이후에는 한국과 미국의 펀더멘털 차이가 중요해질 것”이라며 “한국 경제 여건이 상대적으로 양호한 만큼 환율이 반등하더라도 상단은 제한될 가능성이 크다.”</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006342706' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006342706</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
