@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>레버리지 규제로 발묶인 돈, 코스닥 향할까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005556072' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14049" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>레버리지 규제로 발묶인 돈, 코스닥 향할까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">대형주 반도체 중심으로 자금이 집중되고 코스닥 시장 거래대금은 연중 최저치를 기록하며 부진하다는 분석입니다. 레버리지 ETF의 예탁금 상향과 같은 규제 변화가 소외된 중소형 성장주에 자금을 분산시킬지 전문가들 사이에서 의견이 엇갈립니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">코스닥 시장의 급격한 유동성 감소 및 자금 쏠림현상 지속은 시장 심리가 냉각되고 있음을 보여줍니다. 다만 규제 변화에 따른 추후 흐름이 전문가마다 상충하는 만큼 명확한 방향성을 제시하기 어렵습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥 #레버리지규제 #반도체</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스닥 시장의 거래대금이 연중 최저치로 쪼그라들었다. 극심한 변동성 장세에 주식시장 거래가 주춤했던 상황에 '쏠림현상'이 지속되면서, 코스닥이
+부진한 흐름을 이어가는 모습이다. 증권가에선 단일종목 레버리지 규제에 따른 자금 유입 가능성에 주목하고 있다.
+
+2일 한국거래소에 따르면 지난달 코스닥 시장 일평균 거래대금은 6조1161억원으로 집계됐다. 일평균 거래대금이 10조원 밑으로 내려간 것은 올
+들어 처음이다.
+
+이는 전월(10조129억원) 대비 38.92% 줄어든 수치다. 올해 거래가 가장 활발했던 지난 5월(15조5661억원)과 비교하면 60.75%급감했다.
+
+일별 기준으로는 지난달 27일 4조4616억원으로 연중 최저치를 기록하기도 했다. 연중 최고치인 1월 26일(25조3341억원) 대비 5분의 1도 안 되는 수준이다.
+
+지난달 주식시장 전반에 유동성이 주춤했던 데다, 반도체 등 대형주에 투자가 집중되면서 소외 종목에 자금이 흐르지 않는 것으로 풀이된다. 특히
+단일종목 레버리지 상장지수펀드(ETF) 등장 이후 쏠림이 가속화됐다는 분석이 나온다.
+
+이재원 유안타증권 연구원은 "코스닥 부진의 출발점은 핵심 순매수 주체였던 개인투자자의 이탈"이라며 "메모리 가격·수출·이익 개선이 확인되는
+반도체 대형주가 비교우위를 지닌 가운데, 단일종목 레버리지 ETF는 개인투자자의 고베타 수요까지 삼성전자와 SK하이닉스로 이동시켰다"
+고 말했다.
+
+이어 단일종목 레버리지 상품의 예탁금이 3000만원으로 상향되며 투자 문턱이 높아진 만큼, 자금 쏠림이 다소 완화될 것으로 봤다.
+
+이 연구원은 "레버리지 규제로 감소한 자금이 모두 코스닥으로 이동하는 것은 아니다"
+"면서도 "대형 반도체·레버리지 상품의 자금 효율성과 접근성이
+낮아지면 중소형 성장주 투자의 상대적 기회비용도 하락할 것"이라고 분석했다.
+
+반면 현대차증권은 레버리지 규제에 따른 코스닥의 수혜는 크지 않을 것으로 봤다.
+김재승 현대차증권 연구원은 "레버리지 ETF에 투자하던
+개인투자자들은 다른 ETF로 갈아타는 분위기이며, ETF 이외의 개별종목으로 이동하는 신호는 포착되고 있지 않다"며 "개인투자자들이 ETF
+투자를 많이 할수록 코스닥 거래대금에서 개인투자자가 차지하는 비중은 낮아지고, 이는 코스닥의 수급 공백을 야기할 것"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005556072' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005556072</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
