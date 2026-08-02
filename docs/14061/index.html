@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>단일 레버리지 ETF 여파?…거래소 ETF 상장심사 '병목'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016229500' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14061" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>단일 레버리지 ETF 여파?…거래소 ETF 상장심사 '병목'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">단일종목 레버리지 ETF를 둘러싼 시장 혼란과 규제 대응 과정으로 인해 거래소가 신규 ETF 상장 심사에 과부하가 발생하여 일정 지연을 안내했습니다. 이는 금융당국의 관심이 집중된 이슈로, 자산운용업계의 상품 출시 계획에 영향을 미치며 중소형 운용사에게 더 큰 부담이 될 수 있다는 우려를 낳고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">ETF 상장 심사 지연은 금융상품 시장의 공급 구조 자체에 영향을 주며, 특히 중소형 자산운용사의 사업 계획 및 성장 동력에 부정적인 우려를 던지고 있어 투자심리 위축 요인으로 작용할 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자산운용</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF상장지연</span> <span class="tag tag-hash">#단일종목레버리지</span> <span class="tag tag-hash">#금융규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">"단일종목 레버리지 ETF (PG) [김선영 제작] 일러스트
+
+(서울=연합뉴스) 정회인 기자 = 단일종목 레버리지 상장지수펀드(ETF)를 둘러싼 시장 혼란으로 관련 대응이 급증하면서 한국거래소가 자산운용사들에 이달부터 일반 ETF 신규 상장 심사를 사실상 정상적으로 처리하기 어렵다는 취지의 안내를 한 것으로 나타났다.
+
+거래소 심사가 늦어지면 이후 금융감독원의 증권신고서 검토와 상장 일정도 순차적으로 밀려 ETF 출시 전반에 제동이 걸릴 수 있다. 다만 거래소는 기존 심사 물량과 제한된 인력을 고려해 일정을 조율하는 과정이라는 입장이다.
+
+2일 자산운용업계에 따르면 거래소는 지난달 말 주요 자산운용사들을 대상으로 상장 예정 ETF 수요를 조사하면서, 8월부터 예비심사를 청구하더라도 평소보다 일정이 늦어질 수 있으니 이를 감안해 상장 계획을 세워달라는 취지의 안내를 한 것으로 전해졌다.
+
+신규 청구 자체는 가능하지만, 기존 심사 물량을 우선 처리해야 하는 만큼 업계에서는 사실상 신청을 미뤄달라는 의미로 받아들이고 있다.
+
+자산운용업계 A 관계자는 "심사를 신청해도 당장 처리하기 어려우니 신규 상품 제출 시점을 늦춰달라는 안내를 받았다"며 "접수 자체를 거부하는 것은 아니지만 운용사 입장에서는 사실상 신규 신청을 제한하겠다는 취지로 파악했다"
+
+이번 심사 지연은 지난 5월말 단일종목 레버리지 ETF 상장 이후 시장 변동성이 확대하면서 국회와 금융당국의 자료 제출 및 대응 요구가 늘어난 데 따른 것으로 알려졌다.
+
+삼성전자·SK하이닉스 단일종목 레버리지 ETF는 최근 반도체주 급락 과정에서 개인투자자 손실과 증시 변동성을 확대했다는 지적을 받았다.
+
+지난달 국회 정무위원회에서도 단일종목 레버리지 ETF 도입 과정과 금융당국의 사후 대응을 둘러싸고 여야 의원들의 비판이 이어졌고, 이에 금융당국 수장들도 사과의 뜻을 밝혔다.
+
+현재 거래소의 ETF 상장 심사 인력은 4명으로, 이중 일부는 단일종목 레버리지 ETF 관련 국회와 금융당국 대응 업무를 맡기 위해 다른 팀에 차출된 것으로 파악됐다. 여기에 여름 휴가철과 기존 심사 물량 적체까지 겹친 것으로 전해졌다.
+
+자산운용업계 B 관계자는 "과거에도 휴가철이나 신청이 몰릴 때 일정이 다소 늦어진 적은 있지만, 신규 심사 일정 전반이 밀릴 수 있다는 안내는 처음"이라며 "거래소로부터 단일종목 레버리지 ETF 관련 대외 업무가 급증해 심사 인력이 과부하 상태라는 설명을 들었다"
+
+국회 앞에 놓인 단일종목 레버리지 ETF 상장 폐지 촉구 근조화환 (서울=연합뉴스) 황광모 기자 = 29일 서울 여의도 국회 정문 부근에 단일종목 레버리지 ETF 상장 폐지를 촉구하는 근조화환이 설치돼 있다.
+
+(중략)
+
+이에 따라 2분기에 예비심사를 신청한 상품들은 이달과 다음 달 예정대로 출시될 가능성이 크다.
+
+반면 이달 심사를 신청해 오는 4분기 상장 예정이던 상품은 일정이 늦어질 수 있다. 업계에서는 심사 지연이 장기화할 경우 연말 신규 ETF 출시가 크게 줄어들 수 있다는 관측도 나온다.
+
+다만 거래소는 신규 ETF 심사 청구를 제한하거나 상장 심사를 중단한 것은 아니라고 선을 그었다.
+
+거래소 관계자는 "적체된 심사 물량을 먼저 처리한 뒤 순차적으로 진행하려는 것"이라며 "운용사들에 신규 상품을 제출하지 말라고 한 적은 없다"
+
+이어 "현재 제한된 인력으로 심사를 진행하고 있어 신규 신청 건은 일부 지연될 수 있다는 점을 안내한 것"이라며 "운용사들의 상장 계획과 예상물량을 파악해 일정을 조율하는 통상적인 절차"라고 설명했다.
+
+업계에서는 금융당국의 주도로 도입된 단일종목 레버리지 ETF의 시장 혼란에 대응하는 과정에서 해당 상품을 출시하지 않은 운용사들까지 상장 지연의 영향을 받고 있다는 우려가 나온다.
+
+특히 상품군과 시장 점유율을 이미 갖춘 대형사보다 신규 ETF 출시가 사업 성장과 직결되는 중소형 운용사의 부담이 더 크다는 지적이다.
+
+한 중소형 운용사 관계자는 "대형사는 여러 상품을 동시에 준비할 수 있지만 중소형사는 일정이 한 차례만 끊겨도 신규 출시가 끊길 수 있다"며 "예측 가능한 심사 기준과 일정이 제시돼야 한다"
+
+또 다른 중소형 운용사 관계자는 "단일종목 레버리지 ETF를 출시한 적 없는 운용사까지 심사 지연의 영향을 받는 것은 형평성에 맞지 않다"며 "신규 상품이 줄면 투자자 선택권도 제한돼 일반 투자자에게까지 피해가 확대할 수 있다"
+</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016229500' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016229500</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
