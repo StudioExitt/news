@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주가 누르기 방지법은 장려법?…시장·소액주주 비판 여론 확산</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000522362' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14125" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>주가 누르기 방지법은 장려법?…시장·소액주주 비판 여론 확산</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부가 대주주의 주가 누르기 방지를 위해 세제 개편안을 내놓았으나, 소액주주 및 시장 전문가들로부터 실효성이 떨어진다는 강한 비판에 직면했습니다. 이들은 법의 허점과 사각지대가 많다며 정부 정책 자체를 근본적으로 재검토할 것을 촉구하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">정부의 세제 개편안은 주가 시장에 중요한 영향을 미칠 수 있는 정책 변화입니다. 하지만 본 기사는 해당 법안이 실효성이 부족하고 기존 지배주주의 조세 회피 통로를 열어주는 '규제용 장치'일 뿐이라는 전문가들의 비판을 집중적으로 다루고 있어, 단기적인 시장의 불확실성과 투자 심리 위축에 더 큰 영향을 미칠 수 있습니다. 정책적 공방이 핵심입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주가누르기방지법</span> <span class="tag tag-hash">#세제개편안</span> <span class="tag tag-hash">#저PBR투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">시장 전면 재검토 촉구 여론도
+
+이형일 재정경제부 1차관이 3일 오후 서울 중구 은행회관에서 열린 제59차 세제발전심의위원회에 참석해 모두발언 하고 있다. /박상민 기자
+
+정부가 대주주의 고의적인 주가 누르기를 막겠다며 세제 개편안을 내놨으나 정작 자본시장의 개인 투자자들과 전문가, 소액주주연대 사이에서는 비판 여론이 확산돼 배경에 관심이 쏠린다.
+
+5일 금융투자업계에 따르면 상장사 소액주주연대를 비롯한 개인 투자자 단체들은 구윤철 경제부총리 겸 재정경제부 장관이 지난 3일 발표한 '2026년 세제개편안'의 주가 누르기 방지 대책이 실효성이 부족한 '눈속임용 누더기 법안'이라고 반발하고 나섰다.
+
+가장 큰 허점은 페널티의 실효성 부재다. 한화생명 소액주주연대 대표는 "주가를 순자산가치의 10분의 1 수준인 PBR(주가순자산비율) 0.1(시가 1000원)로 극단적으로 낮춰놨다고 가정할 때, 정부가 제시한 30% 징벌 할증을 적용해 봐야 PBR은 0.13(시가 1300원)불과하다"고 꼬집했다.
+
+실제 기업이 가진 청산가치(BPS)가 1만원인데도 대주주는 고작 1300웡느로 가치를 평가받아 상속세를 내는 셈이다. 대주주 입장에서는 주가를 부양해 정상적인 세금을 내는 것보다, 30%의 벌금을 맞고 저평가된 주가로 승계하는 것이 수천억원가량 이득이기 때문에 주가 누르기를 멈출 요인이 안 된다는 지적이다.
+
+국세청 평가심의위원회(심의위)의 심의 절차를 끼워 넣은 대목도 도마 위에 올랐다. 개정안에 따르면 저PBR 요건에 걸리더라도 바로 과세하지 않고 심의위를 거친다. 이에 대해 주주들은 "대주주가 대형 로펌을 고용해 업황 악화나 경영상 불가피한 사유라며 소명 자료를 쏟아내면 빠져나갈 길이 열린다"고 반문했다. 정부가 대주주들에게 소송과 로비를 통해 법망을 피할 수 있는 합법적 면죄부 창구를 열어준 꼴이라는 비판이다.
+
+최대 6년 6개월의 장기 평균 주가를 적용하겠다는 방침 역시 현실성이 떨어진다는 지적이다. 오너 일가는 상속 직전에만 주가를 누르는 것이 아니라, 수년에서 10년 이상 장기간 배당을 배제하고 자사주를 방치하는 방식으로 주가를 억눌러왔다는 주장이다. 이미 수년째 PBR 0.1~0.2배에 갇혀 있던 기업이라면 과거 6년치 평균 주가를 내봤자 현재의 낮아진 주가와 큰 차이가 없으며, 장기적으로 꾸준히 주가를 눌러온 진짜 '악질 대주주'에게는 아무런 타격도 주지 못한다는 해석이다.
+
+반면 정부는 기업들의 급격한 세 부담을 완화하고 업황에 따른 불가피한 저평가 기업을 구제하기 위해 정교한 여과 장치가 필요했다는 입장이다. 재정경제부 측은 "획일적인 기준으로 과세할 경우 정상적인 경영 활동을 하는 기업까지 과도한 상속세 폭탄을 맞을 수 있다"며 "심의위 절차나 업종별 분류, 장기 평균 주가 반영 등은 제도 도입 초기 시장의 충격을 최소화하고 억울한 피해 기업을 막기 위한 최소한의 안정장치"라고 설명했다.
+
+그러나 시장 전문가들은 정부의 이런 방침이 오히려 주가 누르기가 의심되는 지배주주들에게 합법적인 조세 회피 전략을 짤 수 있는 길을 열어주었다고 재반박한다.
+
+한국기업거버넌스포럼은 논평을 통해 "지배주주들이 일반 주주의 돈인 회사 자금을 동원해 대형 로펌의 법기술자나 세무기술자를 고용하고 규제망을 빠져나갈 수 있도록 길을 연 조치"라며"6년 반 동안 단 2번만 실적 공시 시점에 맞춰 배당 확대 등 호재성 뉴스를 터뜨려 일시적으로 주가를 부양하면 그만이기 때문에 법안 기교성만 부각될 뿐 실제 지배주주의 일반주주 권익 침해 방지 효과는 미미할 것"이라고 말했다.
+
+포럼 측은 이어 "정부안의 조건대로 시뮬레이션을 해보면 규제 대상 기업은 코스피 80여개, 코스닥 40여개 등 전체 증시를 통틀어 고작 130여개에 불과해 롯데지주, GS, DL, 태광산업, 한화생명, 대신증권, 이마트 등 저평가가 심각한 주요 대기업들은 규제망에서 쏙 빠져나가게 된다"며 "정부는 기교적인 누더기 제도를 궁리할 것이 아니라 자본시장을 이용한 탈세와 시장 왜곡을 정상화하기 위해 상속증여세율 현실화 등 거시적 관점에서 대책을 원점 재검토해야 할 것"이라고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000522362' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000522362</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
