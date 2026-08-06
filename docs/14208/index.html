@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>‘단 11주’에 SK하닉 시초 하한가… 가격 왜곡 중심 선 프리마켓</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/005/0001865429' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14208" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>‘단 11주’에 SK하닉 시초 하한가… 가격 왜곡 중심 선 프리마켓</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">대체거래소(NXT) 프리마켓에서 SK하이닉스가 단 11주 거래로 하한가를 기록하며 시초가가 결정되어 시장의 가격 발견 기능이 훼손되는 논란을 일으켰습니다. 이는 소량 거래만으로 주가를 급락시킬 수 있는 NXT 구조적 문제점과, 현행 제도(VI) 도입까지 시간이 남아있다는 점에 대한 불안감을 높였습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">개별 기업 실적보다는 시장 자체의 거래 시스템(프리마켓) 결함과 관련된 규제 및 제도적 논란이 핵심이며, 이는 금융시장 전체의 신뢰도에 영향을 주어 단기적으로 매우 부정적인 심리를 조성했기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#가격왜곡</span> <span class="tag tag-hash">#NXT</span> <span class="tag tag-hash">#VI제도</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[이슈 분석] 또 다른 ‘시장 교란종’ NXT 6일 코스피가 4.5% 넘게 하락하며 6200선으로 내려앉았다. 간밤 미국 기술주 약세와 외국인 매도세에 삼성전자와 SK하이닉스가 전날보다 각각 6.3%, 10.4%씩 급락하며 지수를 주저앉혔다. 이날 오후 서울 중구 하나은행 딜링룸 전광판에 코스피 지수가 표시돼 있다.
+SK하이닉스가 6일 대체거래소 넥스트레이드(NXT) 프리마켓 개장 직후 전 거래일보다 50만원(29.98%) 폭락한 116만8000원에 거래를 시작했다. 프리마켓에서 SK하이닉스 하한가는 이날 반도체 투자 심리를 얼어붙게 한 요인 중 하나다. 하한가에 이르게 한 주식 수는 11주였다.
+극히 적은 수량의 매매로 코스피 시가총액 2위 SK하이닉스의 주가를 폭락시킨 사례는 지난달에도 있었다. 비슷한 상황이 반복되면서 시장에서는 넥스트레이드가 대응책 마련에 속도를 내야 한다고 촉구하고 있다. 다음 달 정적 변동성완화장치(VI)를 도입이 예정돼 있지만, 도입까지 여전히 한 달 이상이 남아있어 추가 피해가 우려된다.
+이날 넥스트레이드에 따르면 SK하이닉스는 프리마켓(오전 8시~8시 50분) 시초가가 ‘하한가’로 결정됐다. 시초가를 결정한 주문은 누군가 하한가에 내다 판 SK하이닉스 11주다. 이후 동적 VI가 발동하면서 2분간 단일가 매매가 이뤄졌다. SK하이닉스는 거래 재개 후 낙폭을 만회해 3~4% 하락한 수준에서 거래됐지만, 시장은 장중 내내 불안한 흐름을 보였다. 금융투자업계에서는 “시장의 가격 발견 기능이 훼손된 사례로 대책 마련이 시급하다”고 지적했다.
+이런 가격 왜곡 현상은 처음이 아니다. SK하이닉스는 지난달 28일에도 프리마켓에서 단 1주가 하한가에 체결돼 시초가가 결정됐고 증시 폭락 분위기를 연출했다. 이날 정규장에서 SK하이닉스는 전 거래일보다 16% 넘게 하락했다. 지난 5일에는 삼성전기와 알테오젠이 프리마켓에서 마찬가지로 1주 거래로 상한가까지 치솟았다.
+시장에서는 주문 실수라기보다 프리마켓의 시초가 결정 구조를 악용해 만든 ‘의도적인 가격 왜곡 현상’이라는 의심이 지배적이다. 특정 종목을 하한가나 상한가에 체결해 파생상품 시장에서 이익을 얻으려는 세력이 있다는 분석이다. 지난달 28일 SK하이닉스가 프리마켓서 하한가에 시초가가 결정됐을 때 해외 가상자산 파생상품 시장에서는 5740만달러(약 826억원) 규모의 강제청산이 발생하기도 했다.
+이준서 동국대 경영학과 교수는 “대체거래소에서 기록한 상·하한가로 청산되는 상품은 글로벌 가상자산 플랫폼에서 거래되는 것들로 국내 금융당국의 규제가 닿지 않는다. 여기서 거래되는 상품까지 우리가 고려할 사항은 아니다”면서도 “문제는 하한가로 프리마켓을 출발하면 투자자의 심리에 영향을 준다는 것”이라고 말했다.
+이날 SK하이닉스는 전 거래일보다 10.37% 하락한 149만5000원에 거래를 마쳤다. 미국 반도체기업 AMD의 실적이 기대치에 미치지 못하며 급락한 영향도 있지만, 프리마켓 하한가 시초가 개장도 일정 부분 영향을 줬을 것으로 분석된다.
+하한가 시초가의 배경에는 넥스트레이드의 시초가 가격 결정 방법에 있다. 넥스트레이드는 매수와 매도 호가가 일치하면 거래가 체결돼 즉시 시초가에 반영된다. 오전 8시 프리마켓 개장 직후 유동성이 충분치 않을 때는 단 1주의 거래만으로 주가가 급등락하는 착시효과를 만들 수 있는 구조다.
+반면 한국거래소(KRX)는 오전 9시 개장 전까지 주문을 모아 매수·매도 물량이 가장 많이 일치하는 단일 가격으로 시가를 산출하는 ‘단일가매매’로 운영된다. 단순 주문 실수나 의도적인 거래만으로 가격을 끌어올리거나 내릴 수 없는 구조다.
+넥스트레이드도 문제점을 인식하고 보완책을 마련했다. 넥스트레이드는 지난 3월부터 정적 VI를 도입을 결정하고 준비 중이다. 다음 달 14일 적용 예정으로 정적 VI가 도입되면 전 거래일 종가나 기준가격보다 주가가 10% 이상 벗어나는 주문이 접수되면 이를 체결하지 않는다. 2분간 단일가 매매로 전환해 균형가격을 산출한 뒤 거래를 재개한다. 1주나 11주와 같은 단주 거래로 시장 가격을 왜곡할 수 없게 된다.
+시장에서도 현실적인 대안으로 평가하고 있으나 여전히 도입까지 한 달이 넘는 시간이 남아있다는 게 문제로 지적된다. 정적VI 도입을 결정하고 약 6개월 동안 준비하고 있어 사태의 심각성을 제대로 인지하지 못한 것 아니냐는 비판도 나온다. 정적VI 도입 전까지 얼마든지 의도적인 상하한가를 만들 수 있는 셈이다. 넥스트레이드 관계자는 “증권사 개별적으로 타임라인을 잡아서 준비하고 있다. 테스트하는 과정도 필요해 곧바로 적용할 수가 없었던 것”이라고 설명하였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/005/0001865429' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/005/0001865429</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
