@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ETF 빠질 판…거래소 애프터마켓, NXT 차별화 카드 흔들</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/029/0003041105' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14157" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>ETF 빠질 판…거래소 애프터마켓, NXT 차별화 카드 흔들</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">한국거래소의 애프터마켓 개장은 확정되었으나, 핵심 경쟁력으로 내세운 ETF 거래 도입이 단일종목 레버리지 ETF 관련 변동성 논란으로 인해 불투명해졌습니다. 이로 인해 거래소는 대체거래소 넥스트레이드와의 차별점을 확보하기 어려워지며 시장에 불안감을 주고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 경쟁 상품인 ETF의 도입 불확실성은 시장 참여자들에게 거래소 자체의 신뢰도 및 매력을 떨어뜨립니다. 이는 단기적으로 투자 심리를 위축시키고, 향후 금융상품 구조와 거래 시스템 전반에 대한 불안감을 초래할 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#애프터마켓</span> <span class="tag tag-hash">#거래소리스크</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">한국거래소가 다음 달 14일 애프터마켓을 예정대로 개장하지만, 당초 함께 도입하려던 상장지수펀드(ETF) 거래는 불투명해졌다. 단일종목 레버리지 ETF발 변동성 논란이 확산하면서 거래 대상과 도입 시점을 다시 검토하고 있어서다. ETF가 빠질 경우 대체거래소 넥스트레이드와의 경쟁에서 내세웠던 핵심 차별화 전략도 흔들릴 수 있다는 우려가 나온다.
+
+6일 금융투자업계에 따르면 거래소는 오는 9월 14일부터 오후 4시부터 8시까지 애프터마켓을 운영한다. 애프터마켓 개장과 주식 거래는 확정됐지만 ETF는 같은 날 함께 거래할지, 추후 도입할지 등을 원점에서 검토하고 있다.
+
+거래소 관계자는 “다음 달 14일 애프터마켓을 여는 것은 확정이며 주식 거래는 예정대로 시작한다”면서도 “ETF는 개장과 동시에 도입할 수도 있고 나중에 열 수도 있어 현재로서는 불투명한 상황”이라고 말했다.
+
+도입 준비 절차도 멈춰 섰다. 거래소는 당초 이달 초 자산운용사를 대상으로 애프터마켓에서 거래를 희망하는 ETF 목록을 제출받을 예정이었다. 그러나 ETF 거래 여부와 허용 범위 자체가 다시 검토되면서 수요조사 일정도 미뤄졌다.
+
+거래소는 애초 투자자에게 더 많은 거래 기회를 제공하는 동시에 넥스트레이드와 차별화하기 위해 ETF를 애프터마켓 거래 대상에 포함할 계획이었다. 넥스트레이드는 주식을 대상으로 프리마켓과 애프터마켓을 운영하고 있어, 거래소가 ETF까지 거래 시간을 연장하면 상품 측면에서 우위를 확보할 수 있다는 판단이었다.
+
+분위기는 단일종목 레버리지 ETF 출시 이후 달라졌다. 예상보다 가격 변동성과 괴리율 문제가 크게 불거지면서 ETF 거래시간 확대가 시장 불안을 다시 키울 수 있다는 부담이 커졌다.
+
+거래소 관계자는 “단일종목 레버리지 ETF 도입으로 시장 변동성이 이처럼 확대될 것이라고 예상하지 못했던 것처럼 애프터마켓 ETF 거래가 어떤 영향을 미칠지도 시행 전에는 단정하기 어렵다”며 “이 같은 불확실성 자체가 시장 참여자들에게 리스크가 될 수 있어 고민이 깊어졌다”고 설명했다.
+
+인프라가 부족한 것은 아니다. 거래소를 비롯해 코스콤과 한국예탁결제원은 애프터마켓 관련 시스템 준비를 마친 상태다. 기술적으로 거래가 가능한 상황에서도 ETF 도입이 흔들리는 것은 최근 변동성 확대에 따른 정책적 부담 때문인 셈이다.
+
+업계에서는 ETF 거래가 무산되면 거래소 애프터마켓이 주식만 거래하는 ‘반쪽 시장’으로 출발할 수 있다고 우려한다. 이미 장시간 거래 체제를 구축한 넥스트레이드와 비교해 거래시간만 늘려서는 뚜렷한 경쟁력을 확보하기 어렵다는 것이다.
+
+한 증권업계 관계자는 “ETF는 거래소가 넥스트레이드와 차별화할 수 있는 핵심 요소였다”며 “ETF 거래가 빠지면 애프터마켓을 열더라도 넥스트레이드와의 차별점이 사실상 사라진다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/029/0003041105' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/029/0003041105</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
