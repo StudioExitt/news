@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“미국 전력이 모자란다” 한 마디에 K전력주 주목…AI 데이터센터 전력 수요 ‘5배 폭증’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004649251' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14164" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“미국 전력이 모자란다” 한 마디에 K전력주 주목…AI 데이터센터 전력 수요 ‘5배 폭증’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 데이터센터 수요 급증으로 북미 전력망 병목 현상이 심화되면서, 대규모 송전 인프라 및 전력 안정화 설비(변압기, GIS 등)에 대한 투자가 필수적입니다. 이는 국내 주요 전력기기 제조사들에게 중장기적인 확실한 성장 동력을 제공할 전망입니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">LS일렉트릭</span> <span class="tag stock-tag">HD현대일렉트릭</span> <span class="tag stock-tag">효성중공업</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전력</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">기계</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI데이터센터</span> <span class="tag tag-hash">#전력인프라</span> <span class="tag tag-hash">#전력기기</span> <span class="tag tag-hash">#K산업</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미국 AI 데이터센터 붐이 전력망의 한계를 드러내고 있다. 전력 수요가 역대 최대치의 5배에 달하면서 신규 데이터센터 승인 절차가 멈춰 섰고, 실제 대규모 전력망 사고까지 발생했다. AI 시대 최대 병목이 전력 인프라로 옮겨가면서 북미 시장을 공략 중인 국내 전력기기 업체들이 새로운 수혜주로 주목받고 있다.
+
+AI 데이터센터 몰리자…전력 수요 ‘역대 최대의 5배’
+6일 업계에 따르면 미국 텍사스 전력신뢰도위원회(ERCOT)의 전력망 연결 승인 대기 프로젝트가 요청한 전력 규모는 총 474기가와트(GW)로, ERCOT 역사상 최대 전력 수요의 약 5배에 달하는 것으로 집계됐다. 승인 대기 프로젝트는 1800건이 넘으며, 이 가운데 약 90%가 AI 데이터센터인 것으로 나타났다.
+
+텍사스는 풍부한 전력과 넓은 부지, 기업 친화적인 환경을 앞세워 미국 최대 AI 데이터센터 거점으로 떠오르고 있다. 하지만 데이터센터 건설 속도가 전력망 확충을 앞지르면서 전력 공급이 새로운 병목으로 부상했다.
+
+이에 그레그 애벗 텍사스 주지사는 신규 데이터센터의 전력망 연결 승인을 일시 중단하고, 모든 프로젝트에 대한 전력 수요와 용수 사용량, 소유 구조 등을 재점검하도록 지시했다. 전력망 안정성을 확보하지 못하는 사업은 승인을 거부하겠다는 방침이다.
+
+업계에서는 이번 조치가 AI 데이터센터 확대를 막기 위한 규제라기보다 송배전 인프라 투자를 더욱 앞당기는 신호로 보고 있다.
+
+북미 전력망 투자 확대…국내 전력기기 ‘수혜’ 기대
+전력망 병목이 현실화되면서 미국에서는 초고압 송전망과 변압기, GIS(가스절연개폐장치), 배전반, 차단기, 전선, BESS(에너지저장장치) 등 전력 인프라 투자도 더욱 확대될 것이라는 전망이 나온다.
+
+이에 따라 LS일렉트릭, HD현대일렉트릭, 효성중공업 등이 대표적인 수혜 기업으로 거론된다.
+
+LS일렉트릭은 약 6000억원을 투자해 미국 유타 공장 증설과 텍사스 복합 거점 구축을 추진하고 있다. HD현대일렉트릭은 미국 최고 전압인 765kV 초고압 변압기를 앞세워 북미 시장 공략에 속도를 내고 있으며, 올해 상반기 북미 수주가 이미 지난해 연간 수준에 도달했다. 글로벌 빅테크와 약 1조1000억원 규모의 장기 공급 계약을 체결했고 추가 공급 협의도 진행 중이다.
+
+효성중공업은 미국 최대 전력 EPC 기업인 퀀타서비스와 합작법인을 설립해 올해 4분기부터 GIS용 차단기 생산을 시작할 예정이다. 중공업 부문 수주 목표도 기존 8조4500억원에서 12조원으로 상향 조정했다.
+
+LS일렉트릭 미국 텍사스주 배스트럽 캠퍼스. LS일렉트릭
+LS일렉트릭 미국 텍사스주 배스트럽 캠퍼스. LS일렉트릭국내 3사의 성장세도 뚜렷하다. LS일렉트릭·HD현대일렉트릭·효성중공업의 올해 2분기 수주잔고는 총 36조7254억원으로 전년(23조8881억원)보다 53.7% 증가하며 사상 최대를 기록했다. 증권가는 단기적인 주가 변동성과 별개로 AI 데이터센터 확대와 북미 전력망 투자가 이어지는 만큼 국내 전력기기 업체들의 중장기 수혜도 지속될 가능성이 크다고 보고 있다.
+
+증권가도 북미 AI 데이터센터 투자 확대에 따른 전력기기 수요 증가가 중장기 성장세를 뒷받침할 것으로 보고 있다. 대신증권은 효성중공업의 올해 중공업 부문 수주 가이던스가 기존 8조4500억원에서 12조원으로 상향됐고, 매출 성장률 전망도 15%에서 25%로 높아졌다고 분석했다.
+
+BNK투자증권은 HD현대일렉트릭의 목표주가를 110만원으로 조정했지만 투자의견은 ‘매수’를 유지했다.
+
+특히 HD현대일렉트릭은 글로벌 빅테크와 약 1조1000억원 규모의 장기 공급계약을 체결한 데 이어 추가 물량과 다른 빅테크 3곳과도 공급 협의를 진행 중인 것으로 전해졌다. 증권가는 최근 주가 조정에도 전력기기 업종의 펀더멘털은 오히려 강화되고 있다고 평가했다.
+
+실제 사고가 보여준 한계…“전력망 투자 더 빨라진다”
+AI 데이터센터 증가로 전력망 부담이 현실화된 사례도 나왔다. 로이터통신은 지난달 22일(현지시간) 북미 최대 전력망 운영기관인 PJM 인터커넥션 관할 지역에서 약 1.5GW 규모의 데이터센터 전력 수요가 동시에 전력망에서 이탈하는 사고가 발생했다고 보도했다.
+
+미국 버지니아주 애슈번 데이터센터 밀집 지역에서 송전선 이상으로 전압이 흔들리자 데이터센터들이 UPS(무정전전원장치)와 비상발전기로 자동 전환하면서 발생한 사고다.
+
+업계는 이번 사고가 AI 시대에는 발전량 확대뿐 아니라 전력망 안정성과 전력 품질 확보가 핵심 과제로 떠올랐음을 보여준 사례라고 평가한다. 초고압 변압기와 GIS, 차단기, 배전반, BESS 등 전력기기 수요가 기존 송전망 증설을 넘어 계통 안정화 설비 중심으로 확대될 것이라는 전망이다.
+
+특히 미국은 2021년 텍사스 한파 이후 노후 전력망 교체 투자를 확대해 왔으며, 이번 사고를 계기로 데이터센터와 연계한 전력망 안정화 투자도 더욱 속도를 낼 것으로 전망된다. PJM 역시 올해 1월 대규모 데이터센터를 안정적으로 전력망에 연결하기 위한 계획을 승인하는 등 관련 제도 정비에 나선 상태다. 업계에서는 송전 용량 확대를 넘어 계통 안정성과 전력 품질을 높이기 위한 투자가 본격화될 것으로 보고.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004649251' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004649251</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
