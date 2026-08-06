@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'주가누르기 방지' 보완입법 시동…국회서 다시 꺼낸 'PBR 0.8'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006346193' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14148" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'주가누르기 방지' 보완입법 시동…국회서 다시 꺼낸 'PBR 0.8'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부가 대주주의 상속·증여 과정에서 발생하는 '주가누르기'를 막기 위한 세제개편안을 발표했으나, 업계에서는 실효성이 낮다고 비판합니다. 국회에서는 순자산가치를 기준으로 평가하한을 두는 법안이 다시 발의되었으며, 이훈기 의원안은 이러한 구조적 개선에 초점을 맞추고 있습니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주가누르기방지</span> <span class="tag tag-hash">#PBR08</span> <span class="tag tag-hash">#세제개편</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">정부가 대주주 상속·증여 과정에서 발생할 수 있는 '주가누르기'를 막겠다며 세제개편안을 내놨지만, 자본시장에서는 당초 입법 취지를 충분히 살리지 못했다는 비판이 이어지고 있다. 국회에서는 주가가 아닌 순자산가치를 기준으로 평가 하한을 두는 안이 다시 발의됐지만, 향후 심의 과정에서 핵심 구조가 그대로 유지될지는 불확실한 상황이다.
+
+이훈기 더불어민주당 의원은 전날 '상속세·증여세법 일부개정법률안'을 대표발의했다. 개정안은 이소영 의원이 지난해 발의한 이른바 '주가순자산비율(PBR) 0.8배법'의 기본 구조를 유지하면서 순자산가액 산정 기준과 상장 자회사·손자회사 적용 방식, 경영난 기업에 대한 예외 등을 보다 구체화한 것이 특징이다.
+
+앞서 재정경제부가 지난 3일 발표한 세제개편안은 일정 요건을 충족한 상장사를 주가 누르기 기업으로 추정한 뒤 국세청 평가심의위원회 심의를 거쳐 상속·증여 대상 주식의 가치를 재평가하도록 했다.
+
+장기 저PBR 기업은 최근 13개 반기(6년 6개월) 중 12개 반기(6년) 동안 주가순자산비율(PBR)이 유가증권시장에서는 업종별 하위 25%, 코스닥시장에서는 업종별 하위 10%에 해당해야 한다. 해당 기업의 주식은 최근 6개월부터 최대 6년6개월까지의 기간별 평균주가와 현행 평가액의 1.3배 가운데 가장 높은 금액으로 평가한다.
+
+과거 주가로 다시 평가?…"주가누르기 못 막는다"
+
+업계에서 가장 크게 우려하는 부분은 이소영 의원안의 핵심이었던 순자산가치 80% 평가 하한이 정부안에서 빠졌다는 점이다.
+
+현재는 상장주식의 상속·증여세는 상속개시일이나 증여일 전후 각 2개월간의 평균 주가를 기준으로 평가한다. 이소영 의원안은 최대주주가 보유한 상장주식의 평가액이 순자산가치의 80%보다 낮을 경우 비상장주식 평가방식을 적용하고, 순자산가치의 80%를 최저 평가액으로 삼자는 내용이 핵심이었다.
+
+반면 정부안은 이같은 절대적 평가 하한을 두지 않고 과거 평균주가와 30% 할증 방식을 택했다. 한화투자증권은 "PBR이 0.2배인 기업의 경우 기존 이소영 의원안에서는 평가액이 최대 4배까지 높아질 수 있지만, 정부안의 30% 할증을 적용하면 PBR이 0.26배로 오르는 데 그친다"고 분석했다.
+
+업계에서는 장기간 낮게 유지된 주가의 평균을 다시 평가 기준으로 삼는다면 주가를 억누르려는 유인이 근본적으로 사라지기 어렵다고 봤다.
+
+김민국 VIP자산운용 대표는 "과거 주가 평균은 기업의 실제 자산가치를 반영하지 못하고, 장기간 주가가 눌린 기업이라면 장기 평균 역시 눌린 가격일 수밖에 없다"고 비판했다. 이어 과거 주가가 아닌 상속·증여 시점의 순자산가치를 기준으로 삼아야 한다고 주장했다.
+
+적용 대상이 지나치게 좁다는 지적도 나온다. 한국기업거버넌스포럼은 정부안의 장기 저PBR 요건을 적용하면 코스피 84~87개, 코스닥 43개 등 약 130개 기업만 해당할 것으로 추정했다. 한화투자증권도 "PBR 0.8배 미만인 상장사가 1291곳에 달하지만 정부안 적용 기업은 다른 추정 요건까지 포함해도 200여곳 수준일 것"으로 봤다. 사실상 이소영 의원안의 적용 대상과 비교하면 10분의 1 수준으로 축소된 셈이다.
+
+'주가' 대신 '순자산' 원안 살린 이훈기안…업계도 "순자산 기준 유지돼야"
+
+전날 발의된 이훈기 의원안은 정부안처럼 주가 누르기 기업을 선별하기보다, 주가를 낮춰도 상속·증여세가 추가로 줄어들지 않도록 평가 구조 자체를 바꾸는 데 초점을 맞췄다.
+
+최대주주 등이 보유한 상장주식의 시가가 세법상 1주당 순자산가치의 80%보다 낮으면 비상장주식 평가방식을 적용하고, 이 평가액도 순자산가치의 80%보다 낮을 경우 이를 평가 하한으로 삼는다.
+
+기본 구조는 이소영 의원안과 사실상 같지만, 순자산가치 기준을 비상장주식 평가방법에 따른 '세법상 순자산가치'로 법률에 명시했다. 또 상장 자회사와 손자회사 주식에도 같은 평가방식을 단계적으로 적용하도록 했다. 하위 상장회사의 낮은 주가가 이를 보유한 모회사의 순자산가치에 그대로 반영돼 제도를 우회하는 것을 막기 위한 장치다. 자본잠식이나 회생절차, 경영정상화 약정, 국가가 추진하는 구조조정·사업재편 등으로 정상적인 사업 수행에 어려움이 있는 기업에는 법정 예외를 두도록 했다.
+
+한 자본시장 관계자는 "순자산가치를 기준으로 삼았다는 점에서 주가 누르기를 구조적으로 개선할 수 있는 가장 효과적인 방안"이라며 "이소영 의원안에서 불명확했던 자회사 적용 기준과 순자산가액 산정 기준 등을 보다 명확하게 해 업계의 실무적인 부담도 해소한 법안"이라고 평가했다.
+
+이어 "주가가 아닌 순자산가치를 기준으로 세금을 부과하는 기본 구조는 반드시 유지돼야 한다"고 강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006346193' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006346193</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
