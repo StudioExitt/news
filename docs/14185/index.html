@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>수급 공백에 출근길마다 주가 출렁…“변동성 완화장치 서둘러야” [이슈포커스]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004649280' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14185" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>수급 공백에 출근길마다 주가 출렁…“변동성 완화장치 서둘러야” [이슈포커스]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">대체거래소 프리마켓의 시초가 형성 과정에서 소량 거래만으로 대형 종목이 상하한가를 기록하는 등 가격 왜곡 현상이 빈번하게 발생하고 있어 투자자 불안감이 고조되고 있습니다. 제도적 개선 및 변동성 완화 장치(VI) 조기 도입을 촉구하는 목소리가 높습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">프리마켓 시초가 형성 과정에서의 구조적 불안정성과 과도한 변동성이 투자자 신뢰를 떨어뜨리고 있으며, 이는 단기적인 시장 하락 압력으로 작용합니다. 제도 개선의 필요성이 주요 이슈입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">알테오젠</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#변동성완화장치</span> <span class="tag tag-hash">#프리마켓</span> <span class="tag tag-hash">#주가폭락</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">국내 증시가 ‘변동성 확대→투자 심리 악화→변동성 확대’라는 악순환에 갇힌 가운데 대체거래소 프리마켓의 시초가 형성 방식이 투자 경계감을 더 키우는 요인으로 지목된다. 시가총액 초대형 종목들이 단 1주 거래만으로 상·하한가를 기록하면서 프리마켓의 가격 형성 기능에 의문을 갖는 투자자들이 늘어나고 있다는 지적이다.
+
+6일 금융투자 업계에 따르면 SK하이닉스 프리마켓 하한가 사태 전날인 5일에도 국내 증시 대표 종목이 프리마켓에서 등락 제한폭까지 오른 사례가 2건이나 있었던 것으로 확인됐다. 코스피 시가총액 5위인 삼성전기와 코스닥 시가총액 1위인 알테오젠은 각각 단 1주 거래로 시초가를 상한가에 형성했다. 알테오젠의 경우 변동성 완화 장치(VI)가 발동해 2분간 단일가매매가 이뤄진 뒤 17.6% 떨어졌다가 다시 상한가에 근접한 가격으로 10주가 거래됐다. 해당 투자자는 상당한 손실을 봤을 것으로 추정된다.
+
+지난해 3월 대체거래소인 넥스트레이드(NXT) 출범 이후 적은 거래량으로 시초가가 왜곡된 사례는 꾸준히 발생해왔다. 당시 금융 당국이 이상 주문 체결이 반복될 경우 불공정거래 여부를 조사하겠다고 밝히기도 했으나 NXT 시초가 형성 방식은 이후로도 바뀌지 않았다. 약 1년 5개월이 지나도 소량 거래로 큰 폭의 가격 변동이 일어나는 문제는 전례 없는 변동성 위기까지 더해져 투심 악화를 부채질하고 있다.
+
+NXT는 상·하한가 널뛰기를 방지하기 위해 다음 달 14일 정적 VI를 도입하겠다는 계획이다. 전일 종가나 기준 가격보다 10% 이상 차이가 나는 가격으로 주문이 들어오면 즉시 체결하지 않고 2분간 단일가매매로 전환된다.
+
+문제는 지난달 극심했던 증시 변동성의 여진이 지속되고 있는 상황에서 제도 도입까지는 한 달 넘게 남아 투자자 피해가 우려된다는 점이다. 특히 지난달 28일 SK하이닉스 프리마켓 하한가 사태 때는 해외 가상자산 파생거래소 트레이드엑스와이지의 SK하이닉스 무기한선물 상품 대규모 청산으로 이어져 시장 불신을 키우는 촉매제가 됐다. 증권가에서는 특정 세력이 파생상품에서의 이익을 취하기 위해 호가창이 얇은 프리마켓을 노릴 수 있다는 시나리오도 제기됐다.
+
+증시 전문가들은 증시 변동성 증폭 요인으로 지목된 단일종목 레버리지 상품 거래대금이 금융당국 조치로 급감했지만 여전히 변동성 관리에 높은 경각심을 유지해야 한다고 조언했다. 한국형 공포지수로 불리는 코스피200 변동성지수(VKOSPI)는 6월 29일 96.9로 고점을 찍은 뒤 이날 77.17까지 낮아졌지만 역사적 평균인 20대를 여전히 상회하고 있다.
+
+거래소에 따르면 코스피지수의 월평균 일중 변동률은 이달 들어 3.63%로 집계됐다. 일중 변동률은 당일 지수의 ‘고가와 저가의 차이’를 ‘고가와 저가의 평균치’로 나눈 값으로 변동성을 나타내는 지표다. 일중 변동률 지난달 7.13%와 비교하면 낮아졌으나 중동 전쟁으로 증시 변동성이 높아졌던 3월(3.77%)과 비슷한 수준이고 1월(2.06%)과 비교해도 여전히 높다.
+
+외국인 투자자들의 이탈도 현재진행형이다. 외국인은 이날만 코스피 시장(상장지수펀드 등 포함)에서 3조 원 넘게 팔아치우며 이달 5조 4566억원의 순매도를 기록했다. 반면 이날 코스피 일일 거래대금은 약 42조 원으로 지난달 29일 91조 8000억 원과 비교하면 반토막났다. 5일 기준으로 투자자 예탁금은 103조 2125억 원으로 지난달 초(120조 837억 원) 대비 14% 줄었는데 그만큼 개인 투자자들의 매수 여력이 떨어졌다는 의미로 풀이된다.
+
+이영곤 토스증권 리서치센터장은 “지난달부터 이어지고 있는 조정이나 하락세가 완전히 마무리되지 않았다”며 “시장이 상승 방향성을 찾으려면 시장 불안감을 해소할 필요가 있다”고 말했다.
+
+결국 글로벌 반도체 산업 전망 불확실성이라는 외부 변수는 제어할 수 없어도 당장 시장 불안을 냉각시킬 수 있는 당국의 제도적 조치와 함께 특정 산업군에 쏠려 있는 증시 불균형을 해소할 중장기적 방안을 투트랙으로 가져가야 한다는 진단이 나온다. 금융투자 업계의 한 관계자는 “분명 당국의 제도적인 측면에서 할 수 있는 부분들은 제한적일 수 있다”면서도 “지금은 조치의 실제 효과보다도 투자자에게 신뢰를 줄 수 있느냐가 더 중요한 시점”이라고 지적했다.
+
+반도체 쏠림의 증시 구조를 개선해 나가야 한다는 목소리도 높다. 자본시장연구원은 최근 보고서에서 개별 종목·섹터 비중을 제한한 주가지수 활용, 개별 종목별 유동성을 반영한 변동성 완화장치 정교화 등을 중장기 변동성 완화 방안으로 제시했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004649280' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004649280</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
