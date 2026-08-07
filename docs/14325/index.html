@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'7수' KDB생명 인수전, 한화·흥국·한투 '3파전'⋯유증 규모 변수</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/031/0001048138' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14325" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'7수' KDB생명 인수전, 한화·흥국·한투 '3파전'⋯유증 규모 변수</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">KDB생명 매각 본입찰에 한화생명, 흥국생명, 한국투자금융지주가 참여하며 3파전 양상을 보이고 있습니다. 이 인수전의 핵심 변수는 최대주주인 산은이 결정할 유상증자 규모이며, 최종 계약 체결은 연내를 목표로 진행 중입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">KDB생명 매각은 단순한 자산 거래를 넘어 금융지주사들이 핵심 사업 영역을 재편하는 대형 구조조정 이슈입니다. 한화, 흥국, 한투 등 경쟁 참여사의 진입과 산은의 유상증자 규모라는 거대한 변수가 시장에 높은 불확실성과 동시에 큰 기대감을 조성하며 중장기적으로 금융 섹터 전반의 투자심리에 영향을 줄 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한화생명</span> <span class="tag stock-tag">흥국생명</span> <span class="tag stock-tag">한국투자증권</span> <span class="tag stock-tag">삼성생명</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융지주</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">보험업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#금융구조조정</span> <span class="tag tag-hash">#M&A</span> <span class="tag tag-hash">#보험업황</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">7일 본입찰 마감, 삼성생명·교보생명 이탈
+이달 중 우협 선정⋯산은 연내 SPA 목표
+7번째 매각 시도에 나선 KDB생명 인수 본입찰에 한화생명, 흥국생명, 한국투자금융지주가 참여했다.
+유력 후보 중 한 곳으로 거론된 삼성생명이 끝내 불참하면서 3파전이 성립됐다.
+
+KDB생명 
+KDB생명 
+
+7일 투자은행(IB)업계와 보험업계에 따르면 이날 오후 3시 마감된 KDB생명 매각 본입찰에 한화생명, 흥국생명, 한투지주 등 3개사가 최종 인수 제안서를 제출했다.
+앞선 6월 KDB생명 매각 예비 입찰에는 삼성생명, 교보생명, 한화생명 등 이른바 '3대' 생명보험사와 흥국생명, 한투지주가 참여한 바 있다. 그러나 삼성생명과 교보생명은 중도 이탈했다. 특히 삼성생명은 부사장급 임원 산하 태스크포스(TF)까지 꾸려 실사를 진행했지만 인수 시너지가 크지 않다고 판단한 것으로 보인다.
+
+업계에선 한화생명이 본입찰에 참여한 것에 주목한다. 현재 한화생명은 애큐온캐피탈·저축은행 인수도 추진 중이다. 애큐온 인수에만 1조원 안팎의 자금이 필요한 상황에서 KDB생명 인수전에도 뛰어들었다.
+자본 부담을 감수하더라도 금융사업 외형을 키우겠단 의지가 강한 것으로 풀이된다. 한화생명은 KDB생명을 인수할 경우 생명보험 본업의 자산과 계약 기반을 단기간에 확대할 수 있다.
+
+태광그룹 계열사인 흥국생명도 KDB생명 인수 의지가 크다는 평가다. 올 1분기 기준 흥국생명의 총 자산은 23조8161억원 수준이다. 인수 후 KDB생명 총자산 16조5576조원을 끌어안으면 단숨에 자산 규모는 40조원까지 늘어난다. KB라이프생명(35조원), 미래에셋생명(32조원)을 제치고 업계 6~7위권으로 도약하는 셈이다.
+
+한투지주도 보험업 진출에 의지를 보이고 있다. 장기 운용 자산을 확보할 수 있는 생보사를 인수하면 핵심 사업인 증권과 보험 부문 간 시너지 효과를 기대할 수 있어서다. 한투지주는 KDB생명 외 BNP파리바카디프생명, 롯데손해보험 인수도 검토하고 있는 것으로 알려졌다.
+
+산업은행은 지난 2010년 금호아시아나그룹 구조조정 과정에서 당시 금호생명(현 KDB생명)을 인수하며 최대주주가 됐다. 이후 2014년부터 12년간 총 여섯 차례나 매각을 시도했으나 지속해서 무산됐다.
+
+이번 7번째 매각 시도에서 쟁점 중 하나는 최대주주 산은의 유상증자 규모다. 이미 지난해 산은은 KDB생명에 5000억원 규모 유증을 단행한 바 있다. 현재 매각 전 추가 유증 가능성을 열어 놓은 상태다. 산은은 최대 5000억원 안팎을 제시했으나 원매자 측은 1조원 가까이를 요구하고 있는 것으로 알려졌다.
+
+산은과 매각 주관사인 삼일회계법인은 이르면 이달 내 우선협상 대상자를 선정한다. 연내 주식매매계약(SPA) 체결이 목표다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/031/0001048138' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/031/0001048138</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
