@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>안전할 줄 알고 ETF 샀는데…월급, 휴가비 다 날렸다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006346806' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14287" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>안전할 줄 알고 ETF 샀는데…월급, 휴가비 다 날렸다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 업황 악화와 국내외 시장 폭락으로 인해 ETF 시장 전반의 투자 심리가 급격히 위축되었으며, 7월 기준 상장된 ETF의 약 78%가 하락했습니다. 개별 주식보다 안전하다고 여겨졌던 ETF조차 큰 손실을 기록하며 개인 투자자들의 재정적 어려움과 불안감을 증폭시키고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 동력인 반도체 섹터의 폭락이 ETF 전반의 패닉 셀링을 유발하며 시장 불안정성이 극도로 높아졌기 때문입니다. 투자자들의 재정적 어려움 호소까지 등장하며 단기적인 급격한 변동성 확대가 예상됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF하락장</span> <span class="tag tag-hash">#반도체위기</span> <span class="tag tag-hash">#투자심리위축</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">폭락 거<0xEC><0x85><0x8C>던 7월, 국내 ETF 상품 78% 하락. 하락 상품 중 531개는 한 달 수익률 -10%.
+ETF 순자산총액도 6월 말보다 77조 줄어 국내 상장지수펀드(ETF) 중 7월에 하락한 상품이 78%에 달한 것으로
+나타난 가운데, ETF에 투자했다가 큰 손실을 본 개인 투자자들이 탄식을 내뱉고 있다.
+
+7일 한국거래소와 ETF체크 등에 따르면 지난달 국내에 상장된 ETF 가운데 가격이 하락한 상품은 891개로 전체의 78.3%를 차지했다. 반면
+상승한 ETF는 244개에 그쳤다.
+
+하락 상품 가운데 531개는 한 달 수익률이 마이너스 10%를 밑돌았다. 하락 ETF의 절반 이상이 두 자릿수 손실을 기록한 것이다.
+
+하락 상품 비중은 중동 전쟁이 발생했던 지난 3월과 비슷한 수준이다. 당시에도 전체 ETF의 78.5%에 해당하는 838개 상품이 하락한 바
+있다.
+
+ETF 순자산총액도 큰 폭으로 줄었다. 지난달 말 기준 ETF 순자산총액은 434조4000억원으로, 이는 전월 말(512조4000억원)보다
+77조9000억원 급감한 수준이다. 지난달 30일에는 한때 398조원까지 밀리며 순자산총액 400조원 선이 무너지기도 했다.
+
+ETF 시장의 부진은 코스피·코스닥 지수 자체의 폭락과 맞물려 있다. 코스피는 6월 30일 8476.48에서 7월 31일 6595.45로 마감해
+한 달 새 22.19% 급락했다. 코스닥 지수도 같은 기간 916.18에서 719.76으로 21.44% 떨어졌다.
+
+충격의 중심에는 반도체주가 있었다. 중국 메모리 반도체 기업 창신메모리테크놀로지(CXMT)의 상장 흥행을 계기로 중국의 공급 확대와 가격 경쟁
+심화 우려가 부각됐다. 미국 증시에서 엔비디아와 AMD, 마이크론 등 주요 반도체 기업 주가가 먼저 흔들렸고, 국내 시장에서도 삼성전자와
+SK하이닉스가 각각 21.41%, 35.17% 급락하며 지수 하락을 주도했다.
+
+g루동안 개별종목 매수에 부담을 느낀 투자자들은 1주당 가격이 저렴하고 여러 종목이 하나에 묶인 ETF 상품들에 투자해왔다.
+대표적으로 KODEX
+반도체, TIGER 반도체TOP10, RISE AI반도체TOP10, SOL AI반도체TOP2 등이다.
+
+그러나 비교적 안전할 거라 생각한 ETF 상품도 반도체 종목 비중이 높아 큰 낙폭을 만회하지 못하면서, 투자자들 사이에는 “일상 생활조차
+힘들어졌다”고 호소하는 이들도 있었다.
+
+이들은 주식종목토론방, 사회관계망서비스(SMS) 등에 “등록금 물려서 휴학해야할 판”, “내 퇴직연금도 전부 손실”, “손실 메꾸려면 월급 두달
+치를 더 벌어야 한다”, “이번 여름휴가는 강제 포기”, “휴가비까지 다 날렸다”, “긴축재정 돌입”, “커피 마실 자격도 없어 맥심 타
+먹는다”, “배달 끊고 냉장고 파먹습니다” 등의 반응을 보였다.
+
+최근에는 ETF 시장 전반의 활력도 눈에 띄게 줄고 있다. 지난 5일 전체 ETF 거래대금은 약 15조9000억원으로, 7월 일평균 거래대금 약
+33조원의 절반 수준에 불과했다.
+
+여기에는 레버리지 상품 규제 강화도 영향을 미쳤다. 단일종목 레버리지 ETF(인버스 포함) 16종의 거래대금은 지난 5일 9198억원으로
+집계되며 상장 이후 처음으로 1조원을 밑돌았다.
+
+금융당국이 지난달 31일부터 기본예탁금을 1000만원에서 3000만원으로 높이는 등 투자요건을 강화한 지 4거래일 만이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006346806' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006346806</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
