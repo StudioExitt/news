@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피, 외국인 '사자'에 1.32% 상승…6300선 회복</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006346671' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14248" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피, 외국인 '사자'에 1.32% 상승…6300선 회복</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">간밤 뉴욕 증시 하락에도 불구하고, 전날 급락에 대한 저가 매수세와 외국인의 순매수에 힘입어 코스피와 코스닥이 동반 반등하며 상승 마감했습니다. 이는 단기 차익실현 성격이었던 전일 급락으로 판단되며 시장 안정 기대감을 높였습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">외국인의 순매수와 저가 매수세 유입에 힘입어 시장이 전날 급락분을 만회하며 반등했다는 점은 단기적인 투자 심리 개선을 시사합니다. 다만, 뉴욕 증시의 하락과 일부 주요 반도체주의 약세는 향후 상승세를 제한할 요인으로 작용할 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">LG에너지솔루션</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피상승</span> <span class="tag tag-hash">#외국인매수</span> <span class="tag tag-hash">#저가매수세</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스닥도 1.3% 올라…양 시장 동반 강세 외\n외국인 3138억원 순매수, 개인은 차익 실현\n저가 매수세 유입에 전날 급락분 일부 만회 국내 증시가 하루 만에 반등 출발했다. 간밤 뉴욕증시가 일제히 하락했지만 전날급락에 따른 저가 매수세가 유입되면서 코스피와 코스닥이 동반 상승하고 있다. 증권가는 전날 반도체주 급락이 단기 차익실현 성격이 강했던 만큼 투자심리가 점차 안정을 찾을 것으로 보고 있다.\n\n하나은행 딜링룸.(사진=연합뉴스)\n\n7일 엠피닥터에 따르면 오전 9시 15분 기준 코스피는 전 거래일보다 82.95포인트(1.32%) 오른 6379.33에 거래되고 있다. 상승 종목은 586개(상한가 2개), 보합 종목은 53개, 하락 종목은 250개다. 코스닥은 10.39포인트(1.3%) 오른 812.06을 기록중이다. 상승 종목은 1150개(상한가 5개), 보합 종목은 83개, 하락 종목은 470개다.\n\n투자자별로는 코스피시장에서 외국인이 3138억원, 기관이 169억원을 각각 순매수하며 지수 상승을 이끌고 있다. 개인은 3052억원을 순매도하며 차익실현에 나서는 모습이다. 코스닥시장에서는 개인과 기관이 각각 243억원, 175억원을 순매수한 반면 외국인은 413억원을 순매도하고 있다.\n\n시가총액 상위 종목은 혼조세를 나타내고 있다. 삼성전자(005930)는 1.3%, LG에너지솔루션(373220)은 2.61%, 삼성전기(009150)는 0.98% 각각 상승하고 있다. 반면 전날 10% 넘게 급락했던 SK하이닉스(000660)는 0.74% 하락하는 등 반도체주 가운데 약세를 보이고 있다. 현대차(005380)(-2.13%), 삼성바이오로직스(207940)(-0.2%), KB금융(105560)(-0.12%), 삼성생명(032830)(-4%) 등은 하락세를 나타내고 있다.\n\n코스닥 시가총액 상위 종목은 상승세가 우세하다. 에코프로(086520)가 4.78% 오르고 에코프로비엠(247540)(4%), HLB(028300)(2.7%), 펩트론(087010)(2.13%), 에이비엘바이오(298380)(1.8%), 알테오젠(196170)(0.68%) 등이 강세를 나타내고 있다. 반면 레인보우로보틱스(277810)(-2.96%)와 원익IPS(240810)(-1.19%)는 약세를 보이고 있다. 개인과 기관의 매수세가 바이오와 2차전지 등 성장주로 유입되며 코스닥은 코스피와 함께 반등 흐름을 이어가고 있다.\n\n업종별로는 코스피에서 화학(2.42%), 전기·전자(1.47%), 오락·문화(1.24%), 제조(1.04%) 등이 강세를 보이고 있다. 시가총액 규모별로는 대형주(0.3%), 중형주(0.06%), 소형주(0.64%)가 모두 상승하며 시장 전반으로 매수세가 확산되는 모습이다.\n\n간밤 뉴욕증시는 3대 지수가 일제히 하락했다. 다우존스산업평균지수는 0.85% 내리며 5거래일 연속 상승세를 마감했고, 스탠더드앤드푸어스(S&P)500지수와 나스닥종합지수도 각각 0.18%, 0.06% 하락했다. 유가와 시장금리가 소폭 상승한 가운데 샌디스크와 웨스턴디지털 등 반도체주의 약세가 투자심리를 위축시킨 것으로 풀이된다.\n\n다만 증권가는 전날 국내 증시 급락이 샌디스크의 가이던스 실망과 단기 차익실현이 겹친 영향으로 보고 있다. 한지영 키움증권 연구원은 “전일급락은 최근 급등 이후 속도 조절과 차익실현 여파가 더 컸던 것으로 판단한다”며 “금일에는 미국 반도체주 주가 약세 선반영과 전일 급락에 따른 저가 매수세 유입 등에 힘입어 반등을 시도할 전망”이라고 말했다.\n원문링크: https://n.news.naver.com/mnews/article/018/0006346671</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006346671' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006346671</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
