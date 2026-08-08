@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>개미 '빚투' 급증에…증권사들 CP·전단채 단기자금 '풀베팅'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016240444' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14414" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>개미 '빚투' 급증에…증권사들 CP·전단채 단기자금 '풀베팅'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">개인투자자의 신용거래 및 거래량 급증으로 증권사들의 단기 자금 수요가 폭발적으로 늘어났습니다. 이에 따라 CP와 전단채 같은 단기 자금 조달이 크게 증가했습니다. 이는 브로커리지 수익 확대 기대에 따른 것이지만, 만기가 짧아진 고액의 단기차입은 시장 금리나 유동성 위기에 취약할 수 있다는 우려가 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">증권사들의 단기 자금 조달 확대는 증시 활황과 개인투자자 매매 증가에 힘입어 수익성이 커지고 있음을 보여주지만, 만기가 짧은 구조적 차입이 늘면서 시장 금리 변동이나 유동성 악화 시 재무 건전성에 리스크를 가중시키는 요인으로 작용할 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한국투자증권</span> <span class="tag stock-tag">미래에셋증권</span> <span class="tag stock-tag">NH투자증권</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#신용거래융자</span> <span class="tag tag-hash">#CP</span> <span class="tag tag-hash">#전단채</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">올해 들어 국내 증시 거래와 개인투자자의 신용거래가 급증하면서 증권사들의 기업어음(CP)과 전자단기사채(전단채) 발행액이 지난해의 2배를 훌쩍 넘어선 것으로 나타났다.
+
+개인투자자의 '빚투'인 신용거래융자가 급증한 데다 거래량 증가로 거래소에 납부해야 하는 거래증거금과 결제 자금 부담까지 커지면서 증권사들이 단기 자금 조달을 크게 늘린 영향으로 풀이된다.
+
+9일 금융감독원 전자공시시스템(DART)에 따르면 올해 들어 이달 4일까지 단기차입금 증가 또는 차입 한도 확대를 결정했다고 공시한 증권사는 총 9곳(대신·DB·삼성·LS·유안타·코리아에셋·키움·한양·현대차증권)이다. 지난해 같은 기간에는 2곳(유안타·키움증권)에 그쳤다.
+
+단기차입금은 증권사가 영업 과정에서 필요한 자금을 짧은 기간 빌려 쓰는 돈으로, CP와 전단채, 콜머니 등이 포함된다.
+
+실제 CP와 전단채 발행 규모도 큰 폭 증가했다. 코스콤 CHECK에 따르면 올해 들어 이달 7일까지 국내 증권사들의 CP 및 전단채 누적 발행액은 총 723조8천853억원으로 집계됐다. 1년 전 267조7천175억원과 비교하면 170.4% 증가한 규모다.
+
+특히 만기가 짧은 전단채 발행이 두드러졌다. 증권사가 발행하는 CP는 통상 만기가 3개월을 넘는 경우가 많은 반면, 전단채는 5일 이하의 초단기물이 대부분이다. 증권사들의 자금 수요가 단기간 필요한 운전자금에 집중됐음을 보여준다.
+
+전단채 발행액은 지난해 244조5천966억원에서 올해 666조8천244억원으로 172.6% 늘어 전체 발행 증가액의 대부분을 차지했다.
+
+월별로도 증시 거래가 활발했던 5~6월에 발행이 집중됐다. CP와 전단채 합산 발행액은 5월 165조5천억원으로 정점을 찍은 뒤 6월에도 158조9천400억원을 기록했으나, 7월에는 54조5천400억원으로 전월보다 약 66% 감소했다. 전단채 발행액만 보면 5월 154조1천413억원에서 7월 46조2천602억원으로 약 70% 줄었다.
+
+증권사들의 단기자금 수요가 커진 가장 큰 배경으로는 개인투자자의 신용거래 확대가 꼽힌다. 신용거래융자는 증권사가 투자자에게 주식 매수자금을 직접 빌려주는 구조인만큼, 융자 잔고가 늘어날수록 증권사가 마련해야 하는 자금도 증가한다.
+
+금융투자협회에 따르면 국내 증시의 신용거래융자 잔고는 지난해 말 27조2천865억원에서 지난 6월 24일 38조6천328억원까지 늘었다가 최근 28조7천940억원으로 감소했다.
+
+여기에 증시 거래대금 급증으로 거래소에 납부해야 하는 거래증거금과 결제자금 수요가 늘어난 점도 단기조달 확대에 영향을 미쳤다. 거래증거금은 증권사가 고객 거래의 결제 위험에 대비해 거래소에 자기 재산으로 예치하는 자금으로, 개인들의 거래가 한꺼번에 늘어나 증권사의 결제위험이 커지면 거래소가 요구하는 증거금 부담도 함께 커질 수 있다.
+
+한 신용평가업계 관계자는 "신용융자와 미수금 등 단기 자금 수요에 대응하기 위해 증권사들이 전단채 발행을 늘린 것으로 해석된다"고 말했다.
+
+증권사들의 단기자금 수요가 커진 가장 큰 배경으로는 개인투자자의 신용거래 확대가 꼽힌다. 신용거래융자는 증권사가 투자자에게 주식 매수자금을 직접 빌려주는 구조인만큼, 융자 잔고가 늘어날수록 증권사가 마련해야 하는 자금도 증가한다.
+
+금융투자협회에 따르면 국내 증시의 신용거래융자 잔고는 지난해 말 27조2천865억원에서 지난 6월 24일 38조6천328억원까지 늘었다가 최근 28조7천940억원으로 감소했다.
+
+여기에 증시 거래대금 급증으로 거래소에 납부해야 하는 거래증거금과 결제자금 수요가 늘어난 점도 단기조달 확대에 영향을 미쳤다. 거래증거금은 증권사가 고객 거래의 결제 위험에 대비해 거래소에 자기 재산으로 예치하는 자금으로, 개인들의 거래가 한꺼번에 늘어나 증권사의 결제위험이 커지면 거래소가 요구하는 증거금 부담도 함께 커질 수 있다.
+
+한 신용평가업계 관계자는 "신용융자와 미수금 등 단기 자금 수요에 대응하기 위해 증권사들이 전단채 발행을 늘린 것으로 해석된다"고 말했다.
+
+증권사별로는 한국투자증권의 발행 증가 폭이 가장 컸다. 한투증권의 올해 CP·전단채 발행액은 322조9천468억원으로, 1년 전 93조9천300억원보다 243.8% 증가했다. 특히 전단채 발행액은 91조9천300억원에서 317조8천440억원으로 늘었다. 한투증권 한 곳의 발행 증가액이 전체 증권사 증가액의 절반가량을 차지했다.
+
+단기조달 확대는 다른 증권사에서도 나타났다. 한투증권에 이어 미래에셋증권의 CP·전단채 발행액이 전년 동기보다 43조4천100억원 늘었고, NH투자증권은 23조5천310억원 증가했다. 하나증권과 키움증권도 각각 21조6천억원, 21조원 늘었다.
+
+증권사들이 단기 차입을 늘려가며 자금 확보에 나선 데는 증시 활황에 따른 수익 확대 기대가 자리하고 있다. 거래대금이 늘어날수록 위탁매매 수수료 등 브로커리지 수익도 함께 증가하기 때문이다.
+
+대표적으로 한국투자증권의 올해 2분기 일평균 약정대금은 28조6천500억원으로 1분기보다 55.0% 늘었으며 위탁매매 수수료 수익도 4천524억원으로 44.2% 증가했다. 국내 주식 브로커리지 시장점유율도 같은 기간 10.9%에서 12.1%로 높아졌다.
+
+증시 거래 활성화가 위탁매매 수익을 끌어올리는 동시에 신용융자와 거래증거금 등에 필요한 단기자금 수요도 키운 셈이다.
+
+신용평가업계에서는 이같은 단기물 발행 확대를 자금 운용 기간에 맞춰 조달 만기도 짧게 가져간 결과로 보고 있다. 실제 전단채 발행은 증시 거래대금이 급증한 6월에 늘었다가 최근 거래가 진정되면서 함께 감소한 것으로 파악됐다.
+
+단기물 발행 확대가 곧바로 증권사의 신용도 저하로 이어지는 것은 아니라는 평가다. 주요 증권사의 실적이 양호한 데다 CP와 전단채도 시장에서 원활하게 소화되고 있어 당장 유동성 위험이 크게 높아졌다고 보기는 어렵다는 설명이다.
+
+다만 조달 만기가 짧아진 점은 경계 요인이다. 신용경색이나 단기금리 급등으로 금융 시장 여건이 악화할 경우 차환 비용이 빠르게 커질 수 있기 때문이다. 실제 CP 91일물 금리는 지난 6월 1일 연 3.05%에서 이달 7일 3.15%로 두 달 새 10bp(1bp=0.01%p) 상승했다.
+
+또 다른 신용평가업계 관계자는 "현재는 증권사 실적이 양호하고 단기물도 시장에서 원활하게 소화되고 있어 우려할 상황은 아니다"라면서도 "조달 만기가 짧아진 만큼 시장 경색이나 금리 급등 때 차환 부담이 커질 가능성은 경계할 필요가 있다"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016240444' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016240444</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
