@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>증권사, 조각투자 서비스 확대…장외거래소 개장 대비</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/293/0000088799' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14424" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>증권사, 조각투자 서비스 확대…장외거래소 개장 대비</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">증권사들이 조각투자 서비스 확대를 통해 대체자산 시장 진출을 가속화하고 있습니다. 연내 장외거래소 개설에 맞춰 계좌 관리, 상품 발행 등 인프라를 구축하며 시장의 제도적 기반 마련에 박차를 가하고 있어 금융 산업 전반의 혁신을 예고합니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 인프라</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">대체투자</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#조각투자</span> <span class="tag tag-hash">#장외거래소</span> <span class="tag tag-hash">#자본시장개편</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">증권사들이 조각투자 서비스 확대에 나서고 있다. 연내 조각투자 장외거래소 개설이 예고되면서 계좌관리부터 상품 발행까지 접점을 넓히는 모습이다.
+
+9일 금융투자업계에 따르면 신한투자증권은 최근 미술품 조각투자 기업 투게더아트와 업무 제휴를 체결했다. 투게더아트는 미술품 경매회사 케이옥션의 자회사로, 고가 미술품에 소액으로 투자할 수 있도록 투자계약증권 형태의 청약 서비스를 제공하는 플랫폼이다. 지금까지 10개 작품을 공모했다.
+
+이번 제휴로 신한투자증권은 투게더아트 이용자에게 청약에 필요한 계좌 개설과 연동 서비스를 제공한다. 또한 투자자 예치금을 분리 보관하는 계좌관리기관 역할도 수행한다.
+
+다른 증권사들도 발 빠르게 움직이고 있다. 한화투자증권은 실물연계자산 전담 조직인 '플래시팀'을 꾸리고 디지털·글로벌 경력직 인력을 채용 중이다. 아울러 조각투자 장외거래소 컨소시엄 두 곳에 참여해 금융당국 가이드라인에 맞춰 서비스를 선보일 계획이다. 글로벌 디지털자산 플랫폼 구축도 연내 완료를 목표로 하고 있다.
+
+조각투자 장외거래소 예비인가를 받은 KDX와 NXT 컨소시엄은 이달 본인가 신청을 앞두고 있다. 두 컨소시엄은 올해 4분기 거래소 개설을 목표로 하고 있다.
+
+한국거래소와 코스콤이 주도하는 KDX 컨소시엄은 △키움증권 △교보생명 △카카오페이증권 등이 공동 최대주주다. 흥국증권과 한국거래소도 5% 이상주주로 참여했다. 여기에 20여개 증권사와 다수 핀테크 기업이 이름을 올렸다. 제도권 금융 인프라와 거래 안정성이 강점으로 꼽힌다.
+
+NXT 컨소시엄은 대체거래소 넥스트레이드가 최대주주다. 뮤직카우와 △신한투자증권 △하나증권 △한양증권 △유진투자증권 △블루어드가 5% 이상지분을 보유하고 있다. 음악 저작권 조각투자를 이끌어온 뮤직카우가 컨소시엄 핵심으로 참여한 점이 특징이다.
+
+결제 인프라도 준비가 한창이다. 한국예탁결제원은 이달부터 비상장주식과 조각투자 장외거래 청산결제 인프라 구축에 착수했다. 지난달 27일에는 23개 증권사와 장외거래소 4곳, 금융투자협회 관계자를 대상으로 관련 업무설명회를 열었다.
+
+이번 인프라는 예탁증권 포함 전자증권 기반의 비상장주식·조각투자 시장을 대상으로 하며, 결제주기는 현행 증권시장보다 하루 빠른 'T+1'로 적용된다.
+
+기존 청산결제 시스템과는 독립된 형태로 개발돼 향후 다양한 디지털 자산을 수용할 수 있는 기반도 마련한다. 다만 토큰증권의 유통·결제는 정부 정책을 지켜본 뒤 별도로 검토할 방침이다.
+
+예탁원은 10~11월 모의시장 테스트를 거쳐 12월까지 시스템 구축을 마무리하고, 각 장외거래소의 영업 개시 일정에 맞춰 연내 가동한다는 목표다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/293/0000088799' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/293/0000088799</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
