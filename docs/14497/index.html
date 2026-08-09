@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>단일종목 레버리지 막았더니…반도체·홍콩 ETF로 자금 이동</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/029/0003041400' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14497" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>단일종목 레버리지 막았더니…반도체·홍콩 ETF로 자금 이동</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">단일종목 레버리지 ETF 규제가 강화되자, 투자 자금이 반도체 섹터나 홍콩과 같은 해외 상장 상품으로 이동하는 '풍선효과'가 나타나고 있다. 이는 국내 규제만으로는 글로벌 레버리지 수요를 완전히 통제하기 어려우며, 향후 외국인 수급을 통한 변동성을 키울 가능성을 시사한다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단일종목 레버리지 규제가 시장 자금 흐름을 반도체 섹터 및 해외 ETF로 분산시키며, 향후 외국인 수급 및 변동성 확대 가능성을 시사하는 구조적 분석 기사임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#풍선효과</span> <span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#규제영향</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">여의도 증권가. [연합뉴스]
+
+단일종목 레버리지 상장지수펀드(ETF) 규제 여파로 갈 곳 잃은 투자 자금이 반도체 섹터와 해외 상장 상품으로 쏠리는 ‘풍선효과’가 나타나고 있다는 분석이 나왔다. 국내 단일종목 상품의 거래와 리밸런싱 수요를 줄이는 효과는 확인되고 있지만 레버리지 투자 수요 자체를 억제하는 데는 한계가 있다는 지적이다.
+
+9일 금융투자업계에 따르면 정현종 한국투자증권 연구원은 최근 보고서에서 단일종목 레버리지 투자 규제 시행 후 반도체 섹터 레버리지 ETF의 거래대금이 오히려 증가했다고 분석했다.
+
+금융당국은 지난달 31일부터 단일종목 레버리지 ETF의 기본예탁금을 기존 1000만원에서 현금 3000만원으로 높이는 등 규제를 강화했다. 다만 규제 대상은 개별종목을 기초자산으로 하는 레버리지 상품에 집중돼 있다.
+
+이에 따라 KRX 반도체지수 일간 수익률의 2배를 추종하는 ‘KODEX 반도체 레버리지 ETF’의 기본예탁금은 기존 1000만원이 유지된다. 해당 지수를 추종하는 KODEX 반도체 ETF에서 삼성전자와 SK하이닉스가 차지하는 비중은 각각 39%, 23%에 달해 단일종목 레버리지 투자 수요를 상당 부분 대체할 수 있다는 분석이다.
+
+정 연구원은 “규제 적용일 이후 개별종목 레버리지 ETF와 달리 반도체 레버리지 ETF의 거래대금이 증가한 것은 규제의 풍선효과가 나타나고 있음을 시사한다”고 설명했다.
+
+투자 수요가 해외로 이동할 가능성도 변수다. 국내 규제를 적용받지 않는 홍콩 등 해외 시장에는 삼성전자와 SK하이닉스를 기초자산으로 한 레버리지 ETF가 이미 대규모로 상장돼 있다.
+
+홍콩에 상장된 ‘CSOP SK하이닉스 Daily (2x) Leveraged ETF’는 글로벌 단일종목 레버리지 ETF 가운데 시가총액이 가장 큰 상품이다. CSOP의 삼성전자와 SK하이닉스 레버리지 ETF 순자산은 각각 9억달러, 44억달러로 국내에 상장된 단일종목 레버리지 ETF 시장 전체와 맞먹는 수준이다.
+
+특히 SK하이닉스 레버리지 ETF는 기초자산 가격 하락으로 순자산이 감소하는 과정에서도 발행 좌수가 꾸준히 늘었다. 정 연구원은 7월 SK하이닉스 주가 급락을 저가 매수 기회로 본 글로벌 투자자 자금에 국내 투자자의 대체 수요까지 유입되면서 신규 설정이 늘었을 가능성이 있다고 봤다.
+
+레버리지셰어즈(Leverage Shares), 프로셰어즈(ProShares) 등 해외 운용사들도 SK하이닉스 주식예탁증서(ADR)를 기초자산으로 한 레버리지 ETF를 잇달아 내놓고 있다. 해외 레버리지 상품 규모가 커질수록 이들의 리밸런싱 거래가 외국인 수급을 통해 국내 증시 변동성을 키울 가능성도 있다는 분석이다.
+
+정 연구원은 “규제 효과를 판단하기에는 아직 이르지만, 단일종목 레버리지 ETF의 순자산 감소와 맞물려 국내 상품의 거래대금과 리밸런싱 수요를 줄이는 데는 효과가 나타나고 있다”고 평가했다. 다만 그는 “국내 규제만으로 반도체에 대한 글로벌 레버리지 투자 수요나 다른 상품으로 이동하는 풍선효과까지 막기는 어렵다”며 “장기적인 영향을 지켜볼 필요가 있다”고 짚었다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/029/0003041400' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/029/0003041400</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
