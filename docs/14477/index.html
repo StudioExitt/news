@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'6300 문턱' 코스피 숨고르기…금리·외인동향 촉각</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005397421' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14477" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'6300 문턱' 코스피 숨고르기…금리·외인동향 촉각</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 6300 포인트 근처에서 숨고르기에 접어들면서, 투자자들의 관심이 금리 동향과 외국인 자금 흐름 등 거시경제 지표로 집중되고 있습니다. 비(非)반도체 섹터의 순환매가 두드러지며 시장을 견인하고 있으며, 단기적으로는 미국 물가 및 금리 추이가 가장 중요한 분수령이 될 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">시장 방향을 결정짓는 핵심 트리거(미국 CPI, 금리)와 업종별 순환매 양상이 구체적으로 분석되었으며, 포트폴리오 전략까지 제시하여 투자 판단에 즉각적이고 강력한 영향을 줄 수 있기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">현대차</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">기계</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">화학</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#금리동향</span> <span class="tag tag-hash">#코스피전망</span> <span class="tag tag-hash">#순환매</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 6300 문턱에서 8월 첫 주 거래를 마쳤다. 지난달 31일 1001.89포인트 대반등 후 숨 고르기에 들어간 분위기다. 실적시즌이 반환점을 돌면서 증시의 시선은 유동성을 좌우할 거시지표 동향으로 향하고 있다.
+
+9일 한국거래소에 따르면 코스피 지수는 지난 7일 6258.77에 장을 마쳤다. 주간 낙폭 336.68포인트(5.10%)를 기록한 가운데 개인이 7조8908억원어치를 순매수하고 외국인은 5조9391억원어치, 기관은 2조3099억원어치를 각각 순매도했다.
+
+경감된 변동성이 눈에 띈다. 지수 등락폭은 장중 기준 594.41포인트(6080.25~6674.66)로 전주 대비 949.09포인트 줄었고, 사이드카 발동횟수는 2회(매수 1·매도 1)로 전주 대비 1회 감소했다. 전주 2회 등장한 서킷브레이커는 자취를 감추고 코스피200 변동성지수(VKOSPI) 종가는 일주일새 8.76포인트(10.39%) 내린 75.59를 기록했다.
+
+비(非)반도체 순환매가 두드러졌다. 코스피 업종지수 중 삼성전자·SK하이닉스가 포진한 전기전자는 11.04% 하락한 반면 건설(17.42%)·화학(10.46%)·금속(8.47%)·기계장비(7.72%)·일반서비스(7.25%) 등이 상승폭을 키웠다.
+
+코스닥 지수는 5거래일 중 4거래일 상승, 합계 79.05포인트(10.98%) 오른 798.81로 마감하며 코스피와 표정이 엇갈렸다. 공교롭게도 지난달 31일 단일종목 레버리지 상장지수펀드(ETF)에 대한 예탁금이 상향된 직후 코스닥 강세가 나타난 탓에 증권가에선 수급 개선을 점치는 목소리가 늘고 있다.
+
+권범석 삼성증권 연구원은 "다수 시장 참여자들은 대형주 수급 쏠림을 최근 코스닥 시장 급락의 주요 원인으로 지목했다"며 "지난 2월 상장폐지 강화안 발표 이후 외국인이 적극적인 코스닥 매수 기조를 보인다는 점도 수급에 긍정적"
+
+정현종 한국투자증권 연구원은 "시행 초기여서 판단하긴 이르지만, 금융당국의 레버리지ETF 규제는 증시 조정에 따른 운용자산(AUM) 축소와 맞물려 거래대금과 리밸런싱 수요를 줄이는 데 효과적인 것으로 보인다"면서도 "풍선효과나 글로벌 반도체 투자수요 제어가 쉽지 않은 만큼, 장기효과를 지켜볼 필요가 있다"
+
+2분기 실적시즌은 후반부에 접어들었다. 국내증시는 오는 14일 반기보고서 제출시한(12월 결산법인)을 앞뒀고, 해외증시에선 엔비디아분기실적 발표(26일 예정·현지 시각) 까지 중량급 주자가 부재한 실정이다.
+
+분수령으로는 미국 금리동향이 지목됐다. 한국시간으로 지난 7일 밤 발표된 미 7월 비농업 고용은 예상치를 크게 하회, 기준금리 인상 부담감을 완화하면서 뉴욕증시 3대 지수(다우존스30·S&P500·나스닥) 동반상승을 견인했다. 미 7월 소비자물가지수(CPI)는 오는 12일 밤, 생산자물가지수는 13일 밤 공개된다.
+
+이재원 유안타증권 연구원은 "하이퍼스케일러의 AI(인공지능) 투자가 회사채 발행과 외부 차입을 동반하는 자본집약적 국면으로 진입한 만큼, 시장금리 안정은 투자 지속성을 결정할 핵심 요건"이라며 "원/달러 환율이 급격히 안정되는데도 국내증시로 유입된 외국인 자금이 미미했던 이유는 물가·금리에 대한 경계심리"
+
+이경민 대신증권 연구원은 "7월 CPI는 전월과 유사하거나 소폭 낮아질 전망으로, 미국·이란의 재충돌과 협상 과정에서 국제유가가 반등한 만큼 에너지발 물가압력이 근원·서비스 물가로 확산하는지가 핵심"이라며 "물가 압력에 따른 추가 긴축 가능성은 미국채 금리와 달러를 향한 상방 압력으로 작용해 경계할 필요가 있다"
+
+단기 전략으로는 반도체 유지·비반도체 확대가 거론된다. 변동성 장세 속에서 업종 순환매가 계속될 가능성에 대비해야 한다는 분석이다.
+
+최재원 키움증권 연구원은 "현재까지 성장주의 주도권 회복은 제한적"이라며 "정보기술(IT) 기업들의 성장 지속성에 관련한 우려가 가시적으로 완화되기 전까진 펀더멘털·저평가 매력이 부각된 성장주와 변동성 방어가 가능한 가치주를 함께 편입하는 바벨 전략이 필요한 구간"
+
+김재승 현대차증권 연구원은 "국내에선 금융주를 포트폴리오에 일부 포함할 필요가 있다"며 "반도체 중심 포트폴리오의 변동성을 완화하고 금리상승 리스크를 헤지하는 보완자산"</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005397421' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005397421</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
