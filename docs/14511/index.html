@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>현대차 주가 약세에도 …'배당 안전판' 우선주는 선방</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005718574' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14511" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>현대차 주가 약세에도 …'배당 안전판' 우선주는 선방</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">피지컬 AI 기대감 소멸로 인해 현대차 보통주는 급락했으나, 배당 매력이 높아진 우선주들이 상대적으로 주가 하락 폭을 줄이며 '안전판' 역할을 했다는 분석입니다. 시장의 관심이 성장 프리미엄에서 실질적인 수익 창출 일정으로 옮겨갈 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 성장 프리미엄의 급격한 후퇴와 시장 기대 변화가 명확하게 관찰되었으며, 보통주와 우선주의 투자 매력도가 다르게 부각되어 투자 전략 재설정 필요성을 제기하기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자동차부품</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#현대차</span> <span class="tag tag-hash">#우선주</span> <span class="tag tag-hash">#AI프리미엄</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">올해 상반기 국내 증시에서 '자동차주'를 넘어 '로봇주'로 재평가받았던 현대차 주가가 피지컬 인공지능(AI) 투자 열기가 식으면서 고전하고 있다. 보스턴다이내믹스와 휴머노이드 로봇 '아틀라스'의 성장성을 선반영하며 급등한 보통주에서 프리미엄이 빠르게 걷혔다. 반면 상승장에서 소외됐던 우선주는 상대적으로 주가 낙폭이 작았던 데다 주가 하락으로 배당수익률이 높아져 눈길을 끈다.
+
+7일 한국거래소에 따르면 현대차는 이날 39만5500원에 거래를 마쳤다. 코스피가 종가 기준 고점을 기록한 지난 6월 22일 58만1000원과 비교하면 31.9% 떨어졌다. 같은 기간 현대차우는 16.1%, 현대차2우B는 14.9%, 현대차3우B는 14.5% 하락했다. 이들 우선주의 평균 하락률은 15.2%로 보통주보다 16.8%포인트 선방했다.
+
+실적과 현금 창출력을 공유하는 보통주·우선주 간에 수익률이 이처럼 벌어진 것은 상반기 현대차 상승분에 붙었던 '피지컬 AI 프리미엄'의 크기를 역으로 보여준다는 분석이 나온다. 현대차는 연초 이후 보스턴다이내믹스의 휴머노이드 사업과 피지컬 AI 생태계 구축 기대가 부각되며 전통 완성차보다 로봇 성장주에 가까운 평가를 받았다. 이 과정에서 유동성과 의결권을 갖춘 보통주에 수요가 집중된 반면 우선주는 상승세를 따라가지 못했다. 실제 6월 22일 기준 우선주 평균 할인율은 60.0%까지 벌어져 있었지만 이후 보통주가 더 가파르게 밀리며 7일 현재 50.2%로 좁혀졌다.
+
+우선주에는 배당이라는 가격 하단도 있었다. 현대차는 2025~2027년 총주주환원율(TSR) 35% 이상과 연간 최소 주당배당금(DPS) 1만원을 유지하는 정책을 제시하고 있으며 지난달 23일에도 보통주와 우선주 3종에 각각 주당 2500원의 분기배당을 단행하겠다고 결정했다. 연간 최소 배당금을 7일 종가에 단순 적용하면 보통주 배당수익률은 2.5%에 그치지만 현대차우 5.1%, 현대차2우B 5.0%, 현대차3우B 5.2%로 5% 안팎에 이른다. 주가가 내릴수록 현금수익률이 빠르게 높아지는 우선주의 특성이 추가 하락을 막는 완충재로 작용한 셈이다.
+
+반대로 보통주는 성장 프리미엄 변화에 훨씬 민감했다. 로봇사업의 장기 성장성이 훼손됐다기보다 주가를 다시 끌어올릴 만한 수익화 일정이나 기업가치 산정 근거가 제시되지 않으면서 기대가 현실을 앞서갔던 부분이 되돌려지고 있다는 해석이다. 시장의 관심이 '아틀라스가 얼마나 진화했느냐'에서 '로봇사업이 주주에게 언제부터 얼마의 이익을 안기느냐'로 옮겨간 것이다.
+
+이에 따라 오는 26일 예정된 현대차 CEO 인베스터데이가 재평가의 분기점이 될 전망이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005718574' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005718574</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
