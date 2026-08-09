@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PEF 해외 M&A, 가격보다 '경제안보'가 좌우</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005397505' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14539" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>PEF 해외 M&A, 가격보다 '경제안보'가 좌우</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">해외 PEF의 M&A 시장에서 기업 가치 평가가 재무적인 관점보다 국가 안보와 전략기술 보호라는 지정학적 변수에 의해 결정되는 시대적 흐름을 보여줍니다. 이는 글로벌 자본 이동에 규제와 위험 요소를 크게 증가시키고 있습니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">고려아연</span> <span class="tag stock-tag">SK아이이테크놀로지 (관련 소재)</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">원자재</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#경제안보</span> <span class="tag tag-hash">#공급망재편</span> <span class="tag tag-hash">#PEF</span> <span class="tag tag-hash">#반도체소재</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">투자 대상국 규제·안보 환경 검토 필수 PEF(사모펀드)의 해외 인수·합병에서 미국·일본의 대중국 견제가 핵심변수로 부상하고 있다. 일부 PEF는 미국 주도 공급망 정책에 대한 전략적 파트너로 인정받기 위한 시도에 나섰다.
+
+9일 IB(투자은행)업계에 따르면 고려아연이 미국 테네시에서 추진하는 '프로젝트 크루서블'은 갈륨, 게르마늄, 안티모니 등 비철금속을 생산하는 통합 제련사업이다. 해당 품목들은 중국이 정제·공급을 사실상 주도해온 광물이고 중국이 2024년 12월부터 지난해 11월까지 대미수출을 전면금지(현재는 11월까지 수출금지 한시적 유예 대상)하면서 미국이 전략물자로 중시하고 있다. 프로젝트 크루서블은 미국 정부로부터 지난 4월 FAST-41(연방 인허가 신속지원제도) 적용사업에 지정됐다. 미국 측이 대중국 공급망 재편에 속도를 내는 모양새다.
+
+최윤범 고려아연 회장을 상대로 경영권 분쟁 중인 MBK파트너스(이하 MBK)·영풍은 미국 현지에서 최대주주 그룹으로 자신들을 소개하며 해당 사업을 지지한다는 입장을 알렸다. 이와 관련, 고려아연이 영풍·MBK 측을 상대로 상표권 무단사용과 업무방해를 이유로 형사고발에 나서자 MBK·영풍 측은 주주권 탄압이라며 맞서고 있다. IB업계는 이번 갈등이 미국 전략사업의 대표권을 쟁취하기 위한 경쟁이 본격화했음을 의미한다고 본다.
+
+미국에서는 중국 변수로 인해 PEF의 기업 인수가 무산된 전례가 있다. 중국계 PEF 와이즈로드는 2021년 한국계 반도체기업 매그나칩반도체 인수를 추진했지만 미국 외국인투자심의위원회(CFIUS)의 승인을 얻지 못하면서 거래가 무산됐다. 중국계 PEF를 경유해 반도체 기술이 중국으로 넘어갈 경우 자국 안보에 문제가 발생할 수 있다고 CFIUS가 해석한 것으로 풀이된다. MBK는 일본 정부로부터 지난 4월 일본 마키노밀링머신 인수중단을 권고받고 인수추진을 철회한 일이 있다. 일본 정부는 마키노밀링머신이 세계적인 공작기계업체고 제품이 일본 방산업체에 폭넓게 사용된다는 점을 판단근거로 들면서 인수에 제동을 걸었다. 미중 대립 속에 일본 측이 안보현안에 대해 강경한 입장을 드러냈다는 관측이 나온다.
+
+PEF들은 프로젝트 크루서블 등 경제안보 관련 사업 추이에 주목한다. IB업계 관계자는 "(해외 인수·합병에서) 인수가격이나 주주판단보다 전략기술 보호가 거래성사 여부를 좌우할 수도 있다"며 "사전검토 대상이 재무와 사업성뿐 아니라 투자 대상국의 최신 규제는 물론 안보환경으로까지 넓어지고 있다"</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005397505' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005397505</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
