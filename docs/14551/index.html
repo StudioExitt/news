@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>훌쩍 뛴 '증권신고서 정정요구'…매서워진 당국 눈치</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005397536' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14551" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>훌쩍 뛴 '증권신고서 정정요구'…매서워진 당국 눈치</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금융감독원의 증권신고서 정정요구가 급증하면서 기업들의 자금 조달(유상증자 등)에 어려움을 겪으며 경영 불확실성이 높아지고 있습니다. 일반주주는 주주권익 강화로 환영하나, 기업과 대주주 측에서는 예측 가능성 하락으로 불안감이 커지는 것이 핵심입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">금융당국의 강화된 규제와 자금 조달의 어려움은 기업들의 단기 유동성 및 투자심리에 부정적인 영향을 미치며, 이는 증시 전체에 불안 요소로 작용함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#자금조달난항</span> <span class="tag tag-hash">#규제강화</span> <span class="tag tag-hash">#유상증자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[MT리포트-돈맥경화, 기업들 곡소리 난다]② 기업들은 운신의 폭 좁아져…"경영 불확실성↑"
+[편집자주] 최근 상장사들의 자금 조달이 전방위로 어려워지고 있다. 회사채·메자닌 등 다른 자금 조달 창구부터 위축된 데다, 마지막 보루였던
+유상증자마저 잇단 정정요구로 발이 묶이는 형국이다. 금융당국의 자금 조달 정책 방향마저 예년보다 깐깐해져 기업들의 고민도 깊어진다. 돈의 흐름이
+시장 말단까지 유연하게 흐르게 할 수 있는 해법을 모색해 본다.
+금융감독원의 증권신고서 정정요구/그래픽=이지혜
+금융감독원의 증권신고서 정정요구/그래픽=이지혜
+자금조달 난이도를 둘러싼 산업계 하소연의 뒤편엔 최근 급증세에 접어든 금융감독원의 증권신고서 정정요구가 있다. 일반주주들은 환영하는 반면 운신의
+폭이 좁아진 기업들은 경영 불확실성이 높아졌다며 우려를 표명한다.
+
+7일 머니투데이가 금융감독원의 전자공시·김상훈 국민의힘 의원 제출자료를 토대로 집계한 올해 증권신고서 정정요구는 이날까지 66건으로 나타났다. 
+8개월 만에 지난해(43건)와 2024년(56건)의 연간 건수를 뛰어넘은 수준이다.
+
+기업별로 보면 연달아 정정요구를 받는 사례가 잇따르고 있다. 올 들어 한울반도체와 상지건설은 4차례, 에이전트AI·휴림에이텍은 3차례 퇴짜를
+맞았다.
+
+당국의 정정요구는 증권신고서의 효력을 정지하는 효과를 낸다. 상장사는 주가 급등락 부담을 안게 되기도 한다. 이런 이유로 기업 현장에선 금감원이
+정식 요구에 돌입하기에 앞서 실무적 협의를 거치거나 '암묵적 제스처'를 감지하고 신고서를 정정한 사례가 적잖은 것으로 전해진다.
+
+정정요구가 나타나는 범위는 전통적 갈등사안인 유상증자에서 합병·분할로 확산하는 추세다. 포괄적 주식교환에 대해 정정요구를 받은 상장사는 지난해
+전무했지만, 올 들어선 4곳(현대지에프홀딩스·이마트·넷마블·우리금융지주)으로 증가했다.
+
+송곳 심사가 급증한 배경엔 지난해 단행된 상법 개정이 자리한다. 기존 '회사의 이익'에 한정됐던 상법상 이사의 충실의무 범위가 '회사와 주주의이익'으로 넓어지면서 당국의 재량권 역시 강화된 것으로 업계는 보고 있다.
+
+일반주주 권익보호에 초점을 둔 자본시장 운영기조에 맞추다 보니 정무적 판단이 녹아들었다는 주장도 있다. 통상 금감원은 
+개별 정정요구에 대해 사유를 공개하지 않는다.
+
+심사기조 변화를 둘러싼 평가는 극과 극으로 나뉜다. 유증 등 단기 악재에 민감한 일반주주 측에선 당국의 잣대가 엄밀해지면서 주주권익이 증진됐다고
+호평하지만 대주주와 기업 측에선 유증에 따른 자금조달이나 기업 합병·분할에 대한 예측 가능성이 급감했다며 불안을 호소한다. 당국의 제동으로
+경영문제가 가중될 수 있다는 지적이다.
+
+한 금융투자업계 관계자는 "정정요구를 한 차례 받으면 일정이 최소 수주 지연되기 마련인데 차입금 상환이나 운영자금 마련이 시급해 유증을 시도하던
+기업의 경우 유동성 위기에 내몰릴 수 있다"며 "신고서 정정에 따른 자금 공백을 추가 단기차입 등으로 해결하더라도 중장기 재무부담을 감수해야 한다"
+고 밝혔다.
+
+증시 안팎에선 정정요구의 주된 발단인 유증에 대해 경영상황·지배구조별로 심사기준을 세분화·명확화해 예측 가능성을 높이면 주주·기업간 갈등을
+완화할 있다는 의견도 나온다. 시장에선 유증 유형별로 주가 변동성이 다르게 나타나는 추세다.
+
+홍지연 자본시장연구원 선임연구원은 "주주배정·일반공모 방식 유증은 외부자금 조달 필요성과 주가 고평가 신호로 인식돼 단기적으로 부정적 시장반응이
+나타나는 반면 제3자배정 유증은 전략적투자자의 참여와 기업가치에 대한 긍정적 신호로 해석되는 경향이 있다"며 "2020~2022년 유증 상장사의
+공시 후 누적초과수익률(CAR)을 살펴보면 발행 방식에 따라 뚜렷한 차이가 확인된다"
+고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005397536' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005397536</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
