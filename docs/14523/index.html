@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>극심한 변동장에…커버드콜로 대피 늘었다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004650008' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14523" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>극심한 변동장에…커버드콜로 대피 늘었다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내외 증시의 급등락과 변동성 확대가 심화되자, 투자자들이 옵션 프리미엄을 활용하여 위험을 관리하고 정기적인 분배금을 확보할 수 있는 커버드콜 ETF로 대거 이동하고 있습니다. 이로 인해 국내 상장 커버드콜 ETF의 순자산은 지난해 대비 약 70% 증가하며 기관 및 개인 자금의 관심이 집중되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">시장의 구조적 변화와 투자자 심리 변화를 반영한 보고서 성격의 기사로, 특정 자산에 대한 직접적인 매수/매도 신호보다는 새로운 투자 전략 및 금융상품의 유효성을 제시하여 중기적인 포트폴리오 구축 방식에 영향을 줄 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">KB금융</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#커버드콜</span> <span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#변동성장세</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■순자산 올해 70%↑ 26조 육박
+콜옵션에 월배당으로 변동성 낮춰
+3월 이후 ‘국내 주식형’ 9종 상장
+반도체·AI주 등 기초자산도 다양
+코스피가 하락 마감한 7일 오후 서울 중구 하나은행 딜링룸 현황판에 전장대비 37.61포인트(0.60%)하락한 6,258.77을 나타내고 있다.
+뉴스1
+국내외 증시가 급등락을 반복하면서 옵션 프리미엄을 활용해 변동성을 낮추고 정기적인 분배금을 지급하는 커버드콜 상장지수펀드(ETF)로 투자금이 몰리고 있다. 코스피를 비롯해 미국 대표지수와 배당주, 반도체 등을 기초자산으로 삼은 상품 전반에 자금이 유입되면서 국내 상장 커버드콜 ETF의 순자산은 26조 원에 육박하는 것으로 나타났다.
+
+9일 한국거래소에 따르면 이달 7일 기준 국내 상장 커버드콜 ETF의 순자산총액은 25조 9853억 원으로 집계됐다. 지난해 말 15조 373억 원보다 70% 증가한 규모다.
+
+상품별로는 ‘KODEX 200타겟위클리커버드콜’에 올 들어 이달 7일까지 2조 5279억 원이 순유입됐다. ‘TIGER 배당커버드콜액티브’에도 같은 기간 2조 90억 원이 들어왔다. ‘TIGER 미국나스닥100타겟데일리커버드콜’과 ‘TIGER 반도체TOP10커버드콜액티브’의 연초 이후 순유입액도 각각 1조 3380억 원, 8428억 원을 기록했다.
+
+이밖에도 ‘SOL 200타겟위클리커버드콜’에는 올 들어 6944억 원이 순유입됐고 ‘KODEX 미국배당커버드콜액티브’와 ‘KODEX 미국나스닥100데일리커버드콜OTM’에도 각각 5598억 원, 5588억 원이 들어왔다. 국내 대표지수부터 미국 배당주와 기술주까지 기초자산이 다양해지면서 투자자의 선택 폭도 넓어진 것으로 풀이된다.
+
+커버드콜 ETF는 주식이나 주가지수를 보유하면서 해당 자산을 일정 가격에 살 수 있는 권리인 콜옵션을 매도하는 상품이다. 주가가 크게 오르면 상승분을 온전히 누리기 어렵지만 옵션을 팔아 받은 프리미엄으로 정기적인 분배금을 지급하고 하락 위험을 일부 완충할 수 있다. 증시가 급등하기보다 횡보하거나 완만하게 오르내리는 변동성 장세에서 상대적으로 유리하다.
+
+최근 국내 증시의 변동성이 확대되면서 상품 출시도 빨라지고 있다. 국내 주식형 커버드콜 ETF 21개 중 9개가 올 3월 이후 출시됐다. 코스피200을 단순 추종하는 상품뿐 아니라 고배당주와 금융고배당, 반도체, 인공지능(AI) 반도체, 코스닥150 등을 활용한 상품으로 투자 대상도 다양해졌다.
+
+단일종목 레버리지 ETF에 집중됐던 개인 자금이 규제 강화와 증시 급락을 계기로 다른 종류의 전략형 상품에 분산되고 있다는 분석도 나온다. 높은 변동성을 감수하고 주가 상승에 베팅하기보단 옵션 프리미엄을 통해 현금 흐름을 확보하고 포트폴리오의 가격 변동을 줄이려는 수요가 늘었다는 것이다.
+
+해외에서도 한국 증시의 높은 변동성을 활용한 상품이 등장했다. 홍콩 운용사 CSOP자산운용은 지난달 31일 홍콩거래소에 코스피200 선물과 콜옵션 매도 전략을 결합한 ‘CSOP KOSPI 200 커버드콜 액티브 ETF’를 상장했다.
+
+다만 커버드콜 ETF는 원금 보장 상품이 아닌 만큼 투자시 주의가 필요하다. 기초자산 가격이 크게 하락하면 ETF 가격도 함께 떨어져 분배금을 받더라도 주가 하락 폭이 이를 웃돌면 총수익률은 마이너스를 기록할 수 있다. 강한 상승장에서도 콜옵션을 매도한 만큼 일정 수준을 넘어선 상승 이익은 포기해야 해 일반 지수형 ETF보다 수익률이 낮아질 가능성이 크다.
+
+김재승 현대차증권 연구원은 “코스피가 반등하더라도 지수가 오를수록 개인투자자의 차익 실현과 포지션 축소가 반복될 가능성이 있다”며 “급락과 급반등 이후 시장이 방향성을 고민하는 시기에는 커버드콜을 활용해 포트폴리오의 변동성을 낮추는 전략이 유효하다”고 분석했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004650008' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004650008</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
