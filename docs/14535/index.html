@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"저게 뭐야?" 주말 달군 UFO 목격담...쩍 갈라진 하늘까지</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006348369' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14535" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"저게 뭐야?" 주말 달군 UFO 목격담...쩍 갈라진 하늘까지</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">천문학적/과학적인 단순 목격담으로, 경제 활동이나 금융 시장과는 관련성이 매우 낮아 투자 심리 변화를 일으키지 않을 것입니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#과학상식</span> <span class="tag tag-hash">#기후현상</span> <span class="tag tag-hash">#뉴스분석</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">시흥 상공에선 하늘이 수평으로 갈라져 9일 경기 김포와 시흥 등 수도권 상공에서 신기한 현상들이 잇따라 포착돼 온라인이 시끌하다.
+
+수도권 일대에서 포착된 물체와 수평선으로 갈라진 하늘 (사진=YTN 캡처)
+
+이날 고양시 인근에서는 맑은 하늘에 하얗고 작은 점 3개가 둥둥 떠다니는 모습이 동시다발적으로 목격됐다.
+
+각종 사회관계망서비스(SNS)와 온라인을 중심으로 미확인 비행 물체(UFO)가 아니냐는 추측글이 잇따랐으며 언론사에 제보도 이어졌다.
+
+전문가들은 이번 현상을 두고 UFO일 가능성을 낮게 봤다. UFO는 비현실적인 고속 비행이나 급가속 직각 회전 등 말 그대로 이해 불가능한 비행 현상을 보인다.
+
+하지만 이번에 관측된 현상은 고고도 상공에서 바람을 타고 천천히 이동했으며 앞서 언급한 UFO의 특징을 보이지 않았다. 전문가는 “대형 풍선이나 드론 기체가 태양광을 강하게 반사하며 나타난 현상으로 추정된다”고 YTN에 의견을 밝혔다.
+
+같은 날 인천 시흥 상공에서도 좀처럼 보기 힘든 기상 현상이 관측됐다. 하늘이 수평으로 가로 <0xEC><0x9E><0xB0> 듯 흰색과 파란색으로 나뉜 현상이 나타난 것이다.
+
+이를 기상학적으로 풀이하면 ‘전선 구름’ 현상이라 한다. 성질이 다른 공기 덩어리가 강하게 충돌하면서 일종의 전선대가 만들어 진 것이다.
+
+전문가는 “동풍이 밀어붙이는 경계면을 따라 구름이 형성되고, 건조한 공기와 만나는 하단부가 순식간에 증발하면서 선명한 일직선 경계가 나타난 것이”라고 설명했다.
+
+최근 SBS 탐사보도 프로그램 ‘그것이 알고 싶다’에서 지난 5월 발생한 부산 김해공항 회항 사건을 조명하며 UFO에 대한 관심이 높아진 상태다.
+
+김해공항은 항공 보안상 비행금지구역인 데다 공군도 주둔하고 있어 보안에 철저한 곳이다. 사건은 지난 5월 19일 당시 아파트 10층 정도 높이에서 세 개의 불빛이 편대를 이뤄 움직이는 모습이 포착되며 시작됐다.
+
+방송에 따르면 해당 비행체는 훈련된 공군 장병들도 쫓기 어려울 정도로 2시간 동안 신출귀몰하다 갑자기 사라졌다고 한다. 한 제보자는 “특수임무소대라고 대테러 전문팀도 출동한 것으로 안다”고 주장했다.
+
+이에 일본 나고야에서 출발해 밤 9시 반쯤 김해공항에 도착할 예정이던 비행기는 본래 1시간 반이면 도착했어야 하지만 비상사태로 활주로가 폐쇄되면서 인천공항으로 회항했다가 10시간 만에 김해공항으로 돌아왔다.
+
+관제탑을 관할하는 공군은 미확인 비행체 출몰 이후 경찰과 함께 합동수색을 벌였으나, 실체를 확인할 수는 없었다. 경찰 역시 밤하늘 불빛을 비행체로 오인한 해프닝으로 보고 사건을 종결했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006348369' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006348369</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
