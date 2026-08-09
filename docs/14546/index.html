@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'만능통장' ISA 바뀐다는데…내 계좌 그냥 둬도 되나요[금알못]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014116708' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14546" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'만능통장' ISA 바뀐다는데…내 계좌 그냥 둬도 되나요[금알못]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부의 ISA 개편안 발표로 인해 기존 투자자들의 불만이 커지고 있습니다. 계약 기간 제한과 납입한도 이월 폐지는 자영업자 등 소득 변동성이 큰 투자자들에게 재정적 부담이 될 수 있다는 우려가 제기됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 절세 계좌인 ISA의 구조 변경(만기 제한 및 납입 한도 이월 폐지) 가능성이 제기되어 투자자들의 불안감과 불만이 커졌습니다. 이는 장기적인 자산 포트폴리오 계획에 부정적인 영향을 미칠 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">소비자 금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ISA개편 #세제정책 #절세계좌 #재테크</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[서울=뉴시스] 박주연 기자 = 정부의 세제개편안 발표 후 '만능 절세계좌'로 불리던 개인종합자산관리계좌(ISA)를 둘러싼 혼란이 커지고 있습니다.
+
+ISA는 하나의 계좌로 펀드와 주식, 예·적금, 상장지수펀드(ETF), 주가연계증권(ELS) 등 다양한 금융상품들을 운용하고 세제 혜택을 받을 수 있는 자산관리계좌입니다. 2016년 3월 국민 자산형성 지원을 목적으로 도입된 후 꾸준한 인기를 얻으며 올해 상반기 말 기준 투자금액 73조원, 가입자수 973만명을 돌파했습니다.
+
+ISA계좌의 가장 큰 장점은 '절세 혜택'입니다.
+
+ISA는 가입기간 중의 수익과 손실을 더해 순수익에만 세금을 매기기 때문에 일반계좌에 비해 절세효과가 클 수밖에 없습니다.
+
+비과세와 세율 혜택도 상당합니다. 일반형의 경우 ISA 계좌에서 발생한 이자, 배당소득 등 순이익 중 200만원까지 비과세가 적용되며 서민형과 농어민형은 400만원까지 세금 혜택이 있습니다. 비과세 구간을 초과하는 과세 대상 소득은 9.9% 세율로 분리과세합니다.
+
+예를 들어 ISA 계좌를 통해 500만원의 금융소득을 벌어들일 경우 이 중 200만원까지는 비과세가 적용되고 이후 300만원에 대해서는 9.9%의 세율이 적용됩니다. 일반 예·적금 이자, 펀드 배당에 15.4%를 과세하는 것에 비하면 세율이 낮습니다. 납입한도는 연간 2000만원, 5년간 최대 1억원입니다.
+
+의무 가입 기간(3년) 이후에도 만기를 무제한 연장해 세금을 미루며 굴리는 초장기 과세이연과 복리 효과를 누릴 수 있고, 납입한도 이월이 가능해 '만능 절세 통장'이라는 별칭까지 얻었습니다.
+
+하지만 정부가 기존 ISA의 계약기간을 5년으로 제한하고 납입한도 이월을 없애는 대신 국내 투자에 특화한 '생산적금융 ISA'를 신설하는 내용의 개편안을 내놓으면서 기존 투자자들의 불만이 커지고 있습니다.
+
+정부의 세제개편안이 국회를 통과하면 앞으로는 5년마다 세금을 정산한 후 새로 가입해야 합니다. 1억원을 모두 채워 해지한 후 재가입할 때는 전액을 계좌에 넣을 수 없습니다. 다시 연간 2000만원씩, 5년간 1억원을 채워야 합니다.
+
+납입한도 이월이 사라지는 것에 대한 불만도 큽니다. 기존에는 올해 1000만원을 넣으며 내년에는 3000만원을 넣을 수 있었지만 앞으로는 무조건 연간 2000만원 한도로 납입해야 합니다.
+
+소득이 일정해 매년 2000만원을 채워넣을 수 있는 투자자들은 큰 부담이 없지만 자영업자 등 소득이 일정하지 않은 투자자들 사이에서는 매년 넣지 못하는 만큼 비과세 혜택이 줄어든다는 불만이 나옵니다.
+
+세제개편안이 국회를 통과하면 내년부터 시행되는 만큼 미국 지수형 상품 투자를 위해 ISA 가입을 고려하고 있던 투자자라면 올해 안에 계좌를 개설하는 것이 유리합니다.
+
+ISA 계좌를 통해 미국 대표지수 ETF를 모아온 투자자들 사이에서는 세제혜택을 최대한 받기 위해 개정안 시행 전 계약기간을 최대한 늘리려는 움직임이 나타나고 있습니다. 다만 ISA 만기 연장은 일반적으로 '만기 도래 3개월 전'부터 가능합니다. 연장 가능 시점이 내년으로 넘어가면 개편 ISA를 적용받아 초장기 연장이 어려울 수 있습니다.
+
+이 때문에 온라인상에는 기존 계좌를 해지한 뒤 올해 안에 만기를 최대한 길게 설정해 새로 가입하라는 등의 대응법도 공유되고 있습니다. 다만 계좌를 해지하면 기존 계좌에서 누려온 세제 혜택이나 납입 이력 등에 영향을 받을 수 있는 만큼, 무조건 해지하기보다는 자신의 가입기간과 수익 규모 등을 따져봐야 한다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014116708' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014116708</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
