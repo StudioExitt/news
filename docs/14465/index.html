@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“시청 김 주무관인데요”…공공기관 사칭 신종피싱 주의보</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #6b7280; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/023/0003992005' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14465" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“시청 김 주무관인데요”…공공기관 사칭 신종피싱 주의보</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">미분류</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">—</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">공무원 사칭, 로맨스 스캠 등 신종 피싱 범죄 증가에 대한 주의보가 발표되었습니다. 피해를 막기 위해서는 공공기관의 공식 채널을 통한 교차 확인과 의심스러운 요구사항 거절이 필수적입니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">공공 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#피싱주의보</span> <span class="tag tag-hash">#금융사기예방</span> <span class="tag tag-hash">#소비자안전</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">캄보디아에서 연애를 빙자한 사기 '로맨스 스캠'으로 120억원을 가로챈 한국인 총책 부부가 지난 1월 23일 국내로 강제 송환돼 울산경찰청 반부패수사대로 연행되는 모습./뉴스1
+“시청에서 사용할 차량용 무전기를 대신 구매해주시면 차액을 챙겨드리겠습니다.”
+
+한 소상공인은 시청 공무원을 사칭한 사기범의 이 같은 제안을 받았다. 사기범은 공공기관 납품가보다 일반 도매가가 싸다며 대리구매를 부탁했고, 허위 업체 직원을 소개하며 물품 대금을 대신 입금해달라고 했다. 피해자가 돈을 보내자 ‘공무원’도, 업체도 모두 연락이 끊겼다.
+
+공공기관을 사칭해 물품을 대신 사게 한 뒤 돈을 가로채는 ‘노쇼 사기(대리구매 사기)’가 신종 피싱의 주요 유형으로 떠올랐다. 사기범들은 위조한 명함이나 공무원증, 공문서 등을 보내 신뢰를 확보한 뒤 접근하는 수법을 주로 쓴다.
+
+금융정보분석원(FIU)이 지난 6월 30일 신종피싱 의심계좌 거래정지 제도를 시행한 이후 8월 4일까지 신종피싱으로 신고돼 금융회사가 임시조치한 건수는 4935건이었다. 이 가운데 금융회사가 특금법상 강화된 고객확인 대상으로 분류해 신종피싱 의심계좌로 임시 거래정지 처리한 건수는 3750건이었다.
+
+3750건을 유형별로 보면 로맨스 스캠이 1527건(41%)으로 가장 많았고 노쇼 사기 1376건(37%), 팀미션 사기 847건(22%)이 뒤를 이었다.
+
+특히 노쇼 사기는 지자체뿐 아니라 교도소와 학교 등 공공기관을 사칭하는 방식으로 확산하고 있다. 대규모 납품이나 공사 계약을 체결할 것처럼 접근한 뒤 “내부 감사”나 “예산 부족” 등을 이유로 피해자에게 물품을 대신 구매해 달라고 요구하는 식이다. 최근에는 소방·위생 점검이나 정부 시책을 빙자해 특정 장비를 사도록 유도하는 사례도 확인됐다.
+
+실제 교도소 직원을 사칭한 사기범은 구내식당 공사를 이유로 출장 뷔페 견적을 의뢰한 뒤 접근했다. 이후 내부 감사 문제로 특정 음식을 직접 구매할 수 없다며, 대신 구매해 납품하면 현금으로 대금을 주겠다고 속여 허위 업체 계좌로 돈을 보내게 했다.
+
+시청 공무원을 사칭해 식당에 위생 민원이 접수됐다고 한 사례도 있다. 사기범은 위생 점검을 앞두고 오염 측정기와 세균 측정기를 특정 업체에서 구매해 구비해야 한다고 요구해 피해금을 받아냈다.
+
+다른 신종 피싱도 일상적인 관심사를 파고든다. 로맨스 스캠은 유명인이나 전문직, 특수군인 등을 사칭해 소셜미디어나 데이팅 앱으로 접근한 뒤 일정 기간 신뢰를 쌓고 돈을 요구한다. 실제로 유엔(UN) 평화유지군 부사령관을 사칭해 한 달간 관계를 쌓은 뒤 800만달러와 금괴가 든 택배를 보내겠다며 통관 수수료를 요구한 사례가 있었다. 한국계 외국인 이성을 사칭해 쇼핑몰 투자를 권유하거나 가짜 포인트를 미끼로 회원 등급 상향 비용을 요구한 사례도 적발됐다.
+
+팀미션 사기는 영상 시청이나 쇼핑몰 체험단 같은 부업으로 위장한다. 처음에는 리뷰 작성이나 영상 시청 대가로 소액을 지급해 안심시킨 뒤 보증금·투자금·충전금 등을 요구한다. 미션 실패를 이유로 추가 입금을 요구하거나 수익금을 인출하려면 수수료가 필요하다고 속이는 경우도 있다.
+
+FIU는 공공기관 직원을 사칭한 경우 해당 기관의 공식 전화번호로 신분과 요청 내용을 직접 확인해야 한다고 당부했다. 특히 공공기관 직원은 휴대전화로 계약이나 납품을 요청하지 않으므로, 휴대전화로 걸려온 전화는 각별히 유의해야 한다. 직접 취급하지 않는 물품의 대리구매나 특정 업체의 물품 구매를 요구받으면 즉시 거절해야 한다. 이미 송금했다면 돈을 돌려주겠다는 말에 추가로 입금하지 말고 금융회사나 경찰에 즉시 신고해야 한다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/023/0003992005' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/023/0003992005</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
