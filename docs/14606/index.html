@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>단타 막으려면 '0.2% 거래세'…레버리지 ETF, 규제 2라운드 오나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005559235' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14606" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>단타 막으려면 '0.2% 거래세'…레버리지 ETF, 규제 2라운드 오나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">단일종목 레버리지 ETF가 현물시장 변동성을 증폭시키는 구조적 원인으로 지적되며, 0.2% 수준의 매도 거래세 부과 등 추가 규제가 검토되고 있습니다. 다만, 전반적인 거시경제 지표(수출호조, 낮은 PER)는 견조하며, 시장은 수급 왜곡 해소를 통해 이익 기반 반등을 할 것으로 전망됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">레버리지 ETF에 대한 규제 가능성은 단기적으로 시장 변동성 요인으로 작용하나, 기사 말미의 경제 분석(저PER, 견조한 이익, 우호적 금리)을 통해 장기적인 반등 기대감을 높임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#거래세</span> <span class="tag tag-hash">#반도체실적</span> <span class="tag tag-hash">#수급규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">10일 오전 서울 중구 하나은행 딜링룸에서 딜러들이 업무를 하고 있다. 뉴시스 제공
+[파이낸셜뉴스] 단일종목 레버리지 상장지수펀드(ETF)에 대한 추가 규제 필요성이 증권가에서 제기되고 있다. 개인 투자자 기본예탁금을 3000만원으로 상향한 기존 대책만으로는 시장 변동성을 완화하는 데 한계가 있는 만큼 단일종목 레버리지·인버스 ETF에 한해 매도 시 0.2% 수준의 거래세를 부과하는 방안을 검토해야 한다는 제안이다.
+
+10일 금융투자업계에 따르면 최근 증권가에서는 단일종목 레버리지 ETF가 현물시장 변동성을 증폭시키는 구조적 요인으로 작용하고 있다며 추가적인 제도 보완이 필요하다는 의견이 나오고 있다.
+
+김두언 하나증권 연구원은 "반등의 지속성을 위해서는 시장 내부의 수급 왜곡도 정상화돼야 한다"며 "지금까지의 규제가 투자 진입을 제한하는 데 초점을 맞췄다면 다음 단계는 과도한 단기 회전의 비용을 정상화하는 것"이라고 말했다.
+
+김 연구원은 단일종목 레버리지·인버스 ETF에 한해 매도 시 0.2% 수준의 거래세를 부과하는 방안을 제시했다. 세수 확보가 목적이 아니라 초단기 거래와 기계적 리밸런싱이 현물시장에 전가하는 변동성 비용을 해당 상품 내부에 반영하자는 취지다. 적용 대상도 일반 ETF가 아닌 단일종목 레버리지·인버스 ETF로 한정하고 일정 기간 시행 후 효과를 재평가하는 일몰형 제도가 바람직하다고 덧붙였다.
+
+이 같은 제안은 주가와 펀더멘털 간 괴리가 확대되고 있다는 판단에 근거한다. 김 연구원은 "최근 코스피 하락은 기업 실적 악화보다 수급과 투자심리 위축의 영향이 크다"고 진단했다. 코스피는 6월 고점 대비 33.3% 하락했지만 12개월 선행 EPS 전망치는 연초 이후 약 184% 상향됐고 12개월 연속 개선됐다. 7월 수출은 전년 동기 대비 62.8% 증가한 988억9000만달러, 반도체 수출은 178.8% 늘어난 410억1000만달러를 기록했으며, 2·4분기 국내총생산(GDP)도 전분기 대비 0.6%, 전년 동기 대비 3.7% 성장했다.
+
+과거 외환위기와 글로벌 금융위기, 코로나19 팬데믹 당시에는 주가와 함께 이익 전망도 악화됐지만 이번에는 양상이 다르다는 평가다. 현재 코스피 12개월 선행 PER은 5.12배로 2008년 금융위기 당시(6.27배)와 코로나19 저점(7.53배)을 모두 밑돌고 있다.
+
+d만 외국인 수급은 여전히 변수다. 7월 외국인 순매도는 삼성전자와 SK하이닉스 등 대형 반도체주에 집중됐고, 이달 첫째 주에도 코스피에서 약 7조4000억원을 순매도했다. 미국 고용 둔화로 연방준비제도(Fed)의 추가 긴축 우려가 완화되면서 미국 국채금리와 달러는 안정세를 보이고 있지만 환율 안정만으로 외국인 매수세를 기대하기는 어렵다. 반도체 실적에 대한 신뢰 회복이 외국인 수급 개선의 선결 조건이라는 설명이다.
+
+김 연구원은 "정책이 가격을 끌어올릴 필요는 없다"며 "기업의 이익이 다시 가격을 결정할 수 있도록 왜곡된 수급을 걷어내는 것으로 충분하다"고 말했다. 이어 "현재 시장은 수급은 약하고 변동성은 높지만 가격은 충분히 낮아졌고 이익은 견조하며 금리 환경도 우호적으로 바뀌고 있다"며 "첫 반등은 가격과 금리가 만들고 이후 상승은 기업 이익과 외국인 수급이 이끌 것"이라고 전망했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005559235' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005559235</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
