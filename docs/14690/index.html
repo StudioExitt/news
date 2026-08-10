@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 주춤, 코스닥만 날았다…레버리지 규제 이후 수급 개선</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016243183' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14690" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 주춤, 코스닥만 날았다…레버리지 규제 이후 수급 개선</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">레버리지 규제 강화 이후 단일 종목으로 쏠리던 자금이 코스닥 시장 전반으로 분산되며 수급이 개선되었습니다. 특히 외국인과 기관의 대규모 순매수세에 힘입어 코스닥 지수가 급등하며, 기술주 중심 섹터(바이오, 소부장)가 강세를 보였습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">금융당국의 레버리지 규제라는 제도적 변화(Policy/Regulation)가 촉매제가 되어 자금이 단일 종목에서 분산되어 코스닥 전체 시장으로 유입되면서 구조적인 수급 개선을 가져왔기 때문입니다. 이는 중장기적인 긍정 신호로 해석됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">알테오젠</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">소부장</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">2차전지</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥급등</span> <span class="tag tag-hash">#레버리지규제</span> <span class="tag tag-hash">#수급개선</span> <span class="tag tag-hash">#반도체</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피 주춤, 코스닥만 날았다…레버리지 규제 이후 수급 개선. (본문 전문)
+월요일 아침 코스피는 서명곤 기자 = 코스피가 상승 출발한 10일 서울 중구 하나은행 딜링룸 전광판에 코스피, 코스닥 지수가 표시돼있다.
+(서울=연합뉴스) 김유향 기자 = 지난 2개월간 급락한 코스닥 지수가 다시 날개를 달고 빠른 회복세를 보이고 있다. 특히 삼성전자·SK하이닉스 단일종목 레버리지 상품에 쏠렸던 거래자금이 금융당국의 보완대책 시행 이후 급감하면서, 코스닥 시장의 수급이 다소 개선된 데 따른 것으로 풀이된다.
+10일 한국거래소와 금융정보서비스업체 연합인포맥스에 따르면 코스닥은 전장보다 55.66포인트(6.97%) 오른 854.47로 장을 마쳤다. 8.85포인트(1.11%) 오른 807.66으로 출발한 지수는 개장 직후부터 급격히 오름폭을 키워 장중 한때 855.38까지 7.08% 치솟았다.
+지수를 끌어올린 것은 외국인과 기관 투자자의 대규모 순매수였다. 장 마감 기준으로 코스닥 시장에서는 외국인과 기관이 각각 1천54억원과 5천661억원을 순매수했다. 개인은 홀로 6천727억원을 순매도하며 단기차익을 실현하는 모습이었다.
+업종별로는 바이오를 필두로 소부장(소재·부품·장비)과 2차전지 등 대형주의 강세가 두드러졌다. 코스닥 대장주인 알테오젠이 세계 최대 자산운용사 블랙록이 지분 5%를 보유하고 있다는 사실이 공시되면서 14% 넘게 급등했다.
+지난주 말 뉴욕증시에서 스페이스X가 보호예수 물량 해제에도 15.83% 급등한 영향으로 국내 관련주인 스피어(+8.89%) 등에도 매수세가 이어졌다.
+지수가 급등하자 오전 9시 50분께에는 매수 사이드카가 발동, 코스닥 시장 내 프로그램매수호가 효력이 5분간 정지되기도 했다. 코스닥 매수 사이드카 발동은 이달 들어서만 세 번째다. 8월 들어 6거래일 중 무려 절반인 3거래일에서 지수가 급등하며 사이드카가 걸린 셈이다.
+글로벌 반도체 조정과 맞물려 변동성 주범으로 지목된 '삼전·닉스' 단일종목 레버리지 상품에 대한 금융당국의 보완대책이 시행되며 코스피와 코스닥이 급반등한 지난달 31일 기준으로는 7거래일 사이 네차례 매수 사이드카가 울렸다. 이 기간 코스닥 상승률은 32.5%에 달한다.
+보완대책 시행 첫날인 지난달 31일 코스닥 지수는 11.63% 폭등했고, 이달 3일에도 2.44% 올랐다. 이후 4일 5.88%, 5일 2.42%, 6일 0.26% 오르며 닷새 연속 상승했다. 7일 0.36% 하락하며 잠시 숨을 고른 뒤 이날 다시 7% 가까이 뛰었다.
+그런 가운데 단일종목 레버리지 거래대금은 규제 전날 12조4천485억원에 이르렀던 것이 지난 7일에는 8천452억원 수준까지 급감했다. 삼전·닉스 단일종목 레버리지 상품이 블랙홀처럼 시중 자금을 빨아들이던 흐름이 역전되면서, 반대로 코스닥 시장으로 자금이 유입되는 모양새다.
+지난달 30일 4조4천929원이던 코스닥 거래대금은 보완대책 시행 첫날인 31일 5조4천357원으로 증가했다. 지난 5일에는 6조3천827억원, 이날에는 7조673억원으로 늘며 7조원대까지 올라섰다.
+올해 초부터 대체로 10조원을 넘어 지난 5월 12일까지도 20조원을 넘은 코스닥 시장의 거래대금은 지난 5월 27일 단일종목 레버리지 상품이 처음 상장된 이후 하락 추세를 보여왔다. 급기야 지난달 27일 4조4천616억원으로 올해 일별 최저 거래대금을 기록했지만, 31일을 기점으로 다시 상승 추세를 보이고 있다.
+반면 코스피 시장 거래대금은 지난달 30일 38조3천209억원에서 규제 시행 당일 49조5천677억원으로 늘었다가 이후 빠르게 줄어 이날 18조8천402억원을 기록했다.
+이에 코스피와 코스닥 양 시장의 합산 거래대금에서 코스닥이 차지하는 비중은 이날 27.28%까지 높아졌다. 이는 단일종목 레버리지 상품이 상장되기 직전인 지난 5월 26일의 28.48% 이후 가장 높은 수준이다. 삼전·닉스 레버리지 상품 상장 이후 급격히 낮아졌던 코스닥 거래 비중이 약 두 달 반 만에 사실상 상장 이전 수준을 회복한 셈이다.
+코스닥 거래대금 비중은 단일종목 레버리지 상품 상장 이후 20%대 초반이나 그 아래에서 움직였고, 지난달 31일에는 9.88%까지 떨어졌다. 그러나 이달 들어 두 자릿수를 회복한 뒤 빠르게 상승하면서 이날 다시 30%에 가까운 수준으로 올라섰다.
+다만 단일종목 레버리지 규제 강화 이후 7월 31일∼8월 7일 상장지수펀드(ETF) 상승률 상위 5개는 전부 코스닥 레버리지 상품으로 채워져, 또 다른 '풍선효과'를 우려하는 시각도 있다.
+시장은 이러한 수급 개선에 더해 정책성 호재에도 관심을 기울이고 있다. 올해 하반기부터 코스닥 승강제 도입이 구체화하고, 부실기업 퇴출도 본격 시행될 예정이어서다. 동전주에 대한 상장폐지 요건을 새롭게 시행한 한국거래소는 지난달 1일부터 주가가 30거래일 연속 1천원 미만 수준에 머무른 종목들을 오는 13일부터 관리종목으로 지정할 예정이다.
+거래대금뿐 아니라 시가총액 측면에서도 코스닥의 존재감은 되살아나고 있다. 이날 코스피와 코스닥시장의 시가총액은 각각 5천194조2천820억원, 469조4천380억원으로 집계됐다. 두 시장의 합산 시가총액에서 코스닥이 차지하는 비중은 8.29%로, 약 2개월 만에 8%대를 회복했다. 올해 초 이 비중은 12.67%였지만, 코스피 대형주 중심의 상승세가 두드러지면서 코스닥의 시가총액 비중은 빠르게 낮아졌다. 그러면서 지난 5월 6일(9.98%) 한 자릿수로 내려왔고, 6월 25일에는 6.39%까지 떨어져 1999년 5월 12일(6.35%) 이후 약 27년 만에 가장 낮은 수준을 기록했다. 이후 지난달까지 6∼7%대를 오가던 코스닥 시총 비중은 이달 들어 상승세를 보이다 이날 8.29%까지 올라섰다. 8%대를 회복한 것은 지난 6월 11일 이후 약 두 달 만이다.
+이에 코스피의 상승 탄력이 주춤한 사이 코스닥이 국내 증시 시가총액의 10분의 1 수준을 다시 회복할 수 있을지 관심이 쏠린다. 신한투자증권 강진혁 연구원은 코스닥의 상승세를 두고 "파죽지세"라며 "코스닥은 대형주의 강세가 이어지며 코스피를 아웃퍼폼하는 모습이었다"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016243183' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016243183</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
