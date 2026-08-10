@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스닥지수 오르자 'ETF'도 활짝…삼전·닉스 단일ETF 대안 될까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.11</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/417/0001154942' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14781" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스닥지수 오르자 'ETF'도 활짝…삼전·닉스 단일ETF 대안 될까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스닥지수가 반등세를 보이면서 관련 ETF 수익률도 상승했습니다. 코스피 주도주에서 코스닥 중소형주로의 자금 순환매가 주요 동력으로 분석됩니다. 이는 기존 단일 종목 레버리지 상품의 규제에 따른 대체재로서 주목받고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">코스닥 시장으로의 자금 유입과 ETF 상품의 제도권화 및 규제 완화 기대감이 주가 상승을 견인하는 동력으로 작용하고 있기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥ETF</span> <span class="tag tag-hash">#순환매</span> <span class="tag tag-hash">#시장규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">등락을 거듭하며 불확실성이 확대된 최근 국내 증시 흐름에서 코스닥시장이 반등의 기폭제가 될 수 있을지 주목된다. 증시 불확실성의 단초로 지목됐던 코스피 '삼성전자·SK하이닉스 단일종목 레버리지 상품'에 대한 금융당국의 규제 및 보완 대책이 시행되면서 코스닥 ETF(상장지수펀드)로 개인투자자 자금이 유입되는 등 분위기 반전 흐름을 보여서다. 정부의 '동전주' 퇴출 기조 속 규제 보단 근본적인 기업가치 회복을 위한 장치가 마련돼야 한다는 목소리도 공존한다.
+
+지난 10일 코스닥지수는 전 거래일보다 55.66포인트(6.97%) 뛴 854.47에 마쳤다. 7월31일~8월6일까지 5거래일 연속 상승세로 장이 종료된 뒤 직전 거래일(8월7일)에 소폭 약세(-0.36%)로 마감됐지만 이날 다시 상승 흐름을 타 총 7거래일 가운데 6거래일이 올랐다.
+
+코스닥지수 상승세는 관련 지수를 추종하는 ETF 상품 수익률에서도 드러난다. 코스피 주도주와 삼전·닉스 단일 레버리지 상품에 쏠렸던 자금이 코스닥으로 일부 유입되며 수익률을 끌어올린 것으로 분석된다. 최근 코스닥 체질개선 기대감과 함께 투자자가 집중됐던 코스피 반도체·대형주에서 코스닥 종목들로 순환매가 이동하며 동반 상승 탄력을 키운 것으로 분석된다.
+
+기존 코스닥 ETF는 대체로 코스닥150 지수를 추종해 ETF 수급 효과가 시가총액 상위 150개 종목에 집중된 반면 코스닥 액티브 ETF는 1800개에 달하는 코스닥 상장 종목을 추종해 코스닥150에 포함되지 않은 중소형주까지 선별할 수 있어 최근의 지수 상승세와 흐름을 함께 했다.
+
+'동전주' 퇴출 등 금융당국의 '체질개선' 효과와 코스피 단일 레버리지 ETF 규제가 코스닥 시장 강세 지속 여부를 좌우할 변수가 될 것으로 보인다. 시총 기준 미달로 '관리종목'에 지정된 코스닥 종목은 7월 16곳·8월 12곳 등 총 28곳이다. 이달 12일까지 주가 1000원을 회복 못할 경우 추가 관리종목에 지정될 기업은 42곳으로 이미 예고됐다.
+
+코스닥 및 관련 ETF에 대한 전문가의 전망은 긍정적이다. 권범석 삼성증권 선임연구원은 "최근 금융당국의 삼전·닉스 단일 레버리지 상품 보완방안 발표 이후 7월31일~8월6일 기준 약 1조2000억원의 순매도를 기록했다"고 짚었다. 이어 "관련 ETF가 출시된 5월27일 이후 예탁금 강화 조치(7월30일) 전까지의 순매수 금액인 15조1000억원 대비 아직 미미하지만 규제 이후 순매도세가 지속되고 있다"며 "예탁금 등 증시 주변자금 증가 요인으로도 작용해 코스닥 수급에 우호적 환경이 제공됐다"고 분석했다.
+
+단일 레버리지 ETF 상품 규제와 보완책 발표, 코스닥 체질개선을 위한 동전주 퇴출 시행 등으로 시장의 기초체력을 회복할 수 있는 긍정적 요인 작용 기대감이 있는 반면 기업가치 회복을 위한 근본적 장치 마련이 필요하다는 시각도 존재한다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/417/0001154942' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/417/0001154942</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
