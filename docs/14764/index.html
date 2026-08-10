@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7주 연속 마이너스 코스피, '솟아날 구멍'은</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.11</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003120387' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14764" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>7주 연속 마이너스 코스피, '솟아날 구멍'은</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금리 인상 우려가 완화되며 투자 심리가 개선될 전망이나, 외국인 매도세로 인해 시장 전반의 방향성을 잡기 어려운 상황이다. 그러나 업종별 수급 분산과 AI 사이클에 따른 반도체 섹터 순환매 기대감이 상존하며 변동성을 키우고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">거시적 관점(금리 완화)과 업종별 분석(순환매, 바이오/소비재), 핵심 기술 예측(AI/반도체)이 복합적으로 제시되어 시장 참여자들의 전략 재검토가 필요하며 변동성이 클 것으로 예상되기 때문.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">소비재</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#외국인수급</span> <span class="tag tag-hash">#AI사이클</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피 지수가 전장 대비 301.88포인트(4.58%) 내린 6296.38에 마감한 지난 6일 오후 서울 중구 하나은행 딜링룸에서 딜러들이 업무를 보고 있다(자료사진).
+코스피 지수가 전장 대비 301.88포인트(4.58%) 내린 6296.38에 마감한 지난 6일 오후 서울 중구 하나은행 딜링룸에서 딜러들이 업무를 보고 있다(자료사진).
+깊어지고 있다.
+
+미국 고용지표 악화로 금리 인상 우려가 누그러짐에 따라 위험자산 선호 심리에 탄력이 붙을 전망이지만, 기존 주도주 중심의 투자전략은 재검토할 필요가 있다는 지적이다.
+
+11일 한국거래소에 따르면, 전날 코스피 지수는 전장 대비 40.89포인트(0.65%) 오른 6299.66에 장을 마쳤다.
+
+금리 인상 우려가 완화되며 투자심리에 우호적 상황이 만들어졌음에도 외국인 투자자들은 여전히 코스피 복귀를 주저하는 분위기다.
+
+실제로 외국인은 전날 코스피에서만 1조4887억원어치를 팔아치웠다.
+
+반도체 주목도가 낮아지며 코스피가 주춤한 사이 코스닥 중심 순환매 장세에 시동이 걸리고 있다.
+
+전날 수급이 몰린 코스닥은 장 초반 매수 사이드카가 발동된 끝에 전장보다 55.66포인트(6.97%) 오른 854.47에 마감했다.
+
+국내증시 방향성을 결정지을 핵심 변수인 외국인 수급 역시 반도체 이외 업종으로 분산되는 양상이다.
+
+김종민 삼성증권 연구원은 "반도체를 비롯한 핵심 주도주의 지수 영향력이 상반기 대비 낮아진 것은 '불편한 진실'"이라면서도 "이를 대체할 새로운 주도주가 명확히 등장한 것도 아니다"고 짚었다.
+
+전날의 경우, 알테오젠(403억)과 셀트리온(294억원)이 외국인 순매수 3위, 5위에 이름을 올리며 바이오주에 대한 관심이 확인됐지만, 매수 규모는 크지 않았다.
+
+김대준 한국투자증권 연구원은 "외국인은 실적과 가격 매력을 토대로 업종을 선별해 자금을 운용하고 있다"며 "지난주엔 유통, 운송, 건강관리, 음식료 등의 업종을 순매수했다"고 전했다.
+
+유통 및 운송은 3분기 실적 전망이 상향 조정되고 있고, 건강관리는 저가 매력 영향으로 업종 다변화 국면에서 우호적 수급 상황을 맞았다는 설명이다.
+
+다만 미국에서 S&P500 지수가 최고치를 새로 쓰는 등 인공지능(AI) 사이클에 대한 투자자 기대감이 이어지고 있다는 점도 간과해선 안 된다.
+
+AI 순환매를 염두드리고 반도체주에 대한 긍정적 전망을 견지할 필요가 있다는 분석이다.
+
+서정훈 삼성증권 연구원은 "그간 메모리 업종에만 쏠렸던 투자자 수급이 하이퍼스케일러와 비메모리 관련주에 분산되는 흐름도 눈여겨봐야 한다"며 "실적 가시성이 높고, 변동성 우려가 상대적으로 덜하다는 게 현재 소구 되는 배경"
+
+이어 "AI 테마 전반에 순환매가 나타난다는 것은 AI 사이클의 연속성을 지지하는 요소가 될 것"이라며 "결국 해당 흐름은 메모리 업체들의 반등으로도 이어질 전망"이라고 강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003120387' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003120387</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
