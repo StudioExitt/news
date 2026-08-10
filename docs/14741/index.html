@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>한국증시 조기 반등 어렵다...미국 중심 분산 투자 필요</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.11</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/417/0001154928' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14741" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>한국증시 조기 반등 어렵다...미국 중심 분산 투자 필요</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">전문가는 국내 증시의 높은 변동성(반도체 사이클 의존도)을 지적하며 단기 반등이 어렵다고 경고했습니다. 대신, 미국 중심의 글로벌 분산 투자를 통해 불확실성을 줄이고 투자 기회를 찾을 것을 조언했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">국내 증시의 실적 지속성 우려가 커지며 변동성이 장기간 유지될 것이라 판단했기 때문입니다. 투자처를 미국 중심으로 글로벌 분산해야 한다는 구체적인 방향성을 제시하며 시장에 경고 신호를 보냈습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">글로벌 금융시장</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#글로벌분산투자</span> <span class="tag tag-hash">#반도체사이클</span> <span class="tag tag-hash">#미국주식</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">박희찬 미래에셋증권 상품지원부문 대표가 글로벌 분산 투자의 중요성을 강조했다. 사진은 박희찬 대표.
+"삼성전자와 SK하이닉스 실적이 내년에도 계속 좋아진다고 해도 그 주식을 사줄 자금이 없다면 주가가 올라갈 수 없습니다. 최근 계속되는 변동성이 생각보다 더 길어질 수 있어 코스피보다는 글로벌 분산 투자에 주목할 필요가 있습니다."박희찬 미래에셋증권 상품지원부문 대표가 동행미디어 시대와의 인터뷰에서 변동성이 커진 국내 증시보다 미국 주식이나 채권 등 글로벌 분산 투자에 집중해야 한다고 강조했다. 그는 2006년부터 미래에셋증권에 몸담으며 투자 전략과 자산 배분을 연구해 온 전문가로 지난 3월 리서치센터장에서 상품지원부문 대표로 자리를 옮겼다.
+지난 7월 코스피는 반도체 투자가 지속될지에 대한 불확실성이 커지며 급격한 조정을 겪었다. 이른바 '피크 아웃' 우려가 시장에 확산한 것. 한국 증시가 유난히 큰 타격을 받은 이유에 대해 박 대표는 '피크 아웃'이 한국에서 미국보다 더 큰 의미로 받아들여지기 때문이라고 지적했다. 사이클을 타는 반도체 산업 의존도가 큰 한국 증시의 특성상 하락 전환은 곧 상승의 종료로 해석된 사례가 많았다는 것.
+박 대표는 "미국은 AI 반도체의 피크아웃이 추세의 끝을 의미하지 않지만 한국은 반도체의 하락 전환이 아예 마이너스로 가 버리는 경우가 많았다"며 "이 때문에 반도체 투자가 정점을 지나면 곧 하락으로 전환될 것이라는 우려가 가시지 않은 것이 현재의 변동성의 원인으로 작용하고 있다"
+반도체 기업들은 LTA(장기 공급계약) 등을 내세우며 과거와 다르다는 점을 내세우지만 그는 결국 본질은 달라지지 않는다고 봤다. 그는 "최근 삼성전자와 SK하이닉스가 크게 올랐지만 이 실적이 10년을 갈 것이라고는 아무도 생각하지 않는다"며 "LTA도 본질이 달라지지 않고 포장만 조금 바뀌는 것"이라고 지적했다.
+근본적으로 실적의 변동성이 해소되지 않는다는 점이 한국 증시의 급등락을 확대했다는 것이 그의 판단이다. 박 대표는 "미국 기업과 한국 기업의 가장 큰 차이는 '사이클을 타느냐'에 있다"며 "미국은 금융이나 에너지, 소비재 등 다양한 종목이 있고 꾸준한 매출을 낼 수 있지만 반도체 수출 중심의 한국은 매출이 꾸준히 발생하지 않는다는 점이 결국 지속 가능성에 대한 우려로 이어졌다"고 말했다.
+박희찬 대표 "미국 주식이나 채권 등 글로벌 분산 투자 필요…AI 경쟁 승자 결정되면 불확실성 줄어들 것"
+박희찬 대표는 계속되는 국내 증시의 급격한 변동성을 지적하며 당분간 국내보다는 미국에 투자할 필요가 있다고 봤다. 
+그는 8월 들어 코스닥으로의 자금 이동이 이뤄지고 있지만 코스닥도 코스피의 궁극적인 대안이 되지는 못한다고 주장했다. 코스닥 주력 산업의 한계와 고금리 때문이다.
+박 대표는 "코스피는 반도체를 비롯해 조선이나 방산, 자동차 등 실적이 받쳐주는 산업이 있지만 코스닥은 주력 산업인 바이오와 이차전지가 코스피만큼 튼튼하지 못하다"며 "고금리 상황이 악재로 작용하고 있고 정책이 지수를 끌어올리는 것도 한계가 있다"
+이 때문에 당분간 국내 증시보다는 미국에 투자할 필요가 있다고 했다. 변수는 미국 빅테크의 AI 경쟁에서 누가 승리하느냐다. 박희찬 대표는 AI 투자 경쟁 속 수익화 모델 구축에 성공해 승리하는 나타나면 AI 반도체 투자의 불확실성도 줄어들 것이라고 관측했다.
+그는 "AI 투자의 불확실성의 원인은 이 경쟁의 승자가 아직 나오지 않았다는 데 있다"며 "변동성을 줄이는 요소는 명확성인데 과거 넷스케이프를 마이크로소프트나 구글이 꺾고 시장을 장악했듯 누가 이기는지 명확해지면 투자할 대상도 분명해진다"
+이 때문에 금리 동향을 봐야 한다고 했다. 이미 빅테크의 보유 현금 투자 여력은 한계에 달했고 외부 자금 차입에 나서는 과정에서 누가 더 좋은 결과를 내느냐에 따라 승패가 갈린다는 것. 이 과정에서 금리 상승 압력이 커지리라는 것이 그의 예상이다.
+박희찬 대표는 "빅테크들의 사내 현금 창출력은 이제 한계에 다다랐고 2027년부터 대부분 잉여현금흐름이 마이너스에 접어들 것"이라며 "AI 기업들이 회사 외부의 시장 자금을 흡수하면 금리 상승 압력이 커지는데 이 상황에서 자금 수혈을 못해 무너지는 기업이 생기면 시장 구도가 보다 더 명확해질 것"이라 예측했다.
+박희찬 대표는 개인 투자자에게 당분간 국내 주식이 아니라 미국 등 해외로 고개를 돌릴 필요가 있다고 조언했다. 그는 "현 상황에서 국내 증시에 집중하는 것보다는 글로벌 분산 투자를 권한다"며 "한국 시장 비중이 높아졌던 만큼 당분간은 코스피 밖을 봐야 한다"
+굳이 코스피의 급등락에 시달릴 필요가 없다는 것이 그의 판단이다. 박 대표는 "미국 주식이나 채권, ELS(주가연계증권)를 비롯해 변동성을 줄이는 펀드나 상품이 있다"며 "전문가들의 역량을 빌리며 보다 더 안정적인 포트폴리오를 가져가는 것이 좋을 것"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/417/0001154928' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/417/0001154928</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
