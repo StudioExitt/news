@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>소부장 끌고, 바이오 밀고…다시 '천스닥' 궤도 오를까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005319263' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14713" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>소부장 끌고, 바이오 밀고…다시 '천스닥' 궤도 오를까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">호실적 기반의 코스닥시장 회복 기대감이 높아지며, 바이오와 반도체 소부장 관련 종목으로 자금 유입이 집중되고 있습니다. 정부 정책과 레버리지 규제 해소 또한 추가적인 상승 동인으로 작용할 전망입니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">알테오젠</span> <span class="tag stock-tag">심텍</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥 #소부장 #바이오</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">정책·수급·실적 '3박자'…불붙은 코스닥
+
+지수 7% 올라 854…열흘새 30% 넘게 급등
+
+주요 59개 기업 2분기 영업익 34% 급증한 호실적에
+레버리지 규제로 '쩐의 이동'…시장 육성책도 한몫
+한국경제신문의 투자 전문 유료 플랫폼 '한경 프리미엄9'(www.hankyung.com/premium9)에 실린 기사입니다. '한경 프리미엄9'을 구독하시면 더 많은 주식 투자 기사를 찾아볼 수 있습니다. 
+
+코스닥지수가 열흘 새 30% 넘게 상승하면서 ‘천스닥’ 회복을 위한 랠리에 시동을 걸었다. 코스닥시장 상장 기업의 호실적이 확인되는 가운데수급과 정책 기대가 뒷받침되면서 ‘V자 반등’에 다가서고 있다. 코스피지수는 박스권에 머무를 것이라는 우려가 커지고 있다.
+
+10일 코스닥지수는 6.97% 오른 854.47에 거래를 마쳤다. 장 초반부터 매수 사이드카가 발동되는 등 상승세가 계속돼 지난달 3일(868.41) 후 약 5주 만에 최고치를 기록했다. 최근 저점인 지난달 30일(644.78)에 비해 32.52% 상승했다. 이날 0.65% 올라 6299.66으로 마감한 코스피지수가 같은 기간 11.20% 뛴 것에 비해 상승폭이 세 배가량 크다.
+
+코스닥시장 상승세를 뒷받침하는 것은 기업 실적이다. 에프앤가이드에 따르면 올해 2분기 실적을 발표한 코스닥 상장사 중 컨센서스가 존재하는 59개기업의 합산 영업이익은 전년 동기 대비 34.09% 급증한 8336억3000만원이다. 이날 블랙록의 투자 소식과 함께 14.10% 급등한 알테오젠은 2분기 흑자 전환했고 에코프로는 전년 동기 대비 두 배 넘는 영업이익을 거뒀어.
+
+‘삼전닉스’ 단일종목 레버리지 상장지수펀드(ETF) 규제 이후 코스닥 기업으로 수급이 이동하는 점도 지수 상승을 뒷받침하고 있다. 한국투자증권이규제 이후 수급을 분석한 결과 단일종목 레버리지를 판 투자자들은 지수형 ETF나 반도체 레버리지 ETF로 옮겨 갔다. 코스닥에 상장된 다수반도체 소부장(소재·부품·장비) 기업 주가가 최근 오른 배경이다.
+
+정부의 코스닥 육성 의지에 대한 시장의 기대도 상당하다. 코스닥 승강제가 계기가 될 것이라는 분석이 제기된다. 나승두 SK증권 연구원은 “1부 리그인 ‘코스닥 셀렉트’가 만들어지면 국내외 패시브 자금이 유입될 수 있다”고 말했다. 이재명 대통령이 세제 개편안과 관련해‘주가누르기방지법’을 강화하라고 지시한 것도 시장 체력을 강화하는 계기가 될 수 있다는 전망이 나온다.
+
+열흘 만에 644 → 854…코스닥 'V자 반등'
+레버리지 몰려갔던 개미 돌아와, 자금 유입 2주 만에 50% 급증
+지난달 600대까지 밀린 코스닥지수가 10일 6.97% 급등한 854.47에 마감하며 단숨에 800대를 회복했다. 이달 들어서만 매수 사이드카가 세 차례 발동될 정도로 상승세가 가팔라지자 ‘천스닥’ 재진입 기대가 커졌다. 단일종목 레버리지 상장지수펀드(ETF)로 몰리던 개인 자금이 서서히코스닥시장으로 복귀하기 시작한 가운데 증권·운용업계는 바이오와 반도체 소부장(소재·부품·장비)주에 주목하고 있다.
+◇ 삼전닉스 숨 고르기에 코스닥 수혜
+10일 한국거래소에 따르면 국내 상장된 코스닥150 패시브 ETF 8종의 개인 순매수액은 8월 첫째 주(3~7일) 7952억원으로 집계됐다.
+7월 넷째 주(7월 20~24일) 5238억원에서 7월 다섯째 주(27~31일) 7687억원으로 늘난 데 이어 또다시 증가한 것이다. 2주만에 개인 순매수 규모가 50% 이상 커졌다.
+
+코스닥시장으로 개인 자금이 돌아오기 시작한 배경에는 단일종목 레버리지 ETF 거래 급감이 있다는 분석이 나온다. 지난 5월 27일 단일종목레버리지 ETF가 상장한 이후 관련 상품으로 개인 자금이 몰리며 코스닥시장 수급이 위축됐으나 지난달 31일부터 예탁금 규제 등이 강화되자단일종목 레버리지 수요가 코스닥시장으로 옮겨왔다는 설명이다.
+
+박우일 신한투자증권 연구원은 “단일종목레버리지 ETF 거래 감소로 코스닥시장도 기존의 과매도 포지션에서 반전을 기대해볼 만한 구간에진입했다”며 “개인의 코스닥시장 순매수는 현물에서 ETF로 이동했는데, 이 둘을 합산한 수급이 7월 말부터 순유입으로 전환됐다”고 말했다.
+
+삼성전자와 SK하이닉스의 주가 상승세가 한풀 꺾인 것도 코스닥시장에 호재로 꼽힌다. ‘반도체 투톱’이 수급을 독식하지 않고 완만히 상승하면실적이 개선된 코스닥 기업으로 투자자의 관심이 옮겨갈 수 있어서다. 이건재 IBK투자증권 코스닥리서치센터장은 “삼전닉스가 천천히 우상향하며변동성을 줄이는 가운데 코스닥 기업의 체력 개선이 확인되면 하반기 코스닥시장의 투자 매력도가 더 높아질 것”이라고 설명했다.
+
+코스닥시장 상장사의 이익도 개선되고 있다. 에프엔가이드에 따르면 올 2분기 실적을 발표한 코스닥 상장사 가운데 3개 이상기관의 추정치가존재하는 59개 기업의 합산 영업이익은 8336억3000만원으로 전년 동기(6216억5100만원) 대비 34.1% 증가했다. 심텍, 파두, 고영등 반도체 소부장 기업이 이익 증가를 이끌었고, 알테오젠도 시장 예상치를 48% 웃도는 영업이익을 기록했다.
+◇ 코스닥액티브가 선택한 테스·심텍
+업종별로는 바이오와 반도체 소부장이 코스닥지수 반등의 대표적 수혜 업종으로 꼽힌다. 바이오주는 코스닥150지수 내 헬스케어 비중이 약 36%에달해 코스닥지수 반등 시 수급 유입이 기대된다. 박 연구원은 “코스닥150 패시브 ETF 순자산에 36%를 곱해도 국내 바이오 관련 ETF 합산순자산보다 3.4배 크다”며 “코스닥시장에 매수세가 몰리면 자연스럽게 바이오로 자금이 유입될 것”이라고 말했다. 이에 따라 알테오젠 등코스닥시장 시가총액 상위 바이오 종목이 수혜를 볼 가능성이 있다는 분석이다.
+
+바이오주는 펀더멘털 대비 주가 하락폭이 커투자자의 관심이 쏠릴 것으로 전망된다. 미래에셋증권은 최근 보고서에서 디앤디파마텍, 올릭스, 에이비엘바이오, 오름테라퓨틱 등이 고점 대비 40~70% 하락했다며 “핵심 파이프라인 가치가 훼손되지 않은 기업은 수급 정상화 과정에서상대적으로 높은 반등 탄력을 보일 수 있다”고 설명했다.
+
+코스닥액티브 ETF는 반도체 소부장주에 베팅하고 있다. KoAct, TIME, DS 등 주요 코스닥액티브 ETF의 편입 상위 종목에 테스와심텍이 모두 이름을 올렸다. 테스는 반도체 전공정 장비 업체로 KoAct와 TIME이 각각 6.14%, 4.23%를 담았고, DS는 8.55%로가장 높은 비중을 뒀다. 메모리 설비 투자 확대와 신규 장비 매출 증가에 따른 실적 개선 기대가 반영된 것으로 풀이된다.
+
+심텍은 반도체용 기판 업체다. 인공지능(AI) 서버에 들어가는 소캠(SOCAMM) 매출이 늘며 실적 개선이 본격화했다는 평가가 나온다. 이회사의 올 2분기 영업이익은 629억원으로 전년 동기 대비 1000% 넘게 증가했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005319263' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005319263</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
