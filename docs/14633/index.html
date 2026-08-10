@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中 '유니트리' 증시 입성…韓 로봇주에 호재일까 악재일까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014117478' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14633" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>中 '유니트리' 증시 입성…韓 로봇주에 호재일까 악재일까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">중국 휴머노이드 로봇 기업 유니트리가 상하이 증권거래소에 IPO를 진행하며 국내외 로봇 시장의 주목을 받고 있습니다. 대규모 자금 조달은 글로벌 경쟁 심화와 밸류에이션 상승 기대를 주지만, 미·중 기술 갈등과 완성품 중심의 가격 경쟁 리스크가 공존하여 업종별 영향이 엇갈릴 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 최신 기술(휴머노이드 로봇) 분야의 초대형 중국 기업 IPO는 국내외 산업 생태계에 큰 변동성을 가져오며 시장 주목도가 매우 높으나, 지정학적 리스크와 완성품 vs 부품주 간의 명확한 섹터 구분이 필요해 긍정/부정 판단이 어렵습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">기계</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#로봇</span> <span class="tag tag-hash">#IPO</span> <span class="tag tag-hash">#휴머노이드</span> <span class="tag tag-hash">#산업자동화</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">송혜리 기자 = 중국 휴머노이드 로봇 기업 유니트리가 기업공개(IPO) 청약에 돌입하면서 국내외 로봇주에 미칠 영향에 관심이 쏠린다.
+
+글로벌 휴머노이드 시장을 선도하는 유니트리의 증시 입성이 로봇주 밸류에이션(가치)을 끌어올리는 계기가 될 수 있다는 기대와 함께, 대규모 자금 조달을 통한 중국 연구개발(R&D)·생산능력 확대가 업계 경쟁을 격화시킬 수 있다는 분석이 나온다.
+
+전량 신주발행 약 1조원 조달
+
+10일 금융투자업계에 따르면 유니트리는 지난 6일 상하이증권거래소 과학기술혁신판(과창판) 상장 발행공고를 통해 공모가를 주당 150.80위안으로 확정하고 이날부터 청약을 시작했다. 종목코드는 688836.SH다.
+
+유니트리는 이번 IPO에서 총 4044만6400주를 전량 신주로 발행한다. 발행 후 전체 주식의 약 10% 규모다. 총 조달액은 약 60억9900만위안(약 1조2000억원)이며 발행비용을 제외한 순조달액은 약 59억1700만위안이다. 조달 자금은 로봇 연구개발(R&D)과 생산능력 확충, 임베디드 AI 알고리즘 개발 등에 투입될 예정이다. 공모가 기준 상장 후 예상 시가총액은 약 609억9300만위안이다.
+
+유니트리는 2016년 설립된 로봇 전문기업이다. 4족 보행 로봇에서 쌓은 기술과 공급망을 기반으로 휴머노이드 시장까지 빠르게 영역을 넓혔다.
+
+2023년부터 지난해까지 4족 로봇 누적 판매량은 3만3294대로 글로벌 1위를 기록한 것으로 알려져 있다. 특히 지난해 글로벌 휴머노이드 업체 최초로 연간 출하량 5000대를 돌파했고, 올해 상반기까지 누적 출하량은 1만1000대에 달했다. 지난해 매출은 16억9900만위안(약 3600억원)으로 휴머노이드 비중이 51.8%를 차지했다.
+
+이번 IPO에서 눈에 띄는 대목은 딥시크와 텐센트 등 중국 대표 기술기업과 국유자본이 전략적 투자자로 참여했다는 점이다. 특히 딥시크는 1억4080만위안(약 2080만달러)을 투자해 전략배정 물량의 2.31%인 93만3399주를 확보했다.
+
+박광래 신한투자증권 연구원은 "딥시크의 AI 모델·추론 기술과 유니트리의 기구설계·모션제어·휴머노이드 하드웨어를 결합해 피지컬 AI 모델을 공동 개발할 것으로 보인다"면서 "유니트리는 AI 학습 서비스 구매 시 딥시크를 우선 고려하고, 딥시크는 로봇 구매와 임베디드 AI 실증에서 유니트리를 우선 활용한다"고 설명했다.
+
+이어 "핵심 목적은 낯선 환경을 인식하고 언어 명령을 실제 동작으로 변환하는 로봇 파운데이션 모델 확보로 중국 AI와 로봇 하드웨어 업체 간 수직결합이 본격화되는 신호"라고 분석했다.
+
+미·중 기술갈등은 변수…국내 완성품 '부담'·부품주 '기회'
+
+유니트리의 증시 입성은 글로벌 휴머노이드 시장 경쟁 구도에도 영향을 미칠 전망이다.
+
+대규모 자금 조달을 통해 R&D와 생산능력을 동시에 끌어올릴 수 있게 된 만큼 중국 업체를 중심으로 한 가격·기술 경쟁이 한층 거세질 가능성이 있어서다. 다만 미·중 기술 갈등에 따른 미국 시장 규제는 향후 성장성을 좌우할 변수로 꼽힌다.
+
+서지현 삼성증권 연구원은 "미국 매출 익스포저와 규제 리스크가 핵심 변수"라고 짚었다. 유니트리의 지난해 미국 매출 비중은 13.3%로, 회사 역시 투자설명서를 통해 관세와 정부조달 제한, 수출통제, 기존 인증 상실 등이 해외 성장과 부품 조달에 영향을 줄 수 있다고 명시했다.
+
+서 연구원은 "미국이 외국산 휴머노이드와 4족 보행 로봇에 대한 신규 제한을 도입한 상황"이라며 "기존 모델은 미국 승인을 보유하고 있지만 향후 신모델은 판매가 제한될 가능성이 있다"고 설명했다. 이어 "미·중 기술·통상 갈등이 격화하는 국면에서의 상장이라는 점에서 밸류에이션 프리미엄과 별개로 지정학적 할인 요인이 상존한다"고 분석했다.
+
+국내 증시에 미칠 파장은 앞서 중국 메모리 업체의 부상과는 결이 다르다는 분석이 나온다. 
+
+창신메모리가 삼성전자와 SK하이닉스의 시장점유율과 가격 경쟁력을 직접 위협하는 것과 달리, 유니트리는 휴머노이드 완성품 업체인 만큼 국내 기업과 직접적인 대체재 관계에 놓여 있지는 않아서다.
+
+다만 유니트리의 IPO를 계기로 중국 휴머노이드 산업의 성장세가 빨라질 경우 국내 로봇 업종 내에서도 영향은 엇갈릴 전망이다. 완성품 업체에는 가격·기술 경쟁 심화와 밸류에이션 부담으로 작용할 수 있지만, 감속기·액추에이터·센서 등 핵심 부품 업체에는 시장 확대에 따른 신규 수요를 기대할 수 있다는 분석이다.
+
+양승윤 유진투자증권 연구원은 "국내 로봇주 관점에서는 유니트리 상장이 밸류에이션 벤치마크 측면에서 긍정적"이라고 평가한다. 다만 "유니트리가 IPO를 통해 약 1조3000억원의 신규 자금을 확보해 R&D와 생산능력을 동시에 확대하게 된다"며 "이미 높은 가격 경쟁력을 갖춘 상황에서 추가적인 경쟁 강도 상승 가능성은 리스크 요인"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014117478' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014117478</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
