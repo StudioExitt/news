@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[우보세]ETF 댐에 갇힌 유동성</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.11</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005398098' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14743" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[우보세]ETF 댐에 갇힌 유동성</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">ETF가 자본시장 유동성을 높이는 통로 역할을 했지만, 최근 특정 종목이나 업종에 자금이 과도하게 쏠리면서 시장 전체의 선순환 구조를 저해하고 있다는 지적입니다. 정책당국과 시장 운영자들은 자금 흐름이 하류까지 원활히 순환할 수 있도록 시스템 개선이 필요합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">ETF라는 좋은 상품의 구조적 한계와 자금 흐름 불균형(쏠림 현상)이라는 시장 제도 개선점을 제시하며 장기적인 정책 논의를 요구하고 있어 중규모 영향력을 갖는다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#유동성순환</span> <span class="tag tag-hash">#자본시장구조</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[편집자주] 뉴스현장에는 희로애락이 있습니다. 그 가운데 기사로 쓰기에 쉽지 않은 것도 있고, 곰곰이 생각해봐야 할 일도 많습니다. '우리가 보는 세상'(우보세)은 머니투데이 시니어 기자들이 속보 기사에서 자칫 놓치기 쉬운 '뉴스 속의 뉴스' '뉴스 속의 스토리'를 전하는 코너입니다.
+[서울=뉴시스] 고범준 기자 = 7월29일 서울 여의도 국회의사당 인근에 단일종목 레버리지 ETF 상장 폐지 촉구 근조화환이 놓여져 있다. [...] 자본시장은 마치 홍수를 막고 가뭄에 대비해 물을 안정적으로 공급하기 위해 건설하는 댐과 같다. 하지만 댐에 물을 가둬두기만 하면 문제가 생긴다. 물은 넘쳐도 하류는 메말라간다. 물이 부족해서가 아니라 흐르지 않기 때문이다.
+상장지수펀드(ETF)는 이런 자본시장에서 개인투자자들에게 문턱을 낮춰준 대표적인 상품이다. 종목을 일일이 고르지 않아도 적은 비용으로 반도체와 자동차는 물론 채권, 해외 증시까지 클릭 몇 번이면 투자할 수 있다. [...] 지난 5월 단일종목 레버리지 ETF 출시 이후 자금이 시장 전체를 순환하기보다 특정 종목과 특정 업종에 집중되는 현상이 대표적이다. 인공지능(AI)과 반도체를 담은 ETF로 몰린 자금은 삼성전자와 SK하이닉스 등 주도주로 흘러갔고, 패시브 자금도 지수 비중대로 움직였다. [...] 역설적으로 개인들의 투자 접근성을 높이며 시장에 활력을 불어넣었던 ETF가 특정 종목으로의 쏠림을 키우며 시장의 자금 순환을 막는 모습이 연출됐다.
+ETF를 탓하거나 혁신상품을 막자는 의미는 아니다. 물가보다 낮은 임금 상승률 속에서 조금이라도 높은 수익을 좇는 개인투자자들의 선택 역시 존중받아야 한다. 다만 자금이 특정 상품과 종목에 과도하게 쏠려 자본시장의 선순환 구조를 훼손하지 않도록 시장의 판을 설계하고 관리하는 정책당국과 시장 운영자들의 세심한 고민은 아쉬웠다.
+특히 당국은 단일종목 레버리지 상품처럼 수급 쏠림을 증폭시킬 수 있는 상품은 상장 여부만 판단해서는 안 된다. 기초자산의 거래대금과 유동성, 특정 종목에 대한 자금 집중도는 물론 급락 시 시장 충격까지 종합적으로 살폈어야 했다.
+늦은 감은 있지만 최근 관련 대책이 나오면서 시장 흐름도 점차 안정화 모습이다. 코스닥도 7월 말 이후 이달 10일까지 약 30%가량 반등했다.
+우리 자본시장의 유동성이 더 아래로 흐를 수 있도록 물길을 내는 일은 여전히 중요하다. ETF 밖에 있다는 이유만으로 경쟁력 있는 기업까지 자금시장에서 소외되는 구조는 건강하지 않다. 하류까지 물이 흘러야 강과 들이 살아나듯 거대한 ETF라는 댐을 키운 지금 필요한 것은 더 큰 댐이 아니라 넘치는 유동성이 시장 곳곳으로 흘러갈 수 있도록 수문과 물길을 촘촘히 설계하는 일이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005398098' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005398098</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
