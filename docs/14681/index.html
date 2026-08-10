@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>유가증권시장 떠난 외국인 향한 곳은?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/243/0000101450' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14681" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>유가증권시장 떠난 외국인 향한 곳은?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">외국인 자금이 대규모 매도세를 보인 코스피(유가증권시장)를 떠나 코스닥 시장으로 이동하며 순매수 우위를 점했습니다. 특히, 규제 강화로 인해 고위험 투자 자금이 단일 종목에서 지수형 ETF와 코스닥 시장으로 '풍선효과'처럼 몰리며 긍정적인 흐름을 보였습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">규제 변화(레버리지 규제 강화)에 따른 자금의 시장 순환(풍선효과)이 명확하게 포착되었으며, 외국인 매매 동향 등 구체적인 투자 주체를 중심으로 상승 섹터가 식별되어 단기적인 긍정적 모멘텀을 제공합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">알테오젠</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오/제약</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#풍선효과</span> <span class="tag tag-hash">#외국인자금흐름</span> <span class="tag tag-hash">#코스닥반등</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">10일 국내 주식시장은 코스피와 코스닥지수가 동반 상승하며 3거래일 만에 반등에 성공했다. 다만 양 지수의 상승 폭과 장중 흐름은 확연한 온도 차를 보였다. 코스피는 전 거래일 대비 40.89포인트(0.65%) 오른 6299.66으로 장을 마감했다. 반면 코스닥지수는 바이오·반도체 장비주를 중심으로 매수세가 대거 몰리며 55.66포인트(6.97%) 급등한 854.47로 거래를 마쳤다.
+
+이날 국내 증시에서는 외국인 투자 자금의 움직임이 눈길을 끌었다. 지난주 반도체 업종을 중심으로 대규모 매도 폭탄을 쏟아냈던 외국인 투자자들은 이날도 유가증권시장에서 매도 우위를 보인 반면, 코스닥시장에서는 순매수로 돌아섰다.
+
+유가증권시장 시가총액 1·2위인 삼성전자와 SK하이닉스는 장 초반의 강세를 지키지 못하고 약보합으로 장을 마감했다. 두 종목 모두 장중 3~4% 상승세를 보였으나 이후 상승 동력을 잃고 약세로 돌아섰다. 두 종목의 발목을 잡은 것은 미국 애플이 중국 창신메모리테크놀로지(CXMT)의 메모리 반도체를 도입하려 한다는 소식이었다.
+
+반면 코스닥시장 시가총액 1위 기업인 알테오젠은 세계 최대 자산운용사인 블랙록이 지분 5%를 보유하고 있다는 사실이 공시되면서 주가가 14% 올랐다. 주성엔지니어링(13.30%)을 비롯해 에코프로·에코프로비엠도 7~8% 상승했다.
+
+시장에서는 단일종목 레버리지 규제 강화로 인한 풍선효과에 주목하고 있다. 금융당국은 지난달 31일부터 단일종목 레버리지 상장지수펀드(ETF)에 대한 개인투자자의 기본예탁금을 종전 1000만원에서 3000만원으로 대폭 인상했다. 이에 따라 하루 10조원을 웃돌던 단일종목 레버리지거래대금이 1조원 아래로 급감했다. 규제 문턱이 높아지자 고위험·고수익을 노리는 투자 자금이 단일종목에서 상대적으로 규제가 덜한 지수형 ETF와 코스닥시장으로 이동했다는 분석이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/243/0000101450' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/243/0000101450</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
