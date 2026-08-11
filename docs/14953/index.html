@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>25% 빠진 금값, 조정은 '끝물'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005801801' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14953" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>25% 빠진 금값, 조정은 '끝물'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금값은 고점 대비 25% 급락하며 조정세를 보였으나, 달러 약세, 완화적 금리 전망, 그리고 중앙은행의 꾸준한 순매입세가 맞물리며 상승 추세 전환 국면에 접어들었다고 분석됩니다. 전문가들은 연말까지 금값이 사상 고점 수준으로 회복할 것으로 전망합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 중앙은행의 구조적인 금 매집 추세와 거시경제 지표(달러 약세, 완화적 금리) 개선은 장기적으로 금값에 강력한 상승 동력을 제공하므로 주식 시장 전반의 리스크 선호 심리를 자극할 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">금광채굴주 (골드러시 테마)</span> <span class="tag stock-tag">원자재 관련 대형 금융지주사</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금속 및 광물</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#금값</span> <span class="tag tag-hash">#안전자산</span> <span class="tag tag-hash">#거시경제</span> <span class="tag tag-hash">#중앙은행</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">금값이 고공행진하며 골드바 품귀현상이 벌어지고 있는 18일 서울 종로구 한국금거래소 종로본점 외벽에 골드바 사진이 붙어 있다. 금값 조정이 막바지에 들어섰다는 분석이 나왔다. 올해 초 사상 최고치를 찍은 뒤 25%가량 빠지며 과열을 식혔고, 최근에는 달러 약세와 완화적 금리 전망, 중앙은행 매수세가 맞물리며 다시 상승 흐름을 되찾고 있다는 판단이다. 상상인증권은 최근 보고서를 통해 금 가격 조정의 끝이 보인다고 전망했다. 금 선물 가격은 지난 1월 말 종가 기준 사상 최고치인 5318달러를 기록했다. 이후 6월24일 3990달러까지 내려오며 고점 대비 25% 하락했다. 이후 이달 초까지 약 6주간 4000달러 전후에서 박스권 흐름을 보였다. 급락의 출발점은 지난 1월30일 케빈 워시 미국 연방준비제도(Fed) 의장 지명이었다. 금리 동결이나 인하를 기대하던 시장은 워시 의장 지명을 계기로 유동성 여건을 따지고 금리 경로를 조정했다. 케빈 워시 지명 당일 금 선물은 11% 하락하며 사상 최대 일간 낙폭을 기록했다. 이후 미국과 이란의 전쟁에 따른 유가와 물가 부담까지 겹치며 금값 조정 폭은 더 깊어졌다. 상상인증권은 6개월간의 가격 조정과 기간 조정을 거치며 과열은 상당 부분 해소됐다고 진단했다. 최예찬 상상인증권 연구원은 "지난 1월20일 극단적 과매수 구간에서 지난 6월23일 과매도 구간에 진입했다"며 "지난 7일 종가 기준 매크로 환경 개선 등의 요인으로 금 선물 가격이 4340달러를 기록하며 하락 추세 저항선을 상향 돌파했다"고 설명했다. 거시경제 환경도 금에 우호적으로 바뀌고 있다. 가장 큰 변화는 달러 약세다. 미국과 일본의 동시 엔화 매수 개입 이후 달러 강세가 진정됐고, 미국 고용 지표 둔화도 달러 약세를 키웠다. 달러인덱스는 7월 말 101.5포인트에서 8월10일 99포인트 수준까지 내려왔다. 금리 전망도 완화됐다. 7월 미국 비농업 고용은 2만3000명 감소해 시장 예상치를 크게 밑돌았다. 직전 2개월 고용도 16만9000명 하향 조정됐다. 이에 따라 연준의 연말 금리 전망은 1.8회 인상에서 1.2회 인상으로 낮아졌고, 9월 인상 확률도 44%까지 떨어졌다. 추가 고용 둔화가 확인되면 연내 동결 가능성도 커질 수 있다는 분석이다. 중앙은행 매수세도 금값 하단을 받치고 있다. 금 가격 조정 중에도 중앙은행 수요는 오히려 늘었다. 2분기 중앙은행의 금 순매입은 288.9톤으로 전년 동기 대비 62% 증가했다. 중국 인민은행은 20개월 연속 순매입을 이어가고 있다. 주목할 변화는 한국은행이다. 한국은행은 이달 국내 생산 금 매입 협력 체계 구축을 발표하면서 2분기에 이미 금 상장지수펀드(ETF) 매입을 시작했다고 밝혔다. 13년 만의 첫 금 익스포저 확대다. 글로벌 중앙은행들이 달러화 의존도를 낮추기 위해 금 보유를 늘리는 흐름이 중장기적으로 이어질 수 있다는 점도 금 가격에는 우호적이다. 상상인증권은 전쟁 장기화와 유가·금리 상방 압력을 반영해 올해 3분기와 4분기 금 가격이 각각 4650달러, 5000달러에 이를 것으로 전망했다. 최 연구원은 "역사적 금 강세장에서도 고점 대비 15% 이상 하락한 뒤 평균 8개월간 저점을 탐색했고, 12개월 안에 고점 대비 90% 수준까지 회복했다"며 "이번 조정도 그에 따라 연말까지 5000달러 근방으로 상승할 것"이라고 전망했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005801801' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005801801</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
