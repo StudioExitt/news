@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[클릭 e종목]월마트는 왜 좋은 실적에도 주가가 빠졌나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005801805' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14956" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[클릭 e종목]월마트는 왜 좋은 실적에도 주가가 빠졌나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">월마트는 높은 실적에도 주가가 하락했는데, 이는 회사가 제시한 연간 실적 전망(가이던스)이 시장의 기대치에 비해 보수적이었기 때문입니다. 고평가된 만큼, 명확하고 공격적인 가이던스 상향 조정이 필수적이며 이것이 향후 주가의 최대 변수로 작용할 것입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">회사의 실적 자체보다 '미래 가이던스'라는 정성적인 요소가 주가를 좌우하고 있어 변동성이 매우 크며, 투자자들이 주목해야 할 핵심 리스크 요인이 명확하게 제시되었기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">월마트 (Walmart)</span> <span class="tag stock-tag">주요대형유통사</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">도소매업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">온라인쇼핑</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#월마트</span> <span class="tag tag-hash">#기업실적분석</span> <span class="tag tag-hash">#가이던스</span> <span class="tag tag-hash">#투자변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">월마트가 오는 20일 실적 발표를 앞둔 가운데 이번 분기의 관전 포인트는 실적 자체보다는 회사가 연간 실적 전망치를 상향할지 여부라는 분석이 나왔다.
+
+12일 조재운 대신증권 연구원은 "월마트는 미국 최대 오프라인 유통업체지만 최근 몇 년의 성장은 매장이 아니라 온라인·광고·멤버십에서 나왔다"면서 "직전 분기 매출은 1777억5000만달러로 시장 평균 전망(컨센서스)을 1.7% 웃돌았고, 총이익률은 25.14%로 아홉 분기 연속 전년 대비 개선됐는데도 발표 당일 주가는 7.27% 밀렸다. 실적이 아니라 회사 가이던스(자체 전망)의 보수성이 시장을 실망시킨 것이다. 이번에도 같은 장면이 반복될지가 최대 변수"라고 설명했다.
+
+월마트 현 주가는 12개월 예상 이익 대비 40.2배 수준에서 거래되고 있다. 5년 평균 27.5배보다 46% 높다. 조 연구원은 "이 정도 프리미엄이면 웬만한 상회로는 주가가 잘 움직이지 않는다. 오히려 기대에 못 미치면 낙폭이 커지는 비대칭 구조로, 지난 분기의 7% 넘는 하락이 그 증거"라고 말했다.
+
+월마트의 40배 멀티플은 단순 유통업의 잣대로는 설명할 수 없다. 시장이 정당화하는 프리미엄의 본질은 광고, 멤버십, 마켓플레이스와 같은 대안 수익원이다. 조 연구원은 "이 영역이 이미 영업이익의 약 3분의 1을 만들고 있고 계절 변동과 무관하게 총이익률을 밀어올리고 있다"면서 "지난 분기 미국 사업의 매출총이익 개선분 중 0.29%포인트가 이 믹스 변화에서 나왔다. 최근 14억달러를 들여 프랑스 광고기술 기업 바이브닷코를 인수한 것은 인터넷 연결 TV 광고로 이 영역을 넓히려는 포석"이라고 분석했다.
+
+투자는 부담 요인이다. 조 연구원은 "잉여현금흐름이 마이너스로 전환했고 설비투자는 여전히 정점 부근"이라며 "물류센터 자동화 개편이 절반쯤 진행됐다는 점은 다음 회계연도 중 투자 정점 통과 가능성을 뒷받침하지만 이번 분기에 현금흐름이 어느 정도 회복되는지가 밸류에이션 논쟁의 실질적 가늠자가 될 것"이라고 짚었다.
+
+이번 분기에 이익률을 흔드는 외부 변수로는 연료비와 관세 환급이 꼽힌다. 1억7500만달러 규모의 연료비 역풍과 미국의 긴급경제권한법에 근거한 관세 환급이 회사 전망에서 빠져있다는 점이 이익률에 영향을 미칠 것으로 보인다. 조 연구원은 "환급이 하반기 중 확정되면 그만큼이 고스란히 상방 여력으로 남는다. 회사가 연간 주당순이익 전망을 2.75~2.85달러로 제시한 반면 시장 평균 전망이 2.91달러인 것도 이런 보수적 설정 때문"이라며 "월마트는 최근 4년 연속 낮게 잡고 여러 차례 올려온 이력이 있다. 관건은 그 첫 상향이 이번 분기에 나오느냐다"
+
+실적이 전망치를 상회하더라도 연간 전망 상향이 없으면 주가 반응은 제한될 것으로 전망된다. 조 연구원은 "상회에 더해 연간 주당순이익 전망을 2.85달러 위로 올려잡는다면 40배라는 배수를 정당화하는 실적 궤도가 확인되며 주가 재평가로 이어질 여지가 있다"면서 "전망치에 부합하는 수준에 그치면 매수 의견에 쏠린 눈높이가 오히려 하방 압력으로 작용할 수 있다"고 내다봤.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005801805' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005801805</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
