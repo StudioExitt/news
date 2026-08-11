@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>바이오부터 네카오까지…K주식 베팅 늘리는 블랙록</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.11</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004650721' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14903" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>바이오부터 네카오까지…K주식 베팅 늘리는 블랙록</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">글로벌 자산운용사 블랙록이 국내 주식 시장에서 투자 범위를 바이오, 플랫폼(AI), 방산 등 고성장 분야로 넓히며 매수세가 두드러지고 있다. 이는 한국 증시에 대한 외국인 기관투자자들의 관심과 신뢰가 높아지고 있음을 보여주는 긍정적인 신호로 해석된다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">알테오젠</span> <span class="tag stock-tag">네이버</span> <span class="tag stock-tag">카카오</span> <span class="tag stock-tag">현대건설</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">건설</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#블랙록</span> <span class="tag tag-hash">#외국인투자</span> <span class="tag tag-hash">#K성장주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">연합뉴스세계 최대 자산운용사 블랙록이 올 들어 국내 증시에서 빠르게 보폭을 넓히고 있다. 이달 들어서만 8개 종목의 지분을 5% 이상 신규 확보하거나 기존 보유분을 추가로 늘리는 등 매수세가 여느 때보다 두드러지는 모습이다. 한때 금융지주와 삼성 계열사 등에 집중됐던 업종 분포 역시 바이오·플랫폼·방산·조선 등으로 빠르게 다변화하는 흐름이 나타나고 있다.
+
+11일 한국거래소에 따르면 블랙록의 자회사인 블랙록펀드어드바이저는 이달 들어 국내 증시에서 8개사의 지분 확대 사실을 공시했다. 카카오·현대건설·알테오젠·HD현대일렉트릭 등 4곳에서 새롭게 5% 이상 주요 주주로 올라선 동시에 HLB, 유한양행, 네이버(NAVER), DB손해보험 등 기존 대량 보유 종목에서도 지분을 추가로 늘렸다. 지난해만 해도 블랙록의 대량 보유 신규·변동 공시는 6건에 그쳤지만 올해는 8개월도 채 안 돼 34건으로 늘었고 이 가운데 31건이 비중 확대에 해당했다.
+
+한국에 대한 투자·사업 협력에 관심을 보여온 블랙록의 존재감은 올해 국내 주식시장에서도 한층 커지고 있다. 지난해 9월에는 이재명 대통령이 미국 뉴욕에서 래리 핑크 블랙록 회장과 만나 인공지능(AI) 분야의 글로벌 협력 방안을 논의하면서 산업계의 주목을 받은 바 있다. 당시 과학기술정보통신부와 블랙록은 국내 AI·재생에너지 인프라 구축 등에 협력하기 위한 양해각서(MOU)를 체결했다. 블랙록이 올해 주식시장에서 매수세를 늘린 업종도 SK하이닉스·삼성전기 등 반도체, 정보기술(IT)부터 삼성중공업, 현대로템, 한국항공우주(KAI) 등 조선·방산까지 폭넓게 퍼졌다.
+
+최근 가장 눈에 띄는 분야는 바이오다. 블랙록은 간암 신약의 미국 허가 재도전을 앞둔 HLB에 이어 피하주사(SC) 제형변경 플랫폼을 앞세워 기술 수출을 확대하고 있는 알테오젠까지 보유 비중을 추가로 끌어올렸다. 여기에 폐암 신약 렉라자의 글로벌 상업화를 본격화한 유한양행의 지분도 추가로 늘리면서 성장축과 사업 모델이 서로 다른 종목들에 고루 올라타는 양상이다.
+
+주가가 장기간 박스권에 머물고 있는 ‘국민주’ 네이버와 카카오에도 큰손의 자금이 동시에 향했다. 블랙록의 네이버 지분율은 6.05%에서 7.09%로 높아졌고 카카오는 4.98%에서 5.01%로 올라섰다. 양 사는 나란히 올 2분기 시장 기대치를 상회하는 매출을 기록하며 본업에서의 견고한 체력을 입증했지만 새로운 성장 동력인 AI 사업의 성과가 향후 주가 재평가를 좌우할 변수로 꼽히고 있다.
+
+네이버는 인프라부터 모델·서비스까지 아우르는 ‘풀스택 AI’를 추진하는 반면 카카오는 카카오톡을 기반으로 이용자의 의도를 실제 행동과 거래로 연결하는 에이전트 AI에 집중하고 있다. 서정연 신영증권 연구원은 “양 사 모두 AI 투자 확대에도 수익성이 훼손되지 않았다”며 “네이버는 AI가 기존 사업의 성장에 기여한 반면 카카오의 경우 AI가 아직 본격적인 기여 단계보다는 미래 성장동력으로 제시된 수준”이라고 짚었다.
+
+가파른 상승세를 보이며 시장 주도 업종으로 부상한 건설주로도 투자 저변을 넓혔다. 현대건설은 블랙록 측 지분율이 4.96%에서 5.01%로 오르며 처음 5%선을 넘어섰다. 이달 들어 현대건설 주가가 30% 넘게 뛰고 코스피 건설업 지수도 최고 상승률을 보이는 가운데 증권가에서는 주택 원가율 정상화에 데이터센터와 원전 등 새로운 성장축이 더해지면서 재평가가 이어질 것으로 보고 있다. KB증권은 국내 주택 사업의 이익 가시성 개선과 미국 원전, 중동 대형 프로젝트 등 해외 성장 가능성을 근거로 현대건설을 업종 내 최선호주로 제시했다.
+
+i 밖에도 전력기기 초호황 국면에서 주목을 받은 HD현대일렉트릭 지분율은 4.99%에서 5.01%로 상향됐고 보험주인 DB손해보험도 5.06%에서 6.08%로 확대됐다. 금융투자 업계 관계자는 “패시브 운용 규모가 큰 기관의 지분 변화를 개별 종목에 대한 적극적인 매수 의견으로 직결하기는 어렵다”면서도 “여러 업종에서 대량 보유 종목이 동시에 늘어난 것은 한국에 투자 가능한 선택지가 보다 넓어지고 있다는 상징적 신호”라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004650721' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004650721</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
