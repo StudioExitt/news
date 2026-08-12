@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>부실기업 퇴출 본격화… 30개 종목에 ‘1차 경고장’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/005/0001866585' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15101" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>부실기업 퇴출 본격화… 30개 종목에 ‘1차 경고장’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">강화된 상장폐지 요건(동전주, 시총 미달)에 따라 30개 종목이 관리종목으로 지정되며, 향후 기준 충족 실패 시 대규모 상장폐지 물결이 예상된다. 이는 코스닥 시장 전반의 체질 개선을 기대하게 하지만, 중소기업계는 주가 변동에 따른 과도한 퇴출 요건이라며 우려를 표하고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">이번 규제 강화는 시장 구조적 개선(체질 개선)이라는 명목 하에 대규모 종목 퇴출을 예고하고 있어 투자 심리에 큰 영향을 미친다. 이는 단기적으로 부정적인 충격 요인이지만, 장기적으로는 증시의 건전성을 높이는 요인으로 작용할 수 있다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상장회사 전체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융/증권업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#상장폐지</span> <span class="tag tag-hash">#관리종목</span> <span class="tag tag-hash">#시장규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">‘동전주·시총 미달’ 관리종목 지정
+향후 성과 없다면 10월 최종 상폐
+‘만년 2부리그’ 코스닥 개선 기대
+“시장 변동성에 퇴출 야기” 우려도
+
+‘동전주’(주가 1000원 미만 주식)·시가총액 미달 등 강화된 상장폐지 요건에 따라 13일부터 30개 종목이 관리종목으로 신규 지정된다. 향후 90거래일 중 45일 연속 강화된 기준을 충족하지 못하면 오는 10월 중 최종 ‘상장폐지 기업’이 무더기로 나올 전망이다. 코스닥이 ‘투기판’, ‘만년 2부리그’ 등의 오명에서 벗어나 체질 개선을 할 것이라는 기대가 나온다. 중소기업계에서는 “일률적 기준이 기업 펀더멘털보다 주가 변동에 따른 퇴출을 야기할 수 있다”며 보완을 요구하고 있다.
+
+12일 한국거래소에 따르면 이날 신규로 관리종목 지정 사유가 발생한 종목은 총 30개로 집계됐다. 앞서 금융당국은 상폐 요건으로 동전주를 신설하고, 시가총액 기준도 코스피·코스닥 각각 300억·200억원(2027년부터 500억·300억원)으로 강화해 지난달 1일부터 시행했다. 이날까지 30거래일 연속 종가가 1000원 미만인 종목은 21개, 시가총액 기준을 미달 종목은 12개다. 이 중 3개 종목은 동전주·시가총액미달 요건이 중복됐다. 이와 별개로 이미 관리종목으로 지정됐던 코스닥 6개 종목은 관리종목 지정사유(동전주)가 추가됐다.
+
+코스피에서는 대영포장·형지엘리트·일신석재·SUN&L·한국전자홀딩스·태원물산·대원화성·남성·온타이드 9곳, 코스닥에서는 우리엔터프라이즈·티케이지애강·CMG제약·샤페론·좋은사람들·제이엠아이·SDN·옴니시스템·이노인스트루먼트·이스트에이드·노을·에스에너지·랩지노믹스·뉴인텍·에이비온·국일신동·한탑·패션플랫폼·에스앤더블류·형지글로벌·E8 등 21곳이다.
+
+관리종목 지정은 ‘증시 퇴출 첫 단계’다. 관리종목 기업은 향후 90거래일 이내에 주가가 45거래일 연속 1000원 이상을 기록하지 못하거나, 시가총액 기준에 미달하면 최종 상폐된다. 이미 30거래일 연속 동전주·시총미달이었던 기업이 45거래일 연속 기준을 충족하기 쉽지 않아 다수가 퇴출 절차를 밟을 것이라는 전망이다. 10월부터 동전주 상폐 사례가 무더기 나올 것으로 예상된다.
+
+동전주 상폐를 피하려 액면병합(여러 주식을 하나로 합쳐 주식 수를 줄이고 주당 가격을 높이는 조치)을 추진하는 기업도 있다. 하지만 본질적인 기업 가치가 달라지지는 않는다. 퇴출을 피하려면 경영 성과가 뒷받침돼야 한다.
+
+시장에서는 코스닥 증시 개선이 기대된다. 이상준 NH투자증권 연구원은 “부실기업 퇴출이 가속화하면 코스닥의 실적 개선과 지나치게 높은 밸류에이션 조정 등이 이뤄질 것”이라며 “2021~2025년 코스닥 영업이익에서 연도별 한계기업(3년 연속 이자보상배율이 1배 미만인 기업)의 영업이익 합산을 제외하면 전반적인 이익 레벨이 개선되는 흐름이 확인된다”고 분석했다.
+
+중소기업계는 반발하고 있다. 상폐 강화 기준을 보완하고, 시행 유예를 해야 한다는 요구다. 주가 변동에 따라 중소 상장사의 부담이 커진다는 우려에서다. 김기문 중소기업중앙회장은 “시장 변동성 때문에 어려워진 중소기업에 대해서는 옥석을 가려 필요한 구제책을 마련해야 한다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/005/0001866585' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/005/0001866585</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
