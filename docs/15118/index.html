@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>증시 출렁일 땐 '따박따박 배당'…커버드콜 ETF가 피난처?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003121239' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15118" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>증시 출렁일 땐 '따박따박 배당'…커버드콜 ETF가 피난처?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">증시 변동성이 커지면서 안정적인 현금흐름을 창출하는 고배당·커버드콜 ETF가 투자 대안으로 부상하고 있다. 그러나 기사는 높은 분배율에 대한 맹신을 경계하며, 원금 손실 가능성과 기초자산 확인의 중요성을 강조했다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#커버드콜ETF</span> <span class="tag tag-hash">#고분배주</span> <span class="tag tag-hash">#변동성장세</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">연 20%대 분배율 상품 잇따라
+출렁이는 증시에 투자 대안 부상
+국내 ETF 가운데 연간배당률 상위권에는 커버드콜 전략을 활용한 상품들이 대거 이름을 올렸다.
+국내 증시 변동성이 커지면서 높은 분배금을 지급하는 고배당·커버드콜 상장지수펀드(ETF)가 투자 대안으로 주목받고 있다.
+
+주가 급등락에 따른 시세차익보다 꾸준한 현금흐름을 원하는 투자자라면 고분배 ETF를 활용하는 것도 선택지가 될 수 있다.
+
+13일 ETF CHECK에 따르면, 국내 ETF 가운데 연간배당률 상위권에는 커버드콜 전략을 활용한 상품들이 대거 이름을 올렸다。
+
+연간배당률이 가장 높은 상품은 'SOL 팔란티어커버드콜OTM채권혼합'으로 28.00%를 기록했다.
+
+이어 ▲PLUS 고배당주위클리커버드콜(23.97%) ▲SOL 팔란티어미국채커버드콜혼합(23.66%) ▲KODEX 미국나스닥100데일리커버드콜OTM(21.52%) ▲TIGER 배당커버드콜액티브(21.35%) 순으로 나타났다.
+
+'ACE 미국빅테크7+데일리타겟커버드콜(합성)'과 'RISE 미국테크100데일리고정커버드콜'도 각각 20.33%, 20.12%의 연간배당률을 기록했다.
+
+커버드콜 ETF는 주식 등에 투자하면서 해당 주식을 일정한 가격에 살 수 있는 권리인 '콜옵션'을 다른 투자자에게 파는 상품이다.
+
+이때 받은 돈을 분배금으로 활용한다.
+
+대신 주가가 크게 오르면 상승에 따른 수익을 모두 가져가기 어렵다.
+
+주가 상승으로 얻을 수 있는 수익 일부를 포기하고 그 대가로 꾸준한 분배금을 받는 구조기 때문이다.
+
+따라서 주가가 크게 오르기보다 오르내림을 반복하는 장세에서 활용할 수 있는 상품으로 꼽힌다.
+
+때문에 최근 국내 증시가 출렁이는 가운데 이같은 고분배 ETF는 변동성 장세에서 활용할 수 있는 투자 대안으로 여겨진다.
+
+코스피는 지난 6월 장중 9000선을 돌파했지만, 불과 한달여 만인 지난달 29일에는 장중 5665.44까지 밀렸다.
+
+특히 변동성이 큰 장세에서 고위험 상품에 투자한 투자자들의 손실도 커졌다.
+
+지난 5월 말 삼성전자와 SK하이닉스 등 개별 종목의 하루 수익률을 두배로 추종하는 단일종목 레버리지가 국내에 처음 도입됐지만 이후 증시가 급등락하면서 높은 변동성에 그대로 노출됐다.
+
+실제 최근 1개월 수익률 하위권에도 레버리지 상품이 대거 이름을 올렸다.
+TIGER 반도체TOP10레버리지는 52.71% 하락했고 KODEX 반도체레버리지도 41.76% 떨어지는 등 반도체주 급락 과정에서 손실이 크게 불어났다.
+
+배재규 한국투자신탁운용 대표도 최근 개인 투자자들을 향해 레버리지 투자에 주의를 당부했다.
+
+배 대표는 최근 기자간담회에서 "레버리지 투자는 절대 하지 말아야 한다"며 변동성이 큰 시장에서 레버리지 상품의 위험성을 경고했다.
+
+다만 커버드콜 ETF가 변동성 장세의 대안으로 꼽힌다고 해서 위험이 없는 것은 아니다.
+
+높은 분배금을 받을 수 있다는 점만 보고 투자할 경우 오히려 손실을 볼 수 있어 주의가 필요하다.
+
+실제 연간배당률이 23.97%인 PLUS 고배당주위클리커버드콜의 연간 수익률은 -25.08%를 기록했다.
+
+연간배당률 28.00%인 SOL 팔란티어커버드콜OTM채권혼합도 연간 수익률은 -2.61%였다.
+
+ETF 가격이 떨어지면 받은 분배금보다 손실이 더 클 수 있다는 의미다.
+
+또 커버드콜은 주가가 크게 상승할 경우 상승분을 온전히 누리지 못한다는 한계도 있다.
+
+이에 투자할 때는 높은 분배율만 볼 것이 아니라 ETF가 어떤 자산에 투자하는지와 전체 수익률 등을 함께 확인해야 한다는 조언이 나온다.
+
+자산운용업계 관계자는 "최근처럼 증시 변동성이 큰 상황에서는 주가 상승에만 기대기보다 정기적인 현금흐름을 확보할 수 있는 상품에 대한 관심이 높아질 수 있다"며 "고배당·커버드콜 ETF는 분배금을 통해 변동성에 대응할 수 있는 하나의 투자 대안이 될 수 있다"
+go열.
+
+다만 높은 분배율 자체가 높은 수익률이나 원금 보전을 의미하는 것은 아니다"며 "기초자산과 옵션 전략, 분배금 재원 등을 확인해 투자 목적에 맞는 상품을 선택해야 한다"고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003121239' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003121239</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
