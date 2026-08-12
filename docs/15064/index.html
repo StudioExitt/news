@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"데이터센터 아무거나 안 산다"…기관이 보는 새 투자 기준은</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006350519' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15064" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"데이터센터 아무거나 안 산다"…기관이 보는 새 투자 기준은</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">medium</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">데이터센터 투자 시장이 단순한 규모가 아닌, 전력 안정성 확보 여부와 장기적 현금흐름(NOI) 개선 가능성에 초점을 맞추며 변화하고 있습니다. 특히 수도권의 심각한 전력 부족 문제가 핵심 변수로 부상했으며, 향후 데이터센터는 전력망에 가까운 외곽 지역 중심으로 재편될 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">전력 부족 문제와 투자 기준 변화는 국내 핵심 산업 인프라(데이터센터)의 구조적 변화를 의미하며, 전력 설비 및 관련 소재 기업에 중장기적인 영향을 줄 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전력 설비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">건축자재</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#데이터센터</span> <span class="tag tag-hash">#AI인프라</span> <span class="tag tag-hash">#전력수급</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">전력 확보했나…'전기 있는 데이터센터'가 핵심
+장기 임대차 계약…"누가 얼마나 오래 쓰느냐"
+"데이터센터 NOI 안 늘면?"…임대차 구조 중요
+최신 AI 서버 담을 수 있나…'노후화' 주요 변수
+"팔 때 누가 살까"…엑시트 가능성 미리 따져야 생성형 인공지능(AI) 확산으로 데이터센터가 기관투자자들의 핵심
+대체투자 자산으로 떠오르고 있지만, 시장의 투자 공식은 빠르게 바뀌고 있다.
+국내 데이터센터의 자본환원율(캡레이트)이 이미 글로벌 주요 시장과 비슷한 수준으로 낮아진 만큼 단순히 "데이터센터니까 오른다"는 접근으로는 투자수익을 내기 어려워졌다는 것.
+이제는 데이터센터 투자시 고려할 요소로 "전력 있고, 임차인 좋고, 순영업소득(NOI)이 커지고, 나중에 누가 살지 보이는 자산인가"가 추가되는단계에 들어섰다.
+데이터센터 투자 판단 '핵심 기준' 바뀌고 있다
+12일 상업용부동산 서비스 회사 CBRE코리아에 따르면 국내 데이터센터에 대한 투자자들 관심사는 자산의 외형적 규모에서 '현금흐름 질'과 '향후엑시트(자금회수) 가능성'으로 이동하고 있다.
+과거에는 데이터센터라는 자산 자체의 희소성과 가격 상승에 기대는 투자 전략이 통했다. 반면이제는 △전력을 얼마나 안정적으로 확보했는지 △우량임차인을 얼마나 오래 붙잡고 있는지 △임대료와순영업소득(NOI)을 얼마나 키울 수 있는지 등이 투자 판단의 핵심 기준으로 부상하고 있다.
+(자료=CBRE)
+우선 데이터센터 투자자들이 가장 먼저 따져야 할 조건은 '전력'이다. 올해 3월 누적 기준 수도권 데이터센터 전력계통영향평가 기술검토 신청은522건, 전체 신청 용량은 3만3592MW에 달했다. 이 중 절반 이상인 279건(1만8050MW)가 공급 불가 판정을 받았다.
+'데이터센터 전력계통영향평가 기술검토'는 10MW 이상의 대규모 전력 소비가 예상되는 데이터센터 등이 전력망에 미치는 영향을 사전에 정량·정성적으로 심사해서 전기 공급 가능 여부를 결정하는 제도다.
+이 검토에 합격했다는 것은 10MW 이상의 대규모 전력을 안정적으로 공급받을 수 있는 까다로운 사전 검증 관문을 통과했음을 의미한다. 수도권 등전력 포화 지역에서는 전력계통영향평가 기술검토 합격 기준이 강화되고 통과율이 매우 낮아서, 입지 선정의 핵심 변수로 작용하고 있다.
+(자료=CBRE)
+전력 확보했나…'전기 있는 데이터센터'가 핵심
+data센터 전력계통영향평가 기술검토 신청 건수 중 절반 이상이 '공급 불가'라는 것은 수도권 전력망 포화로 데이터센터 공급 차질이 현실화됐음을뜻한다.
+1차 기술검토를 통과했다고 끝나는 것도 아니다. 1차 검토를 통과한 243건 가운데 실제 본심사까지 진입한 프로젝트는 24건에 불과했고, 최종공급 가능 승인을 받은 자산은 10건이었다. 전체 신청 건수(522건) 대비 최종 승인률은 1.9%에 그쳤다. 승인된 전력 용량(1010MW)역시 전체 신청 용량(3만3592MW)의 3%였다.
+이 때문에 데이터센터의 입지를 평가하는 기준도 바뀌고 있다. 과거에는 '서울 접근성'과 '통신 인프라' 등이 주요 입지 조건이었다면 이제는'전력망에 얼마나 가까운지', '실제 수전(한국전력 등 외부 전력망으로부터 필요한 전기를 받아들이는 것)이 가능한지'가 핵심 변수로 떠오르고 있다.
+이에 따라 CBRE는 '전력 확보가 가능한 수도권 외곽 지역'이 새로운 대안으로 부상하면서 향후 데이터센터 시장이 전통적인 권역 구분보다 전력망을 중심으로 재편될 가능성이 있다고 분석했다.
+결국 기관투자자 입장에서는 "데이터센터 부지를 확보했다"는 것과 "데이터센터에 필요한 전력을 확보했다"는 것을 전혀 다른 문제로 봐야 한다는의미다.
+장기 임대차 계약…"누가 얼마나 오래 쓰느냐"
+전력 다음으로 중요한 것은 임차인이다. 데이터센터의 희소성이 높아져도 실제 현금흐름을 만들어내는 것은 결국 임차인이기 때문이다.
+특히 글로벌 데이터센터 전문 자본이나 리츠(부동산투자회사·REITs)가 장기적으로 자산을 편입하려면 '장기 임대차계약'과 '안정적 현금흐름'이중요한 조건으로 꼽힌다.
+이 때 '글로벌 데이터센터 전문 자본'이란 데이터센터를 영속적으로 편입하는 게 목적인 투자자를 뜻한다. 싱가포르 거래소에 상장된 아시아 최초순수 데이터센터 리츠인 '케펠 DC 리츠'나 세계 최대 데이터센터 전문 리츠인 '에퀴닉스'가 이에 해당한다.
+(자료=CBRE)
+CBRE 분석에 따르면 이들에게 데이터센터의 필수 선결 조건은 △트리플넷 구조 △6년 이상의 장기 WALE(가중평균 잔여 임대기간) 확보다.'트리플 넷 구조'란 상업용부동산 임대차에서 기본 임대료 외에 재산세, 건물 보험료, 유지관리비 및 수선비 등 3가지 핵심 부대비용을 임차인이 전액 부담하는 계약 방식을말한다.
+글로벌 인프라 자본 역시 데이터센터를 10년 이상 장기 보유하는 것을 선호한다. 국내 최대 상장 인프라 펀드 맥쿼리인프라, 글로벌 사모펀드운용사 KKR, 블랙스톤 등이 여기에 해당한다. 이들은 임대차 재구조화를 통해 NOI를 개선할 가능이 있는 자산에 높은 가치를 부여하는 경향이있다.
+즉 같은 규모의 데이터센터라도 어떤 임차인이 들어와 있고, 계약 기간이 얼마나 남았으며, 임대료가 어떤 방식으로 상승하도록 설계돼 있는지에 따라투자 가치가 달라질 수 있다는 얘기다.
+최근에는 글로벌 CSP(클라우드 서비스 제공업체) 등이 대용량 상면에 장기 임차를 확약하는 사례도 나타나고 있다. '대용량 상면'이란 인터넷데이터 센터(IDC)에서 서버와 네트워크 장비를 설치하고 운영하기 위해 빌려쓰는 매우 넓은 전용 공간(바닥 면적 및 랙 개수)을 뜻한다.
+글로벌 사업자들이 10MW 이상 계약할 경우 최소 10년 장기임차가이뤄지는 사례가 늘고 있다. 또한 실수요자 계약시 연 3% 또는소비자물가지수(CPI) 연동 방식의 임대료 인상 조건도 일반화되는 추세다.
+"데이터센터 NOI 안 늘면?"…임대차 구조 중요
+기관들이 데이터센터를 볼 때 또 하나의 핵심은 NOI 성장 여력이다. 과거에는 자산을 매입한 뒤 시장의 캡레이트가 낮아지면 자산 가격이 상승하면서 매각차익을 얻는전략이 가능했다. 하지만 데이터센터의 캡레이트는 이미 상당히 낮아졌다.
+캡레이트는 부동산 투자 수익률을 평가하는 지표로, 상업용 부동산에 투자했을 때 1년에 얼마나 벌 수 있는지를 수치로 표현한 것이다. 부동산에서1년간 벌어들인 순수익을 구입가격으로 나눠서 계산한다.
+입지가 좋고 투자 위험이 낮은 부동산일수록 캡레이트가 작게 나오고, 외곽이나 투자 위험이 높은 지역 부동산은 캡레이트가 높게 나타난다. 특정부동산의 '캡레이트 하락'은 해당 부동산 가격이 상승했음을 뜻한다.
+(자료=CBRE)
+CBRE에 따르면 서울 수도권 하이퍼스케일 데이터센터의 캡레이트는 5.3~6.5% 수준으로 싱가포르(5.3~6.3%) 등 주요 시장과 유사한수준이다.
+미국 상장 데이터센터 리츠의 시가총액과 추정 NOI를 역산한 데이터를 살펴보면, 지난 2005년 13~14%였던 수익률은 올해 5~6% 수준까지약 20년간 구조적으로 낮아졌다. 저금리 기조와 기관 자본의 대규모 유입이맞물린결과다.
+이에 따라 과거와 같은 추가적 캡레이트 압축을 통한 극적인 매각차익은 기대하기 어렵다는 분석이 나온다. 앞으로는 자산 자체의 가격 상승보다임대료 상승과 NOI 성장이 투자 성과를 결정하는 비중이 커질 전망이다.
+문제는 국내 데이터센터의 임대차 구조다. 미국 등 선진 시장에서는 영속성 자본 중심의 상장 리츠가 15~20년 장기 임대차를 체결하는 경우가일반적이다. 반면국내에서는 프로젝트 펀드나 PFV 등 단기 개발 자본이 3~7년 내 매각을 전제로 하는 상품 구조가 많다.
+초기 가동 시점의 안정화(램프업) 기간과 상대적으로 낮은 임대료 인상률까지 겹치면 투자자가 펀드를 보유하는 기간 동안 NOI 성장이 제한될 수있다.
+이에 따라 기관들은 단순히 "현재 임대료가 얼마인가"가 아니라 향후 임대료가 얼마나 오를 수 있는지, 그 상승분이 실제 자산가치 상승으로 온전히연결될 수 있는지를따져야 한다는 분석이 나온다.
+최신 AI 서버 담을 수 있나…'노후화' 주요 변수
+투자자가 면밀히 짚어야 할 또다른 요소는 데이터센터의 물리적 진부화 리스크다.데이터센터가 일반 오피스와 다른 점은 기술 변화에 더 민감하다는것이다.
+건물 수명은 30~40년에 달하지만 그래픽 처리 장치(GPU) 세대교체 주기는 2~3년에 불과하다. 데이터센터는 건물 노후화가 아니라,정보기술(IT) 인프라 요구사양의 급격한 진화로 기존 설계가 현행 수요를 수용할 수 없게 되는현상이 발생할 수 있다.
+AI 서버의 전력 밀도가 높아지고 액체냉각 등 새로운 기술이 확산되면서 과거에 지어진 데이터센터가 최신 수요를 감당하지 못할 가능성도 커졌다.
+(자료=CBRE)
+CBRE는 데이터센터의 물리적 진부화가△하중 △전력 밀도 △냉각 △설비 형태 등에서 발생할 수 있다고지적했다. 특히 국내 시장에서는 임대인이인프라까지 포함해 인도하는 완전 설비형 구조가 보편적이어서, 기술 변화에 따른 감가상각과 대규모 재투자 부담이임대인에게 집중될 수있다.
+결국 기관 입장에서는 "최신 시설을 갖춘 데이터센터인지" 뿐만 아니라 "향후 몇 년 뒤에도 경쟁력을 유지할 수 있는 설계인지, 추가 설비투자에얼마나 많은 비용이 필요한지"도 따져야한다.
+"팔 때 누가 살까"…엑시트 가능성 미리 따져야
+투자할 때부터 엑시트(자금회수)를 고려하는 것도 새로운 기준으로 꼽힌다. 현재 국내 데이터센터 시장의 단기 매수 주체는 국내 기관자본이지만,중장기적으로는 글로벌 인프라 자본과 데이터센터 전문 자본이 주요 매수자로 등장할 가능성이 높다.
+글로벌 인프라 자본은 10년 이상 장기 보유를 선호하고, 케펠 DC 리츠·에퀴닉스 등 데이터센터 전문 자본은 장기적인 영속 자본 편입을 목표로한다.
+케펠 DC 리츠는 인수 자산에 대해△장기 계약 △연간 에스컬레이션(또는 물가상승률 연동) △코어 앤 쉘 구조(임차인이 IT 장비 투자와 진부화 비용을 지불)를 선호하는 경향이뚜렷하다.
+이에 따라 기관들은 데이터센터를 매입하는 단계부터 향후 글로벌 자본이 요구하는 기준을 충족할 수 있는지를 따져야한다.
+한국 데이터센터 투자의 엑시트 가능성을 판단하기 위한 비교 대상으로는 아시아 선진 시장인 싱가포르와 도쿄가 꼽힌다. 두 시장은 한국과 유사한△도시 집중 △전력 제약 △고밀도 디지털 경제 구조를 공유하면서도, 엑시트 생태계의 성숙도 측면에서는 한 발 앞서 있다.
+CBRE는 결국 데이터센터 시장에서도 ‘좋은 자산’의 정의가 달라지고 있다고 설명했다.
+과거에는 큰 규모, 좋은 입지, 높은 임대료가 핵심이었다면 앞으로는 여기에다△확보된 전력 △우량임차인 △장기임대차 △임대료 상승 여력 △NOI 성장성 △기술적 경쟁력 △명확한 엑시트 경로까지 갖춰야한다.
+CBRE 관계자는 "AI 열풍과 전력난이 데이터센터의 희소성을 높이고 있지만, 희소성만으로 모든 자산 가치가 함께 오르는 시장은 아니다"며"앞으로는 전력을 선점하고 안정적인 현금흐름을 확보한 데이터센터와 그렇지 못한 자산 간 가치 차이가 더욱 커질 것"이라고 전망한다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006350519' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006350519</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
