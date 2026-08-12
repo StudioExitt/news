@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'덜 똘똘한 한 채'인데 20억…내가 올린 게 아닌데 종부세 낼 판</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/057/0001963383' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15086" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'덜 똘똘한 한 채'인데 20억…내가 올린 게 아닌데 종부세 낼 판</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">강북권 등 비핵심 지역 아파트값이 급등하며, 소유자들이 예상치 못한 높은 종합부동산세(종부세) 부담을 우려하고 있습니다. 세제개편안과 실거래가 상승에 따른 공시가격 반영 가능성이 가장 큰 리스크로 지적됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">재산세 및 종합부동산세와 같은 정부의 강력한 규제(Taxation) 변화는 모든 부동산 관련 자산과 금융기관에 직접적인 리스크 요인으로 작용하여 투자 심리를 위축시키고 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">부동산</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#종부세</span> <span class="tag tag-hash">#부동산정책</span> <span class="tag tag-hash">#세제개편</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">【 앵커멘트 】
+강력한 세제개편안의 여진은 지금도 이어지고 있습니다.
+10억 원대 아파트로 수요가 몰리며 이른바 서울 강북권 '덜 똘똘한 한 채'에서도 종부세 우려가 나오고 있는데요.
+내가 아파트값을 올린 것도 아닌데, 내년에 높아진 실거래가가 공시가격에 반영되면 종부세 대상이 될 수 있다는 걱정이 나옵니다. 
+
+【 기자 】
+지은지 10년이 안 된 서울 성북구의 2300세대 아파트.
+올해 초엔 전용면적 84㎡가 17억 원대에 거래됐는데, 지난달 20일 20억 원을 찍으며 2021년 전고점을 회복했습니다.
+그럼에도 신혼부부 등 젊은 층을 중심으로 문의가 이어지고 있어, 인근 중개업소들은 아파트값이 더 오를 것으로 보고 있습니다.
+
+▶ 인터뷰 : 공인중개사
+- "지금 계속 올라가지. 그렇게 거래돼요, 상승거래. 왜냐면 그 금액 나가면 또 높여서 나오고, 나오면 또 나가고।"
+
+25억 원 이상 고가 아파트의 대출 한도가 크게 줄면서 그 바로 아래 비교적 '덜 똘똘한 한 채'로 수요가 몰리는 겁니다.
+
+▶ 스탠딩 : 이승훈 / 기자
+- "이곳 성북구의 올해 아파트값 누적 상승률이 10.85%로, 서울에서 가장 높은 수준을 기록했습니다."
+
+문제는 올해까지는 종부세가 없거나 수십만 원 정도인 경우가 대부분인데, 내년에는 달라질 수 있다는 점입니다.
+
+세제개편안이 통과되면 종부세 대상 공시가격이 12억 원에서 14억 원으로 높아지지만, 그만큼 아파트값도 뛰었기 때문입니다.
+
+실거래가 기준으로 20억 원이 넘는 집에 실거주하지 않는다면 내년에 수백만 원을 종부세로 낼 수 있다는 우려가 나옵니다.
+
+▶ 인터뷰(☎) : 우병탁 / 신한은행 프리미어 패스파인더 전문위원
+- "강북의 외곽 지역임에도 시세 자체가 상승하면서, 금액에 따라서는 종부세 대상 부담까지 가중되는 측면이…."
+
+정부가 예외적으로 실거주로 인정하는 사유를 늘리는 방안을 검토 중인 가운데, 강북권에서도 관련 목소리가 잇따를 것으로 예상됩니다.
+MBN뉴스 이승훈입니다.
+
+영상취재 : 문진웅 기자
+영상편집 : 이우주
+그 래 픽 : 정민정
+원문링크: https://n.news.naver.com/mnews/article/057/0001963383</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/057/0001963383' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/057/0001963383</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
