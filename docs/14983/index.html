@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 반등 불씨 살릴까…美 7월 CPI에 쏠린 눈</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001262106' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14983" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 반등 불씨 살릴까…美 7월 CPI에 쏠린 눈</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국의 7월 CPI 발표가 연준의 9월 금리 정책 방향을 가를 분수령으로 떠오르고 있습니다. 물가 둔화 확인 시 금리 동결 기대감이 커질 수 있으나, 국제유가 상승 및 지정학적 불확실성이 변수로 작용하며 국내외 증시 변동성을 높이고 있어 관리가 필요합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 거시경제 지표(CPI) 및 중앙은행 정책 방향(금리) 결정에 직접적인 영향을 미치는 기사이기 때문에 영향도가 매우 높습니다. 금리 환경 변화가 시장 전체의 자금 흐름과 기업 가치 평가에 근본적인 변수로 작용합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">미국 국채</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#CPI</span> <span class="tag tag-hash">#금리정책</span> <span class="tag tag-hash">#거시경제</span> <span class="tag tag-hash">#코스피반등</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">고용 부진에 미 연준 9월 기준금리 동결론 무게
+"물가둔화 시 코스피 반등 계기될 수도"
+사진=연합뉴스
+사진=연합뉴스
+미국의 7월 소비자물가지수(CPI) 발표가 연방준비제도(Fed·연준)의 9월 기준금리 향방을 가를 분수령으로 떠올랐다. 고용 부진에 추가 금리 인상 우려가 한풀 꺾인 가운데 물가 둔화까지 확인될 경우 금리 동결 기대가 빠르게 확산할 것으로 전망된다.
+
+금융투자업계에 따르면 미국 노동부는 현지시간으로 12일 7월 CPI를 발표할 예정이다. 시장에서는 이번 지표가 연준의 9월 통화정책 방향을 결정할 주요 변수로 작용할 것으로 보고 있다.
+
+앞서 공개된 미국의 7월 비농업 부문 고용은 전월보다 2만3천명 감소했다. 고용시장 둔화가 확인되면서 연준이 추가 금리 인상에 신중해질 것이라는 기대가 커졌고 뉴욕증시도 이를 호재로 받아들였다.
+
+시카고상품거래소(CME) 페드워치에 따르면 오는 9월 연방공개시장위원회(FOMC)에서 기준금리가 동결될 확률은 52.2%, 인상될 확률은 47.8%로 나타났다. 전망이 팽팽하게 맞서면서 7월 CPI 결과에 시장의 관심이 집중되고 있다.
+
+증권가는 7월 CPI 상승률이 전월 대비로는 다소 높아지더라도 전년 동월 대비로는 둔화세를 이어갈 것으로 보고 있다. 지표가 시장 예상에 부합하면서 인플레이션 둔화 흐름이 유지될 경우 금융시장의 추가 금리 인상 부담도 낮아질 가능성이 있다.
+
+다만 호르무즈 해협을 둘러싼 미국과 이란 간 협상에 뚜렷한 진전이 나타나지 않는 상황에서 국제유가가 상승하고 있다는 점은 물가 경계심을 낮추기 어렵게 한다. 브렌트유 선물 종가는 전장보다 1.36% 올랐고, 미국 서부텍사스산원유(WTI) 선물 종가도 1.30% 상승했다.
+
+7월 물가지표가 예상보다 낮게 나오더라도 고유가가 지속되는 상황에서는 향후 물가 재상승 우려가 남아 증시 상승 폭이 제한될 수 있다는 분석도 나온다.
+
+간밤 뉴욕증시에서도 호르무즈 해협을 둘러싼 불확실성과 물가 경계심이 겹치며 3대 주가지수가 동반 하락했다. 다우존스30 산업평균지수는 전장보다 0.34% 내렸고 스탠더드앤드푸어스(S&P)500지수와 기술주 중심의 나스닥종합지수도 각각 0.32%, 0.60% 하락했다.
+
+국내 증시 역시 미국 물가지표의 영향을 받을 전망이다. 최근 코스피는 주간 기준으로 7주연속 마이너스(-) 수익률을 기록하며 약세를 이어왔다.
+
+한국투자증권의 김대준 연구원은 "앞으로 미국 금리 상단이 제한되는 흐름이 나타나면 코스피도 추가 하락압력에 노출될 확률이 낮아진다"며 "미국 경제지표가 주식시장에 불리한 영향을 미치지 않는다면 약세를 지속했던 코스피도 반등계기를 마련할 수 있을 것"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001262106' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001262106</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
