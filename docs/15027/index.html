@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>은행 아성 넘보는 증권사, 금융권 지각변동?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026-08-12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005399170' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15027" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>은행 아성 넘보는 증권사, 금융권 지각변동?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">증권사들이 상반기 활황에 힘입어 일부 대형 은행의 분기 순이익을 추월하며 금융지주 내 이익 기여도가 급격히 커지고 있습니다. 이는 자본시장 성장에 따른 증권사의 새로운 핵심 성장 축 부상을 의미합니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">미래에셋증권</span> <span class="tag stock-tag">한국투자증권</span> <span class="tag stock-tag">KB증권</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 지주사</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자본시장</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#금융지주</span> <span class="tag tag-hash">#증권사</span> <span class="tag tag-hash">#자본시장성장</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미래에셋 순이익 1.9조, 5대 은행 모두 제쳐…금융지주, 증권사 '체급 키우기' 경쟁
+증권사-은행 2분기 순이익/그래픽=이지혜
+은행의 그늘에 가려있던 증권사들이 사상 최대 실적을 앞세워 은행의 아성을 넘보고 있다. 올해 상반기 증시 활황을 등에 업은 대형 증권사들이 분기 수천억원에서 1조원대 순이익을 거두면서 일부는 이미 대형 은행의 실적까지 넘어섰다. 은행 중심이었던 금융지주 안에서도 증권 계열사의 이익 기여도가 빠르게 커지고 있다. 은행이 여전히 금융권의 안정적인 이익 기반을 담당하지만 자본시장 성장과 함께 증권사가 새로운 이익축으로 부상하는 모습이다.
+
+━한투·키움, 일부 대형은행 추월…금융지주 내 증권사 위상 커져―
+주요 은행과 증권사의 2분기 순이익을 비교하면 달라진 증권사의 위상이 선명하게 드러난다. 12일 금융투자업계에 따르면 미래에셋증권은 2분기 순이익(1조9052억원)이 5대 은행을 모두 넘어섰다. 신한은행이 1조3015억원, KB국민은행 1조1240억원, 하나은행 1조212억원을 앞질렀다. 한국투자증권(9464억원)은 우리은행(8427억원)을 넘어섰고, 키움증권(6806억원)도 NH농협은행(6052억원)보다 많은 순이익을 냈다. 대형 증권사의 분기 이익이 주요 은행과 직접 비교할 수 있는 규모까지 커진 것이다.
+
+증권사의 약진은 금융지주 내부에서도 나타난다. NH투자증권·KB증권·신한투자증권·하나증권·우리투자증권 등 5대 금융지주 계열 증권사의 올해 상반기 합산 순이익은 약 2조6370억원으로 지난해 같은 기간보다 2배 이상 증가했다. 올해 상반기 NH농협금융에선 NH투자증권의 순이익(9651억원)이 NH농협은행 순이익(1조1629억원)의 83%까지 올라왔다.
+
+KB증권과 신한투자증권도 지주 내 실적 비중에서 존재감을 키웠다. KB증권은 상반기 7963억원의 순이익을 거둬 전년 동기 대비 135%증가했고, 신한투자증권도 5777억원으로 123%증가했다. 여전히 은행이 금융지주 전체 이익의 중심이긴 하지만 올해 금융지주의 추가적인 이익 성장을 증권 계열사가 강하게 뒷받침한 것이다.
+
+금융지주가 증권사의 자본력을 키우고 있다는 점도 달라진 위상을 보여준다. KB금융은 지난 2월 KB증권에 7000억원을 투입한 데 이어 7월에도 1조원을 추가 배치했다. NH농협금융도 지난 6월 NH투자증권에 4000억원 규모의 자본을 확충했다. 우리금융은 올해 우리투자증권에 1조원을 투입해 자기자본을 2조원대로 끌어올렸다. 금융지주들이 은행 이외의 성장동력을 확보하기 위해 증권 계열사의 체급을 키우는 모습이다.
+
+증권사에 자본이 몰리는 것은 자기자본이 영업 경쟁력과 직결되기 때문이다. 자기자본이 늘어나면 기업금융과 인수금융, 모험자본 공급 등에서 대형 거래를 수행할 여력이 커진다. 자기자본 규모는 종합금융투자사업자 지정과 발행어음·IMA(종합투자계좌) 등 신규 사업 진출을 위한 주요 요건이기도
+
+━"은행 일변도 금융권 이익 지형 달라지는 신호 뚜렷"―
+최근 증권사의 이익 확대에는 자금의 자본시장 이동도 영향을 미쳤다. 증시 활황으로 주식과 ETF(상장지수펀드) 거래가 늘어 브로커리지 수수료가 증가했다. 신용융자가 늘어 이자이익도 커졌다. 주가 상승으로 고객자산이 불어나면 금융상품 판매와 자산관리(WM) 수수료까지 증가한다. 퇴직연금과 연금저축 등 장기 자산이 증권사로 유입된 것도 수익 기반이 넓어진 요인이다.
+
+은행은 대출과 예대마진을 기반으로 상대적으로 안정적인 이익을 창출하지만 가계대출 관리와 자본규제 등으로 성장에 제약을 받는다. 반면 증권사는 시장 변동에 취약하다는 단점이 있지만 자본시장이 성장할 경우 브로커리지와 WM, IB(투자은행), 트레이딩 등 여러 수익원이 동시에 확대될 수 있다.
+
+은행과 증권의 이익 규모를 단순 비교하는 데에는 한계도 있다. 은행의 이익은 상대적으로 반복 가능성이 높은 반면 증권사의 실적은 증시와 거래대금, 금리, 보유자산 평가손익에 따라 변동성이 크다. 실제로 미래에셋증권의 2분기 순이익이 주요 은행을 모두 넘어선 데에는 스페이스X평가이익이 결정적인 영향을 미쳤다.
+
+금융투자업계에서는 증권사가 은행을 대체한다기보다 자본시장 확대에 따라 금융산업의 두 번째 핵심 이익축으로 성장하는 과정으로 봐야 한다는 평가가 나온다. 아울러 최근 증권사의 이익 변동성이 은행보다 큰 만큼 한두 분기 실적만으로 은행과 증권사의 구조적 역전을 말하기는 이르다는 지적도 있다.
+
+금융투자업계 관계자는 "은행 일변도였던 금융권의 이익 지형이 달라지고 있다는 신호는 뚜렷해지고 있다"며 "은행 중심이던 국내 금융산업에서 증권업의 위상이 얼마나 더 커질지 주목된다"
+</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005399170' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005399170</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
