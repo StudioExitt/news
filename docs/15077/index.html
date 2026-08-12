@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상폐 카운트다운…'동전주·시총 미달' 경고장 받은 36곳 어디?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000524062' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15077" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>상폐 카운트다운…'동전주·시총 미달' 경고장 받은 36곳 어디?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">한국거래소의 상장 요건 강화에 따라 주가나 시가총액 기준을 충족하지 못한 36개 종목이 관리종목으로 지정되었습니다. 이들 종목은 향후 경영 개선 및 기준 회복 여부가 생존의 핵심 과제가 되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">규제 당국이 강화한 상장 유지 기준을 충족하지 못한 다수의 종목들이 관리종목으로 지정되면서, 투자 시장 전반에 걸쳐 '저품질' 및 '고위험' 종목에 대한 경계 심리가 높아지고 구조적 불안감이 확산될 수 있기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#관리종목</span> <span class="tag tag-hash">#상장폐지</span> <span class="tag tag-hash">#주가하한</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">한국거래소가 상장 유지 요건을 강화하면서 주가와 시가총액 기준에 미달한 36개 종목이 무더기로 관리종목에 지정됐다. 이들 종목은 향후 기준을 회복하지 못하면 실제 상장폐지 수순을 밟게 된다.
+
+12일 한국거래소에 따르면 이번 관리종목 지정 대상 36곳 가운데 주가가 30거래일 연속 1000원 미만에 머문 종목은 24곳이다. 코스피에서는 대영포장·형지엘리트·일신석재가 이름을 올렸다. 코스닥에서는 뉴인텍·노을·에스에너지·랩지노믹스·이스트에이드·옴니시스템·SDN·좋은사람들·제이엠아이·샤페론·CMG제약·이노인스트루먼트·우리엔터프라이즈·에이비온·티케이지애강이 주가 기준에 걸렸다. 이미 관리종목으로 지정돼 있던 비케이홀딩스·아이스크림에듀·원풍물산·바른손이앤에이·수성웹툰·에이에프더블류도 주가 1000원 미만 사유가 추가됐다.
+
+주가는 1000원 이상이지만 시가총액 기준만 충족하지 못한 곳은 9곳이다. 코스피에서는 SUN&L·한국전자홀딩스·태원물산·대원화성·남성이 시가총액 300억원 기준을 밑돌았다. 코스닥에서는 국일신동·한탑·패션플랫폼·에스앤더블류가 시가총액 200억원에 미달했다.
+
+주가와 시가총액 두 기준에 동시에 걸린 곳도 3곳이다. 코스피의 온타이드, 코스닥의 형지글로벌·E8은 최근 30거래일간 주가가 1000원 미만인 동시에 각각 시장별 시가총액 기준도 충족하지 못했다.
+
+이를 합치면 주가 기준만 미달한 24곳, 시가총액 기준만 미달한 9곳, 두 기준 모두 미달한 3곳 등 총 36곳 이다. 이 가운데 기존 관리종목 6곳을 제외한 신규 지정 30곳은 오는 13일 하루 동안 매매거래가 정지된다.
+
+이번 조치는 지난달 1일부터 시행된 강화된 상장폐지 기준에 따른 것이다. 주가가 30거래일 연속 1000원 미만이거나 시가총액이 코스피 300억원, 코스닥 200억원을 밑돌 경우 관리종목으로 지정된다.
+
+관리종목 지정 이후에는 90거래일 동안 연속 45거래일 이상 해당 기준을 회복해야 한다. 이를 충족하지 못하면 최종 상장폐지 절차를 밟게 된다.
+특히 동전주 요건에 따른 상장폐지는 이의신청도 할 수 없어 이르면 오는 10월부터 실제 퇴출 사례가 나올 가능성도 거론된다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000524062' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000524062</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
