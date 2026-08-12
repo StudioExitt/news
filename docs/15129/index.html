@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이달 초순 개인은 코스피 상승, 외국인은 하락에 베팅했다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016248339' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15129" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>이달 초순 개인은 코스피 상승, 외국인은 하락에 베팅했다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">개인 투자자들은 코스피 상승에 베팅한 커버드콜 및 지수 추종 ETF를, 외국인 투자자는 하락을 예측하는 곱버스 상품과 해외 주요 지수(나스닥, S&P 500) 추종 ETF에 대규모 자금을 투입했습니다. 이는 시장 참여자들의 상반된 심리가 강한 변동성을 예고합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">개인과 외국인의 상반된 매매 패턴은 시장에 방향성 불확실성(변동성)이 높다는 신호를 보내지만, 해외 자산 및 안정적 현금흐름 상품으로의 관심 증가는 투자 심리의 분산을 나타냅니다. 단기적으로는 제한적인 움직임이 예상됩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF매매동향</span> <span class="tag tag-hash">#개미투자자</span> <span class="tag tag-hash">#외국인투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">ETF (PG) [김선영 제작] 일러스트
+(서울=연합뉴스) 고은지 기자 = 이달 들어 개인은 코스피 상승, 외국인은 하락에 주로 '베팅'한 것으로 나타났다.
+13일 코스콤 CHECK에 따르면 지난 3일부터 12일까지 개인 투자자는 코스피200 지수를 기초지수로 하는 'KODEX 200'을 1천622억원 순매수했다. 이는 전체 상장지수펀드(ETF) 중 세 번째로 많은 액수다.
+또 'KODEX 레버리지'는 886억원을 사들이며 전체 ETF 순매수액 가운데 상위 8위를 기록했다. 해당 ETF는 코스피200 지수의 일간 변동률을 2배로 추종한다.
+반면에 외국인은 'KODEX 200선물인버스2X'를 1천142억원 순매수하며 개인과 정반대의 양상을 나타냈다. 이 ETF는 코스피200 지수 하락 시 2배의 수익을 낼 수 있는 '곱버스' 상품으로, 외국인 순매수액이 'TIGER 미국나스닥100'(1천153억원) 다음으로 많았다.
+ETF 거래 기록으로 보면 개인은 코스피 상승을, 외국인인 하락을 예측하는 수요가 더 많았던 셈이다. 8월 3∼12일 코스피는 6,595.45(7월 31일 종가)에서 6,579.04로 0.25% 소폭 하락했다.
+이달 개인이 가장 많이 사들인 ETF는 'KODEX 200타겟위클리커버드콜'로 2천452억원을 순매수했다. 이외에도 'KODEX 200커버드콜액티브'(7위·900억원), 'RISE 코리아밸류업위클리고정커버드콜(11위·500억원), 'TIGER 반도체TOP10커버드콜액티브'(14위·448억원) 등 커버드콜 관련 ETF가 개인 ETF 순매수액 상위권에 나란히 이름을 올렸다. 커버드콜 ETF는 기초자산(주식이나 지수)을 보유한 상태에서 해당 자산의 콜옵션을 매도해 옵션 프리미엄을 받고, 이를 분배금 재원으로 활용하는 ETF다. 월 분배로 안정적인 현금 흐름을 가져갈 수 있기 때문에 변동성 장세가 유리한 것으로 여겨진다.
+'TIGER 미국S&P500'(2위·2천430억원), 'KODEX 미국나스닥100'(4위·1천619억원), 'KODEX 미국S&P500'(5위·1천410억원), 'TIGER 미국나스닥100'(6위·1천174억원) 등 미국 주요 주가지수를 따르는 ETF도 많이 사들였다. 국내 주식시장이 주춤한 가운데 스탠더드앤드푸어스(S&P) 500이나 나스닥 100 지수가 상대적으로 강한 회복세를 나타내면서 미국 지수 추종 ETF로 눈을 돌린 것으로 풀이된다.
+코스피(CG) [연합뉴스TV 제공]
+단일종목 레버리지는 개인과 외국인 모두 순매도액 상위권에 포함됐다. 개인은 지난 3∼12일 'KODEX SK하이닉스단일종목레버리지'를 1천114억원, 'KODEX 삼성전자단일종목레버리지'를 1천73억원 각각 순매도했다. 전체 ETF 중 순매도액 3, 4위에 해당한다.
+외국인은 KODEX SK하이닉스단일종목레버리지를 2천28억원(2위), KODEX 삼성전자단일종목레버리지를 725억원(3위) 순매도했다. 단일종목 레버리지 16종(인버스 2종) 총 거래대금은 지난 12일 기준 8천594억원으로 집계됐다. 규제가 강화된 지난달 31일 이후 가장 적었던 지난 10일 5천923억원보다 늘어난 수치나 매도액이 증가한 데 따른 것으로 분석된다.
+신한투자증권 노동길 연구원은 "국내 주식시장이 7월 말 이후 디레버리징에 돌입한 가운데 변동성 정점은 이미 통과한 것으로 판단된다"며 "지수 반등을 판단할 때 이익 전망 못지않게 변동성을 키웠던 수급 구조가 얼마나 정상화되는지를 확인할 필요가 있다"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016248339' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016248339</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
