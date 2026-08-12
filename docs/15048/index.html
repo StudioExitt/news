@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>증시 '깔딱고개'…모두가 '이것'을 주목한다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003121154' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15048" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>증시 '깔딱고개'…모두가 '이것'을 주목한다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국제유가 및 미국 물가 지표 공개를 앞두고 증시의 단기 방향성을 예측하기 어려우며, 금리 불안과 지정학적 리스크가 상존하는 상황입니다. 시장은 CPI와 PCE 등 주요 경제지표를 통해 물가 안정화 추세 지속 여부에 촉각을 곤두세우고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">물가와 금리라는 거시경제의 핵심 변수가 주도하고 있어 시장 방향성이 불확실하며, 이는 투자 심리를 크게 흔들 수 있는 중요 요소입니다. 특히 국제 유가와 지정학적 리스크 언급이 불안정성을 높입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">에너지 시설 및 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#거시경제</span> <span class="tag tag-hash">#금리</span> <span class="tag tag-hash">#CPIPCE</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">고용지표 악화로 금리 인상 우려 완화\n물가 상승폭 시장 기대 부합할까\n위험자산 선호심리에 영향 가능성\n美비축유 감소…TACO로 이어질까\n택시 운전사가 주유소에서 차량에 연료를 넣고 있다(자료사진). \n택시 운전사가 주유소에서 차량에 연료를 넣고 있다(자료사진).\n거듭하는 가운데 시장 초점은 물가와 금리에 맞춰지고 있다.\n중동 불확실성으로 국제유가가 출렁이는 상황에서 하나둘 공개될 미국 물가 지표가 단기 증시 방향성을 결정지을 수 있다는 관측이다.\n\n12일 한국거래소에 따르면, 이날 코스피 지수는 전 거래일 대비 233.51포인트(3.68%) 오른 6579.04로 거래를 마쳤다.\n\n삼성전자를 연이틀 매수한 외국인 투자자들이 지수 상승을 견인했다.\n\n강진혁 신한투자증권 선임연구원은 "전일에 이어 외국인 비차익 프로그램 매수세가 들어오며 반도체 중심 대형주가 강하게 상승했다"고 말했다.\n\n미국 국채 10년물 금리가 4.7% 안팎을 오가며 증시 부담을 키우는 상황에서도 AI 기대감은 꺾이지 않는 분위기다.\n\nAI 기대감이 증시 하방 압력을 방어하는 가운데 시장은 미국에서 조만간 발표될 7월 경제지표에 촉각을 곤두세우고 있다.\n\n문남중 대신증권 연구원은 "높은 수준의 장기 금리, 물가 부담, 금리 불안이 상존하고 있다"며 "단기간 증시가 상승을 모색하는지는 더 지켜봐야 하는 상황"이라고 말했다.\n\n다만 지난주 공개된 미국 고용지표가 예상보다 악화해 금리 인상 우려가 완화된 만큼, 물가 상승폭이 시장 예상을 웃돌지 않는다면 투자심리에 온기를 더할 가능성이 높다.\n\n특히 지난달 발표된 6월 물가지표가 미국·이란의 휴전 영향으로 '안정된 흐름'을 보인 만큼, 관련 추세가 이어질지 주목할 필요가 있다.\n\n문 연구원은 "오는 12일, 26일 각각 발표되는 소비자물가지수(CPI)와 개인소비지출(PCE)의 중요성이 더욱 커졌다"며 "증시 하락 후, 상승을 도모하는 주식시장 상황을 고려하면 최소 2달 이상의 연속성이 중요하다"고 강조했다.\n\n다만 중동정세 악화에 따른 국제유가 상승과 이로 인한 금리 인상 우려는 언제든 증시를 위협할 수 있다.\n\n독일 겔젠키르헨에 위치한 메이저 정유사 BP의 공장 지대에 대형 유류 저장 탱크들이 보이고 있다(자료사진). \n독일 겔젠키르헨에 위치한 메이저 정유사 BP의 공장 지대에 대형 유류 저장 탱크들이 보이고 있다(자료사진).\n모르는 미국·이란 협상보다 미국의 비축유 감소를 주목할 필요가 있다는 목소리도 제기된다.\n\n중간선거를 고려해 도널드 트럼프 미국 대통령이 꽁무니를 내리는 '타코(TACO·Trump Always Chicken Out)' 트레이드가 펼쳐질 수 있다는 관측이다.\n\n박상현 iM증권 연구원은 "미국 전략비축유 재고 수준이 1983년 이후 최저 수준까지 급감했다"며 "이란 사태 장기화로 미국 원유 재고 수준이 추가로 감소한다면 유가 불안, 즉 유가 폭등세가 현실화될 위험을 배제하기 어렵다"고 짚었다.\n\n그러면서 "미국 내 상황이 트럼프 대통령으로 하여금 이란과의 협상 타결을 압박하는 분위기"라고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003121154' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003121154</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
