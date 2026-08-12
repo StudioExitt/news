@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>널뛰기 증시에 변액보험 가입자 속앓이</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/023/0003992684' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15097" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>널뛰기 증시에 변액보험 가입자 속앓이</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">증시 급락과 변동성 장세로 인해 변액보험 가입자들의 평가액이 크게 줄고 속앓이가 커지고 있습니다. 보험사들이 판매를 독려했으나, 투자와 보험이 결합된 구조적 위험(원금 손실 가능성, 높은 사업비) 때문에 소비자 민원이 증가하고 금융당국의 주의가 요구됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">변액보험 시장의 자산 가치 급락 및 소비자 민원 증가가 보고됨으로써 금융투자 상품 전반에 대한 신뢰도가 하락하고 있으며, 이는 관련 금융 업계 전체의 투자 심리를 위축시키는 요인으로 작용할 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">소비자 금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#변액보험</span> <span class="tag tag-hash">#금융상품위험</span> <span class="tag tag-hash">#투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">널뛰기 증시에 변액보험 가입자 속앓이. 언론사: 조선일보 날짜: 2026.08.13. 오전 12:36 본문: 순자산 두달 새 20조 넘게 줄어 "만기가 된 변액보험을 지난달 초에 해지하려 했는데, 보험사 측에서 해지를 만류하는 말을 듣고 그냥 뒀더니 주가가 곤두박질치면서 한 달 만에 외제차 한 대 값이 날아갔습니다." 한 보험 가입자가 최근 증시 급락으로 변액보험 평가액이 크게 줄었다며 토로한 말이다. 변액보험은 보험료 일부를 주식이나 채권 등에 투자해 운용 성과에 따라 보험금과 해약 환급금 등이 달라지는 보험 상품이다. 해약 환급금은 보험 상품을 중도에 해지했을 때 계약자에게 돌려주는 돈을 말한다. 그래픽=박상훈 변액보험은 일반 펀드와 달리 보험의 보장 기능이 결합돼 있고 보험료에서 각종 비용이 차감되는 구조여서 단기 투자 상품과는 성격이 다르다. 그런데 일부 보험 설계사 등이 ‘증시가 좋을 때 들면 좋은 보험’ 등으로 마케팅을 해 가입자가 피해를 보는 경우도 종종 있다. 올 들어 증시가 급등락을 반복하면서 주식형 펀드에 투자하는 변액보험 가입자들의 평가액도 출렁이고 있다. 특히 증시가 좋을 때 높은 수익률을 기대하고 가입한 소비자들이 속앓이를 하고 있다.
+
+◇증시 호황일 때 보험 판매 봇물 12일 보험 업계에 따르면, 국내 생명보험사들의 변액보험 순자산은 지난 6월 150조원을 넘었다가 지난 11일 기준 128조원대로 떨어졌다. 두 달 사이 20조원 넘게 감소했다. 이 기간 코스피가 20% 이상 하락하는 등의 피해를 함께 본 것이다. 변액보험 자산에는 투자 자산 가격 변동 외에도 신규 보험료 유입과 해지·인출에 따른 자금 유출 등이 반영된다. 앞서 증시 호황기엔 변액보험 판매가 급증했다. 금융감독원에 따르면, 지난해 변액보험 초회보험료는 2조8900억원으로 전년보다 46.2% 증가했다. 비슷한 흐름이 올 들어서도 이어졌다. 지난 1월 1만4882건이던 저축성 변액보험 판매 실적은 증시가 조정을 거치던 4월 1만3357건으로 주춤했다가 증시가 상승하자 5월 1만7065건, 6월 2만48건으로 늘었다. 문제는 변액보험이 일반 펀드와 비슷해 보이지만 실제로는 보험과 투자가 결합된 상품이며, 원금 손실도 가능하다는 점이다. 변액보험은 납입한 보험료 전액이 투자되는 것이 아니라 상품에 따라 위험보험료와 사업비 등이 차감된 뒤 남은 금액이 펀드로 운용된다. 위험 보험료는 사망·질병 등 보험사고가 발생했을 때 보험금을 지급하기 위한 것이고, 사업비는 보험을 판매·관리하는 데 드는 돈이다. 따라서 펀드 운용 성과가 좋더라도 가입자가 실제 납입한 보험료 전체를 고려한 수익률은 다를 수 있다.
+
+◇가입 초기 중도 해지하면 손해 커 중도 해지 때 부담이 커질 수 있다는 점도 일반 펀드와 다르다. 금융감독원은 가입 초기에는 사업비 비중이 비교적 높기 때문에 단기간에 해지할 경우 해약환급금이 생각보다 더 적을 수 있다고 안내하고 있다. 해지 자체가 불가능하거나 절차가 어렵지는 않지만, 투자 성과가 나빠졌을 때 일반 펀드처럼 손쉽게 환매하고 다른 상품으로 갈아타기에는 비용 측면에서 부담이 클 수 있다. 금감원에 따르면 지난해 변액보험 관련 민원은 1308건으로 전체 생명보험 민원의 약 9%를 차지했다. 변액보험이 좋은 성과를 내는 시기도 있지만, 보험과 투자 상품이 결합된 구조 자체로 분쟁의 소지가 적지 않다는 뜻이다.
+
+실제 금감원은 지난해 변액보험 판매량 급증 과정에서 실적 경쟁이 과열됐다고 보고 판매 절차를 점검했다. 올해 3월 발표한 미스터리 쇼핑에서는 일부 보험사가 판매 과정에서 변액보험의 자산 운용 방식과 설명 의무 위반 시 계약 해지를 요구할 수 있는 소비자 권리 등에 대해 설명이 충분하지 않았던 것으로 나타났다.
+
+◇상품마다 천차만별... 혜택 따져야 금감원은 변액보험이 자신의 가입 목적과 투자 성향에 맞는 상품인지 먼저 따져보고 계약할 것을 당부했다. 변액보험은 저축 목적의 상품과, 사망 보장을 중심으로 하는 상품, 연금 목적의 상품 등 유형에 따라 종류도 여러 가지다. 특히 변액종신보험은 사망 보장이 본래 목적이어서 단순한 저축 상품으로 접근해서는 안 된다는 설명이다. 변액보험 가입을 장기간 유지하면서 보험의 보장 기능과 투자 기능을 함께 활용하려는 소비자에게는 유용할 수 있다. 다만 주가가 오를 때 수익률만 보고 가입했다가 단기간에 해지하려는 경우에는 적지 않은 손해를 볼 수 있다. 변액보험 가입에 앞서 기대 수익률뿐 아니라 어떤 보장을 받는지, 중도해지 때 얼마를 돌려받을 수 있는지, 자신이 감당할 수 있는 투자 위험에 해당하는지 등을 종합적으로 살펴볼 필요가 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/023/0003992684' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/023/0003992684</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
