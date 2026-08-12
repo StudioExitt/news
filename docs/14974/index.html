@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스페이스X, 서학개미 열기 식었다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/031/0001049055' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/14974" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>스페이스X, 서학개미 열기 식었다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">스페이스X에 대한 개인 투자자들의 단기적 매수 열기가 둔화되며, 보호예수 해제 및 대규모 자본적 지출(CAPEX) 부담이 주가 하방 압력으로 작용하고 있다. 다만, 스타링크와 AI 부문의 강력한 성장세를 바탕으로 장기적인 관점에서 분할 매수 기회를 제공한다는 분석이다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단기적으로는 보호예수 해제와 CAPEX 부담이라는 명확한 공급 측면 리스크가 작용하고 있으며, 개인 투자자들의 관심도 감소하며 주가 상승 동력이 약화된 것이 핵심 요인입니다. 하지만 여러 증권사에서 제시하는 구체적인 호실적 및 고성장 부문 분석은 장기적 매수 의견을 강화하여 중립적 해석이 필요합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SpaceX</span> <span class="tag stock-tag">Starlink 관련주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">통신장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">우주항공산업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#스페이스X</span> <span class="tag tag-hash">#서학개미</span> <span class="tag tag-hash">#보호예수</span> <span class="tag tag-hash">#CAPEX</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">스페이스X에 대한 개인 투자자들의 열기가 식고 있다. 상장 직후 기대감만으로 급등락을 거듭했던 주가는 최근 공모가 수준으로 되돌아왔다. 보호예수 해제 물량이 단계적으로 풀리는 데다 하반기 자본적 지출(CAPEX) 부담이 남아 있는 등 당분간 주가의 발목을 잡을 요인이 적지 않다는 평가다.
+
+12일 한국예탁결제원에 따르면 미국 주식에 투자하는 국내 개인 투자자 '서학개미'의 스페이스X 순매수 규모는 상장 이후 빠르게 줄고 있다. 스페이스X는 지난 6월 12일 상장했다. 상장 첫달 서학개미의 순매수액은 18억9307만달러(약 2조6882억원)에 달했다. 그러나 7월에는 2억375만7290달러(약 3358억원)로 약 10분의 1 수준까지 급감했다. 이달(1~11일)에도 순매수액은 1억3237만달러(약 1871억원)에 그쳤다.
+
+매수세가 빠르게 둔화했지만 매도액도 함께 줄면서 순매수 기조 자체는 유지되고 있다. 다만 상장 초기 공격적인 저가매수에 나섰던 투자자들의 열기는 한풀 꺾인 모습이다.
+
+미국 개인 투자자들의 관심도 주춤하는 모습이다. 지난 7일(현지시간) 미국 개인 투자자는 상장 이후 처음으로 약 450만달러 순매도로 전환했다.
+
+야후파이낸스는 개인 투자자들이 상장 직후부터 저가매수를 이어왔지만 8월 들어 투자 열기가 식기 시작했다고 분석했다.
+
+스페이스X 주가는 상장 이후 급등락을 거듭했다. 시가총액 기준 세계 6위에 오르기도 했지만 7월 들어 하락세로 돌아서며 공모가인 135달러를 밑돌았다. 실적 발표 다음날이었던 이달 5일에는 108.27달러까지 떨어졌다. 하반기에도 대규모 CAPEX 지출이 이어질 것이라는 전망이 주가에 부담으로 작용했다. 이후 3거래일간 반등하며 138.74달러까지 회복했지만 다시 하락해 현재는 133.29달러에 거래되고 있다.
+
+증권가에서는 보호예수 해제와 CAPEX 부담 등을 고려하면 주가의 본격적인 회복까지는 시간이 필요할 것으로 보고 있다.
+
+지난 6일에는 스페이스X 임직원과 초기 투자자들이 보유한 9억1150만주의 보호예수가 해제됐다. IPO 당시 유통 가능 물량인 5% 대비 거래 가능 주식이 두 배 이상 늘어났다. 오는 12월 8일까지 거래 가능 주식 비중은 전체의 40%까지 확대된다. 내년 중반에는 일론 머스크 최고경영자(CEO) 지분을 포함한 나머지 60%도 시장에 풀릴 예정이다.
+
+이재광 LS증권 연구원은 "하반기 CAPEX 지출은 2분기 수준으로 지속될 것으로 밝혔고, 단계적 락업 해제는 내년 6월에 완전히 해제될 것임을 고려하면 주가는 당분간 부진한 흐름을 나타낼 수 있을 것"이라고 전망한다.
+
+성장성에 대한 평가는 긍정적이다. 스타링크를 담당하는 커넥티비티 부문은 2분기 매출이 전년 동기 대비 66% 증가한 43억달러를 기록했다. 인공지능(AI) 부문 매출도 247% 급증한 26억달러를 기록했다. 스타십 개발을 담당하는 스페이스 부문은 개발비 부담으로 적자를 이어갔다.
+
+이 연구원은 "2분기 호실적과 향후 고성장 전망, 수직계열화에 바탕한 경쟁력을 고려하면 주가가 부진할 때 장기적 관점에서 분할 매수를 추천한다"고 분석했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/031/0001049055' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/031/0001049055</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
