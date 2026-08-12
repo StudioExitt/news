@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>돈줄 마른 국내 증시…거래 줄고 대기자금도 '뚝'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.12</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005560680' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15014" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>돈줄 마른 국내 증시…거래 줄고 대기자금도 '뚝'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피와 코스닥의 일평균 거래대금이 전월 대비 급감하며 국내 증시의 유동성이 둔화되고 있다. 투자자예탁금과 CMA 잔고 등 시장 대기자금 역시 감소세를 보여, 단기적으로 수급 개선이 이루어져야 증시 반등이 가능할 것이라는 분석이 나온다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">거래대금 및 대기자금 감소는 단기적인 유동성 경고 신호로 작용하지만, 전문가들이 외국인 매수나 글로벌 거시 환경 개선을 반등의 주요 촉매제로 제시하고 있어 방향성이 불투명하며 기술적 분석에 초점을 맞춘 내용임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융산업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#국내증시 #유동성위축 #투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피 이달 거래대금 연중 최저치
+투자자예탁금 6개월여 만에 100조원 밑으로
+"수급 개선돼야 증시 반등 가능"
+[파이낸셜뉴스] 국내 증시가 지지부진한 흐름을 이어가자 주식시장의 유동성이 둔화되고 있다. 투자심리가 위축되면서 거래 활력이 떨어진 것은 물론,
+증시 진입을 위한 대기자금도 급격하게 쪼그라들고 있다.
+
+12일 한국거래소에 따르면 이달 들어 이날까지 코스피 일평균 거래대금은 24조8215억원으로 집계됐다. 전월(36조8754억원) 대비
+12조539억원(32.69%) 감소한 수치로, 올 들어 가장 낮은 수준이다.
+
+코스피 시장은 지난 1~4월 하루 평균 30조원 안팎의 거래가 이뤄졌지만, 5~6월 50조원대로 올라서며 사상 최대치를 경신했다. 하지만 극심한
+변동성 보인 지난달부터 거래가 급감하는 추세다.
+
+코스닥 시장도 상황은 마찬가지다. 이달 코스닥 일평균 거래대금은 6조1948억원을 기록했다. 전월보다는 소폭 늘었지만, 1~6월
+10조~15조원대였다는 점을 감안하면 여전히 낮은 수준이다.
+
+증시 대기자금도 급격하게 줄어들고 있다. 개인들의 '실탄'으로 여겨지는 투자자예탁금은 전날 기준 97조9289억원으로, 지난 2월 이후 6개월여
+만에 100조원 밑으로 내려갔다. 한 달 새 11조원가량 줄어든 수치로, 역대 최대치를 기록한 지난 6월 4일(139조6948억원)과 비교하면
+40조원 넘게 빠졌다.
+
+또 다른 증시 대기자금인 종합자산관리계좌(CMA) 잔고도 줄어드는 추세다. CMA 잔고는 전날 기준 104조4653억원으로, 한 달간 3조원
+가까이 줄었다.
+
+증권가에선 증시 반등을 위해선 수급 개선이 뒷받침돼야 한다고 보고 있다. 국내 증시가 역대급 저평가 구간에 진입했음에도, 유동성이 회복되지
+않으면 상승세가 더딜 수밖에 없다는 분석이다.
+
+노동길 신한투자증권 연구원은 "최근 조정은 펀더멘털 약화보다는 높은 변동성과 수급 불균형의 영향이 상당했던 것으로 보인다"며 "지수 반등을
+판단할 때도 수급 구조가 얼마나 정상화되는지를 확인할 필요가 있다"
+고 말했다.
+
+특히 외국인의 국내 증시 복귀가 중요한 변수가 될 것이란 분석이 나온다. 김재승 현대차증권 연구원은 "개인 투자자들의 투자심리가 약화된 상황에서
+외국인의 순매수 여부가 지수 방향성을 결정하고 있다"며 "글로벌 유가 하락에 물가 상승 압력이 약화됐고, 미국 고용지표 부진에 연준의 기준금리
+인상 우려가 완화된 점은 외국인 순매수에 긍정적"
+이라고 봤다.
+
+대기자금 감소세에도 개인 투자자들의 매수 여력이 남아 있다는 의견도 있다. 실제 개인은 국내 증시에서 지난달 5조319억원에 이어 이달
+6조1971억원을 순매수했다.
+
+이상헌 iM증권 연구원은 "투자자예탁금은 원래 50조~60조원대를 유지하다 지난해 말부터 급격히 증가하며 지난 1월 처음으로 100조원을
+넘겼다"며 "현재도 예탁금의 절대적인 금액 자체는 많은 수준"
+이라고 짚었다. 이어 "예탁금이 빠진 것은 증시 조정 과정에서 투자 과열이 해소된
+것으로, 이미 자본시장으로 돈이 많이 들어와 있는 것으로 볼 수 있다"고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005560680' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005560680</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
