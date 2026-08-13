@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>개발서 생산까지…빅파마 원스톱 수주 탄력</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.14</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004651691' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15306" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>개발서 생산까지…빅파마 원스톱 수주 탄력</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">삼성바이오로직스가 애브비의 신약 '주밀로키바트' 상업생산 CMO 계약을 체결하며 수주 역량을 강화했습니다. 또한 일라이릴리의 중국 임상에도 공동 참여함으로써, 신약 개발 초기 단계(CDO)부터 최종 상업 생산(CMO)까지 아우르는 '원스톱' 파트너로서의 입지를 공고히 했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 빅파마(애브비, 일라이릴 등)와의 대규모 CMO/CDO 계약 체결은 삼성바이오로직스의 안정적인 매출 성장과 시장 지배력 강화를 의미하며, 산업 전반에 걸쳐 매우 긍정적입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성바이오로직스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">제약</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#빅파마</span> <span class="tag tag-hash">#CMO</span> <span class="tag tag-hash">#CDO</span> <span class="tag tag-hash">#바이오의약품</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">삼성바이오로직스가 글로벌 빅파마인 애브비의 신약 후보물질 ‘주밀로키바트’의 위탁생산(CMO)을 맡는다. 에브비가 아포지를 인수합병(M&A)하기로 하면서 아포지가 앞서 삼성바이오로직스와 체결한 위탁생산(CMO) 계약도 승계되기 때문이다. 삼성바이오는 최근 일라이릴리의 중국 임상에도 공동으로 참여하는 등 신약 개발부터 상업생산까지 아우르는 ‘원스톱’ 수주에 탄력이 붙고 있다는 분석이 나온다.
+
+13일 제약·바이오업계에 따르면 삼성바이오는 애브비가 인수를 진행중인 아포지와 올해 초 주밀로키바트 조건부 상업 생산 계약을 맺은 것으로 확인됐다. 주밀로키바트가 규제 당국의 승인을 받을 시 삼성바이오가 상업용 원료의약품 생산까지 담당하는 내용이다. 개발사 측 문제로 유통이 불가능해질 경우 계약상 의무 비용을 포함해 수백만 달러 상당의 해지 수수료도 삼성바이오가 보장받았다.
+
+이번 계약은 삼성바이오가 지난해 2월 아포지와 맺은 CDO 계약을 확장한 것이다. 당시 삼성바이오는 신약 후보물질의 임상용 배치 생산과 공정 특성 분석, 밸리데이션 수행을 맡기로 했다. 주밀로키바트는 아토피피부염 등을 적응증으로 하는 자가면역질환 치료제로, 연내 임상 3상 진입과 2029년 상업화를 목표로 개발되고 있다. 임상 2상에서 차세대 표준치료제 가능성을 보이며 애브비가 약 109억 달러에 아포지를 인수하게 만든 핵심 자산으로 평가받는다. 애브비는 키트루다가 기록을 경신하기 전까지 글로벌 매출 1위 의약품이었던 자가면역질환 치료제 ‘휴미라’를 개발한 회사다.
+
+또 삼성바이오는 지난달 일라이릴리의 자가면역질환 치료제 ‘LY4005130’의 중국 임상 2상에도 공동 신청인으로 이름을 올렸다. 백반증과 원형탈모증 등을 치료하기 위한 후보물질로, 업계에서는 삼성바이오가 임상용 배치 생산 등을 맡았을 것으로 보고 있다. 임상 단계부터 협력한 CDO사가 허가 이후 상업용 생산까지 담당하는 경우가 많아 CMO 계약으로도 이어질 것으로 보인다.
+
+삼성바이오는 과거에도 자가면역질환 후보물질 CDO를 진행한 바 있다. 한올바이오파마의 ‘바토클리맙’으로 양사는 2021년부터 세포주개발과 생산공정개발, 임상시료생산 등을 협력해왔다. 이후 미국 로이반트의 자회사 이뮤노반트가 해당 물질을 도입하며 CMO 계약도 체결했으나 올해 4월 바토클리맙이 임상 3상에 실패하며 상업 생산은 사실상 무산됐다. 이와 달리 최근 두 후보물질은 애브비, 릴리 등 빅파마가 직접 개발을 맡은 만큼 최종 상업화 가능성이 높을 것으로 전망된다.
+
+완성된 제조법을 넘겨받아 의약품을 생산하는 CMO와 달리 CDO는 후보물질의 제조 기반을 구축하는 사업이다. 신약 개발 초기 단계부터 참여하는 만큼 후보물질의 특성과 제조 데이터를 축적할 수 있어 위탁개발생산(CDMO) 사업의 경쟁력을 높이는 기반이 된다. 바이오업계 관계자는 “CDO가 수년 뒤 CMO로 이어지는 경우가 많은 만큼 생산물량을 선점하는 효과가 있다”며 “경쟁사인 론자는 전체 매출의 약 30%, 중국 우시바이오로직스도 40%가량을 CDO에서 창출할 정도로 힘을 쏟고 있다”고 설명했다.
+
+한편 삼성바이오는 2011년 CMO로 출발해 2018년 CDO 사업에 진출했다. 올해 초까지 누적 164건의 CDO 계약을 체결했으며 이 가운데 49건이 임상시험계획(IND)을 승인받았다. 국내 바이오 기업 중심이었던 사업 초기와 달리 최근에는 70~80%가 글로벌 고객인 것으로 알려졌다. 이상명 삼성바이오로직스 CDO개발담당(상무)은 올해 초 JP모건 헬스케어 콘퍼런스에서 “고객의 아이디어에 삼성바이오의 기술과 노하우, 인프라를 결합해 신약 개발 전주기를 아우르는 원스톱 파트너로 자리매김하겠다”고 강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004651691' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004651691</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
