@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KDB생명 품는 한국금융지주…‘한국판 버크셔’ 만든다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004651596' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15275" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>KDB생명 품는 한국금융지주…‘한국판 버크셔’ 만든다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">한국금융지주가 KDB생명보험의 매각 우선협상 대상자로 선정되며 종합금융그룹으로 도약합니다. 이는 증권업 중심의 수익 구조를 보험 부문을 통해 다변화하고, 안정적인 장기 자금을 확보하는 구조적 변화를 의미하며 시장에 큰 긍정적 영향을 줄 것으로 예상됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">오랜 기간 표류하던 대형 보험사의 매각이 성사되고, 이를 통해 금융지주회사가 증권업에 치중되었던 수익 구조를 안정적이고 장기적인 자금줄을 가진 보험 부문으로 다변화하는 것은 기업의 근본 체질 개선을 의미하므로 매우 긍정적입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한국금융지주</span> <span class="tag stock-tag">한국투자증권</span> <span class="tag stock-tag">대형금융사</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">보험</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#종합금융그룹</span> <span class="tag tag-hash">#KDB생명</span> <span class="tag tag-hash">#금융구조개편</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■매각 우선협상대상자 선정
+코인원 인수로 디지털 확장 이어
+보험업 통해 장기자금 창구 확보
+증권사 수익 의존서 다변화 노려
+‘종합금융그룹’ 마지막 퍼즐 맞춰
+KDB생명 매각 12년 표류 끝날듯
+한국투자증권
+한국투자증권한국투자금융지주가 12년간 장기 표류하던 KDB생명보험의 매각 우선협상 대상자로 선정되며 종합금융그룹으로의 도약에 나선다. 가상자산거래소 코인원 지분 인수 등 디지털과 전통 금융을 넘나드는 사업 확장에 이어 보험사로 영역을 넓혀가는 모습이다. 국내 증시 활황 속에 탄탄한 자기자본을 바탕으로 올 상반기 역대 최대 실적을 달성한 한국금융지주가 공격적인 투자로 금융 영토 확장에 나서고 있다는 평가가 나온다.
+
+13일 한국투자증권의 모회사인 한국금융지주(071050)는 한국산업은행 등으로부터 KDB생명 매각의 우선협상 대상자로 선정됐다고 공시했다. 산업은행은 이날 투자심의위원회를 열고 한국금융지주를 KDB생명 매각 우선협상 대상자로 최종 확정했다. 매각 대상은 산업은행 등이 보유한 KDB생명 지분 99.75%다. 7일 본입찰에서 한국금융지주는 한화생명·흥국생명과 3파전을 벌인 끝에 우선협상권을 쥔 바 있다.
+
+이번 인수전의 최대 승부처는 매각 가격보다 인수 후 단행할 자본 확충 규모였다. 한국금융지주는 이번 입찰에서 약 1조 원 규모의 유상증자 계획을 제시한 것으로 알려졌다. KDB생명은 지난해 말 산업은행으로부터 5000억 원의 증자를 받았음에도 올해 1분기 지급여력 비율이 74.5%에 불과해 당국 권고 기준인 130%를 밑돌았다. 막대한 자금을 투입해 재무 건전성을 정상화할 수 있느냐가 승패의 결정적 요인이 됐다는 평가다.
+
+보험사 인수는 김남구 한국금융지주 회장의 숙원이기도 했다. 김 회장은 지난해 3월 정기 주주총회에서 기자들과 만나 보험사 인수를 “여러 검토사항 중 하나”라고 밝힌 바 있다. 이후 BNP파리바카디프생명과 롯데손해보험 등 매물이 나올 때마다 한국금융지주가 유력 후보로 거론됐다.
+
+2010년 옛 금호생명 인수 후 2014년부터 추진된 산업은행의 12년 매각 잔혹사도 결실을 보게 됐다. 산업은행은 그간 하나금융지주, 사모펀드 제이씨(JC)파트너스, MBK파트너스 등과 협상했으나 자본 부담과 대주주 적격성 문제로 여섯 차례 불발된 바 있다.
+
+한국금융지주 입장에서는 증권에 치우친 수익 구조를 다변화할 기회다. 올 상반기 그룹 전체 순이익 1조 9150억 원 중 한국투자증권 비중이 90.4%인 1조 7311억 원에 달했다. 라이벌 미래에셋그룹이 2005년 미래에셋생명을 인수해 포트폴리오 다각화에 성공한 것과 대비된다.
+한국금융지주는 KDB생명 최종 인수 시 확보되는 약 17조 원의 장기 자금을 통해 계열사 전반의 사업 확대를 도모할 방침이다. 한국투자증권이 부동산 등 투자처를 발굴하고 운용사가 이를 관리하며 보험사의 장기 자금을 투입하는 삼각 선순환 구조가 거론된다.
+
+1조 원 안팎의 자본 투입 부담이 있지만 한국투자증권의 튼튼한 실탄이 이를 뒷받침할 수 있다는 관측도 이어진다. 한국투자증권의 올 상반기 순이익은 전년 동기 대비 68.9% 증가한 1조 7311억 원, 영업이익은 89.1% 늘어난 2조 1701억 원으로 반기 만에 지난해 연간 이익을 넘어섰다. 별도 기준 자기자본 또한 13조 1922억 원으로 업계 최고 수준이다.
+
+한국투자증권은 최근 국내 3대 가상자산거래소인 코인원 지분 약 20%를 인수하며 3대 주주로 올라선 바 있다. 토큰증권 등 다가오는 디지털자산시대에 대비해 위험관리 노하우와 블록체인 기술을 접목하기 위해서다. 금융권 관계자는 “한국투자증권이 KDB생명 인수를 통해 장기 자금 창구를 확보하고 코인원으로 미래 가상자산 시장 선점을 노리고 있다”며 “인수 완료 시 명실상부한 대형 종합금융그룹으로 체질을 바꿀 것”이라고 했다.
+한국금융지주 관계자는 “KDB생명보험을 인수하게 되면 계열사와의 시너지 효과가 기대된다.”</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004651596' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004651596</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
