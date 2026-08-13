@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>두나무 합병 '하세월'에 주가·거래량 '뚝'…네이버는 AI로 눈돌리나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000524166' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15166" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>두나무 합병 '하세월'에 주가·거래량 '뚝'…네이버는 AI로 눈돌리나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">두나무와 네이버파이낸셜의 합병 작업이 9개월째 지연되면서 두 사의 주가 및 시장 기대감이 크게 하락했습니다. 특히 네이버는 글로벌 AI 투자에 집중하며, 과거 핵심 동력으로 여겼던 두나무와의 결합보다 AI를 새로운 성장 축으로 빠르게 옮겨가고 있어 시너지 효과에 대한 불확실성이 커지고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">합병 지연 및 주가 급락은 기업의 핵심 미래 성장 동력이었던 시너지 효과가 실현되지 못하고 있음을 의미하며, 경쟁사들은 이미 제도권 금융과 연계하는 등 공격적인 움직임으로 시장의 초점을 분산시키고 있어 단기적 투자 심리에 매우 부정적입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">네이버</span> <span class="tag stock-tag">두나무</span> <span class="tag stock-tag">카카오</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 플랫폼</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">가상자산</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#합병지연</span> <span class="tag tag-hash">#AI전략</span> <span class="tag tag-hash">#주가하락</span> <span class="tag tag-hash">#가상자산규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">두나무와 네이버파이낸셜의 합병 작업이 예상보다 길어지면서 시장의 기대감도 식고 있다. 지난해 11월 국내 최대 인터넷 플랫폼과 가상자산 거래소의 결합이라는 기대 속에 합병 계획을 공식화했지만 약 9개월이 지나도록 기업결합 심사의 문턱을 넘지 못하고 있다.
+
+기다리는 동안 양사를 둘러싼 상황도 녹록지 않다. 두나무와 네이버의 주가는 합병 발표 이후 나란히 두 자릿수 하락했고 가상자산 거래대금도 급감했다. 코빗과 코인원 등 경쟁 거래소들은 대형 금융사와 손잡고 추격에 나섰다. 네이버는 최근 인공지능(AI)에 공격적으로 투자를 확대하면서 두나무와의 결합이 전체 성장 전략에서 차지하는 상대적인 무게도 합병 발표 당시보다 낮아지는 모습이다.
+
+13일 금융투자업계에 따르면 두나무 장외주가는 이날 기준 25만7000원 수준이다. 포괄적 주식교환을 공식화한 지난해 11월 26일 37만원과 비교하면 약 30.5% 하락했다. 네이버도 같은 기간 26만7500원에서 21만9000원으로 약 18.1% 떨어졌다. 특히 같은 기간 국내 증시가 유례없는 강세장을 펼쳤다는 점에서 부진이 더욱 두드러진다. 코스피는 올해 가파르게 상승하며 지난 6월 사상 처음 9000선을 넘어섰지만 네이버는 합병 발표 당시보다 오히려 20% 가까이 뒷걸음질쳤다.
+
+실적과 투자 부담도 주가를 짓누르고 있다. 네이버의 지난 2분기 영업이익은 5203억원으로 시장 컨센서스인 5662억원을 밑돌았다. 강석오 신한투자증권 수석연구원은 "커머스 이익률 하락과 광고 성장률 둔화가 지속되고 있다"며 "최근 네오클라우드로의 전환이 시작된 가운데 신사업 진행 속도와 수익성에 대한 불확실성 해소가 관건"이라고 분석했다.
+
+[중략]...</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000524166' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000524166</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
