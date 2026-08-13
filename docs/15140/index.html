@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"주가 흔들려도 매달 따박따박"...한 달 만에 5000억 몰린 이 ETF</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005560919' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15140" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"주가 흔들려도 매달 따박따박"...한 달 만에 5000억 몰린 이 ETF</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">변동성 장세 속에서 월별 현금 흐름 확보를 원하는 투자 수요가 삼성자산운용의 'KODEX 200커버드콜액티브' ETF로 집중되면서, 상장 한 달 만에 순자산 5000억원을 돌파했다. 이 상품은 커버드콜 전략과 국내 주식/옵션 수익의 절세 효과가 특징이다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">최근 높은 변동성으로 인해 투자자들이 주가 상승 기대보다는 정기적이고 안정적인 현금 흐름(분배금)에 초점을 맞추면서 관련 상품이 큰 자금을 유치했음을 보여주는 지표입니다. 이는 시장의 투심 변화와 특정 투자 전략의 성공을 의미합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#커버드콜</span> <span class="tag tag-hash">#월배당</span> <span class="tag tag-hash">#투자전략</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[파이낸셜뉴스] 삼성자산운용의 'KODEX 200커버드콜액티브' 상장지수펀드(ETF)가 상장 한 달 만에 순자산 5000억원을 넘어섰다. 국내 증시 변동성이 이어지는 가운데 매월 현금 흐름을 확보할 수 있는 월분배형 상품과 절세 효과에 대한 투자자 관심이 맞물리면서 개인 자금이 빠르게 유입된 것으로 풀이된다.
+
+13일 삼성자산운용에 따르면 KODEX 200커버드콜액티브 ETF의 순자산이 지난달 14일 상장 이후 약 한 달 만에 5364억원을 기록했다.
+
+상장 이후 개인투자자의 순매수 규모는 4652억원에 달했다. 최근 1개월 기준 국내 커버드콜 ETF 가운데 개인 순매수 1위이며, 레버리지 상품을 포함한 전체 ETF 중에서는 3위에 해당한다.
+
+첫 월분배금 지급도 투자자들의 관심을 끌었다. KODEX 200커버드콜액티브는 지난달 말 주당 153원을 지급해 약 2.1%의 월분배율을 기록했다. 오는 8월 말에도 두 번째 월분배금을 지급할 예정이다.
+
+최근 증시 방향성을 예측하기 어려운 장세가 이어지면서 주가 상승에만 기대기보다 정기적인 분배금을 통해 현금 흐름을 확보하려는 투자 수요가 커진 점도 자금 유입에 영향을 미친 것으로 보인다.
+
+KODEX 200커버드콜액티브는 코스피200 구성 종목을 기반으로 반도체와 IT하드웨어 등 국내 증시 주도산업과 핵심 기업, 주주환원 종목의 편입 비중을 비교지수보다 확대하는 액티브 운용 전략을 활용한다. 
+
+시장 상황에 따라 옵션 매도 비중을 탄력적으로 조절하는 커버드콜 전략도 적용한다. 증시 상승이 예상될 때는 옵션 매도 비중을 낮춰 주가 상승에 대한 참여도를 높이고, 하락하거나 횡보할 것으로 예상될 때는 옵션 프리미엄을 확보해 현금 흐름을 높이는 방식이다.
+
+세제 혜택도 특징이다. 국내 옵션 프리미엄 수익과 국내 주식 매매차익에는 세금이 부과되지 않으며 주식 배당금에서 발생한 수익에는 15.4%의 배당소득세가 적용된다. 일반계좌뿐 아니라 연금저축과 개인형퇴직연금(IRP), 확정기여형(DC) 퇴직연금 계좌에서도 투자할 수 있다.
+
+송아현 삼성자산운용 매니저는 "국내 증시가 이익 대비 여전히 저평가돼 있으나 변동성은 크다"며 "방향성 투자보다는 시장 주도주와 주주환원주에 투자하면서 시장 상황과 관계없이 매달 안정적인 현금 흐름을 확보할 수 있는 상품을 찾는 개인투자자들의 수요가 이어지고 있다"
+</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005560919' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005560919</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
