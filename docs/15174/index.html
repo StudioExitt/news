@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>‘동전주’ 무더기 관리종목 지정…부실기업 퇴출 본격화</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/138/0002237681' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15174" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>‘동전주’ 무더기 관리종목 지정…부실기업 퇴출 본격화</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">주가 및 시총 기준 미달 기업들이 관리종목으로 무더기 지정되며 부실기업 퇴출 움직임이 가속화되고 있습니다. 상장규정 강화에 따라 지정된 기업들은 주가 회복이나 구조 조정(감자 등)을 통해 위기를 극복해야 하며, 규제는 향후 더욱 높아질 예정입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">상장규정 강화와 퇴출 대상 기업 증가 뉴스는 전반적인 시장 심리에 부담을 주며, 자산가치 하락 우려를 키워 단기적으로 부정적 영향을 미칠 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">건설자재</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#상장규제</span> <span class="tag tag-hash">#관리종목</span> <span class="tag tag-hash">#부실기업</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">주가가 1000원에도 못 미치는 이른바 ‘동전주’와 시가총액이 상장 유지 기준을 밑돈 상장사들이 무더기로 관리종목에 지정됐다. 정부가 부실기업 퇴출을 위해 상장폐지 요건을 강화한 뒤 나온 첫 대규모 지정이다.
+
+13일 한국거래소에 따르면 전날 장 마감 기준 최근 30거래일 동안 주가 또는 시가총액 기준을 충족하지 못한 코스피·코스닥 상장사 36곳에서 관리종목 지정 사유가 발생했다. 이 가운데 30곳이 새로 관리종목에 지정됐고, 기존 관리종목 6곳에는 지정 사유가 추가됐다.
+
+시장별로는 코스피 9곳, 코스닥 27곳이다.
+
+주가가 1000원 아래에 머물러 관리종목 지정 사유가 발생한 기업은 코스피 3곳, 코스닥 21곳 등 모두 24곳이다. 시가총액 기준 미달 기업은 코스피 5곳, 코스닥 4곳 등 9곳이었다. 주가와 시가총액 기준을 모두 충족하지 못한 기업도 3곳 나왔다.
+
+코스피에서는 대영포장과 형지엘리트, 일신석재 등이 주가 기준에 걸렸다. 한국전자홀딩스와 태원물산, 대원화성 등은 시가총액 기준에 미달했다.
+
+코스닥에서는 우리엔터프라이즈와 티케이지애강, CMG제약, 좋은사람들, 노을, 옴니시스템, 아이스크림에듀 등이 주가 기준에 따라 관리종목 지정 대상에 포함됐다.
+
+이번 지정은 지난달 1일부터 시행된 개정 상장규정에 따른 것이다. 주가가 30거래일 연속 1000원을 밑돌거나 시가총액이 코스피 300억원, 코스닥 200억원에 미치지 못하면 관리종목으로 지정된다.
+
+관리종목 지정이 곧바로 상장폐지를 뜻하는 것은 아니다. 다만 이후 90거래일 동안 연속 45거래일 이상 해당 기준을 웃돌지 못하면 상장폐지 대상이 된다.
+
+기준은 내년부터 한층 더 높아진다. 내년 1월부터 시가총액 기준은 코스피 500억원, 코스닥 300억원으로 상향된다.
+
+상장사들도 대응에 나섰다. 이번에 주가 미달로 관리종목에 지정된 기업 가운데 코스피 3곳과 코스닥 12곳은 액면병합이나 감자 등을 위한 주주총회 결의를 예고했다. 관련 절차를 통해 주가 기준을 회복하면 관리종목에서 벗어날 수 있다.
+
+금융당국은 상장폐지 요건 강화로 퇴출 대상 기업이 크게 늘어날 것으로 보고 있다. 금융위원회와 거래소의 시뮬레이션에 따르면 올해 코스닥 상장폐지 대상 기업은 약 150곳 안팎으로 추산된다.
+
+다만 실제 상장폐지 규모는 향후 주가 회복이나 액면병합, 감자 등 기업별 대응에 따라 달라질 수 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/138/0002237681' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/138/0002237681</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
