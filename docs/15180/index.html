@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[데스크칼럼] <0xEC><0x84><0xB6>을 지고 불길로 뛰어들다 멈춤</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.13</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002683476' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15180" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[데스크칼럼] <0xEC><0x84><0xB6>을 지고 불길로 뛰어들다 멈춤</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부가 주택 공급 부족 해소 및 금융 활력 제고를 위해 대규모 공공주택지구 계획 발표와 PF 보증 확대 등 구체적인 대책을 내놓았다.
+그러나 칼럼은 세금으로 시장을 통제하려는 시도(세제개편안)가 역효과를 낳았음을 비판하며, 정부는 정책 책임 영역과 시장 자율 영역의 선을 지켜야 한다고 강조한다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">정부 주도 공급 확대 및 금융 지원 강화 대책(8·13 대책)은 부동산 시장에 구조적 활력을 불어넣는 정책으로 해석될 수 있으나, 기사는 과도한 규제와 세금 통제를 비판하며 신중론을 제기함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">건설</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#부동산정책</span> <span class="tag tag-hash">#공급확대</span> <span class="tag tag-hash">#세제개편</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">이재명 정부엔 집값을 안정화할 ‘내공이 없는 게 아니냐’는 의심을 일단 유보한다. 거센 비판을 자초한 ‘8·3 세제개편안’이 돌발한 지 열흘만에 나온 통칭 ‘8·13 부동산 대책’ 때문이다. 시장의 목소리를 폭넓게 듣고, 가능한 한 반영한 흔적이 있다.
+
+우선 서울과 인접한 경기 남양주시 와부읍의 고려대 덕소농장을 활용해 2만1700호를 공급한다는 계획에 눈길이 간다. 다른 개발제한구역(그린벨트)도 동원해 7만3000호 가량을 지을 추가 공공주택지구 후보지도 연내 공개한다는 복안이다. 이미 내놓은 공공택지는 발표 후 착공까지 68개월 걸리던 걸 37개월로 줄이겠다고도 했다. 지연되고 틀어지기 일쑤였던 계획이고, 그린벨트 해제에 대한 반대여론도 있겠지만 공급 시그널을 발신한 건 긍정적이다.
+
+서울 주택 공급의 90%를 담당하는 민간의 역할을 인정한 점도 평가한다. 주택도시보증공사 등의 프로젝트파이낸싱(PF) 보증 공급을 연평균 28조원대로 늘리기로 했다. 과거 3년 평균보다 2배 이상 많다. 돈줄이 막혀 집짓기를 포기한 생태계에 활력을 줄 수 있다.
+
+다가구·오피스텔 등의 공급을 확충하려고 임대사업자가 신축 일반주택을 매입할 때 현행 0%인 담보인정비율을 최대 60%까지 완화한다. 청년층의 주거난을 덜어줄 장치다.
+
+도심 주택 재개발·재건축에 대해선 신속 착공하는 사업장에 세제·금융 인센티브를 주기로 했다. 이주비 대출도 금융사 총량관리 목표에서 별도 관리를 해 숨통을 <0xED><0x8B><0x94>운다. 그러나 사업성을 높여 공급 속도를 배가할 용적률 완화는 배제했다. 찬밥 더운밥 가릴 처지가 아닌데 특정인에게 개발이익이 돌아가게 둘 순 없다는 판단에 그치고 있는 게 아쉽다.
+
+8·13 대책으로 당장 집값을 안정화할 순 없겠지만 세금으로 시장을 통제하려는 시도보단 낫다. 세제개편안은 정부를 ‘증세 프레임’에 가뒀다. 삽시간에 퍼진 ‘덜 똘똘한 한 채’, ‘퇴거 공포’란 말에 정부·여당은 크게 흔들리고 있다. 세제개편안을 밀어붙일 정치적 체력은 애초 없었고 시장 생리도 몰랐다.
+
+정부는 시가 40억원 이상 초고가 주택에 종합부동산세 부담이 커지고 그 아래 가격은 변동이 없거나 되레 낮아진다고 봤다. 하지만 시장에선 ‘덜 똘똘한’ 20억~30억원대의 집이 주목받아 값이 오른다고 해석했다. 비거주 1주택자에게 양도소득세 부담을 키워 ‘살지 않는 집은 팔라’고 정부는 압박할 태세였지만, 집주인이 직접 거주를 위해 세입자를 내보내면 전월세난이 극에 달할 것이라는 분석이 들끓었다. 정책 설계자들은 계약갱신청구권 제도가 있기 때문에 그럴 수 없다는 취지로 답했다. 주택임대차법 6조에 ‘임대인이 실제 거주하려는 경우 계약갱신요구를 거절할 수 있다’고 버젓이 적혀 있는데도 그랬다.
+
+임대·임차인은 샴쌍둥이처럼 떼어내기 힘든 관계다. 이를 무겁게 인식하지 않고 시장을 재단할 순 없다. 국민 입장에선 앞선 2차례의 진보 정권이 세금으로 집값 잡으려다 실패해 피해를 봤기에 세제개편안에 공포마저 느낀다. 불타고 있는 매매·전세·월세 시장에 기름을 부을 세제개편안은 전면 재검토하는 게 맞다.
+
+집값 급등에 분노한 이들을 달래려고 누군가의 세금을 올리는 건 포퓰리즘일 뿐이다. 집값을 단번에 잡을 비책은 없다. 정부는 시장에 맡길 지점과 정책이 책임질 영역을 구분하는 ‘선’을 지키면 된다.
+</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002683476' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002683476</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
