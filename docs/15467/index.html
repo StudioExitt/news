@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 피크론 기우였나…샌디스크 등 "강한 수요 지속"</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.15</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006352244' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15467" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>AI 피크론 기우였나…샌디스크 등 "강한 수요 지속"</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">샌디스크와 어플라이드 머티어리얼즈 등 반도체 관련 기업들이 AI 인프라 확장에 힘입어 향후 수년간 강력한 수요가 지속될 것이라는 낙관적인 전망을 제시했습니다. 이는 일시적 현상이 아닌 장기적 실적 사이클 진입으로 해석됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 AI 인프라 구축에 따른 반도체 수요의 구조적이고 장기적인 성장을 여러 주요 기업들이 구체적인 계약 물량 및 가이던스를 통해 확인시켜 주었기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체 #AI #장기성장</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">샌디스크, 두자릿수 매출 성장 전망
+어플라이드 CEO "내년도 역시 강한 성장"
+"AI 거품 아냐, 실적이 입증"
+인공지능(AI) 투자 회의론이 확산되는 가운데 반도체 관련 기업들이 낙관적인 전망을 내놓고 있다.
+
+13일(현지시간) 로이터통신에 따르면 미국 낸드플래시 메모리 업체 샌디스크는 이날 투자자의 날 행사에서 AI 인프라 확대로 강한 수요가 이어질 것이라면서 2028~2030 회계연도 매출이 연평균 10%대 중후반 성장을 기록할 것으로 전망했다. 회사는 이 흐름이 회사의 ‘비트그로스’(bit growth·비트기준 출하량 증가율)와 일치한다고 부연했다.
+
+샌디스크의 루이스 비소소 최고재무책임자(CFO)는 같은 기간 조정 매출총이익률이 약 80% 수준으로 유지될 것으로 예상한다고 밝혔다.
+
+샌디스크는 고객사들과 확약된 물량을 기반으로 수년간 사업 전망을 제시, 최근 성장세가 일시적인 수요 급증이 아니라 지속 가능한 흐름임을 보여주려는 것이라고 로이터는 평가했다.
+
+샌디스크는 장기 공급 계약 성격인 신규 비즈니스 계약 모델(NBM) 현황도 공개했다. 샌디스크는 미국 하이퍼스케일러 3곳을 포함한 8개 고객사와 계약을 체결했다. 이 계약들은 회사의 저장장치 생산량 가운데 2027 회계연도 약 절반, 2028 회계연도 약 3분의 2를 포괄한다.
+
+알퍼 일크바하르 최고기술책임자(CTO)는 샌디스크가 고대역폭 플래시(High Bandwidth Flash·HBF) 기술용 첫 메모리 다이(memory die), 즉 데이터를 저장하는 개별 실리콘 칩의 테이프아웃을 완료했다고 밝혔다. 이달 초 샌디스크는 SK하이닉스(000660)와 손잡고 HBF 업계 표준을 개발하는 컨소시엄을 발표한 바 있다. 회사는 내년 AI 추론 장치를 개발하는 고객들에게 초기 샘플을 공급하기 위해 작업 중이다.
+
+HBF는 AI 프로세서에 사용되는 고대역폭메모리(HBM)의 속도와 플래시 메모리의 대용량 저장능력을 결합한 메모리 반도체다. 이를 통해 데이터센터는 AI 추론 과정에서 증가하는 메모리 수요에 대응할 수 있다.
+
+같은 날 반도체 장비업체 어플라이드 머티어리얼즈도 시장 예상치를 웃도는 실적과 가이던스를 내놨다. 회사의 2026 회계연도 3분기(5~7월) 매출과 조정 주당순이익(EPS) 모두 시장 예상치를 상회했으며, 2026 회계연도 4분기(8~10월) 매출과 조정 EPS 전망치 또한 예상치를 웃돌았다.
+
+게리 디커슨 최고경영자(CEO)는 고객사들이 장비를 더 빨리 공급받기 위해 어플라이드 머티어리얼즈에 생산량을 늘려달라고 요청하고 있다며 낙관적인 전망을 내놨다. 그는 고객사들이 제시한 향후 여러 분기에 걸친 전망을 보면 2027년 역시 강한 성장세가 이어질 것이라고 자신했다.
+
+그는 “고객사들은 계속해서 우리에게 생산능력을 확대해달라고 요구하고 있다”며 “고객들은 창의적으로 방법을 찾아내고 있고, 더 많은 클린룸 공간을 확보하면서 장비 인도 수요를 앞당기고 있다”고 말했다. 디커슨 CEO는 “우리는 가능한 한 빠르게 생산을 확대하기 위해 노력하고 있다”면서도 수요를 충족할 만큼 생산량을 늘리기까지는 시간이 필요하다고 말했다.
+
+제이 해트필드 인프라스트럭처캐피털어드바이거스 최고경영자(CEO)는 “AI 실적이 이끄는 기술주 붐이 계속되고 있다”며 “이건 거품이 아니라 실적 장세”라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006352244' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006352244</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
