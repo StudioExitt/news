@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“노후자금 불려준다더니” 제 역할 못하는 퇴직연금 디폴트옵션[이슈 플러스]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.14</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005721376' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15444" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“노후자금 불려준다더니” 제 역할 못하는 퇴직연금 디폴트옵션[이슈 플러스]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">퇴직연금 디폴트옵션 운용 성과 분석 결과, 고위험 옵션이 초저위험 옵션 대비 8배에 달하는 장기 수익률 우위를 보였음에도 불구하고, 실제 가입자들은 여전히 과도하게 낮은 위험도의 상품을 선택하고 있는 경향이 확인되었습니다. 장기적인 자산 형성을 위해서는 투자자의 관점 전환과 사업자의 실력 평가가 중요합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">퇴직연금이라는 거대한 노후자금 흐름과 투자자들의 위험 선호도에 대한 분석을 담았으며, 금융회사(증권사 등)의 운용 실력 평가 기준 및 구조적 문제를 제기했기 때문에 업계 전반의 관심도가 높음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한국투자증권</span> <span class="tag stock-tag">삼성생명</span> <span class="tag stock-tag">KB국민은행</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#퇴직연금</span> <span class="tag tag-hash">#디폴트옵션</span> <span class="tag tag-hash">#금융규제</span> <span class="tag tag-hash">#자산배분</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">여의도 증권가 전경. 퇴직연금 디폴트옵션(사전지정운용제도)은 위험도를 어떻게 선택하느냐에 따라 장기 수익률이 크게 달라지는 것으로 나타났다. 최근 3년 수익률을 비교한 결과 고위험 디폴트옵션은 평균 70%를 넘은 반면, 예·적금 등으로 구성된 초저위험 상품은 9%에도 미치지 못했다.
+
+특히 주목할 부분은 반드시 고위험 상품을 선택하지 않더라도 상당한 성과 차이가 나타났다는 점이다. 저위험 상품의 3년 평균 수익률도 27.47%로 초저위험 상품의 8.96%보다 3배 이상 높았다. 장기간 운용하는 퇴직연금에서 지나친 원금보장 선호가 노후자산 형성에 적지 않은 기회비용으로 돌아올 수 있다는 의미다.
+
+장기투자인 퇴직연금…3년 지나자 수익률 격차 8배
+매일경제가 고용노동부와 금융감독원이 최근 공시한 2026년 6월 말 기준 디폴트옵션 상품 329개의 운용성과를 분석한 결과, 고위험 상품의 적립금 가중평균 3년 수익률은 70.91%로 집계됐다. 중위험은 45.28%, 저위험은 27.47%, 초저위험은 8.96%였다. 고위험과 초저위험의 수익률 격차는 약 8배에 달했다.
+
+위험도가 높을수록 수익률이 높아지는 현상은 1년 기준에서도 뚜렷했다. 고위험 상품은 최근 1년 동안 평균 35.79%의 수익률을 기록했고, 중위험은 22.63%, 저위험은 12.69%였다. 초저위험은 2.17%에 그쳤다.
+
+퇴직연금은 일반적인 단기 금융상품과 성격이 다르다. 20~30년 이상 적립하고 운용하는 경우가 적지 않은 만큼 장기 수익률의 작은 차이도 복리 효과가 누적되면 은퇴 시점의 자산 규모를 크게 좌우할 수 있다.
+
+하지만 현재 국내 디폴트옵션 가입자의 선택은 정반대로 향하고 있다. 전체 디폴트옵션 적립금 55조8700억원 가운데 초저위험 상품에 들어 있는 자금은 46조1000억원으로 82.5%를 차지했다. 저위험 상품은 4조6000억원(비중 8.2%), 중위험 상품은 3조1600억원(5.7%), 고위험 상품은 2조100억원(3.6%)에 그쳤다.
+
+전문가들은 디폴트옵션이 본격 시행된 지 3년이 지나면서 이제 금융회사들의 ‘퇴직연금 운용 실력’을 따져보고 선택하는 노력이 필요하다고 말한다. 특히 투자와 인출 기간이 긴 퇴직연금의 특성을 감안하면 단기 수익률보다는 장기 성과를 중심으로 상품을 평가해야 한다고 지적한다.
+
+정도영 한양대 경제학과 교수는 “단기 수익률을 공시하는 것도 다양한 정보를 제공한다는 측면에서는 의미가 있지만 오히려 투자자의 편견에 영향을 미칠 수 있다”“ 단기 수익률보다는 장기 수익률을 중심으로 공시하고 평가하는 것이 바람직하다”고 말했다.
+
+이에 매일경제는 단기 시장 상황에 따른 수익률 왜곡을 줄이고 장기 운용 능력을 더 크게 반영하기 위해 사업자별 성과를 별도로 평가했다. 1개월 수익률에 10%, 3개월 10%, 6개월 20%, 1년 20%, 3년 수익률에는 가장 높은 40%의 가중치를 부여해 종합점수를 계산했다. 동일 사업자가 같은 위험도에서 여러 상품을 운용하는 경우에는 상품별 적립금 규모를 반영해 가중평균했다.
+
+증권사, 고위험·중위험·저위험 모두 선두
+고위험 디폴트옵션에서는 한국투자증권의 성과가 가장 두드러졌다. 한국투자증권은 종합점수 57.56점으로 전체 금융회사 가운데 고위험 부문 1위를 기록했다. 특히 적립금 가중평균 3년 수익률이 105.07%로 조사 대상 사업자 가운데 유일하게 100%를 넘겼다. 최근 1년 수익률도 45.03%에 달했다.
+
+2위는 삼성생명으로 종합점수 50.30점이었다. 삼성생명의 고위험 상품은 최근 3년간 87.17%의 수익률을 기록했다. 3위 KB국민은행은 종합점수 48.68점, 3년 수익률 80.62%로 은행권에서 가장 높은 성과를 나타냈다.
+
+이어 신한투자증권과 하나증권이 각각 4~5위권에 자리했다. 위험자산 운용 경험이 상대적으로 많은 증권사가 고위험 부문 상위권에 다수 포진한 것이다.
+
+정 교수는 “단기 수익률은 시장 상황에 따라 차이가 날 수 있지만 장기적으로 수익률 차이가 지속된다면 사업자의 운용 실력이라고 볼 수 있다”고 설명했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005721376' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005721376</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
