@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반도체 주춤한 사이 '질주'…대박 난 ETF 봤더니</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.14</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001262390' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15354" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>반도체 주춤한 사이 '질주'…대박 난 ETF 봤더니</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 대형주에서 자금이 이탈하며 코스닥, 방산, 우주항공 등 소외 업종으로 순환매가 발생해 관련 ETF들이 높은 수익률을 기록했습니다. 다만 최근 반도체의 회복세와 커버드콜 상품으로의 지속적인 자금 유입이 관찰되어 향후 시장 방향성에 대한 변동성이 예상됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">투자자금의 업종별 순환매(Sector Rotation) 현상을 구체적인 데이터와 근거(중동 긴장, 스페이스X 주가 등)를 들어 분석하며, 다양한 섹터로 투자 시야를 확장하도록 유도하여 시장 전반에 대한 긍정적 기대감을 높임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한화에어로스페이스</span> <span class="tag stock-tag">반도체 대형주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">코스닥</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">방산</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">우주항공</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF분석</span> <span class="tag tag-hash">#업종순환매</span> <span class="tag tag-hash">#방위산업</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">3∼13일 수익률 상위 1∼5위 코스닥150 레버리지
+사진=연합뉴스
+사진=연합뉴스
+반도체 대형주에 집중됐던 투자자금이 코스닥과 방산·우주항공 등 상대적으로 소외됐던 업종으로 이동하면서 관련 상장지수펀드(ETF)가 이달 높은 수익률을 낸 것으로 나타났다. 특히 코스닥 레버리지 ETF는 불과 2주도 안 되는 기간에 50% 넘게 상승한 상품까지 등장했다.
+
+14일 한국거래소에 따르면 이달(3∼13일) 국내 상장 전체 ETF 가운데 수익률 상위 1∼5위를 코스닥 레버리지 상품이 차지했다.
+
+'KIWOOM 코스닥150선물레버리지'가 51.35%로 가장 높았고, 'RISE 코스닥150선물레버리지' 50.99%, 'TIGER 코스닥150레버리지'(50.26%), 'KODEX 코스닥150레버리지'(49.62%), 'HANARO 코스닥150선물레버리지' 45.83%가 뒤를 이었다.
+
+코스닥 시장의 가파른 반등이 레버리지 상품의 수익률을 끌어올렸다. 같은 기간 코스닥150이 22.85% 상승하면서 지수 움직임을 2배로 추종하는 상품들의 상승폭이 더욱 커졌다.
+
+반도체 중심의 상승장에서 상대적으로 소외됐던 방산과 우주항공 관련 ETF도 강세를 보였다.
+
+'KODEX 방산TOP10레버리지'가 42.55%, 'SOL우주항공밸류체인'이 38.52% 각각 오르며 수익률 6위와 7위를 기록했다.
+
+이외에도 'PLUS K방산레버리지'(8위·34.23%), 'PLUS 우주항공'(11위·30.05%), 'TIGER 미국우주테크'(12위·29.93%), 'ACE 미국우주테크액티브'(14위·28.37%), 'KODEX 미국우주항공'(16위·27.80%) 등이 20위권 안에 들었다.
+
+방산주 강세에는 이달 초 중동지역의 긴장이 다시 고조된 점이 영향을 미친 것으로 분석된다. 방산 대장주 한화에어로스페이스는 지난달 30일부터 지난 10일까지 8거래일 연속 상승하면서 시가총액 상위 10위권에 다시 진입했다.
+
+우주항공 분야에서는 상장 이후 약세를 이어가던 일론 머스크의 스페이스X 주가가 최근 급반등하면서 관련 종목으로 투자심리가 확산한 것으로 풀이된다.
+
+스페이스X 주가는 지난달 31일 108.37달러에서 지난 13일 141.29달러로 올랐다.
+
+증권가에서는 반도체에 집중됐던 수급이 분산되면서 업종별 순환매가 나타나고 있다고 분석한다. 수출과 실적 개선 기대를 바탕으로 비반도체 업종이 상승하면서 당분간 지수의 상승 흐름이 이어질 가능성이 있다는 전망이다.
+
+다만 최근 반도체주가 다시 회복세를 보이면서 관련 ETF로의 자급 유입도 늘고 있다.
+
+코스콤 ETF CHECK에 따르면 최근 한 주간(8월 7∼12일) 'TIGER 반도체TOP10'에는 1천175억원이 순유입됐다. 'TIGER 반도체TOP10커버드콜액티브'에도 913억원이 들어왔다. 전체 ETF 가운데 순유입액 기준 각각 9, 10번째로 많은 규모이다.
+
+y안타증권 이재원 연구원은 "최근 코스피 이익추정치는 지속 상향됐고 외국인 자금 역시 반도체 대형주를 중심으로 유입됐다"면서 "단기 낙폭과대반등 이후에는 결국 이익과 수급이 뒷받침되는 코스피로 다시 시선을 옮길 필요가 있다"</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001262390' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001262390</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
