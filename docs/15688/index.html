@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"초과수익인데 또 상장폐지"…반복되는 '액티브 ETF' 상관계수 논란</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.16</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014129922' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15688" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"초과수익인데 또 상장폐지"…반복되는 '액티브 ETF' 상관계수 논란</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">액티브 ETF가 초과 성과를 내면서도 비교지수와의 상관계수 규제(0.7)를 충족시키지 못해 잇따라 상장폐지되는 사례가 발생하고 있습니다. 금융당국은 지수 연동 요건이 없는 '완전 액티브 ETF' 도입을 추진 중이나, 법률 개정 지연으로 시장 혼란이 가중되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">액티브 ETF의 구조적인 문제(초과 수익 추구 vs. 규제 준수)가 반복적으로 상장폐지 사례를 만들면서 해당 상품 클래스에 대한 신뢰도와 제도적 불안정성을 제기하기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF폐지</span> <span class="tag tag-hash">#액티브ETF</span> <span class="tag tag-hash">#상관계수규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">이지민 기자 = 비교지수 대비 높은 수익률을 기록한 액티브 상장지수펀드(ETF)가 상관계수 규제를 맞추지 못해 상장폐지 되는 사례가 잇따르고 있다. 금융당국은 지수 연동 요건 없는 '완전 액티브 ETF' 도입을 추진하겠다고 밝혔으나, 입법이 지연되면서 시장 혼란도 커지는 모습이다.
+
+16일 금융투자업계에 따르면 타임폴리오자산운용은 지난 14일 'TIME 미국배당다우존스액티브'가 상관계수 미달로 상장폐지 사유가 발생했다고 밝혔다.
+
+해당 ETF는 오는 18일부터 매매거래가 정지되고, 19일 상장폐지된다. 투자자들에 대한 해지 상환금은 21일에 지급된다.
+
+상관계수는 ETF 상품이 비교지수를 얼마나 잘 추종하는지 보여주는 지표다. 한국거래소 상장 규정에 따르면 액티브 ETF는 비교지수와의 상관계수가 0.7 미만 상태로 3개월 이상 지속될 경우 상장폐지 사유가 발생한다.
+
+액티브 ETF는 패시브 ETF와 달리 시장 상황에 따라 포트폴리오를 수시로 변경하는 등 운용 역량이 중요하지만, 이러한 상관계수 규제가 운용 자율성을 제약한다는 지적이 꾸준히 제기된 바 있다.
+
+TIME 미국배당다우존스액티브의 경우 미국 고배당 종목을 주요 자산으로 담고, 성장주를 일부 편입해 비교지수 대비 초과 수익 창출을 지향해 왔다. 그러나 초과 성과를 위해 편입했던 일부 인공지능(AI) 관련 종목이 단기간 급등하면서 상관계수가 0.7을 밑돌게 됐다.
+
+앞서 지난달에도 한국투자신탁운용의 액티브 ETF 4종이 상관계수 미달로 상장폐지된 바 있다. 해당 ETF들은 모두 최근 1년간 비교지수 대비 초과 수익률을 달성했지만, 비교지수와의 괴리를 이유로 최종 상장폐지됐다.
+
+금융당국은 이러한 지수 연동 요건 없는 '완전 액티브 ETF' 도입을 추진 중이다.
+
+상반기 중 제도 개선을 추진할 계획이었으나, 자본시장법 개정이 필요한 만큼 일정이 다소 지연되고 있다.
+
+il각에서는 운용상 이탈 방지와 투자자 피해 예방을 위해 지수 연동 자체를 없애기 보다는 비교지수는 유지하되 상관계수 규제를 완화하는 방안이 적절하다는 주장도 나온다.
+
+d만 금융위는 지수 연동 요건을 없애는 기존 방향을 유지 중이다.
+
+금융위 관계자는 "법률 개정이 필요한 사안으로 국회와 소통을 지속하고 있다"며 "완전 액티브 도입이라는 기존 입장에서 바뀐 것은 없다"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014129922' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014129922</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
