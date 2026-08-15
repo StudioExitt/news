@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>기업들 AI 붐…'챗GPT' 오픈AI도 기업 매출이 개인 추월</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #6b7280; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.15</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005803485' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15553" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>기업들 AI 붐…'챗GPT' 오픈AI도 기업 매출이 개인 추월</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">미분류</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">—</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">오픈AI의 매출원 중심이 개인 고객에서 기업용 B2B 서비스로 빠르게 이동하고 있으며, 그 성장세가 폭발적이다. 전반적인 AI 기술 도입 가속화와 수익 모델 다각화에 힘입어 시장 기대감이 고조되고 있다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="empty">—</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">오픈AI 비공개회의 발언 보도
+7월 한달간 기업매출 32% 급증
+당초 예상시점은 2026년 말인공지능(AI) 챗봇 '챗GPT' 개발사 오픈AI의 기업용 사업 매출이 개인 고객 매출을 처음으로 넘어섰다. 사측은
+당초 두 사업의 매출이 연말경 같아질 것으로 예상했지만, 기업들의 AI 기술 도입이 빨라지면서 예상시점보다 수개월 앞섰다.
+
+샘 올트먼 오픈AI 최고경영자가 지난 7월 24일(현지시간) 미국 샌프란시스코 더 미드웨이에서 이재명 대통령이 참석한 가운데 열린 '샌프란시스코 AI 서밋'에서 발언하고 있다. 연합뉴스
+
+14일(현지시간) 미 경제매체 CNBC방송에 따르면, 새러 프라이어 오픈AI 최고재무책임자(CFO)는 비공개 투자자 회의에서 "올해 초 소비자와 기업 매출 비중이 60대40이었지만 기업 사업이 예상보다 훨씬 빠르게 성장하면서 두 선이 교차했다"며 "현재 매출의 과반이 기업에서 나온다"고 말했다.
+
+오픈AI의 연환산 매출은 400억달러(약 56조원)에 달한다. 지난 7월 연환산 매출은 전월보다 20% 증가했고, 기업 고객 수는 같은 기간 32% 늘었다. 지난 2월 시작한 챗GPT 광고 사업도 연환산 매출이 10억달러에 육박한 것으로 전해졌다.
+
+기업들의 AI 소비 방식도 달라지고 있다. 프라이어 CFO는 기업들이 사용량을 극대화하는 이른바 '토큰맥싱'에서 벗어나 같은 비용으로 얼마나 높은 AI 성능을 얻을 수 있는지를 뜻하는 '지능 단위당 비용'에 집중하고 있다고 설명했다. 오픈AI는 최근 모델 가격을 인하했고, 최신 모델의 에이전트형 코딩 작업 효율은 54% 높아졌다고 밝혔다.
+
+그레그 브록먼 오픈AI 사장은 중국 오픈소스 AI의 부상에 대해 "오픈소스가 더 저렴하다는 것은 오해"라는 취지로 답했다. 기업공개(IPO) 시점에 대해서는 미 증권거래위원회(SEC)에 비공개로 관련 서류를 제출했다는 이유로 답변을 피했다.
+
+한편, 이번 회의는 고위 임원들이 잇따라 회사를 떠나는 가운데 열렸다. 데니스 드레서 최고매출책임자(CRO)는 취임 8개월 만에 사임했고, 8년간 오픈AI에서 근무한 브래드 라이트캡도 퇴사를 발표했다. 후임 CRO에는 구글이 인수한 사이버보안 업체 위즈 출신 달리 라직이 영입됐다.
+</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005803485' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005803485</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
