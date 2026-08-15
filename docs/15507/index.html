@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[ETF워치]단일종목 레버리지에 지친 투자자, 서학개미로 복귀</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.15</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/648/0000049863' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15507" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[ETF워치]단일종목 레버리지에 지친 투자자, 서학개미로 복귀</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">과도한 규제와 높은 변동성으로 인해 국내 단일종목 레버리지 ETF에서 자금을 빼고 있는 개인 투자자들이, 안정적 수익과 글로벌 분산 효과를 기대하며 미국 주식형 ETF(서학개미) 또는 커버드콜 ETF로 관심이 쏠리고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">개인투자자들이 고위험 단일종목 레버리지 ETF에서 자금을 회수하여 글로벌 시장(미국 S&P500 등) 및 안정적인 현금흐름을 창출하는 커버드콜 ETF로 이동하는 추세가 명확하게 관찰됩니다. 이는 국내 개별 종목 중심의 투자심리 위축과 해외/구조화된 상품 선호 심리를 동시에 반영하며, 중장기적인 자본 흐름 변화를 시사합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">미국 S&P500 관련주</span> <span class="tag stock-tag">글로벌 기술주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">해외 자산 투자</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">ETF 시장</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#서학개미</span> <span class="tag tag-hash">#커버드콜</span> <span class="tag tag-hash">#자금흐름</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">기본예탁금 현금 3000만원 시행 후 거래 급감 지속
+일평균 10조→1조 미만…개인 2주 연속 순매도 이어가
+ETF 개인 투자 상위는 미국지수·커버드콜 ETF로 재편금융당국이 단일종목 레버리지 상장지수펀드(ETF) 개인 투자 문턱을 높인 이후 2주가
+흘렀습니다. 하루 10조원 안팎이었던 거래대금은 지난주에 이어 이번주에도 1조원을 계속 밑돌고 있습니다. 한때 이 상품에 몰렸던 개인투자자
+자금도 2주 연속으로 순매도를 기록했고요.
+
+한국거래소에 따르면 단일종목 레버리지(인버스 포함) 16종의 일간 거래대금은 8월10~14일 내내 1조원대 밑이었어요. 지난달 31일
+기본예탁금이 현금 3000만원으로 바뀌기 전 일간 거래대금은 평균 10조원대였는데요. 8월6일부터는 내내 1조원을 밑돌고 있어요. 특히
+10일에는 5923억원까지 떨어지기도 했어요.
+
+개인투자자도 단일종목 레버리지에서 돈을 빼고 있습니다. 8월 10~13일 동안 개인은 전체 1997억원을 순매도했어요. 8월3~7일 개인
+순매도가 2187억원이었는데요. 아직 데이터가 공개되지 않은 14일을 합쳐도 2주 연속 개인 순매도가 이어졌을
+가능성이 커요.
+
+단일종목 레버리지 기초자산인 삼성전자와 SK하이닉스가 이번주에 상승세를 나타냈는데도 한 번 떠난 개인투자자의 관심이 쉽게 돌아오지 않은
+셈입니다. 게다가 정부는 오는 19일 모의거래 의무화를 비롯한 추가 규제를 시행하면서 문턱을 더 높일 예정입니다.
+
+대신 개인투자자의 관심은 미국주식형 ETF로 쏠리는 모습입니다. 국내증시의 출렁임에 지친 개인투자자들이 ‘서학개미’로 복귀한 셈입니다. 강한
+증시 변동 속에서도 매달 분배금을 안정적으로 받을 수 있는 커버드콜 ETF도 인기를 끌고 있어요.
+
+14일 코스콤 ETF체크에 따르면 최근 일주일 동안 개인 순매수 상위권 ETF 1~10위에 △TIGER 미국S&P500 △KODEX
+미국나스닥100 △KODEX 미국S&P500 △TIGER 미국나스닥100이 이름을 모두 올렸어요. 특히 미래에셋자산운용의 TIGER
+미국S&P500의 개인 순매수는 1조원을 넘었어요.
+
+이 순위에는 △KODEX 200타겟위클리커버드콜 △RISE 코리아밸류업위클리고정커버드콜 △KODEX 200커버드콜액티브도 들어갔습니다.
+국내주식형 ETF 중에서는 확실히 커버드콜 ETF가 인기를 끄는 모습이죠.
+
+이 때문인지 자산운용사도 커버드콜 ETF 성과를 알리는 데 열심입니다. 삼성자산운용은 KODEX 200커버드콜액티브가 7월14일 상장한 뒤 약
+1개월 만인 이달 13일 순자산 5364억원을 기록했다고 밝혔어요. 상장 후 개인투자자 자금이 꾸준히 들어온 결과라고 설명했어요.
+
+미래에셋자산운용은 6월2일 상장한 TIGER 코스닥액티브가 8월 1~11일 동안 평균 수익률 23.6%를 기록하면서 같은 기간 코스닥 상승률
+19.2%를 넘어섰다고 알렸어요. 코스닥 시장 전반에 투자하는 국내 액티브 ETF 중 같은 기간 가장 높은 수익률을 기록했어요.
+
+키움투자자산운용은 6월30일 출시한 KIWOOM 코스닥150커버드콜액티브가 약 1개월 만인 이달 12일 순자산 527억원을 기록했다고 전했어요.
+7월 말 기준 상장 후 첫 월 분배금도 투자자에게 나눠줬어요. 주당 분배금은 175원, 첫 월 분배율은 2.4%입니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/648/0000049863' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/648/0000049863</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[IPO챗] 인제니아·기도산업, 다음주 코스닥 입성</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.15</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016252909' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15508" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[IPO챗] 인제니아·기도산업, 다음주 코스닥 입성</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">—</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">바이오 기업 인제니아테라퓨틱스, 산업용 의류 제조업체 기도산업가 코스닥에 연속 상장합니다. 또한 웨어러블 의료기기 개발사 스카이랩스는 기관 수요예측을 진행하며 헬스케어 섹터의 관심을 받고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">여러 기업의 상장 및 수요예측 일정 공시는 시장에 대한 관심을 집중시키고 관련 섹터(바이오, 의료 기기, 아웃도어) 전반에 긍정적인 테마를 형성합니다. 특히 바이오/헬스케어 분야는 지속적으로 큰 이슈입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">의료 장비 및 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">섬유 및 의복</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#IPO</span> <span class="tag tag-hash">#코스닥</span> <span class="tag tag-hash">#바이오테크</span> <span class="tag tag-hash">#헬스케어</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">(서울=연합뉴스) 정회인 기자 = 다음 주(18~21일) 기업공개(IPO) 시장에서는 바이오기업 인제니아테라퓨틱스와 산업용 의류 제조업체 기도산업이 코스닥에 입성한다.
+
+일반투자자 대상 공모주 청약은 없는 가운데 디지털 헬스케어 기업 스카이랩스가 기관 수요예측을 이어간다.
+
+15일 금융투자업계에 따르면 인제니아테라퓨틱스는 오는 18일 코스닥 시장에 상장한다.
+
+인제니아테라퓨틱스는 미세혈관을 보호·회복하는 항체 기술을 기반으로 신장질환 치료제를 개발하는 미국 바이오기업이다. 미국 보스턴에 본사를 두고 있으며, 주식예탁증서(DR) 방식으로 국내 증시에 상장한다.
+
+대표 파이프라인 'MK-8748'은 미국 빅파마 머크(MSD)가 아이바이오(EyeBio) 인수를 통해 확보한 안과 신약 후보물질이다. 현재 습성 황반변성 적응증을 대상으로 글로벌 임상 2b·3상이 진행되고 있다.
+
+회사는 이번 공모 자금을 기존 파이프라인 임상과 후속 후보물질 연구개발에 투입하고, 향후 기술이전과 글로벌 파트너십 확대에도 나설 계획이다.
+
+기도산업은 오는 21일 코스닥 시장에 상장한다.
+
+기도산업은 아웃도어와 모터사이클 보호복 등을 생산해 글로벌 브랜드에 공급하는 주문자상표부착생산(OEM)·제조자개발생산(ODM) 기업이다.
+
+오랜기간 축적한 고부가가치 제품 중심의 기술력을 바탕으로 할리데이비슨(Harley-Davidson), 바버(Barbour), 잭울프스킨(Jack Wolfskin), 쉐펠(Schoffel) 등 글로벌 프리미엄 브랜드를 고객사로 확보하고 있다.
+
+지난해 연결 기준 매출은 3천466억원, 영업이익 322억원으로, 최근 3년간 매출이 연평균 24% 증가했다.
+
+공모가는 희망 범위 최상단인 2만8천400원으로 확정됐다.
+
+기관 수요예측 일정은 스카이랩스가 소화한다.
+
+스카이랩스는 지난 14일부터 오는 21일까지 기관투자자 대상 수요예측을 진행한다. 공모 희망 밴드는 1만3천~1만6천원이며 대표주관사는 한국투자증권이다.
+
+스카이랩스는 2015년 설립된 웨어러블 의료기기 개발 기업이다. 주력 제품인 '카트 비피 프로'(CART BP pro)는 팔에 압박대를 착용하지 않고 손가락에 반지 형태의 기기를 착용해 일상과 수면 중에도 24시간 혈압과 맥박을 측정할 수 있다.
+
+지난해 매출은 79억원으로 전년(41억원)의 약 두 배로 늘었지만, 영업손실은 117억원에서 147억원으로 확대됐다.
+
+회사는 공모자금을 연구개발에 투입해 혈당·혈중지질 등으로 측정 영역을 넓히고 의료 데이터 사업을 확대할 계획이다.
+
+다음 주에는 일반투자자 대상 공모주 청약이 예정된 기업은 없다.
+
+상장 ▲인제니아테라퓨틱스, 코스닥, 18일, 확정 공모가 1만2천원, 대표주관사 삼성증권.
+
+▲기도산업, 코스닥, 21일, 확정 공모가 2만8천400원, 대표주관사 미래에셋증권.
+
+기관 수요예측 ▲스카이랩스, 코스닥, 14~21일, 일반청약 26~27일, 공모 희망 밴드 1만3천~1만6천원, 대표주관사 한국투자증권.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016252909' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016252909</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
