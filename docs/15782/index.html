@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>공차·샤브올데이·맘스터치…사모펀드들의 F&B 거래 공식 [시그널]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.17</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004652259' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15782" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>공차·샤브올데이·맘스터치…사모펀드들의 F&B 거래 공식 [시그널]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">글로벌 사모펀드(PEF)들이 해외 확장성을 주요 기준으로 삼아 공차, 샤브올데이 등 F&B 프랜차이즈의 경영권을 인수하는 사례가 증가하고 있다. 투자은행 업계는 국내 시장만으로는 성장에 한계가 있으며, 글로벌 확장이 F&B 기업 가치를 높이는 핵심 변수가 되고 있다고 분석했다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">F&B 산업 전반에 걸쳐 '글로벌 확장성'이 핵심 가치 지표로 부상하면서 대규모 자본(PEF)의 관심이 집중되고 있음을 보여준다. 이는 국내 F&B 기업들의 사업 포트폴리오와 가치평가 방식 변화를 예고하며, 관련 산업 전반에 긍정적인 성장 모멘텀을 제공한다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">대형 커피 프랜차이즈주</span> <span class="tag stock-tag">외식업체 주식</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">식음료 프랜차이즈</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">국제화 사업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#FNB</span> <span class="tag tag-hash">#M&A</span> <span class="tag tag-hash">#사모펀드</span> <span class="tag tag-hash">#글로벌확장성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">공차 CI. 공차코리아해외 확장성을 가진 식음료(F&B) 프랜차이즈의 경영권 거래가 활발히 이뤄지고 있다. 글로벌 사모펀드(PEF) 운용사 베인캐피털은 최근 글로벌 밀크티 브랜드 공차를 인수했고, 필리핀 외식기업 졸리비그룹은 해외 확장을 염두에 두고 컴포즈커피·샤브올데이를 연이어 품었다.
+
+17일 투자은행(IB) 업계에 따르면 최근 F&B 경영권 거래는 해외 확장성에 따라 성사 여부가 갈리고 있다. 베인캐피털이 6억 3500만 달러(약 9000억 원)에 인수하기로 한 공차가 대표적이다. 현 최대주주 TA어소시에이츠는 공차가 전 세계에서 2200개 매장을 운영하는 점을 근거로 지난해 상각전영업이익(EBITDA)의 약 20배인 2조 원을 매각가로 원했다. 통상 F&B 프랜차이즈 인수합병(M&A) 거래에서 상각전영업이익 대비 기업가치(EV/EBITDA) 배수는 높아도 10배로 매겨진다.
+
+JP모건과 노스포인트의 주관으로 진행된 공차 입찰에는 베인캐피털, 제너럴애틀랜틱, MBK파트너스 등 국내외 유수의 PEF 운용사가 참여했다. 원매자들은 공차가 한국에서 900개, 일본에서 160개가량의 매장을 운영하고 미국·유럽 진출에도 성공한 점을 주목했다. 공차가 미국에서 운영하는 매장은 200개를 웃돌고 지난해에는 콜롬비아·에콰도르에 새로 진출해 남미에서도 저변을 넓히는 중이다. IB 업계에서는 글로벌 확장성에 공차 매각 거래가 예상외의 흥행을 거뒀다고 보고 있다.
+
+2002년 부산에서 시작된 치킨 브랜드 ‘본촌’ 운영사 본촌인터내셔날은 태국 마이너그룹이 약 3000억 원에 인수하기로 했다. 본촌은 현재 국내에서 영업하지 않지만 세계 각지에 500개 안팎의 매장을 두고 있다. 동남아 등지에서는 현지 사업자에게 운영권을 준 뒤 로열티를 받고 있고, 미국에서는 매장을 직접 운영한다. 현재 최대주주인 VIG파트너스는 2018년 본촌인터내셔날을 인수한 뒤 미국 사업 경쟁력 강화에 집중했다.
+
+마이너그룹은 미국 사업에 주목해 본촌 인수 계약을 맺은 것으로 전해졌다.
+
+국내 외식 브랜드를 겨냥한 해외 전략적투자자(SI)의 관심은 꾸준히 이어지고 있다. 올 들어 필리핀 졸리비그룹은 국내 PEF 운용사 엘리베이션에쿼티파트너스와 손잡고 샤브올데이 운영사 올데이프레쉬 경영권을 약 1300억 원에 인수했다. 2024년에는 엘리베이션PE와 커피 프랜차이즈 컴포즈커피를 인수하기도 했다. 졸리비그룹은 국내 F&B 브랜드의 글로벌화를 염두에 두고 있는 것으로 알려졌다.
+
+국내 PEF 운용사 케이엘앤파트너스가 운영하는 맘스터치는 해외 진출을 적극 시도하고 있다. 태국, 몽골, 일본 등에 연이어 지점을 내며 아시아 시장으로 영업권을 넓히는 중이다. IB 업계에서는 프랜차이즈 시장 규모가 큰 일본 진출 성과가 가시화될 경우 맘스터치 기업가치가 크게 높아질 것이라고 보고 있다. 케이엘앤파트너스는 주관사로 씨티증권을 선정해 맘스터치 경영권 매각을 추진하고 있다. 시장에서 거론되는 기업가치는 약 1조원이다.
+
+IB 업계 관계자는 “국내 시장만으로는 성장에 한계가 있어 F&B 프랜차이즈의 가치를 높이려면 해외 확장이 필수인 상황”이라며 “해외 원매자군의 합류는 F&B 경영권 거래의 주요 흥행 변수가 되고 있다.”</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004652259' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004652259</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
