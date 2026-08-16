@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>같은 구리 ETF인데 1개월 수익률 3%대0%… 격차 벌어진 이유는?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.17</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005400764' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15761" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>같은 구리 ETF인데 1개월 수익률 3%대0%… 격차 벌어진 이유는?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 데이터센터 확대로 구리 수요는 장기적으로 매우 밝으나, 미국이 정련구리에 관세를 검토하면서 현물과 선물 가격 간에 큰 괴리가 발생하고 있습니다. ETF 수익률 격차와 더불어 정책 리스크(관세) 및 구조적 공급 부족 문제가 부각되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 산업 확장에 따른 구조적인 구리 수요 증가라는 장기적 성장 모멘텀과 미국 관세 정책이라는 단기적 지정학 리스크가 복합적으로 작용하며, 관련 소재 및 인프라 전반에 대한 투자 심리를 크게 자극하고 있기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전력</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#구리ETF</span> <span class="tag tag-hash">#AI인프라</span> <span class="tag tag-hash">#원자재가격</span> <span class="tag tag-hash">#관세정책</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">구리 현선물 ETF 수익률 추이 비교/그래픽=이지혜
+미국에서 정련구리 수입품에 관세 부과 조치를 검토하자 구리 테마 ETF(상장지수펀드)의 수익률에 차이가 나타났다. 미국 내 구리를 선제적으로 매입하려는 움직임이 일어나자 미국 선물을 기초자산으로 삼는 ETF 수익률이 오른 것이다.
+다만 업계에서는 구리 자체의 전망이 밝다고 내다봤다. AI(인공지능) 데이터센터 투자가 늘어나며 구리 수요 역시 지속적으로 증가할 거란 전망에서다.
+
+16일 코스콤 ETF CHECK에 따르면 지난 14일 기준 'KODEX 구리선물(H)'의 최근 1개월 수익률은 3.07%를 기록했다. 'TIGER 구리실물'은 -0.51%로 집계됐다.
+두 상품 모두 원자재인 구리에 투자하는 ETF이지만 수익률에서 격차가 나타났다. 이는 같은 구리 가격을 추종해도 기초자산이 현물이냐 선물이냐에 따라 달라진 탓이다. KODEX 구리선물(H)의 기초지수는 'S&P GSCI North American Copper'인 반면 TIGER 구리실물은 'Cash Copper'를 추종한다. 쉽게 말해서 전자는 미국 선물을, 후자는 런던 현물을 기초 자산으로 삼는다.
+
+현재 미국에서는 구리 매입이 선제적으로 이뤄지며 선물 가격 역시 동반 상승하며 현물과 격차를 벌리고 있다. 이는 도널드 트럼프 미국 대통령의 정련 구리에 대한 관세 부과에 따른 결과다. NH투자증권에 따르면 관세 부과가 현실화될 경우 미국 선물 구리 가격이 런던 현물 대비 프리미엄을 최소 15%에서 최대 30%까지 확보할 것으로 내다봤다.
+
+앞서 하워드 러트닉 미국 상무장관은 정련구리 수입물에 단계적으로 관세를 부과하는 방안을 제안했다. 관세가 승인된다면 이달부터 반가공 구리 제품 및 구리 다소비 파생 제품에 대한 50% 관세에 정련 구리 관세가 추가로 부과된다. 이러한 조치가 백악관을 통과하기 전에 선제적으로 구리를 수입하려는 수요가 미국 내에 늘면서 가격이 덩달아 올랐다.
+
+d만 해당 조치의 권고 시한은 지난 6월 말까지로 백악관은 지금까지 후속 결정에 대한 입장을 밝히지 않았다. 관세가 다시 보류될 경우 미국 선물 구리 가격 조정이 나타날 가능성이 있다. 이 때문에 런던 현물은 가격 변동성이 적어 비교적 안정적인 자산으로 평가받는다.
+
+금융투자업계에서는 현선물 관계없이 구리 자체의 전망이 밝다고 내다봤다. 미래 주도산업으로 AI가 꼽히는 가운데 AI 데이터센터의 전력 설비에는 구리가 필수적이기 때문이다. 구리는 송전 케이블 등 전력 설비의 핵심 소재다. 이에 각 국가가 구리를 전략자산으로 가져가려는 움직임이 있다는 설명이다.
+
+황병진 NH투자증권 부장은 "전쟁으로 원자재 수요가 둔화할 거란 전망에도 구리 가격은 계속 오르고 있다"며 "AI 전력 설비 확충으로 구리 수요가 느는 반면 공급은 부족한 상황"이라고 분석했다. 이어 "중남미 등 글로벌 사우스 국가에 위치한 광산이나 제련소에서는 황산을 통해 제련하는데, 황산의 30%가 중동에서 나와 제련이 어려워지고 공급이 타이트해졌다"고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005400764' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005400764</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
