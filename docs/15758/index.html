@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>레버리지 예탁금 규제 후 변동성 3개월前 수준으로</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.17</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/020/0003741247' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15758" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>레버리지 예탁금 규제 후 변동성 3개월前 수준으로</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">레버리지 단일종목 규제 강화 이후 국내 주식 시장 변동성 지수가 3개월 전 수준까지 하락하며 안정세를 보였으나, 향후 기준금리 인상 가능성과 거시경제 불확실성으로 인해 다시 높은 변동성이 커질 수 있다는 우려가 제기됨.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">레버리지 규제 강화로 단기 변동성은 완화되었으나, 거시경제 환경(금리 인상)에 대한 리스크 경고가 매우 크므로 중립적이지만 높은 주의가 요구되는 상황입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지규제</span> <span class="tag tag-hash">#금리인상</span> <span class="tag tag-hash">#변동성지수</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">단일종목 레버리지 상품의 기본 예탁금 상향 등 규제 이후 코스피 변동성 지표가 35% 이상 하락해 3개월 전 수준까지 되돌아간 것으로 나타났다. 국내 주식시장 변동성을 좌우한 ‘뇌관’ 중 하나였던 강제 청산(반대매매)액도 하루 최대 1000억 원 규모에서 50억 원 수준으로 감소했다.
+
+다만 미국과 한국의 기준금리가 인상되면 증시에서 자금이 이탈할 가능성이 있어 국내 증시 변동성이 다시 커질 것이란 우려도 나온다.
+
+16일 한국거래소에 따르면 ‘코스피 200 변동성지수’는 14일 55.31로 마감했다. 단일종목 레버리지의 투자자별 기본 예탁금을 1000만 원에서 3000만 원으로 높이는 조치 전날인 지난달 30일(86.18)보다 35.8% 하락했다.
+
+이 지수는 코스피 등락 폭이 컸던 올 5∼7월 3개월간 70∼90대를 오갔다. 6월 29일엔 2009년 지수 도입 이후 역대 가장 높은 96.94까지 오르기도 했다. 단일종목 레버리지 규제 조치 이후에는 꾸준히 하락해 50대까지 내려갔다.
+
+‘빚투’(빚내서 투자)에 따른 국내 주식시장 강제 청산 규모는 줄어들고 있다. 금융투자협회에 따르면 코스피와 코스닥을 합산한 국내 증시 하루 강제 청산 금액은 13일 50억 원으로 집계됐다. 지난달 30, 31일엔 반도체 등 주요 인공지능(AI) 인프라 관련주의 급등락으로 강제청산액이 1000억 원을 넘어서기도 했다가 빠르게 감소하고 있다.
+
+증권사는 투자자가 주식을 담보로 돈을 빌려 매매했다가 일정 기간 안에 부족한 금액을 채우지 못하면 주식을 시세보다 낮은 가격에 강제 처분한다. 강제 처분이 이뤄지면 시세보다 낮은 가격으로 주식 매물이 쏟아져 주가지수를 떨어뜨릴 수 있다.
+
+코스피 시가총액의 50% 이상을 차지하는 삼성전자(우선주 포함)와 SK하이닉스의 주가가 최근 크게 뛴 만큼 증시 변동성은 다시 커질 가능성이있다. 한미 통화 정책도 변수다. 26일(현지 시간) 발표 예정인 7월 미국 개인소비지출(PCE) 지표가 6월 대비 꺾이지 않으면 미 연방준비제도(Fed)가 9월 연방공개시장위원회(FOMC)에서 기준금리 인상에 나설 가능성이 있다. 한국은행은 27일 금융통화위원회를 열어 기준금리를 결정한다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/020/0003741247' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/020/0003741247</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
