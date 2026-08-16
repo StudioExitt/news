@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>‘오르락 내리락’ 주가 변동성의 늪…상장사 M&A의 딜레마</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.17</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002684582' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15773" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>‘오르락 내리락’ 주가 변동성의 늪…상장사 M&A의 딜레마</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">주가 변동성 심화로 인해 상장사 M&A 시장이 어려움을 겪고 있습니다. 주가 급락 시 매도자는 적정 가치 하락을 이유로 협상을 미루고, 주가 급등 시에는 인수 측의 자금 부담 및 높은 몸값이 걸림돌이 되어 거래 구조를 수정하거나 블록딜로 방향을 돌리는 사례가 늘고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">M&A 시장의 구조적 난관과 투자 심리 위축을 경고하는 내용으로, 기업가치 평가와 거래 성사에 부정적인 영향을 미칩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#MANDilemma</span> <span class="tag tag-hash">#주가변동성</span> <span class="tag tag-hash">#밸류에이션</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">상장사 인수·합병(M&A) 시장에서 주가 변동성에 따른 매도자와 매수자 간 ‘눈높이 격차’는 오랜 숙제다. 하지만 최근 증시의 단기 상승·하락 폭 변화가 극심해지면서 이같은 고질적 난제가 딜 자체를 흔드는 결정적 변수로 작용하는 분위기다.
+
+투자은행(IB) 업계에 따르면 최근 증시 및 상장사 시가총액의 변동성 확대로 M&A 거래가 차질을 빚거나 구조가 수정되는 사례가 늘고 있다. 주가가 떨어지면 매도 측이 적정 기업가치 산정을 요구하며 협상을 미루고, 주가가 오르면 인수 측의 자금 조달 부담이 커져 딜 추진이 어려워지는 탓이다.
+
+대표적인 사례가 엠앤씨솔루션이다. 방산 부품 전문기업 엠앤씨솔루션은 올해 상반기 M&A 시장에서 빅딜로 주목 받았지만, 최근 최대주주인 소시어스프라이빗에쿼티(PE)·웰투시인베스트먼트 컨소시엄과 한국투자파트너스 PE본부 간 경영권 매각 협상이 최종 무산됐다. 올해 3월 우선협상대상자 선정 당시만 해도 1조원대에 달했던 시가총액이 증시 약세로 급락하면서, 밸류에이션 이견을 극복하지 못한 것으로 알려졌다.
+
+반대로 주가가 지나치게 올라 경영권 매각이 가로막힌 사례도 있다. 이 경우 만기를 앞둔 사모펀드(PEF) 운용사들은 주가가 안정될 때까지 무작정 기다리기보다, 블록딜(시간외 대량매매) 방식으로 돌파구를 찾았다.
+
+HPSP의 대주주인 크레센도에쿼티파트너스가 경영권 매각 대신 블록딜로 방향을 선회한 것도 같은 이유에서다. HPSP는 최근 인공지능(AI) 열풍과 실적 호조에 힘입어 주가가 급등하면서 몸값이 3조원대로 치솟았다. 원매자들이 선뜻 인수를 결정하기 어려울 정도로 기업가치 부담이 커지자, 크레센도는 올해 초 지분 10% 안팎을 시장에 연달아 매각하는 블록딜 방식을 택했다. 지분을 쪼개 팔아 딜 규모를 줄이는 한편, 대주주 지분율을 낮춰 추후 잠재 인수자의 진입 문턱을 낮추려는 전략으로 풀이된다.
+
+조선기자재 업체 현대힘스 역시 주가 변동성 국면에서 딜 구조가 재편된 사례다. 최대주주인 제이앤PE는 조선업 호황에 힘입어 현대힘스 주가가 급등하자, 원매자들의 가격 부담을 덜어주고 선제적으로 투자금을 회수(엑시트)하기 위해 블록딜을 단행했다.
+
+업계에서는 이처럼 주가 변동성이 확대되는 순간, 상장사 M&A는 ‘구조적 딜레마’에 빠질 수 밖에 없다고 말한다. 주가가 급락하면 매도자는 딜을 철회하거나 미루게 된다. 기업의 본질 가치와 상관없이 떨어진 시가로 지분을 넘길 경우 엑시트 수익률 저하가 불가피해서다. 반면 매수자는 매도자의 눈높이에 맞춰 시가 대비 높은 프리미엄을 지급하려 해도 출자자(LP) 설득이 어렵다. 여기에 주가 하락으로 인수 대상 지분의 담보 가치가 떨어져 필요한 대출금을 끌어오지 못하는 난관에 부딪히기도 한다.
+
+주가가 급상승하는 국면에서도 딜레마는 이어진다. 매도자 입장에서 시가총액이 급증해 경영권을 한 번에 넘길 수 있는 매수 후보군 자체가 줄어들기 때문이다. 매수자 역시 고평가 우려 속에서 과도한 인수 자금을 조달해야 하는 재무적 부담을 안게 되며, 추후 주가 조정 시 LP로부터 ‘돈을 낭비했다’는 비판에 직면할 수 있다.
+
+이는 매일 시장의 평가를 받는 상장사의 ‘숙명’이기도 하다. 비상장사와 달리 상장사는 매일 주식시장에서 거래되는 명확한 가격이 존재한다. 노출된 시장가격이 협상의 기준점이 되는 동시에 매도자와 매수자 양측의 발목을 잡는 구조적 한계로 작용하는 셈이다.
+
+업계 관계자는 “단순히 주가가 오르고 내리는 문제보다 변동성의 폭이 거래 성사 여부를 가르는 핵심 변수가 된다”며 “지금과 같은 널뛰는 주가 장세 속에서는 상장사 M&A를 할 때마다 밸류에이션 접점을 찾는 진통이 계속될 것”이라고 설명했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002684582' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002684582</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
