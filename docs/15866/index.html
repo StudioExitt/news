@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[단독] 카카오모빌 美 ADR 발행 속도…이사회 정식 의결 [시그널]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.17</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004652372' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15866" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[단독] 카카오모빌 美 ADR 발행 속도…이사회 정식 의결 [시그널]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">카카오모빌리티가 미국 주식예탁증서(ADR) 발행을 이사회에서 공식 의결하며 글로벌 자본 시장 진출에 박차를 가하고 있습니다. 이는 2대주주 TPG 컨소시엄의 투자금 회수(엑시트) 시동이자, 국내 중복상장 논란까지 정면 돌파하겠다는 전략적 움직임입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">국내 시장의 주요 플레이어가 글로벌 자본 시장(미국) 진출을 공식화하고 법적 리스크까지 해소했다는 것은 기업가치 재평가의 강력한 촉매제 역할을 하며, 장기적인 성장에 대한 기대감을 높입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">운송 산업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ADR발행</span> <span class="tag tag-hash">#글로벌진출</span> <span class="tag tag-hash">#기업가치제고</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">카카오모빌리티가 이사회에서 미국 주식예탁증서(ADR) 발행 안건을 정식 의결했다. 중복상장 논란을 딛고 투자 10년 차에 접어든
+2대주주 텍사스퍼시픽그룹(TPG) 컨소시엄의 ‘엑시트(투자금 회수)’ 물꼬를 터주면서 성장의 무대를 글로벌 자본시장으로 넓혀 기업가치를 재평가받겠다는 전략이다.
+
+17일 투자은행(IB) 업계에 따르면 카모는 올 상반기 이사회 내 주주가치제고위원회를 신설하고 ADR 상장 관련 제반 비용과 세부 일정, 상장 후 이사회 개편안을 담은 세부 실행 계획을 최종 승인했다. 최대주주인 카카오와 2대주주 컨소시엄 간 체결된 주주간계약에 따라, 위원회를 통과한 안건은 이사회 의결과 사실상 동일한 효력을 갖는다.
+
+앞서 카모는 ADR 상장 주관사로 뱅크오브아메리카(BofA), 모건스탠리, UBS 등 글로벌 IB를 선정한 바 있다. IB 업계 관계자는 “주관사 선정과 함께 실제 ADR 상장 추진 과정에서 수반되는 제반 사항과 예산 집행을 최고 의사결정기구를 통해 공식화한 것”이라고 설명했다.
+
+이번 의결을 주도한 위원회는 윤신원 TPG 부대표(위원장)와 손승헌 TPG 이사, 정종욱 카카오 책임경영위원장 등 3인으로 구성됐다. 위원회 과반을 차지한 TPG가 주도권을 쥐면서 회사의 주요 의사결정 권한이 사실상 2대주주이자 재무적투자자(FI)로 넘어갔다는 분석도 나온다. FI측은 그간 기업공개(IPO) 추진을 관망해왔으나 이제부터는 자신들이 직접 나서 해결하겠다는 의지를 카카오 그룹 내 확인한 것으로도 해석된다.
+
+TPG 컨소시엄은 2017년부터 카모에 총 6400억 원가량을 투입해 지분 약 29%를 보유하고 있다. 당시 맺은 주주간계약에는 ‘일정 기간 내 IPO가 무산되거나 지연될 경우 TPG 측이 회사 경영 전반과 회수 방안에 대해 주도적 권한을 갖는다’는 내용이 포함돼 있는 것으로 파악됐다.
+
+TPG는 이 권한을 바탕으로 위원회를 신설해 이번 ADR 발행을 주도하는 것으로 보인다. 
+
+i사회 문턱까지 넘어선 만큼 카모의 미국행은 더욱 속도를 낼 것으로 전망된다. 특히 국내에서 걸림돌이 된 중복상장 논란을 정면으로 돌파하기 위해 구체적 방안 마련에도 착수했다. 실제 위원회는 중복상장 규제 동향 파악과 법적 리스크 검토를 외부 자문사에 위임한 것으로 전해졌다. 금융 당국이 최근 가이드라인을 통해 해외 증시 상장도 중복상장 규제를 적용할 수 있도록 한 만큼 이에 대응할 논리 구축에 나선 것이다.
+
+il각에서는 카모의 이번 ADR 발행이 중복상장 규제 대상에 해당하지 않을 여지도 있다는 분석이 나온다. 신주 발행으로 자금을 조달하는 일반적인 IPO와 달리 이번 ADR은 기존 FI 측 구주를 활용해 2대주주를 교체하는 성격이 강하기 때문이다. 신주 발행이 없어 기존 주주들의 지분 가치가 희석되지 않으며 모회사인 카카오 주주들의 가치를 훼손할 우려도 적다. 오히려 미국 증시 입성 이후 높은 몸값을 인정받을 경우, 카모기업가치를 한 단계 끌어올리는 계기가 될 수 있다는 관측이다.
+
+이번 이사회 승인은 TPG의 독자 추진에 따른 구조적·법적 리스크를 해소했다는 점에서도 의미가 있다. 현행법은 해외 DR을 발행할 때 원주발행사의 사전 동의를 받도록 규정하고 있다. 카모가 미국 증권거래위원회(SEC) 신고서 제출과 실사, 자료 제공 등 상장 절차에 적극 협조하지 않으면 TPG 단독으로 ADR 상장이 불가능한 구조다. IB 업계 관계자는 “이번에 이사회가 안건을 정식 의결하면서 향후 상장 추진 과정에서 발생할 수 있는 구조적 걸림돌이 치워진 셈”이라고 했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004652372' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004652372</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

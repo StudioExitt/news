@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>모멘텀 시들해진 엔터株, ETF도 줄손실</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.17</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004652369' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15867" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>모멘텀 시들해진 엔터株, ETF도 줄손실</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">엔터 산업은 시장 전반의 반등세에도 불구하고 부진하며 관련 ETF와 주요 기업들의 주가 하락세를 보였습니다. 증권가에서 단기 실적보다 중장기 IP 성장성 불확실성이 큰 리스크로 지적되면서, 목표주가 하향 조정이 속출하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">엔터 업종의 단기 실적 대비 중장기 불확실성과 목표주가 하향 조정이 핵심 리스크로 작용하며 투자 심리가 위축되고 있기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">JYP Ent.</span> <span class="tag stock-tag">HYBE</span> <span class="tag stock-tag">SM Ent.</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">미디어</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">지식재산</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#엔터테인먼트 #KPOP #IP성장성 #투자위험</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■주요 ETF 연초 후 수익률 -40%대
+코스피 11% 뛸 때 엔터株 하락세
+JYP 목표가는 이틀새 13건 하향
+중장기 불확실성에 눈높이 낮춰
+시장 관심 차세대 IP 성장성 주목
+국내 증시가 반등세를 나타내고 있지만 엔터주는 좀처럼 부진에서 벗어나지 못하면서 관련 상장지수펀드(ETF)도 줄손실을 기록했다. 대형 아티스트의 활동 재개라는 호재가 상당 부분 현실화된 가운데 시장의 관심이 차세대 지식재산권(IP)의 성장 여부로 옮겨가면서 증권사들은 주요 엔터사의 목표주가를 잇달아 낮추고 있다.
+
+17일 한국거래소에 따르면 지난주(10~14일) 국내 ETF 가운데 레버리지·인버스 상품을 제외하고 수익률이 가장 낮은 상품은 ‘TIGER 미디어컨텐츠’로 -5.56%를 기록했다. ‘ACE KPOP포커스’(-4.65%)와 ‘HANARO Fn K-POP&미디어’(-4.35%)도 수익률 하위권에 나란히 이름을 올렸다. 연초 이후로 기간을 넓혀보면 세 상품은 일제히 -40%대 수익률을 나타내며 부진이 장기화하는 양상이다.
+
+이들 ETF의 부진은 고비중으로 담고 있는 주요 엔터주의 동반 약세가 고스란히 반영된 결과다. 지난주 JYP Ent.(JYP)는 12.29% 급락했고 하이브(-3.02%), 에스엠(-2.91%), 와이지엔터테인먼트(-1.20%)도 일제히 하락했다. 같은 기간 코스피와 코스닥이 각각 11.49%, 8.24% 상승한 것과 대조적이다. 증시 전반에 위험선호 심리가 되살아났지만 엔터 업종에는 온기가 미치지 못한 셈이다. 최용현 KB증권 연구원은 “최근 엔터주 주가는 밸류에이션 하단에 위치해 있다”고 설명했다.
+
+특히 8월 실적 시즌을 거치며 증권가의 눈높이까지 빠르게 낮아지는 분위기다. 어닝 쇼크를 기록한 JYP는 이달 13~14일 이틀 동안에만 목표주가를 낮춘 보고서가 13건 쏟아졌다. 2분기 연결 기준 매출액은 1831억 원으로 전년 동기 대비 15% 감소했으며 영업이익은 310억 원으로 41% 급감했다. 스트레이키즈의 투어 공백에 콘텐츠 제작비 증가와 팬키트 원가 반영 등이 겹친 영향이다.
+
+당장의 실적보다 시장이 더 민감하게 반응한 부분은 JYP의 양대 핵심 IP를 둘러싼 중장기 불확실성이다. 황지원 iM증권 연구원은 “트와이스 멤버들의 재계약 이후 개인 활동 비중 확대 가능성을 감안하면 그룹 활동을 전년 대비 보수적으로 가정할 수밖에 없다”며 “2년 내 스트레이키즈 멤버들의 순차적 군입대까지 감안하면 멀티플 하향 조정이 불가피하다”고 짚었다.
+
+하이브는 BTS 완전체 활동 효과에 힘입어 2분기 매출 1조 4500억 원, 영업이익 1709억 원으로 모두 분기 사상 최대치를 기록했다. 다만 업종 최대 기대 재료가 현실화된 이후 시장의 시선은 ‘컴백 이후’로 이동하고 있다. 앞서 올 4월 BTS 완전체 활동 재개 직후에는 그동안 기대감으로 주가가 선반영됐다는 인식 속에 차익 실현 물량이 출회되며 엔터주와 관련 ETF의 변동성이 확대되기도 했다. 코르티스, 캣츠아이 등 차세대 그룹이 후속 성장축으로 자리 잡을 수 있을지가 향후 주가 재평가의 관건으로 꼽힌다.
+
+에스엠과 와이지엔터테인먼트 역시 호실적에도 눈높이 하향을 피하지 못했다. 에스엠은 2분기 매출과 영업이익이 각각 15%, 11% 증가했지만 주요 그룹의 월드투어 재개가 연말이나 내년 초로 예상되는 등 하반기 실적 공백 우려가 제기됐다. 와이지엔터테인먼트도 매출과 영업이익이 각각 22.7%, 31.2% 늘었지만 전반적인 업종 투자심리 약화를 반영해 LS·교보증권 등 두 곳에서 목표주가를 낮췄다.
+
+임수진 키움증권 연구원은 “엔터 업종 고유의 센티먼트를 전환시킬 재료가 필요한 시점”이라며 “현재 시장은 당장 확인되는 실적보다 2027~2028년 성장 가시성을 높여줄 새로운 재료를 탐색하고 그 신빙성을 검증하는 국면으로 판단된다.”</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004652369' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004652369</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
