@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반도체 후광 따라 불타기… 가파른 오르막 끝에 사라진 미소</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026-08-17</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/005/0001867342' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15884" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>반도체 후광 따라 불타기… 가파른 오르막 끝에 사라진 미소</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 섹터의 급격한 상승세에 개인 투자자들이 '후광 효과'를 타고 레버리지 상품과 과감한 자금 투입으로 추격 매수하는 모습을 다뤘습니다. 기사는 이러한 과열된 투기 심리가 시장 조정 국면에서 큰 위험성을 내포하고 있으며, 결국 수익의 끝자락에서 좌절을 경험하게 됨을 경고합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 급등주에 대한 개인 투자자들의 투기적 몰입과 과대 포장된 시장 기대가 위험한 수준임을 보여줍니다. 레버리지 상품의 구조적 위험성, 그리고 폭락 이후 오는 심리 위축은 중장기적인 투자 시 주의 신호로 작용합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#투자심리</span> <span class="tag tag-hash">#레버리지위험</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">살면서 한 번도 주식을 해본 적이 없는 최유진(가명·57)씨는 딱 한 번, 올해 초에 SK하이닉스 주식을 샀다. 친했던 친구의 권유로 “속는 셈 치고 하나 사보지 뭐” 하는 마음이었다. 그런 그의 계좌 수익률은 5월에 120%까지 올랐다. 그런데도 유진씨는 후회가 됐다. “더 많이 샀으면 더 많이 벌 수 있었잖아요. 돈 벌 기회를 눈 뜨고 놓친 게 후회가 됐죠.” 코스피가 몇 포인트인지도 모르던 유진씨는 지난 6월 주택청약 통장을 담보로 돈을 빌리는 등 이것저것 끌어 모은 1억3000만원으로 ‘불타기’(최초 매수가보다 높은 가격에 추격매수)에 나섰다. 말 그대로 있는 돈, 없는 돈 다 동원한 것이었다. 남편도 모르게 인생 최대 규모의 과감한 투자 결정을 내렸다.
+
+한참 주가가 오르던 때였지만 정부·여당 곳곳에서 “주가가 아직도 낮다”는 확신에 찬 발언들이 나오고 있었다. 정보도 가장 많고 힘도 제일 센 사람들이 그렇다는데, 일부러 믿지 않을 이유도 없었다. 이재명 대통령도 SNS에서 “주식시장은 여전히 저평가”라는 메시지를 내보냈다.
+
+유진씨가 이렇게까지 주식에 혈안이 된 건 부동산 때문이었다. 지난해 결혼한 큰아들 부부가 서울에 아파트를 장만하느라 돈이 필요해졌다. 은행 대출을 받을 수 있을 만큼 받았는데도 돈이 부족했다. 유진씨는 아들 내외가 2억원 규모의 빚을 갚는 데 시달리는 모습이 늘 안쓰러웠다. “이번 한 번만 주식으로 대박 나면 아들 부담 좀 덜어줄 수 있지 않을까 했어요.”
+
+투자는 성공처럼 보였다. 250만원에 매수한 하이닉스는 300만원까지 치솟았다. 35만원에 산 삼성전자는 조금 부진했지만, 그래도 36만원을 넘어섰다. 뉴스에서는 연일 속보로 두 종목의 신고가가 경쟁하듯 나왔다. 유진씨는 평일 오전이 즐거워졌다. “막 500만원까지 간다니까. ‘역시 사길 잘했다’는 확신이 들었죠”라고 유진씨는 당시를 기억했다.
+
+2026년 1월 27일. 코스피가 사상 처음 종가 기준 5000포인트를 넘어서며 시장에 불이 붙었다. 코스피는 한 달도 안 된 2월 25일 6000포인트를 넘어서며 쭉 내달렸다. 개인투자자들은 하나같이 ‘반도체 후광’에 탑승하려 기를 썼다. 한국 증시를 폭발시킨 건 누가 뭐래도 반도체 주식이었다. 작년까지만 해도 5만~6만원 안팎에서 횡보하던 삼성전자는 연말부터 무섭게 치고 올랐다. 고점까지의 상승률만 따지면 7배다. 하이닉스는 더 심했다. 작년 6월 20만원대에 거래되던 주식이 1년 만에 장중 300만원을 돌파했다.
+
+계약직 프리랜서 윤미선(가명·57)씨도 마찬가지다. 살던 집을 정리하고 더 작은 집으로 옮기며 생긴 돈 2500만원을 전부 반도체 주식에 투자했다. 미선씨도 유진씨와 크게 다르지 않았다. 다른 점이 있었다면 그는 이 대통령의 말처럼 부동산 자금을 ‘생산적 금융’으로 실제로 옮겼다는 점이다.
+
+미선씨를 부추긴 건 주변 사람들이었다. “언니들이 만날 때마다 삼성전자 사라 그러고, ‘나 3월에 들어갔어’ ‘2월에 들어갔어’ 자랑을 하거든요. 얼마 벌었다고는 말 안 하지만 대충 그려지잖아요.” 주식을 시작하기 전 미선씨의 심경이었다. “주변의 전문직, 경제 프로그램 작가, 이런 사람들이 다들 ‘이거(주식) 한번이라도 해보세요’ 하니까 가만히 있을 수가 없는 거예요.” 당장 굶어 죽을 판은 아니지만, 안정된 소득이나 연금이 없는 프리랜서 직업. 계산기를 두드려봤다. 65세부터 나오는 국민연금은 한 달에 65만원 정도였다. 보험료, 통신비, 생활비까지 내고 나면 살아가기엔 턱도 없는 돈이었다.
+
+미선씨는 급등하는 코스피를 보며 마지막 기회를 잡아야겠다고 생각했다. ‘큰 거’ 한 방이면 안정적인 소득이 없어도 남 못지않은 삶을 영위할 수 있을 것이라 기대했다. 삼성전자 1주당 32만원. 증권사 리서치센터에서는 ‘삼성전자 50만원 간다’는 장밋빛 전망이 쏟아지던 시기였다. 첫 시작은 5주였다. 그간 지내던 집을 정리하고 작은 집으로 옮기며 생긴 차액이 종잣돈이었다. 미선씨는 “내릴 때마다 계속 사서 한 달 반 동안 2500만원을 넣은 거예요. 제 인생에서 제일 미친 짓이었어요.” 그렇게 평생 주식과 연이 없던 미선씨는 집을 팔고 주식장에 뛰어들었다.
+
+불지른 레버리지 상품
+
+이 무렵부터 시장에선 우려의 목소리가 나왔다. 이재명 대통령이 취임했던 지난해 6월 2000선에 머물던 코스피가 1년 만에 4배 가까이 오르고 있었다. 비전문가가 봐도 속도가 너무 빨랐다. 하지만 개인투자자들의 투심은 식을 줄 몰랐다. 그럼에도 정부는 지난 5월, 삼성전자와 SK하이닉스에 대해 ‘단일종목 레버리지’ 증시 상장을 허용했다.
+
+30대 김재호(가명)씨는 이때 묘한 기시감이 들었다. 그는 올해 한국 주식에 본격 투자하기 전 5년간 가상화폐 투자를 한 경험이 있었다. 그는 “레버리지는 말 그대로 오르는지 내리는지 맞추는 홀짝 도박”이라고 설명했다.
+
+재호씨는 가상화폐 선물시장에서 1억원 가까이 레버리지 투자를 하면서 어떻게 돈을 잃는지 생생히 경험했다. “음의 복리라고 하거든요. 2배 레버리지 걸고 100원짜리가 -30% 맞으면 -60% 돼서 40원이 되잖아요. 그런데 이게 다시 100원이 되려면 150% 올라야 하거든요. 애초 한 번이라도 잃으면 복구하기 힘든 게임이에요. 게다가 주식은 코인처럼 ‘한 방 역전’할 만큼 엄청나게 한 번에 오르기도 힘들잖아요.”
+
+레버리지 상품은 시장 변동성을 크게 흔들 수밖에 없는 상품이다. 단일종목 레버리지는 대상 주식의 하루 수익률을 2배로 추종한다. 삼성전자가 하루에 10% 오르면 이 상품은 20% 오른다. 10% 떨어지면 20% 떨어진다. 레버리지 상품 운용사는 가격을 맞추기 위해 가격이 오르면 주식을 더 매수하고, 떨어지면 더 팔아야 한다. 상승장에선 더 빠르게 많은 돈을 벌지만 하락장에서는 돈을 잃는 속도가 가속화된다.
+
+해외에서도 테슬라·엔비디아·AMD 등 수익률을 2배로 추종하는 상품이 있고, 유럽에는 3배 추종하는 경우도 있다. 다만 한국의 경우 시장 쏠림이 문제였다. 삼성전자와 하이닉스가 시장에서 차지하는 비중은 이미 레버리지 상품이 출시되기 전인 4월에도 40%를 넘어섰다. 출시되고 한 달 뒤인 6월에는 50%를 초과했다. 두 종목만으로도 시장의 방향이 출렁이는데, 레버리지 효과로 변동성이 더해지니 매일같이 급등락이 반복됐다.
+
+6월이 되자 증권가를 중심으로 반도체가 증시에서 차지하는 비중이 지나치게 높다는 분석이 나왔다. 반도체를 제외한 종목들의 주가도 함께 봐야 한다는 취지였다. 그러자 이 대통령이 직접 반박했다. 이 대통령은 엑스(X)에 “축구 실력 빼면 손흥민도 보통 사람이라고 하는 사람은 없다. 오히려 ‘반도체 빼고도 한국 증시 무려 4100’이라고 해야 하는 것 아니냐”고 썼다.
+
+줄곧 “국장 탈출은 지능 순”이라고 외쳐 왔다는 재호씨가 말했다. “대통령이 이렇게까지 밀어주는 걸 보면 뭔가 있겠구나 싶었죠. 실적도 좋고 정부에서도 자신 있어하니까 투자하지 않을 이유가 없었던 거예요. 그냥 믿은 거죠.”
+
+“폭등 속 시그널은 있었다”
+사실 전문가들은 현장에서 위험 신호를 감지했지만 투자자들은 이미 이성을 잃고 몰려들고 있었다. 경기도 분당의 한 증권사 지점에서 PB로 일하는 김영석(가명)씨가 올해 상반기 풍경을 들려줬다. “어르신들이 식사하러 친구들 모임에 가잖아요. 그럼 거기서 ‘나 이걸로 얼마 벌었다’ ‘저걸로 얼마 벌었다’는 얘기를 듣고 곧장 증권사로 달려와 그러는 거예요. ‘그 친구가 얼마 벌었다는데 나 뭐 사야 돼?’”
+
+영석씨는 정석적인 답변을 했다. “삼성전자나 하이닉스는 단일종목이라 위험합니다. 차라리 ETF를 사는 게 낫습니다.” ETF는 여러 주식을 묶은 상장지수펀드다. 한 종목이 급락해도 그 위험을 고스란히 안지는 않기에 비교적 안전하다고 평가받는다.
+
+영석씨 고객들이 ‘주린이’라는 게 문제였다. 영석씨는 새로 상담한 고객들이 상당 부분 공통점을 갖고 있다는 걸 알게 됐다. “대부분 그동안 그냥 은행에 돈을 뒀던 분들이 많았어요. 예금이나 적금, 아니면 그냥 일반 입출금통장에. 주식을 해본 적 없고, 어떻게 투자하는지도 모르는 분들이 그냥 쌈짓돈 들고 오신 거예요.”
+
+하지만 불타오르는 투심 앞에서 전문가의 조언은 무용지물이었다. 투자자들의 환희와 시장의 우려가 혼재하던 6월 23일. 코스피가 9.9% 떨어졌다. 당시 기준 역사상 두 번째로 크게 떨어진 날이었다. 개미들 얼굴에서 미소가 사라지기 시작했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/005/0001867342' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/005/0001867342</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
