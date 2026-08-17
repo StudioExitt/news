@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>활황에 돈 쓸어담은 증권사… 3분기는 '실적 잔치' 어렵다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.17</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005562513' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15877" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>활황에 돈 쓸어담은 증권사… 3분기는 '실적 잔치' 어렵다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">증권사들이 2, 4분기에 기록한 사상 최대 실적에 이어 3분기에도 호실적이 기대되나 어렵다는 전망이 나온다. 주식 시장 조정 국면과 미래에셋증권의 스페이스X 관련 대규모 평가손실 예상으로 인해 3분기 컨센서스 순이익은 전 분기 대비 급감할 것으로 보인다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">대형 증권사의 핵심 수익원(스페이스X 관련 평가이익) 급감 및 시장 자체의 약세 진입으로 단기 실적 둔화가 예상되기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증권사</span> <span class="tag tag-hash">#실적조정</span> <span class="tag tag-hash">#스페이스X</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">2·4분기 역대급 성적표를 받아든 증권사들이 3·4분기에는 성장세가 둔화될 것으로 전망된다. 하반기 들어 증시가 조정 국면을 맞았던 데다, 미래에셋증권의 호실적에 기여했던 스페이스X가 변수로 떠오르고 있어서다.
+
+17일 금융정보업체 에프앤가이드에 따르면 미래에셋증권·한국금융지주·키움증권·NH투자증권·삼성증권 등 5대 증권사의 3·4분기 지배주주 순이익 컨센서스는 2조1991억원으로 집계됐다. 전년 대비 14.04% 늘었지만, 전 분기와 비교하면 51.66% 급감한 수치다.
+
+증권사들은 지난 2·4분기 사상 최대 실적을 거둔 바 있다. 5대 증권사의 2·4분기 지배주주 순이익은 4조5497억원으로, 전년 동기보다 160.98% 늘었다. 미래에셋증권이 '스페이스X 효과'로 순익이 370.1% 급증했고, 미래에셋증권을 제외한 증권사 4곳도 평균 98.04% 증가세를 기록했다.
+
+하지만 하반기 들어 국내 증시가 약세로 돌아선 만큼, 3·4분기에도 가파른 성장세를 이어가기는 어려울 것이란 전망이 지배적이다. 지난달 반도체업종이 급격한 조정을 받으면서 한때 9000선을 넘어섰던 코스피는 지난달 29일 장중 5262.77까지 급락하기도 했다.
+
+주식시장 전반의 거래 활력도 떨어졌다. 코스피·코스닥 일평균 거래대금은 2·4분기에 56조5903억원에 달했지만, 3·4분기 37조8080억원으로 3분의 2 수준으로 급감했다.
+
+여기에 상반기 급성장을 이뤄냈던 미래에셋증권이 스페이스X 주가 하락으로 실적 전망치가 크게 낮춰지는 상황이다. 3·4분기 미래에셋증권의 순이익 컨센서스는 2343억원으로, 3개월 전보다 44.41% 하향 조정됐다. 전년 동기와 비교해도 31.17% 줄어든 수치다.
+
+일부 증권사에선 미래에셋증권이 3·4분기 순이익이 적자로 전환할 것이란 전망도 내놓는다. 키움증권과 KB증권은 각각 4020억원, 3280억원 순손실을 예상했다. 스페이스X 주가가 2·4분기 말 대비 20%가량 하락하면서 대규모 손실이 반영될 것이란 전망이다.
+
+안영준 키움증권 연구원은 "미래에셋증권은 2·4분기 스페이스X의 기업가치 증가에 따른 평가이익이 세전 기준 1조6000억원 반영됐다"며 "그러나 스페이스X 주가가 하락한 점을 반영하면, 3·4분기에 약 1조원의 평가손실이 반영될 것"이라고 예상했다.
+
+다만 투자심리가 점차 회복되고 있는 점은 긍정적인 요인으로 평가된다. 반도체 피크아웃(정점 통과) 우려가 잦아들고 금리 인상 압박이 완화되면서, 주식시장이 다시금 활력을 찾을 것이란 전망이다.
+
+윤유동 NH투자증권 연구원은 "최근 주식시장이 바닥을 다지는 국면에서 반등의 발판을 마련했다고 판단한다"며 "증권주 전반의 밸류에이션 매력이 부각되는 시기"라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005562513' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005562513</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
