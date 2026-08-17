@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'실적 잔치' 증권사들…다음 격전지는 'AI 투자'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.17</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/031/0001050128' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15790" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'실적 잔치' 증권사들…다음 격전지는 'AI 투자'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">증권사들이 AI와 오픈API를 활용한 새로운 투자 플랫폼을 경쟁적으로 출시하며 생태계를 선점하려 합니다. 이는 감소하는 거래대금에 대응하여 고객 계좌 연동 및 트래픽 확보를 통한 장기적인 '락인 효과' 창출을 목표로 합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">전통적인 금융 서비스업계가 거래대금 감소라는 어려움에 직면하자, 기술(AI)과 구조적 변화(API/오픈 플랫폼)를 통해 새로운 생존 동력 및 수익원을 창출하려는 노력이 포착되었습니다. 이는 증권사 전반의 디지털 전환을 가속화하며 긍정적인 업황 개선 기대감을 줍니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 기술</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증권사</span> <span class="tag tag-hash">#오픈API</span> <span class="tag tag-hash">#AI트레이딩</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">토스·NH·KB '오픈API' 출시…AI 트레이딩 공략
+새로운 투자 채널 기능…자사 계좌 락인 효과 기대올해 상반기 역대급 실적을 거둔 국내 주요 증권사가 다음 먹거리로 인공지능(AI) 트레이딩
+생태계 선점에 나섰다. 증권사들의 ‘투자 플랫폼’ 경쟁 무대가 모바일트레이딩시스템(MTS)에서 AI로 넓어지고 있는 것이다. AI를 투자 도구로
+활용하는 개인투자자가 늘어나면서 증권사들도 이들을 자사 고객으로 끌어들이기 위한 경쟁에 뛰어든 것으로 풀이된다.
+
+17일 증권업계에 따르면 AI 투자 분석 도구 활용이 늘면서 API를 활용해 투자정보를 분석하고 자동매매 시스템을 구축하려는 수요가 증가하고
+있다。
+
+지난 13일 토스증권이 오픈API 서비스를 출시했다 [사진=토스증권]
+오픈API는 증권사가 보유한 시세·주문·계좌 정보 등을 외부 프로그램과 연동할 수 있도록 제공하는 인터페이스다. 증권사 애플리케이션을 직접 열지
+않고도 별도의 프로그램이나 AI를 통해 시세를 조회하고 주문할 수 있다.
+
+최근 KB증권·NH투자증권·토스증권이 잇달아 오픈API 서비스를 내놓았다. 이들 서비스는 별도의 전문적인 코딩 지식 없이도 투자정보 조회와 매매
+기능을 활용할 수 있도록 접근성을 높인 것이 특징.
+
+증권사들이 AI 트레이딩 생태계에 주목하는 배경에는 증시 활황을 바탕으로 한 실적 개선도 자리한다.
+올해 상반기 국내 10개 대형 증권사(△미래에셋증권 △한국투자증권 △삼성증권 △KB증권 △NH투자증권 △신한투자증권 △메리츠증권 △키움증권
+△하나증권 △대신증권)의 연결 기준 합산 당기순이익은 약 6조원에 달했다. 지난해 연간 순이익의 약 66%를 상반기에 달성한 셈이다.
+
+다만 최근 증시 거래대금은 줄어들고 있다. 코스피는 지난 6월 장중 9385.59까지 오르며 하루 거래대금이 50조원을 넘어서는 등 활황이었지만
+이후 급락과 조정을 거쳤다. 이달 들어 일평균 거래대금은 24조8214억원까지 줄었다.
+
+거래대금에 따라 위탁매매 수익이 좌우되는 증권사로서는 새로운 투자 채널을 확보하고 고객 접점을 넓힐 필요성이 커지고 있다. 오픈API를 활용하면
+투자자가 자신이 사용하는 AI나 프로그램에서 증권 계좌를 직접 연결해 투자 전략을 실행할 수 있다. AI를 활용하는 투자자들이 자사 계좌를
+연결하도록 유도하고 거래를 지속하게 하는 고객 '락인 효과'를 기대할 수 있다.
+
+업계 관계자는 "오픈API는 외부 서비스와 연계해 자신만의 투자 환경을 구축할 수 있다는 점에서 고객 편의성과 서비스 활용도를 높일 수 있다"며
+"장기적으로 고객 만족도와 서비스 이용률을 높이는 데 기여할 것"이라고 말했다.
+
+다만 보안과 투자 책임 문제는 유의해야 한다. API 키가 유출될 경우 제3자가 계좌에 접근할 수 있다. 자동매매 과정에서 발생하는 오류나 투자
+손실은 투자자에게 귀속될 수 있다. 외부 AI의 투자 분석 결과에 대해서도 증권사가 책임지는 것은 아니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/031/0001050128' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/031/0001050128</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
