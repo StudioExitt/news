@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스닥 액티브 ETF도 반도체가 수익률 주도</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.17</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005321556' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15857" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스닥 액티브 ETF도 반도체가 수익률 주도</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스닥지수가 한 달간 20% 가까이 급등하며 활발한 자금 유입을 보였습니다. 코스닥 액티브 ETF들은 이러한 시장 흐름 속에서 특히 AI 반도체와 전력인프라, 바이오 섹터에 전략적으로 베팅하며 높은 수익률을 기록했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">시장 급등세에 힘입어 수익률 높은 섹터(반도체, 전력인프라)로 자금쏠림이 명확하게 관찰되었으며, 이는 중장기적인 성장 동력에 대한 확신을 반영합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">제주반도체</span> <span class="tag stock-tag">지엔씨에너지</span> <span class="tag stock-tag">알테오젠</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전력</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI반도체</span> <span class="tag tag-hash">#코스닥ETF</span> <span class="tag tag-hash">#인프라투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">이달 들어 지수 20% 급등
+바이오·전력기기 비중도 늘려코스닥지수가 이달(1~11일) 들어 20% 가까이 급등하자 코스닥액티브 상장지수펀드(ETF)의 성과가 뚜렷하게
+갈렸다. 시장 수익률을 웃돈 액티브 ETF들은 인공지능(AI) 반도체 비중을 공통적으로 확대했고, 일부는 전력인프라와 바이오주에 공격적으로
+투자한 것으로 나타났다.
+
+17일 한국거래소에 따르면 국내 상장 6개 코스닥액티브 ETF 중 8월 들어 코스닥150 패시브 ETF(약 19%)보다 높은 수익률을 기록한
+상품은 두 개다. ‘TIGER 코스닥액티브’가 21.36%로 가장 높았고, ‘TIME 코스닥액티브’(20.08%)이 그 뒤를 이었다.
+
+수익률 1위인 TIGER 코스닥액티브는 이 기간 반도체주 비중을 늘리는 전략을 폈다. 제주반도체 보유량을 기존 39주에서 56주로 늘린 게
+대표적이다. 제주반도체는 현재 포트폴리오 내 최대 편입 종목(6.90%)이다. ISC 보유량도 7주에서 13주로, 브이엠 역시 29주에서 36주로 늘렸다.
+이들 종목은 모두 이 기간 두자리수 수익률을 기록했다. 현금 비중도 7.61%에서 3.44%로 줄였다.
+
+TIME 코스닥액티브는 반도체 종목을 유지한 채 전력인프라, 바이오 등으로 투자 범위를 넓혔다. 반도체주인 심텍과 제주반도체 보유량을 대폭 늘린
+동시에 비상발전설비 기업 지엔씨에너지를 집중적으로 매수했다. 지엔씨에너지 주식 수를 233주에서 375주로 확대하며 비중을 2.72%에서 4.96%로 끌어올렸다.
+AI 데이터센터에 필수적인 대형 비상발전기 부문을 국내에서 과점하고 있는 기업으로, 이 기간 주가가 3만6600원에서 4만9900원으로 36.33% 뛰었다.
+삼성물산과 국가 AI 컴퓨팅센터 비상발전기 공급계약을 체결한 데 이어 민간 AI 데이터센터 투자 확대
+기대가 커지며 주가가 급등했다는 분석이다.
+
+코스닥 시총 1위이자 바이오 대장주인 알테오젠도 기존 52주에서 83주로 확대하며 포트폴리오 내 최대 비중(6.91%)으로 키웠다. 지난달 말
+30만8500원이던 주가는 이달 11일 종가 기준 32만7500원으로 6% 넘게 뛰었다. 올해 2분기 시장 전망치를 웃도는 실적을 발표한 데다
+세계 최대 자산운용사자인 블랙록이 보유 지분을 늘렸다는 소식이 주가를 밀어올렸다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005321556' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005321556</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

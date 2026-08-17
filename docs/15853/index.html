@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 거품론 시기상조…수익 모델 무르익어야</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.17</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005321560' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15853" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>AI 거품론 시기상조…수익 모델 무르익어야</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 산업이 단순한 기대감(Hype) 단계를 넘어, 태스크 단위로 명확하게 가격표가 붙는 '소비재' 성격으로 진화하고 있습니다. 높은 매출총이익률과 컴퓨팅 투자 상향 추세는 장기적인 산업 성장 동력임을 시사합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 산업의 투자 근거를 단순 기대감에서 단위당 수익성이 증명되는 실질적 경제 모델로 전환하고 있어 장기적인 구조 변화 가능성을 제시함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI</span> <span class="tag tag-hash">#수익모델</span> <span class="tag tag-hash">#반도체투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">우건의 아시아 주식 이야기인공지능(AI) 산업에 대한 우려가 순환매도로 이어지고 있다. 7월 미국 반도체 지수 SOXX는 한 달 만에 21% 하락했고, 일본과 중국 반도체 주도주들도 거의 50%씩 빠졌다. AI 산업은 돈을 벌지 못할 것 같은데 금리까지 오르면 투자가 끊기지 않겠느냐는 의구심 때문이다. 금리 전망이 요동치는 것은 분명 리스크다. 하지만 이 역시 AI 산업이 오르는 금리보다 매력적인 수익률을 낼 수 있느냐로 환원되는 문제다. 결국 중요한 질문은 하나로 축약된다. AI 산업은 돈을 버는가?
+
+올해 들어 가장 큰 변화는 AI가 단위당 수익성을 찾기 시작했다는 것이다. 과거엔 대답만 하던 AI가 이제는 ‘일’을 하기 시작했다. 중요한 것은 여기에 실제로 돈이 지불되고 가격표가 붙기 시작했다는 점이다. 작년까지의 AI가 언제 올지 모를 꿈에 대한 투자였다면 지금은 소비재 산업에 대한 투자로 성격이 바뀌었다. 태스크당 클로드 페이블 급은 2달러, 소넷이나 GPT 키미 급은 1달러 선으로 가격대가 표준화됐다.
+
+유닛 이코노믹스를 보면 더욱 명확해진다. 1달러짜리 태스크는 대략 1만 개의 입력 토큰과 10만 개의 출력 토큰을 소비하며, 여기에 들어가는 컴퓨팅 비용은 추정상 10센트 안팎이다. 태스크당 90%에 가까운 매출총이익이 나온다는 계산이다. 하이퍼스케일러들이 조정 국면에서도 컴퓨팅 투자를 상향하는 이유다.
+
+다만 이런 높은 이익률은 추론에 한정된다. 학습은 모델 업체에 매출로 전환되지 않는 비용일 뿐이다. 실제로 선두권 경쟁 구도는 상당히 정리되는 모습이다. 마이크로소프트와 아마존은 컴퓨팅으로 무게를 옮겼고, 메타나 xAI도 최고 성능 모델 경쟁과는 거리를 두고 있다.
+
+하지만 학습 주체 수가 줄어드는 것과 투입되는 컴퓨팅 총량이 줄어드는 것은 전혀 다른 이야기다. 최고 성능 AI를 확보한 자의 지위가 막강하기에 프론티어 모델 개발이 사라질 수는 없다. 알파고에서 챗GPT로, 다시 에이전틱 AI로의 도약에는 각각 100배가량의 컴퓨팅 스케일링이 필요했다.
+
+소수의 주체가 국가 자본 기반의 컨소시엄을 구성한다면 총량은 유지되며 투자의 변동성만 줄어드는 그림도 가능하다.
+
+현재 유료 사용자 침투율이 2% 남짓이라는 점을 고려하면 이 산업을 성숙 산업으로 보기는 이르다. 7월의 조정이 밸류에이션 재조정이었는지는 시간이 답하겠지만 판단의 근거는 실체에 두어야 한다. AI가 일을 하기 시작했고, 그 일에 가격표가 붙었다는 것, 지금 확인 가능한 실체는 거기까지다.
+
+우건 매뉴라이프자산운용 매니저</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005321560' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005321560</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

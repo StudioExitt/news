@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"확신의 매수 구간"…비중확대 추천한 반도체 종목은</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.17</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005400915' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15850" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"확신의 매수 구간"…비중확대 추천한 반도체 종목은</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">"확신의 매수 구간"을 강조하며 삼성전자의 주주환원 정책 확대와 메모리 슈퍼사이클 지속성을 전망했습니다. 전반적인 반도체 업황 회복세와 소부장(소재·부품·장비) 분야에 대한 비중 확대 추천이 이어지며, 반도체 섹터 전반에 긍정적 모멘텀을 제시했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 섹터인 반도체 업종에서 구체적인 성장 모멘텀(HBM 시장 점유율 상승, 대규모 주주환원 기대감)과 투자 추천이 나오며 강력한 매수 시그널을 제공하고 있기 때문입니다. 비록 다른 내용은 부정적이지만 전체 기사의 중심은 섹터 긍정 전망에 맞춰져 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">반도체 소부장주 전반</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#HBM</span> <span class="tag tag-hash">#주주환원</span> <span class="tag tag-hash">#비중확대</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[주간 베스트리포트]머니투데이 증권부가 선정한 8월 둘째 주(10~14일) 베스트리포트는 △김동원 KB증권 연구원의 '주주환원 10배 이상, 확신의 매수 구간(삼성전자)' △최승환 신한투자증권 연구원의 '반도체 중소형주, 타이밍이 됐다' △박종대 하나증권 연구원의 '실적 불확실성이 너무 크다(이마트)' 등 3건입니다.
+
+━
+삼성전자, 신규 주주환원책 10배 이상 커질 전망…비중확대 추천
+
+삼성전자가 지난 4~6일(현지시간)까지 미국 캘리포니아주 산타클라라 컨벤션센터에서 열리는 'FMS(Future of Memory and Storage) 2026'에 참가해 차세대 3D 메모리 아키텍처인 zHBM과 zNAND-O의 목업(Mock-up)을 업계 최초로 공개하고, AI 시대를 이끌 차세대 메모리 기술 비전을 제시했다고 5일 밝혔다. 사진은 이진엽 삼성전자 Flash개발실 부사장이 발표를 하고 있는 모습.
+/사진=뉴스1 김동원 KB증권 연구원은 지난 10일 삼성전자에 대해 매수 투자의견과 목표주가 60만원을 유지한다는 입장을 밝혔습니다. 김 연구원은 그러면서 지금을 비중 확대 구간으로 확신했습니다. 이 리포트는 주간에 발행된 리포트 가운데 가장 높은 조회수를 기록했습니다.
+
+김 연구원은 삼성전자가 조만간 주주환원 정책을 발표할 것으로 예상했습니다. 주주환원 규모는 최소 100조원에서 최대 200조원에 이를 것으로 추정했습니다. 기존(9조8000억원) 대비 10배 이상 커질 것이란 전망입니다.
+
+다음은 리포트를 요약한 내용입니다. (원문보기)
+☞'원문보기'는 네이버·다음 등 포털사이트가 아닌 머니투데이 홈페이지에서만 가능합니다.
+
+삼성전자는 글로벌 D램 1위로 마이크론(3위)의 시가총액 대비 4% 할인 거래되고 있다. 미국 달러 프리미엄을 감안해도 비정상적인 상황으로
+분석된다.
+
+삼성전자의 내년 HBM 평균판매가격은 전년 대비 2배 이상 상승하고 HBM4의 시장 점유율은 44%(1위)로 추정된다. 조만간 발표될 신규 주주환원 정책 규모는 최소 100조원을 넘을 것으로 본다. 이에 따라 현재 주가 기준 배당수익률이 7%를 웃돌 전망이다. 지금은 확신의 매수 구간 (conviction buy)이라고 판단한다.
+
+━
+1조원 미만 반도체 소부장으로 온기 확산…12개 장비·부품주 '탑픽'
+
+/사진=신한투자증권
+/사진=신한투자증권최승환 신한투자증권 연구원은 지난 13일 반도체 장비부품에 대한 신규 의견으로 '비중확대'를 제시했습니다. 메모리 슈퍼사이클 지속성이 재확인되면서 빅테크 CAPEX(설비투자)가 내년까지 확장될 것이란 관측입니다.
+
+최 연구원은 레거시 메모리에 대한 시장 우려는 과도하다고 짚었습니다. 대형 IDM 투자 사이클 속 전공정에서 후공정과 부품까지 낙수효과로 인한 온기가 확산되고 있다는 입장입니다.
+
+다음은 리포트를 요약한 내용입니다. (원문보기)
+☞'원문보기'는 네이버·다음 등 포털사이트가 아닌 머니투데이 홈페이지에서만 가능합니다.
+
+코스닥은 8월 들어 반도체 소부장을 중심으로 패닉에서 회복하고 있다. 삼성전자와 SK하이닉스의 재고는 3분기 이후 2주 수준까지 소진 속도가 빨라지고 LTA(장기공급계약) 체결 규모도 예상을 웃돌고 있다. 후공정 투자까지 온기가 확산하는 분위기가 연초부터 나타나고 있다.
+
+△첨단 패키징과 기판 수혜주인 인텍플러스와 기가비스 △HBM과 메모리 수율 개선 수혜주인 예스티, 뉴파워프라즈마, 펨트론, GST △차세대 메모리 테스트 수혜주인 네오셈, 엑시콘, 오킨스전자, 싸이맥스 △레거시 메모리 수혜주인 제주반도체, 피델릭스 등을 최선호 종목(톱픽)으로 제시한다.
+
+━
+이마트, 2분기 어닝쇼크에 계열사 불확실성 지속…투자의견 '중립'
+
+/사진=하나증권
+/사진=하나증권박종대 하나증권 연구원은 지난 14일 이마트에 대해 실적 불확실성이 크다며 투자의견을 매수에서 중립으로 하향 조정한다고 밝혔다. 그러면서 목표주가는 기존 11만원에서 8만2000원으로 내렸습니다.
+
+박 연구원은 이마트가 지난 2분기 430억원의 영업손실을 내면서 어닝쇼크를 기록했다고 분석했습니다. 또 쓱닷컴, G마켓, SCK컴퍼니, 신세계건설 등 계열사의 불확실성이 지속되고 있어 이마트의 밸류에이션 할인 요인이 있다고 설명했습니다.
+
+다음은 리포트를 요약한 내용입니다. (원문보기)
+☞'원문보기'는 네이버·다음 등 포털사이트가 아닌 머니투데이 홈페이지에서만 가능합니다.
+
+이마트에 대한 실적 추정치와 밸류에이션을 하향 조정했다. 12개월 실적 기준 PER(주가수익비율)는 27배로 산출했다. 당분간 보수적 접근이 바람직하다.
+
+대형마트 부문의 높은 실적 모멘텀은 긍정적이지만 자회사들의 실적 불확실성이 크다. 쓱닷컴의 영업손실 규모는 다시 늘어나고 있다. G마켓 관련 지분법 손실은 매 분기 400억원 이상이 반영되고 있다. SCK컴퍼니의 정상화는 내년까지 시간이 소요될 것으로 예상된다. 신세계건설은 미분양 아파트·상가에 대한 대손충당금처럼 예측하기 힘든 일회성 비용이 발생할 우려가 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005400915' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005400915</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
