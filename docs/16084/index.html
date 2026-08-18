@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>실적 날았는데 주가는 제자리…K라면株 다시 끓나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.18</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004652762' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16084" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>실적 날았는데 주가는 제자리…K라면株 다시 끓나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">삼양식품과 농심은 2분기 해외 판매 호조에 힘입어 높은 영업이익 증가율을 기록했으나, 최근 수출 증가세 둔화로 주가는 연초 대비 부진합니다. 그러나 기업들은 신규 공장 가동 등 생산능력 확대를 통해 장기적인 성장 동력을 확보하여 재평가 기대감이 높아지고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">강력한 해외 시장 실적과 대규모 공장 증설 계획 등 구조적인 성장 모멘텀이 확인되어 주가 재평가(Re-rating)의 근거를 제시했습니다. 다만 단기 수출 증가율 둔화는 투자 심리를 위축시키는 요소로 작용합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼양식품</span> <span class="tag stock-tag">농심</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">식료품</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">해외무역</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#K라면</span> <span class="tag tag-hash">#실적분석</span> <span class="tag tag-hash">#밸류업</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">삼양식품과 농심이 올 2분기 해외 판매 호조에 힘입어 나란히 40%대 영업이익 증가율을 기록했지만 주가는 연초 수준에 머물고 있다. 최근 라면 수출 증가세가 둔화하면서 성장성에 대한 우려가 커진 탓이다.
+
+18일 한국거래소에 따르면 농심은 이날 전 거래일 대비 4.23% 하락한 42만 원에 거래를 마쳤다. 연초 주가인 42만 8500원과 비교하면 1.98% 낮은 수준이다. 삼양식품은 이날 5.12% 오른 133만 4000원에 마감했지만 연초 이후 상승률은 4.55%에 그쳤다.
+
+주가 흐름과 달리 양 사의 2분기 실적은 큰 폭으로 개선됐다. 삼양식품의 올 2분기 연결 기준 매출액은 7703억 원으로 전년 동기보다 39% 증가했다. 영업이익은 1762억 원으로 47% 늘어 시장 기대치에 부합했다. 농심도 같은 기간 매출액이 10% 증가한 9561억 원, 영업이익은 48% 늘어난 593억 원을 기록했다. 농심의 영업이익은 시장 전망치인 513억 원을 웃돌았다.
+
+해외 사업이 양 사의 성장을 견인했다. 삼양식품의 2분기 해외 매출액은 6458억 원으로 전년 동기 대비 47% 증가했다. 미국 법인 매출은 신규 거래선 확보와 주류·아시아계 유통 채널 확대에 힘입어 54% 늘어난 2036억 원을 기록했다. 농심의 해외 매출액도 31% 증가한 3286억 원을 기록했다. 올 상반기 미국 법인 매출은 2873억 원으로 11% 늘었고 유럽 법인은 상반기에만 803억 원의 매출을 올렸다.
+
+호실적에도 주가가 힘을 받지 못한 것은 최근 라면 수출 증가율이 둔화했기 때문이다. 국내 라면 수출액은 올 상반기 9억 2000만 달러로 전년 동기보다 26% 증가했지만 7월 증가율은 8%로 낮아졌다. 특히 최근 4년간 가파른 상승세를 이어온 삼양식품은 올 상반기 호실적에도 수출 증가율이 둔화하면서 주가가 부진한 흐름을 보인 것으로 풀이된다.
+
+증권가에서는 최근 수출 둔화가 K라면 수요 약화보다 주요 업체의 생산 여력 부족에서 비롯됐다고 보고 상승 여력이 남아 있다고 분석했다. 농심은 올 10월 말 부산 녹산 수출 전용 공장을 완공해 유럽을 비롯한 해외시장 공략을 확대할 예정이다. 삼양식품은 내년 중국 자싱공장을 가동한다. 이에 따라 삼양식품의 연간 라면 생산능력은 올해 약 25억 개에서 내년 37억 개 이상으로 확대될 것으로 전망된다.
+
+장지혜 DS투자증권 연구원은 “삼양식품과 농심의 추가 공장 생산능력 확대로 수출 성장률 둔화가 해소될 것으로 보인다”며 “일본 라면 업체의 해외 성장률을 감안하면 상대적인 밸류에이션 매력도는 더 높다”고 분석했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004652762' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004652762</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

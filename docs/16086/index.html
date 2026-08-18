@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>수익률 높아 '상폐'...세상에 없는 규제에 '분통'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.18</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001262741' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16086" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>수익률 높아 '상폐'...세상에 없는 규제에 '분통'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">초과 수익을 낸 액티브 ETF가 상관계수 규제 위반으로 상장폐지되는 사례를 지적하며, 국내의 경직된 규제가 글로벌 시장의 자율적인 액티브 ETF 발전을 저해한다는 비판이 제기되고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">ETF 규제와 관련한 구조적인 문제점을 지적하며 국내 금융시장의 자율성과 글로벌 경쟁력 약화 우려를 제기했기 때문입니다. 이는 장기적인 제도 개선 이슈로 작용할 수 있습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자산운용</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF규제</span> <span class="tag tag-hash">#상폐위험</span> <span class="tag tag-hash">#액티브ETF</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">수익률이 비교지수(기초지수)보다 더 좋았는데도 상장폐지되는 상장지수펀드(ETF)가 있습니다. 액티브 ETF, 말 그대로 지수보다 더 적극적으로 운용하라고 만든 상품인데, 정작 초과 수익을 냈더니 상폐 수순을 밟게 된 겁니다. 증권부 이민재 기자와 짚어보겠습니다. 이 기자, 상폐되는 ETF는 뭡니까?
+<기자>내일(19일) 타임폴리오자산운용의 ‘TIME 미국배당다우존스액티브 ETF’가 상폐됩니다. 상폐라고 하면 안 좋은 이유로 당하는 경우라 생각할 수 있습니다. 그런데 이 경우는 ‘잘 벌엇는데 상폐’입니다. 수익률만 보면 성과가 좋았는데, 제도가 요구하는 이른바 ‘지수와의 거리’를 벗어났다는 이유로 퇴출 되는 셈입니다. 투자자 입장에서는 “잘 운용해서 돈을 벌어줬는데, 왜 상품이 사라지느냐”는 의문이 나올 수밖에 없습니다.
+<앵커>문제가 된 상관계수가 뭐길래 이런 결과가 나온 겁니까?
+<기자>상관계수는 ETF가 비교 지수와 얼마나 비슷하게 움직이는지 보여주는 수치입니다. 1에 가까울수록 지수와 거의 같은 방향, 같은 폭으로 움직인다는 뜻입니다. 쉽게 말하면 ETF가 지수에서 너무 멀리 벗어지지 않도록 만든 일종의 ‘운용 울타리’입니다. 현재 규정 상 패시브 ETF는 비교지수와 상관계수가 0.9 이상, 액티브 ETF는 3개월 이상 0.7 미만이면 상장폐지 대상이 됩니다. 패시브 ETF는 지수를 그대로 따라가는 상품이니 높은 상관계수가 필요합니다. 문제는 액티브 ETF입니다.
+액티브 ETF는 지수를 단순 복제하는 게 아니라 운용사가 종목과 비중을 적극적으로 조절해 지수보다 높은 성과, 이른바 ‘알파’를 내는 것이 목표입니다. 그런데 잘 운용해서 지수와 차이가 커지면, 오히려 상관계수 기준에 걸릴 수 있는 구조가 문제가 된겁니다.
+<앵커>그렇다면 이번 상품은 얼마나 성과가 좋았던 겁니까?
+<기자>상폐 사유가 된 시점인 지난 5월 14일 기준으로 보면, 이 ETF의 과거 1년 수익률은 36.06%, 상장 이후 수익률은 37.20%였습니다. 비교지수의 원화환산지수보다 각각 9.42%포인트(p), 9.68%포인트 높은 성과입니다. 즉, 지수보다 약 10%포인트 가까이 더 벌었습니다.
+그런데 이 초과 성과가 지수와의 움직임 차이를 키웠고, 결국 상관계수 미달로 이어진 겁니다.
+운용사는 상관계수 미달을 확인한 뒤 초과수익 포지션 비중을 줄이는 등 개선을 시도했다고 설명합니다. 다만 비교 지수 자체가 변동성이 낮은 배당 지수이다 보니, 짧은 기간 안에 상관계수를 다시 기준 안으로 되돌리기 어려웠다는 겁니다.
+<앵커>수익률이 높은 상품인데, 투자자 불만이 나올 수 밖에 없겠는데요.
+<기자>원치 않는 시점에 투자 기회를 잃을 수 있습니다. 상폐가 되면 투자자는 ETF를 정리해야 하고, 계속 투자하고 싶어도 같은 상품을 보유할 수 없습니다.
+더 큰 문제는 시장에 잘못된 신호를 줄 수 있다는 점입니다. 운용사 입장에서는 지수보다 높은 성과를 내기 위해 적극 운용했다가 오히려 상폐 위험을 질 수 있습니다. 그러면 반대로 지수와 거의 비슷하게 움직이면서 상관계수만 맞추는, 말 그대로 ‘패시브와 다를 바 없는 액티브 ETF’가 늘어날 수 있습니다.
+지난달에도 한국투자운용의 액티브 ETF 4종이 상관계수 요건을 충족하지 못해 상폐가 된 바 있기 때문에 이런 상황에 굳어질 가능성이 있습니다.
+최근처럼 시장 변동성이 큰 시기에는 지수보다 방어력이 좋거나 초과 수익을 낼 수 있는 액티브 ETF가 투자 대안이 될 수 있는데, 제도가 이런 선택지를 줄이는 것 아니냐는 비판이 나오는 이유입니다.
+<앵커>해외 주요 시장도 액티브 ETF에 이런 상관계수 규제를 적용합니까?
+<기자>국내와는 차이가 큽니다. 미국을 비롯해 유럽, 일본, 홍콩 주요 시장에서는 액티브 ETF에 대해 국내처럼 상관계수 유지 의무를 두지 않습니다.
+미국 액티브 ETF 시장은 빠르게 성장했습니다. 전체 ETF 시장에서 액티브 ETF가 차지하는 비중은 2019년 말 2.4%에서 최근 10% 수준까지 올라왔고, 운용 자산 규모는 약 1조5천억 달러 수준으로 커졌습니다.
+성장 배경에는 다양한 전략을 허용한 제도 환경이 있습니다. 특정 지수를 반드시 따라가게 하기보다는, 투자 설명서에 운용 전략과 위험을 명확히 적고 투자자가 선택하도록 한 겁니다.
+특히 대형 운용사가 장악한 패시브 ETF 시장과 달리, 액티브 ETF는 중소형 운용사도 차별화된 전략으로 경쟁할 수 있는 시장입니다. 국내 운용사들이 글로벌 경쟁력을 키우는 통로가 될 수 있는데, 지금 규제가 그 가능성을 막고 있다는 지적입니다.
+<앵커>이런 문제 제기가 처음은 아닐 텐데요. 제도 개선 왜 늦어지고 있습니까?
+<기자>올해 초 상관계수 규제를 손 봐야 한단 내용이 언급된 바 있습니다. 다만 이 문제는 자본시장법 개정이 필요한 사안이라, 금융당국의 입법 추진이나 국회 논의가 필요합니다.
+그런데 최근 단일종목 레버리지 ETF 변동성 논란이 커지면서 액티브 ETF 규제 완화 논의 자체가 뒤로 밀리고 있는 상황입니다. 구체적으로 보면 당국 입장에서는 레버리지 ETF 후폭풍이 남아 있는 상황에서 또 다른 ETF 규제를 완화하는 결정을 내리기 부담스러워 하고 있습니다.
+한국거래소는 규제 완화가 거래 증가와 수익 확대로 이어질 수 있다는 이해 상충 논란을 의식하고 있습니다..
+결국 제도 논의가 지연되는 동안 투자자는 성과가 좋은 상품을 잃고, 운용사는 적극적인 전략을 쓰기 어려워지고, 국내 ETF 시장은 글로벌 경쟁에서 뒤처질 수 있다는 우려가 나옵니다. 학계에서는 상관계수라는 일률적인 울타리 대신, 상품 설명서에 투자 방향과 위험을 더 분명하게 공개하고 운용 자율성을 높이는 방식으로 제도를 바꿔야 한다는 목소리가 커지고 있습니다.
+<앵커>지금까지 증권부 이민재 기자였습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001262741' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001262741</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
