@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>‘롤러코스피’, 변동성 좀 진정되나…반도체 강세 관건은 ‘이것’이라는데</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.18</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005722402' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16054" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>‘롤러코스피’, 변동성 좀 진정되나…반도체 강세 관건은 ‘이것’이라는데</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">변동성 지수 하락과 업종 순환매 장세가 나타나고 있으나, 코스피의 주도적인 강세 모멘텀은 여전히 반도체 업종에 달려있다. 향후 국내 증시의 변곡점은 삼성전자와 SK하이닉스의 '주주환원 정책' 발표 여부가 가장 중요한 촉매제가 될 전망이다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">변동성 감소세와 업종 순환매는 긍정적 신호이나, 향후 반도체 강세장을 결정할 핵심 변수(주주환원 정책 발표)가 명확하게 제시되었기 때문에 중장기적으로 높은 영향을 미칠 것으로 분석됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#주주환원정책</span> <span class="tag tag-hash">#코스피변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 상승 출발해 장 초반 ‘7000피’를 회복한 18일 서울 중구 하나은행 딜링룸 현황판에 코스피 등이 표시되고 있다. 이날 코스피 지수는 149.83포인트(2.15%) 오른 7127.77로 출발해 단숨에 7100선을 회복한 뒤 108.11포인트(1.55%) 내린 6869.83에 장을 마감했다. [연합뉴스]급등·급락을 반복했던 코스피가 이달 들어 변동성이 줄어든 가운데, 증권가는 여전히 반도체주가 국내 증시를 이끌 것으로 보고 있다. 다만 반도체 이외의 업종이 상승하며 순환매 장세를 보이는 상황에서 향후 반도체주의 주주환원 발표에 주목하고 있다.
+
+최근 SK증권은 코스피200 변동성 지수(VKOSPI)가 전주 대비 -20.3 하락한 55.3을 기록했다고 봤다. 여전히 변동성 레벨 자체는 굉장히 높지만 변동성 수준을 투자 의사결정 여부에 반영하는 주체가 많은 만큼 VKOSPI 급락은 분명히 긍정적이라고 짚었다.
+
+또 VKOSPI 급락은 예상 변동성의 영역으로 실현 변동성이 낮아지는 속도와 비교하면 훨씬 빠르게 예상 변동성이 내려온 만큼 시장의 기대가 앞서가는 국면으로 보인다고 짚었다.
+
+현대차증권은 코스피가 반도체를 중심으로 반등하고 있다고 봤다. 코스피는 지난 7월 30일 5500선에서 저점 마감한 이후, 종가 기준으로 2주 만에 25% 상승하며 120일 이동평균을 상회하는 등 기술적으로 강세장에 재차 진입했다고 평가했다. 이 중 반도체 업종의 기여도가 눈에 띈다고 짚었다. 미국 증시에서 인공지능(AI) 수요 확대와 수익화에 대한 우려가 완화되는 가운데 메모리 반도체의 이익 사이클이 지속될 것이란 기대가 높아져서다.
+
+삼성전자와 SK하이닉스. [연합뉴스]
+또 이번 반등장은 지난 5~6월 반도체 독주 국면과 조금은 차이를 보인다고 봤다. 코스피가 바닥을 형성한 후 반등하고 있는 과정에서 반도체 이외의 업종도 함께 상승하고 있어서다. 반도체가 코스피 방향성을 결정하는 건 동일하지만 반도체만 올랐던 장에서 벗어나 부진했던 업종과 종목까지 키 맞추기가 이어지고 있다고 봤다. 반도체 톱2 종목에 쏠렸던 자금이 지수 전체로 퍼져나간다는 것이다.
+
+향후 반도체 업종의 강세 모멘텀 지속 재료는 8~9월 발표될 주주환원 정책이라고 봤다. 최근의 반등 과정에서 미국 메모리 업체 대비 SK하이닉스의 주가 반등은 상대적으로 부진하다고 짚었다. 미국과 한국 자본시장의 깊이와 투자심리, 개별 종목별 차이도 있지만 미국 메모리 업체 대비 적극적이지 못한 주주환원 정책에 대한 실망도 영향을 주고 있다고 판단했다.
+
+이에 삼성전자는 빠르면 이달 중 차기 3개년 주주환원 정책을 공개할 것으로 전망했다. 또 SK하이닉스도 3분기 중 주주가치 제고를 위한 구체적인 주주환원 방안을 공개할 예정이라고 공시했다고 짚었다.
+
+김재승 현대차증권 연구원은 “현재 높아진 시장의 기대치를 양사의 주주환원 정책 발표가 충족시킬 수 있는지가 국내 반도체 업종의 강세장을 결정하는 중요한 변수가 될 것”이라며 “(주주환원 관련) 복잡한 이해관계를 균형 있게 풀면서 주주에게 돌아가는 몫을 얼마나 높이느냐가 국내 증시의 외국인 순매수 확대와 반도체 강세 모멘텀 확대 여부를 결정할 전망이다”고 밝혔다.
+
+다만 금리에 대한 요소는 변수 요소로 남아 있다는 의견도 나온다. iM증권은 최근 한국과 미국 모두 10~30년 구간 금리가 이번 사이클에서 최고 수준으로 올라가 있다고 짚었다. 당장 금리가 빠르게 안정되긴 힘들며 주식시장과 불편한 동행이 계속될 것으로 보인다고 내다봤다. 다만 명목 성장률을 상회하는 수준이 아니라면 당장 시장에 큰 영향은 없을 것으로 보인다고도 전망했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005722402' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005722402</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
