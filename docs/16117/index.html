@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“하닉 ADR -9.2%…오늘 삼전·닉스 불안하네” 뉴욕증시, 중동 긴장·미 국채금리 급등에 하락 마감</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.19</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/021/0002812135' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16117" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“하닉 ADR -9.2%…오늘 삼전·닉스 불안하네” 뉴욕증시, 중동 긴장·미 국채금리 급등에 하락 마감</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국과 이란 갈등 심화 우려와 급등한 미국 국채금리가 기술주 전반을 압박하며 뉴욕 증시가 하락 마감했습니다. 특히 고평가된 AI 관련 반도체 주(SK하이닉스 ADR 등)는 금리 상승에 민감하게 반응하며 큰 폭으로 밀렸습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">중동 지정학적 리스크 심화와 급등하는 장기 국채금리(고금리 환경)가 결합하여 고평가된 반도체 및 기술주 섹터 전반의 투자심리를 크게 위축시켰습니다. 이는 국내 반도체 업황에도 즉각적인 하방 압력으로 작용합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#미국증시 #금리상승 #반도체업황 #중동긴장</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미국과 이란의 갈등이 장기화할 수 있다는 우려가 커지면서 18일(현지시간) 뉴욕증시가 하락 마감했다. 높은 국제유가와 급등한 장기 국채금리가
+기술주를 압박하면서 나스닥지수의 낙폭이 두드러졌다.
+
+인베스팅닷컴 등에 따르면 이날 다우존스30 산업평균지수는 전 거래일보다 116.38포인트(0.22%) 내린 5만3343.40에 거래를 마쳤다.
+스탠더드앤드푸어스(S&P)500지수는 53.30포인트(0.69%) 내린 7691.76, 나스닥 종합지수는 355.20포인트(1.33%) 떨어진
+2만6289.71로 마감했다.
+
+투자심리를 짓누른 것은 평화협상 기대의 후퇴였다. 미국과 이란이 지난 6월 체결한 잠정 합의에 따른 60일 협상 시한은 지난 17일 종료됐다.
+도널드 트럼프 미국 대통령은 이란과 진행 중인 협상도, 예정된 협상도 없다고 밝혔고, 이란 고위 당국자는 외교 교착을 이유로 ‘전면 공세’
+태세로 전환하겠다고 경고했다.
+
+호르무즈 해협을 둘러싼 불확실성에 국제유가도 올랐다. ICE선물거래소에서 10월 인도분 브렌트유는 0.17% 오른 배럴당 91.02달러,
+뉴욕상업거래소에서 9월 인도분 서부텍사스산원유(WTI)는 0.52% 상승한 84.94달러에 마감했다. 두 유종 모두 지난달 24일 이후
+최고치다.
+
+유가 상승에 따른 인플레이션 우려는 채권시장에 직격탄이 됐다. 미 30년물 국채 금리는 장중 5.3371%까지 올라 2007년 이후 최고치를
+기록했고, 10년물 금리도 한때 4.7478%로 2025년 1월 이후 가장 높은 수준을 나타냈다. 장 후반 다소 내려왔지만 여전히 높은 수준을
+유지했다.
+
+금리에 민감한 기술주와 반도체주가 크게 밀렸다. 마이크론이 약 7%, 메타가 4.4%, 엔비디아가 2.3% 하락했고 웨스턴디지털 등 데이터저장
+관련주도 큰 폭으로 떨어졌다. 높은 금리는 대규모 데이터센터 투자에 필요한 자금조달 비용을 끌어올려 인공지능(AI) 관련 기업의 밸류에이션
+부담을 키운다. AP통신은 최근 AI 열풍으로 크게 오른 종목들이 고금리와 고평가 우려에 더 민감하게 반응하고 있다고 분석했다. 같은 흐름에서
+서학개미들이 큰 관심을 보이는 SK하이닉스 미국주식예탁증서(ADR)는 전장 대비 9.2% 빠졌다.
+
+국내 반도체주에도 부담이 불가피할 전망이다. 삼성전자와 SK하이닉스는 필라델피아 반도체 지수와 마이크론·엔비디아 등락에 사실상 실시간으로 연동돼
+왔는데, 이번에 마이크론이 7% 급락하며 메모리 업종 전반이 밀렸기 때문이다.
+
+KB증권은 앞서 미 10년물 금리가 5.0∼5.3%를 넘어서면 벤처캐피털과 연기금 등 자금 공급자들이 투자 규모를 줄이면서 AI 투자 열풍이
+꺾일 수 있다고 경고한 바 있다. 다만 국내 메모리 업체들은 장기공급계약(LTA)으로 생산 물량 상당 부분이 확정돼 있고 12개월 선행
+주가수익비율(PER)도 3∼4배 수준에 머물러, 밸류에이션 부담이 큰 미국 AI주와는 결이 다르다는 반론도 나온다.
+
+투자자들은 19일 공개되는 미 연방준비제도의 7월 연방공개시장위원회(FOMC) 의사록을 주목하고 있다. 고유가와 인플레이션 압력이 향후
+통화정책에 어떤 영향을 미칠지가 관심사다. 이번 주에는 타깃과 로우스, 월마트 등 주요 유통업체의 실적 발표도 예정돼 있어 미국 소비 상황에
+대한 관심도 이어질 전망이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/021/0002812135' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/021/0002812135</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
