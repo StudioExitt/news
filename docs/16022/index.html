@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>최근 코스피 꾸준한 반등에도…거래대금·거래량 연중 최저수준</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.18</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016256420' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16022" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>최근 코스피 꾸준한 반등에도…거래대금·거래량 연중 최저수준</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피는 반도체 주 중심으로 단기적 회복세를 보였으나, 거래량 및 자금 유입이 불안정하여 추세 전환을 확신하기 어렵다는 분석이 우세하다. 장기적인 상승을 위해서는 외국인 수급 개선과 금리 안정화가 필수적이다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단기 반등에도 불구하고 거래량 및 자금 유입이 연중 최저 수준에 머물고 있어 상승 모멘텀의 지속성이 불확실하며, 금리 안정화 등 거시적 변수가 주요 위험 요소로 작용함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#증시</span> <span class="tag tag-hash">#투자심리</span> <span class="tag tag-hash">#금리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 삼성전자와 SK하이닉스를 중심으로 반등하며 다시 7천선을 넘나들고 있지만, 시장의 활력을 보여주는 거래량과 거래대금은 올해 최저 수준으로 떨어진 것으로 나타났다. 지난달 급락장에서 위축된 개인 투자자들의 매매가 좀처럼 되살아나지 않는 가운데 최근 반등 역시 외국인의 대형 반도체주 매수에 의존하고 있다는 분석이 나온다.
+
+18일 한국거래소에 따르면 이달 들어 코스피 시장의 일평균 거래대금은 25조7천450억원으로 올해 들어 가장 낮은 수준을 기록했다. 일평균 거래량도 약 3억2천100만주로 올해 최저이며, 1년 전인 작년 8월(3억1천800만주) 수준으로 회귀한 모습이다. 이달 거래량을 보면 작년 한 해의 일평균(4억4천50만주)보다도 적다.
+
+거래대금은 지난해 코스피의 일평균 거래대금(12조4천억원)보다 많은 수준이지만 올해 증시 활황기에 비해서는 크게 줄었다. 코스피 일평균 거래대금은 지난 1월 27조560억원에서 2월 32조2천340억원, 3월 30조1천430억원, 4월 29조5천510억원 등 30조원 안팎을 유지했다. 지수가 가파르게 상승한 5월과 6월에 이 규모는 각각 50조2천150억원과 50조3천470억원까지 불어나며 두 달 연속 50조원을 넘어섰다. 그러나 증시 변동성이 극심해진 지난달 36조8천750억원으로 줄어든 데 이어 이달에는 20조원 중반까지 감소했다. 두 달여 만에 거래대금이 절반 수준으로 쪼그라든 것이다.
+
+d만 지수 자체는 현재 회복 추세다. 코스피는 지난달 말 급락 과정에서 5,000대로 밀려났지만, 지난주부터 삼성전자와 SK하이닉스를 중심으로 반등하면서 이날 장중 다시 7,000선을 기준으로 오르내리고 있다.
+
+지수와 거래지표 간 엇갈린 흐름의 중심에는 개인 투자자들의 투자심리 약화가 자리잡고 있다. 올해 상반기 거래량과 거래대금 급증을 이끌었던 개인 투자자들은 지난달 증시 급락과 레버리지 투자 손실 등을 겪은 뒤 적극적인 매매에 나서지 않는 모습이다.
+
+반면 최근 지수 반등은 외국인의 시가총액 상위 반도체주 매수가 상당 부분 견인하고 있는 것으로 풀이된다. 김석환 미래에셋증권 연구원은 연합뉴스와의 통화에서 "올해 상반기 국내 증시의 거래대금은 이례적으로 과열됐던 상황이었다"며 "최근의 거래 감소는 과도하게 늘었던 거래가 정상화되고 있는 것"이라고 설명했다. 다만 그는 개인 투자자의 위축도 거래 감소의 원인 중 하나로 꼽았다.
+
+김 연구원은 "그동안 거래량과 거래대금 증가에 큰 역할을 했던 것은 개인 투자자였는데, 현재는 자신이 매수했던 가격까지 주가가 회복되기를 기다리는 투자자들이 많은 것으로 보인다"고 설명했다. 또 "급락 과정에서 청산을 당한 투자자들은 이후 반등의 수혜를 누리지 못한 만큼 개인 투자심리가 상당히 위축된 상황"이라고 말했다.
+
+전문가들은 거래 감소 자체만으로 증시 상승세가 꺾였다고 판단하기는 어렵지만 현재 반등을 시장 전반의 투자심리 회복을 동반한 추세적 상승으로 보기도 이르다고 평가한다. 허재환 유진투자증권 연구원은 "코스피가 (반대로) 7,000대에서 5,000대로 급락하는 과정에서도 거래가 많지 않았다"며 "현재 지수는 반등하고 있지만 이를 투자심리 회복을 동반한 추세 반전으로 보기는 어렵다는 뜻"이라고 말했다.
+
+이어 "투자자들이 여전히 불안해하고 있다는 방증"이라며 "반도체 업황에 대한 기대가 높지만 반도체 기업들의 이익(전망) 상향도 이전보다 주춤한 상황이고, 미국 증시 역시 높아진 금리에 부담을 느끼고 있다"고 설명했다.
+
+전문가들은 거래 감소 자체만으로 증시 상승세가 꺾였다고 판단하기는 어렵지만 현재 반등을 시장 전반의 투자심리 회복을 동반한 추세적 상승으로 보기도 이르다고 평가한다. 허재환 유진투자증권 연구원은 "코스피가 의미 있는 반등을 이어가고 더 높은 수준으로 올라가기 위해서는 금리 상황이 안정될 필요가 있다"며 "배당수익률의 매력도 회복돼 장기자금이 들어올 수 있는 여건이 마련돼야 한다"고 설명했다.
+
+김 연구원은 "외국인은 연간 누적으로 보면 여전히 국내 주식을 순매도하고 있다"며 "그동안 빠져나간 자금의 절반만 다시 들어와도 지수가 크게 상승할 여지가 있는 상황"이라고 말했다. 안정적인 상승을 위해서는 외국인 수급의 지속성과 반도체를 중심으로 한 펀더멘털(기초체력)에 대한 확인이 필요하다.
+
+금리 역시 추가 상승 여부를 가를 변수로 꼽힌다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016256420' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016256420</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
