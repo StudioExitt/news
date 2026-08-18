@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ETF 업은 증권사, 연금시장서 '판정승'…기금형 도입이 최대 변수</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.18</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005401085' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/15980" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>ETF 업은 증권사, 연금시장서 '판정승'…기금형 도입이 최대 변수</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">증권사들이 ETF 상품의 다양성과 실시간 거래 편의성을 앞세워 퇴직연금 및 연금저축 이전 시장에서 우위를 점하고 있습니다. 그러나 향후 대형 기금이 유입될 '기금형' 도입이 최대 변수로 작용하며 경쟁 심화가 예상됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">퇴직연금 및 개인 연금 시장의 자금이 증권사 플랫폼으로 대규모 이동(머니무브)하고 있으며, 이는 ETF를 중심으로 한 적극적인 투자 환경 변화와 디지털 금융 경쟁 심화를 의미합니다. (구조적 변화)</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#연금시장</span> <span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#금융플랫폼</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">ETF(상장지수펀드) 상품·거래 경쟁력을 갖춘 증권사가 퇴직연금 실물이전 시장에서 압승을 거둔 가운데 연금저축펀드 적립금도 70조원에 육박했다. 퇴직연금과 개인연금저축에서 모두 증권사로의 머니무브(자금 대이동)가 가팔라진 것이다. 다만, 증권사들도 내년 기금형 퇴직연금 도입을 앞두고 영향 분석에 나서는 등 '불안한 1등'의 자리를 지키고 있다.
+
+18일 금융감독원이 국회 정무위원회 소속 박홍배 더불어민주당 의원에게 제출한 자료에 따르면 증권사들은 퇴직연금 실물이전, 연금저축 이전제도 최대 수혜 업권으로 나타났다. 증권사는 퇴직연금 실물이전 제도 시행 후 1년8개월간 누적 4조1513억원이 순유입된 반면 은행은 3조9714억원이 순유출됐다. 관계법상 가입 의무가 있는 퇴직연금과 달리 개인이 절세 등을 위해 자발적으로 선택하는 연금저축 시장에서도 증권사들의 독주가 이어졌다. 은행에서 취급하는 연금저축신탁, 원금 보장이 되는 연금저축보험을 갖고 있던 소비자들은 최근 2년간 약 9조원을 연금저축펀드로 이전했다.
+
+연금저축펀드 신규 계좌와 총 적립금도 급증했다. 지난해 4분기 새로 만들어진 연금저축펀드 계좌는 약 61만건으로 2024년 4분기(약 33만건)의 1.85배에 달했다. 올해 1분기에는 64만개의 새 계좌가 개설됐고, 연금저축펀드 총 평가금액은 69조1000억원으로 집계됐다.
+
+퇴직연금과 연금저축은 개인이 노후 대비를 위해 가입하는 상품으로 대중적이면서도 사회보장적 성격을 갖고 있다. 연금은 무조건 안전하게, 원금 보장이 되는 상품을 선호하는 경향이 강했지만 퇴직연금 디폴트옵션 도입과 증시 활황으로 분위기가 달라졌다.
+
+증권사들이 연금 이전 시장에서 압승을 거둔 이유도 'ETF 경쟁력' 때문이라는 분석이 나온다. 수익률만 놓고 보면 증권-은행 간 차이가 크지 않다. 일례로 미래에셋증권의 DC(확정기여형) 원리금비보장형 2분기 수익률은 50.41%, 신한은행은 53.62%로 각 업권의 순이익 1위 회사를 놓고 봤을 때 오히려 은행 수익률이 더 높았다. 개인 IRP 원리금비보장형 수익률의 경우 KB증권이 2분기 52.98%, KB국민은행이 52.96%로 비등했다.
+
+이에 고객들이 ETF 상품 선택지가 더 많고, 실시간 ETF 거래가 가능한 증권사들을 선택했다는 분석에 힘이 실린다. 은행들이 퇴직연금으로 담을 수 있는 ETF 라인업을 대폭 확대하고 있지만 증권사들에는 아직 비하지 못한다는 인식이 크다. 또 은행 앱에서는 ETF 실시간 가격 조회·거래가 안 되는 반면 증권사 MTS(모바일트레이딩시스템)에서는 가능하기 때문에 거래 편의성이 높다.
+
+은행권에서는 업계가 공동으로 나서 실시간 ETF 거래 허용을 요청했지만 금융당국이 2021년 유권해석을 뒤집어야 해 실현 가능성이 높지 않다는 관측이다. 이에 하나은행 등은 다른 업체와 제휴를 통해 ETF 실시간 가격을 조회할 수 있도록 하는 등 자구책을 마련하고 있다.
+
+코스피 랠리에 따른 개인 투자자들의 증권사 앱 락인(lock-in) 효과도 거론된다. 코스피 지수는 지난해 12월30일 4214.17포인트(종가)에서 올해 6월 30일 8476.48포인트로 101% 상승했다. 주식시장에 신규 진입하거나, 주식 거래를 활성화한 개인 투자자들이 증권사 앱을 수시로 이용하는 과정에서 퇴직연금·연금저축펀드 등 연금 계좌까지 옮겨왔다는 것이다. 각 증권사는 연금 실물이전·신규가입 고객을 대상으로 대대적인 이벤트를 펼쳤다.
+
+눈에 띄는 점은 업권 내 갈아타기도 빈번해졌다는 것이다. 퇴직연금 실물이전 제도 시행 후 은행-은행 이전은 4조4817억원, 증권사-증권사 이전은 2조6061억원에 달했다. 같은 업권에서도 연금 고객 유치를 위한 쟁탈전이 치열했던 것이다.
+
+연금 머니무브 경쟁에서 승기를 잡은 증권사들도 마냥 웃지만은 못하고 있다. 이르면 내년 기금형 퇴직연금 제도가 시행될 경우 대형 기금과 경쟁해야 하기 때문이다. 지금과 같은 계약형 구조에서도 경쟁이 심했는데 대규모 기금까지 운용 시장으로 들어올 경우 경쟁 심화, 고객 이탈이 불가피하단 것이다.
+
+연금은 수령 연령까지 계속 유지해야 하고, 그 기간 추가 계약도 이뤄지기 때문에 각 사는 충성고객' 확보 차원에서 연금 고객 유치에 사활을 걸고 있다.
+
+연금 시장의 경쟁 과열로 인한 부작용을 적극적으로 예방해야 한다는 의견도 나온다. 박홍배 의원은 "퇴직연금 실물이전으로 소비자 선택권이 넓어지고 연금자금 운용이 편리해진 것은 긍정적"이라면서도 "연금자산은 국민의 노후생활과 직결되는 만큼 금융사 간 과도한 고객 유치 경쟁이나 단기적인 자금 쏠림에 좌우돼서는 안 된다. 금융사는 내부통제를 강화하고 금융당국도 영업행태를 면밀히 점검해 제도적 보완을 이어가야 한다"고 지적했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005401085' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005401085</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
