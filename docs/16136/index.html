@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반도체지수 급락, 범인은 누구일까 [마켓무버의 국장힌트]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.19</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001262775' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16136" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>반도체지수 급락, 범인은 누구일까 [마켓무버의 국장힌트]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미 증시와 필라델피아 반도체지수(4.98% 급락)가 하락한 주된 원인은 거시 경제적 불안정성 때문입니다. 최고치를 경신한 미국 장기 국채 금리는 안전자산 매력도를 높여 위험자산인 증시에 부정적이며, 이는 정부 부채 증가와 중동발 유가 상승 추세 등 복합적인 요인이 작용한 결과로 분석됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">미국 장기 국채 금리 상승과 지정학적 리스크가 야기한 거시경제 불안정성이 단기적인 투자 심리를 급락시키고 있습니다. 이는 반도체 등 고위험 자산 전반에 걸쳐 부정적인 영향을 미칠 수 있는 큰 위험 요소입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#미국금리</span> <span class="tag tag-hash">#장기채</span> <span class="tag tag-hash">#거시경제</span> <span class="tag tag-hash">#반도체</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미 증시 살펴보며 한국 증시 투자아이디어까지 찾는 마켓 무버입니다.
+
+간밤 뉴욕증시 3대지수 하락 마감했습니다. 다우지수는 0.22%, S&P 500은 0.69%, 기술주 중심의 나스닥은 1.33% 내렸습니다.
+국내 증시에 영향력이 큰 필라델피아 반도체지수는 4.98% 급락했습니다.
+
+오늘 미국 기술주의 하락은 개별 종목의 문제라기보다는 거시 경제의 영향으로 해석해야겠습니다. 미 증시 개장 전 미국의 30년 만기 국채 수익률이 연 5.33%를 찍으며 최고점을 경신했습니다. 이후 국채금리가 내려가기는 했습니다만, 19년만에 가장 높은 수준까지 미국 장기채 금리가 올랐다는 소식은 증시의 불안을 자극했다는 점은 분명합니다.
+
+큰 틀에서 미국 장기채 금리 상승은 증시에 좋지 않습니다. 금리라는 것은 곧 수익률인데요. 안전자산인 채권 수익률이 높다면, 여차하면 손실을 볼 수도 있는 위험자산인 증시의 상대적 매력도가 떨어지겠죠.
+
+그렇다면 지금 미 국채금리를 끌어올리는 요인은 무엇인지를 짚어봐야겠습니다. 역으로 이 요인들이 해결되거나 잠잠해진다면, 역으로 증시의 반등 요인이 될 수있을테니까요.
+
+야데니 리서치는 국채 금리 상승과 관련해 투자자들이 증가하는 정부 부채에 대해 점점 더 불안감을 보이고 있다며 시장이 두 가지 문제를 우려하고 있다고 지적했습니다.
+
+첫째는 AI 하이퍼스케일러들의 대규모 차입 증가입니다. 빅테크 기업들이 회사채를 발행하면서 자금을 조달하고 있는데, 국채 금리보다 높은 수익률을 제시하는 회사채가 국채의 경쟁자가 되고 있다는 것이고요.
+
+둘째는 중동 불안으로 인한 유가 상승 문제입니다. 미국이 중간선거까지 기준금리를 높이지 않을 것이라는 심리가 다시 깨어질 수 있다는 겁니다.
+
+미국과 이란의 휴전 연장이 무산된 이후, 시장에선 호르무즈 해협 통항 문제가 장기화 될 것이라는 관측이 추세로 자리잡고 있는 듯합니다. 국제유가 벤치마크인 브렌트유 선물 가격은 전일 대비 0.5% 가량 오르며 배럴당 91달러 선을 넘었습니다. 당장의 급등보다도 원유 가격 추세 상승이 문제가 될 겁니다.
+
+8월 중순 기준 WTI와 30년물 수익률의 10일 상관계수는 0.85에 달합니다. 유가 상승으로 인한 인플레이션 우려에 지금의 채권 시장이 매우 민감하다는 뜻입니다.
+
+도널드 트럼프 미 대통령이 "호르무즈 해협은 개방돼 정상 운영 중"이라며 "이란과 진행중이거나 예정된 어떤 협상이나 대화도 없다"고 밝히는 가운데도 호르무즈 해협에선 유조선 피격 소식이 나오고 있습니다.
+
+dan 아직까지는 채권시장에 '패닉'이 일어나지는 않았다는 게 야데니의 설명입니다. 지금 정도의 금리는 기업들의 실적에 부정적인 영향을 미치지 않을 것이지요.
+
+전통적으로 장기채 금리의 상승은 투자자들이 그 나라의 재정 건전성을 우려하고 있다는 신호이기도 합니다. 그렇다면 미국의 재정건전성이 좋아지느냐, 혹은 정부가 버는 것보다 돈을 더 푸느냐를 지켜봐야 하는데요.
+
+중간선거를 앞둔 미 행정부가 '돈 풀기' 카드를 외면하기란 쉽지 않은 상황이겠지요. 최근 추세를 돌아보면 머지않아 시장엔 미국 국가부채가 40조 달러를 돌파했다는 뉴스가 나올 가능성이 매우 높습니다.
+
+재정 문제로 인한 장기채 금리 상승은 미국만의 문제가 아니기는 합니다. 특히 시장에 영향을 끼칠 수 있는 것이 일본 국채 금리의 상승입니다. 일본의 10년물 국채 금리는 2.955%까지 높아졌습니다. 특히 일본 국채 금리가 높아지면 시장에 엔 캐리 트레이드 포지션 청산 우려가 재발할 수 있습니다. 엔화 싸게 빌려서 고수익 자산에 투자하는 전략의 효용이 줄어든다는 뜻이 되기 때문입니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001262775' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001262775</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
