@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'롤러코스피'에 지쳤나…커버드콜·미국 지수 ETF로 자금이동</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.18</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016256609' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16034" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'롤러코스피'에 지쳤나…커버드콜·미국 지수 ETF로 자금이동</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 주식시장 변동성에 지친 개인 투자자들이 상대적으로 안정적인 미국 대표지수 ETF와 현금흐름이 예측 가능한 커버드콜 상품으로 자금을 이동시키고 있습니다. 이는 국내 시장에서 해외 시장으로의 자산 배분 전환 추세로 분석됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">개인 자금이 국내 시장의 높은 변동성을 피해 해외 대표 지수 ETF와 안정적인 현금흐름을 제공하는 커버드콜 상품으로 이동하고 있음을 보여주는 흐름성 뉴스입니다. 이는 장기적인 자산 배분 추세 변화를 시사합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자산운용</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#커버드콜</span> <span class="tag tag-hash">#미국지수</span> <span class="tag tag-hash">#자금흐름</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">ETF (PG) [김선영 제작] 일러스트
+(서울=연합뉴스) 고은지 기자 = 개인 투자자 자금이 미국 대표지수 상장지수펀드(ETF)와 커버드콜 상품에 몰리고 있다.
+국내 주식시장의 급격한 등락에 지친 투자자들이 상대적으로 변동성이 작은 미국 증시 관련 ETF나 안정적인 현금 흐름을 기대할 수 있는 상품에 눈을 돌린 것으로 분석된다.
+18일 코스콤 ETF CHECK에 따르면 ETF 시장에서 미국 대표지수를 추종하는 상품은 최근 한 주간(11∼13일) 자금 순유입액 상위 10위권 내 4개가 이름을 올렸다.
+'TIGER 미국S&P500'(3위·2천124억원), 'KODEX 미국나스닥100'(5위·1천억원), 'KODEX 미국S&P500'(6위·965억원), 'TIGER 미국나스닥100'(9위·652억원)이 여기에 포함됐다.
+같은 기간 미국 S&P500과 미국 나스닥100 ETF의 수익률은 1∼2%대에 그쳤다.
+그러나 국내 주가지수에 비해 진폭이 작으면서도 전반적으로 우상향하고 있다는 점이 '롤러코스피'(롤러코스터+코스피)에 지친 투자자들에게 매력적으로 다가온 것으로 풀이된다.
+개인 순매수액으로 봐도 코스콤 CHECK 집계 결과 이달(3∼17일) 'TIGER 미국S&P500'과 'KODEX 미국나스닥100'은 각각 2천818억원과 1천911억원으로 전체 ETF 중 1, 2위를 차지했다.
+삼성증권 전균 연구원은 "8월 초 한국거래소 ETF 시장에서 4천100억원 규모의 자금 유출이 발생했다"며 "국내 자산에서 7천100억원이 이탈했지만, 해외자산으로 3천200억원이 유입됨에 따라 ETF 투자자들이 국내에서 해외로 투자 대상을 전환하고 있음을 알 수 있다"고 분석했다.
+미국 대표지수 추종 ETF만큼 커버드콜 상품에도 뭉칫돈이 몰렸다.
+'KODEX 200타켓위클리커버드콜'(2천147억원)은 최근 한 주 새 전체 ETF 중 자금 순유입액이 'KODEX 200'(4천401억원) 다음으로 많았다.
+이어 'TIGER 반도체TOP10커버드콜액티브'(745억원)과 'RISE 코리아밸류업위클리고정커버드콜'(424억원)이 각각 9, 11위에 올랐다.
+커버드콜 ETF는 기초자산(주식이나 지수)을 보유한 상태에서 해당 자산의 콜옵션을 매도해 옵션 프리미엄을 받고, 이를 분배금 재원으로 활용하는 ETF다.
+일례로 KODEX 200타겟위클리커버드콜은 코스피200 지수 포트폴리오를 보유한 뒤 코스피200을 기초자산으로 위클리 콜옵션을 매도해 옵션 프리미엄을 받는다.
+커버드콜 ETF에 대한 투자자들의 관심이 커지면서 관련 상품도 꾸준히 출시되고 있다.
+국내 상장된 국내 주식형 커버드콜 ETF는 총 21개인데 이 중 9개가 올해 3월 이후 나왔다.
+현대차증권 김재승 연구원은 "커버드콜 ETF는 지수의 추가 상승분의 일부를 포기하는 대신 옵션 프리미엄을 통해 정기적인 현금 흐름을 만들고 수익률 변동성을 낮춘다"며 "커버드콜 전략은 주가지수가 횡보하거나 완만하게 상승 또는 하락하는 변동성 장세에서 유리하다"고 설명했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016256609' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016256609</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
