@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>시장 초과수익 냈더니 '상폐' 통보, 액티브 ETF '상관계수' 논란</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/417/0001155827' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16281" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>시장 초과수익 냈더니 '상폐' 통보, 액티브 ETF '상관계수' 논란</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">초과 수익을 기록했음에도 불구하고, 액티브 ETF가 기초지수와의 상관계수 미준수를 이유로 상장 폐지되는 사례가 발생하고 있다. 이는 초과 성과를 낸 운용사에게 불리하게 작용하며, 액티브 ETF 시장의 제도 개선 필요성에 대한 논란을 키우고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심적인 금융상품(액티브 ETF)의 수익성 확보가 국내 규제(상관계수 유지 의무)에 의해 제한받고 있다는 내용으로, 제도적 개선 요구가 거세지면서 장기적으로 금융산업 구조와 투자 전략 전반에 영향을 미칠 수 있는 중대 이슈입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융투자업</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자산운용</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#액티브ETF</span> <span class="tag tag-hash">#상관계수</span> <span class="tag tag-hash">#규제개선</span> <span class="tag tag-hash">#자본시장법</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">성가 좋아도 상관계수 미준수 시 퇴출…제도 개선 목소리 높아져
+상관계수를 지키지 못해 상장폐지되는 액티브 ETF가 또 나왔다. /사진=신재민 편집위원
+초과수익을 냈음에도 기초지수와 괴리가 커졌다는 이유로 상장 폐지된 상장지수펀드(ETF)가 한 달 만에 또 나왔다. 수익이 좋아도 시장에서
+퇴출당하는 ETF 제도를 개선해야 한다는 목소리도 높아지고 있다.
+
+19일 금융투자업계에 따르면 타임폴리오자산운용의 TIME 미국배당다우존스액티브가 상장폐지됐다. 기초자산 비교지수(BM)와의 상관계수를 지키지 못했기 때문이다. 지난 7월 상장 폐지된 한국투자신탁운용의 ACE 애플밸류체인액티브 등 4종에 이어 1개월 만이다.
+
+이 상품이 상장 폐지된 이유는 비교지수와의 상관계수를 지키지 못했기 때문이다. 현행 유가증권시장 상장 규정 제116조 1항에 따르면 액티브ETF의 경우 비교지수와의 상관계수를 0.7 이상으로 유지하지 못하는 상황이 3개월간 지속되면 상장이 폐지된다.
+
+문제는 이들이 초과 성과를 내고도 시장에서 퇴출당했다는 점이다. TIME 미국배당다우존스액티브는 지난 5월14일 기준 1년 수익률 36.06%를 기록해 기초지수를 약 9.42%포인트 웃도는 성과를 냈다. ACE 애플밸류체인액티브 역시 170%에 가까운 수익률로 기초지수보다 50%포인트 넘는 성과를 냈다.
+
+이에 각종 SNS(소셜미디어)나 종목 토론방 등에서는 '더 좋은 성과를 냈는데도 퇴출되냐'는 비판이 지속됐다. 액티브 ETF는 펀드 매니저의 액티브 운용을 통해 초과 수익을 노리는 상품이다. 현 규정대로라면 기초지수보다 훨씬 더 좋은 성과를 내면 운용사에게 불리해지는 상황이다.
+
+한국거래소에 따르면 지난 18일 기준 액티브 ETF의 순자산총액은 104조4448억원으로 전년 동기 대비 42.80% 늘어났다. 2017년 국내 액티브 시장이 시작되고 9년 만에 100조원 고지에 올랐다. 이는 국내 상장 전체 ETF 순자산총액의 22.87%에 달하는 규모다. 빠르게 성장하는 액티브 ETF 시장을 규정이 발목을 잡을 수 있다는 우려가 제기된다.
+
+━
+상관계수 못 지킨 액티브 ETF 더 있다…"규제가 시장 발목 잡아"
+━
+TIME 글로벌탑픽액티브와 HANARO 글로벌피지컬AI액티브도 상관계수 미준수가 계속 발생하고 있다. /사진=신재민 편집위원
+TIME 글로벌탑픽액티브와 HANARO 글로벌피지컬AI액티브도 상관계수 미준수가 계속 발생하고 있다.
+
+상관계수 미달에 놓인 상품은 더 있다. 타임폴리오의 TIME 글로벌탑픽액티브와 NH아문디자산운용의 HANARO 글로벌피지컬AI액티브다. TIME 글로벌탑픽액티브는 2025년 11월4일부터 이날까지 상관계수 0.7을 계속 밑돌고 있다. HANARO 글로벌피지컬AI액티브 역시 지난 5월14일부터 이날까지 총 30차례나 상관계수 미달을 공시했다.
+
+한국거래소 관계자는 "거래소는 정해진 대로 상관계수를 지켜야 한다고 안내한다"며 "초과 수익에 대한 제도 개선 필요성과 별개로 이미 규정을 지키면서 운용되는 상품도 있기 때문에 상품 설계와 규정상의 원칙을 지켜야 한다"고 설명했다.
+
+d만 한국처럼 액티브 ETF에서 상관계수 규정을 타이트하게 규정하는 나라는 드물다. 액티브 ETF 특성상 상관계수를 지키며 상품을 운용하는 것이 어렵기 때문이다. 미국의 경우 2019년 증권거래위원회(SEC)가 ETF 규제체계를 개편한 Rule 6c-11을 도입하면서 비교지수와 상관계수를 규제 요건에 포함하지 않았다. 대신 포트폴리오 공개와 순자산가치, 시장가 및 괴리율 공시의 투명성을 강화했다.
+
+지난 7월 김성훈 DS자산운용 대표는 회사의 DS 코스닥액티브 상장 기자간담회에서 "상관계수 규제는 전 세계 어디에서도 찾아보기 어렵다"며 "업계에서도 폐지가 필요하다는 공감대가 형성돼 있다"
+
+김재칠 자본시장연구원 선임연구위원은 "액티브 주식형 ETF에서는 추종지수와의 상관계수 유지가 쉽지 않아 운용 전략 수립이나 종목별 가중치 변경에 상당한 제약을 받는 게 현실"이라며 "대부분 국가 역시 액티브 ETF에 특정 지수 방향성을 추종하지 않고 있어 국내에서도 액티브 ETF의 상관계수 유지 의무를 폐지하는 게 원칙적으로 바람직하다고 본다"
+
+다만 현실적으로 상관계수 유지를 당장 폐지하기는 어렵다. 자본시장법에서 ETF를 지수의 변화에 연동해 운용한다고 정의하기 때문이다. 김재칠 선임연구위원은 "상관계수 유지를 당장 없애기는 힘들다"면서도 "장기적으로는 자본시장법 등을 개정해야 하는 등 방법을 찾아야 한다"
+</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/417/0001155827' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/417/0001155827</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
