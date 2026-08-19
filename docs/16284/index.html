@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[뉴욕증시]재무부 바이백 전격 확대…일제히 소폭 상승 마감</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005804892' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16284" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[뉴욕증시]재무부 바이백 전격 확대…일제히 소폭 상승 마감</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국 재무부가 장기 국채 매입(바이백) 규모를 대폭 확대한다고 발표하면서 장기 금리가 급락했고, 뉴욕 증시는 소폭 상승 마감했습니다. 다만 연준의 추가 긴축 가능성 시사로 인해 AI 관련주 등 일부 기술 섹터에서는 약세가 관찰되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">재무부의 대규모 국채 매입 발표는 장기 국채금리를 급락시키며 금융 환경에 큰 구조적 영향을 미쳤습니다. 이는 전반적인 시장 심리에 매우 강력한 긍정적 동력으로 작용했으나, 연준의 긴축 메시지가 이를 상쇄하며 시장의 불확실성을 높였습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">미국 국채</span> <span class="tag stock-tag">대형 기술주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#재무부바이백</span> <span class="tag tag-hash">#장기금리</span> <span class="tag tag-hash">#거시경제</span> <span class="tag tag-hash">#FOMC</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">재무부, 장기채 바이백 최소 2배 확대
+30년물 금리 급락…금리 부담 완화
+Fed 의사록 인상론 폭넓어
+AI 관련주 약세로 상단 제한국 미국 재무부가 장기 국채 매입(바이백) 규모를 최소 두 배로 확대한다고 발표하면서 장기 국채금리가 큰 폭으로 하락한 가운데 19일(현지시간) 미국 뉴욕증시의 3대 지수는 일제히 소폭 오름세로 마감했다. 다만 연방준비제도(Fed)의 7월 연방공개시장위원회(FOMC) 의사록에서 추가 금리 인상 가능성이 거론되고 일부 인공지능(AI) 관련주가 약세를 보이면서 상승폭은 제한됐다.
+
+뉴욕증권거래소(NYSE)에서 다우존스30산업평균지수(다우지수)는 전 거래일보다 119.65포인트(0.22%) 올라간 5만3463.05에 마쳤다.
+대형주 중심의 S&P500지수는 16.22포인트(0.21%) 상승한 7707.98, 기술주 중심의 나스닥지수는 41.37포인트(0.16%) 오른 2만6331.09에 마무리했다.
+
+뉴욕증권거래소. 뉴욕(미국)=황윤주 특파원
+뉴욕증권거래소. 뉴욕(미국)=황윤주 특파원
+
+이날 시장은 미 재무부의 장기 국채 바이백 확대 발표에 주목했다. 미 재무부는 이날 10년물부터 30년물에 이르는 장기 국채의 바이백 규모를 최소 두 배로 확대한다고 밝혔다. 20년물도 바이백 대상에 포함됐다.
+
+재무부 발표 이후 장기 국채금리는 큰 폭으로 하락했다. 전날 5.33%를 넘어서며 19년 만의 최고치를 기록했던 30년 만기 미국채 금리는 9bp(1bp=0.01%포인트)가량 떨어져 5.195%로 내려왔다. 10년 만기 미국채 금리도 5bp 이상 하락해 4.653%로 낮아졌다.
+
+주택 관련주 가운데 홈디포는 2.02% 상승했다. 주택 개량업체 로우스는 장중 강세를 보였으나 이후 상승분을 모두 반납하며 1.12% 하락했다.
+
+프로시온의 마시모 산티키아 미국 주식 책임자는 "가치주들이 이날 매우 좋은 흐름을 보였는데 이는 경제와 기업 실적 사이클이 여전히 매우 강하다는 점을 보여준다"고 평가했다.
+
+다만 그는 견조한 기업 펀더멘털과 높은 국채금리로 인한 자본비용 상승 사이에서 시장에 긴장이 이어지고 있다고 지적했다. 그러면서도 기업 실적 전망을 고려하면 전반적으로는 주식에 여전히 우호적인 환경이라고 진단했다.
+
+개별 종목 중에서는 모더나가 176.97% 폭등했다. 모더나와 머크가 공동 개발한 실험적 피부암 백신이 후기 임상시험에서 긍정적인 결과를 내놓은 영향을이다. 머크 역시 12.61% 오르며 다우지수 상승을 뒷받침했다.
+
+반도체 업체 마벨테크놀로지어는 구글과 텐서처리장치(TPU) 관련 계약을 체결했다는 소식에 9.85% 상승했다. 마벨은 알파벳에 최대 122억달러 규모의 마벨 보통주를 매입할 수 있는 워런트도 발행했다.
+
+반면 일부 AI 관련주는 약세를 보였다. 월스트리트저널(WSJ)이 OpenAI가 투자자들에게 공개한 2분기 실적이 기대에 미치지 못했다고 보도한 영향을이다. OpenAI의 매출은 1분기에서 2분기 사이 18% 증가했지만 손실도 함께 확대된 것으로 전해졌다.
+
+이에 브로드컴과 AMD는 각각 4.61%, 3.71% 하락했고, 아이셰어즈 AI 이노베이션 앤드 테크 액티브 상장지수펀드(ETF)도 2.08%가량 떨어졌다.
+
+Fed의 매파적 기류도 증시 상승폭을 제한했다. 이날 공개된 7월 FOMC 의사록에 따르면 Fed 내부에서는 인플레이션이 충분히 둔화하지 않을 경우 추가 금리 인상이 필요할 수 있다는 의견이 제기됐다.
+
+7월 회의에서는 3명의 위원이 25bp 금리 인상을 주장하며 동결 결정에 반대표를 던졌다. 특히 의사록에서는 실제 표결에서 드러난 것보다 금리 인상론이 폭넓었던 것으로 나타.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005804892' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005804892</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
