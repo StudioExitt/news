@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'IPO 잔혹사' 코스닥 선방에도 새내기주 부진</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.19</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/031/0001050715' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16191" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'IPO 잔혹사' 코스닥 선방에도 새내기주 부진</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스닥 지수는 반등세 속에 선방하고 있으나, 최근 상장한 기업들(새내기주)은 공모가 대비 부진하며 IPO 시장 전반에 약세가 나타나고 있습니다. 투자심리 회복을 위한 제도적 장치로 11월 '코너스톤 투자자 제도'가 기대되지만, 즉각적인 활력 부여는 어려울 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">IPO 시장의 전반적인 침체와 신규 상장주의 부진은 투자 심리를 위축시키는 요인입니다. 제도적 해결책(코너스톤) 기대감이 있으나, 단기적으로는 매수세가 약하여 부정적 압력으로 작용할 가능성이 높습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#IPO</span> <span class="tag tag-hash">#공모주</span> <span class="tag tag-hash">#투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">8월 상장 3곳 모두 약세…딜리셔스, 첫날부터 공모가 하회
+11월 코너스톤 제도 시행…IPO 시장 회복 기대감 '솔솔'
+코스닥 지수가 급등락 속에서도 800선을 지키며 선방하고 있지만 새내기주에는 좀처럼 온기가 퍼지지 않고 있다. 이달 상장한 기업 중 상장 첫날부터 공모가를 밑돈 사례까지 나오면서 IPO 투자심리 회복이 더딘 모습이다. 공모주 시장의 구원투수로 꼽히는 '코너스톤 투자자 제도'도 11월 시행인 만큼 당분간 새내기주의 부진이 이어질 것이란 전망이 나온다.
+
+19일 한국거래소에 따르면 8월 상장한 딜리셔스, 케이앤에스아이앤씨, 인제니아테라퓨틱스는 이날 오전 10시50분 기준 전 거래일 대비 각각 2.18%, 3.17%, 7% 하락하고 있다.
+
+올해 들어 기업공개(IPO) 시장이 부진한 흐름을 보이고 있다.[사진=챗GPT]
+올해 들어 기업공개(IPO) 시장이 부진한 흐름을 보이고 있다.[사진=챗GPT]
+
+딜리셔스는 상장 첫날에도 공모가를 밑돈 채 거래를 마쳤다. 통상 국내 공모주 시장에서는 상장 첫날 시초가가 공모가의 두 배로 형성된 뒤 상한가까지 오르는 이른바 '따상'을 기대하는 경우가 많아 이례적인 사례로 꼽힌다.
+
+케이앤에스아이앤씨는 상장 첫날 장중 공모가 대비 100%까지 올랐지만 이후 상승폭을 반납했다. 전날 상장한 인제니아테라퓨틱스도 장 초반 하락세를 보였다. 이후 반등하며 공모가 대비 49.92% 오른 수준에서 마감했지만 이날 다시 약세를 보이고 있다.
+
+새내기주의 부진은 최근 코스닥 시장의 반등세와 대조적이다. 코스닥 지수는 이달 들어 가파른 반등세를 보였다. 지난달 31일 719.76으로 마감한 뒤 이달 초 거래대금이 급증하면서 3거래일 연속 매수 사이드카가 발동됐다. 이후 급등락을 거듭하면서도 7거래일 연속 800선을 웃돌며 상승분을 상당 부분 지키고 있다.
+
+올해 IPO 시장은 전반적으로 위축된 모습이다. IR큐더스에 따르면 올해 상반기 신규 상장 기업은 17곳으로 지난해 같은 기간(38곳) 대비 55.3% 급감했다. 대형주 중심으로 자금 쏠림이 심화된 데다 모회사와 자회사의 중복상장 규제 강화에 대한 불확실성이 겹친 영향으로 풀이된다.
+
+중복상장 규제가 이달 3일 시행되면서 관련 제도적 불확실성은 일부 해소됐다. 이는 중복상장에 따른 모회사 주주가치 훼손을 막기 위한 제도다.
+
+구체적인 가이드라인이 마련되면서 상장을 미뤄온 대기업 자회사들의 IPO 재개에 대한 기대감도 커졌다. 다만 제도 시행 이후에도 아직 눈에 띄는 움직임은 나타나지 않고 있다.
+
+공모주 투자심리를 되살릴 제도적 장치로는 11월 시행 예정인 코너스톤 투자자 제도가 꼽힌다. 기관투자자에게 상장 전 공모주를 사전 배정하고 최장 10개월간 보호예수를 적용해 상장 직후 매도 물량 부담을 줄이는 취지로 마련됐다.
+
+그러나 제도 시행까지 시간이 남은 만큼 당장 IPO 시장의 분위기를 바꾸기는 어려울 전망이다. 코너스톤 제도 실효성에 대한 검증 기간도 필요하지만 업계에서는 긍정적인 시선이 감지된다.
+
+IPO 업계 관계자는 "최근 상장한 기업들은 수요예측 시기가 변동성이 큰 시기와 겹치면서 수요예측 결과가 부진했고 일반청약 부진으로 이어지며 상장 첫날 수익률에도 영향을 미치는 연쇄작용이 나타난 것으로 보인다"고 말했다. 이어 "최근 시장이 반등하고 있는 만큼 앞으로 분위기가 개선될 가능성도 있다"고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/031/0001050715' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/031/0001050715</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
