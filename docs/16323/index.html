@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>바이백에 국채금리 내렸는데, 기술주는 왜 떨어졌나…주인공은 따로 있었다 [마켓무버의 국장 힌트]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001262918' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16323" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>바이백에 국채금리 내렸는데, 기술주는 왜 떨어졌나…주인공은 따로 있었다 [마켓무버의 국장 힌트]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국 재무부의 국채 바이백으로 장기 국채 금리가 하락했으나, 기술주는 하락하는 현상이 발생했습니다. 자금은 전통적인 성장주가 아닌 획기적인 임상 결과를 발표한 mRNA 기반 헬스케어 섹터로 이동하며 '성장주의 피벗' 추세가 관찰되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">금리 환경 변화(매크로)와 섹터 간 자금 이동(바이오/헬스케어)을 종합적으로 다루며 새로운 투자 기회(피벗 추세)를 제시했기 때문에 중요도가 높습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">모더나</span> <span class="tag stock-tag">머크</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">헬스케어</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#국채금리</span> <span class="tag tag-hash">#바이백</span> <span class="tag tag-hash">#바이오테크</span> <span class="tag tag-hash">#섹터로테이션</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미 증시 살펴보며 한국 증시 투자아이디어까지 찾는 마켓 무버입니다.
+
+간밤 뉴욕 증시 3대 지수 소폭 상승했습니다. 3거래일만에 S&P 500 지수가 상승 전환했지요. 관련해 오늘 경제뉴스들엔 '바이백'이라는 단어가 많이 등장할 겁니다.
+
+기업이 자사주 살 때도 이 바이백이라는 단어를 쓰는데요. 간밤에 국채를 찍어내는 미국 재무부의 바이백, 즉 국채 재매입 규모가 건당 20억 달러에서 40억 달러로 늘어난다는 소식이 알려지며 장기 국채 금리는 하락했습니다.
+
+국채 가격과 반대개념인 국채 금리(=수익률)는 결국 사는 사람보다 파는 사람이 많으면 오르는 건데, 이 '사는 사람'의 편에 미국 재무부가 서서 더 강한 행동을 하겠다는 뜻이니까요.
+
+일반적으로 국채 바이백은 채권시장의 유동성을 강화하는 역할을 합니다. 시장에서 인기가 떨어지는, 그래서 수익률이 높은 비지표물 국채를 재무부가 매입한 뒤, 인기가 높은 국채를 새로 시장에 내놓기 때문입니다.
+
+결과적으로 19년만에 최고 수준으로 올라갔던 미국 30년물 만기 국채 수익률은 5.19% 아래로, 여러 금리의 벤치마크가 되는 10년물 수익률은 4.64%로 내려갔습니다.
+
+다만, 증시의 상승 폭이 그렇게 높지 않았다는 점을 보면 미국의 경제 상황을 바라보는 우려를 크게 씻어내는 정도는 아니라고 볼 수 있겠습니다. 바이백으로 장기채 금리가 낮아지더라도, 금리 상승 요인 가운데 하나로 지적받아온 미국 재정적자 확대 문제가 바이백으로 해결되는 건 아니기 때문입니다. 오늘을 기점으로 미국의 국가 부채 규모는 40조 달러를 돌파했습니다.
+
+또 하나 살펴볼 부분이 있습니다. 어쨌든 장기채 금리가 내려갔다면, 과거 흐름을 볼 때 미국의 기술주는 상승해야했습니다. 기술주 가치평가 방식을 보면 금리가 낮을 수록 유리하니까요.
+
+그런데 오늘 S&P 500 섹터 내 기술주는 오히려 0.73% 하락했습니다. 이것을 어떻게 해석해야 할까요?
+
+기술주에 몰렸던 자금이 다른 쪽으로 빠져나간 겁니다. 그리고 그 자금을 흡수한 곳은 헬스케어 섹터였습니다.
+
+과거 코로나, 팬데믹 시절에 주목받았던 기업 한 곳이 간밤 뉴욕 증시의 스타가 되었습니다. mRNA 백신을 만드는 기업이었죠. 모더나의 주가가 하루 만에 177% 폭등했습니다.
+
+이 회사는 제약사 머크와 함께 환자 맞춤형 암 백신을 개발 중인데, 흑색종을 대상으로 실험 중인 임상 3상 결과가 긍정적으로 나왔다고 발표했습니다. mRNA 기반 개인 맞춤형 암 치료제가 임상 3상에서 긍정적인 결과를 거둔 건 이번이 첫 사례입니다. 이 소식에 모더나와 머크 뿐 아니나 헬스케어 관련주 전반에 자금이 들어오는 흐름이 관측됐습니다.
+
+반도체 투자자들에게는 한편 아쉬운 일이지만요. 주가를 넘어, 인류의 난제가 기업의 혁신으로 해결되는 것을 목격하는 일도 투자의 즐거움이 아닐까요.
+
+성장주를 좇는 자금이 AI 관련주에서 헬스케어로 이동하는 '피벗' 추세가 지속될지도 앞으로의 투자 포인트가 될 수 있겠습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001262918' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001262918</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
