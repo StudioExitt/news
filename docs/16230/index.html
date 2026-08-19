@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>양쯔메모리도 IPO 행보…뜨거운 中 메모리 '투톱'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.19</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001262867' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16230" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>양쯔메모리도 IPO 행보…뜨거운 中 메모리 '투톱'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">양쯔메모리테크놀로지(YMTC)가 IPO 지도 절차를 성공적으로 마무리하며 중국 메모리 시장의 주요 강자로 부상하고 있습니다. 이는 AI 수요 증가와 글로벌 공급난, 그리고 미국의 수출 규제라는 거시적 환경 속에서 두드러지는 국내 대체재 확보 신호탄으로 해석됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 수요를 배경으로 메모리 산업의 구조적 성장이 가시화되고 있으며, 특히 미국 수출 통제 환경 속에서 중국 현지 업체들의 공공재적 중요성이 부각되어 섹터 전체에 강력한 모멘텀을 제공하기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI #메모리칩 #반도체공급망</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">중국 창신메모리테크놀로지(CXMT)에 이어 낸드플래시 업체 양쯔메모리테크놀로지(YMTC)에 이어 중국 증시 상장에 한 걸음 더 다가섰다.
+
+블룸버그 통신은 19일(현지시간) 중국 증권감독관리위원회(CSRC) 웹사이트에 게재된 YMTC 보고서를 인용해, YMTC가 상장 전 지도 절차를 마쳤으며 상장기업에 요구되는 지배구조, 회계 기반, 내부통제 시스템을 갖춘 것으로 나타났다고 보도했다。
+
+지난 5월 19일 후베이성 증권감독국에 상장지도를 등록했던 YMTC는 그로부터 석 달 만에 지도 절차를 마무리했다. 2016년 문을 연 이 회사는 별도의 지배주주 없이 국유기업인 후베이 창성(長晟)개발공사가 지분 26.5%를 보유해 최대 주주 자리에 올라 있다。
+
+다만 실제 상장까지는 증권거래소 신청과 감사, 상장위원회 심사, 증감회 등록 등의 단계가 아직 남아 있다. 중국 과창판(상하이증권거래소 과학기술주 전용 시장)에서는 지도 등록부터 상장까지 통상 8∼12개월이 걸리는 만큼, 업계에서는 YMTC의 실제 상장 시점을 내년 상반기로 내다보고 있다.
+
+시장조사업체 카운터포인트리서치 집계에 따르면 현재 267단 3D 낸드를 양산 중인 YMTC는 올해 2분기 세계 낸드플래시 시장에서 점유율 14%를 확보했다. 이는 일본 키옥시아를 앞지른 수치로, YMTC가 세계 3위에 오른 것은 이번이 처음이다. 같은 기간 1위와 2위는 각각 삼성전자(25%)와 SK하이닉스(22%)가 지켰다。
+
+이런 YMTC의 움직임은 D램 부문 라이벌 CXMT가 앞서 걸었던 길을 뒤따르는 모양새이기도 하다. CXMT는 지난달 말 666억위안(약 13조 9,000억원)을 끌어모으며 중국 본토 역사상 두 번째로 큰 규모의 IPO를 기록했고, 상장 직후에는 주가가 급등하며 텐센트를 밀어내고 중국 시가총액 1위 상장기업 자리에 올라서기도 했다。
+
+두 회사가 나란히 주목받는 배경에는 인공지능(AI) 수요발 글로벌 메모리 공급난과 업계 전반의 수익 급증이 있다. 여기에 중국 반도체를 겨냥한 미국의 수출 통제까지 더해지면서 두 업체의 전략적 중요성은 오히려 커졌다고 블룸버그는 전했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001262867' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001262867</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

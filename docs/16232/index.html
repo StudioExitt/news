@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>단일종목ETF 모의거래 19일 시작…보완책에도 '당국 책임론' 여전</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.19</span>
+        
+        <a class="more-btn" href="https://studioexitt.net/news/16232" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>단일종목ETF 모의거래 19일 시작…보완책에도 '당국 책임론' 여전</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">단일종목 레버리지 ETF 규제 강화와 모의거래 의무화가 발표되었으나, 정책 목적 달성 여부와 시장 구조적 문제에 대한 논란이 커지면서 제도 자체의 지속 가능성에 대한 의문과 책임론이 제기됨.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">ETF 관련 규제 강화는 단기적인 위험관리 측면에서 긍정적이나, 기사 전반을 지배하는 것은 해당 정책의 효과에 대한 의문점과 정치권의 거센 '책임론'입니다. 이는 시장 참여자들의 신뢰 저하 우려를 키우며 중장기적으로 시장 불안감을 조성할 수 있어 부정적인 영향을 미칩니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자본시장</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF규제</span> <span class="tag tag-hash">#단일종목ETF</span> <span class="tag tag-hash">#금융정책논쟁</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">19일부터 단일종목 레버리지 ETF(상장지수펀드) 신규 투자자는 5일 이상 모의거래를 거쳐야 매수할 수 있다. 지난달 기본예탁금 상향에 이은 보완책이지만, 리쇼어링 효과는 미미하고 증권사 수수료 수익만 늘었다는 비판 속에 '당국 책임론'은 가라앉지 않고 있다. 오는 9월 정기국회에서도 정무위원회를 중심으로 당국에 대한 질타와 책임 공방이 이어질 전망이다.
+
+이날 금융당국과 금융투자업계에 따르면 삼성전자·SK하이닉스 레버리지 ETF를 처음 매수하는 투자자는 이날부터 한국거래소 모의거래 홈페이지에서 총 5일 이상의 모의거래를 이수해야 한다. 국내와 해외에 상장된 단일종목 레버리지·인버스 상품에 신규 투자하는 내국인 개인 투자자에게 적용되는 일종의 진입 장벽으로, 기존 투자자는 모의거래 없이도 거래가 가능하다.
+
+신규 투자자는 모의거래 정규장 또는 리플레이(replay)에서 5거래일 이상, 매 거래일 1시간 이상 접속해 모의거래를 해야 한다. 주말과 같이 시장이 열리지 않는 날은 시스템의 리플레이를 이용해 1시간 이상 접속·거래하면 된다. 이렇게 총 5일, 5시간 모의거래 요건을 충족하면 모의거래 이수 확인증을 받을 수 있다. 각 증권사에 모의거래 이수 확인증을 제출해야 ETF를 신규 매수할 수 있다.
+
+이는 금융당국이 지난달 29일 발표한 단일종목 레버리지 ETF 추가 보안책 중 하나다. 모의거래 시스템 도입뿐 아니라 LP(유동성 공급자)의 괴리율 관리의무를 강화하고 위반 시 페널티를 부과하는 거래소 업무규정 시행세칙도 이날부터 시행됐다. 매매수량단위를 20주로 변경하는 시행세칙 또한 전날 개정돼 증권사 전산개발이 완료되는 대로 시행할 예정이다.
+
+다른 후속조치는 아직이다. 개인별 투자한도 설정, 과다거래부담금 부과 등은 구체적인 시행방안과 일정이 나오지 않았다. 홍콩과 같이 레버리지 배수를 유동적으로 조정하는 방안은 자본시장법 개정이 필요한 사안이라 실제 시행까지는 상당한 시일이 걸릴 전망이다.
+
+금융당국의 보완책 시행으로 거래대금이 확 줄었지만 당국 책임론은 여전하다. 오는 9월 정기국회에서도 단일종목 레버리지 ETF 도입 배경과 협의 과정, 정책 목표 달성 여부를 두고 치열한 공방이 예상된다.
+
+특히 해외로의 투자자금 유출을 막기 위한 정책 목적을 달성했는지에 대해서는 의견이 엇갈리고 있다. 금투업계 관계자는 "홍콩에서 거래하던 개인투자자가 국내시장으로 돌아왔다기보다는 투자 의향이 있던 개인들의 수요가 폭발한 것"이라며 "초단타 매매로 차익을 실현하려는 투기성 투자 수요가 당국의 정책과 맞아떨어져 '단일종목 레버리지'라는 시장이 형성됐다고 본다"
+
+실제 리쇼어링 자금 또한 단일종목 레버리지 ETF 시장 규모에 비해 크진 않다. 금융위원회가 국회 정무위원회 소속 강준현 더불어민주당 의원에게 제출한 자료에 따르면 단일종목 레버리지 ETF 상장 후 7월23일까지 국내 투자자들은 홍콩에 상장된 삼성전자·SK하이닉스 ETF 3284억원을 순매도했다. 지난 4월말 홍콩에 상장된 한국물 기반 단일종목 레버리지 상품의 일간 AUM(순자산)이 약 6조원인 점을 고려하면 리쇼어링 규모가 많지는 것이다.
+
+오히려 이를 통해 증권사의 수익만 늘렸다는 비판도 정치권을 중심으로 나오고 있다. 금융감독원이 강준현 의원에게 제출한 자료에 따르면 단일종목 레버리지 ETF를 통한 증권사 위탁매매 수수료 수익은 7월말 기준 총 893억5000만원으로 집계됐다.
+
+국회에서는 다음달 경제 분야 대정부 질문을 시작으로 10월 국정감사에서 단일종목 레버리지 ETF 관련 책임 공방을 이어갈 것으로 보인다.
+국회입법조사처에서도 규율체계 보완 필요성을 언급했다. 편은비 국회입법조사처 입법조사관은 "예탁금 상향 후 7월31일부터 8월10일까지 일평균 거래대금이 1조3000억원으로 약 89% 감소했지만 거래규모의 감소 자체를 투자자 보호의 성과와 동일하게 평가하기는 어렵다"며 "시장여건에 따라 상품의 레버리지 수준을 조정하는 방식도 위험관리수단 중 하나로 검토할 수 있다"고 했다.
+
+강준현 의원은 "단일종목 레버리지 상품 출시 이후 해외 자금의 리쇼어링 등 부분적 효과가 확인되면서도 높은 변동성과 시장 불안정성 초래라는 한계의 양면이 모두 나타났다"며 "레버리지 상품의 시장 영향도를 제어하는 정책 마련과 동시에 우리 자본시장의 가치를 근본적으로 다시 제고하는 일에 정치권과 정부가 합심해야 한다"고 말했다.</div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
