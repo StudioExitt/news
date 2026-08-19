@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“증시, 실적 반이라도 따라갑시다”…3분기에 역대급 찍는 업종 어디</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005723231' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16293" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“증시, 실적 반이라도 따라갑시다”…3분기에 역대급 찍는 업종 어디</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 서버 및 스마트폰 수요 확대로 반도체 업종의 3분기 실적 전망치가 역대급으로 높게 예상됩니다. 삼성전자와 SK하이닉스 등 주요 메모리 기업이 이익 성장을 주도하며, 자동차와 조선업종 또한 견조한 성장세를 보일 것으로 전망돼 전반적인 시장에 강력한 상승 모멘텀을 제공할 것으로 분석됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 업황의 구조적 회복과 AI/산업재 수요 확산에 힘입어 국내 주요 상장사들의 실적이 전 분기 대비 폭발적으로 증가할 것으로 예상되어 매우 강력한 상승 모멘텀을 제공합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">현대차</span> <span class="tag stock-tag">기아</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자동차부품</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">조선</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI #반도체사이클 #실적성장 #메모리업황</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">상장사. [연합뉴스]국내 주요 상장사들이 올해 2분기에 이어 3분기에도 역대급 실적 성장세를 이어갈 전망이다. 인공지능(AI) 투자 확대로메모리 수요가 증가해 수혜를 받을 것으로 기대되는 반도체 업종이 이익 증가를 주도하는 가운데 자동차·조선이 뒤를 받치는 구도가 펼쳐질 것으로 보인다.
+
+19일 에프앤가이드에 따르면 증권사 3곳 이상이 전망치를 제시한 코스피·코스닥 비금융 상장사 230곳의 3분기 매출액 컨센서스는 969조3700억원, 영업이익은 246조1100억원으로 집계됐다. 지난해 3분기보다 각각 39.1%, 293.8% 늘어난 규모다. 직전 분기와 비교해도 매출은 4.4%, 영업이익은 18.7% 증가한 수준이다. 반도체 가격 상승이 이익 추정치를 계속 끌어올리며 눈높이도 우상향했다. 3개월 전 223조6900억원이던 3분기 영업이익 전망치는 현재 10.0% 상향됐다.
+
+핵심은 삼성전자와 SK하이닉스다. 삼성전자의 3분기 영업이익 컨센서스는 113조9400억원으로 전년 동기 대비 836.6%, 전 분기 대비 27.3% 늘어날 전망이다. SK하이닉스도 78조8000억원으로 각각 592.3%, 30.2% 증가할 것으로 예상된다. 두 회사 영업이익만 192조7400억원으로 전체의 78.3%를 차지하며 전체 영업이익 증가액에서 두 회사 비중은 92%를 웃돈다.
+
+이번 호황이 과거와 다른 점은 현물가격 상승뿐 아니라 수요 가시성이 동시에 높아지고 있다는 점이다. AI 서버는 물론 스마트폰 등 범용수요처까지 물량 확보 경쟁에 가세하면서 3분기 D램·낸드 가격은 전 분기보다 약 20% 오를 것으로 전망된다. 여기에 장기공급계약(LTA)이 확산되며 메모리 산업의 고질적 약점이던 수요 불확실성도 낮아졌다. 고객사가 계약의 20~30%를 선수금으로 걸고 5년 단위로 약정하는 만큼 팔릴물량을 확인한 뒤 설비투자 규모를 정할 수 있어 공급 과잉에 따른 급격한 다운사이클 가능성이 줄었다는 분석이다.
+
+호황을 떠받치는 힘이 가격에서 고객 관계로 옮겨가고 있다는 점도 눈여겨볼 대목이다. 고객사별로 설계하는 커스텀 고대역폭메모리(HBM)가 늘면서메모리 업체는 칩 개발 초기부터 고객사와 함께 움직인다. 값이 조금 싸다고 거래처를 갈아탈 수 있던 범용 D램 시절과 달리 한번 확보한 고객이 오래 남는 구조인 만큼 이익의 지속성도 과거보다 높아질 수 있다는 의미다. SK하이닉스는 2분기 발목을 잡았던 HBM4 출하 지연이 3분기 정상화되는 점도 추가 동력으로 꼽힌다.
+
+거시 환경 역시 당장 반도체 이익 사이클을 꺾을 단계는 아니라는 분석이 나온다. 2분기 미국의 민간소비와 투자를 합친 핵심 국내총생산(GDP) 성장률이 오히려 가속했고 자본재 주문도 늘면서 경기 확장이 AI 투자에서 산업재로 번지고 있기 때문이다.
+
+안기태 NH투자증권 연구원은 “AI 인프라 구축에서 AI를 활용하는 산업으로 성장이 확산되고 있다”며 “한국의 주요 지표가 둔화하더라도 내년까지 잠재 수준 이상의 성장은 이어질 것”이라고 내다봤다.
+
+반도체 밖에서는 자동차와 조선업종의 실적 개선도 탄력을 받을 전망이다. 현대차의 3분기 영업이익은 3조1100억원으로 전년보다 22.7%, 기아는 2조5900억원으로 77.4% 늘어날 전망이다. 삼성중공업 등 조선업종 9개사의 영업이익 전망치도 6조5500억원으로 62.9% 증가한다.
+
+반면 화학과 일부 2차전지는 회복이 더뎌 업종별 온도 차가 여전히 클 것으로 보인다. LG화학의 3분기 영업이익 전망치는 2233억원으로 전년 동기 대비 67.2%, 전 분기보다 62.8% 줄어들 것으로 예상된다. 3개월 전 전망치(5398억원)와 비교하면 눈높이가 58.6% 낮아진 셈이다.
+
+롯데케미칼은 2분기 영업이익 1101억원을 거뒀지만 3분기에는 1425억원의 영업손실로 다시 적자 전환할 전망이다. 3개월 전 예상했던적자(475억원)보다 손실 규모가 크게 불어났다. 에코프로비엠의 3분기 영업이익도 184억원으로 전년 동기 대비 63.5% 감소할 것으로 관측된다.
+
+대형 반도체 기업에 대한 쏠림은 여전할 전망이다. 삼성전자와 SK하이닉스를 제외한 나머지 비금융 상장사의 영업이익은 2분기 57조2300억원에서 3분기 53조3600억원으로 오히려 6.7% 줄어든다. 전 분기 대비 실적 모멘텀이 사실상 반도체 두 종목에 기대고 있다는 의미.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005723231' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005723231</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
