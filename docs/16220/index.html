@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“한국서 사면 되잖아, 왜 그래” 월가 ‘깜짝’ 놀랐다…하이닉스 ADR 1조 베팅에 “말도 안 되는 일”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.19</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004653114' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16220" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“한국서 사면 되잖아, 왜 그래” 월가 ‘깜짝’ 놀랐다…하이닉스 ADR 1조 베팅에 “말도 안 되는 일”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 투자자들이 미국 증시로 대규모 자금을 이동시키며 AI, 반도체 등 특정 테마와 고위험 레버리지 상품에 공격적으로 베팅하고 있습니다. 전문가들은 SK하이닉스 ADR과 국내 본주 간의 이례적인 가격 차이 등을 두고 시장 과열 및 거품 징후를 경고했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">한국 개인 투자자들의 자금 흐름이 반도체와 AI 같은 특정 테마에 지나치게 집중되고 있으며, 특히 ADR과 본주 가격 간의 왜곡 및 고위험 레버리지 ETF 편중 현상이 관찰되어 시장 과열 및 거품 징후에 대한 경고가 나옴.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#미국투자</span> <span class="tag tag-hash">#레버리지</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">제목: “한국서 사면 되잖아, 왜 그래” 월가 ‘깜짝’ 놀랐다…하이닉스 ADR 1조 베팅에 “말도 안 되는 일”
+언론사: 서울경제
+날짜: 2026.08.19. 오후 4:32
+본문: 지난달 10일(현지시간) SK하이닉스가 나스닥 ADR 거래를 개시했다. 로이터연합뉴스
+지난달 10일(현지시간) SK하이닉스가 나스닥 ADR 거래를 개시했다. 로이터연합뉴스지난달 국내 증시가 조정을 받자 미국으로 눈을 돌린서학개미들의 투자 방식이 월가의 관심을 끌고 있다. 미국 주식을 6조원 넘게 사들이는 과정에서 국내에서도 살 수 있는 SK하이닉스에 약 1조원을베팅하는가 하면 하루 수익률의 2~3배를 추종하는 고위험 레버리지 상품에도 자금이 몰렸기 때문이다.
+
+한국서 사면 되는데…SK하이닉스 美 ADR에 1조원 몰려
+
+17일(현지시간) 미국 CNBC는 한국예탁결제원 자료를 인용해 한국 투자자들이 지난 7월 미국 주식을 45억달러(약 6조3000억원)어치순매수했다고 보도했다. CNBC는 한국 투자자들이 국내 증시 조정을 피해 미국으로 이동하면서도 AI·반도체와 레버리지 상품에 대한 공격적인 투자성향은 그대로 유지하고 있다고 분석했다.
+
+월가가 특히 주목한 것은 SK하이닉스다. 7월 한국 투자자가 순매수한 미국 증권 가운데 약 8억4000만달러가 SK하이닉스미국주식예탁증서(ADR)에 몰렸다. 전체 미국 주식 순매수액의 약 19%에 해당한다. SK하이닉스 ADR은 한국 투자자의 미국 증권 순매수2위에 올랐다.
+
+ADR은 미국 이외 지역의 기업 주식을 미국 증시에서 거래할 수 있도록 만든 증서다. 문제는 한국 투자자라면 국내 증시에서 SK하이닉스 본주를바로 살 수 있다는 점이다.
+
+심지어 미국에 상장된 ADR이 국내 본주보다 비싸게 거래되는 현상도 나타났다. 오웬 라몬트 아카디안자산운용 수석 부사장은 최근 SK하이닉스ADR과 국내 주식의 가격 차이가 약 10%까지 벌어졌으며 ADR의 변동성도 더 크다고 지적했다.
+
+그는 한국 투자자가 굳이 미국에서 한국 기업의 ADR을 매수하는 상황을 두고 “정말 말도 안 되는 일(Absolutely crazy)”이라고평가했다. 본주와 ADR 사이에 나타난 이례적인 가격 차이를 시장 과열의 징후로 볼 수 있다는 것이다.
+
+라몬트 부사장은 과거 닷컴버블 당시 대만과 인도 기업에서도 이와 비슷한 가격 왜곡이 나타났다며 이를 ‘거품의 징후’라고 진단했다。
+
+10개 중 4개가 레버리지…반도체 3배 레버리지 ‘1위’
+
+SK하이닉스만의 이야기도 아니다. 한국 투자자들이 지난달 미국에서 가장 많이 사들인 증권 상위 10개 가운데 4개가 레버리지 상품이었다.
+
+순매수 1위는 반도체지수의 하루 수익률을 3배로 추종하는 ‘디렉시온 데일리 세미컨덕터 불 3X 셰어스(SOXL)’였다. 반도체가 하루 1%오르면 이론적으로 약 3%의 수익을 내도록 설계됐지만 반대로 지수가 떨어질 때 손실도 그만큼 커질 수 있는 상품이다.
+
+나스닥100지수의 하루 움직임을 3배로 따라가는 ‘프로셰어즈 울트라프로 QQQ(TQQQ)’도 순매수 상위권인 4위에 올랐다. 나스닥100 하루등락률의 2배를 추종하는 ‘프로셰어즈 울트라 QQQ(QLD)’는 6위를 기록했다.
+
+국내 증시가 흔들리자 위험자산에서 돈을 빼기보다는 투자할 시장만 미국으로 옮긴 셈이다. 특히 AI와 반도체에 대한 강세 전망도 그대로 유지되고있다는 분석이 나온다.
+
+필립 울 레이리언트글로벌어드바이저스 리서치 책임자는 “한국 투자자들의 매수 내역을 보면 국내에서 매도 압력을 받았던 AI 하드웨어 테마와 연결된종목을 미국 시장에서 다시 사들이고 있다는 점이 역설적”이라고 설명했다.
+
+윤정인 피보나치에셋운용 대표 역시 투자자들이 AI에 대한 비중을 줄인 것이 아니라 같은 전망을 유지한 채 투자 수단의 지역만 바꾼 것으로분석했다.
+
+“美 전체 흔들 규모 아니지만 특정 종목은 주의”
+
+한국 투자자들의 미국행은 국내 투자 흐름에서도 드러난다. 한국금융투자협회에 따르면 국내 증시의 마진대출 잔액은 6월 말 약37조원(260억달러)에서 이달 초 약 27조원으로 줄어 올해 최저 수준까지 떨어졌다.
+
+다만 서학개미가 미국 증시 전체를 움직일 정도의 영향력을 갖고 있는 것은 아니다. 거액을 운용하는 기관과 전문 투자자가 주도하는 미국 시장에서한국 개인 투자자의 자금이 차지하는 비중은 제한적이기 때문이다.
+
+문제는 자금이 일부 종목이나 테마에 집중될 경우다. 실제 한국 투자자들은 2024년 말 미국 양자컴퓨팅 관련주를 집중적으로 사들이며 일부 종목의주가 급등에 영향을 미친 사례가 있다.
+
+라몬트 부사장은 “개인투자자가 선호하는 특정 종목이나 시장 일부에서는 가격 왜곡이 나타날 가능성이 더 크다”고 지적했다. 한국뿐 아니라 홍콩과미국 등에서 레버리지 ETF가 확산하는 현상역시 시장의 등락 폭을 키울 수 있다고 경고했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004653114' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004653114</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
