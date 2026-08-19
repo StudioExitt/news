@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 5.8% 급락했는데…나홀로 52주 신고가 10개 종목</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.19</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006354286' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16224" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 5.8% 급락했는데…나홀로 52주 신고가 10개 종목</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">시장 전체 지수(코스피, 코스닥)가 급락하는 가운데도 일부 개별 종목들이 52주 신고가를 기록했다. 전문가들은 이러한 개별 종목의 상승세만 믿기보다, 기업의 실적 개선 여부나 명확한 수주/호재 등 근본적인 배경을 함께 살펴봐야 한다고 조언했다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">전반적으로 시장 하락장에서도 개별주의 강세를 포착하고 있으나, 전문가들이 기술적 분석보다는 실적과 근본적인 재료(AI 수주 등)를 따져볼 것을 강조하며 투자자에게 주의를 환기시키고 있어 심층 분석의 가치가 높다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">지배구조</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주식시장</span> <span class="tag tag-hash">#52주신고가</span> <span class="tag tag-hash">#기업분석</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피·코스닥 급락 속 10개 종목 종가 기준 52주 신고가
+AI 수주·실적 개선 등 재료 확인…뚜렷한 호재 없는 종목도
+전문가 “신고가보다 실적·재료·수급 등 상승 배경 살펴야” 국내 증시가 급락한 가운데서도 일부 종목이 종가 기준 52주 신고가를 기록했다. 인공지능(AI) 인프라 수주와 실적 개선, 공개매수 등 개별 재료가 부각된 종목이 있는 반면 뚜렷한 신규 호재가 확인되지 않은 종목도 있었다. 전문가들은 최근처럼 시장 변동성이 큰 상황에서는 신고가 자체보다 기업의 실적과 상승 배경, 수급 등을 함께 살펴볼 필요가 있다고 지적했다.
+
+19일 오후 서울시 영등포구 한국거래소 모니터에 코스피 등 종가가 표시되고 있다. 이날 코스피는 전 거래일 대비 398.66p(5.80%) 떨어진 6471.17, 코스닥은 9.74p(1.17%) 내린 824.46로 마감했다. 서울외환시장에서 달러·원 환율은 장중 1,300원대로 떨어졌다.
+
+19일 엠피닥터에 따르면 이날 코스피와 코스닥에서는 한창제지(009460), 인디에프(014990), 롯데렌탈(089860), 대신정보통신(020180), 아이크래프트(052460), 파커스(065690), 아이윈(090150), 마이크로컨텍솔(098120), 골프존홀딩스(121440), 이퓨쳐(134060) 등 10개 종목이 종가 기준 52주 신고가를 기록했다. 이날 코스피가 전 거래일 대비 5.8%, 코스닥이 1.17% 하락하는 등 시장 전체가 약세를 보였지만 일부 개별 종목은 지수와 반대 흐름을 나타낸 셈이다.
+
+하지만 주가 상승을 뒷받침할 만한 재료가 확인된 종목은 일부에 그쳤다. 아이크래프트는 지난달 네이버클라우드와 1040억원 규모의 고성능 AI 스토리지 공급계약을 체결한 데 이어 데이타솔루션과도 454억2348만원 규모의 공급계약을 맺었다. 연이어 대규모 AI 관련 수주가 나오면서 향후 실적에 대한 기대가 반영될 여지가 커졌다.
+
+아이윈도 실적 개선이 나타난 종목이다. 올해 상반기 연결 기준 매출액은 566억원으로 전년 동기 대비 6% 감소했지만 영업이익은 55억원으로 30% 증가했다. 순이익은 169억원으로 1320% 늘었다. 골프존홀딩스는 실적보다는 공개매수와 자진 상장폐지 추진이라는 지배구조 이슈가 주가에 영향을 준 사례로, 최대주주 측은 지난 6월 29일부터 8월 5일까지 잔여 지분을 주당 6700원에 공개매수했다.
+
+코스피에서는 롯데렌탈도 실적 개선이 확인됐다. 올해 2분기 매출액은 7658억원, 영업이익은 846억원으로 전년 동기 대비 각각 2.3%, 9.6% 증가했다. 오토장기렌탈과 오토단기렌탈 부문의 영업이익이 증가하면서 본업 수익성이 개선됐다.
+
+이처럼 모든 종목에서 명확한 재료가 확인된 것은 아니다. 이날 신고가를 기록한 종목 중 일부는 최근 공시나 실적 가운데 주가 상승을 직접 설명할 만한 새로운 재료가 뚜렷하지 않았다. 특히 소형주의 경우 거래량과 유통주식수 등에 따라 상대적으로 적은 수급에도 주가 변동폭이 커질 수 있어 신고가만으로 기업가치 상승을 판단하기는 어렵다는 지적이 나온다.
+
+i준서 동국대 경영학과 교수는 “실적이 잘 받쳐줘서 소위 말해서 숨겨져 있는 진주가 찾아지는 경우도 있을 테고, 소형주 같은 경우에는 본질 가치와는 무관하게 그냥 바람으로 신고가를 치는 경우도 있을 수 있다”며 “누군가가 주포 역할을 해서 수급에 의해 올라가는 경우도 있을 수 있다”고 말했다.
+
+i 교수는 신고가 종목의 상승 배경을 일률적으로 판단하기보다 개별 기업의 실적과 재료를 확인해야 한다고 강조했다. 그는 “지금 신고가를 친 기업들의 상반기 실적을 한 번씩 살펴볼 필요가 있다”며 실적이 주가 상승을 뒷받침하는지를 확인해야 한다고 설명했다.
+
+i 교수는 이날처럼 시장 전체가 하락하는 상황에서도 일부 종목이 신고가를 기록한 데 대해 “실적이 좋고 아직 발표되지 않은 긍정적인 재료에 따른 주가 상승이라면 상관없지만, 유동성이 몰려 움직이는 장세라면 주의할 필요가 있다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006354286' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006354286</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
