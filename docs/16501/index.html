@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오너 주식 매입 늘었지만… “책임경영 신호 그 이상은 아냐”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.21</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/366/0001187446' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16501" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>오너 주식 매입 늘었지만… “책임경영 신호 그 이상은 아냐”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">최근 오너 및 경영진의 개인 주식 매입이 늘고 있으나, 기사는 이러한 행위가 기업 가치 상승을 보장하지 않는 '상징적 신호'에 불과하다고 분석합니다. 주가 지속 상승을 위해서는 결국 실적 개선이나 자사주 소각 같은 실질적인 주주환원 정책이 필수적이라는 내용입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">오너의 자금 투입은 단기적인 투자 심리에는 긍정적이나, 기사 전반에 걸쳐 '실질적 효과 없음', '펀더멘털이 관건'이라며 경고하고 있어 시장 영향력이 제한적이므로 중립적으로 평가했습니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">한미반도체</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#오너자본</span> <span class="tag tag-hash">#책임경영</span> <span class="tag tag-hash">#주주환원정책</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">최근 증시가 급등락하면서 상장사 최대주주와 경영진이 개인 자금을 들여 자기 회사 주식을 매수하는 사례가 잇따르고 있다. 이는 통상 주주들에게
+책임경영 의지와 현재 주가가 저평가됐다는 자신감으로 받아들여진다.
+
+다만 오너와 경영진의 회사 주식 매수는 회사가 자기주식을 취득·소각하는 경우와 달리 발행주식 수를 줄여 주식 가치를 높이는 효과는 없다. 오너와
+경영진이 회사 주식을 샀다고 해서 기업 실적이 긍정적인 영향을 주는 것도 아니다. 단순히 투자 심리에 영향을 주는 상징적인 결정이라는 의미다.
+
+상장사 주가 상승세가 이어지려면 결국 경영진이 실적 개선과 사업 성과를 증명해야 하고, 소각을 전제로 한 자사주 매입 등 실질적인 주주환원
+정책이 나와야 한다.
+
+일러스트 = 챗GPT 달리
+일러스트 = 챗GPT 달리
+21일 금융감독원 전자공시시스템에 따르면 회장·대표이사·사장이 개인 명의로 10억원 이상 자기 회사 주식을 장내매수한 사례는 올해 1월 6건, 2월 1건, 3월 7건, 4월 6건, 5월 5건으로 한 자릿수에 머물렀다. 그런데 이후 6월에는 11건, 7월에는 13건으로 두 달 연속 두
+자릿수를 기록했다.
+
+대표적으로 최태원 SK그룹 회장은 지난달 30일 SK하이닉스 주식 3620주를 주당 평균 135만3677원에 장내 매수했다. 총매입액은 약
+49억원이다. 곽동신 한미반도체 회장도 지난달 약 50억원어치의 회사 주식을 사들였다. 이달에는 김용주 리가켐바이오 회장이 약 15억원, 김영훈
+대성창투 대표가 회사 주식 매입에 각각 10억원 정도를 투입했다.
+
+10억원 미만까지 범위를 넓히면 매수 사례는 더 많다. 노태문 삼성전자 대표는 지난달 삼성전자 주식 약 7억원어치를 샀고 이규호 코오롱 회장은
+약 2억원을 투입했다. 김동춘 LG화학 사장과 문혁수 LG이노텍 대표도 각각 1억원가량의 회사 주식을 매입했다.
+
+오너의 개인 매수는 통상 기업가치에 대한 내부자의 판단을 직접 보여주는 신호로 해석된다. 경영진은 일반 투자자보다 회사 실적과 사업 전망을 잘
+파악하고 있는 만큼 직접 자금을 투입했다는 사실 자체가 투자자들의 매수 심리를 자극할 수 있다.
+
+강소현 자본시장연구원 자본시장실장은 “경영자는 기업의 실질가치에 대해 외부 투자자보다 많은 정보를 가지고”며 “내부자가 회사 주식을 개인 명의로 매수했다면 기업이 저평가됐다는 보다 강한 신호로 해석할 수 있다”고 말했다.
+
+다만 회사 차원의 자사주 매입·소각과는 구분해서 볼 필요가 있다. 회사가 보유 자사주를 소각하면 전체 발행주식 수가 줄면서 주당순이익(EPS)과
+주당순자산(BPS) 등 주당 가치가 높아질 수 있다.
+
+반면 오너가 개인 돈으로 주식을 사더라도 전체 발행주식 수에는 변화가 없다. 기업으로 새로운 자금이 들어오는 것도 아니어서 실적이나 재무구조가
+개선되는 효과도 없다.
+
+강 실장은 “투자자들은 내부자와 외부주주 사이의 정보 비대칭으로 인해 내부 경영인보다 정보가 부족한 위치에 있다”며 “기업가치가 저평가됐다는
+판단이 맞다면 내부자는 이후에도 지분을 계속 보유할 가능성이 높지만, 그렇지 않다면 지분을 계속 유지할 유인은 크지 않을 수 있다”고 말했다.
+
+실적 개선이나 신규 수주, 사업 성장 등 펀더멘털의 변화가 뒤따르지 않는다면 오너의 주식 매수에 따른 투자 심리 개선도 장기간 이어지기 어렵다는
+의미다. 결국 매수 여부와 금액뿐 아니라 이후 경영 성과와 지분 보유가 이어지는지도 함께 살펴봐야 한다.
+
+이창민 한양대 경영학과 교수는 “오너가 자기 돈으로 회사 주식을 사는 것은 회사의 미래에 대한 신뢰를 주는 측면에서 긍정적으로 볼 수 있다”며
+“다만 회사가 자사주를 매입해 소각하는 것처럼 유통주식 수를 줄이는 것은 아니기 때문에 결국 시장이 매입 의도를 어떻게 해석하느냐에 따라 결과가
+달라질 수 있다”고 말했다.
+
+이어 “주가가 지속적으로 오르기 위해서는 기본적으로 기업 실적이 뒷받침돼야 한다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/366/0001187446' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/366/0001187446</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
