@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[THE FINANCE] 롤러코스피에 피난처된 커버드콜 ETF</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/029/0003043406' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16424" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[THE FINANCE] 롤러코스피에 피난처된 커버드콜 ETF</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">주가 변동성에 지친 투자자들이 안정적인 월 분배금과 하방 방어 효과를 기대하며 '커버드콜 ETF'로 자금이 대규모 유입되고 있다. 커버드콜은 기초자산을 보유하고 콜옵션을 매도하여 옵션 프리미엄을 얻는 구조로, 정기적인 현금흐름을 원하는 투자자들에게 인기를 끌고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">커버드콜 ETF에 대한 자금 유입과 수요 증가 추이를 보여주며 인컴형 투자 상품의 시장성 및 구조적 매력을 부각함. (단, 과도한 낙관론 경계 필요)</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자산운용</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#커버드콜</span> <span class="tag tag-hash">#월분배</span> <span class="tag tag-hash">#ETF투자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">“배당 ETF가 수익이 드라마틱하진 않지만 마이너스 난 적이 없어서 좋습니다. 개별 주식 투자에 재주가 없고 마이너스와 변동성을 정말 싫어하는 사람에겐 딱인 상품입니다. 배당 재투자해서 수량을 늘리는 재미도 쏠쏠합니다.”
+‘롤러코스피’(롤러코스터+코스피)에 지친 투자자들의 관심이 고배당·커버드콜 상장지수펀드(ETF)로 향하고 있다. 주가 급등락에 따른 시세차익을 좇기보다 안정적인 현금 흐름을 확보하기 위해서다. 특히 커버드콜 ETF는 꾸준한 월 분배금과 하방 방어 효과를 동시에 기대할 수 있다는 점에서 변동성 증시의 피난처로 자리 잡고 있다.
+
+◇변동성 장세·월분배 수요 타고 자금 몰려
+20일 금융투자업계와 코스콤 체크에 따르면 지난 14일 기준 국내 증시에 상장된 커버드콜 ETF 62종의 순자산 총액은 약 26조2000억원으로 집계됐다. 올해 초 약 15조원 수준과 비교하면 반년여 만에 11조원가량 증가했다.
+
+커버드콜 ETF는 올 들어 자금 순유입이 지속되고 있다. 1월과 2월 각각 4950억원, 7010억원이 유입된 데 이어 3월부터 7월까지는 매달 1조원이 넘는 자금이 들어오고 있다. 특히 변동성이 심화됐던 7월에는 올 들어 가장 많은 1조5000억원이 순유입됐다.
+
+전균 삼성증권 연구원은 “주식시장의 하방위험과 변동성 상승 위험을 일부 보완할 수 있는 커버드콜 ETF에 대한 투자자들의 관심이 집중된 결과”라고 풀이했다.
+
+커버드콜은 기초자산(지수 또는 주식)을 보유하는 동시에 콜옵션(주식을 살 수 있는 권리)을 매도해 옵션 프리미엄을 확보하는 전략이다. 지수의 추가 상승분의 일부를 포기하는 대신, 옵션 프리미엄을 통해 정기적인 현금 흐름을 만들고 수익률 변동성을 낮추는 구조다.
+
+자산운용사는 주식의 배당금이나 콜옵션 매도 수익(프리미엄)을 ETF 투자자에게 분배금으로 나눠준다.
+
+주식 매수와 동시에 콜옵션 매도 전략을 통해 증시가 하락 및 횡보장일 때 손실 폭을 줄이거나 높은 이익을 얻지만, 장이 좋을 때는 일반적으로 다른 상품보다 상승세를 따라잡지 못하는 특성이 있다.
+
+시장에서는 국내 증시의 높은 변동성을 수익의 원천으로 삼는 커버드콜 ETF 출시가 잇따르고 있다.
+
+최근 변동성 지수가 급등하면서 콜옵션 가격이 상승하자, 옵션 매도를 통해 더 높은 인컴(현금소득)을 만들 수 있어 상품성이 커졌기 때문이다.
+
+최근엔 운용사 간 상품 경쟁이 심화하면서 기초자산과 옵션 전략도 세분화하고 있다. 초기에는 S&P500과 나스닥100 등 해외 대표지수 중심으로 상품이 출시됐다. 최근엔 코스피200, 코스닥150, 국내 반도체 등 국내 주가지수와 섹터를 활용한 상품으로 확대됐다.
+
+옵션 전략 역시 월간옵션을 활용한 전통적 커버드콜 구조에서 위클리 옵션, 목표 프리미엄형, 옵션 매도 비중 조절형 등으로 다양해졌다.
+
+◇‘KODEX 200타겟위클리커버드콜’ 순자산 5조원 넘어
+국내 자산운용사가 내놓은 커버드콜 ETF 상품 가운데 현재 순자산 1위는 삼성자산운용의 ‘KODEX 200타겟위클리커버드콜’이다. ‘KODEX 200타겟위클리커버드콜 ETF’는 2024년 12월 3일 상장한 뒤 올해 순자산총액 5조~6조원대 종목으로 성장했다. 특히 올 들어 순자산이 지난 4월 4조원, 5월 5조원을 돌파하는 등 커버드콜 ETF 시장의 대표 상품으로 자리매김했다.
+
+높은 분배율이 인기 비결로 꼽힌다. 이 상품은 코스피200지수를 기초지수로 삼으며, 주(week) 단위 콜옵션 매도를 시행해 연간 15% 수준의 옵션 프리미엄 수익을 추구한다. 여기에 코스피200 종목 투자를 통해 받는 2% 수준의 배당수익률을 더해 연 17% 분배금을 지급한다.
+
+분배금은 1월 213원에서 2월 244원, 3월 252원, 4월 262원, 5월 348원, 6월 350원 등 꾸준히 높아지고 있다.
+
+미래에셋자산운용의 ‘TIGER 미국나스닥100타겟데일리커버드콜 ETF’, ‘TIGER 배당커버드콜액티브’도 최근 순자산 2조원을 넘어섰다.
+
+‘TIGER 미국나스닥100타겟데일리커버드콜 ETF’은 지난달 순자산 2조원을 돌파했는데, 국내 상장 해외 커버드콜 ETF 중 최대 규모다. 2024년 6월 상장 이후 약 2년간 연 15% 수준의 분배금을 지급하고 있다. 분배금은 2024년 7월 120원에서 올 6월에는 151원으로 약 26% 성장했다.
+
+이 ETF는 미국 대표 기술주 중심의 나스닥100 지수에 투자하면서 데일리 커버드콜 전략을 활용해 정기적인 현금 흐름을 추구한다. 나스닥100의 성장성을 추구하는 동시에 옵션 프리미엄을 통해 분배 재원을 마련하는 것이 특징이다.
+
+KB자산운용의 ‘RISE 200위클리커버드콜 ETF’ 역시 올 6월 순자산 1조원을 넘어섰다. 이 상품은 코스피200 지수를 기반으로 운용되는 월분배형 ETF다. 코스피200 구성 종목에 투자하면서 위클리 콜옵션을 매도해 인컴 수익을 창출한다.
+
+특히 매주 2회, 월간 약 8회에 걸쳐 콜옵션을 매도하는 구조를 통해 기존 월 단위 커버드콜 상품보다 높은 옵션 프리미엄 확보를 추구한다. 최근 1년 누적 연분배율은 18.72%로 월평균 약 1.56% 수준의 분배금을 지급했다.
+
+육동휘 KB자산운용 ETF상품마케팅본부장은 “RISE 200위클리커버드콜 ETF는 위클리 옵션 매도를 활용해 안정적인 월분배와 초과수익을 동시에 추구하는 상품”이라며 “매월 현금 흐름을 원하는 투자자들이 선호하는 인컴형 ETF로 자리매김하고 있다.”고 말했다.
+
+◇분배율보다 ‘총수익률’ 따져야
+전문가들은 높은 분배율만 보고 커버드콜 ETF에 투자하는 것은 경계해야 한다고 조언한다. 커버드콜 ETF의 각 상품 전략과 분배금 추이 등을 꼼꼼히 따져 투자해야 한다는 것이다.
+
+커버드콜 ETF는 횡보장이나 완만한 하락장에서는 안정적인 배당금 확보에 유리하다. 반면 강한 상승장에서는 옵션 매도로 인해 기초자산 상승분을 온전히 누리기 어렵다. 또 시장이 급락할 경우 옵션 프리미엄이 손실을 일부 완충할 수는 있지만 원금 손실 자체를 막아주는 구조는 아니다.
+
+자본시장연구원이 지난 6월 발간한 ‘국내 커버드콜 ETF 시장의 성장 및 시사점’이라는 제목의 보고서에서 커버드콜 ETF의 분배금은 ‘이자’가 아니라 옵션 프리미엄과 자본이익 등을 재원으로 지급되는 만큼 높은 분배율이 높은 수익률을 의미하는 것은 아니라고 설명했다. 분배금을 받은 뒤 ETF 가격이 그만큼 하락하면 실제 자산은 늘어나지 않을 수도 있다.
+
+운용 방식도 상품마다 차이가 크다. 코스피200을 기초자산으로 하는 상품과 미국 나스닥100을 추종하는 상품은 옵션 매도 비중과 분배정책이 모두 다르다. 일부 상품은 기초자산 상승분의 상당 부분을 포기하는 대신 높은 분배금을 지급하는 구조인 반면, 일부는 상승 여력을 일부 남겨두는 전략을 사용한다.
+
+커버드콜 ETF의 분배 관련 정보가 상품별로 다르게 제시되고 있다는 점도 확인해야 한다. 일부 상품은 연평균 순자산가치(NAV) 대비 목표분배율을 내세우고, 다른 상품은 목표 프리미엄이나 목표 분배율 지수 등을 활용한다. 산출 기준이 제각각이다 보니 투자자가 상품 간 분배 수준을 동일한 기준에서 비교하기 어렵다.
+
+심수연 자본시장연구원 연구원은 “투자성과는 월분배금만 보고 판단하기보다 기준가격 변동을 포함한 총투자수익률과 함께 살펴보는 것이 바람직하다”며 “투자자 관점에서는 상품명이나 월분배율보다 기초자산, 옵션 운용방식, 총투자수익률 등을 종합적으로 비교하는 접근이 요구된다”고 조언했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/029/0003043406' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/029/0003043406</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
