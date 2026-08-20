@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피, 전날 폭락 딛고 3%대 반등…SK하닉 6%↑</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/029/0003043253' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16352" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피, 전날 폭락 딛고 3%대 반등…SK하닉 6%↑</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 전날 급락 이후 저가 매수세 유입과 미국 금리 진정에 힘입어 3%대 상승 출발했습니다. 특히 모더나 등 바이오 섹터의 급등과 SK하이닉스의 강세가 지수 반등을 이끈 것으로 분석됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">급격한 폭락 이후 저가 매수세와 함께 바이오/기술주 중심의 강한 반등세가 포착되었습니다. 특히 글로벌 모멘텀(미국 금리 진정)과 개별 호재(모더나 임상 성공)가 맞물려 투자 심리가 개선되고 있다는 신호가 강합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">모더나 (비상장/글로벌)</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기전자</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피반등</span> <span class="tag tag-hash">#반도체주</span> <span class="tag tag-hash">#바이오테크</span> <span class="tag tag-hash">#저가매수</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 전날 급락에 따른 저가 매수세와 미국 국채금리 진정에 힘입어 3%대 상승 출발했다. SK하이닉스의 주주환원 기대와 모더나 급등에 따른 바이오 투자심리 개선이 지수 반등을 이끌고 있다.
+
+20일 한국거래소에 따르면 코스피 지수는 전장 대비 3.23% 상승한 6680.34에 장을 열었다. 이날 오전 9시 10분 기준 유가증권시장에서 개인이 4188억원을 사들이고 있으며 기관은 2673억원, 외국인은 1919억원을 순매도하고 있다.
+
+시총 상위 종목 중 SK하이닉스가 6%대 강세를 보이고 있으며 삼성전자(3.23%), SK스퀘어(2.79%), 삼성바이오로직스(2.275) 등이 오르고 있다. 반면 삼성전기(-3.03%), KB금융(-2.58%), 한화에어로스페이스(-1.95%) 등은 내리고 있다.
+
+업종별로는 전기전자, 제조, 금속 등이 상승하고 있으며 건설, 통신, 운송창고 등은 내리고 있다.
+
+19일(현지시간) 미국 뉴욕증시에서 다우존스30산업평균 지수는 전일 대비 119.65포인트(0.22%) 오른 53463.05에 거래됐다. S&P500 지수는 16.22포인트(0.21%) 상승한 7707.98, 나스닥 지수는 41.38포인트(0.16%) 오른 26331.09를 기록했다.
+
+미국 증시는 재무부의 국채 바이백 규모 확대 소식에 국채 금리가 하락하며 최근 시장을 둘러싼 고금리에 대한 전반적인 경계감을 완화했다. 반도체주 약세는 이어졌지만, 이외 빅테크와 소프트웨어, 호재성 이슈가 있었던 헬스케어 업종 등의 강세가 오히려 시장 상승을 견인했다.
+
+특히 모더나는 맞춤형 암백신 임상3상 성공 소식을 전하며 170%대 급등했다. 모더나는 머크와 공동 개발 중인 맞춤형 암백신 ‘인티스메란 오토진’과 면역 항암제 키트루다 병용 요법이 흑색종 환자를 대상으로 한 임상 3상에서 표준 치료 대비 암 재발을 더 효과적으로 억제하는데 성공했다고 밝혔다. 모더나와 머크는 이번 임상 결과를 바탕으로 미국 내 판매 승인 절차를 협의할 계획이다.
+
+이에 국내 증시도 전일 폭락에 따른 저가 매수세 유입 속 미국 금리 급등세 진정, 모더나의 주가 폭등 효과 등이 바이오를 중심으로 성장주 투자심리를 개선시킬 것으로 전망된다.
+
+한지영 키움증권 연구원은 “반도체주 쏠림 현상이 완화되고 있다는 점도 눈여겨볼 부분”이라며 “주도주의 주주환원 모멘텀, 미국 장기물 금리 급등세 진정, 글로벌 반도체 쏠림 완화의 조합이 생성되고 있다.”라고 말했다.
+
+이어 “이번주 내내 급락을 맞았던 코스피, 코스닥 양 시장 모두 주가 회복 탄력성이 개선되는 경로를 베이스 시나리오로 가져갈 필요가 있다.”고 했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/029/0003043253' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/029/0003043253</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
