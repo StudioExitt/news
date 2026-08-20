@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코인 과세 코앞인데…스테이킹·에어드롭 세금 기준도 마련 못해</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.20</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000525916' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16380" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코인 과세 코앞인데…스테이킹·에어드롭 세금 기준도 마련 못해</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">내년 1월 시행을 앞둔 가상자산 과세가 스테이킹, 렌딩, 에어드롭 등 주요 거래 유형에 대한 세부 기준 미확정 상태입니다. 이로 인해 투자자 혼란과 함께 제도 폐지 및 추가 유예를 요구하는 정치적 움직임이 커지고 있어 시장의 불확실성이 매우 높습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">규제 세부 기준 미확정 및 제도 폐지 논란 심화로 가상자산 시장의 불확실성이 급증함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 인프라</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#가상자산세금</span> <span class="tag tag-hash">#규제불확실성</span> <span class="tag tag-hash">#기타소득</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">내년 1월 가상자산 과세 시행이 4개월여 앞으로 다가왔지만 스테이킹과 렌딩, 에어드롭 등 주요 거래 유형에 대한 세부 과세 기준은 아직 마련되지 않은 것으로 확인됐다. 과세가 세 차례 유예됐음에도 핵심 기준이 여전히 '검토 중'에 머물면서 시행 초기 투자자 혼란이 불가피할 것이란 우려가 나온다.
+
+20일 국회 재정경제기획위원회 소속 김상훈 국민의힘 의원이 국세청에 스테이킹·렌딩을 통해 받은 보상의 과세 여부와 소득 성격, 과세 시점을 질의한 결과, 국세청은 보유한 가상자산의 처분·사용권을 일정 기간 제한하고 그 대가로 가상자산 등을 받는 특징을 고려해 과세 기준을 검토하고 있다고 밝혔다.
+
+에어드롭과 하드포크에 대한 세부 기준도 아직 검토 단계다. 국세청은 에어드롭의 경우 가상자산을 무상으로 지급하는 특징을, 하드포크는 가상자산이 분할·생성돼 지급되는 특징을 각각 고려해 과세 기준을 검토하고 있다고 답했다.
+
+현행 소득세법에 따르면 내년 1월부터 가상자산을 양도하거나 대여해 얻은 소득은 기타소득으로 분류된다. 연간 소득에서 기본공제 250만원을 제외한 금액에 20%의 세율이 적용되며 지방소득세를 포함하면 실질 세율은 22%다.
+
+문제는 가상자산 거래 방식이 단순 매매를 넘어 스테이킹과 렌딩, 에어드롭, 하드포크 등으로 다양해졌다는 점이다. 과세 대상 여부뿐 아니라 어느 시점에 소득이 발생한 것으로 볼지, 취득가액을 어떻게 산정할지 등에 따라 실제 납부 세액이 달라질 수 있다.
+
+반면 거래소 이벤트나 프로모션 등을 통해 지급되는 가상자산은 일부 과세 기준이 이미 마련돼 있다. 국세청에 따르면 거래소가 이용자에게 무상으로 지급하는 가상자산이 소득세법상 상품이나 경품에 해당할 경우 현재도 기타소득으로 과세된다.
+
+과세 시행 이전부터 보유한 가상자산의 취득가액 산정 기준도 정해져 있다. 2027년 1월 1일 이전부터 보유한 가상자산은 올해 12월 31일 당시 시가와 실제 취득가액 가운데 큰 금액을 취득가액으로 적용한다. 내년 이후 취득한 가상자산의 실제 취득가액을 확인하기 어려운 경우에는 양도가액의 50%를 필요경비로 인정한다는 게 국세청의 설명이다.
+
+해외 거래소와 개인지갑을 통한 거래도 과세 대상에서 제외되지 않는다. 국세청은 거주자가 가상자산을 양도하거나 대여해 발생한 소득은 해외 거래소나 개인지갑 이용 여부와 관계없이 모두 과세 대상이라는 입장이다.
+
+해외 거래소 거래의 경우 해외금융계좌 신고제도와 내년 도입 예정인 암호화자산 자동정보교환제도(CARF)를 통해 거래정보를 수집·활용할 계획이다.
+
+다만 개인지갑 거래에 대해서는 현실적인 한계도 인정했다. 국세청은 개인지갑의 특성상 신고되지 않은 거래정보를 모두 파악하는 데 현실적인 한계가 있다고 밝혔다. 이에 가상자산 거래를 추적·분석하는 프로그램을 도입하는 등 과세 공백을 최소화한다는 방침이다.
+
+과세 대상 인원과 예상 세수 규모도 현재로서는 구체적인 추산이 어렵다. 국세청은 과세 시행 전 관련 신고·과세자료를 보유하고 있지 않아 대상 인원과 세수 규모에 대한 독자적인 추계가 곤란하다고 답했다.
+
+과세를 위한 전산 인프라 구축은 진행되고 있다. 국세청은 지난 2022년 1월 가상자산사업자가 제출하는 거래자료를 수집·관리하고 가상자산 소득 신고와 경정 결정 등에 활용하기 위한 세원관리시스템을 구축했다. 거래자료 등을 분석해 조세탈루 혐의를 포착하기 위한 통합분석시스템도 올해 말 개통을 목표로 구축 중이다.
+
+세부 과세 기준 마련 작업도 진행하고 있다. 국세청은 해외 과세 사례와 연구용역 결과 등을 토대로 관계부처와 업계 전문가 등과 협의해 납세자가 신고하는 과정에서 필요한 기준을 마련하고 있다는 입장이다. 다만 거래 유형별 세부 기준을 언제까지 확정해 공개할 것인지에 대해서는 구체적인 시점을 제시하지 않았다.
+
+과세 시행을 불과 수개월 앞두고 세부 기준이 여전히 확정되지 않으면서 정치권에서는 가상자산 과세를 아예 폐지하거나 추가로 유예해야 한다는 주장도 나오고 있다.
+
+송언석 국민의힘 의원은 지난 3월 가상자산 소득에 대한 과세를 폐지하는 내용의 소득세법 개정안을 대표 발의했다. 금융투자소득세가 폐지된 상황에서 가상자산에만 세금을 부과하는 것은 형평성에 어긋나고 이중과세 우려가 있다는 주장이다.
+
+정성국 국민의힘 의원도 지난 10일 가상자산 과세 시행 시점을 내년 1월에서 2030년으로 3년 연기하는 내용의 법안을 대표 발의했다. 투자자 보호 제도와 과세 인프라가 충분히 마련되지 않은 만큼 제도 시행을 늦춰야 한다는 취지다.
+
+국세청은 현재까지 예정된 일정에 맞춰 과세를 준비한다는 입장을 유지하고 있다. 국세청은 내년 과세 시행 여부에 대한 질의에 "과세 시행 시기에 맞춰 과가가 차질 없이 시행될 수 있도록 준비하고 있다"고 밝혔다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000525916' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000525916</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
