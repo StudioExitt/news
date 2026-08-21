@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주주친화적이라는 인적분할에도 카카오 주가 급락 왜?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.21</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005403154' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16611" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>주주친화적이라는 인적분할에도 카카오 주가 급락 왜?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">카카오가 AI 사업 확대를 위해 인적분할을 통한 사업구조 재편을 발표했으나, 시장은 과거 지배구조 이슈와 분할에 대한 피로감 등으로 인해 오히려 주가가 급락하는 모습을 보였습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 기업의 대규모 구조 변화(분할)는 투자심리에 직접적인 영향을 미치며, 과거 주주 가치 훼손에 대한 시장의 부정적 인식이 현재 가격 급락을 유발했기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">카카오</span> <span class="tag stock-tag">네이버</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">지배구조</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#인적분할</span> <span class="tag tag-hash">#주주환원</span> <span class="tag tag-hash">#기업재편</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">카카오가 21일 이사회를 열고 회사를 카카오AI(신설기업)와 카카오X(분할기업)로 나누는 인적분할을 결의했다. 인적분할은 기존 기업 주주가 분할기업과 신설기업 주식을 모두 갖게되는 방식이어서 주주친화적이라는 평을 듣는다. 그럼에도 카카오의 이날 주가는 급락세를 보였다. 아울러 또다른 기업 분할방식인 물적분할이 아닌 인적분할을 택한 배경에도 관심이 모아진다.
+
+카카오는 이날 이사회를 열고 회사를 카카오AI(신설기업)와 카카오X(분할기업)로 나누는 인적분할을 결의했다. 분할비율은 순자산 장부가액 기준 카카오AI 0.36, 카카오X 0.64다. 기존 카카오 주주는 분할비율에 따라 두 회사 주식을 모두 배정받는다. 기존 카카오 주주가 두 회사에 직접 투자하는 상태가 되는 점이 또 다른 기업 분할 방식인 물적분할과 가장 큰 차이다.
+
+따라서 인적분할은 자본시장에서 호재로 받아들여지는 경우가 많다. 그러나 카카오는 인적분할 발표 이후 장중 급락이 이어지고 있다. 이날 오전 10시52분 전 거래일 대비 13.18% 내린 3만6000원에 거래가 되기도 했다. 
+
+장중 두 자릿수 하락률 기록은 미국과 이란 전쟁 발발 직후인 3월4일 장중 16.28%까지 내려간 이후 처음이다. 카카오는 과거 무분별한 사업부문 분할과 계열사 확대 및 상장 시도를 반복하며 지배구조에 대한 의문을 시장으로부터 받았다. 그 결과 상장한 대부분의 계열사 주가가 공모가를 밑도는 상황이다.
+
+카카오가 이날 경쟁력 강화를 위한 기업 분할을 하면서 물적분할이 아닌 인적분할 방식을 택한 이유도 여기에 있다고 증권업계 전문가들은 분석한다. 
+
+물적분할은 인적분할과 달리 분할기업이 신설기업의 지분 100%를 갖게 된다. 주주의 지분 분할은 없고 회사의 재산만 나뉘는 방식이다. 기존 주주들에게 돌아가는 혜택은 거의 없다.
+
+과거 국내 대기업들이 이런 방식으로 특정 대주주 입맛에 맞게 기업 지배구조를 재편하거나 쪼개기 상장을 하는 등의 사례가 발생하면서 부정적으로 인식되는 경우가 잦았다. 
+
+특히, 물적분할한 자회사가 별도로 주식시장에 상장하면서 중복상장이 사회적 문제로 부각되기도 했다.
+
+증권업계 한 관계자는 "카카오가 분할 계획과 함께 내년부터 2029년까지 별도 조정 잉여현금흐름(FCF)의 20~35%를 주주환원 재원으로 활용할 것이라고 한 것도 시장 신뢰 회복과 관련이 있을 것"이라며 "이날 주가는 크게 떨어졌지만 장기적으로 어떤 영향을 줄지는 지켜봐야 할 일"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005403154' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005403154</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

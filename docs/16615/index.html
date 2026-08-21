@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상장사 연쇄 밸류업 … KCC도 '특별배당금' 쏜다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.21</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005724145' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16615" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>상장사 연쇄 밸류업 … KCC도 '특별배당금' 쏜다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">KCC가 삼성물산으로부터 받는 지분 배당금을 활용해 '특별배당금' 제도를 신설하며 주주환원 정책을 강화했습니다. 이는 대기업 그룹 차원의 주주환원이 연쇄적으로 하청/협력사로 확산되는 밸류업 낙수효과를 보여주는 사례입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">핵심 지배구조를 활용한 '특별배당'과 대규모 자사주 소각 계획이 구체적으로 제시되었으며, 이는 국가적 정책 기조인 밸류업(가치제고) 테마와 직접 연결되어 투자 심리 개선 효과가 매우 클 것으로 예상되기 때문입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">KCC</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">삼성물산</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">화학</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">건설자재</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#밸류업</span> <span class="tag tag-hash">#특별배당</span> <span class="tag tag-hash">#주주환원</span> <span class="tag tag-hash">#저PBR</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">기업들 주주환원 행렬\n6조 삼성물산 지분 보유 KCC\n배당금 받아 주주에 나누기로\n\n삼성전자와 SK하이닉스가 촉발한 대규모 주주환원이 상장사 지배구조를 타고 연쇄적인 기업가치 제고(밸류업) 낙수 효과를 만들고 있다.\n\n가치주로 평가받는 KCC가 삼성물산 2대 주주로서 삼성물산으로부터 받는 배당금을 활용한 '특별배당금' 제도를 새로 도입하며 밸류업 대열에 합류했다. 삼성전자의 역대급 주주환원이 삼성물산을 거쳐 KCC까지 이어지는 흐름이다.\n\nKCC는 지난 20일 이사회를 열고 '2026년 기업가치 제고 계획'을 결의했다. 기존 배당정책에 삼성물산 특별배당금과 연동한 특별배당을 추가로 신설한다는 내용이 담겼다.\n\n현재 KCC가 보유한 삼성물산 지분은 약 1701만주(10.49%)로 해당 지분가치는 20일 종가 기준 약 6조3600억원에 달해 KCC 시가총액(4조2105억원)을 웃돈다.\n\nKCC의 기존 주주환원정책은 최소 주당배당금 6000원에 별도 영업이익이 1000억원을 넘으면 이익의 10%를 추가 배당하는 구조였다.\n\n이번에 밸류업 계획의 핵심은 기존 주주환원책에 더해 삼성물산 특별배당 수취액의 50% 이상을 주주들을 위한 특별배당 재원으로 추가 활용하겠다는 것이다.\n\n삼성물산이 주주에게 지급하는 주당배당금에서 최소 지급액인 2500원을 뺀 금액을 '삼성물산 특별배당금'으로 정의하고 KCC가 이 가운데 50% 이상을 자체 특별배당 재원으로 활용하겠다는 내용이다. 세부 지급률은 향후 이사회 결의를 거쳐 확정되며 배당 후 남는 재원은 차입금 상환 등 재무구조 개선에 쓰인다.\n\n특히 KCC는 이번 공시를 통해 장기적으로 적절한 시점에 투자 목적 자산을 매각할 경우 그 매각 이익의 일부까지 주주에게 환원하겠다는 방침을 공식 명문화했다.\n\ni와 함께 KCC는 자사주 소각 로드맵도 차질 없이 밟아가고 있다. 임직원 보상 목적을 제외한 자사주 117만4300주(발행주식의 약 13.2%)를 2027년 9월까지 총 4차례에 걸쳐 전량 분할 소각할 계획이다. KCC는 지난 2분기에 이미 1회차 물량인 약 29만주 소각을 완료했다.\n\n회사는 이러한 전방위적 밸류업을 통해 2030년까지 주가순자산비율(PBR) 1배 및 영업이익률 10%를 달성하겠다는 중장기 목표를 내걸었다. 증권가에서 전망한 올해 연간 기준 KCC의 예상 PBR은 20일 기준 0.37배다.\n\n시장에서는 삼성전자의 대규모 주주환원 기대감이 높아진 상황에서 삼성전자 지분을 쥔 삼성물산의 배당금이 KCC를 거쳐 일반 주주들에게까지 흘러가는 '밸류업 낙수효과'가 가시화됐다는 평가가 나온다.\n\n21일 하나증권에 따르면 삼성전자 특별배당 비중 70%, 삼성물산 환원율 70%를 가정한 최대 규모 특별배당 시나리오에서는 KCC 특별주당배당금이 1만9052원까지 늘어 총 주당배당금은 2만9131원, 시가배당률은 6.1%까지 오를 수 있다. 특별배당이 없을 경우의 시가배당률 2.1%와 비교하면 2.5~4%포인트 개선 효과가 발생하는 셈이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005724145' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005724145</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
