@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 30% 급락…‘빚투’ 후폭풍에 흔들린 증시 체질개선</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.21</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006355654' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16576" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 30% 급락…‘빚투’ 후폭풍에 흔들린 증시 체질개선</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 반도체 호황과 정부의 규제 완화 속에서 개인투자자의 과도한 레버리지 투자가 몰리며 코스피가 고점 대비 30% 급락했다. 이로 인해 대규모 손실이 발생하며 시장 변동성이 커졌고, 투자자들의 신뢰 하락 및 구조적 개선 필요성이 제기되었다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증시급락</span> <span class="tag tag-hash">#레버리지위험</span> <span class="tag tag-hash">#코리아디스카운트</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">단일종목 레버리지 허용 뒤 투자 열풍
+신용융자 29조8000억원 사상 최대
+변동성 급등에 MSCI 선진국 편입도 변수 코스피가 두 달 만에 고점 대비 30% 급락하면서 개인투자자의 대규모 레버리지
+투자가 한국 증시의 위험 요인으로 떠올랐다. 정부가 ‘코리아 디스카운트’ 해소를 위해 투자상품 규제를 완화했지만 인공지능(AI) 투자 열풍과
+빚을 낸 개인투자가 맞물리면서 시장 변동성이 커졌다는 지적이 나온다.
+
+21일 로이터통신에 따르면 코스피는 지난 6월 19일 고점을 찍은 뒤 약 30% 하락했다. 급등장에서 빚을 내 주식을 사거나 레버리지
+상장지수펀드(ETF)에 투자한 개인들의 손실도 불어났다. 씨티는 지난달 28일 고객 보고서에서 개인투자자의 레버리지 ETF 손실을 387억달러로
+추산했다. 달러당 1392.6원을 적용하면 약 53조 9000억원이다.
+
+투자 열풍에는 AI 반도체 호황이 불을 붙였다. 삼성전자와 SK하이닉스 주가가 급등하면서 개인투자자가 빠르게 증시로 몰렸다. 로이터가 인용한
+금융투자협회 자료에 따르면 신용융자 잔액은 6월 24일 29조 8000억원으로 사상 최대치를 기록했다. 연초보다 약 75% 늘어난 규모다.
+
+정부의 규제 완화도 투자 열기를 키웠다. 금융당국은 국내외 ETF의 규제 차이를 줄인다는 취지로 삼성전자와 SK하이닉스를 기초자산으로 한
+단일종목 레버리지·인버스 상품을 허용했다. 관련 상품은 5월 27일 처음 상장됐다. 레버리지 상품은 기초자산의 하루 수익률을 배수로 추종하는
+구조여서 주가가 급변하면 손실도 빠르게 커질 수 있다.
+
+문제는 출시 시기가 증시 과열 국면과 겹쳤다는 점이다. 코스피는 지난해 10월 저점 대비 이미 두 배 이상 오른 상태였다. 삼성전자와
+SK하이닉스가 코스피 시가총액의 53% 이상을 차지한 상황에서 두 종목을 추종하는 레버리지 상품까지 거래되면서 변동성이 더 커졌다고 로이터는
+분석했다.
+
+실제 7월 들어 투자심리는 급격히 얼어붙었다. ‘한국판 공포지수’로 불리는 VKOSPI는 7월 초 97.99까지 치솟아 2009년 집계 시작
+이후 최고치를 기록했다. 코스피가 하루에 5~8%씩 움직이는 날도 여러 차례 나타났다.
+
+대규모 손실은 개인투자자 심리에도 영향을 주고 있다. 구독자 370만명을 보유한 투자 유튜버 전석재씨는 로이터에 “시장에 들어온 많은 사람이 큰
+손실을 봤고 상당수는 투자 자체에 흥미를 잃을 정도의 충격을 받을 수 있다”고 말했다.
+
+서울에서 투자 관련 상담을 하는 정신건강의학과 전문의 박종석씨는 지난해 하루 7~8명 수준이던 관련 환자가 올해 6월 이후 하루 평균 11명으로
+늘었다고 전했다. 부산에서는 주식 손실의 책임을 한 유튜버에게 돌리며 흉기를 휘두른 혐의로 20대 남성이 체포되는 사건도 발생했다.
+
+정책 부담도 커졌다. 이재명 정부는 기업 지배구조 개선과 자본시장 개혁을 통해 코리아 디스카운트를 해소하고 모건스탠리캐피털인터내셔널(MSCI)
+선진국지수 편입을 추진해왔다. 그러나 최근의 극심한 변동성이 외국인 장기투자 유치에는 부담이 될 수 있다는 평가가 나온다.
+
+허재환 유진투자증권 연구원은 로이터에 기업 지배구조 개선 성과가 시장에 자리잡기 전에 변동성이 지나치게 커졌다며 외국인이 장기투자에 나서기
+어려워질 수 있다고 말했다.
+
+정부는 단일종목 레버리지 상품 도입 당시 위험 요인을 충분히 검토했다는 입장이다. 대통령실은 로이터에 “정부는 시장 안정을 유지하는 데 전념하고
+있다”고 밝혔다. 금융위원회도 각 단계에서 여러 위험 요인을 종합적으로 살폈다고 설명한다.
+
+il부 개인투자자는 국내 증시에 대한 신뢰를 잃었다. 30년간 주식에 투자했다는 80대 은퇴자 박달보씨는 이번 급락장에서 투자금의 35%를 잃었다며 “다시는 코스피에 투자하지 않을 것 같다”고 말했다.
+
+최근 급등락은 코리아 디스카운트 해소가 단순한 주가 상승보다 시장 안정성과 투자자 신뢰 확보에 달려 있다는 점을 다시 보여주고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006355654' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006355654</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
