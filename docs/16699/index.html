@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[IPO챗] 공모가 희비 갈린 니어스랩·해치텍, 코스닥 입성</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016264671' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16699" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[IPO챗] 공모가 희비 갈린 니어스랩·해치텍, 코스닥 입성</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 드론 및 반도체 센서 기업이 코스닥 상장을 앞두고 시장의 주목을 받고 있습니다. 니어스랩은 높은 기관 수요예측 경쟁률과 공모가를 기록하며 관심을 받았으나, 해치텍은 상대적으로 낮은 일반 청약 증거금으로 희비가 엇갈리며 IPO 시장의 역동성을 보여주고 있습니다.</div></div>
+      
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">AI 기반 기술</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#IPO</span> <span class="tag tag-hash">#코스닥상장</span> <span class="tag tag-hash">#인공지능</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">다음 주(24∼28일) 기업공개(IPO) 시장에서는 인공지능(AI) 자율비행 드론 기업 니어스랩과 반도체 센서
+집적회로(IC) <0xED><0x8C><0xB9>리스 기업 해치텍이 하루 차이로 코스닥 시장에 입성한다.
+
+두 기업은 앞서 진행한 기관투자자 대상 수요예측에서 공모가가 각각 희망 범위 상단과 하단으로 결정되며 엇갈린 성적표를 받아 상장 이후 주가
+흐름에도 관심이 쏠린다.
+
+22일 금융투자업계에 따르면 니어스랩은 오는 24일 코스닥 시장에 상장한다.
+
+니어스랩은 AI 기반 자율비행 드론 솔루션 기업이다. 풍력발전기 안전점검 분야에서 축적한 자율비행 기술을 바탕으로 적 드론을 직접 요격하는 '카이든(KAiDEN)'과 군집 자폭 드론 '자이든(XAiDEN)'을 개발하며 최근 국방 분야로 사업 영역을 확대하고 있다.
+
+중동향 자이든 프로젝트 매출 약 149억원이 반영되면서 올해 상반기 매출은 174억원으로 전년 동기보다 7배 이상 늘었고, 2분기에는 처음으로
+분기 영업흑자를 냈다.
+
+앞서 기관투자자 대상 수요예측에서 공모가를 희망 범위(3만∼4만1천200원) 최상단인 4만1천200원으로 확정했다. 지난 12∼13일 진행한
+일반청약에서는 530대 1의 경쟁률을 기록했으며 약 2조5천억원의 증거금이 모였다.
+
+해치텍은 이튿날인 25일 코스닥 시장에 상장한다.
+
+해치텍은 자기장의 변화를 감지해 위치와 움직임을 측정하는 고정밀 3차원 자기센서 시스템온칩(SoC)을 설계하는 <0xED><0x8C><0xB9>리스 기업이다. 모바일·가전
+중심의 사업을 자동차와 로봇 분야로 확대하고 있다.
+
+수요예측에서는 총 321개 기관이 참여해 101.91대 1의 경쟁률을 기록하며 공모가를 희망 범위(2만3천∼2만8천원) 최하단인 2만3천원으로
+확정했다. 일반청약 최종경쟁률은 26대 1, 청약 금액의 절반을 미리 납부하는 청약 증거금은 700억원에 그쳤다.
+
+일반투자자 대상 공모주 청약은 디지털 헬스케어 기업 스카이랩스가 진행한다.
+
+스카이랩스는 전날까지 기관투자자 대상 수요예측을 마친 뒤 26∼27일 일반청약에 나선다. 희망 공모 밴드는 1만3천∼1만6천원이며 최종 공모가는
+25일 확정될 예정이다. 대표주관사는 한국투자증권이다.
+
+스카이랩스는 손가락에 착용하는 반지형 기기를 이용해 일상생활과 수면 중에도 혈압과 맥박을 연속 측정할 수 있는 '카트 비피 프로'(CART BP
+pro)를 개발한 기업이다. 공모자금을 연구개발에 투입해 혈당·혈중지질 등으로 측정 영역을 확대할 계획이
+
+한편 다음 주 새롭게 기관투자자 대상 수요예측을 시작하는 기업은 없다.
+
+상장 ▲니어스랩, 코스닥, 8월 24일, 확정 공모가 4만1천200원, 대표주관사 삼성증권.
+
+▲해치텍, 코스닥, 8월 25일, 확정 공모가 2만3천원, 대표주관사 DB증권.
+
+공모주 청약 ▲스카이랩스, 코스닥, 8월 26∼27일, 희망 공모가 1만3천∼1만6천원(25일 확정 예정), 대표주관사 한국투자증권.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016264671' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016264671</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
