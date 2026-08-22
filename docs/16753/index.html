@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>예금·달러·금 쌓고 주식투자는 '신중'…달라진 은행 자금 흐름</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016265010' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16753" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>예금·달러·금 쌓고 주식투자는 '신중'…달라진 은행 자금 흐름</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">환율 하락과 증시 변동성 확대로 인해 달러예금 및 골드바 등 안전자산으로의 자금 유입이 두드러지고 있다. 반면 ETF 판매량과 마이너스 통장 잔액은 감소하며 주식 시장에 대한 투자 심리는 위축된 상태다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">환율 및 금값 변동으로 인해 자금이 안전자산(달러예금, 금)으로 이동하며, 주식 시장의 핵심 유동성인 ETF 및 마이너스 통장 자금은 급감하여 투자 심리 위축이 관측됨</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#자금흐름</span> <span class="tag tag-hash">#안전자산</span> <span class="tag tag-hash">#증시위축</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">환율 하락에 달러예금 역대최대…정기예금은 1천조원 육박
+골드바 판매액 이달 들어 약 3배로↑…마통·ETF 판매는 급감
+
+(서울=연합뉴스) 이도흔 기자 = 최근 원/달러 환율이 1,300원대로 내려오고 증시 변동성이 커지면서 은행 자금 흐름도 달라지고 있다.
+
+개인과 기업 모두 달러예금이 늘었지만 '빚투' 수요와 상장지수펀드(ETF) 판매는 감소했다.
+
+금값 반등에 골드바와 골드뱅킹을 찾는 투자자들도 늘고 있다.
+
+달러예금, 2021년 5월 집계이래 최대 23일 금융권에 따르면 5대 은행(KB국민·신한·하나·우리·NH농협)의 지난 20일 기준 전체 달러예금 잔액은 749억2천만달러로, 7월 말(694억4천만달러)보다 54억8천만달러(8%) 늘었다.
+
+이는 5대 은행 합산 통계가 집계되기 시작한 2021년 5월 이후 가장 큰 규모다.
+
+개인 달러예금은 132억2천만달러로 7월 말(127억1천만달러)보다 5억1천만달러 늘었다. 이는 2022년 2월 말(138억5천만달러) 이후 4년6개월 만에 최대다.
+
+기업 달러예금도 617억달러로 2022년 12월 말(620억5천달러) 이후 3년8개월 만에 가장 많은 수준을 기록했다.
+
+최근 원/달러 환율이 빠르게 떨어지면서 달러 수요가 늘어난 것으로 보인다.
+
+7월 초 1,556원에 육박했던 환율은 지난 21일 장중 1,380원선으로 하락하며 11개월 만에 최저를 기록했다.
+
+한 은행 관계자는 "기업은 반도체 수출 등으로 확보한 달러를 외화예금으로 보유하면서 향후 해외투자나 자금 조달에 활용할 시점을 조정하려는 것으로 보인다"고 말했다.
+
+금값 반등에 골드바에 돈 몰려…정기예금도 1천조원 육박 최근 금값이 반등하자 골드바, 골드뱅킹 등 관련 상품 판매액이 늘었다.
+
+이달 들어 20일까지 5대 은행의 골드바 판매액은 829억6천만원으로 집계됐다. 7월 한 달 판매액(300억1천만원)의 3배에 가깝고, 올해 1월(859억4천만원) 이후 최대다.
+
+골드뱅킹을 취급하는 국민·신한·우리은행의 잔액은 지난 20일 기준 1조8천107억원으로 7월 말(1조7천159억원)보다 948억원 늘었다. 골드뱅킹 잔액 증가는 올해 1월 이후 7개월 만이다.
+
+이달 중순 국제 금 선물 가격은 온스당 4,420.4달러로, 지난달 말 대비 9% 올랐다. 최근 미국 고용·물가 지표 둔화로 미 연방준비제도(연준·Fed)의 금리 인상 우려가 완화하면서 금값이 반등하고 있다.
+
+정기예금에도 돈이 쌓이고 있다. 5대 은행의 정기예금 잔액은 지난 20일 기준 998조7천64억원으로 1천조원에 육박한다. 7월 말(984조9천399억원)보다 13조7천665억원 증가했다. '롤러코스피'에 피로감을 느낀 투자자들이 자금을 은행에 묶어두는 것으로 보인다.
+
+증시 변동에 투자심리 '신중'…ETF 판매 고점대비 97%↓·마통도 주도권 위축됐다. 5대 은행의 상장지수펀드(ETF) 판매 규모는 이달 들어 20일까지 4천634억원으로, 7월 대비 1조9천955억원(81%) 감소했다. ETF 판매액은 5월 15조3천171억원에서 정점을 찍은 뒤 7월에는 한 달 새 83%가 감소하며 급락했다.
+
+'빚투' 수요도 주춤하는 모습이다. 20일 5대 은행의 마이너스통장 잔액은 44조1천80억원으로 7월 말보다 652억원 줄었다. 한 은행 관계자는 "과거 주가가 하락할 때 저가 매수세가 들어가면서 마이너스통장 잔액도 늘었지만 최근엔 다른 흐름이다"라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016265010' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016265010</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
