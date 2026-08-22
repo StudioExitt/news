@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>변동장에 냉기 부는 IPO 시장…3분기 들어 새내기주 평균 25%↓</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016265053' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16759" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>변동장에 냉기 부는 IPO 시장…3분기 들어 새내기주 평균 25%↓</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">3분기 신규 상장 종목들의 수익률이 공모가 대비 평균 25% 하락하며 부진한 흐름을 보이고 있음. 증시 변동성 확대와 중복상장 규제 강화로 인해 기업들의 상장 시기 조율 및 투자 심리 위축이 나타나고 있음.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">신규 상장 종목의 수익률 악화와 중복상장 규제 강화로 인한 IPO 시장 투자 심리 위축</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">소노인터내셔널</span> <span class="tag stock-tag">무신사</span> <span class="tag stock-tag">구다이글로벌</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#IPO</span> <span class="tag tag-hash">#공모주</span> <span class="tag tag-hash">#중복상장규제</span> <span class="tag tag-hash">#신규상장</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">상장 첫날 줄줄이 공모가 하회…2분기 새내기주는 133% 올라\n\"대어급 기업 상장 추진에 공모주 시장 회복 가능성\"\n\n상장사 (PG) [장현경 제작] 일러스트\n상장사 (\"PG\")\n[장현경 제작] 일러스트\n\n(서울=연합뉴스) 이민영 기자 = 3분기 들어 증시 변동성이 커진 가운데 새내기주 수익률이 부진한 모습을 보이고 있다.\n\n향후 공모주 시장이 회복될 수 있을지 투자자들의 관심이 쏠리는 분위기다.\n\n23일 한국거래소에 따르면 21일 종가 기준 지난 7월 이후 이달 21일까지 코스피·코스닥시장에 신규 상장한 8개사(리츠·스팩 제외)는 공모가 대비 평균 25% 내렸다.\n\n같은 기간 코스피(-19%)와 코스닥(-13%) 하락률을 대폭 웃도는 수치다.\n\n이들 8개 종목 중 인제니아테라퓨틱스를 제외하고 7개 종목 모두 현재 주가가 공모가를 밑돌고 있다.\n\n종목별로 보면 에이치엘지노믹스(-57%)가 공모가를 가장 많이 밑돌았으며, 레몬헬스케어(-48%), 딜리셔스(-46%) 등 순으로 많이 하회했다.\n\n상장 첫날 주가도 부진한 흐름이다.\n\n이들 8개 종목의 상장 첫날 공모가 대비 평균 상승률은 2.96%에 불과했는데, 이 중 절반에 달하는 4개사가 상장 첫날 종가가 공모가를 밑돌았다.\n\n구체적으로 지난달 6일 코스닥에 상장한 레몬헬스케어가 공모가 대비 6% 내린 데 이어 같은 달 24일 에이치엘지노믹스가 31% 하락했다. 이달 들어서는 딜리셔스와 기도산업이 각각 27%, 35% 급락했다.\n\n지난 2분기와 비교해도 3분기 새내기주의 수익률은 부진한 모습이다.\n\n2분기 국내 증시에 신규 상장한 8개 기업의 공무가 대비 상장 첫날 평균 수익률은 133%였다.\n\n당시 상장 첫날 공모가의 4배까지 올라 \"따따블\"을 기록한 종목도 3개(마키나락스, 폴레드, 코스모로보틱스)에 달했다.\n\n2분기 코스피가 68% 급등한 가운데 공모주 시장 투자 심리도 덩달아 개선된 영향으로 분석된다.\n\n그러나 3분기 들어 국내 증시 변동성이 커지면서 공모주 시장 투자 심리도 위축된 것으로 보인다. 지난 7월 이후 이달 21일까지 코스피와 코스닥지수는 각각 19%, 13% 내렸다.\n\n특히 중복상장 관련 규제가 공개되자, 기업들이 한국거래소의 첫 심사 사례를 지켜보며 상장 시기를 조율하는 이른바 \"눈치 보기\" 현상이 커진 점도 영향이 있었던 것으로 보인다.\n\n앞서 금융위원회와 한국거래소는 지난달 6일 중복상장 관련 규정·가이드라인 잠정안을 공개한 이후 같은달 31일 최종안을 확정했다.\n\n물적분할한 자회사를 중복상장하려는 모회사는 \"3%룰\" 방식으로 주주동의를 받는 과정이 필수적으로 요구된다는 것이 중복상장 규제의 핵심이다. 아울러 중복상장을 하려는 모회사 이사회에, 주주 영향 평가와 보호 방안 마련, 주주 소통 등 주주 충실의무에 기반한 5대 의무를 부여한다는 내용도 포함됐다.\n\n증권가에서는 여전히 미국과 이란 간 지정학적 긴장이 지속되고 있는 가운데 당분간 중복 상장 규제의 영향을 지켜보며 공모주 시장에서 관망세가 이어질 가능성도 있다고 보고 있다.\n\n박종선 유진투자증권 연구원은 \"글로벌 국지전이 다소 진정되는 모습을 보이고는 있지만, 여전히 불안감을 내포한 전쟁이 지속되고 있다\"며 \"또한 국내에서 엄격해지고 있는 상장 조건, 대기업 자회사 중복상장 가이드라인 규제, 코스닥 시장 내 상장폐지 요건 강화 등으로 인해 당분간 관망세가 지속될 것\"이라고 예상했다.\n\n다만 대어급 기업들의 상장 추진을 계기로 향후 공모주 시장이 다시 살아날 수 있다는 기대도 동시에 나오고 있다.\n\n대표적으로 휴양콘도 운영업체 소노인터내셔널은 지난 6월 말 한국거래소에 코스피 상장을 위한 예비심사를 청구했다. 이밖에 시장에서는 뷰티 플랫폼 기업 구다이글로벌과 패션 플랫폼 무신사의 상장 추진 가능성도 거론되고 있다.\n\n오광영 신영증권 연구원은 \"하반기에는 다수의 심사 청구 종목과 심사 승인 종목이 대기 중이고 투자자들의 관심이 높은 기업들이 상장 가능성이 있어 점점 회복세를 보일 것\"이라고 설명하며, 특히 중복상장 가이드라인에 맞춰 준비 중인 일부 기업들이 상장에 성공하면 일부 대어급 기업들도 다시 상장 채비를 갖춰 공무주 시장에 진입할 것이라고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016265053' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016265053</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
