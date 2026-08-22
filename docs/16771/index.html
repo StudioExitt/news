@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"원인은 한국 메모리" 엔비디아, AI 서버값 15% 인상</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006356273' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16771" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"원인은 한국 메모리" 엔비디아, AI 서버값 15% 인상</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">엔비디아가 메모리 반도체 가격 급등에 따라 AI 서버 가격을 15% 이상 인상하기로 했습니다. 이번 인상은 삼성전자, SK하이닉스 등 주요 메모리 반도체 기업들의 협상력과 수익성 강화로 이어질 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">엔비디아의 서버 가격 인상은 메모리 반도체(DRAM) 가격 상승을 직접적인 원인으로 명시하고 있으며, 이는 삼성전자 및 SK하이닉스의 수익성 개선과 시장 지배력 강화를 의미하므로 반도체 섹터에 강력한 호재임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">마이크론테크놀로지</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#엔비디아</span> <span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#DRAM</span> <span class="tag tag-hash">#삼성전자</span> <span class="tag tag-hash">#SK하이닉스</span> <span class="tag tag-hash">#AI서버</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">내년 초 출하분부터 적용, 베라루빈·블랙웰 대상
+MS·구글·오라클 등 대형 고객사에 이미 통보
+D램 값 폭등에 삼성·SK하이닉스 협상력 급부상 엔비디아가 인공지능(AI) 반도체를 탑재한 서버 가격을 15% 이상 올리기로 했다. 메모리 반도체 값이 치솟으면서 세계 시가총액 1위 기업조차 비용을 감당하지 못해 고객사에 부담을 넘긴 것이다.
+
+블룸버그통신은 22일(현지시간) 복수의 소식통을 인용해 엔비디아 AI 반도체가 들어간 서버 가격이 상당수 제품에서 15% 넘게 인상된다고 보도했다. 인상된 가격은 내년 초 출하분부터 적용되며 차세대 제품인 ‘베라 루빈’과 현재 주력인 ‘그레이스 블랙웰’ 탑재 시스템이 모두 대상이다. 인상 폭은 반도체 세대와 메모리 구성에 따라 달라지는 것으로 전해졌다.
+
+업계 최강자인 엔비디아마저 가격을 붙들거나 늘어난 비용을 떠안지 못했다는 사실은 삼성전자와 SK하이닉스, 미국 마이크론테크놀로지 등 메모리 반도체 업체들이 쥔 협상력이 어느 정도인지를 보여준다는 분석이다.
+
+엔비디아의 AI 가속기는 AI 소프트웨어를 만들고 돌리는 컴퓨터의 심장에 해당하는데, 성능은 데이터를 임시로 저장하는 D램과 얼마나 잘 짝을 이루느냐에 따라 갈린다. 그런데 D램 생산의 대부분을 이들 3개사가 담당한다.
+
+세 회사 모두 생산을 늘리고 있지만 폭증하는 수요를 따라잡지 못하면서 값이 크게 뛰었고, 그만큼 이들의 영향력도 전에 없이 커졌다.
+
+가격 인상 압박은 이미 업계 전반으로 번졌다. 애플과 퀄컴도 최근 반도체 부족을 이유로 제품 값을 올려야 했다고 밝혔다. 엔비디아 역시 이달 초 게임용 PC 그래픽카드 가격을 인상했다고 정보기술(IT) 매체 톰스하드웨어가 보도한 바 있다.
+
+마이크로소프트(MS)와 알파벳 산하 구글, 오라클 등 대형 데이터센터 운영사의 서버를 위탁 생산하는 업체들은 최근 고객사에 이런 내용을 통보했다. 엔비디아는 블룸버그의 논평 요청에 답하지 않았다.
+
+엔비디아가 비용을 흡수하지 못했다는 점은 이례적이라고 블룸버그는 평가했다. 엔비디아는 반도체 업계에서 가장 수익성이 높은 기업으로 꼽힌다.
+
+위탁 생산을 맡은 대만 TSMC의 공급이 수요를 따라가지 못하는 덕에 반도체 한 개를 수만달러(수천만원)에 팔 수 있고, 매출에서 생산 비용을 뺀 매출총이익률은 75%에 이른다. AI 가속기는 원래 수백달러(수십만원)짜리 PC 게임용 반도체에서 출발했지만, 끊이지 않는 수요와 마땅한 대체재가 없는 상황이 맞물리며 값이 계속 올랐다.
+
+고객사들이 어떻게 대응할지, 경쟁사에 틈이 열릴지는 이들이 메모리를 충분히 확보할 수 있느냐에 달렸다. 아마존과 MS, 구글, 메타 등 주요 고객사는 자체 반도체 개발을 추진하고 있지만 데이터센터를 지으려면 여전히 엔비디아 제품을 사야 한다. 홀로서기의 성패도 삼성전자와 SK하이닉스, 마이크론에서 물량을 얼마나 받아내느냐에 좌우된다.
+
+가격 인상은 AI 데이터센터 건설 계획에도 부담을 더할 전망이다. 이미 공사 지연과 인력 부족, 자금 조달 여건 악화, 지역 주민 반발 등으로 차질을 빚는 사업이 적지 않다.
+
+엔비디아는 다음주 2분기 실적을 발표한다. 세계 시가총액 1위 기업의 실적은 AI 인프라가 경제를 바꿀 것이라는 기대에 자금을 쏟아부은 투자자들과 기술 업계 전반이 주목하는 지표로 자리 잡았다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006356273' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006356273</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
