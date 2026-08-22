@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[ETF워치]잦아든 단일 레버리지 소란…간만에 금가격 급등</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.22</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/648/0000050048' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16666" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[ETF워치]잦아든 단일 레버리지 소란…간만에 금가격 급등</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">개인투자자의 단일종목 레버리지 ETF 거래는 규제 강화로 열기가 잦아들었으나, 국제 금값이 급등하면서 금 및 글로벌 금 채굴기업에 투자하는 ETF가 강세를 보였습니다. 이러한 금값 상승 배경으로는 달러 약세와 지정학적 위험 완화(유가 안정)가 주요 요인으로 작용하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 거시경제 환경 변화(달러 약세)와 금값 반등은 안전자산 선호 심리를 반영하며, 이는 광물 및 원자재 섹터에 중장기적 우호 요인으로 작용합니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">골드채굴기업주</span> <span class="tag stock-tag">원자재 관련주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금속 및 광물</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#금값상승</span> <span class="tag tag-hash">#달러약세</span> <span class="tag tag-hash">#안전자산</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">단일종목 레버리지 거래대금 일평균 1조원 수준
+금값 간만에 반등…금 관련 ETF 수익률 상위권
+달러 약세·중국 중앙은행 매수세가 금값 뒷받침
+금융당국이 단일종목 레버리지 상장지수펀드(ETF)의 개인 투자 문턱을 높인 이후 거래 열기가 빠르게 식고 있습니다. 한때 하루 10조원을 웃돌았던 거래대금은 이번 주에도 하루 평균 1조원 수준에 머무르고 있고요.
+
+단일종목 레버리지 ETF 소란이 잦아든 사이에는 금 관련 ETF가 수익률 상위권에 올랐는데요. 최근 국제 금값이 간만에 큰 폭으로 오르면서 금과 금 채굴기업에 투자하는 ETF가 강세를 보였습니다.
+
+22일 한국거래소에 따르면 지난 18~21일 단일종목 레버리지·인버스 ETF 16종의 거래대금은 모두 4조108억원으로 집계됐습니다. 하루 평균으로 따지면 1조27억원인데요. 기본예탁금 규제가 강화되기 전날인 지난달 30일 하루 거래대금 12조4485억원과 비교하면 12분의 1 수준으로 쪼그라든 셈이에요.
+
+거래도 일부 대형 상품에 집중됐습니다. 삼성자산운용의 KODEX SK하이닉스단일종목레버리지의 4일간 거래대금이 1조4831억원으로 전체의 37%를 차지했습니다. 신한자산운용의 SOL SK하이닉스선물단일종목인버스2X(8187억원), 미래에셋자산운용의 TIGER SK하이닉스단일종목레버리지(6489억원), 삼성자산운용의 KODEX 삼성전자단일종목레버리지(6206억원)가 뒤를 이었습니다.
+
+개인투자자의 단일종목레버리지 ETF 진입 문턱은 더욱 높아졌습니다. 지난 19일부터 ETF·ETN 괴리율 관리 기준이 강화된 데 이어 단일종목 레버리지·인버스 상품에 새로 투자하려는 개인투자자는 5시간 이상의 모의거래도 이수해야 합니다.
+
+단일종목레버리지의 열기가 식은 사이 금 가격은 간만에 큰 폭으로 올랐습니다. 국제 금값은 지난 20일 온스당 4500달러를 넘어선 건데요. 뉴욕상품거래소(COMEX)에서 8월물 금 선물은 온스당 4516.30달러에 거래를 마쳤습니다. 지난 1월 기록한 사상 최고치인 5318달러대에서 4000달러선까지 조정을 받은 뒤 최근 다시 반등하는 모습입니다.
+
+금 관련 ETF도 일제히 뛰었습니다. 이번 주(18~21일) 국내 ETF 가운데 NH아문디자산운용의 HANARO 글로벌금채굴기업이 11.94% 올라 수익률 1위를 차지했습니다. 이 ETF는 뉴몬트와 애그니코이글마인스, 바릭마이닝 등 글로벌 금 채굴기업에 투자하는 상품인데요. 금 채굴기업은 금 가격이 오르면 판매가격 상승분이 이익에 반영되면서 금 가격보다 주가 변동폭이 커질 수 있습니다고 운용사 측은 설명했습니다.
+
+최근에는 금 채굴기업의 비용 부담도 낮아지고 있습니다. 금 채굴에는 대형 장비가 주로 쓰이는 만큼 유가는 주요 비용 변수 가운데 하나인데요. 미·이란 교전이 소강 국면에 접어들면서 유가가 안정세를 보이고 있다는 점이 긍정적으로 작용했다는 설명입니다. 금 가격 상승으로 판매가격이 오른 가운데 비용 부담은 낮아지면서 채굴기업의 수익성에 우호적인 환경이 조성됐다는 분석입니다.
+
+특히 8월 들어 금 가격이 상승한 배경으로는 달러 약세가 꼽히는데요. 국제 금은 달러로 거래되는 만큼 통상 달러 가치가 떨어지면 다른 통화를 사용하는 투자자의 금 매입 부담이 낮아져 금 가격에는 상승 요인으로 작용합니다. 특히 지난달 31일 미국과 일본이 외환시장에 공동 개입해 달러를 팔고 엔화를 사들인 것도 달러 약세에 영향을 미쳤습니다.
+
+ACE 골드선물레버리지(합성 H)는 이번 주 9.12% 올랐고 KODEX 은선물(H)(7.06%), KODEX 골드선물(H)(5.18%), TIGER 금은선물(H)(5.13%), TIGER 골드선물(H)(5.05%) 등도 수익률 상위권에 이름을 올렸습니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/648/0000050048' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/648/0000050048</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
