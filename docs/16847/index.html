@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[미국 주식 돋보기] 맞춤형 암백신 현실로…머크 목표주가 줄상향</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005724562' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16847" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[미국 주식 돋보기] 맞춤형 암백신 현실로…머크 목표주가 줄상향</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">머크의 mRNA 암 치료제 임상 3상 성공 및 키트루다 SC 제형 전환 등 차세대 파이프라인 강화로 인해 모건스탠리가 목표주가를 상향 조정함. 또한 경구용 PCSK9 억제제 승인을 통해 시장 지배력 확대가 기대됨.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주력 품목인 키트루다의 특허 만료 우려를 상쇄할 수 있는 신규 mRNA 암 백신 임상 성공 및 SC 제형 전환 전략, 경구용 치료제 승인이 확인됨</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">Merck (MRK)</span> <span class="tag stock-tag">Moderna (MRNA)</span> <span class="tag stock-tag">알테오젠</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">제약</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#머크</span> <span class="tag tag-hash">#키트루다</span> <span class="tag tag-hash">#mRNA</span> <span class="tag tag-hash">#암백신</span> <span class="tag tag-hash">#미국주식</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">키트루다 특허만료 우려에도
+모더나 협업 신약 소식에
+주가 52주 신고가 파죽지세
+콜레스테롤 치료 립펜드라에
+키트루다 제형 전환도 '방패'
+
+글로벌 빅파마 머크의 주가가 고공행진하며 미국 증시에서 강렬한 존재감을 드러내고 있다. 혁신 신약 파이프라인에서 긍정적인 성과가 나와 시장의 주목을 받으면서부터다. 블록버스터 의약품 키트루다 특허가 조만간 만료될 것이라는 우려를 새로운 신약으로 불식시키며 글로벌 투자자들의 호평도 쏟아지고 있다.
+
+지난 21일(현지시간) 뉴욕거래소에서 머크 주가는 전 거래일보다 3.56달러(2.39%) 오른 152.55달러에 거래를 마감했다. 머크는 장중 154.49달러까지 상승하며 52주 신고가를 기록했다. 이번 상승세는 모더나와 공동 개발 중인 개인 맞춤형 메신저리보핵산(mRNA) 암 치료제 '인티스메란 오토진'이 임상 3상에서 세계 최초로 유의미한 효과를 내면서부터 시작됐다. 고위험 흑색종 환자 1137명 대상 임상에서 머크의 면역항암제 키트루다와 병용 투여 시 암이 재발하거나 다른 장기로 전이되지 않고 생존하는 기간이 유의미하게 길게 나타났다.
+
+시장 안팎에선 mRNA 암 백신이 차세대 정밀 항암 치료의 새로운 지평을 열었다는 평가가 나왔다. 글로벌 투자은행(IB) 모건스탠리는 머크의 성장 잠재력을 높게 평가하며 투자 의견을 '중립'에서 '비중 확대'로 올리고 목표주가를 기존 116달러에서 179달러로 상향 조정했다.
+
+테런스 플린 모건스탠리 애널리스트는 보고서를 통해 \"주력 항암제인 키트루다의 특허 만료가 곧 다가옴에도 불구하고 머크의 차세대 신약 파이프라인과 자본 배분 전략이 시장의 우려를 불식하며 추가 성장할 것\"이라고 전망했다. 그러면서 신약 상용화에 따른 밸류에이션(평가가치) 재평가가 필요하다면서 머크의 주가수익비율(PER) 목표치를 기존 11배에서 17배로 상향했다.
+
+머크는 1668년 독일 다름슈타트의 약국에서 출발해 세계 최장수 제약·화학 기업에 뿌리를 둔다. 1891년 미국 법인이 설립된 이후 제1차 세계대전 과정에서 미국 정부에 몰수돼 별도 기업인 미국 머크(MSD)로 분리됐다. 이후 머크는 연구개발(R&D)을 이어오며 2014년 면역항암제 키트루다를 출시하며 제약 산업의 역사를 새로 썼다. 키트루다는 수십 가지 암종으로 적응증을 확장하며 세계 매출 1위 의약품으로 자리매김했다. 머크는 국내 바이오 기업 알테오젠의 인간 재조합 히알루로니다제(ALT-B4) 기술을 도입해 국내 투자자들에게도 친숙하다. 기존 정맥주사(IV) 형태의 키트루다를 피하주사(SC) 제형으로 변경하는 등 제형 다변화를 통해 시장 지배력을 강화하고 있다.
+
+하지만 기존 블록버스터 의약품인 키트루다의 특허 만료가 2028년부터 순차적으로 만료된다는 한계가 존재해왔다. 머크의 전체 매출 중 절반 이상이 항암제가 차지하는 만큼, 특허 만료 시 바이오시밀러 침투로 인한 거대한 매출 공백 우려가 지속돼왔다. 하지만 이번 mRNA 암 치료제 임상 3상 성공과 더불어 기존에 머크가 이를 극복하기 위해 준비하고 있는 강력한 방어 및 차세대 파이프라인 전략이 부각될 것으로 전망된다.
+
+최우선 방어 카드는 단연 키트루다 큐렉스(키트루다 SC)이다. 환자의 투여 시간을 줄여 편의성을 극대화해 특허 만료 이후에도 기존 IV 제형 시장을 SC 제형으로 빠르게 전환시켜 바이오시밀러의 도전을 방어하는 핵심 방패 역할을 담당할 것으로 보인다.
+
+최근 미국 식품의약국(FDA) 승인을 받은 경구용 PCSK9 억제제 '립펜드라'(성</strong>성분명 엔리시타이드)도 또 하나의 혁신 신약 파이프라인으로 꼽힌다. 립펜드라는 고콜레스테롤혈증·이형접합 가족성 고콜레스테롤혈증 환자 치료제로, 머크는 독자적인 기술을 적용해 장내 흡수가 가능한 알약 제형화에 성공해 편의성을 극대화했다. 이번 승인으로 머크는 경쟁사 아스트라제네카를 제치고 세계 최초 경구용 PCSK9 억제제 시장을 선점했다는 평가를 받았다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005724562' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005724562</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
