@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>시장 턴어라운드 시 단기매매 보다 액티브 ETF 주목</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/005403408' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16816" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>시장 턴어라운드 시 단기매매 보다 액티브 ETF 주목</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">시장 턴어라운드 시 액티브 ETF를 활용한 주도주 압축 전략 제안. 반도체 사이클 지속 및 정부 밸류업 정책에 따른 금융주, AI 인프라 관련 섹터 주목.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체, 금융(밸류업), AI 인프라 등 주요 섹터에 대한 구체적인 투자 전략과 전망을 제시함</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">KB금융</span> <span class="tag stock-tag">신한지주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 인프라</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#액티브ETF</span> <span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#밸류업</span> <span class="tag tag-hash">#AI인프라</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">김남호 타임폴리오자산운용 ETF운용본부장은 최근 머니투데이와의 인터뷰에서 \"지난달 증시 하락은 기업 펀더멘털 훼손으로 비롯된 것이 아니라 투자심리가 흔들려 발생한 것인 만큼 이제 시장이 회복세를 보일 것\"이라며 이같이 말했다. 코스피는 지난 한 달간 22.19% 급락한 후 이달 들어 지난 21일까지 4.81% 상승했다. 다만, 변동성이 여전히 높은 상황인 만큼 단기 매매보다는 장기 투자 전략을 세워야 한다고 조언했다. 김 본부장은 \"자금 흐름이 반도체로 흘러갔다가 다시 어디로 <0xED><0x8A><0x88>지 모르는 상황에서 이를 매일매일 쫓아다니다 보면 결국 투자자가 돈을 잃게 된다\"며 \"레버리지 ETF 등을 통해 단기매매를 하기보다는 장기적인 관점에서 우량 자산을 모아가는 투자를 해야 한다\"고 말했다. 이어 \"최근 변동성 장세와 이후 펼쳐질 상승장에서는 단순 지수 추종을 넘어 초과 성과를 창출할 수 있는 액티브 ETF의 활용도 고려해야 한다\"고 설명했다. 액티브 ETF는 기초지수를 추종하는 패시브 ETF와 달리 펀드매니저가 비교적 자유롭게 운용하는 상품이다. 펀드매니저가 판단해 상승 가능성이 있는 종목을 미리 포트폴리오에 편입하거나 비중을 늘릴 수 있고, 반대로 하락이 예상되는 종목을 제외할 수 있다. 이에 따라 기초지수 대비 초과 성과를 추구한다. 타임폴리오자산운용은 현재 액티브 ETF 18개를 운용 중이다. 이 중 \"TIME 코스피액티브\"의 상장 이후 누적 수익률(분배금 재투자 기준)은 지난 20일 기준 155.54%로, 비교지수 수익률(116.08%) 대비 39.46%포인트 높다. 업종별로는 국내 반도체와 금융을 주목해야 한다고 판단했다. 김 본부장은 \"반도체 사이클은 끝나지 않았다\"며 \"메모리 반도체주가 그동안 많이 하락한 만큼 바라봐야 한다\"고 설명했다. 이어 \"그러나 하반기에는 반도체에 집중됐던 자금과 온기가 다른 섹터로 확산할 것\"이라며 \"특히 정부의 밸류업 드라이브와 맞물려 금융주, 이중에서도 은행주를 주목해야 한다\"고 말했다. 그는 한국은행의 기준금리 인상은 대출 금리와 예금 금리의 차이를 벌려 은행의 핵심 수익성 지표인 순이자마진(NIM)에 긍정적인 모멘텀으로 작용할 것\"이라고 분석했다. 미국 주식도 관심을 가져야 할 자산이다. 다만, 이 역시 기술주에 집중 투자보다는 다른 업종까지 분산해서 담아야 한다고 조언했다. 김 본부장은 \"메모리 반도체는 물론, AI(인공지능) 인프라까지 확장해 네오클라우드, 광통신, SMR(소형모듈원자로) 기업들을 눈여겨봐야 한다\"고 말했다. 이어 \"AI 산업에서 전력은 심장과 같은 역할을 하기 때문에 계속 필요할 수밖에 없다\"고 설명했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/005403408' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/005403408</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
