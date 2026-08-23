@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ETF 수익률 톱3 '싹쓸이'…개미 지표 불린 운용사 어디?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003124355' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16900" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>ETF 수익률 톱3 '싹쓸이'…개미 지표 불린 운용사 어디?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">최근 3개월 ETF 수익률 상위 3개 상품이 모두 미래에셋자산운용의 TIGER 브랜드로 나타났습니다. 유럽 증시, 화장품, AI 사이버보안 등 다양한 테마에서 높은 성과를 기록하며 운용사의 글로벌 라인업 경쟁력이 입증되었습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 테마(AI, 화장품, 유럽) ETF의 고수익 달성 및 미래에셋자산운용의 상품 경쟁력 확인</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">미래에셋자산운용 관련 ETF</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">보안장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">화장품</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#TIGER</span> <span class="tag tag-hash">#미래에셋자산운용</span> <span class="tag tag-hash">#AI사이버보안</span> <span class="tag tag-hash">#유로스탁스</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">3개월 최고 수익률 21.88%
+해외·테마형 라인업 강점
+국내 ETF 운용사 28곳의 상품을 대상으로 최근 3개월 수익률을 비교한 결과, 'TIGER 유로스탁스레버리지(합성 H)'가 21.88%로 가장 높은 수익률을 기록했다. 해당 이미지는 AI로 제작됨.
+국내 ETF 운용사 28곳의 상품을 대상으로 최근 3개월 수익률을 비교한 결과, 'TIGER 유로스탁스레버리지(합성 H)'가 21.88%로 가장 높은 수익률을 기록했다. 해당 이미지는 AI로  제작됨. 최근 3개월간 국내 상장지수펀드(ETF) 수익률 상위 3개를 미래에셋자산운용의 'TIGER'가 휩쓴 것으로 나타났다.
+
+유럽 증시부터 화장품, 인공지능(AI)·사이버보안까지 서로 다른 투자처에서 고르게 높은 수익률을 기록하며 변동성 장세에서도 두각을 나타냈다.
+
+24일 한국예탁결제원 증권정보포털 세이브로에서 국내 ETF 운용사 28곳의 상품을 대상으로 최근 3개월 수익률을 비교한 결과, 'TIGER 유로스탁스레버리지(합성 H)'가 21.88%로 가장 높은 수익률을 기록했다.
+
+'TIGER 화장품'이 18.48%로 2위에 올랐고 'TIGER 글로벌AI사이버보안'이 17.62%로 뒤를 이었다.
+
+최근 3개월 수익률 1~3위를 미래에셋자산운용 상품이 모두 차지한 셈이다.
+
+상위권 상품의 투자 대상이 유럽 증시, 국내 화장품, 글로벌 인공지능(AI)·사이버보안 등으로 차별화됐다는 점이 눈에 띈다.
+
+수익률 1위인 TIGER 유로스탁스레버리지(합성 H)는 유로존 대표 기업으로 구성된 EURO STOXX 50 지수의 일간 수익률을 두배로 추종하는 상품이다.
+
+최근 유럽 증시 상승에 레버리지 효과까지 더해지면서 수익률이 확대된 것으로 풀이된다.
+
+2위 TIGER 화장품은 국내 주요 화장품 기업에 투자하는 ETF다.
+
+국내 화장품 업종이 수출 확대와 해외 시장 성장 기대 등에 힘입어 강세를 나타내면서 높은 수익률로 이어졌다.
+
+3위 TIGER 글로벌AI사이버보안은 글로벌 사이버보안 기업에 투자한다.
+
+AI 산업이 빠르게 성장하면서 데이터와 정보 보호를 위한 보안 수요 역시 확대될 것이란 기대가 관련 기업의 주가를 뒷받침한 것으로 분석된다.
+
+최근 국내 증시가 급등락을 반복한 가운데 미래에셋자산운용의 폭넓은 ETF 라인업도 다시 주목받고 있다.
+
+미래에셋자산운용은 국내 운용사 가운데서도 해외 투자와 테마형 ETF에 강점을 보여온 운용사로 꼽힌다.
+
+국내 TIGER ETF뿐 아니라 글로벌 ETF 사업을 확대하며 투자 지역과 자산군을 넓혀왔다.
+
+미래에셋자산[...생략...] 단순하게 상품 수를 늘리는 것에서 그치지 않고 투자자 수요가 커지는 시장과 산업을 ETF로 빠르게 담아낸 전략이 경쟁력으로 작었다는 평가이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003124355' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003124355</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
