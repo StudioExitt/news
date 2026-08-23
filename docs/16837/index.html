@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>토큰증권 시대…증권사 역할도 바뀐다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/293/0000089424' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16837" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>토큰증권 시대…증권사 역할도 바뀐다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">토큰증권 제도화로 인해 증권사의 역할이 단순 판매에서 상품 구조화, 계좌관리, 유통 및 사후관리까지 확대될 전망이다. 국내에서는 발행인의 직접 권리관리와 증권사의 중개 기능이 공존하는 방향으로 제도가 설계되고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">토큰증권 제도화를 통한 증권사의 업무 영역 확대 및 새로운 비즈니스 모델(IB 밸류체인 확장) 구축 기대</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">NH투자증권</span> <span class="tag stock-tag">LS증권</span> <span class="tag stock-tag">미래에셋증권</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#토큰증권</span> <span class="tag tag-hash">#ST</span> <span class="tag tag-hash">#증권사</span> <span class="tag tag-hash">#디지털자산</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">서울 여의도 증권가 전경 / 사진 = 아이스톡
+토큰증권 제도화가 증권 발행 방식뿐 아니라 증권사의 역할에도 변화를 가져올 전망이다. 기업이 자체 고객망을 활용해 투자자와 직접 연결하는 해외 사례가 등장하는 가운데 국내에서도 발행과 권리관리 방식의 변화가 예고됐다. 다만 국내 제도는 기업의 직접 판매를 전면 확대하기보다 발행인의 직접 권리관리와 증권사의 중개 기능을 함께 허용하는 방향이다. 증권사의 경쟁 무대도 단순 판매에서 상품 구조화와 계좌관리, 유통과 사후관리까지 넓어질 것으로 보인다.
+
+23일 금융투자업계에 따르면 일본 토요타파이낸스는 이달 10억엔 규모의 1년 만기 토큰화 회사채 청약에 나섰다. 연 이자율은 1.72%이다. 투자자가 매입하는 것은 암호화폐가 아니라 일반 회사채와 마찬가지로 이자를 받고 만기에 원금을 돌려받는 증권이다. 차이는 투자자를 모집하고 권리를 기록·관리하는 방식에 있다.
+
+토요타파이낸스가 지난해 3월 발행한 1호 토큰화 채권은 증권사를 통해 판매했다. 반면 2호 채권은 별도 증권계좌 없이 자체 서비스인 'Toyota Wallet'에서 청약할 수 있도록 설계했다. 기업이 보유한 고객을 직접 투자자로 연결하는 방식이다. 차량 시승과 모터스포츠 관람 등 토요타 고객을 겨냥한 혜택도 채권에 결합했다.
+
+토큰증권이 기업의 자금조달 경로 자체를 바꿀 가능성을 보여주는 사례다. 기존에는 증권사가 기업이 발행한 증권을 인수하거나 투자자에게 판매하는 접점 역할을 맡았다. 토큰증권에서는 기업이 자체 앱이나 고객망을 활용하고 분산원장에서 권리를 관리할 경우 투자자와 만나는 방식이 다양해질 수 있다.
+
+국내에서는 이런 변화가 다른 형태로 나타날 가능성이 크다. 내년 2월 개정 전자증권법을 시행하면 분산원장을 증권계좌부로 활용할 수 있다. 일정 요건을 갖춘 발행인이 자신이 발행한 증권의 권리자와 거래내역을 직접 기록·관리하는 '발행인 계좌관리기관' 제도도 세부 설계를 진행하고 있다. 지금처럼 증권사 등 기존 계좌관리기관에 권리 기록을 전적으로 맡기는 구조에 변화가 생길 수 있는 부분이다.
+
+다만 발행인이 권리를 직접 관리할 수 있다는 것이 증권사 없이 일반투자자에게 자유롭게 증권을 판매할 수 있다는 의미는 아니다. 토큰증권도 본질은 자본시장법상 증권이다. 모집과 매출, 공시와 투자자 보호 등 기존 증권 규율을 적용한다. 발행과 권리관리 방식의 디지털화와 금융상품 판매 문제를 구분해야 하는 이유다.
+
+오히려 투자계약증권에서는 증권사의 역할이 확대된다. 기존에는 투자계약증권을 증권사가 중개할 수 없어 발행인이 직접 투자자를 모집하는 방식에 의존했다. 개정 자본시장법 시행 이후에는 증권사를 통한 투자계약증권 중개를 허용한다. 토큰증권이 발행인의 직접 관리 가능성을 넓히는 동시에 기존에 막혀 있던 증권사의 유통 참여도 제도권으로 끌어들이는 셈이다.
+
+국내 증권사들의 준비도 이런 방향으로 넓어지고 있다. NH투자증권은 공동 플랫폼에서 채권과 지분증권의 발행부터 권리관리와 상환까지 검증하고 있다. LS증권은 브로커리지와 인공지능(AI), 토큰증권을 한 사업부에 묶었다. 미래에셋그룹도 거래와 수탁, 스테이블코인과 토큰증권을 연결하는 디지털금융 인프라를 확대하고 있다.
+
+결국 국내에서 예상되는 변화는 '증권사 없는 자본조달'보다는 증권사가 맡는 기능의 재배치에 가깝다. 발행기업이 일부 권리관리 업무를 직접 수행하거나 자체 고객망을 활용할 여지는 커지는 반면 비정형 자산의 가치평가와 상품 구조화, 투자자 모집, 계좌관리와 유통 등 전문 금융회사가 맡아야 할 영역도 함께 늘어난다. 특허 로열티와 콘텐츠처럼 권리관계가 복잡한 기초자산일수록 이런 역할은 더 중요해질 수 있다.
+
+증권사 입장에서도 단순히 만들어진 증권을 판매하고 수수료를 받는 방식에서 벗어나 기업의 자금 수요를 투자 가능한 상품으로 만들고 발행 이후 권리관리와 유통까지 연결하는 역량이 중요해질 전망이다. 토큰증권을 새로운 투자은행(IB) 밸류체인으로 거론하는 이유다.
+
+금융투자업계 관계자는 "토큰증권이 확산되면 기업과 투자자가 만나는 경로는 다양해지겠지만 증권사의 역할이 없어지기보다 달라지는 쪽에 가깝다"며 "앞으로는 단순 판매망보다 기업의 자금조달 수요를 상품으로 구조화하고 발행부터 유통까지 연결할 수 있는 역량이 중요해질 것"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/293/0000089424' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/293/0000089424</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
