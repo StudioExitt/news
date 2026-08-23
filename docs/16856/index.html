@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ETF 시장 양극화 심화…50억 미만 줄줄이 퇴출</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.23</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004654300' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16856" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>ETF 시장 양극화 심화…50억 미만 줄줄이 퇴출</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 ETF 시장에서 원본액 50억 원 미만인 소형 상품들이 자금 유입 부진으로 인해 줄지어 상장폐지되고 있습니다. 대형 및 인기 테마로의 투자금 집중화가 심화되면서 중소형 ETF 운용사들의 생존과 포트폴리오 개편이 어려워지는 양극화 현상이 나타나고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">ETF 시장의 자금 양극화 심화로 인한 소규모 상품의 퇴출 및 운용사들의 구조적 어려움 증대</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한화자산운용</span> <span class="tag stock-tag">KB자산운용</span> <span class="tag stock-tag">NH아문디자산운용</span> <span class="tag stock-tag">키움투자자산운용</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#상장폐지</span> <span class="tag tag-hash">#양극화</span> <span class="tag tag-hash">#자산운용</span> <span class="tag tag-hash">#금융시장</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">전체 1161개 중 45개 달해
+대형·인기상품에 밀려 외면
+기초지수 변경 심사도 강화
+포트폴리오 개편 쉽지않아
+클립아트코리아
+클립아트코리아국내 상장지수펀드(ETF) 시장이 1160개를 넘어섰지만 규모가 50억 원에도 미치지 못하는 상품이 45개에 달하는 것으로 나타났다. 투자금이 일부 대형·인기 상품에 집중되면서 자금 유입에 실패한 소형 ETF의 상장폐지가 잇따르고 있다.
+
+23일 금융투자 업계에 따르면 20일 기준 국내에 상장된 ETF 1161개 가운데 원본액이 50억 원 미만인 상품은 총 45개로 집계되었다. 전체 ETF의 약 3.9%가 상장폐지 가능 기준을 밑도는 셈이다.
+
+현행 규정상 ETF를 설정한 지 1년이 지난 뒤 원본액이 50억 원 미만인 상태가 한 달 동안 계속되면 투자신탁 해지 가능 사유에 해당한다. 다만 해당 요건을 충족했다고 즉시 상장폐지되는 것은 아니다. 운용사가 상품성과 성장 가능성 등을 검토한 뒤 투자신탁 해지를 결정하게 되면 거래소의 상장폐지 절차를 밟게 된다.
+
+실제 원본액 감소에 따른 ETF 퇴출 사례도 이어지고 있다. 한화자산운용의 ‘PLUS 글로벌AI인프라’는 이달 27일 상장폐지될 예정이다. KB자산운용의 ‘RISE 국채선물5년추종’도 20일 시장에서 퇴출됐다. NH아문디자산운용의 ‘HANARO 글로벌워터MSCI(합성)’를 비롯한 일부 상품도 지난달 상장폐지됐다. 이밖에 키움투자자산운용의 ‘KIWOOM K-2차전지북미공급망’도 최근 원본액이 감소하면서 투자유의 안내 대상에 올랐다.
+
+이는 ETF 시장이 빠르게 성장하는 과정에서 투자금이 대표지수나 반도체·인공지능(AI), 파킹형 등 일부 인기 상품에 집중된 영향으로 풀이된다. 신규 ETF가 잇따라 출시되며 상품 수는 늘고 있지만 인지도가 낮거나 투자 테마가 시장의 관심에서 멀어진 상품은 원본액과 거래량을 유지하기가 갈수록 어려워지고 있다. 특히 유사한 테마를 내건 ETF가 동시에 출시되면서 후발 상품이나 중소형 운용사 상품의 자금 확보 부담이 커졌다는 평가다.
+
+자금 유입이 부진한 ETF를 기초지수 변경을 통해 되살리는 리모델링도 쉽지 않아졌다는 게 운용업계의 설명이다. 운용사들은 시장 수요가 줄어든 ETF의 상품명과 기초지수를 변경해 편입 종목과 비중을 조정하는 방식으로 상품 경쟁력을 보완하기도 했다. 기존 상품을 청산하고 신규 ETF를 출시하는 것보다 시간과 비용을 줄일 수 있어서다.
+
+하지만 최근에는 기초지수 변경의 필요성과 상품 차별성에 대한 한국거래소의 심사가 한층 까다로워졌다는 목소리도 있다. 올해 주요 개편 사례로는 삼성자산운용의 ‘KODEX AI반도체TOP2플러스’가 꼽힌다. 삼성자산운용은 기존 ‘KEDX AI반도체’의 명칭과 기초지수를 변경하고 삼성전자와 SK하이닉스의 합산 비중을 50%로 높여 대형 우량주 중심으로 포트폴리오를 재편했다.
+
+업계의 한 관계자는 “ETF 시장의 외형은 계속 커지고 있지만 실제 자금은 상위권 상품을 중심으로 유입되고 있다”며 “기초지수 변경을 통한 상품 개편까지 어려워지면 원본액이 감소한 소형 ETF는 상장폐지 외에 선택할 수 있는 대안이 많지 않다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004654300' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004654300</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
