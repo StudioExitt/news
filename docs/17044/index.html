@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 흔들 세 가지 변수…엔비디아·금통위·잭슨홀[투자360]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002687772' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17044" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 흔들 세 가지 변수…엔비디아·금통위·잭슨홀[투자360]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">이번 주 국내 증시는 엔비디아 실적 발표, 한국은행 금통위, 잭슨홀 심포지엄 등 대형 이벤트가 연이어 예정되어 있어 변동성이 확대될 전망입니다. 특히 미국의 PCE 물가지표와 잭슨홀에서의 통화정책 발언이 글로벌 금리 및 AI 투자 심리에 핵심적인 분수령이 될 것으로 보입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">엔비디아 실적과 잭슨홀 심포지엄 등 시장의 방향성을 결정할 대형 경제 이벤트가 집중되어 변동성 확대 가능성이 높음</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">엔비디아</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#엔비디아</span> <span class="tag tag-hash">#잭슨홀</span> <span class="tag tag-hash">#금리변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">서울 중구 하나은행 딜링룸에서 한 직원이 경제지표를 살펴보고 있다. 임세준 기자
+
+서울 중구 하나은행 딜링룸에서 한 직원이 경제지표를 살펴보고 있다. 임세준 기자
+
+이번주 국내 증시는 엔비디아 실적과 한국은행 금융통화위원회, 잭슨홀 심포지엄 등 굵직한 이벤트를 연이어 맞는다. 장기 국채금리 불확실성과 인공지능(AI) 투자 논란이라는 상단 제약 요인이 완화될 수 있을지 시장의 관심이 쏠린다.
+
+24일 금융투자업계에 따르면 오는 26일(현지시간) 엔비디아 실적 발표를 시작으로 27일 한국은행 금융통무위원회, 28~29일(현지시간) 잭슨홀 경제정책 심포지엄이 열린다.
+
+글로벌 증시의 최대 관심사는 잭슨홀 심포지엄이다. 특히 시장은 28일 예정된 케빈 워시 미국 연방준비제도(Fed) 의장의 기조연설이 장기 금리 궤적을 결정할 분수령으로 꼽는다. 오는 26일(현지시간) 발표되는 미국 개인소비지출(PCE) 물가지표도 장기금리 향방을 가늠할 변수다.
+
+지난주 국내 증시는 글로벌 장기금리 급등의 충격을 고스란히 받았다. 미국 30년물 국채금리가 5.3%를 넘어선 데 이어 일본 10년물 국채금리도 2.9%를 돌파하면서 투자심리가 위축된 영향이다. 빅테크의 대규모 회사채 발행도 금리 상승 요인으로 작용하면서 인공지능(AI) 투자 확대에 대한 경계심도 높아졌다.
+
+하건형 신한투자증권 연구원은 “잭슨홀에서는 케빈 워시 의장의 물가 관련 해석과 추가 금리 인상에 대한 시각을 확인할 필요가 있다”고 설명했다. “개인소비지출(PCE)에서 물가 둔화가 재차 확인되고 통화정책에 대한 경계감까지 완화될 경우 국채 금리 안정과 함께 위험자산 선호가 다시 강화될 가능성이 높다”고 덧붙였다.
+
+엔비디아의 실적은 국내 반도체주를 비롯한 증시 전반의 투자심리에 영향을 미칠 전망이다. 시장 예상치 상회 여부와 향후 실적 가이던스, 매출총이익률 방어 여부 등이 주요 관전 포인트다.
+
+실적 발표를 통해 순환금융 논란이 해소될지도 관건이다. 엔비디아는 지난 10일(현지시간) 6개 글로벌 금융기관과 5000억달러 규모의 AI 금융 플랫폼 구축 계획을 발표했다. 엔비디아가 고객에 공급한 자금이 다시 GPU 구매로 이어지는 구조를 두고 수요가 부풀려지는 것이 아니냐는 우려가 제기됐다. 투자자들은 투자 확대를 뒷받침할 실제 수요가 입증될지 주목할 것으로 보인다.
+
+김석환 미래에셋증권 연구원은 “2분기 실적과 3분기 가이던스, 고마진 유지 여부 등도 중요하지만 현재 시장이 가장 우려하는 AI 투자와 자금조달의 지속 가능성에 대해 어떤 답을 내놓을지가 핵심”이라고 짚었다.
+
+27일 열리는 한국은행 금융통화위원회도 국내 증시의 주요 변수다. 증권가는 기준금리를 연속으로 인상할 가능성을 높게 점치고 있다. 물가 상방 압력이 이어지는 가운데 반도체를 중심으로 수출 회복세가 강화되면서 정책 부담도 제한적이라는 평가다.
+
+김유미 키움증권 연구원은 “한국은행 부총재의 금리 인상 필요성 관련 발언 등을 고려하면 이전보다 추가 인상 가능성이 높아진 것은 사실”이라면서도 “최근 달러/원 환율이 빠르게 하락하고 7월 소비자물가 상승률도 둔화된 만큼, 8월에는 동결한 뒤 10월 추가 인상에 나서는 속도 조절 가능성도 열어둘 필요가 있다”고 말했다.
+
+금리 불확실성이 해소되기 전까지 코스피와 코스닥 모두 변동성 장세가 이어질 것이라는 게 증권가의 전망이다.
+
+황수욱 메리츠증권 연구원은 “AI가 비용(금리) 우려를 뚫고 더 성장할 수 있느냐와 금리 문제가 성장 기대를 누르느냐에 따라 시장 방향이 결정될 것”이라면서 “삼성전자와 SK하이닉스를 제외한 코스피와 코스닥 모두 금리에 민감해질 수 있는 멀티플 레벨로 금리 안정 확인 전까지는 반도체 톱2에 집중된 대응이 단기적으로는 적절하다”고 말했다.
+
+이경민 대신증권 연구원은 “기본 시나리오는 엔비디아 실적이 컨센서스에 부합하고 PCE가 예상 수준에서 나오며 워시 의장이 원론적 발언에 그치는 경우”라고 전망했다. “이 경우 코스피의 7000선 안착과 8000선대 진입 가능성이 확대될 것”이라고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002687772' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002687772</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
