@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엔비디아 호실적이면 반도체주 다시 뛸까…이번주 ‘시험대’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/023/0003994522' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16931" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>엔비디아 호실적이면 반도체주 다시 뛸까…이번주 ‘시험대’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">엔비디아의 2분기 실적 발표를 앞두고 반도체 및 AI 관련주의 향방이 주목받고 있습니다. 높은 성장률에도 불구하고 높아진 시장 기대치와 차세대 제품 공급 상황, 금리 변동성 등이 주가 변동의 핵심 변수로 작용할 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">엔비디아 실적 발표는 반도체 및 AI 섹터 전체의 향방을 결정짓는 핵심 이벤트이며, 최근 호실적 이후에도 주가가 하락한 사례가 있어 시장의 불확실성이 매우 높음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">엔비디아</span> <span class="tag stock-tag">AMD</span> <span class="tag stock-tag">마이크론</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전력</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#엔비디아</span> <span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#AI</span> <span class="tag tag-hash">#실적발표</span> <span class="tag tag-hash">#주식시장</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">인공지능(AI) 반도체 대장주 엔비디아의 실적 발표가 다가오면서 반도체주 투자자들의 관심이 쏠리고 있다. 엔비디아를 비롯한 주요 반도체 기업의 실적은 빠르게 성장하고 있지만 호실적이 예전처럼 주가 상승으로 이어지지 않는 경우가 늘고 있기 때문이다. 엔비디아는 지난 5월 시장 예상을 웃도는 실적과 전망을 내놓고도 이후 주가가 약세를 보였고, AMD와 마이크론 등 다른 반도체주도 호실적 이후 주가가 크게 출렁였다. 실적이 좋아도 높아진 시장의 기대치를 충족하지 못하면 오히려 주가가 흔들리는 모습이다.
+
+젠슨 황 엔비디아 최고경영자(CEO). (공동취재) 2026.6.8 
+젠슨 황 엔비디아 최고경영자(CEO). (공동취재) 2026.6.8 
+이번 실적은 엔비디아 한 종목을 넘어 AI 관련주의 향방을 가늠할 시험대로 꼽힌다. 국내에서도 엔비디아 실적 발표 때마다 반도체뿐 아니라 전력·냉각·건설 등 AI 데이터센터 관련주가 함께 움직여왔다. 최근 미국 장기 국채 금리 상승으로 AI 관련주가 흔들린 상황이어서 이번 실적이 국내외 AI 관련주의 투자 심리를 되돌릴 수 있을지에도 관심이 쏠린다.
+
+◇실적 좋아도 주가는 하락… 높아진 눈높이
+
+엔비디아는 한국 시간으로 27일 오전 5시쯤 2분기(5~7월) 실적을 발표한다. 시장에서는 매출 919억달러(약 127조4700억원), 주당순이익(EPS) 2.08달러로 다시 역대 최대 실적을 예상하고 있다. 지난 1분기 매출은 816억달러로 전년 동기보다 85% 증가했고 데이터센터 매출은 752억달러로 92% 늘었다. 문제는 높은 성장률이 주가 상승을 보장하지 않는다는 점이다. 최근 8차례 엔비디아 실적 발표 가운데 7차례에서 발표 직후 주가 반응이 좋지 않았다. 지난 5월에도 매출과 다음 분기 전망이 모두 시장 예상을 웃돌았지만 주가는 이후 약세를 보였다. 실적 발표 전 220달러대였던 주가는 한 달여 뒤 190달러대까지 떨어졌다.
+
+AMD와 마이크론에서도 비슷한 흐름이 나타났다. AMD는 이달 초 시장 예상을 웃도는 실적과 전망을 내놓고도 주가가 급락했다. 마이크론은 지난 6월 AI용 고대역폭 메모리(HBM) 수요에 힘입은 깜짝 실적을 발표한 다음 날 두 자릿수 급등했지만 이후 상승분을 상당 부분 반납했다. 실적이 좋다는 사실보다 이미 주가에 반영된 기대를 얼마나 크게 뛰어넘느냐가 중요해진 것이다. 황병찬 LS증권 연구원은 \"엔비디아의 실적과 어닝콜보다 중요한 것은 이를 받아들이는 시장의 환경\"이라고 했다.
+
+이번에도 2분기 실적 자체보다 향후 전망이 주가를 좌우할 가능성이 크다. 현재 주력인 블랙웰의 수요가 여전히 공급을 웃도는가, 차세대 \"루빈\"의 공급이 계획대로 진행되고 있는지가 주요 관전 포인트다. 마이크로소프트·아마존·알파벳·메타 등 빅테크가 AI 데이터센터 투자를 계속 확대하고 있지만, 최근 급등한 장기 금리가 투자 확대에 부담을 줄지도 변수로 꼽힌다.
+
+엔비디아 로고. /로이터통신
+엔비디아 로고. /로이터통신
+
+◇GPU 가격도 오른다… AI 투자비 부담은 변수
+
+엔비디아 AI 시스템의 가격 상승도 변수다. 블룸버그는 22일(현지 시각) 엔비디아 칩을 탑재한 AI 서버 가격이 메모리 가격 급등 등의 영향으로 상당수 제품에서 15% 이상 오를 수 있다고 보도했다. 가격 상승은 2027년 초 출하되는 차세대 \"루빈\"과 기존 \"블랙웰\" 기반 시스템 등에 영향을 미칠 전망이다. 서버 가격 상승은 AI 데이터센터를 짓는 고객사에는 투자비 부담을 키우는 요인인 반면, 삼성전자·SK하이닉스·마이크론 등 메모리 업체에는 긍정적인 신호다. AI 서버용 메모리 수요가 공급을 웃돌면서 가격이 오르고 있어 실적 개선으로 이어질 수 있기 때문이다.
+
+AI 데이터센터 확대에는 비용뿐 아니라 전력과 부지 확보도 걸림돌로 떠오르고 있다. 엔비디아가 GPU를 만들어 파는 데서 한발 더 나아가 데이터센터 건설을 직접 지원하기 시작한 이유다. 엔비디아는 21일 미국 데이터센터 개발 업체 클로버리프 인프라스트럭처에 투자했다고 밝혔다. 투자액은 공개되지 않았지만 월스트리트저널(WSJ)은 수억달러 규모라고 보도했다. 클로버리프는 데이터센터 개발사와 전력 회사, 투자자를 연결해 인프라용 부지와 전력을 공급하는 전문 기업이다. AI 데이터센터의 전력 부족이 심해지자 엔비디아가 자사 GPU가 들어갈 데이터센터의 전력 확보에도 직접 나선 것이다.
+
+앞서 엔비디아는 블랙록·블랙스톤·골드만삭스·아폴로·브룩필드·KKR 등 6개 금융회사와 5000억달러 이상의 외부 자금을 AI 인프라에 끌어들이는 금융 플랫폼도 추진하기로 했다. AI 기업의 데이터센터 건설과 GPU 구매를 쉽게 만들어 엔비디아의 매출을 늘릴 수 있지만, 엔비디아가 직·간접적으로 지원한 자금이 결국 자사 GPU 구매로 이어지는 \"순환 금융\"에 대한 우려도 나온다. 로이터는 최근 이런 거래가 늘면서 엔비디아와 고객사 사이의 순환적인 자금 흐름에 대한 투자자들의 우려가 커지고 있다고 전했다.
+
+최근 오픈AI가 사용할 미국 오하이오 데이터센터에 대한 최대 1050억달러 보증이 대표적이다. 엔비디아는 오픈AI가 20년간 임차하는 데이터센터의 임대료와 전력비 일부를 보증하고, 오픈AI가 임대료를 내지 못해 시설을 재임대하거나 매각한 뒤에도 가치가 일정 수준에 미치지 못하면 그 차액을 부담한다. 해당 데이터센터에는 엔비디아 칩이 독점적으로 사용될 예정이어서 AI 투자가 계속 확대되면 GPU 판매를 늘릴 수 있지만, 사업이 기대에 못 미칠 경우 보증 부담이 엔비디아로 돌아올 수 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/023/0003994522' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/023/0003994522</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
