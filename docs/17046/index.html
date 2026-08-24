@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[뉴욕증시]마이크론·AMD 등 급락…S&P500·나스닥 ↓</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005806712' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17046" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[뉴욕증시]마이크론·AMD 등 급락…S&P500·나스닥 ↓</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">마이크론, AMD 등 주요 반도체 및 AI 관련주가 급락하며 나스닥 지수가 하락했습니다. 미 국채 금리는 재무부의 국채 바이백 계획으로 하락세를 보였으나, 시장은 잭슨홀 연설과 PCE 물가 지표 발표를 앞두고 관망하는 모습입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">반도체 및 AI 핵심 종목들의 주가 급락이 나스닥 및 기술주 전반의 하락을 주도하며 시장에 부정적 영향을 미침</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">마이크랜 테크놀로지</span> <span class="tag stock-tag">AMD</span> <span class="tag stock-tag">브로드컴</span> <span class="tag stock-tag">인텔</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#뉴욕증시</span> <span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#나스닥</span> <span class="tag tag-hash">#잭슨홀</span> <span class="tag tag-hash">#국채금리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">반도체주 급락에 나스닥 약세
+美 장기 국채금리는 하락
+마이크론·AMD 등 일제히 내려
+시장, 잭슨홀·P&quot;ECA 주목
+미국의 장기 국채금리가 하락세로 돌아섰지만 반도체주를 중심으로 매도세가 쏠리면서 24일(현지시간) 미국 뉴욕증시의 3대 지수는 장 초반 혼조세를 나타내고 있다.
+
+뉴욕증권거래소(NYSE)에서 오전 9시 54분 현재 다우지수는 전 거래일보다 152.11포인트(0.29%) 올라간 5만3429.12에 거래중이다.
+대형주 중심의 S&amp;P500지수는 22.22포인트(0.29%) 하락한 7652.15, 기술주 중심의 나스닥지수는 233.05포인트(0.89%) 내린 2만5947.40을 나타내고 있다.
+
+이날 반도체주 약세가 증시에 부담을 주고 있다. 마이크론테크놀로지 6.76%, AMD 3.58%, 브로드컴 1.71%, 인텔 4.86% 등의 하락률이 두드러졌다. 인공지능(AI) 관련 기술주 전반에도 매도세가 나타났다. 루멘텀 8.22%, 샌디스크 10.80%, 시게이트테크놀로지 6.50%, 코닝은 4.73% 떨어지고 있다.
+
+반면 미 국채금리는 재무부가 장기 국채 바이백 재원으로 재무부 일반계정(TGA)을 활용할 수 있다는 보도가 나오면서 하락하고 있다. 10년 만기 미 국채금리는 전장 대비 약 4bp(1bp=0.01%포인트) 내린 4.70%를 나타내고 있다. 지난주 5.3%를 넘어 약 20년 만의 최고 수준까지 치솟았던 30년물 금리도 4bp가량 하락한 5.23% 수준에서 움직이고 있다.
+
+앞서 스콧 베선트 미 재무부 장관은 지난주 CNBC와의 인터뷰에서 향후 수개월 동안 국채 바이백 규모를 최소 두 배로 확대할 계획이라며, 앞서 발표한 회당 40억달러보다 규모가 더 커질 수 있다고 밝힌 바 있다. 최초 발표 직후 장기금리가 급락했지만 이후 다시 반등하면서 시장 안정 효과는 오래가지 못했다.
+
+최근 미국뿐 아니라 일본과 프랑스, 독일 등 주요국의 장기 국채금리가 수년 만의 최고 수준으로 오르면서 글로벌 증시에 부담을 주고 있다. 미국과 이란의 전쟁이 장기화할 경우 국제유가가 높은 수준을 유지하면서 인플레이션 압력을 키울 수 있다는 우려도 투자심리를 짓누고 있다.
+
+피터 부크바 원포인트 BFG 웰스파트너스 최고투자책임자(CIO)는 재무부가 단기 국채 발행을 늘려 장기금리를 낮추려 할 경우 "미 정부의 이자비용이 연방준비제도(Fed)의 연방기금금리 움직임에 더욱 밀접하게 연동될 것"이라며, "케빈 워시 Fed 의장이 이번 주 연설에서 직접 언급하지는 않겠지만 앞으로 고려해야 할 새로운 변수가 됐다"고 말했다.
+
+시장에서는 이번 주 예정된 워시 의장의 잭슨홀 심포지엄 연설에 주목하고 있다. 워시 의장은 오는 28일 와이오밍주 잭슨홀에서 열리는 Fed 연례 경제정책 심포지엄에서 연설할 예정이다. 물가 지표도 주요 변수다. 오는 26일에는 Fed가 선호하는 인플레이션 지표인 7월 개인소비지출(PCE) 가격지수가 발표된다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005806712' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005806712</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
