@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>둘로 쪼개지는 카카오, 목표주가 내려가는 이유 [B급기자의 B급리포트]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001263331' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16959" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>둘로 쪼개지는 카카오, 목표주가 내려가는 이유 [B급기자의 B급리포트]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">카카오가 카카오톡과 인공지능 사업을 분리하는 대규모 인적분할을 발표했으나, 지주사 할인 확대와 계열사 간 시너지 약화 우려로 인해 주요 증권사들이 목표주가를 일제히 하향 조정하고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">인적분할로 인한 지주사 할인 우려 및 AI 사업의 수익성 불확실성으로 인해 주요 증권사가 일제히 목표주가를 하향함</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">카카오</span> <span class="tag stock-tag">카카오뱅크</span> <span class="tag stock-tag">카카오페이</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">인터넷 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#카카오</span> <span class="tag tag-hash">#인적분할</span> <span class="tag tag-hash">#AI</span> <span class="tag tag-hash">#목표주가하향</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">카카오가 카카오톡과 인공지능 사업을 분리하는 대규모 인적분할을 발표했지만 증권가의 평가는 부정적이다. 주요 증권사들은 지주회사 할인율 확대와 자회사 시너지 약화 등을 이유로 일제히 카카오의 목표주가를 하향조정하고 있다.
+
+● 카카오톡과 투자회사로 나뉘는 인적분할 구조
+
+카카오는 최근 회사를 두 개로 쪼개는 인적분할을 결정했다. 인적분할이란 기존 주주들이 존속회사와 신설회사의 주식을 비율대로 모두 나눠 가지는 방식이다.
+
+분할비율은 순수 자산가치를 뜻하는 '순자산장부가액'을 기준으로 존속법인 카카오X가 0.64, 신설법인 카카오AI가 0.36으로 정해졌다. 카카오 주식을 보유한 투자자라면 해당 비율만큼 두 종och의 주식을 나눠서 받게 된다.
+
+카카오X는 카카오뱅크와 카카오페이 등 주요 계열사 지분을 관리하는 투자 목적의 지주회사 역할을 맡게 된다. 카카오AI는 카카오톡이라는 핵심 플랫폼을 바탕으로 인공지능과 광고, 쇼핑 사업을 전담하며 새로운 성장을 추진한다.
+
+● 인공지능 구체적 실적 전망치 하향
+
+키움증권은 카카오의 목표주가를 기존 11만원에서 7만원으로 낮췄다. 인적분할을 통한 인공지능 시너지효과 창출 전략이 현실적으로 작동하기 어려울 수 있다는 점을 잠재적 위험으로 꼽았다.
+
+새로 생기는 카카오AI의 성장 전략이 현실에서 제대로 작동하지 않을 수 있다는 우려를 수치에 반영했다. 카나나 중심의 인공지능 성장성을 강조하고 있지만 프런티어 모델 기반의 자율형 에이전트 구축이 미완비된 상태라고 지적했다. 키움증권은 인공지능이 사용자를 대신해 알아서 업무를 처리해주는 톡 기반 에이전트의 2030년 월평균구독료 추정치를 기존 13만 5천원에서 6만 6천원으로 낮춰 잡았다.
+
+유료결제비율 역시 10.9%에서 7.3%로 하향조정했다. 사용자 맞춤형 광고인 에이전틱 광고의 일평균 매출도 2030년 기준 40억원에서 27억원으로 축소해 전망했다.
+
+● 지주사 할인 본격화와 핵심 주주 지분 매각
+
+메리츠증권은 투자의견을 매수에서 '보류'로 낮추고 목표주가를 3만 7천원으로 제시했다.
+
+존속법인 카카오X가 투자 전문 지주회사가 되면서 주식시장에서 기업가치를 깎아내리는 지주사 할인이 적용될 것이라고 분석했다. 카카오뱅크 등 주식시장에 상장된 3개 회사의 순자산가치 6조 3천억원과 상장되지 않은 3개 회사의 가치 4조 8천억원을 합해 카카오X의 실질적 가치를 11조 1천억원으로 계산했다. 인공지능 분야에 대해서도 "에이전틱 커머스 등 인공지능 수익화 전략이 가시적인 성과를 내기 전까지는 보수적인 접근이 필요하다"고 진단했다.
+
+여기에 기업의 주가가 실제 벌어들이는 이익 대비 몇 배인지를 나타내는 주가수익비율을 15배로 적용해 주가를 산정했다. 핵심 주주인 텐센트가 지난 5월 카카오 지분 98만 9524주를 457억원에 매각한 점도 주가 하락을 부추기는 요인으로 짚었다.
+
+● 생태계 분리 탓에 계열사 간 시너지 약화 우려
+
+삼성증권도 투자의견을 '보류'로 내리고 목표주가를 4만 9천원에서 4만원으로 낮췄다.
+
+각 사업부의 가치를 따로 구해 더하는 방식을 써서 카카오X의 가치를 10조 8천억원, 카카오AI를 7조원으로 평가했다. 카카오X의 순자산 15조 4천억원에 30%의 할인율을 적용해 가치를 깎은 결과다.
+
+특히 삼성증권은 "이번 분할로 카카오페이처럼 카카오톡 사용자에 크게 기대고 있던 계열사들이 카카오톡과 분리되면서 기존의 사업 시너지가 줄어들"라고 내다봤다. 인공지능 사업도 확실히 돈을 벌어들인다는 것을 보여주기 전까지는 글로벌 정보기술 기업들의 평균 주가수익비율인 18.7배만큼 높은 평가를 받기 어렵다고 분석했다.
+
+● 비현실적인 폭발적 성장 가정과 중복상장 부담
+
+유진투자증권은 목표주가를 5만 8천원으로 유지했지만 분할의 단점을 뚜렷하게 지적했다.
+
+카카오X가 6조 4천억원의 투자재원을 갖추게 되지만 시장에 이미 상장된 자회사 비중이 커서 모회사의 가치가 깎이는 순자산가치 할인을 피하기 어렵다고 분석했다. 카카오AI는 2030년에 매출 6조원, 법인세와 이자를 내기 전 영업이익인 EVIDTA는 2조원을 목표로 제시했다.
+
+하지만 이는 현재 돈을 거의 벌지 못하는 인공지능 광고와 쇼핑 부문이 앞으로 폭발적으로 성장한다는 비현실적인 가정을 바탕으로 한 수치라고 지적했다. 결국 높은 기업가치를 인정받는 것은 실제 서비스 이용자 수와 수익을 증명하는 데 달렸다고 평가했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001263331' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001263331</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
