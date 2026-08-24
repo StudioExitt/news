@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>110조 환원도 부족했나…삼성전자 급락에 코스피도 약세</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.24</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005806390' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/16979" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>110조 환원도 부족했나…삼성전자 급락에 코스피도 약세</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">삼성전자가 역대 최대 규모인 110조원 주주환원안을 발표했으나, 시장의 기대치(최대 200조원 전망 등)에 미달했다는 평가가 나오며 주가가 6%대 급락함. 반면 SK하이닉스는 파격적인 자사주 소각 계획을 발표하며 시장의 긍정적 반응을 이끌어냄.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">삼성전자의 주주환원 발표가 시장의 높은 기대치(최대 200조원)에 미달하면서 대형주의 매도세가 유발되었고, 이는 코스피 지수 하락과 반도체 섹터 전반의 투자심리 위축으로 이어짐.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성생명</span> <span class="tag stock-tag">삼성물산</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장품</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#삼성전자</span> <span class="tag tag-hash">#주주환원</span> <span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#SK하이닉스</span> <span class="tag tag-hash">#반도체</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">모건스탠리 \"삼성전자 주주환원 시장 기대 못미쳐\" 삼전 장중 6%대 급락…코스피도 1% 이상 하락 반도체주 27일 엔비디아 분기 실적 발표가 \"분수령\" 24일 서울 중구 하나은행 본점 딜링룸에서 직원들이 증시와 환율 등을 모니터하고 있다. 이날 코스피는 전 거래일 대비 31.88포인트(0.46%) 내린 6881.07에 코스닥은 2.33포인트(0.29%) 상승한 8 24일 서울 중구 하나은행 본점 딜링룸에서 직원들이 증시와 환율 등을 모니터하고 있다. 이날 코스피는 전 거래일 대비 31.88포인트(0.46%) 내린 6881.07에 코스닥은 2.33포인트(0.29%) 상승한 804.27에 장을 시작했다. 2026.8.24 조용준 기자 삼성전자가 국내 기업 역사상 최대 규모인 110조원의 주주환원안을 공개했음에도 주가가 하락하며 코스피 약세를 이끌었다. 주주환원 규모와 내용이 시장의 높아진 기대치를 충족시키지 못했다는 평가가 나온다. 다만 중장기적인 관점에서 보면 SK하이닉스와 함께 진행할 수백조 원 규모의 주주환원이 우리 증시의 하방을 단단하게 지지하는 역할을 할 것이라는 분석도 나온다. 삼성전자 대규모 주주환원에도 6%대 약세 24일 코스피는 전 거래일 대비 0.46% 내린 6881.07에 개장한 뒤 낙폭을 키워 오전 10시6분 기준 1.18% 내린 6831.52에 거래 중이다. 반면 코스닥은 2.21% 오른 820.01에 거래되고 있다. 대장주 삼성전자의 주가가 급락하면서 코스피도 빠졌다. 오전 10시7분 현재 삼성전자는 전장 대비 6.57% 내린 26만3000원을 기록 중이다. 삼성전자 지분을 많이 보유한 삼성생명(-9.13%), 삼성물산(-7.84%) 등 관련주도 급락세다. 삼성전자는 지난 21일 이사회를 열고 올해 90조~110조원에 달하는 주주환원을 실시할 예정이라고 밝혔다. 종전 최대였던 2020년 20조3000억원 규모의 주주환원의 약 5배에 달한다. 삼성전자는 올해 3분기 정규 분기 배당을 포함해 약 30조원 규모의 현금배당을 우선 시행할 계획이다. 삼성전자가 국내 기업 중에서 역대 최대 규모의 주주환원안을 공개했지만 시장 기대치에 못 미쳤다는 평가가 나오면서 매도세가 나타났다. 앞서 KB증권은 삼성전자의 올해 주주환원 규모가 최대 200조원에 달할 수 있다고 전망하는 등 시장에서는 110조원 이상의 주주환원을 기대했다. 글로벌 투자은행(IB) 모건스탠리는 \"삼성전자의 주주환원에 대한 시장 기대치가 110조원을 상회했던 점을 고려하면 예상에 소폭 미달했다\"고 평가했다. 특히 당장 확정된 환원책이 약 30조원의 현금배당에 그치고 나머지 재원의 활용 방안이 내년으로 미뤄진 점도 투자심리에 부담이 되고 있다. 삼성전자는 나머지 60조~80조원의 주주환원 재원 활용방안은 2026년 경영실적이 확정되는 내년 1월 이사회에서 결정할 예정이다. JP모건은 \"전체 주주환원 규모는 기존 예상치인 110조원 상단과 일치하지만 3분기에 즉각 집행하는 30조원이 상반기 영업현금흐름 대비 약 25%에 불과해 잉여현금흐름(FCF) 50% 원칙과 비교해도 시장 기대보다 낮다\"고 지적했다. 반면 SK하이닉스의 주주환원안은 시장 예상을 뛰어넘었다는 평가를 받으며 오전 10시8분 현재 1.45% 상승한 175만5000원에 거래 중이다. SK하이닉스는 40조원 규모의 자사주를 취득해 전량 소각할 계획이라고 지난 19일 발표했다. 3년간 FCF의 50% 이상을 환원하는 새 주주환원 정책도 공개했다. 이후 주가는 10% 이상 상승하는 등 시장은 SK하이닉스의 주주환원안을 긍정 평가했다. 이종욱 삼성증권 연구원은 \"SK하이닉스는 종전에 누적 FCF의 50% 이내에서 환원한다는 주주환원 목표를 이번에 50% 이상으로 상향했다\"며 \"이번 주주환원책은 이익 지속성에 대한 경영진의 신호이자 주가의 상승 여력을 부각시키는 촉매가 될 것\"이라고 평가했다. \"양 사의 수백조 원 주주환원이 코스피 하방 지지할 것\" 양 사의 주주환원 공개 이후 단기적으로 주가 변동성이 커졌지만 중기적으로는 증시 하방을 지지하는 역할을 할 것이라는 분석이다. 한지영 키움증권 연구원은 \"삼성전자의 주주환원안 공개 이후 수급 변동성은 높아졌지만 중기적인 관점에서 이익 성장이 만들어내는 현금 흐름을 주주가치로 전환시키는 구조가 강화됐다는 점에 주목할 필요가 있다\"며 \"SK하이닉스와 함께 국내 증시 전반의 수급 안전판 역할을 수행할 것\"이라고 기대했다. 우리 시간으로 오는 27일로 예정된 엔비디아의 회계연도 2분기 실적이 반도체 주가를 가를 주요 변수로 꼽힌다. 한 연구원은 \"엔비디아 실적이 사실상 차주까지도 증시 방향성의 변수가 되는 메인 이벤트가 될 것\"이라고 분석했다. 한편 오전 10시13분 기준 다른 시가총액 상위 종목 중에서는 SK스퀘어(-1.78%), 현대차(-0.24%), 삼성바이오로직스(-0.19%) 등은 하락 중이며, 삼성전기(1.75%), LG에너지솔루션(3.64%), 한화에어로스페이스(3.04%), HD현대중공업(0.77%) 등은 강세다. 업종별로 보면 보험(-5.00%), 유통(-4.10%), 전기·전자(-3.01%)의 낙폭이 크고 오락·문화(1.71%), 일반서비스(1.52%), 음식료·담배(1.11%)는 상승세다. 코스피에서 외국인 투자자들은 1조2000억원가량 순매도 중이며 기관투자가도 3100억원 매도 우위이다. 개인만 1조2000억원 이상 순매수하고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005806390' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005806390</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
