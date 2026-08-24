@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>하이브·JYP·현대차…”목표주가 하향” 쏟아졌다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005806755' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17082" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>하이브·JYP·현대차…”목표주가 하향” 쏟아졌다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 랠리 종료 이후 증권사들의 목표주가 하향 리포트가 급증하고 있습니다. 미디어, 반도체, 자동차 등 주요 산업 전반에서 실적 부진과 밸류에이션 부담이 반영되는 추세입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">주요 기업들의 목표주가가 실적 부진과 밸류에이션 부담을 이유로 일제히 하향 조정되면서 시장 전반의 투자 심리가 위축됨</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">JYP Ent.</span> <span class="tag stock-tag">현대차</span> <span class="tag stock-tag">하이브</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">클래시스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">미디어</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자동차</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">제약</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#목표주가하향</span> <span class="tag tag-hash">#코스피변동성</span> <span class="tag tag-hash">#기업실적부진</span> <span class="tag tag-hash">#밸류에이션조정</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피 랠리 끝나자 급반전
+7월부터 하향 리포트 폭증
+실적 하회·밸류에이션 부담국내 증시 변동성이 확대되면서 증권사들의 목표주가 하향 보고서가 쏟아지고 있다. 올해 6월까지는 목표주가 상향 보고서가 우세를 점했으나 7월 이후 하향 리포트 수가 상향 리포트를 앞질렀다. 미디어, 전자 장비 및 기기, 반도체 및 관련 장비 등 주요 산업 전반에서 증권가의 눈높이가 낮아지는 분위기다.
+
+25일 금융정보업\"업체 에프앤가이드에 따르면 지난달 목표주가 하향 리포트는 780건으로 상향 리포트(383건) 대비 2배 이상(397건)이었다. 이달 1~23일 역시 하향 리포트(571건)가 상향 리포트(304건)보다 압도적으로 많았다. 이는 코스피가 6월 22일 종가기준 9114.55포인트를 찍은 뒤 지난달 30일 5,593.56포인트까지 떨어진 흐름과 맞물려 있다.
+
+실제 올해 상반기만 해도 증시 상승 기대감에 힘입어 목표가 상향 리포트가 압도적 우위를 유지했다. 1월 상향 리포트는 843건(하향 216건), 2월 1058건(하향 115건)으로 낙관론이 강하게 반영됐다. 이후 3~5월에도 월평균 800~1000건 안팎의 상향 리포트가 쏟아졌고, 6월에도 상향(257건)이 하향(107건)보다 많았다.
+
+업종별 하향 리포트 수는 지난달 1일부터 이달 23일 기준JYP Ent. 등 미디어와 LG에너지솔루션 등 전자 장비 및 기기가 102건으로 가장 많았다. SK하이닉스 등 반도체 및 관련 장비 75건, 녹십자 등 제\"약 73건, GS건설 등 건설 65건, 현대위아 등 자동차부품 64건 등이 뒤를 이었다.
+
+개별 종목별로는 JYP Ent의 목표가 하향 리포트가 28건으로 가장 많았다. 이어 현대차(22건), 클래시스·하이브(19건), GS건설(18건), 넷마블(17건) 등으로 집계됐다. 1위인 JYP Ent.에 대해 유안타증권은 2분기 실적이 시장 컨센스\"스를 하회했다며 저년차의 아쉬운 성장세, 트와이스 활동 불확실성 등 향후 주가 상승 전망은 녹록지 않다고 평가했다. 이에 목표주가를 기존 6만원에서 5만5000원으로 내렸다. iM증권은 지난 14일 트와이스 재계약 시즌 진입, 스트레이 키즈 입대 등을 이유로 목표주가를 기존 8만원에서 6만원으로 하향했다.
+
+2위인 현대차에 대해 삼성증권은 지난 7일 내수 판매 부진과 하이브리드 차량에 불리해지는 세제 및 환경 규제를 반영해 수익 추정치를 조정한다며 목표주가를 기존 70만원에서 65만원으로 하향 조정했다. DB증권은 지난달 27일 최근 시장 전반의 멀티플 하락과 밸류에이션 조정을 반영한다며 목표주가를 기존 90만원에서 7\"0만원으로 낮췄다.
+
+3위인 클래시스에 대해 유안타증권은 지난 18일 2분기 실적이 시장 기대치를 하회했다며 목표주가를 기존 7만4000원에서 5만원으로 내렸다. DB증권은 지난 13일 국내 매출 부진이 지속되는 가운데 현지 법인(브라질·일본)을 통한 수출성장 및 중국 등 신규 지역 진출 모멘텀이 필요한 시점이라며 목표주가를 6만8000원에서 5만4000원으로 하향 조정했다.
+
+하이브의 경우 BNK투자증권은 지난달 3\"1일 특정 아티스트 의존도에 따른 실적 피크아웃(정점통과) 우려와 거버넌스 관련 평판 리스크를 반영해 목표주가를 기존 46만원에서 30만원으로 하향했다. 삼성증권은 지난달 29일 시장 변동성 확대 및 수익성 우려와 탑티어 아티스트 기여도 상승에 따른 보수적 이익 전망치 조정을 이유로 목표주가를 기존 30만원에서 25만5000원으로 내렸다.
+
+'반도체 투톱'인 삼성전자와 SK하이닉스는 각각 6건, 9건이었다. 삼성전자에 대해 키움증권은 지난 10일 실적 전망치 조정 및 시장 금리 변동을 반영해 목표주가를 기존 39만원에서 35만원으로 낮췄다. 신한투자증권은 지난달 31일 목표주가를 기존 50만원에서 45만원으로 하향했다. 김형태 신한투자증권 연구원은 "과도한 주가 괴리율 조정을 위해 D램 동종 업체 평균 주가순자산비율(PBR) 멀티플을 하향 반영했다"고 설명했다.
+
+SK하이닉스에 대해 키움증권은 지난 10일 범용 D램 가격 하락 전망 등 실적 전망치 재조정 및 시장 금리 변동을 반영하여 목표주가를 기존 250만원에서 210만원으로 내렸다. 한화투자증권은 지난달 30일 목표주가를 기존 430만원에서 315만원으로 하향 조정했다. 박준영 한화투자증권 연구원은 "기업의 실적이 특정 요인으로 인해 큰 폭 하향된다면 펀더멘털(기초체력)의 악화로 인한 조정으로 판단해야겠지만 현재 징조는 전혀 보이지 않는다"면서도 "최근 시장 전반의 급격한 주가 조정을 반영해 하향한다"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005806755' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005806755</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
