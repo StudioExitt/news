@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'자산군 분산' 무용지물 만든 AI…'기준 포트폴리오'로 새 길 뚫는 투자자들</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006357399' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17068" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'자산군 분산' 무용지물 만든 AI…'기준 포트폴리오'로 새 길 뚫는 투자자들</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 테마가 주식, 채권, 대체투자 등 다양한 자산군에 동시에 유입되면서 기존의 자산군별 분산투자 효과가 약화되고 있음. 이에 따라 전체 포트폴리오의 위험과 수익을 기준으로 관리하는 \"기준 포트폴리오\" 전략이 주목받고 있음.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 테마로 인한 자산군 간 상관관계 증가 및 전통적 분산투자 전략의 유효성 변화에 대한 구조적 논의</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">데이터센터 관련주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">부동산</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI</span> <span class="tag tag-hash">#자산배분</span> <span class="tag tag-hash">#포트폴리오전략</span> <span class="tag tag-hash">#기관투자자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">최근 대체투자 시장에서는 '위험과 수익' 관점에서 전체 포트폴리오를 바라보는 '기준 포트폴리오' 도입의 중요성이 점점 커지고 있다. 공모와 사모를 가리지 않고 인공지능(AI)이라는 하나의 테마로 돈이 몰리면서 기관투자자들의 전통적 '자산군 분산' 전략에 경고등이 켜져서다. 주식·채권·대체투자로 자산을 나눠 담아도 각 자산군의 기초자산이 AI라는 같은 방향을 바라보고 있다면 실질적 분산 효과를 기대하기 어렵다. 다만 기준 포트폴리오 역시 운용역의 판단에 지나치게 의존할 경우 특정 테마에 대한 쏠림을 키울 수 있다는 한계가 있다. 결국 전략적 자산배분(SAA)과 기준 포트폴리오 가운데 하나를 택하기보다는 두 전략의 장점을 적절히 조합해야 한다는 분석이다. “나눠 담았는데 다 같은 곳”…AI가 흔든 분산투자 24일 금융투자업계에 따르면 최근 기관투자자(LP)들 사이에서는 단순히 자산군별 투자 비류를 조절하는 데서 벗어나 실제 포트폴리오 전체의 위험과 기대수익을 기준으로 투자 결정을 내려야 한다는 문제의식이 커지고 있다. 기관투자자들이 자산군 분산만으로 충분한 위험 관리가 어렵다고 보는 배경에는 'AI 투자 열풍'이 있다. 공모시장은 물론 사모펀드(PE), 사모채권(프라이빗 크레딧), 부동산, 인프라 등 대체투자 시장까지 AI라는 동일한 테마에 자금이 몰리고 있어서다. 주식에서는 AI 관련 대형주 비중이 커지고, 대체투자 시장에서는 AI 관련 기업 투자와 데이터센터, AI 인프라 프로젝트 등이 주요 투자처로 부상하는 식이다. 문제는 투자 대상의 '그릇'이 다를 뿐 실제 위험 요인은 비슷해질 수 있다는 것이다. 주식과 채권, 부동산, 인프라에 각각 돈을 나눠 투자했다고 해도 이들 자산의 기초자산이 모두 AI 성장에 대한 기대를 공유한다면 한쪽 충격이 다른 자산군으로 번질 가능성이 커진다. 전통적으로 대체투자의 핵심 장점으로 꼽혀온 '자산군 간 낮은 상관관계'와 '분산 효과'가 약해질 수 있다는 의미다. 자산별 칸막이 대신 '위험자산·안전자산'으로 본다 이 과정에서 주목받는 것이 '기준 포트폴리오'다. 전통적인 전략적 자산배분(SAA)이 주식·채권·대체투자 등 자산군별 목표 투자 비중을 정하는 방식이라면, 기준 포트폴리ys는 자산군 자체보다 '위험자산'과 '안전자산'이라는 큰 틀에서 포트폴리오를 설계하는 방식이다. 핵심은 투자 부서별 성과가 아니라 기관 전체의 리스크와 기대수익을 기준으로 자산을 바라보는 것이다. SAA에서는 주식팀과 채권팀, 대체투자팀 등이 각각 정해진 벤치마크를 기준으로 성과를 관리하는 경우가 많다. 이 때문에 각 부서가 전체 포트폴리오보다 자신의 성과와 목표 비중을 방어하는 데 집중할 가능성이 있다. 이른바 '사일로 효과'다. 사일로 효과는 조직 내 각 부서가 서로 충분히 소통하지 않은 채 자기 부서의 이익이나 성과만 챙기는 '부서 이기주의'를 뜻한다. 예컨대 채권팀은 금리 상승에 따른 평가손실을 우려해 채권 비중 확대를 꺼리고, 주식팀은 주가 하락 가능성을 이유로 주식 비중 축소를 반대하는 식이다. 각 부서의 판단만 놓고 보면 합리적일 수 있지만, 최고투자책임자(CIO) 입장에서는 전체 포트폴리오의 위험과 수익을 고려해 신속하게 자산을 재배분하기 어려워질 수 있다. 기준 포트폴리오는 이 같은 자산군과 조직의 칸막이를 상대적으로 낮추는 데 초점을 맞춘다. 특정 자산을 반드시 일정 비중 보유해야 한다는 틀에서 벗어나 전체 포트폴리오의 리스크 총량과 기대수익을 기준으로 자산을 기민하게 재배분할 수 있다는 장점이 있다. '기준 포트폴리오'도 만능 아니다…쏠림현상 우려도 다만 기준 포트폴리오 역시 운용 인력의 판단이 상대적으로 중요해진다. 어떤 자산을 위험자산으로 볼지, 어느 정도의 위험을 감수할지 등을 결정하는 과정에서 운용역의 주관적 판단이 개입될 여지가 크기 때문이다. 특히 AI처럼 시장의 기대가 한쪽으로 강하게 쏠리는 상황에서는 오히려 이 같은 유연성이 위험 요인이 될 수 있다. 운용 인력들이 AI의 성장성과 수익성을 지나치게 낙관할 경우 '기준 포트폴리오'라는 이름 아래 AI 관련 자산에 대한 투자 비중을 계속 늘릴 가능성도 배제할 수 없다. 자산군별 칸막이를 허문 것이 오히려 특정 테마에 대한 쏠림을 심화시키는 결과로 이어질 수 있다는 것이다. 반면 SAA는 각 자산별 목표 비중과 상·하단을 설정하고 이를 일정 범위 안에서 관리한다. 특정 테마의 과도한 낙인론이 발생하더라도 자산군별 투자 비중을 일정 수준에서 제한할 수 있다는 점에서 위험 관리에 유리하다. 결국 기준 포트폴리오와 SAA는 어느 한쪽이 절대적으로 우월한 전략이라고 보기는 어렵다는 평가다. 장기간 수익률을 비교해도 두 전략의 성과 우열은 대체로 5대 5 수준으로 뚜렷한 승자가 가려지지 않는 것으로 알려졌다. 조직 개편도 문제…“둘 중 하나 고르기보다 섞어야” 기준 포트폴리오를 실행하기 위해 조직 구조를 어떻게 바꿀 것이냐도 현실적인 문제다. 각 자산군별로 부서나 팀이 나뉘어서 전문적인 운용을 수행하는 구조에서는 기준 포트폴리오 식의 즉각적인 자산 재배분이 어렵다. 조직 문화가 보수적이거나, 순환보직 시스템으로 되어 있을 경우 대규모 조직개편이나 시스템 변경을 추진하기도 어렵다. 이에 따라 기관투자자들에게 필요한 것은 SAA를 기준 포트폴리오로 완전히 대체하는 것이 아니라 두 전략의 장점을 적절히 조합하는 '균형감각'이라는 분석이 나온다. SAA로 자산군별 최소·최대 비중을 설정해 과도한 쏠림을 막는 동시에, 기준 포트폴리오를 활용해 전체 포트폴리오 차원에서 위험과 기대수익을 점검하는 방식이다. 특히 AI처럼 여러 자산군에 걸쳐 동시에 영향을 미치는 테마가 등장한 상황에서는 '주식 몇 퍼센트(%), 채권 몇 %, 대체투자 몇 %'라는 자산군별 구분만으로는 포트폴리오의 실제 위험을 파$악하기 어려워졌다. 앞으로는 투자한 펀드의 이름이나 자산군 뿐 아니라 그 아래에 어떤 기업과 산업이 담겨 있는지까지 들여다보는 방식으로 위험 관리의 범위가 넓어질 가능성이 크다. 한 LP 관계자는 "결국 기관투자자의 자산배분 전략이 '얼마나 많이 나눠 담느냐'에서 '실제로 얼마나 다른 위험을 담고 있느냐'를 따지는 방향으로 이동하고 있다"며 "구체적인 자산배분 방법론으로는 SAA, 기준 포트폴리오 모두 장단점이 있기 때문에 양쪽의 장점을 두루 반영하는 방향을 도입할 필요가 있다"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006357399' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006357399</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
