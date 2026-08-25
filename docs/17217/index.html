@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엔비디아 실적 앞두고 훅 들어온 '美-이란 합의'…아심 무니르가 성공한 걸까 [마켓무버의 국장 힌트]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001263624' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17217" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>엔비디아 실적 앞두고 훅 들어온 '美-이란 합의'…아심 무니르가 성공한 걸까 [마켓무버의 국장 힌트]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국과 이란의 휴전 합의 가능성 보도로 인해 중동 지정학적 리스크 완화 및 유가 하락에 따른 증시 긍정적 영향이 기대됩니다. 또한 엔비디아 실적 발표를 앞두고 시장은 단순한 숫자를 넘어선 \"내러티브 서프라이즈\" 여부에 집중하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">미국-이란 휴전 가능성 보도는 지정학적 리스크 완화 및 유가 하락을 유도하여 증시에 긍정적인 모멘텀이 될 수 있습니다. 또한 엔비디아 실적 발표와 관련된 내러티브 서프라이즈 기대감은 기술주 투자심리를 개선할 수 있는 요소입니다.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">엔비디아</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#엔비디아</span> <span class="tag tag-hash">#미국이란휴전</span> <span class="tag tag-hash">#유가하락</span> <span class="tag tag-hash">#내러티브서프라이즈</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미 증시 살펴보며 한국 증시 투자아이디어까지 찾는 마켓 무버입니다.
+
+간밤 뉴욕 증시 3대 지수 상승했습니다. 10년물 미 국채 금리가 4.62%까지 내려온 것을 비롯해, 국제 유가 하락이 증시 투자심리에 긍정적인 영향을 미쳤습니다. 브렌트유 선물 가격은 전거래일 대비 5.5% 넘게 내리며 배럴당 87달러 선에서 움직였습니다.
+
+이란과 오만의 외무장관이 호르무즈 해협을 통과하는 임시 항로 설치와 해협 내 기뢰 제거 사업에 대한 기본 방침을 논의했다는 소식 등이 장중 영향을 끼쳤는데요.
+
+장 마감 직후 시장에 알려진 보도가 국내를 비롯한 아시아 증시에 추가적인 영향을 미칠 가능성이 큽니다. 지난 2월부터 지속되어온 중동 문제의 끝을 예감할 수 있는 내용입니다.
+
+러시아 국영 통신사 리아 노보스티가 미국과 이란이 휴전에 합의했다고 보도했습니다.
+
+리아 노보스티는 이란과 파키스탄 관계자를 인용해 앞으로 며칠 내 공식적인 휴전 발표가 있을 것으로 예상된다며 호르무즈 해협의 자유 통항을 보장하는 내용이 포함될 것이라고 전했습니다.
+
+러시아 국영 통신사가 인용한 이란과 파키스탄 관계자가 어느 정도 신뢰성이 있는 인물인지는 불분명합니다. 다만 앞서 지난 24일 아심 무니르 파키스탄군 총사령관이 이란을 방문한 것을 되짚어볼 필요가 있습니다.
+
+아심 무니르는 도널드 트럼프 미 대통령이 '가장 좋아하는 야전사령관'이라 칭할 만큼 트럼프의 신뢰를 받고 있는 인물입니다.
+
+미국과 이란을 중재하는 핵심 관계자가 이 아심 무니르인데, 러시아발 보도가 나오기 전 파키스탄군 명의의 성명을 통해 아심 무니르 총사령관과 페제시키안 이란 대통령과 회담을 했고 이 자리에서 분쟁 협상 타결 방안을 논의했다는 점은 공식적으로 확인할 수 있습니다. 단 당사국인 미국과 이란에서는 이 보도에 대한 반응이 나오지 않았습니다.
+
+알려진 내용이 현실화된다면 시장은 1차 휴전이 이뤄졌던 지난 6월의 움직임을 반복할 가능성이 있겠지요. 엔비디아 실적이라는 큰 변곡점을 앞둔 상황에서 기술주 투자자들에겐 특히 반가운 일일 수 있습니다. 중동 긴장 완화로 인한 유가 하락은 국채 금리 하방 압력으로 작용할 테니까요.
+
+하루 뒤 실적 발표를 앞둔 엔비디아는 7거래일 연속 하락세를 끝냈습니다. 엔비디아 실적에 대한 시장 컨센서스는 매출 9<0xC2><0xA0>19억 달러, 주당순이익(EPS) 2.08달러 수준입니다.
+
+케빈 캐시디 로젠블랫증권 애널리스트는 3분기 매출 가이던스가 1,050억달러를 넘으면 시장에 긍정적인 놀라움을 줄 수 있고, 1,100억달러에 이르면 매우 강력한 실적이 될 것이라고 전망했습니다.
+
+캐시디 애널리스트는 \"실적 수치가 투자자를 충분히 놀라게 하지 못할 경우, 잉여현금흐름의 50%를 자사주 매입과 배당 확대에 쓰겠다는 계획을 실행하는지가 또 다른 촉매가 될 수 있습니다.\"라고 말했습니다.
+
+엔비디아의 차세대 AI 칩 플랫폼인 ‘베라 루빈(Vera Rubin)’ 관련 발표도 주가를 움직일 수 있는 요인이겠습니다.
+
+사실 그동안 엔비디아 실적발표와 주가 움직임을 되짚어보면, 적당한 수준의 어닝 서프라이즈로는 투자자들이 않는다는 점을 확인할 수 있습니다.
+
+평균 98점 맞고도 한 문제 틀린 걸로 회초리를 드는 학부모같다고 해야 할까요. 과거 세 차례의 실적발표에서 엔비디아는 시장 예상치를 상회하는 실적을 내놓고도 주가가 하락한 경험이 있습니다.
+
+지금 필요한 건 잘 나온 숫자가 아니라 엔비디아 실적 발표를 통해 시장이 주목하지 못했던 부분에 대한 새로운 스토리, '내러티브 서프라이즈'라는 이야기도 여의도에서는 나오는 상황입니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001263624' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001263624</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
