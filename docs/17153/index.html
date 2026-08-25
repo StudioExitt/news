@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>변동성 구간 이제 시작… 미국 주식으로 분산·장기 투자해야</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005404541' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17153" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>변동성 구간 이제 시작… 미국 주식으로 분산·장기 투자해야</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 기술 혁신으로 인한 향후 2029년까지의 시장 변동성 확대 전망과 함께, 리스크 관리를 위한 미국 주식 중심의 자산배분 및 장기 투자 전략을 강조함.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 기술 혁신에 따른 시장 변동성 확대 전망 및 미국 중심의 자산배분 전략 제시</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">S&P500 ETF</span> <span class="tag stock-tag">미국 AI 테크주</span> <span class="tag stock-tag">금</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#AI변동성</span> <span class="tag tag-hash">#자산배분</span> <span class="tag tag-hash">#미국주식</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[ETF 릴레이 인터뷰]⑨이경준 키움투자자산운용 ETF운용본부장
+[편집자주] 분산, 간접, 장기 투자라는 장점을 기반으로 개미들의 대표 투자 수단이 된 ETF(상장지수펀드). '21세기 최고의 금융 상품'으로 불리는 ETF 투자를 경험하고 실력을 겨뤄 볼 'ETF 투자왕' 대회가 오는 9월 개최된다. 대회에 앞서 ETF 시장 성장을 주도하고 이끌어 온 주요 운용사 ETF 본부장들에게 하반기 투자 전망과 전략 아이디어, 유망한 ETF 종<0xA0>종목에 대한 조언을 들어본다.
+이경준 키움투자자산운용 ETF운용본부장 인터뷰 /사진=이기범 기자 leekb@
+이경준 키움투자자산운용 ETF운용본부장 인터뷰 /사진=이기범 기자 leekb@코스피가 지난해 하반기부터 본격적인 성장세를 보이는 시점에 미국 주식 중심의 자산배분형 ETF(상장지수펀드)를 출시한 운용사가 있다. ETF 본질인 장기·분산 투자에 맞는 상품 라인업을 먼저 구축해야 한다는 판단에서였다. S&P500과 금, 미국 고배당주와 AI(인공지능) 테크주를 결합한 이른바 '앤드(&)'형 상품을 잇달아 상장했다. 올 하반기 국내외 증시 변동성이 커지면서 분산투자의 중요성이 재조명됐고, 기본을 지킨 이 운용사의 전략이 적중했다.
+
+자산배분형 ETF 상품 출시를 이끈 이경준 키움투자자산운용 ETF운용본부장은 최근 머니투데이와의 만남에서 자사 ETF 운용 철학으로 '마음 편한 투자', '힐링 투자'를 꼽았다. 그는 지난해 키움투자자산운용에 합류해 약 18개의 ETF를 출시했다. 이 중 5개를 제외하면 모두 미국 시장에 투자하는 상품('KIWOOM 한국고배당&미국AI테크' 포함)이다. 마음 편한 투자를 위해선 변동성이 낮은 포트폴리오가 필요하고 이에 적합한 자산은 미국이라고 봤다.
+
+이 본부장은 기술 발전 단계를 설명하는 영국 경제학자 카를로타 페레스의 이론을 인용하며 증시를 전망했다. AI라는 혁신 기술의 등장으로 현재 주식 시장이 변동성 구간의 초입에 들어섰다고 진단했다. 2029년까지는 변동성 장세가 이어지지만 이후 역사적인 강세장이 펼쳐질 것으로 내다봤다.
+
+그는 "AI 관련 기업들이 큰 매출 성장을 기록해도 투자자들은 닷컴 버블 등의 역사 때문에 AI 수익성에 민감하게 반응한다"며 "이런 우려가 반도체뿐 아니라 빅테크 등 AI 밸류체인(가치사슬) 전반으로 번지며 변동성이 커질 것"이라고 말했다.
+
+AI 밸류체인에 속한 여러 기업 중 승자가 정해져 시장이 정리되기 전까지는 널뛰기 장세가 이어질 것으로 예상했다. 주가를 예측하기 어려운 만큼 분산·장기 투자로 리스크를 관리하는 것이 중요하다고 봤다. 이에 시장의 우상향 흐름을 유지하면서도 현재의 변동성을 견딜 수 있는 상품 설계에 주력했다.
+
+이 본부장은 "주식 투자는 △그로스(성장) △모멘텀 △하이 디비던드(고배당) △하이베타(고위험 고수익) 4가지 유형으로 구성된다"고 설명하며, "안정적인 우상향 투자란 이 4가지를 잘 분산 투자하는 것"이라고 설명했다.
+
+4가지 투자 유형에 해당하는 상품으로 각각 KIWOOM 미국S&P500&GOLD, 'KIWOOM 미국S&P500모멘텀', 'KIWOOM 미국고배당&AI테크', 지난달 출시한 'KIWOOM 미국CPU반도체TOP4+'를 예시로 들었다. 이 본부장은 "노후 준비 등 장기 투자 관점에서는 하이베타 투자를 통한 다다익선이 아닌 지속가능성이 중요하다"며 "내 인생에 지속가능한 현금흐름을 만드는 데 초점을 맞춰야 한다"고 말했다.
+
+한국 시장은 투자 유형 중 하이베타에 해당한다고 진단했다. 이 때문에 포트폴리오 전체를 한국 시장으로만 꾸리는 건 장기투자 관점에서 적합하지 않다고 조언했다. 이 본부장은 "미국 시장에서는 코스피 지수 자체도 하이베타 투자라고 볼 만큼 한국 시장 자체를 고위험군으로 본다"며 "글로벌 공급망 밸류체인을 보면 주문을 주는 쪽(주로 미국)의 취향이나 트렌드에 따라서 받는 쪽(한국)이 흔들리기 때문"이라고 설명했다.
+
+키움투자자산운용은 포트폴리오 내 '코어' 상품을 모두 구축했다고 판단, '위성'용 상품 출시를 준비 중이다. 다만 투자자들이 고수  수익을 위해 일부 섹터에 집중하는 포트폴리오를 만들더라도 너무 한쪽에 치우치지 말 것을 강조했다. 이 본부장은 "'KIWOOM 미국우주데이터센터인프라'를 출시할 때도 우주 섹터만 담은 타사와 달리 절반 정도는 반도체로 구성했다"며 "테마 특징은 잡되 분산되는 효과가 나타나게끔 설계했다"고 했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005404541' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005404541</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
