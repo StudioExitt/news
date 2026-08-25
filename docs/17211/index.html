@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주식 줄일 때 아니다…탄력 잃은 코스피 ‘매도’보다 ‘선별’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003125368' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17211" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>주식 줄일 때 아니다…탄력 잃은 코스피 ‘매도’보다 ‘선별’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 하반기 20% 이상 급락하며 투자 심리가 위축되었으나, 전문가들은 단순 매도보다는 반도체 등 주도주 중심의 선별적 대응이 필요하다고 조언한다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">코스피 하락 및 매크로 불확실성 확대로 투자 심리가 위축되었으나, 반도체 중심의 선별적 대응 전략을 제시함</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#투자전략</span> <span class="tag tag-hash">#매크로</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">하반기 20% 밀린 코스피…매크로 불확재성에 투심↓
+반등 가능성은 제한…수급 부담 속 차익실연 매물 대기
+주도주는 여전히 반도체 대형주…펀더멘털에 이상 無
+코스피가 하반기에만 20% 넘게 밀리면서 투자자들의 고민이 깊어지고 있다. 길어지는 증시 부진에 투자 열기가 한풀 꺾인 모습이다.
+
+하지만 증권가의 시선은 ‘매도’보다 ‘선별’에 향한다.
+
+코스피의 단기 저점을 확인한 만큼, 시장을 떠나는 것보다 업종·종목을 선별해야 한다는 조언이 나온다.
+
+26일 한국거래소에 따르면 올해 하반기 들어 코스피는 20.45%(8476.48→6742.74) 하락했다. 상반기 101.14%(4214.17→8476.48) 급등한 것과 대비된다.
+
+상반기 코스피 상승의 상당 부분은 삼성전자·SK하이닉스를 중심으로 한 인공지능(AI) 투자 열풍이 주도했다.
+
+실제로 삼성전자와 SK하이닉스는 상반기에만 각각 178.57%(11만9900원→33만4000원), 307.07%(65만1000원→265만원) 치솟았다.
+
+하지만 하반기 시장에는 “AI 투자 규모가 과도하다”는 우려가 번졌고, 반도체주 조정과 수급 악화로 이어졌다.
+
+이와 함께 단일종목 레버리지 상품이 변동성을 확대하는 요인으로 지목되면서 증시 분위기가 바뀌었다는 분석이다.
+
+최근에는 ▲미국의 장기금리 급등 ▲지정학적 리스크 ▲유가 급등 등 불안한 매크로(거시경제) 환경이 형성돼 주식 비중 축소를 고민하는 투자자가 늘어나는 추세다.
+
+증시 대기자금인 투자자 예탁금은 이달 24일 기준 103조137억원으로 집계됐다. 이는 6월 말(121조6340억원) 대비 15.31% 감소한 수준이다.
+
+투자자 예탁금은 투자자들이 주식을 매수하기 위해 증권사 등에 맡기거나 주식을 팔고 나서 찾지 않은 자금으로, 언제든 증시에 투입될 수 있는 대기성 자금 성격이 짙다.
+
+증시 열기를 측정하는 지표로 활용되는 만큼, 투자자 예탁금 감소는 매수 대기 수요가 약해졌다는 의미로 해석된다.
+
+업계에서는 당분간 코스피 반등이 제한될 것으로 보고 있다. 7월 급락으로 인해 수급 부담이 커지면서 매물 소화 과정이 필요하고, 지수가 오를 때마다 손실을 만회하려는 매물과 차익실현 물량이 출회될 가능성이 높다는 이유에서다.
+
+다만 코스피의 단기 저점을 확인한 만큼, 주식 비중 축소를 고민하기보다 종목 선별의 중요성이 높아진 시기라고 강조했다.
+
+그러면서 반도체 대형주가 여전히 주도주 역할을 할 것으로 내다봤다. 이익 기여도와 시가총액 비량를 고려하면 국내 증시의 중심에 반도체가 있고, 메모리의 반등 속도가 시장 기대보다 느린 점과 AI 투자 사이클이 훼손됐다는 판단을 구분해야 한다는 설명이다.
+
+이상연 신영증권 연구원은 “최근 반도체 반등 탄력이 투자자들의 기대에 미치지 못하고 있으나, AI 사이클의 부진으로 확대 해석할 필요는 없다”고 말했다. 이어 “글로벌 증시의 관심은 ‘AI인가 아닌가’에서 ‘AI 안에서 자본이 어디로 이동하는가’로 옮아가고 있다”고 덧붙였다.
+
+또한 “AI·반도체 업종의 펀더멘털이 훼손되지 않은 가운데 일부 실적 업종이 피난처 역할을 하고 있다”며 “3분기 실적을 앞두고 원화 강세의 수혜가 실적으로 연결될 수 있는 업종도 대안”이라고 부연했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003125368' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003125368</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

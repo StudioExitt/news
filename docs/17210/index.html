@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엔비디아 실적 발표, 어닝 서프라이즈보다 주목할 점은</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005807264' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17210" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>엔비디아 실적 발표, 어닝 서프라이즈보다 주목할 점은</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">엔비디아의 2분기 실적 발표를 앞두고 시장은 단순한 어닝 서프라이즈를 넘어 총이익률 유지 여부와 차세대 제품인 베라 루빈의 생산 차질 여부에 주목하고 있습니다. 또한 중국향 매출 증가 가능성과 향후 AI 투자 수요에 대한 전망도 핵심 변수입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">엔비디아의 실적 발표와 가이던스는 글로벌 AI 산업 및 반도체 업황 전체의 투자 심리를 결정짓는 핵심 지표임</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">엔비디아</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#엔비디아</span> <span class="tag tag-hash">#실적발표</span> <span class="tag tag-hash">#AI반도체</span> <span class="tag tag-hash">#베라루빈</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">엔비디아가 26일(현지시간) 2027 회계연도 2분기(5~7월) 실적을 발표한다. 시장이 엔비디아의 실적 발표에 촉각을 곤두세우고 있는 가운데 이번 실적 발표에서는 총이익률 확대 여부, 차세대 제품인 베라 루빈의 생산 차질 여부 등에 주목해야 한다는 분석이 나온다.\n\n현대차증권에 따르면 엔비디아의 2분기 실적 컨센서스(증권사 전망치 평균)는 매출 전년 동기 대비 96.1% 증가한 9<0xA0>916억4000만달러, 조정 주당순이익(EPS)은 98.1% 늘어난 2.08달러다.\n\n다만 시장은 실적 서프라이즈 그 이상을 기대하고 있다. 김재승 현대차증권 연구원은 \"엔비디아는 인공지능(AI) 혁명이 시작된 2023년 이후 매출과 EPS 모두 서프라이즈를 기록했지만 최근 4개 분기 연속으로 실적 서프라이즈에도 주가가 하락하는 셀온이 발생했다\"면서 \"지난 1분기에도 매출은 전년 동기 대비 85% 증가했고 EPS는 130% 상승하는 등 강력한 성장 모멘텀이 확인됐음에도 주가는 약세를 보였다. 실적 서프라이즈와 주가의 상관관계가 낮아진 것\"이라고 분석했다.\n\n김 연구원은 AI 투자와 국내 반도체 투자심리 회복을 위해 엔비디아의 2분기 실적 발표에서 주목해야 할 것으로 총이익률의 추가 확대 여부, 젠슨 황의 발언, 중국발 매출 증가 가능성 등을 꼽았다.\n\n엔비디아의 1분기 일반회계기준(GAAP) 총이익률은 74.9%를 기록했고 2\_분기 가이던스로 74.9%에 ±0.5%를 제시했다. 엔비디아는 고대역폭메모리(HBM)와 서버용 D램 등 메모리와 부품 가격 상승에 2027년 초 출하되는 AI 서버 가격을 15% 인상하기로 고객사에 통보한 상황인 만큼 올해 총이익률 감소에 대한 우려가 커지고 있다. 김 연구원은 \"2026년 하반기부터 엔비디아의 차세대 AI 플랫폼인 베라 루빈의 초기 양산 및 출하가 시작됐다는 점에서 GB300과 베라 루빈 초기 출하를 통한 고성능 제품 믹스 개선으로 이익률을 유지할 수 있을지 관심\"이며 \"엔비디아는 2024년 마진 피크아웃(고점 통과)에 주가가 1년간 기간 조정을 보였다는 점에서 매출 증가에도 이익률 하락은 부정적\"이라고 분석했다.\n\n특히 젠슨 황의 발언에 관심이 집중될 것으로 전망된다. 2027년 이후의 AI 자본지형(CAPEX) 수요 확대가 확인돼야 한다. 시장은 내년 이후의 AI 수요 전망에 민감하게 반응하고 있다. 대규모 AI 투자가 고객들의 데이터센터 가동률과 수익화로 이어지고 있는지도 확인이 필요하다. 차세대 제품인 베라 루빈의 양산 속도와 공급 확대가 계획대로 진행되는지 여부도 주목할 필요가 있다. 김 연구원은 \"특히 국내 증시 관점에서 메모리 공급 부족에 베라 루빈의 생산 차질 여부는 물론 메모리의 탑재량 축소 여부에 주목해야 한다\"이면서 \"또한 AI 생태계 조성에서 엔비디아 중심 순환금융에 대한 시장의 의구심을 낮출 필요가 있다\"고 짚었다.\n\n중국 정부의 H200 수입 허용이 매출 증가에 어느 정도 영향을 미칠지도 관심이다. 지난 19일 파이낸셜타임스(FT)는 중국 정부가 바이트댄스와 텐센트가 각각 신청한 엔비디아의 H200 칩 1만대의 반입을 허용했다고 보도했다. 다른 중국 빅테크(대형 정보기술 기업)들도 비슷한 규모로 반입을 승인받을 것으로 전망된다. 앞서 미국 정부는 중국 기업들이 각각 최대 10만대의 H200을 구매할 수 있도록 허가했으나 중국 정부가 본토 반입을 규제하고 있는 상황이었다. 김 연구원은 \"중국 정부가 미국과의 AI 경쟁에서 격차를 줄이기 위해 반입 규정을 완화한 만큼 엔비디아가 향<0xC2>무 중국향 매출을 얼마나 반영할지 관심\"이다. 가이던스에서 중국 매출을 포함할 경우 중국발 매출 성장 기대가 커질 수 있다고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005807264' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005807264</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
