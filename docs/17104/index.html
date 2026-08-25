@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엔비디아 실적 D-1…'삼전·하닉' 주가 가를 진짜 변수는 컨콜</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000527237' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17104" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>엔비디아 실적 D-1…'삼전·하닉' 주가 가를 진짜 변수는 컨콜</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">엔비디아의 2분기 실적 발표를 앞두고 차세대 AI 가속기 \"베라 루빈\"의 출하 속도와 HBM4 수요 전망이 삼성전자 및 SK하이닉스의 주가 향방을 결정할 핵심 변수로 주목받고 있음.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">엔비디아의 실적 발표와 컨퍼런스콜은 국내 반도체 공급망(SK하이닉스, 삼성전자)의 향후 매출과 점유율을 결정짓는 가장 중요한 단기 변수이며, 기술 전환기에 따른 불확실성이 존재함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">엔비디아</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#엔비디아</span> <span class="tag tag-hash">#HBM4</span> <span class="tag tag-hash">#베라루빈</span> <span class="tag tag-hash">#삼성전자</span> <span class="tag tag-hash">#SK하이닉스</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">엔비디아의 실적 발표가 임박한 가운데 삼성전자와 SK하이닉스의 주가 향방에 귀추가 주목된다. /더팩트 DB\n\n 엔비디아의 실적 발표가 임박한 가운데 삼성전자와 SK하이닉스의 주가 향방에 귀추가 주목된다. /더팩트 DB\n\n 엔비디아의 2분기 실적 발표가 하루 앞으로 다가왔다. 국내 반도체주에선 실적 숫자보다 뒤이어 열리는 컨퍼런스콜이 더 중요$다. 차세대 인공지능(AI) 가속기 '베라 루빈'의 출하 속도와 HBM4 수요 전망이 삼성전자와 SK하이닉스의 HBM 실적 기대치를 좌우할 수 있어서다.\n\n◆ 실적 코앞인데 7거래일째 하락…매출 눈높이는 920억달러\n\n25일 금융투자업계에 따르면 엔비디아는 현지시간 26일 회계연도 2027년 2분기 실적을 발표한다. 한국시간으로는 27일 오전 6시부터 컨퍼런스콜이 진행된다. 이번 2분기는 지난 7월 26일 종료됐다.\n\n실적을 앞둔 주가는 오히려 뒷걸음질치고 있다. 엔비디아는 24일(현지시간) 전 거래일보다 2.91%(6.24달러) 내린 208.48달러에 거래를 마쳤다. 7거래일 연속 하락하며 2022년 9월 이후 가장 긴 연속 하락 기록을 세웠다. 같은 날 마이크론(-5.83%)과 브로드컴(-2.63%) 등 반도체주도 동반 약세를 보였고 필라델피아반도체지수(-2.70%)도 하락했다. AI 투자 지속성에 대한 우려와 지정학적 불확실성이 겹치며 기술주 전반의 투자심리가 위축됐다.\n\n월가의 실적 눈높이 자체는 높다. 시장에서는 엔비디아의 2분기 매출을 920억달러 안팎으로 예상한다. 엔비디아가 지난 5월 제시한 매출 가이던스 910억달러를 웃도는 수준이다. 직전 1분기 매출은 816억달러로 전년 동기보다 85% 증가했고 데이터센터 매출도 752억달러로 92% 뛰었다.\n\n이미 매출 성장에 대한 기대가 상당 부분 높아진 만큼 컨퍼런스콜에서는 다음 분기 수요와 수익성에 대한 설명이 더 중요해졌다. 엔비디아가 제시할 3분기 매출 가이던스와 주요 클라우드 고객사의 AI 인프라 투자 흐름, 베라 루빈 공급 확대 속도가 확인 대상이다.\n\n증권가도 엔비디아 실적의 관전 포인트를 매출에만 두지 않는다. 나정환 NH투자증<0xA0>증권 연구원은 \"엔비디아 실적의 관건은 컨센서스 상회 여부뿐 아니라 높은 총이익률을 유지하는지 여부\"라고 말했다. 블랙웰에서 루빈으로 넘어가는 초기에는 수율이 안정되기 전 원가 부담으로 마진이 희석될 수 있다는 설명이다.\n\n◆ 루빈 GPU 하나에 HBM4 288GB…랙 하나면 20.7TB\n\n루빈부터는 HBM의 역할도 더 커졌다. 엔비디아가 공개한 사양을 보면 루빈 GPU 한 개에는 최대 288GB의 HBM4가 탑재된다. 메모리 대역폭은 초당 22TB이다. 루빈 GPU 2개로 구성된 슈퍼칩에는 576GB, 72개의 GPU가 들어가는 베라 루빈 NVL72 한 대에는 총 20.7TB의 HBM4가 탑재된다.\n\nAI 모델이 단순 학습에서 복잡한 추론과 에이전틱 AI로 확장되면서 GPU가 한 번에 처리해야 할 데이터가 늘어난 영향이다. 엔비디아가 지난 5월 루빈의 본격적인 생산 확대를 공식화한 만큼 실제 출하 증가 속도가 삼성전자와 SK하이닉스의 HBB 물량에도 연결되는 구조다.\n\n메모리 가격 상승은 이미 엔비디아의 완제품 가격에도 영향을 미치고 있다. 블룸버그에 따르면 엔비디아의 일부 대형 고객사는 내년 초 출하되는 AI 서버 가격이 15% 이상 오를 수 있다는 통보를 받았다. 베라 루빈과 그레이스 블랙웰 기반 시스템이 대상이며 메모리 반도체 가격 상승이 주요 배경으로 지목됐다. 엔비디아는 해당 보도에 공식 입장을 내놓지 않았다.\n\n증권가에서도 엔비디아 실적 이후 반도체 투자심리 변화를 주요 변수로 보고 있다. 한지영 키움증권 연구원은 지난 24일 주간 전망에서 이번 주 코스피를 움직일 변수 가운데 하나로 \"엔비디아 실적 이후 AI 내러티브 변화\"를 꼽았다. 엔비디아 실적과 컨퍼런스콜에서 확인될 AI 수요가 국내 반도체주 투자심리에도 영향을 줄 수 있다는 분석이다.\n\n◆ SK하이닉스는 선두 수성…삼성, HBM4서 추격 속도\n\n현재 HBM 시장에서는 SK하이닉스가 가장 앞서 있다. 올해 1분기 글로벌 HBM 시장점유율은 SK하이닉스가 58%로 삼성전자와 마이크론의 21%를 각각 크게 웃돌았다. 엔비디아의 주요 HBM 공급사라는 위치도 유지하고 있다.\n\nHBM4 역시 이미 매출로 연결되고 있다. SK하이닉스는 지난달 2분기 실도 발표에서 HBM4 양산 출하를 2분기에 시작했으며 하반기 생산량을 확대한다고 밝혔다. 주요 전략 고객을 포함한 약 10곳과 장기공급계약(LTA)을 마쳤고 다른 고객사와도 다년 계약을 논의하고 있다. HBM4E 샘플 출하도 상반기에 완료했다.\n\n삼성전자도 HBM4부터 공급 확대 속도를 높이고 있다. 지난 2월 HBM4 양산과 상용 출하를 시작했다. 삼성 HBM4에는 10나노급 6세대(1c) D램과 자체 4나노 파운드리 공정으로 만든 로직 베이스 다이가 적용됐다. 동작 속도는 핀당 11.7Gbps를 안정적으로 구현하고 최대 13Gbps까지 지원한다.\n\nHBM3E에서 SK하이닉스보다 엔비디아 공급 확대가 늦었던 삼성전자로서는 루빈 세대가 점유율을 끌어올릴 기회다. 이미 HBM4 상용 출하가 시작된 만큼 엔비디아의 루빈 생산이 늘어나는 과정에서 실제 공급 물량을 얼마나 확보하느냐가 HBM 매출 증가 폭과 직결된다.\n\n후속 제품 경쟁도 시작됐다. 삼성전자는 지난 5월 12단 HBM4E 샘플을 주요 글로벌 고객사에 출하했다. 최대 속도는 핀당 16Gbps로, 지난 2월 HBM4 양산을 시작한 지 약 3개월 만에 후속 제품까지 고객 평가 단계에 올렸다.\n\n한편 한국거래소에 따르면 이날 오전 10시5분 기준 삼성전자는 전 거래일(25만7000원) 대비 3.02%(7750원) 내린 24만9250원에 거래되고 있다. 이날 24만9000원으로 출발한 뒤 장중 24만5000원까지 밀리기도 했다. 같은 시각 SK하이닉스는 전 거래일(167만1000원)보다 5.45%(9만1000원) 내린 158만원을 가리키고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000527237' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000527237</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
