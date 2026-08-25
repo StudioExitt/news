@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엔비디아 실적·워시 연설, 코스피 향방 가를 듯</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/023/0003994883' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17189" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>엔비디아 실적·워시 연설, 코스피 향방 가를 듯</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">이번 주 엔비디아 실적 발표, 잭슨홀 미팅에서의 케빈 워시 연설, 한국은행 금통위 결과가 코스피의 향방을 결정할 분수령이 될 전망임. 미국 국채 금리 상승과 지정학적 불안은 여전히 시장에 부담으로 작용하고 있음.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">엔비디아 실적과 미국의 PCE 물가 지표, 잭슨홀 미팅 연설 등 글로벌 시장의 방향성을 결정할 초대형 이벤트들이 이번 주에 집중되어 변동성 확대 가능성이 매우 높음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">엔비디아</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#엔비디아</span> <span class="tag tag-hash">#잭슨홀미팅</span> <span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#금리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">이번주가 8월 증시 분수령
+25일 코스피는 전 거래일보다 45.78포인트(0.68%) 오른 6742.74에 거래를 마쳤다. 오후 들어 반등하긴 했지만 오전 한때 4% 넘게 급락하는 등 불안한 흐름을 보였다.
+
+25일 코스피는 0.68% 오른 6742.74에 거래를 마쳤다. 코스피가 7000대로 오를지는 엔비디아 실적 발표, 잭슨홀 미팅(세계 중앙은행장 연례 모임), 한국은행 금융통화위원회 등 이번 주 주요 이벤트에 달렸다. 이날 서울 중구 하나은행 딜링룸 전광판에 코스피 종가가 표시돼 있다. /뉴스1
+미국 장기 국채금리 급등과 이란의 지정학적 불안이 부담 요인으로 계속 작용하는 모습이다. 장기금리 상승은 주식시장에서 채권시장으로 자금이 옮겨가는 직접적 원인이 된다. 여기에 10년물 금리 상승은 기술주 등 미래 이익의 현재 가치를 줄이는 방향으로 작용한다.
+
+이런 가운데 이번 주에는 엔비디아 실적과 잭슨홀 미팅, 한국은행 금융통화위원회 등이 이어진다. 증권가는 세 이벤트의 조합이 8월 코스피 향방을 가를 것으로 본다.
+
+엔비디아, \"팔수록 손해\" 여부 확인 시점
+젠슨 황 엔비디아 최고경영자(CEO)./뉴스1
+젠슨 황 엔비디아 최고경영자(CEO)./뉴스1
+엔비디아는 26일(이하 현지 시각) 장 마감 후 2027회계연도 2분기(5~7월) 실적을 발표한다. 매출 가이던스(회사 자체 전망치)는 910억달러다. 매출 컨센서스(애널리스트 전망치 평균)는 919억달러쯤으로 전년 동기보다 97% 많다. 직전 분기 매출은 816억달러, 매출총이익률은 74.9%였다.
+
+관건은 75% 안팎의 이익률을 얼마나 지켜내느냐에 있다. 엔비디아 차세대 AI 컴퓨팅 플랫폼인 베라 루빈 플랫폼의 출하 비중이 커질수록 초기 원가 부담은 늘어난다. HBM(고대역폭메모리), D램 등 메모리 가격 급등도 매출원가에 부담을 더한다. 매출이 컨센스를 웃돌아도 총이익률이 무너지면 \"팔수록 남는 게 줄어드는 성장\"으로 해석될 수 있다.
+
+이른바 \"순환 금융\" 논란은 부담이다. 엔비디아는 지난 10일 블랙록·골드만삭스·KKR 등 6개 금융사와 5000억달러 규모 AI 인프라 자금 조달 플랫폼 설립을 위한 개별 양해각서를 맺었다. 엔비디아의 보증 부담은 최대 25%로 제한했다. 그럼에도 엔비디아가 고객사에 빌려준 돈이 다시 엔비디아 GPU(그래픽처리장치)를 사는데 쓰이는 일종의 \"돌려막기 매출\"이라는 지적이 지속될 수 있다.
+
+잭슨홀, 워시의 첫 기조연설
+지난 6월 17일(현지 시각) 새로운 미국 연방준비제도 의장 케빈 워시가 워싱턴 D.C.에 있는 미국 연방준비은행에서 연방공개시장위원회(FOMC) 회의가 끝난 뒤 기자회견을 열고 있다. /REUTERS=연합뉴스
+지난 6월 17일(현지 시각) 새로운 미국 연방준비제도 의장 케빈 워시가 워싱턴 D.C.에 있는 미국 연방준비은행에서 연방공개시장위원회(FOMC) 회의가 끝난 뒤 기자회견을 열고 있다. /REUTERS=연합뉴스
+세계 중앙은행장들의 연례 모임인 잭슨홀 경제정책 심포지엄은 27~29일(27~29일(현지시각)) 열린다. 케빈 워시 미국 연방준비제도(Fed) 의장은 28일 기조연설한다.
+
+투자자들은 연설에서 높은 장기금리 수준을 진정시킬 단서가 나오길 원한다. 미 30년물 국채금리는 지난주 연 5.3%를 넘어 2007년 6월(5.44%) 이후 19년 만의 최고 수준까지 올랐다. 일본 10년물 국채금리도 17일 장중 2.93%까지 뛰며 1996년 9월 이후 가장 높았다.
+
+26일 나오는 미국 7월 개인소비지출(PCE) 물가는 금리 상황에 우호적이지 않다. 시장 예상치는 전년 동월 대비 3.6% 상승이다. 6월 3.7%보다 소폭 낮지만 연준 목표 2%와는 여전히 멀다. 예상대로 나와도 금리를 끌어내릴 재료는 못 된다. 오히려 예상치를 웃돌면 금리 상승 압력이 한 단계 더 붙는다.
+
+미 재무부가 지난 19일 장기 국채 바이백(재매입) 규모를 2배로 늘렸는데도 금리 상승 기조가 꺾이지 않았다. 40조달러(약 5경5200조원)를 돌파한 국가부채가 국채 시장을 짓누른다. 재정적자를 메우려면 국채를 더 찍어낼 수밖에 없고 이는 금리 인상 요인으로 작동한다.
+
+한은 금통위, 인상과 동결 팽팽
+신현송 한국은행 총재가 지난 7월 16일 오전 서울 중구 한국은행에서 열린 금융통화위원회 본회의에서 의사봉을 두드리고 있다. 2026.7.16 자료사진
+신현송 한국은행 총재가 지난 7월 16일 오전 서울 중구 한국은행에서 열린 금융통화위원회 본회의에서 의사봉을 두드리고 있다. 2026.7.16 자료사진
+한은 금통위는 27일 기준금리를 결정한다. 현재 기준금리는 연 2.75%다. 한은은 지난달 16일 0.25%포인트 올리며 1년간 이어온 동결 기조를 깼다.
+
+전망은 갈린다. 성장률 상향 가능성과 근원물가 압력, 집값 불안을 근거로 연속 인상을 점치는 시각이 있다. 반대로 원·달러 환율이 하락하고 소비자물가 상승률이 2%대로 내려온 만큼 7월 인상 효과를 먼저 확인하자는 의견도 만만치 않다.
+
+대신증권은 엔비디아 실적과 PCE가 예상 수준에 머르며 워시 의장 발언이 원론에 그치는 경우를 기본 시나리오로 잡았다. 이때는 코스피 7000선 안착과 8000선 진입 가능성이 커질 것으로 봤다.
+
+반대로 엔비디아 실적이 기대에 미달하고, 식료품과 에너지를 뺀 근원 PCE가 예상치를 상회하며, 워시의 매파적 발언이 겹치는 경우 30년물 금리가 연 5.4%를 넘고 코스피 6000선이 위협받을 수 있다고 예상했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/023/0003994883' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/023/0003994883</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
