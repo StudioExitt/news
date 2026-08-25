@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>‘따따블’서 공모가 아래로…조정장에 공모주 투심 악화</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004655087' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17163" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>‘따따블’서 공모가 아래로…조정장에 공모주 투심 악화</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">증시 조정 국면 진입과 함께 신규 상장주 수익률이 마이너스로 전환되며 공모주 투자 심리가 급격히 위축되었습니다. 공급 감소와 중복상장 규제 강화가 시장의 불확실성을 키우고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">국내 증시 조정에 따른 단기 자금 이탈과 신규 상장 종목의 수익률 악화로 인해 공모주 시장 전반의 투자 심리가 위축됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">레몬헬스                헬스케어</span> <span class="tag stock-tag">딜리셔스</span> <span class="tag stock-tag">에이치엘지노믹스</span> <span class="tag stock-tag">스카이랩스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#IPO</span> <span class="tag tag-hash">#공모주</span> <span class="tag tag-hash">#증시조정</span> <span class="tag tag-hash">#투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■새내기주 잔혹사
+레몬헬스케어 등 상장 후 반토막
+수요예측선 밴드 하단 밑돌기도
+증시조정 장기화에 단기자금 이탈
+공급 감소·중복상장 규제에 위축
+코너스톤 도입 등으로 반전 기대도
+
+서울 중구 하나은행 딜링룸 전광판에 코스피, 원· 달러 환율, 코스닥 종가 지수가 표시돼 있다. 연합뉴스
+서울 중구 하나은행 딜링룸 전광판에 코스피, 원· 달러 환율, 코스닥 종가 지수가 표시돼 있다. 연합뉴스불과 몇 달 전까지만 해도
+‘따따블(공모가 대비 4배 상승)’ 종목이 속출했던 기업공개(IPO) 시장의 분위기가 급변하고 있다. 2분기 급등장을 타고 공모주로 몰렸던
+투자자들이 3분기 증시 조정과 함께 빠르게 이탈하면서 신규 상장주가 시장 평균보다 더 큰 충격을 받는 모습이다. 
+상장 이후에도 공모가를 회복하지
+못하는 종목이 늘면서 IPO 시장의 옥석 가리기가 한층 심화할 것이라는 전망이 나온다.
+
+25일 한국거래소에 따르면 올해 2분기 국내 증시에 신규 상장한 8개 기업의 공<0xA0>공모가 대비 상장 첫날 평균 수익률은 132.4%에 달했다.
+마키나락스·폴레드·코스모로보틱스 등 3개 기업은 상장 당일 공모가의 4배까지 오르는 ‘따따블’을 기록했다. 2분기 코스피가 67.7% 급등하며
+뜨거웠던 투심도 공모주 시장에도 그대로 반영됐다.
+
+3분기 들어 상황은 정반대로 바뀌었다. 7월 1일부터 이날까지 신규 상장주 10개의 첫날 평균 수익률은 -4.62%로 떨어졌다.
+레몬헬스케어·딜리셔스 등은 공모가 대비 반토막이 났고, 에이치엘지노믹스는 무려 58.6% 급락했다.
+
+공모주 시장의 급격한 냉각은 국내 증시 조정과 맞물려 있다. 지난달 이후 이날까지 코스피와 코스닥은 각각 20.45%, 9.72% 하락했다.
+2분기 증시 급등 과정에서 공모주로 유입됐던 단기 자금이 시장 변동성 확대와 함께 빠져나가면서 상대적으로 위험도가 높은 신규 상장주에 매도
+압력이 집중됐다는 분석이다.
+
+코스피는 이날 전 거래일보다 0.68% 오른 6742.74에 거래를 마쳤지만 종가 기준 지난달 23일 이후 7000선을 회복하지 못하는 상태다.
+코스닥 역시 827.15로 지난달 1일 이후 800선 아래에 머물러 있다.
+
+IPO 시장은 이미 공급 측면에서도 크게 위축돼 있다. 올 상반기 코스피·코스닥 신규 상장사는 스팩합병·이전상장·코넥스 등을 제외하면 17곳으로
+최근 10년간 상반기 평균 27곳에 크게 못 미쳤다. 상반기 공모금액 역시 1조 1000억 원으로 전년 동기 대비 48.7% 감소했다. 
+지난해 상반기 LG CNS와 서울보증보험 등 대어급 기업 4곳이 증시에 입성했던 것과 달리 올해는 케이뱅크 정도만 대형 IPO로 꼽혔다.
+
+여기에 중복상장 규제 강화까지 겹치면서 상장을 준비하는 기업들의 ‘눈치 보기’도 길어졌다. 지난달 확정된 가이드라인에 따라 물적분할
+자회사를 중복상장하려는 기업은 모회사 일반주주의 동의를 확보하는 등 추가적인 절차를 밟아야 한다.
+
+상장 첫날부터 주가가 꺾이면서 기관들의 투자 수요도 덩달아 위축됐다. 이달 14일부터 21일까지 기관 수요예측을 진행한 반지형 혈압계
+제조사 스카이랩스는 이날 공모가를 1만 원에 확정했다. 희망 공모가 밴드(1만 3000~1만 6000원) 하단의 약 20%를 하회하는 가격으로 올해
+신규상장을 마친 기업 중에서는 처음으로 밴드 하단을 밑돈 사례다. 장기 투자 의사를 엿볼 수 있는 의무보유확약비율의 경우
+참여 물량 기준 0.17%로 집계됐는데 이 역시 올해 새내기주 가운데 가장 낮은 수치다.
+
+시장에서는 올 4분기를 분위기 반전의 분기점으로 보고 있다. 올해 11월부터 코너스톤 투자자 및 사전수요예측 제도가 시행된다. 증권신고서 제출
+전 기관투자가의 투자 수요를 확인하고 6개월 이상 보호예수를 조건으로 공모주 일부를 미리 배정할 수 있게 되면서 공모가 산정의 정확도를 높이고
+상장 초기 급격한 주가 변동을 줄일 수 있다는 기대가 나온다.
+
+대어급 IPO의 귀환 여부도 관건이다. 소노인터내셔널이 6월 말 코스피 상장을 위한 예비심사를 청구한 가운데 구다이글로벌과 무신사 등의 상장
+추진 가능성도 거론된다. 하반기 IPO 심사를 청구한 기업은 40여 곳에 달한다. 증시 변동성이 진정되고 이들 기업이 성공적으로 시장에 입성할
+경우 얼어붙은 공모주 투자심리가 되살아날 수 있다는 전망도 나온다.
+
+투자은행(IB) 업계 관계자는 “코스닥 투자자들의 수익률이 떨어지다 보니 연쇄적으로 공모주 시장까지 영향을 미치고 있다”고 말하며, “증시 불확실성이 큰
+상황이 반복되면 공모주 시장 침체는 더 이어질 수밖에 없다”고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004655087' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004655087</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
