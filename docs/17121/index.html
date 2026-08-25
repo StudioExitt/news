@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“2030은 하이닉스, 4050은 삼성전자”…큰손들이 담은 종목 보니</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/366/0001188171' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17121" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“2030은 하이닉스, 4050은 삼성전자”…큰손들이 담은 종목 보니</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">키움증권 분석 결과 2030세대는 SK하이닉스를, 40대 이상은 삼성전자를 가장 많이 보유하고 있다. 현대차의 전 연령대 확산과 고액자산가의 급격한 증가가 확인되었다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">고액자산가 유입 급증과 특정 섹터(반도체, 자동차)로의 수급 집중 현상이 나타나며 시장 내 주도주 성격이 명확해지고 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">현대차</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자동차</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#고액자산가</span> <span class="tag tag-hash">#반도체수급</span> <span class="tag tag-hash">#투자트렌드</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">키움증권, 자사 고액자산가 투자 현황 분석
+현대차 전 연령대 상위권…카카오·알테오젠 이탈
+
+키움증권 고객들의 주식 보유 종목을 분석한 결과 20~30대는 SK하이닉스, 40대 이상은 삼성전자를 가장 많이 보유한 것으로 나타났다.
+고액자산가 사이에서도 삼성전자와 SK하이닉스가 나란히 상위권을 차지했고, 현대차의 순위 상승도 두드러졌다.
+
+25일 오전 서울 중구 하나은행 본점 딜링룸 전광판에서 딜러들이 업무를 보고 있다. /뉴스1
+25일 오전 서울 중구 하나은행 본점 딜링룸 전광판에서 딜러들이 업무를 보고 있다. /뉴스1
+
+25일 키움증권에 따르면 올해 7월 말 기준 20대 이하와 30대 고객의 보유 종목 1위는 SK하이닉스였다. 지난해 7월까지 상위권 밖이었던
+SK하이닉스가 두 연도에서 모두 1위로 올라섰다. 반면 40대와 50대, 60대 이상에서는 삼성전자가 가장 많이 보유한 종목 자리를 지켰다.
+
+현대차도 전 연령대로 보유가 확산됐다. 지난해에는 30대와 40대에서만 상위권에 들었지만 올해는 20대 이하부터 60대 이상까지 모두
+3~4위권에 이름을 올렸다. 삼성전자 우선주 역시 30~60대 이상에서 새롭게 상위권에 진입했다. 배당에 대한 관심이 커진 영향으로 풀이된다.
+
+반대로 지난해 일부 연령대에서 상위 5개 종목에 포함됐던 카카오와 알테오젠은 올해 7월에는 전 연령대에서 상위권 밖으로 밀려났다.
+두산에너빌리티는 20대 이하와 60대 이상에서 2년 연속 상위권을 유지했다.
+
+고액자산가의 보유 종목에서도 반도체와 자동차 비중이 높아졌다. 예탁자산 10억원 이상 고객의 상위 보유 종목은 지난해 7월
+삼성전자\"NAVER\"SK하이닉스\"카카오\"두산에너빌리티 순이었지만, 올해는 삼성전자\"SK하이닉스\"현대차\"두산에너빌리티\"NAVER 순으로 바뀌었다.
+
+30억원 이상 고객 역시 지난해 삼성전자\"NAVER\"카카오\"SK하이닉스\"두산에름빌리티 순에서 올해
+삼성전자\"SK하이닉스\"현대차\"두산에너빌리티\"삼성전기 순으로 재편됐다.
+
+키움증권 관계자는 \"최근 고액자산가들의 투자 행태를 살펴보면 2030세대에서는 성장 기대가 높은 종목에 대한 선호가 두드러지는 반면, 40대
+이상에서는 시장 대표성과 안정성을 갖춘 종목에 대한 관심이 지속되는 모습\"이라고 설명했다.
+
+고액자산가 자체도 빠르게 늘고 있다. 지난 7월 말 기준 키움증권의 예탁자산 10억원 이상 고객은 1년 전보다 80.7% 증가했고, 30억원
+이상 고객은 약 90% 늘었다.
+
+전체 개인 고객 수도 증가세다. 지난달 말 기준 키움증권 개인 고객은 905만명을 넘어 지난해 같은 기간 813만명보다 약 92만명(11%)
+증가했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/366/0001188171' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/366/0001188171</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'110조' 푼다는데 "24만전자·150만닉스"…이유 있었네</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001263489' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17122" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'110조' 푼다는데 "24만전자·150만닉스"…이유 있었네</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">뉴욕 증시의 반도체주 조정과 삼성전자의 기대치에 미치지 못한 주주환원 정책 발표로 인해 국내 반도체 대형주의 급락세가 나타나고 있습니다. 엔비디아 실적 발표를 앞둔 경계심리와 차익 매물이 겹치며 시장 변동성이 확대되는 양상입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">삼성전자의 주주환원 정책에 대한 실망감과 엔비디아 실적 발표를 앞둔 글로벌 반도체 섹터의 차익 실현 매물이 국내 대형주 하락을 주도하고 있음</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">SK스퀘어</span> <span class="tag stock-tag">삼성전기</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#삼성전자</span> <span class="tag tag-hash">#SK하이닉스</span> <span class="tag tag-hash">#반도체주락락</span> <span class="tag tag-hash">#엔비디아</span> <span class="tag tag-hash">#주주환원</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">삼성전자와 SK하이닉스가 25일 장 초반 각각 4%대와 6%대의 낙폭을 보이고 있다. 간밤 뉴욕증시에서 엔비디아를 비롯한 대형 기술주와 반도체주가 일제히 조정을 받으면서 국내 반도체주에도 차익 매물이 쏟아지고 있다.
+
+이날 오전 9시 47분 현재 코스피는 전장 대비 137.86포인트(2.06%) 내린 6,559.10다. 지수는 전장 대비 161.03포인트(2.40%) 내린 6,535.93으로 출발해 하락폭이 커졌다. 한때 6,408.82(-4.30%)까지 내리며 6,400선마저 위협받기도 했다.
+
+같은 시각 삼성전자는 3.5% 내린 24만8,000원에, SK하이닉스는 5.45% 내린 158만원에 거래되고 있다. SK스퀘어는 5.11% 내린 102만1,000원에 삼성전기는 3.79% 내린 126만8,000원에 거래되고 있다.
+
+국내 반도체주의 하락세는 간밤 뉴욕증시에서 대형 기술주와 반도체주를 중심으로 차익 실현 매물이 나온 영향에서다. 다우존스30산업평균지수는 0.3% 상승했지만 스탠더드앤드푸어스(S&P)500지수와 나스닥지수는 각각 0.3%, 0.8% 하락했다. 샌디스크는 6.5% 급락했고 마이크론테크놀로지도 5.9% 내리는 등 반도체·기술주 전반에 매도세가 두드러졌다.
+
+삼성전자가 21일 정규장 마등 이후 2026년 주주환원 재원이 90조~110조원에 이를 것이라며 대규모 주주환원 계획을 내놨지만 시장이 기대했던 대규모 자사주 매입·소각이 구체화하지 않으면서 실망 매물과 재료소멸에 따른 \"셀온\" (Sell-on\cdot호재 속 가격하락)이 나타났다. 삼성생명과 삼성화재의 삼성전자 보통주 지분율이 10%로 맞춰져 있어 보통주를 추가 소각할 경우 양사 지분율이 금융산업의구조개선에관한법률(금산법) 한도인 10%를 초과하게 된다는 점이 관련 결정에 영향을 미쳤을 것으로 보인다.
+
+삼성전자의 주주환원책 발표 이후 국내에서 시작된 반도체주 조정이 미국 증시로까지 번진 데다 엔비디아 실적 발표를 앞두고 투자자들의 경계심리가 커진 영향으로 풀이된다. 특히 엔비디아 주가는 4년 만에 7거래일 연속 약세를 나타내면서 선제적으로 투자 비중을 줄이려는 움직임도 반도체 업종 전반으로 확산했다.
+
+이경민 대신증권 연구원은 \"삼성전자의 주주환원 정책이 시장 기대에 미치지 못하면서 삼성 계열사 전반에서 약세가 나타났다\"고 설명했다.
+
+다만 증권가에서는 반도체주 하락세는 펀더멘털 균열이 아닌 엔비디아 실적 경계 심리를 앞둔 수급 변동성이 만들어낸 단기적인 요인이라는 전망을 내놨다.
+
+한지영 키움증권 연구원은 \"국내 증시는 미국 반도체주 조정에 대한 선반영 인식과 금리 급등세 진정, 유가 약세, 전일 급락에 따른 저가 매수세 유입 등에 힘입어 반등을 시도할 것\"이라고 설명할 것이다.
+
+임정은 KB증권 연구원은 \"이번 주 엔비디아 실적, PCE(개인소비지출) 물가 지표, 잭슨홀 미팅, 한국은행 금융통화위원회 등 AI와 금리 관련 주요 이벤트가 집중돼 있어 증시 변동성 확대 가능성에도 유의할 필요가 있다\"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001263489' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001263489</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
