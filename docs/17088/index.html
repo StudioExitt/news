@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>베선트 "아직 국채 안 샀다"…재무부, TGA 활용 검토</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.25</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005806736' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17088" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>베선트 "아직 국채 안 샀다"…재무부, TGA 활용 검토</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미 재무부가 장기 국채 금리 상승을 억제하기 위해 바이백 규모 확대를 추진하는 가운데, TGA(재무부 일반계정) 자금을 바이백 재원으로 활용하는 방안을 검토 중임. 이는 시장의 예측 가능성을 저해할 수 있다는 우려와 함께 장기 채권 금리의 하락을 유도함.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">미 재무부의 국채 바이백 확대 및 TGA 활용 검토는 장기 금리 하락을 유도할 수 있으나, 부채 관리 원칙의 불확실성을 증대시켜 시장 변동성을 높일 수 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#미재무부</span> <span class="tag tag-hash">#국채바이백</span> <span class="tag tag-hash">#TGA</span> <span class="tag tag-hash">#금리하락</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">TGA, 바이백 재원 활용 검토\n월가 \"국채 관리 원칙 훼손 우려\"\n스콧 베선트 미국 재무장관이 장기 국채금리 상승을 억제하기 위해 바이백(재매입) 확대에 나선 가운데 추가적인 시장 개입 가능성에 대해서는 신중한 입장을 보였다. 다만 미 재무부는 9000억달러가 넘는 재무부 일반계정(TGA) 자금을 바이백 재원으로 활용하는 방안을 검토하고 있어 미국의 \"정례적이고 예측 가능한\" 국채 관리 원칙이 흔들릴 수 있다는 우려도 나온다.\n\n스콧 베센트 미국 재무부 장관. 2026.05.13. 윤동주 기자\n스콧 베센트 미국 재무부 장관. 2026.05.13. 윤동주 기자\n\n베선트 장관은 24일(현지시간) 워싱턴DC 재무부 청사에서 열린 기자회견에서 국채 바이백 규모를 추가로 확대할 계획이 있느냐는 질문에 \"우리는 아직 국채를 단 한 장도 사들이지 않았다\"고 답했다.\n\n베선트 장관은 확대된 바이백이 아직 시행되지 않은 만큼 추가 확대 여부에 대해서는 말을 아꼈다. 해당 조치는 다음 달 9일부터 적용된다.\n\n장기 국채의 입찰 규모 자체를 줄이는 방안을 검토하느냐는 질문에도 베선트 장관은 \"정례적인 국채 입찰 프로그램을 계속할 것\"이라고 답했다. 국채 입찰 규모를 포함한 부채관리 정책 변경은 예정대로 오는 11월 초 다음 분기 국채발행계획(Quarterly Refunding Announcement)에서 발표하겠다는 입장이다.\n\n재무부는 지난 19일 10~30년 만기 국채에 대한 유동성 지원 목적의 바이백 규모를 회당 20억달러에서 최소 40억달러로 두 배 확대하기로 했다. 다음 달 9일부터 11월4일까지 예정된 장기물 바이백 규모는 최대 140억달러다. 베선트 장관은 이후 이 규모를 추가로 확대할 수도 있다고 밝혔다.\n\n9350억달러 TGA, 바이백 재원으로 활용 검토\n\n재무부는 바이백 확대에 필요한 자금을 마련하기 위해 TGA를 활용하는 방안도 검토하고 있다. CNBC는 이날 미 재무부 고위 당．자 2명을 인용해 재무부가 장기 국채 바이백 재원으로 TGA 자금을 사용할 수 있다고 보도했다.\n\nTGA는 미국 연방정부가 세금 등으로 거둬들인 현금을 연방준비제도(Fed)에 예치해 두는 계좌다. 사회보장연금이나 연방정부 직원·정부 계약업체에 대한 지급 등 정부 지출에 사용되는 일종의 현금성 완충자금이다.\n\n지난 20일 기준 TGA 잔액은 약 9350억달러에 달한다. 재무부는 그동안 예상치 못한 금융시장 충격이나 정부 지출에 대비하기 위해 상당한 규모의 현금을 TGA에 유지해 왔다.\n\n미 재무부 홈페이지\n\n재무부 홈페이지\n\n시장에서는 재무부가 바이백 재원을 마련하기 위해 단기 국채를 추가 발행할 가능성이 높다고 예상해왔다. 단기물을 발행해 조달한 자금으로 장기물을 사들이는 방식이다.\n\n하지만 TGA에 쌓인 현금을 사용할 경우 단기 국채 발행을 추가로 늘리지 않고도 장기 국채를 매입할 수 있다. 장기물 공급 부담을 줄이면서 단기물 발행 증가에 따른 부담도 피할 수 있다는 점에서 시장의 관심이 커졌다.\n\nTGA 활용 가능성이 알려지자 장기 국채금리는 하락했다. 이날 미 10년물 국채금리는 장중 약 4bp(1bp=0.01%포인트) 떨어진 4.69%수준까지 내려갔다. 지난주 5.3%를 넘어서며 약 20년 만의 최고 수준까지 올랐던 30년물 국채금리도 하락했다.\n\n\"정례적이고 예측 가능한 국채관리 원칙 훼손 우려"\n\n다만 월가에서는 재무부가 장기금리를 끌어내리기 위해 잇따라 정책을 변경할 경우 미국 국채 관리의 핵심 원칙인 \"정례적이고 예측 가능한(regular and predictable)\" 발행 정책이 훼손될 수 있다는 우려도 제기된다.\n\n미 재무부는 수십 년간 국채 입찰 규모나 바이백, 현기잔액 정책 등에 큰 변화를 줄 경우 시장 참가자들과 충분한 협의를 거쳐 분기별 국채발행계획을 통해 발표해왔다.\n\n그러나 재무부가 이달 초 분기별 바이백 일정을 공개한 지 불과 2주 만에 장기물 바이백 규모를 두 배 이상 확대하면서 시장에서는 베선트 장관이 장기금리를 낮추기 위해 과거보다 적극적으로 국채시장에 개입하고 있다는 평가가 나온다.\n\n블레이크 그윈 RBC캐피털마켓 미국 금리전략 책임자는 TGA 활용 가능성을 두고 \"현금잔액 정책을 충분히 검토한 결과라기보다 국채 매도세를 막으려는 다소 즉흥적인 시도처럼 보인다\"고 평가했다.\n\n이어 그는 사이버 공격 등 위험이 커진 상황에서는 오히려 충분한 현금 완충자금을 확보할 필요가 있다며 TGA를 실제 바이백에 사용할 가능성은 낮게 봤다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005806736' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005806736</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
