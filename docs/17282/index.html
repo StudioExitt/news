@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 6800선 탈환했지만…엔비디아 실적 앞두고 뒷심 부족</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 202*8.26.</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006358410' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17282" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 6800선 탈환했지만…엔비디아 실적 앞두고 뒷심 부족</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 6800선을 회복했으나 엔비디아 실적 및 미 PCE 발표를 앞둔 경계감으로 인해 상승 폭을 일부 반납하며 마감했습니다. 삼성전자와 SK하이닉스의 자사주 매입이 지수를 지지한 가운데, 원전주는 강세를 보였고 해운주는 약세를 기록했습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">엔비디아 실적 및 미국 PCE 발표라는 대형 매크로 이벤트를 앞둔 경계감이 시장의 상단을 제한하고 있음</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">한전기술</span> <span class="tag stock-tag">현대차</span> <span class="tag stock-tag">팬오션</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">원자력발전</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">해상운수</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자동차</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#엔비디아</span> <span class="tag tag-hash">#자사주매입</span> <span class="tag tag-hash">#원전주</span> <span class="tag tag-hash">#PCE</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">장중 2% 상승했지만…0.97% 오른 6808.21 마감
+대형 이벤트에 시장 경계감 커져…개인 2.2조 순매도
+삼전하닉 자사주 매입이 지지…기타법인 1.5조 ‘사자’
+원전주 연일 강세…휴전 합의 소식에 해운주 약세 국내 증시에 관망 심리가 짙어지면서 코스피와 코스닥이 동반 보합권에서 마감했다.
+코스피는 장중 한때 2%대 강세를 보였으나 엔비디아 실적 및 미 생산자물가지수(PCE) 발표를 앞두고 시장의 경계감이 지수의 움직임을 제한한 것으로 해석된다.
+
+26일 서울 하나은행 본점 딜링룸에서 딜러들이 업무를 보고 있다. (사진:연합뉴스)
+
+26일 엠피닥터에 따르면 이날 코스피는 전 거래일 대비 65.47포인트(0.97%) 오른 6808.21에 거래를 마쳤다. 6800선을 회복한 건 지난 20일 이후 4거래일 만이다.
+지수는 전장 대비 15.49포인트(0.23%) 내린 6727.25에서 출발해 한동안 보합권에 머물렀다. 장중 한때는 144.45포인트(2.14%) 오른 6887.18까지 치솟았으나 장 막판 상승분을 반납했다. 국제유가와 국채금리 하락 등 시장 호재에도 엔비디아 실적 발표와 같은 대형 이벤트를 앞두고 관망 심리가 짙어진 영향으로 해석된다.
+다만 삼성전자(005930)와 SK하이닉스(000660)가 잇따라 대규모 자사주 매입에 나서면서 ‘기타법인’의 매수세가 수급 버팀목 역할을 했다. 기타법인은 이날 1조5981억원을 순매수했으며 기관도 7649억원을 사들였다. 반면 개인과 외국인은 각각 2조2468억원, 1161억원을 순매도했다.
+이경민 대신증권 연구원은 “전일에 이어 삼성전자·SK하이닉스의 자사주 매입으로 추정되는 대규모 기타법인 매수세가 지수 하단을 지지했다”며 “실질적인 자사주 매입의 수급 모멘텀에 주가 반응 민감도가 높아지고 있는 것”이라고 분석했다.
+삼성전자는 전 거래일 대비 4500원(1.75%) 오른 26만1500원에 장을 마감했다. 삼성물산(028260), 삼성생명(032830) 등 지분 가치주도 동반 상승했다. SK하이닉스는 1만원(0.60%) 상승한 168만8000원에 거래를 마쳤다.
+반면 현대차(005380)는 이날 약 7900억원 규모의 자사주 소각을 결정하고도 1만3000원(3.09%) 하락한 40만8000원에 거래를 마감했다. 최근 대형주들의 주주환원 규모가 크게 증가한 가운데 현대차의 소각 규모가 시장의 기대치에 미치지 못한 것으로 풀이된다.
+원전 업종도 강세를 이어갔다. 미국 정부가 한국에 미국 원전 기업 웨스팅하우스(WEC) 지분 인수를 제안했다는 소식이 전해지면서다. 한전기술(052690), 현대건설(000720), 한국전력(015760), 두산에너빌리티(034020) 등의 강세가 지속됐다.
+반면 해운 업종은 약세였다. 미국과 이란이 휴전에 합의했다는 러시아 국영 리아노보스티 통신의 보도가 나오는 등 중동 긴장 완화에 대한 주목도가 높아지면서다. 이에 팬오션(028670), HMM(011200), 대한해운(005880) 등이 하락했다.
+코스닥은 전 거래일 대비 2.38포인트(0.29%) 하락한 824.77에 마감했다. 투자자별로 개인이 1929억원을 순매수했고 외국인과 기관이 각각 918억원, 1052억원를 순매도했다.
+국내 증시 방향성은 PCE 및 엔비디아 실적 발표에 좌우될 전망이다. 특히 엔비디아 실적은 영업이익률 75% 사수 여부가 관건으로 꼽힌다.
+이 연구원은 “엔비디아 실적이 기대치를 상회할 경우 상승 탄력이 강화되고 기대치를 하회할 경우 단기 변동성을 감안해야 한다”면서도 “우상향 방향성은 유효하다”고 말했다. 이어 “코스피는 6400선에서 지지력을 확보했고 6800선을 회복했다는 점에서 의미 있는 반등이 진행 중”이라고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006358410' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006358410</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
