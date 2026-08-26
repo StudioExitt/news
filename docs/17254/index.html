@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>퇴직연금 DB형 맡겼더니 수익률 고작 3.5%…IRP는 9.4% 달해</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005725995' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17254" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>퇴직연금 DB형 맡겼더니 수익률 고작 3.5%…IRP는 9.4% 달해</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">DB형 퇴직연금 수익률이 3.5%로 나타나 IRP(9.4%) 및 DC형(8.5%)보다 크게 저조한 것으로 집계됨. 원인으로 원리금보장형 상품에 대한 과도한 편중이 지목되었으며, 금융당국은 최소적립금 미충족 사업장에 대해 정기감독과 제재를 강화할 방침임.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">퇴직연금 DB형의 저조한 수익률 및 정부의 규제 강화(정기감독/과태료)로 인해 관련 금융권의 자산 운용 전략 변화와 기업들의 비용 부담 증가가 예상됨</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#퇴직연금</span> <span class="tag tag-hash">#DB형</span> <span class="tag tag-hash">#수익률</span> <span class="tag tag-hash">#금융감독원</span> <span class="tag tag-hash">#자산배분</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">DB형, 적립금 92% 원리금보장형 편중
+5년 누적수익률, 임금상승률보다 3%P 낮아
+금감원, 최소적립금 미충족 사업장 정기감독
+
+[자료=금융감독원]
+[자료=금융감독원]기업이 운용 책임을 지는 확정급여형(DB) 퇴직연금의 지난해 수익률이 3.5%에 그쳤다. 확정기여형(DC)과 개인형퇴직연금(IRP) 수익률의 절반에도 못 미치는 수준이다. 금융당국은 DB형 적립금의 90% 이상이 원리금보장형 상품에 편중된 것을 주요 원인으로 지목했다.
+
+26일 고용노동부와 금융감독원에 따르면 2025년 DB형 퇴직연금 수익률은 3.5%로 집계됐다. DC형은 8.5%, IRP는 9.4%였다. DB형 수익률은 DC형의 41.2%, IRP의 37.2% 수준이다. DB형 수익률은 2023년 4.5%에서 2024년 4.0%, 지난해 3.5%로 2년 연속 하락했다.
+
+DB형은 근로자가 퇴직할 때 받을 급여가 사전에 정해지고 기업이 적립금을 운용하는 제도다. 운용 손익이 기업에 귀속되기 때문에 수익률이 낮다고 근로자가 받을 퇴직급여가 직접 줄어드는 것은 아니다. 대신 운용 실적이 부진하면 기업이 부족한 적립금을 추가로 납부해야 한다.
+
+지난해 말 전체 퇴직연금 적립금 501조4000억원 가운데 DB형은 228조9000억원으로 45.7%를 차지했다. 제도 유형 가운데 가장 큰 비중이다. 그러나 DB형 적립금의 91.9%가 원리금보장형 상품에 투자됐다. 원리금보장형 비중은 DC형 67.0%, IRP 44.3%보다 크게 높았다.
+
+장기 수익률도 임금상승률을 따라가지 못했다. 2021년부터 지난해까지 DB형의 5년 누적 수익률은 15.9%로 같은 기간 누적 임금상승률 18.9%보다 3%포인트 낮았다. DB형은 임금이 오르면 기업이 미래에 지급해야 할 퇴직급여도 늘어나는 구조다.
+
+금감원은 “적립금 수익률이 임금상승률보다 낮은 경우 당해연도 근로 결과 발생하는 신규 퇴직급여액과 별개로 기존 적립금에서 부족액이 발생해 사용자에게 추가 부담으로 작용한다”고 설명했다.
+
+퇴직급여 부채와 운용자산 간 만기 불일치도 기업 부담을 키우는 요인으로 지적됐다. 지난해 근로자의 평균 근속연수는 7.1년이지만 DB형이 투자한 원리금보장형 상품의 83%는 만기가 3년 이내였다. 당국은 DB형 운용자산의 듀레이션이 2~3년 수준에 그쳐 금리가 하락하면 퇴직급여 부채가 자산보다 더 큰 폭으로 늘어날 수 있다고 설명했다.
+
+당국은 기업별 임금상승률 이상으로 목표수익률을 설정하고 퇴직급여 지급 시기에 맞춰 운용자산의 투자 기간과 구성을 조정해야 한다고 주문했다. 보도자료에 소개된 한 기업은 퇴직연금사업자의 자문을 받아 채권 중심 포트폴리오를 실적배당형과 원리금보장형 상품 등으로 다변화했다. 해당 DB 계좌의 1년 수익률은 2024년 12월 5.9%에서 2025년 12월 7.4%, 올해 5월 기준 25.5%로 상승했다.
+
+고용부는 올해부터 DB형 퇴직연금 사업장 가운데 최소적립금 충족하지 못한 곳을 대상으로 정기감독을 실시하고 과태료 부재 등 제재를 병행할 계획이다. 최소적립금 미충족 사업장은 최대 1000만원의 과태료 부과 대상이 될 수 있다. 연말에는 DB형 적립금을 모범적으로 운용한 기업과 퇴직연금사업자를 선정해 포상한다.
+
+금감원은 퇴직연금사업자별로 문서를 보내 기업에 대한 컨설팅을 강화하도록 독려할 예정이다. 오는 10월 발표할 퇴직연금 가이드북에도 목표수익률 설정과 자산 배분 등 DB형 운용 정보를 담는다.
+
+금감원은 “DB형은 목표수익률 설정과 퇴직급여 자산·부채의 듀레이션 일치 등 전문적인 운용이 중요한 만큼 사용자는 퇴직연금사업자의 자문과 지원을 적극 활용하는 것이 중요하다”고 밝혔다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005725995' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005725995</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
