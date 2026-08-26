@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>가상자산 레버리지ETF 올라탄 서학개미</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005726252' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17300" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>가상자산 레버리지ETF 올라탄 서학개미</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">비트코인과 이더리움의 가격 반등에 따라 서학개미들의 2배 레버리지 ETF 매수세가 강력하게 나타나고 있다. 특히 달러 약세 전망과 유동성 확대 기대감이 가상자산 및 관련 파생상품 ETF로의 자금 유입을 주도하고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">가상자산 가격 급등과 달러 약세 전망에 따른 고위험 레버리지 상품으로의 자금 유입 가속화</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">BITX</span> <span class="tag stock-tag">BITU</span> <span class="tag stock-tag">ETHU</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#비트코인</span> <span class="tag tag-hash">#이더리움</span> <span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#서학개미</span> <span class="tag tag-hash">#가상자산</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">비트코인, 3개월새 8만弗 회복
+규제 없는 코인 레버리지 인기
+한주간 가격 62% 급등하기도
+단기 조정 가능성 유의해야
+
+가상자산 반등세에 올라타려는 투자 수요가 실물 코인뿐만 아니라 레버리지 상장지수펀드(ETF)로까지 번지고 있다. 특히 서학개미를 중심으로 규제 밖에 놓여 있는 비트코인과 이더리움 레버리지 ETF에 대한 적극적인 투자 움직임이 나타나고 있다.
+
+26일 한국예탁결제원에 따르면 25일 기준 지난 일주일간 서학개미 순매수 상위 종목에 비트코인·이더리움을 기초자산으로 하는 2배 레버리지 ETF들이 잇달아 이름을 올렸다.
+
+이더리움을 기초자산으로 하는 볼래틸리티셰어스 '2X 이더 ETF'(ETHU)의 경우 2056만8607달러 순매수를 나타내며 상위 20위에 진입했다.
+
+비트코인 가격을 2배로 추종하는 ETF들도 인기를 끌고 있다. 서학개미들은 최근 한 주간 볼래틸리티셰어스 '2X 비트코인 스트래티지 ETF'(BITX)와 '프로셰어스 울트라 비트코인 ETF'(BITU)를 각각 1101만1684달러, 651만5961달러 순매수했다. BITX는 비트코인 선물 지수를, BITU는 비트코인 현물 가격 지수를 각각 기초지수로 삼는다.
+
+이처럼 서학개미들이 가상자산 ETF 매집에 나서는 것은 가상자산 가격이 급등하고 있기 때문이다. 비트코인과 이더리움의 가격 상승세에 힘입어 2X 이더 ETF는 최근 한 주간 62.4% 올랐고, 2X 비트코인 스트래티지 ETF와 프로셰어스 울트라 비트코인 ETF는 각각 47% 넘게 상승했다.
+
+최근 가상자산 시장에 대한 관심이 커진 배경에는 미국의 국채 매입(바이백) 확대, 이에 따른 달러 약세 가능성이 놓여 있다. 가상자산은 달러가 약세일 때 주목받는 자산이기 때문이다. 이에 더해 고공행천하던 장기금리가 안정될 것이란 기대감이 나타나면서 달러 약세와 유동성 확대를 예상한 자금이 비트코인 등으로 이동했다는 분석이다.
+
+비트코인은 25일 장중 8만1257달러까지 오르며 지난 5월 중순 이후 석 달여 만에 8만달러 선을 회복하기도 했다. 이에 미국 증시에서도 비트코인 현물 ETF로 자금이 빠르게 유입되고 있다. 블룸버그에 따르면 지난 24일(현지시간) 기준 미국 증시에 상장된 13개 비트코인 현물 ETF에는 한 주간 19억2000만달러가 순유입돼 지난해 10월 이후 10개월 만에 순유입액 최대치를 기록했다. 비트코인 상승세를 ETF 자금이 떠받쳤다는 분석이 나온다.
+
+반면 국내 개인투자자 입장에서는 가상자산 현물이라는 대체재가 있는 데다 국내에 가상자산 ETF가 없는 것이 현실이다. 이에 더해 해외에 상도된 현물 ETF도 규제 이슈로 국내에서는 사실상 매매할 수 없다.
+
+이 때문에 투자자들이 선물 기반 레버리지 ETF로 우회 매수에 나서는 것이라는 분석이다. 레버리지 ETF는 파생상품 기반 ETF인 까닭에 현물 ETF 중개 제한을 비켜간다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005726252' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005726252</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
