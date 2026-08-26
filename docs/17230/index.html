@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엔비디아 실적 D-1 관전 포인트 4가지-[굿모닝 글로벌 이슈]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215_0001263617' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17230" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>엔비디아 실적 D-1 관전 포인트 4가지-[굿모닝 글로벌 이슈]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국과 캐나다의 관세 전쟁 가능성으로 인한 자동차 및 건설 업계 타격 전망, 러시아-우크라이나 전쟁에 따른 에너지 공급 불확실성, 그리고 엔비디아 실적 발표를 앞둔 반도체 시장의 4가지 핵심 관전 포인트를 분석함.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">미국-캐나다 무역 갈등 심화로 인한 글로벌 공급망 불확실성과 엔비디아 실적 발표라는 핵심 변수가 공존하며 시장 변동성을 확대시킬 요인임</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">엔비디아</span> <span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">포드</span> <span class="tag stock-tag">GM</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자동차</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">건축자재</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#엔비디아</span> <span class="tag tag-hash">#관세전쟁</span> <span class="tag tag-hash">#반도체실적</span> <span class="tag tag-hash">#지정학적리스크</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">캐나다 정부가 오는 9월 8일부터 미국과 동등한 규모로 미국에 대한 관세를 부과하기로했다고 밝혔습니다.
+미국과 똑같이 약 200억 달러 규모의 미국산 700개 제품 품목에 15%, 25%, 또 50%의 보복 관세를 차등 부과하기로 했는데요.
+품목 별로 보면, 일부 미국산 철강과 알루미늄 제품, 가구, 의류 등에 50% 관세를 부과합니다.
+이전보다 관세율이 두 배로 증가한 건데요.
+이어서 가전제품과 유제품, 일부 철강 및 알루미늄 파생 제품에는 25%의 관세가 부과되며 산업용 공구 등에는 15%의 관세가 부과될 예정입니다.
+캐나다는 미국의 관세로 피해를 입는 기업들을 보호하기 위해 75억 달러 규모의 추가 지원책을 발표하기도 했는데요.
+
+앞서 블룸버그 통신에서는 미국과 캐나다 간 막판 협상 당시, 자동차와 관련된 관세에서 이견을 좁히지 못해 결국 협상이 타결되지 않았다고 보도한 바 있죠.
+뉴욕 타임스에서는 간밤 협상이 왜 불발됐는지 자세한 내막을 보도했는데, 미국이 캐나다에게 미국의 통상정책을 요구한 것으로 드러났습니다.
+쉽히 말해, 캐나다가 다른 국가와 무역협정을 체결할 때, 미국이 자신들의 통상정책과 보조를 맞추도록 요구한 건데요.
+특히 철강의 경우 미국이 제3국에 대한 관세를 올린다면, 캐나다도 같은 수준의 관세를 적용하라고 요구하는 것입니다.
+미국의 입장에서는 저렴한 외국산 철강이 캐나다를 거쳐 미국으로 유기되는 것을 막기 위한 조치였지만, 미국에 대한 의존도를 줄이고 중남미 등으로 교역을 늘리려는 카니 총리의 구상과 충돌했고요.
+심지어 미국은 캐나다에게 캐나다산 구매 정책을 축소할 것도 요구했습니다.
+영어와 프랑스어를 공용어로 사용하는 캐나다에서 프랑스어 콘텐츠가 전면 배치되는 것도 문제를 삼았고요.
+캐나다산 원유를 미국으로 수송하기 위한 대형 송유관 사업인 키스톤 XL 송유관 사업 재개와 관련해서도 양국의 이견이 좁혀지지 않았습니다.
+
+[美·캐나다 관세 전쟁發 타격 업계는?]
+포드는 현재 캐나다 온타리오주 오크빌 공장에 30억 달러를 투자하고 있는데요. F-시리즈 슈퍼 듀티 픽업트럭을 연간 10만 대 생산할 계획이었습니다. 하지만 트럼프 대통령의 말처럼 내년 1월 1일부터 미국이 캐나다산 차량과 차량 부품에 50% 관세를 적용한다면, 캐나다 공장에서 생산하는 픽업 트럭의 가격 경쟁력이 크게 떨어질 수밖에 없겠죠.
+뿐만 아니라 제너럴모터스 역시 인기 모델 여러 대를 캐나다에서 생산 중이고 스텔란티스는 캐나다 정부와 정부 지원금을 두고 갈등 중인 가운데 관세 인상이라는 악재까지 겹치게 됐는데요. 협상이 타결되었더라면 자동차 관세가 15%로 낮아졌을 텐데, 지금 유럽과 우리나라, 일본산 자동차 관세보다 미국 자동차 기업들이 내야 하는 캐나다 관세가 50%로 높아지는 상황이 생겨버렸습니다.
+
+미국의 주택 건설 업계들도 큰 타격을 받을 것으로 보입니다. 캐나다산 시멘트, 페인트, 합판 등 주요 건축 자재에 대한 관세도 즉각 부과됐는데요. 또한 미국의 7월 신규 주택 판매량이 6개월 만에 최저 수준으로 하락했습니다. 높은 모기지 금리가 수요를 위축시키고 있는데, 건설 업체들이 가격을 인하하고 인센티브를 제공함에도 효과를 보지 못하는 상황에서 건축 자재 비용 상승까지 더해져 타격이 예상됩니다.
+
+[우크라, 러 정유시설·흑해 항구 동시 타격 집중]
+러시아가 엔비디아의 AI칩을 이용한 드론을 우크라이나 공습에 활용하고 있습니다. 이번 공격에 활용된 드론은 AI가 목표물을 식별하여 높은 정확도로 공격했습니다. 뉴욕타임스는 킬러 로봇의 등장을 경고했습니다.
+하지만 우크라이나 역시 러시아의 정유 시설과 흑해 항구를 동시에 타격하며 러시아의 연료 공급에 영향을 주고 있습니다. 이로 인해 러시아의 해상 원유 수출량이 감소하고 있으며, 러시아는 디젤 수출 금지 조치 연장을 논의 중입니다. 최근 미국과 이란의 휴전 합의 소식으로 유가가 급락했으나, 러우 전쟁 상황은 국제유가에 중장기적인 영향을 줄 수 있습니다.
+
+[엔비디아 실적발표 D-1...관전 포인트 주목]
+엔비디아의 분기 예상 매출은 919억 달러, 주당순이익은 2.08달러로 집계됩니다. 전망대로라면 매출이 전년 대비 약 90% 증가하며 역대 최고치를 기록할 예정입니다. 시장은 실적 수치보다 3분기 가이던스, 수익성, GPU 출하 계획을 주목하고 있습니다. 특히 엔비디아의 가이던스는 삼성전자와 SK하이닉스의 HBM 수요와 직결됩니다.
+CNBC는 4가지 관전 포인트를 제시했습니다. 첫째, 고객층(하이퍼스케일러 등)의 다양성 여부, 둘째, 블랙웰 등 신제품의 매출 기여도, 섭째, 시장 기대치를 충족하는 강력한 가이던스 제시 여부, 넷째, AI칩 구매 지원을 위한 금융 플랫폼 운용 방식에 대한 설명입니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215_0001263617' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215_0001263617</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
