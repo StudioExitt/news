@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반도체 2막 주인공은 소부장?…AI 병목 수혜주 뜬다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.26</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003125693' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17270" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>반도체 2막 주인공은 소부장?…AI 병목 수혜주 뜬다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 서버 고도화에 따라 MLCC 및 반도체 기판 수요가 급증하며 소부장 기업으로 수혜가 확산될 전망입니다. 삼성전기, 이수페타시스 등 주요 기업의 실적 개선과 구조적 성장 국면 진입이 기대됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 서버 수요 급증에 따른 MLCC 및 기판 등 핵심 부품의 구조적 성장세와 삼성전기 등 주요 수혜 기업의 실적 전망이 매우 긍정적임</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전기</span> <span class="tag stock-tag">이수페타시스</span> <span class="tag stock-tag">LG이노텍</span> <span class="tag stock-tag">원익IPS</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전자 장비 및 기기</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체소부장</span> <span class="tag tag-hash">#AI서버</span> <span class="tag tag-hash">#MLCC</span> <span class="tag tag-hash">#FCBGA</span> <span class="tag tag-hash">#삼성전기</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">전세계적으로 반도체 슈퍼사이클이 지속되고 있는 가운데 반도체 소부장(소체·부품·장비) 기업으로 수혜가 확산될 것이라는 진단이 나온다. 인공지능(AI) 서버 고도화로 적층세라믹콘덴서(MLCC) 및 기판 수요가 급증하고 있다는 이유에서다. 정의현 미래에셋자산운용 ETF운용본부장은 26일 TIGER ETF 공식 유튜브 채널에서 진행된 웹 세미나를 통해 \"반도체 랠리의 열기가 메모리를 넘어 MLCC·기판·전공정 장비까지 퍼지고 있다\"고 말했다. 이때, AI 하드웨어 병목이 확산되는 점에 주목했다. 카테고리별 5단계 정성 평가에 따르면 고대역폭메모리(HBM)를 비롯한 대부분의 영역이 내년부터 병목 상태에 놓일 것으로 전망된다. 이 중에서도 MLCC와 기판의 중요성이 커지고 있다. 정 본부장은 MLCC에 대해 \"전기를 저장한 뒤 반도체에 안정적으로 공급하는 ‘댐’ 역할을 한다\"며 \"AI 서버에서 MLCC 탑재가 폭증하고 있다\"고 설명했다. 기판에 대해서는 \"AI 서버가 고도화되면서 다양한 칩들을 연결하는 것이 관건인데, 연결의 병목은 기판으로 해결한다\"며 \"AI 훈풍 속 구조적 성장 국면에 진입했다\"고 부연했다. 이에 따라 MLCC와 기판에 특화된 국내 기업에 주목해야 한다는 게 그의 진단이다. 우선 AI 반도체 투자 확대의 핵심 수혜주이자 MLCC 선두업체로 꼽히는 삼성전기가 있다. 삼성전기는 올해 5월 1조5000억원 규모의 실리콘 커패시터 공급 계약을 체결했다. 실리콘 커패시터는 MLCC보다 저ELS(전자식 라벨) 특성이 우수하고, 두께가 얇아 AI 서버용 반도체 패키지에서 칩과 가장 가까운 위치에 탑재된다. 삼성전기의 FC-BGA(반도체 패키지 기판) 매출액은 꾸준히 성장하고 있다. 국내 증권사가 예상한 삼성전기의 오는 2028년 FC-BGA 매출은 4조3650억원으로, 지난해(1조1580억원) 대비 276.94% 높은 수준이다. AI 인프라용 기판과 고다층 인쇄회로기판(PCB) 등을 생산하는 이수페타시스 역시 신규 수주와 수주 잔고가 증가하고 있다. 특히 정 본부장은 \"반도체 병목에 생산기업의 설재투자(CAPEX)가 확대되고 있는데, 이는 반도체 소부장 기업들의 영업이익률을 높이는 요인으로 작용한다\"라고 분석했다. AI 서버의 고성능화에 따라 반도체 공급망 전반의 병목이 심화될 경우, 관련 기업들의 가격 협상력과 실적 개선이 기대된다는 이유에서다. 미래에셋자산운용의 ‘TIGER AI반도체핵심공정’이 한국판 MLCC·기판 ETF로 주목받고 있다. 해당 ETF는 AI 반도체 공급망의 핵심 기업에 투자하는 상품으로, MLCC·기판뿐 아니라 전공정 장비 기업까지 담아 AI 인프라 투자 확대에 따른 소부장 전반의 성장 기회에 투자할 수 있다. 이달 19일 기준 ‘TIGER AI반도체핵심공정’의 주요 편입 종목에는 ▲삼성전기(23.96%) ▲LG이노텍(17.03%) ▲이수페타시스(16.75%) ▲원익IPS(10.68%) 등이 이름을 올렸다. 국내 상장된 반도체 소부장 ETF 중 삼성전기를 가장 높은 비중으로 편입한 게 특징이다. 정 본부장은 \"최신 AI 반도체 소부장 트래로를 반영한 포트폴리오\"라며 \"MLCC와 기판 관련 기업의 합산 비중이 71.41%로, AI 하드웨어 병목 수혜주에 높은 비중으로 투자한다\"라고 강조했다. 끝으로 \"반도체 소부장 기업은 성장주이면서도 밸류에이션이 낮은 가치주 성격을 갖고 있다\"며 \"상대적으로 저평가된 국내 반도체 소부장 기업에 관심을 가질 필요가 있다\"라고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003125693' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003125693</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
