@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>금리 올라도 웃는 주식 있다…고금리 버티는 종목 고르는 법</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.27</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/025/0003547309' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17461" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>금리 올라도 웃는 주식 있다…고금리 버티는 종목 고르는 법</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">한국은행의 기준금리 인상(3.00%) 국면에서 수혜가 예상되는 금융주(보험, 은행) 및 경기 방어적 성격의 필수소비재 업종을 분석함. 특히 주주환원을 통해 ROE를 높이거나 자산 대비 수익성(ROA)을 개선하는 기업에 주목할 것을 권고함.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">금리 인상이라는 거시경제적 변화에 대응할 수 있는 구체적인 업종(금융, 필수소비재)과 재무 지표(ROE, ROA) 기반의 투자 전략을 제시함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">기아</span> <span class="tag stock-tag">삼성전기</span> <span class="tag stock-tag">한미반도체</span> <span class="tag stock-tag">코스맥스</span> <span class="tag stock-tag">삼양식품</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">보험</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">식료품</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#금리인상</span> <span class="tag tag-hash">#금융주</span> <span class="tag tag-hash">#주주환원</span> <span class="tag tag-hash">#경기방어주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">27일 오후 서울 중구 하나은행 본점 딜링룸 전광판에 코스피 종가가 표시되어 있다. 이날 코스피는 전 거래일 대비 1.53% 상승한 6912.37, 코스닥은 1.30% 오른 837.65로 마감했다. 뉴스1
+27일 오후 서울 중구 하나은행 본점 딜링룸 전광판에 코스피 종가가 표시되어 있다. 이날 코스피는 전 거래일 대비 1.53% 상승한 6912.37, 코스닥은 1.30% 오른 837.65로 마감했다. 뉴스1
+한국은행이 27일 기준금리를 연 2.75%에서 3.00%로 올리며 2회 연속 \"백투백\" 인상을 단행했다. 금리가 오르면 주식시장에는 대체로 악재다. 이자 비용 부담에 따른 기업 실적 악화, 할인율(미래에 벌 돈의 가치를 현재 기준으로 낮춰 계산하는 비율) 상승으로 인한 기업가치 하락, 여기에 안전자산으로의 자금 이탈까지 겹치기 때문이다.
+
+증권가에서는 고금리 장기화 가능성에 무게를 두며 보험·은행 등 금융주가 반사이익을 볼 수 있다고 보고 있다. 27일 한국거래소에 따르면 이달 들어(3~27일) KRX보험지수는 12.44%, KRX은행지수는 3.01% 상승했다.
+
+우선 보험사는 금리 상승의 직접적인 수혜를 입는다. 보험사는 고객에게 먼 미래에 돌려줄 보험금을 회계상 부채로 잡는데, 금리가 오르면 이 부채의 현재 가치 평가액이 줄어든다. 결과적으로 빚 부담이 줄고 장부상 순자연이 늘어나 재무 건전성이 좋아지는 구조다. 여기에 도수치료의 관리 급여화와 자동차보험 경상 환자 치료 기준 강화 등 제도 개선으로 손해율과 실적이 개선되고 있다. 은행 역시 대출금리 인상에 힘입어 순이자마진(NIM)이 확대되는 반사이익을 얻는다.
+
+김대준 한국투자증권 수석연구원은 \"역사적으로 고금리 환경에서 금리 상승과 주가 상승률이 정비례 관계를 나타낼 확률은 보험과 은행이 가장 높다\"며 \"금융주는 시장금리 상승 국면에서 방어력이 높고 주주환원 매력까지 겸비해 매크로 충격을 비껴갈 수 있다\"고 분석했다.
+
+하나증권은 금리가 상승하는 시기엔 배당과 자사주 매입 등 주주환원으로 자기자본이익률(ROE)을 높일 수 있는 기업을 주목하라고 했다. 이재만 하나증권 글로벌투자분석실장은 \"금리 인상기에는 (빚을 내 투자하는) 기업의 외형 성장보다는 주주환원을 통해 자본 효율성을 높이는 기업의 주가 흐름이 좋다\"고 설명했다.
+
+실제 2023년 미국의 추가 금리 인상 당시 S&P 500에서 ROE 상승 폭 상위 3개 업종은 평균 10.4% 오른 반면, 하위 3개 업종은 4.7% 하락했다. 국내에서는 기아·LG·현대글로비스·GS 등이 관심 종목으로 꼽힌다.
+
+반면 금리가 정점을 찍고 고공행진을 이어가는 시기에는 총자산이익률(ROA)이 개선되는 기업에 무게중심을 둬야 한다. ROA는 빚과 자본을 합친 회사 전체 자산으로 실질적인 순이익을 얼마나 냈는지를 보여주는 지표다. 금리가 더 오르지 않고 높은 수준에 머물면, 투자자들의 관심은 본업에서 얼마나 실속 있게 이익을 뽑아내느냐로 옮아가기 때문이다.
+
+하나증권은 자산 대비 수익성 개선이 예상되는 AI 밸류체인 및 전력 인프라 관련 종목으로는 삼성전기·한미반도체·이수페타시스·LS ELECTRIC·효성중공업 등을 제시했다.
+
+전통적인 경기 방어주인 음식료·화장품 등 이른바 필수소비재도 주목할 만하다. 이들 업종은 고환율ㆍ고금리ㆍ고물가 등 \"3고(高)\" 환경에서도 대응력이 좋은 종목으로 꼽힌다. 실제로 코로나19 팬데믹 직후 글로벌 긴축이 본격화됐던 2021~2022년 당시에도 증시 급락장 속에서 상대적으로 우수한 수익률을 기록했다. 이달 들어 코스맥스는 53.22%, 에이피알은 35.78%, 빙그레는 33.83%, 삼양식품은 26.71% 올랐다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/025/0003547309' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/025/0003547309</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
