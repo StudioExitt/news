@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>같은 인적분할인데 한화와 카카오 주가 엇갈린 이유는</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.27</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/023/0003995185' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17378" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>같은 인적분할인데 한화와 카카오 주가 엇갈린 이유는</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">한화는 인적분할을 통해 사업 구조를 단순화하며 복합기업 할인을 해소해 주가가 상승했으나, 카카오는 지주회사 할인 발생 및 AI 수익성 불확실성으로 인해 주가가 하락하는 대조적인 모습을 보임.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">기업의 사업 구조 개편(인적분할) 방식에 따라 기업 가치 재평가 및 할인율 적용이 달라짐을 보여주는 사례</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한화</span> <span class="tag stock-tag">카카오</span> <span class="tag stock-tag">한화에어로스페이스</span> <span class="tag stock-tag">카카오뱅크</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">방산</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#인적분할</span> <span class="tag tag-hash">#지주사할인</span> <span class="tag tag-hash">#복합기업할인</span> <span class="tag tag-hash">#기업가치재평가</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">인적분할이라는 이름만 같았을 뿐 평가는 정반대로 갈렸다. 지난 25일 한화는 인적분할을 마치고 거래를 재개하자 주가가 뛰었다. 25일 17.4% 급등을 포함해 26일까지 이틀간 한화 주가는 18.2% 올랐다. 그러나 카카오는 21일 분할 계획을 내놓자 주가가 7.5% 빠졌다. 이후 약간 오르긴 했지만 26일까지 6.1% 하락했다.
+
+이를 두고 증권가에서는 한화의 경우는 인적분할을 통해 주가 하락 요소를 걷어낸 반면, 카카오는 오히려 주가가 떨어지는 요인이 새로 발생했기 때문으로 해석한다. 같은 인적분<0xA0>분할이지만 이처럼 시장의 반응은 엇갈리므로 인적분할 주식에 투자할 때에는 건별로 자세히 들여다봐야 한다고 전문가들은 조언한다.
+
+한화, 방산지주사로 좁혀 할인 요소 줄여
+
+한화는 지난 1일 존속법인 한화와 신설법인 한화머시너리앤서비스홀딩스(한화M&S)로 갈라졌다. 존속법인에는 한화에어로스페이스와 한화오션, 한화솔루션, 한화생명 등 방산·조선·에너지·금융 계열사가 남았다. 한화비전과 한화갤러리아, 한화호텔앤드리조트, 한화모멘텀, 한화로보틱스는 신설법인으로 넘어갔다.
+
+투자자들은 구조가 단순해진 점을 높이 평가한 것으로 보인다. 한국투자증권 집계로는 분할 전 9개 분야에 상장사 11개를 거느렸던 회사 구조는 7개 분야, 상장사 9개로 줄었다.
+
+성격이 다른 사업이 한 회사에 섞여 있으면 투자 가치가 각 사업을 더한 값보다 낮게 매겨지는 \"복합기업 할인\"이 발생한다. 부진한 사업이 잘나가는 사업의 가치를 덮거나 성장 사업에서 번 돈이 적자 사업으로 흘러갈 위험이 존재하기 때문이다. 방산·조선 같은 성장 사업과 유통·레저 같은 성숙 사업은 가치 평가 시 적용 잣대(PER·PBR)도 달라 하나의 주가로 묶으면 어느 쪽도 제값을 못 받는다.
+
+그런데 이 사업들을 비슷한 성\"성격별로 분류하면 주가가 저평가되는 문제가 감소한다. 미래에셋증권은 인적분할한 한화 목표주가를 10만700원에서 18만5000원으로 올렸다. 복합 사업 지주회사에서 방산 지주회사로 비교군이 바뀌면서 목표주가를 구할 때 곱하는 할인율이 줄기 때문이다. 이전 54.75%였던 순자산가치(NAV) 할인율은 12개월 뒤 50.85%로 낮아질 것으로 봤다.
+
+여기에 자회사 주가가 오를 때 지주사 주가도 따라 오르는 연동성도 강해진다. 존속법인 한화가 보유한 상장 자회사 가치의 약 80%는 성장세가 좋은 방산주 한화에어로스페이스의 몫이기 때문이다.
+
+카카오, 주가 할인 요인 되레 더 커져
+
+카카오는 21일 이사회에서 카카오톡과 인공지능(AI), 광고, 커머스를 맡는 신설법인 카카오AI와 계열사 지분·투자자산을 보유하는 존속법인 카카오X로 나누기로 했다. 순자산 기준 분할 비율은 카카오X 0.635, 카카오AI 0.365다.
+
+분할 기일은 내년 1월 1일, 변경 상장 및 재상장은 같은 달 27일이다. 카카오AI 대표에는 정신아 현 대표가, 카카오X 대표에는 김도\"영 카카오인베스트먼트 대표가 내정됐다.
+
+그러나 평가는 한화와 정반대였다. 존속법인 카카오X가 영업가치보다 지분가치가 더 큰 순수 지주회사에 가까워지며 지주회사 할인이 발생하는 것으로 지적됐다. 자회사가 따로 상장돼 있으면 같은 이익이 모회사·자회사 주가에 두 번 반영되는 이중계산(더블 카운팅) 문제가 생기기 때문이다. 카카오X가 보유하게 될 주요 자산은 카카오뱅크, 카카오페이 등 상장 자회사 지분이다. 지주회사가 실제로 손에 쥐는 것은 배당과 상표권 사용료 정도다. 자회사 이익 전부를 가져오지는 못한다.
+
+삼성증권은 카카오X에 30% 할인율을 적용해 기업가치를 10조8000억원으로 매겼고, 할인율이 50%까지 커지면 카카오 적정주가가 3만3000원까지 내려갈 것으로 추산했다. 자회사 순자산가치가 선명해지는 효과보다 할인율 상승의 부담이 클 수 있다는 것이다. 없애겠다던 복합기업 할인 자리에 지주회사 할인이 새로 들어서는 셈이다.
+
+AI 수익성도 부담 요인이다. 카카오는 카카오AI 매출을 현재의 약 2조8000억원에서 2030년 6조원 이상으로 키우고 이 중 AI 매출로만 1조원을 넘기겠다고 밝혔다. 그러나 메리츠증권은 \"AI 수익화 전략은 아직 성과를 내지 못하고 있다\"고 평가했다.
+
+카카오는 사업부 합산 잠재가치를 34조2000억원으로 제시했다. 그러나 최근 3개월 평균 시가총액은 16조8000억원으로 절반 수준이었다. 그 격차를 인적분할로 메우기엔 쉽지 않아 보인다는 지적이 나온다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/023/0003995185' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/023/0003995185</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
