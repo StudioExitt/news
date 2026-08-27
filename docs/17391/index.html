@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엔비디아 깜짝실적에 한숨 돌린 삼전닉스</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.27</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005808056' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17391" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>엔비디아 깜짝실적에 한숨 돌린 삼전닉스</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">엔비디아의 예상을 뛰어넘는 2분기 실적 발표와 향후 AI 반도체 수요에 대한 낙관적인 전망이 삼성전자, SK하이닉스 등 국내 주요 반도체 기업들의 주가 상승을 견인함.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">엔비디아의 어닝 서프라이즈와 향후 AI 반도체 수요에 대한 낙관적인 전망이 삼성전자, SK하이닉스 등 국내 주요 반도체 기업들의 주가 상승을 견인함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">SK스퀘어</span> <span class="tag stock-tag">삼성전기</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#엔비디아</span> <span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#AI</span> <span class="tag tag-hash">#삼성전자</span> <span class="tag tag-hash">#SK하이닉스</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">엔비디아, 2분기 깜짝 실적 발표
+내년 매출도 70% 급증 전망
+젠슨 황 \"AI는 이제 변곡점\" 
+코스피 지수가 전 거래일 대비 187.91포인트 상승한 6996.12에 개장한 27일 서울 중구 하나은행 본점 딜링룸 전광판에 국내증시 현황이 표시돼 있다. 2026.8.27 강진형 기자
+코스피 지수가 전 거래일 대비 187.91포인트 상승한 6996.12에 개장한 27일 서울 중구 하나은행 본점 딜링룸 전광판에 국내증시 현황이 표시돼 있다. 2026.8.27 강진형 기자
+
+전 세계 반도체 1위 기업인 엔비디아가 예상을 뛰어넘는 실적을 발표하면서 코스피도 삼성전자와 SK하이닉스 등 반도체를 중심으로 상승했다. 젠슨 황 엔비디아 최고경영자(CEO)가 올해에 이어 내년에도 인공지능(AI) 반도체 수요가 매우 강할 것이라고 전망하면서 코스피도 7000포인트 탈환을 시도 중이다.
+
+엔비디아, 2분기 깜짝 실적에 코스피 화답
+
+27일 코스피는 오전 10시4분 기준 전 거래일 대비 1.20% 오른 2889.96에 거래 중이다. 같은 시간 코스닥도 0.19% 상승한 828.43에 거래되고 있다.
+
+이날 새벽 뉴욕증시 마감 후 발표된 엔비디아의 회계연도 2분기(5∼7월) 실적이 예상치를 웃돌면서 우리 증시도 긍정 반응했다. 엔비디아는 2\u0021분기 매출이 전년 동기 대비 106% 급증한 962억2000만달러(약 133조2000억원)를 기록했다고 밝혔다. 이는 시장전망치 921억7000만달러를 40억달러 이상 웃돈 수치다. 엔비디아는 13분기 연속 매출 신기록을 경신했다.
+
+황 CEO는 실적 설명회에서 \"AI가 변곡점에 도달했다\"며 \"이제 연산이 곧 매출\"이라고 말했다. 엔비디아는 인공지능(AI) 반도체 시장의 폭발적인 성장세에 힘입어 2028회계연도(2027년 2월~2028년 1월) 매출이 전년 대비 70% 성장할 것으로 내다봤다. 황 CEO는 이마저도 공급 제약에 따른 것이라며 세간에서 제기되고 있는 \'AI 정점론\'에 선을 그었다.
+
+황 CEO는 실제 수요는 이보다 훨씬 강하다고 설명했다. 그는 \"수요는 70%보다 훨씬 크다\"라고 밝혔으며, 실제 수요 증가세가 100%에 가까운 수준이라고 밝혔다. 공급만 충분했다면 매출 증가율이 70%를 크게 웃돌 수 있다는 의미이다. 그러면서 그는 \"수요가 70%보다 훨씬 크지만, 현재 공급 능력을 고려하면 70% 성장을 자신 있게 달성할 수 있다\"며 공급망과 협력해 공급량을 계속 늘리겠다고 했다.
+
+예상을 뛰어넘는 장기 성장 전망에 투자자들도 반응했다. 이날 정규장에서 1.59% 하락했던 엔비디아 주가는 실적 발표와 컨퍼런스콜 이후 시간 외 거래에서 4% 넘게 급등했다. 투자전문매체 배런스는 \"엔비디아가 2028년 강력한 전망치로 월스트리트를 감동시켰다(impresses)\"라고 평가했다.
+
+엔비디아가 반도체 장기 호황 가능성을 언급하면서 국내 반도체주도 상승세다. 이날 오전 10시6분 현재 SK하이닉스는 전 거래일 대비 2.37% 오른 172만8000원에 거래 중이다.
+
+삼성전자도 1.72% 뛴 26만5500원을 기록했다. KB증권은 이날 삼성전자가 하반기 이익 체력 향상과 구조적인 주주환원 확대를 바탕으로 기업가치 재평가를 끌어낼 것이라고 분석했다. 김동원 KB증권 리서치본부장 이날 보고서에서 \"삼성전자가 막대한 주<0xA0>주환원을 바탕으로 올해 하반기 실적 상향과 주주환원 확대가 동시에 가시화되는 \'더블 서프라이즈\'를 보일 것이다\"라고 강조했다.
+
+SK스퀘어(0.57%), 삼성전기(1.83%) 등 다른 반도체 대형주도 상승세다. 한지영 키움증권 연구원은 \"엔비디아 2분기 실적은 기대 이상의 서프라이즈였다\"며 \"이번 실적은 메모리 반도체 업체들의 가격 협상력을 높여줘 한동안 불안감이 높았던 주도주인 반도체의 투자심리를 호전시킬 것이다\"라고 분석했다.
+
+반도체 투자심리 개선 전망
+
+엔비디아의 호실적은 국내 투자자들의 반도체 투자심리를 개선할 것으로 예상된다. 서학개미들은 이미 엔비디아 실적 발표 전부터 미국 반도체주를 집중 매수하고 있는 상황이다.
+
+한국예탁결제원에 따르면 최근 일주일 새 서학개미들이 사들인 종목 1\u0021위와 2위가 모두 반도체 상장지수펀드(ETF)였다. 국내 투자자들은 이달 19일부터 25일까지 미국 증시에서 \'디렉시온 데일리 세미컨덕터 불 3배 ETF(SOXL)\'를 7억1879만 달러 순매수했다. SOXL은 필라델피아반도체지수의 일간 수익률을 3배로 추종하는 고위험 레버리지 상품이다. 이어 주요 메모리 기업에 집중적으로 투자하는 \'라운드힐 메모리 ETF(DRAM)\'가 8\u002184만달러로 2위를 차지했다.
+
+미국 증시가 향후 6~12개월 이내에 거시 경제에 의해 약세장에 진입할 가능성은 희박하다는 평가도 나온다. 삼성증권은 미국 경기는 2020년 5월 이후 경기 확장국면 지속 중이며, 중앙은행의 강제 긴축이 없는 한 견고한 흐름을 지속할 것이라고 진단했다. 미국 장기 금리 상승은 일시적이고 제한적인 위험에 그칠 것이라고도 분석했다.
+
+유승민 삼성증권 연구원은 \"2022년 이후 고금리 환경에서 얻은 교훈은 성장주의 구조적 약세가 아니라 금리 부담을 상쇄할 수 있는 이익 성장 기업의 주가는 훼손되지 않는다는 것이다\"라고 설명했다. 이어 \"내년까지 타 업종을 압도하는 이익 성장을 지속하는 IT와 반도체에 대한 선호를 유지한다\"며 \"증시 변동성을 활용하여 이익 모멘텀이 강한 업종에 대한 비중을 점진적으로 확대할 필요가 있다\"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005808056' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005808056</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
