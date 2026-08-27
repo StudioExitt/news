@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[ETF 상관계수의 덫]② 요건 미달 584건…법 개정 '차일피일'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.27</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/293/0000089644' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17406" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[ETF 상관계수의 덫]② 요건 미달 584건…법 개정 '차일피일'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 액티브 ETF의 상관계수 요건 미달 공시가 올해 584건에 달하며 상장폐지 리스크가 확산되고 있음. 완전 액티브 ETF 도입을 위한 자본시장법 개정이 타 규제 이슈로 인해 지연되면서 운용사의 자율성 침해 및 시장 불확실성이 커지는 상황임.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">액티브 ETF의 상장폐지 리스크 증가 및 제도 개선 지연에 따른 시장 불확실성 확대</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한국투자신탁운용</span> <span class="tag stock-tag">타임폴리오자산운용</span> <span class="tag stock-tag">NH-Amundi자산운용</span> <span class="tag stock-tag">KB자산운용</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#상관계수</span> <span class="tag tag-hash">#액티브ETF</span> <span class="tag tag-hash">#상장폐지</span> <span class="tag tag-hash">#자본시장법</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">국내 액티브 상장지수펀드(ETF)에서 상관계수 요건 미달을 알리는 공시가 올해 들어서만 600건 가까이 쏟아졌다. 초과 수익을 낸 상품일수록 오히려 상장폐지 위기에 가까워지는 역설적인 현상이다.\n\n지수연동 요건이 없는 완전 액티브 ETF 도입을 위한 자본시장법 손질이 차일피일 미뤄지면서 문제를 키우고 있다는 비판이 나온다.\n\n27일 한국거래소 기업공시정보시스템에 따르면 올해 들어 이달 26일까지 국내 액티브 ETF의 상관계수 요건 미달 공시는 총 584건에 달한다. 이미 요건 미달로 상장폐지된 종목 5개를 제외하고도 9개 운용사의 14개 종목이 이 기간 반복적으로 공시를 냈다.\n\n앞서 한국투자신탁운용의 △에이스(ACE) TDF2030액티브 적격 △ACE TDF2050액티브 적격 △ACE TDF장기자산배분액티브 △ACE 애플밸류체인액티브 △타임폴리오자산운용의 TIME 미국배당다우존스액티브는 상관계수 요건 미달로 인해 상장폐지됐다. 이 액티브 ETF 5종의 상관계수 요건 미달 공시는 총 317건이었다.\n\n이미 시장에서 사라진 종목의 공시를 제외해도 초과수익을 내서 상장폐지 위험에 닥친 종목 14개의 공시가 267건에 달한다. △NH아문디자산운용의 HANARO 글로벌피지컬AI액티브 △타임폴리오운용의 TIME 글로벌탑픽액티브 △KB자산운용의 RISE 미국AI전력인프라액티브 △현대자산운용의 UNICORN 생성형AI강소기업액티브 등이 반복해서 공시를 냈다.\n\n이러한 문제의 배경으로 지지부진한 완전 액티브 ETF 도입이 지적된다. 국내 ETF는 자본시장법상 상장지수집합투자기구로 분류돼 가격이나 지수에 연동해야 한다. 이 때문에 미국 등 주요국처럼 지수연동 의무가 없는 완전한 액티브 ETF를 운용할 수 없다는 게 금융당국의 설명이다.\n\n이에 금융위원회는 올해 1월 지수연동 요건이 없는 완전한 액티브 ETF 도입을 위해 자본시장법 개정 추진 계획을 내놓았다. 조속히 법안을 마련을 지원해 올해 상반기 중 국회에서 개정 법안을 발의할 수 있도록 지원하겠다는 일정도 제시했다.\n\n그러나 지난 5월 단일종목 레버리지 ETF가 도입된 이후 시장 변동성이 커지면서 국내·해외상장 ETF 간 비대칭 규제 해소 논의의 초점이 단일종목 레버리지 ETF 규제로 쏠렸다. 레버리지 ETF의 허들을 높이는 등 후속 규제에 여론과 금융당국의 역량이 집중됐다. 이 여파로 당초 추진하던 액<0xA0>티브 ETF 상관계수 관련 법 개정 논의는 뒷전으로 밀렸다는 지적도 있다.\n\n시장에서는 초과 수익을 추구하는 액티브 ETF의 상품 취지를 제대로 구현할 수 있도록 규제 환경을 개선해야 한다는 지적이 꾸준히 제기된다. 김재칠 자본시장연구원은 \"액티브 ETF의 부상과 과제\" 보고서에서 \"수요자 및 공급자 측면의 유인체계, 국내외 자본시장 환경 등을 고려해 볼 때 국내 액티브 ETF의 성장세는 이어질 것으로 보인다\"고 전망한다.\n\n이어 \"대부분의 국가에서 액티브 ETF는 특정 지수의 방향성을 추종하지 않는다\"며 \"이를 참고해 국내에서도 액티브 ETF가 추종지수와의 상관계수 유지 의무를 폐지하는 것이 원칙적으로는 바람직하다\"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/293/0000089644' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/293/0000089644</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
