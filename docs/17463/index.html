@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“주식·채 $...\"작은따옴표는 필요없음...$”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.27</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005726911' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17463" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“주식·채 $...\"작은따옴표는 필요없음...$”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국 재무장관의 국채 정책 변화로 인해 달러 약세와 원자재 가격 상승이 예상됨에 따라, 주식과 채권이 동시에 부진한 시기에 대비한 금(GLD) 등 원자재 ETF가 포트폴리오 방어 수단으로 주목받고 있음.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">미국 재무장관의 국채 정책 변화로 인해 달러 약세 및 원자재 가격 상승 가능성이 제기되며 전통적 자산(주식·채권)의 투자 전략 수정이 필요함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">GLD</span> <span class="tag stock-tag">SPY</span> <span class="tag stock-tag">QQQ</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">원자재</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#금</span> <span class="tag tag-hash">#달러약세</span> <span class="tag tag-hash">#베센트의역설</span> <span class="tag tag-hash">#재테크</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">주식·채권·달러 동시 약할 때 수비수 ETF
+
+스콧 베센트 미국 재무장관 [매경DB]
+스콧 베센트 미국 재무장관 [매경DB]
+\"주식·채권 숏(매도 포지션)·원자재 롱(매수 포지션)!\"
+
+미국 월스트리트의 투자 분위기다. 스콧 베센트 미국 재무장관이 국채 발행을 장기물에서 단기물 중심으로 전환하고 기존 장기 국채를 시장에서 직접 사들이는 바이백(Buyback·국채 재매입)까지 병행해 장기 국채 금리를 낮추려 한(장기물 가격 강세 유도)에서 금융 투자 분위기가 바뀌고 있다.
+
+이 과정에서 달러 약세가 유발됐고 달러가 약해지면 원자재 가격은 반대로 오르는 구조가 작동한다. 원자재 \"가격표\"가 달러로 붙어 있기 때문이다. 베센트가 장기물 대신 단기물 국채를 더 많이 발행하면 시장에 단기 국채 공급이 늘어난다.
+
+동시에 재무부가 시장에서 기존 장기 국채를 직접 매입하는 \"바이백\"을 통해 장기 국채 유통 물량을 줄이면 기존 장기채 가격이 올라가 장기 금리가 하락한다. 여기까지는 베센트가 원하는 방향이다. 그러나 장기 금리가 낮아지면 일본·유럽 등 타 지역 \"큰손\"들이 미국 채권을 외면하게 된다. 수익률이 하락하기 때문이다.
+
+과거처럼 미국 우방국들이 무조건 채권을 사주는 시대가 아니다. 결국 미 국채를 사려던 달러 수요가 줄어 달러가 약세로 돌아선다. 달러가 싸지면 달\"러\"로 표시되는 금·원유·우라늄 같은 원자재는 자동으로 비싸진다. 채권 시장을 살리려던 베센트의 처방이 의도치 않게 달러가 아닌 원자재 시장에 불을 지른 셈이다. 이것이 바로 \"베센트의 역설\"이다.
+
+\"베센트발 악재\"로 주식과 채권이 동반 부진한 시대에 원자재 상장지수펀드(ETF)가 포트폴리오의 새로운 핵심 자산으로 급부상하고 있다. 과거엔 주식이 빠질 때 채권이 오르고 채권이 빠질 때 주식이 올랐다. 그러나 2022년 이후 주식·채권 동반 하락이 현실화하면서 전통적인 60·40 포트폴리오(주식 60%·채권 40%)의 신뢰가 흔들리고 있다. 이제 포트폴리오에 변화를 줘야 한다. 여기에 딱 맞는 ETF를 소개한다.
+
+SPDR Gold Shares: 금 가격을 추종하는 ETF
+GLD는 금 현물 가격을 직접 추종하는 ETF다. 달러 약세·인플레이션 헤지·지정학 리스크라는 세 가지 수요가 동시에 작동하는 구간에서 가장 강력한 성과를 내는 경향이 있다. 2004년 11월 출시돼 22년 차를 맞은 역사와 전통의 금 ETF다. 전 세계의 돈이 집중되며 8월26일 현재 ETF체크 기준 순자산(AUM)이 약 218조원에 달하는 세계 최대 금 현물 ETF다.
+
+이 ETF 주가는 한 달 동안(7월27일~8월25일) 14.3% 오르며 선방했다. 미국 양대 시장 지수 S&P500과 나스닥100을 추종하는 대표 ETF인 SPY(3.6%)와 QQQ(4.2%)를 넉넉하게 이겼다. 이 기간 마이너스 수익\"률\"을 기록한 국내 주식시장(코스피)을 이긴 것은 물론이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005726911' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005726911</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
