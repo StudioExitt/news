@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>증시 출렁여도 주식 사는 개미…CMA 잔고 '5조' 빠졌다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.28</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003126384' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17489" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>증시 출렁여도 주식 사는 개미…CMA 잔고 '5조' 빠졌다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">최근 증시의 큰 변동성에도 불구하고 개인 투자자들이 CMA 계좌에 자금을 묵혀두기보다 주식 매수에 적극적으로 나서면서, 지난 3개월간 CMA 잔고가 약 5조 원 감소했습니다. 이는 최근의 시장 조정을 저점 매수 기회로 판단하는 투자 심리가 반영된 결과입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">CMA 내 대기성 자금이 주식 시장으로 유입되는 현상은 개인 투자자들의 매수 의지가 강력함을 시사하며, 이는 하락장에서의 저가 매수세를 뒷받받하여 증시 하방 경직성을 확보할 수 있는 긍정적 요인임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#CMA</span> <span class="tag tag-hash">#개미투자자</span> <span class="tag tag-hash">#저점매수</span> <span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#반도체</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">최근 출렁이는 증시에도 개인 투자자들은 CMA에 자금을 묵혀두기보다 주식 매수에 적극적으로 나서고 있다. 해당 이미지는 AI로 제작됨.
+최근 출렁이는 증시에도 개인 투자자들은 CMA에 자금을 묵혀두기보다 주식 매수에 적극적으로 나서고 있다. 해당 이미지는 AI로 제작됨.[데일리안
+= 김하랑 기자] 증시 변동성이 이어지는 가운데 개인 투자자들이 주식 매수에 나서면서, 증권사 종합자산관리계좌(CMA)의 자금이 빠지고 있다.
+
+28일 금융투자협회에 따르면, CMA 계좌 수는 지난 26일 4001만8174개로 3개월 전(5월 26일 3984만831개)보다 17만7343개 증가했다.
+반면 같은 기간 CMA 잔고는 4조9518억원(110조1696억원→105조2178억원) 감소했다.
+계좌는 꾸준히 늘고 있지만 계좌에 실제로 머무는 돈은 줄어든 셈이다.
+최근 증시가 큰 폭의 변동성을 보이고 있음에도, 개인 투자자들이 CMA에 자금을 묵혀두기보다 주식 매수에 적극적으로 나선 영향으로 풀이된다.
+CMA는 증권사가 고객이 맡긴 자금을 환매조건부채권(RP), 머니마켓펀드(MMF), 발행어음 등 단기 금융상품에 운용하고 그 수익을 돌려주는 계좌다.
+하루만 맡겨도 수익을 기대할 수 있고 입출금이 비교적 자유로워 투자처를 찾지 못한 자금을 잠시 보관하는 용도로 활용된다.
+실제 최근 3개월 간(5월 27일→8월 27일) 개인 투자자의 거래대금 순매수 규모는 52조9600억원에 달했다.
+개인의 매수세가 이어진 것과 달리 국내 증시는 크게 흔들렸다.
+코스피는 지난 6월 사상 처음 9000선을 돌파하며 역대 최고치를 새로 썼다. 그러나 불과 한달여 만인 지난달 장중 5200선까지 밀리며 고점 대비 40% 넘게 급락했다. 이달 들어서도 급등락이 반복됐다.
+지난 12일 코스피가 4% 넘게 급등하면서 매수 사이드카가 발동된 이어 19일에는 장 초반 5–6%대 급락으로 매도 사이드카가 발동됐다. 바로 다음 날인 20일에는 다시 코스피가 5%대 급등하며 매수 사이드카가 작동했다.
+그럼에도 개인 투자자들이 주식 매수에 나서는 배경에는 최근 조정을 매수 기회로 보는 시각이 자리 잡고 있는 것으로 풀고된다.
+서울 용산구에 거주하는 직장인 A씨(32세)는 최근 증시 급락을 저가 매수 기회로 보고 대형주를 추가 매수했다. A씨는 \"최근 주가가 많이 빠졌지만 기업 실적이나 장기 전망이 크게 달라진 것은 아니라고 봤습니다.\"라며 \"지금이 상대적으로 낮은 가격에 살 수 있는 시점이라고 판단해 최근 대형주 몇 종목을 사들였습니다.\"고 말했다.
+급락 이후에도 코스피가 다시 상승할 수 있다는 기대가 개인 투자자들의 위험자산 선호를 뒷받침하고 있다는 분석이다.
+특히 해외 투자은행(IB)들의 낙관적인 전망 역시 영향을 미치고 있다. 글로벌 IB 골드만삭스는 이달 초 한국 증시에 대한 \"비중확대\" 의견과 코스피 12개월 목표치 1만2000을 유지했다. 최근 급락에도 AI 수요에 힘입은 메모리 반도체 업황의 성장세가 이어질 것이라는 판단에서다.
+증권업계 관계자는 \"최근 증시가 큰 폭으로 출렁였지만 개인 투자자들은 조정을 오히려 저가 매수 기회로 보는 분위기\"라며 \"중장기적으로 국내 증시가 추가 상승할 수 있다는 기대가 여전히 높은 만큼 CMA 등 대기성 자금 일부가 주식시장으로 이동하는 흐름이 나타나고 있다\"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003126384' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003126384</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
