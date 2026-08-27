@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피, 7000선 근접 출발… 엔비디아 호실적에 반도체주 상승</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.27</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/366/0001188605' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17395" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피, 7000선 근접 출발… 엔비디아 호실적에 반도체주 상승</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">엔비디아의 어닝 서프라이즈 발표로 인해 국내 반도체 대장주인 삼성전자와 SK하이닉스의 상승세가 나타나며 코스피 지수가 7000선에 근접해 출발함.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">엔비디아의 강력한 실적 발표가 국내 반도체 대장주인 삼성전자와 SK하이닉스의 주가를 견인하며 시장 전체의 투자심리를 개선시킴</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">엔비디아</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#엔비디아</span> <span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#삼성전자</span> <span class="tag tag-hash">#SK하이닉스</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피, 2.76% 상승 출발
+삼전·닉스 3·4%대 오름세
+
+27일 오전 서울 중구 하나은행 딜링룸 전광판에 코스피 등 개장 시황이 나오고 있다. /뉴스1
+27일 오전 서울 중구 하나은행 딜링룸 전광판에 코스피 등 개장 시황이 나오고 있다. /뉴스1
+27일 코스피 지수가 7000선에 바짝 다가선 채 출발했다. 전날 미국 증시의 약보합 마감에도 불구하고 엔비디아의 ‘어닝 서프라이즈’에 힘입어 상승 흐름을 보이는 것으로 분석된다.
+
+코스피 지수는 전날보다 187.91포인트(2.76%) 오른 6996.12에 거래를 시작했다. 오전 9시 2분 기준 기관은 2243억원, 외국인이 2372억원 각각 순매수 중인 가운데 개인은 4950억원 순매도하고 있다.
+
+코스닥 지수도 전날 대비 1.55포인트(0.19%) 오른 828.42로 출발해 장 초반 상승 흐름이 나타나고 있다.
+
+전날 뉴욕 증시는 연준의 목표치를 웃도는 물가 지표 부담과 엔비디아 실적 발표를 앞둔 경계감 속에 소폭 하락 마감했다. 26일(현지 시각) 다우존스30산업평균지수는 전장보다 0.21% 내린 5만3463.88에 거래를 마쳤다. 스탠더드앤드푸어스(S&P) 500지수는 0.02% 하락한 7675.70, 나스닥지수는 0.08% 내린 2만6130.20을 기록했다.
+
+미국 7월 근원 개인소비지출(PCE) 가격지수는 전년 대비 3.3% 올라 시장 예상치에 부합했지만, 헤드라인 PCE는 3.7% 상승해 예상을 소폭 상회했다. 연준 목표치(2%)를 지속적으로 웃도는 데다 유가 상승에 따른 향후 물가 압력 우려가 더해지며 금리 향방에 대한 경계감을 높였다.
+
+시장 관심이 집중됐던 엔비디아는 정규장 마감 후 호실적을 발표했다. 엔비디아의 2분기 매출은 전년 동기 대비 106% 증가한 962억2000만 달러, 조정 주당순이익(EPS)은 2.22 달러를 기록하며 모두 시장 전망치를 웃돌았다.
+
+엔비디아 주가는 초기 매출총이익률 <0xC2>둔화 우려로 시간 외 거래에서 하락 전환하기도 했지만, 젠슨 황 CEO의 AI 인프라 수요에 대한 긍정적 전망과 장기 성장 가이드라인 제시 이후 3% 안팎으로 상승 반전했다.
+
+국내 반도체 대장주인 삼성전자와 SK하이닉스에도 매수세가 쏠리고 있다. 9시 2분 기준 삼성전자가 전 거래일 대비 3.06%, SK하이닉스가 4.86% 각각 상승 중이다.
+
+증권가에서는 엔비디아 호실적으로 반도체 업종 전반의 투자심리가 호전될 것으로 내다보고 있다.
+
+한지영 키움증권 연구원은 “엔비디아 실적은 HBM, DRAM 등 메모리 수요 가시성 및 메모리 업체들의 가격 협상력을 높여준 만큼, 한동안 불안감이 높았던 주도주인 반도체의 투자심리는 호전 국면에 돌int 돌입할 전망”이라며 “오늘 국내 증시는 엔비디아 효과에 힘입어 반도체를 중심으로 상승 출발한 이후 장중에도 업종 수익률 온기가 확산하는 흐름을 보일 것”이라며 분석했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/366/0001188605' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/366/0001188605</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
