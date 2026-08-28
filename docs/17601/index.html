@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>삼전·닉스 1주가 '공짜'?…증권사 이벤트 뭐 있나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003126771' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17601" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>삼전·닉스 1주가 '공짜'?…증권사 이벤트 뭐 있나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">주요 증권사들이 신규 및 휴면 고객을 유치하기 위해 삼성전자, SK하이닉스 등 반도체 주식과 상품권을 제공하는 마케팅 이벤트를 경쟁적으로 진행하고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">증권사의 마케팅 이벤트는 단기적인 거래량이나 신규 고객 유입에는 영향을 줄 수 있으나, 기업의 본질적 가치나 시장 전체의 추세를 결정짓는 요소는 아님.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">유안타증권</span> <span class="tag stock-tag">삼성증권</span> <span class="tag stock-tag">토스증권</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증권사이벤트</span> <span class="tag tag-hash">#반도체주식</span> <span class="tag tag-hash">#재테크</span> <span class="tag tag-hash">#삼성전자</span> <span class="tag tag-hash">#SK하이닉스</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">삼전·닉스 등 반도체주 100% 당첨
+ISA 이전 시 60만원…올리브영 제휴
+유안타증권은 오는 11월 30일까지 \"K-반도체 주식 뽑기\" 이벤트를 진행한다.
+유안타증권은 오는 11월 30일까지 \"K-반도체 주식 뽑기\" 이벤트를 진행한다.
+유치와 휴면 고객 복귀를 위해 주식부터 상품권까지 다양한 혜택을 내걸고 있다.
+
+국내 증시 투자 열기가 이어지는 가운데 유안타증권과 삼성증권, 토스증권 등이 고객 확보를 위한 이벤트 경쟁에 나섰다.
+
+29일 금융투자업계에 따르면, 유안타증권은 오는 11월 30일까지 \"K-반도체 주식 뽑기\" 이벤트를 진행한다.
+
+유안타증권 최초 신규 고객이나 올해 국내주식 거래가 없는 휴면 고객이 대상이다.
+
+참여 고객에게 SK하이닉스와 삼성전자, \"SOL AI반도체 TOP2 플러스\" 상장지수펀드(ETF) 가운데 1주를 100% 지급한다.
+
+SK하이닉스는 20명, 삼성전자는 200명에게 돌아가며 나머지 당첨자는 ETF 1주를 받는다.
+
+이벤트 참여 후 계좌를 개설하면 국내주식 거래에 사용할 수 있는 1만원 쿠폰도 제공한다.
+
+당첨 내역 등을 카카오톡 친구 3명에게 공유하면 커피 기프티콘도 받을 수 있다.
+삼성증권의 중개형 ISA를 처음 개설하거나 다시 이용하는 고객이 100만원 이상 순입금하면 금액에 따라 최대 3만원 상당의 상품권을 받을 수
+삼성증권의 중개형 ISA를 처음 개설하거나 다시 이용하는 고객이 100만원 이상 순입금하면 금액에 따라 최대 3만원 상당의 상품권을 받을 수 있다. 
+
+오는 10월 31일까지 진행하는 \"중개형 ISA 점프-업! 이벤트\"는 신규·복귀·타사 이전 고객을 대상으로 한다.
+
+중개형 ISA를 처음 개설하거나 다시 이용하는 고객이 100만원 이상 순입금하면 금액에 따라 최대 3만원 상당의 상품권을 받을 수 있다.
+
+다른 금융사에서 보유한 ISA 자산을 삼성증권으로 옮기면 이전 금액에 따라 최대 60만원 상당의 상품권을 지급한다.
+
+다만 세 이벤트의 혜택은 중복으로 받을 수 없으며 오는 11월 30일까지 순입금액 이상의 잔고를 유지해야 한다.
+토스증권 기본계좌가 없는 고객이 올리브영 앱을 통해 이벤트에 참여하고 계좌를 개설하면 2만원 상당의 올리브영 모바일 상품권을 받을 수 있다.
+토스증권 기본계좌가 없는 고객이 올리브영 앱을 통해 이벤트에 참여하고 계좌를 개설하면 2만원 상당의 올리브영 모바일 상품권을 받을 수 있다.
+
+오는 9월 5일까지 토스증권 기본계좌가 없는 고객이 올리브영 앱을 통해 이벤트에 참여하고 계좌를 개설하면 2만원 상당의 올리브영 모바일 상품권을 
+받을 수 있다.
+
+기존 토스증권 고객도 올리브\"영에서 상품을 구매하면 금액과 관계없이 추첨을 통해 200명에게 국내 인기주식 1주를 받을 기회가 주어진다.
+
+올리브영 앱을 처음 이용하는 고객에게는 1만원 할인 쿠폰도 제공한다.
+토스증권은 별도로 신규 고객에게 삼성전자와 SK하이닉스, 국내 상장 반도체 ETF 가운데 1주를 무작위 지급하는 이벤트도 진행하고 있다.
+
+다만 올리브영 제휴 이벤트의 신규 계좌 개설 혜택과 중복 참여는 불가능하다.
+
+증권사들이 현금성 혜택뿐 아니라 삼성전자·SK하이닉스 등 개인투자자의 관심이 높은 종목까지 전면에 내세우면서 고객 유치를 둘러싼 경쟁도 한층
+치열해지는 모습이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003126771' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003126771</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
