@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피, 1%대 하락세…삼전닉스 1~2%대↓</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.28</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016276331' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17540" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피, 1%대 하락세…삼전닉스 1~2%대↓</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피와 코스닥 지수가 외국인과 기관의 동반 매도세로 인해 하락세를 보이고 있습니다. 삼성전자, SK하이닉스 등 반도체 대형주가 약세를 보이는 가운데, 투자자들은 잭슨홀 미팅을 앞두고 거시경제적 불확실성에 주목하며 경계 심리를 나타내고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">외국인 및 기관의 동반 매도와 함께 잭슨홀 미팅을 앞둔 거시경제적 경계감이 국내 반도체 대형주를 포함한 시장 전반의 하락 압력으로 작용하고 있음</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">LG에너지솔루션</span> <span class="tag stock-tag">삼성바이오로직스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#삼성전자</span> <span class="tag tag-hash">#SK하이닉스</span> <span class="tag tag-hash">#잭슨홀미팅</span> <span class="tag tag-hash">#주식시장</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피 하락 출발 (서울=연뉴스) 박동주 기자 = 코스피가 하락 출발한 28일 서울 중구 하나은행 딜링룸에서 직원이 업무를 보고 있다. 2026.8.28 pdj6635@yna.co.kr 코스피 하락 출발 (서울=연뉴스) 박동주 기자 = 코스피가 하락 출발한 28일 서울 중구 하나은행 딜링룸에서 직원이 업무를 보고 있다. 2026.8.28 pdj6635@yna.co.kr (서울=연뉴스) 김유향 기자 = 28일 코스피는 하락 출발한 뒤 장중 1%대로 내림세를 이어가고 있다. 이날 오전 10시 46분 현재 코스피는 전장보다 94.10포인트(1.36%) 내린 6,818.27로 전날의 상승분(+1.53%)을 반납하는 모습을이다. 지수는 전장 대비 65.83포인트(0.95%) 내린 6,846.54로 출발해 약세를 지속 중이다. 유가증권시장에서 외국인은 3천965억원, 기관은 521억원 각각 매도 우위다. 다만 개인은 장중 순매수와 순매도를 오가고 있다. 기타법인은 이날 4천568억원 매수 우위를 보이고 있다. 최근 기타법인은 삼성전자의 임직원 주식보상 목적 자사주 매입과 SK하이닉스의 자사주 소각을 위한 매입 영향으로 유가증권시장 내 주요 수급 주체로 떠올랐다. 간밤 미국 뉴욕증시에서는 엔비디아가 9% 가까이 급등한 가운데 3대 주가지수가 동반 강세를 보였다. 기술주 중심의 나스닥 종합지수는 1.57% 뛰었고, 다우존스30 산업평균지수와 스탠더드앤드푸어스(S&P) 500지수는 각각 0.20%와 0.72% 올랐다. 서상영 미래에셋증권 상무는 "미국 증시는 엔비디아(+8.74%)와 세일즈포스(+22.58%)가 실적발표 후 급등하자 나스닥을 중심으로 상승했다"면서도 "인공지능(AI) 공급망 전체가 동반 상승하진 않았다"고 말했다. 메모리 가격 상승에 따른 하드웨어 기업 수익성 부담과 추가 반도체 관세, 높은 국채금리에 대한 경계가 지속됐다는 설명이다. 투자자들은 다음날로 예정된 케빈 워시 연방준비제도(Fed·연준) 의장의 잭슨홀 회의 연설을 주시하는 모습이다. 관련 경계심 등에 국내증시는 이날 하락출발해 약세를 이어가고 있다. 국내 반도체 '투톱'도 1∼2% 내리고 있다. 삼성전자는 전날보다 2\"26\"% 내린 26만원에 거래되고 있다. 주가는 출발부터 1%대 하락세를 보였다. SK하이닉스는 1.45% 밀린 170만5천원이다. 마찬가지로 1.50% 하락 출발해 현재까지 약세를 유지 중이다. 다른 시가총액 상위 종목 중에서는 SK스퀘어(-1.31%), LG에너지솔루션(-1.35%), 삼성바이오로직스(-5.21%), 삼성물산(-0.93%) 등이 함께 내리고 있다. 삼성전기(3.54%)와 현대차(0.13%), 삼성생명(0.33%)은 강세다. 업종별로는 전기·가스(-3.22%), 제약(-2.85%), 의료·정밀기기(-1.91%)의 하락률이 크다. 화학(1.18%), 음식료·담배(0.78%), IT서비스(0.88%) 등은 소폭 강세를 나타내고 있다. 같은 시각 코스닥 지수는 7.98포인트(0.95%) 내린 829.67이다. 지수는 2.42포인트(0.29%) 내린 835.23로 시작해 장 초반 상승과 하락을 거듭하다 현재는 약세다. 코스닥 시장에서는 외국인이 1천604억원, 기관이 319억원 각각 순매도 중이다. 개인은 1천892억원 매수 우위로 지수의 추가 하락을 막고 있다. 에코프로(-3.26%), 에코프로비엠(-2.29%), 레인보우로보틱스(-3.29%)는 하락 중이고 알테오젠(1.12%), 파마리서치(4.05%), 에이비엘바이오(1.71%)는 상승 중이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016276331' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016276331</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
