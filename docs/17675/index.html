@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'롤러코스피' 멈췄지만…활력 위축에 7천선 문턱 걸린 코스피</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/001627878310' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17675" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'롤러코스피' 멈췄지만…활력 위축에 7천선 문턱 걸린 코스피</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 변동성이 크게 축소되며 사이드카 발동 횟수가 급감했으나, 거래량과 회전율이 연중 최저 수준을 기록하며 시장 활력이 위축되었습니다. 단일종목 레버리지 규제 이후 수급 공백으로 인해 지수의 7천선 안착이 불투명한 상황입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">단일종목 레버리지 규제 이후 시장 변동성은 안정되었으나, 거래량 및 회전율 급감으로 인한 수급 공백과 투자 심리 위축이 지수 상승을 저해함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#변동성</span> <span class="tag tag-hash">#사이드카</span> <span class="tag tag-hash">#수급위축</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">지난달 사이드카 15회→이달 단 5회…지수 움직임도 미미
+단일종목 레버리지 대책에 VKOSPI. 한달새 97.99→50.08 급락
+변동성 잡혔지만 거래 활기는 '뚝'…일평균 거래량·회전율 올해 최저
+"코스피, 기간 조정 후 반등 전망…다시 박스권 머물 가능성도
+
+(서울=연합뉴스) 김유향 기자 = 지난달까지만 해도 '롤러코스터'를 방불케 하는 급등락을 반복하던 코스피가 눈에 띄게 잠잠해졌다.
+7월 내내 사흘에 이틀 꼴로 3% 넘는 등락을 보이던 지수는 이달 들어 급격히 변동성을 축소하고 있다.
+유가증권시장의 사이드카 발동 횟수도 지난달 15회에 이르렀던 것이 이달 들어서는 3분의 1 수준인 5회로 줄었다.
+삼성전자와 SK하이닉스로의 시장쏠림, 그리고 이로 인한 변동성을 더욱 증폭하던 단일종목 레버리지·인버스 상장지수상품(ETP)으로 인한 문제가 크게 완화된 모습이다.
+당국은 글로벌 반도체 조정과 맞물려 국내 주식시장이 초(超)고변동성을 보이자 지난달 31일 기본예탁금을 1천만원에서 3천만원으로 상향하는 등 긴급 보완대책을 실시했는데 실제로 효과가 있었던 셈이다.
+다만, 이번 사태가 투자자들의 심리에 남긴 상처는 쉽게 치무되지 않고 있다.
+증시 불확실성은 줄었지만 거래량과 거래대금 등 시장 활력이 크게 위축되면서 지수 상승 탄력이 확연히 둔화한 것이다.
+시장 거래량과 회전율이 나란히 감소한 가운데 코스피는 이달 들어 7천선 안착에 번번이 실패하고 있다.
+
+'롤러코스피' 증시…변동성 정점 찍은 7월 30일 연합뉴스가 코스피의 일별 등락률을 분석한 결과 지난달 코스피가 전 거래일보다 3% 이상 오르거나 내린 날은 22거래일 가운데 14거래일(64%)에 달했다. 거래일 약 3일 중 2일꼴로 지수가 3% 넘게 움직인 셈이다.
+1월에는 이 같은 날이 단 하루였다. 이후 2월에는 7일, 미국과 이란 전쟁으로 변동성이 커진 3월에는 9일, 4월엔 3일, 5월엔 7일을 기록했다. 단일종목 레버리지 거래가 본격화한 6월에는 11일, 7월에는 14일까지 늘었다.
+반면 규제가 시행된 이후인 이달을 보면 지난 28일까지 총 19거래일 가운데 8일(42%)만 코스피가 3% 이상 등락했다.
+코스피가 5% 이상 급등락한 날의 수를 보면 변화는 더욱 뚜렷하다. 6월에는 7일, 7월에는 10일을 기록했는데 이달 들어서는 단 3일로 줄었다.
+올해 코스피가 하루 10% 이상 움직인 총 세 차례 가운데 두 차례는 7월에 몰렸다. 지난달 28일 코스피는 10.84% 폭락해 역대 2위 하락폭(732.09포인트)을 기록했고, 31일에는 반대로 17.91% 뛰어 역대 최대 상승률과 상승폭을 새로 썼다.
+역대 1위 하락폭을 기록한 날은 바로 6월 23일(-910.71포인트)이다.
+
+지수 움직임이 잔잔해지자 시장 안전장치 발동 횟수도 줄었다. 유가증권시장 사이드카는 6월 10회, 7월 15회 발동됐다. 올해 총 49차례의 사이드카 발동건수 중 절반이 넘는 25건이 6∼7월에 집중됐다. 반면 8월 들어서는 사이드//사이드카 발동이 5회에 그쳤다.
+코스피가 전일 종가지수 대비 8% 이상 폭락한 채로 1분간 지속되면 거래를 일시 중단하는 서킷브레이커도 이달 들어서는 한 번도 울리지 않았다.
+'한국형 공포지수'로 불리는 코스피200 변동성지수(VKOSPI)도 지난 6월 말 장중 한때 97.99까지 치솟았지만 지난 28일에는 50.08로 내려왔다. 금융당국의 레버리지 대책 이전과 비교하면 불과 20거래일 만에 42%가 하락한 것이다.
+
+변동성 잡혔지만 거래 활기도 '뚝'…다시 '박스피'? 문제는 변동성은 잡았지만 시장의 열기가 식는 걸 막지는 못했다는 점이다. 코스피는 지난 6월 장중 9,385.59까지 치솟으며 '만스피'(코스피 1만 포인트)에 대한 기대를 키웠지만 이후 글로벌 반도체주 조정과 고점 부담 속에 지난달 29일 장중 5,262.77까지 추락했다.
+이달 들어는 저점 대비 상당 폭 반등했지만 7천선 안착에는 실패했다. 코스피가 종가 기준 7천선을 웃돈 것은 지난달 23일이 마지막이다.
+거래 위축도 두드러진다. 이달 코스피 일평균 거래량은 3억2천179만주, 일평균 거래대금은 25조7천568억원으로 둘 다 연중 최저 수준이다. 상장주식 회전율 또한 올 최저로 떨어졌다.
+지수 급락 과정에서 누적된 손실로 투자 열기가 빠르게 식은 데다, 이후 반등세마저 주춤하면서 투자자들이 손실 만회를 기다리는 소위 \"물린\" 상태에 머물고 있는 까닭이다.
+증권가에서는 코스피가 다시 7천선을 넘어 전고점을 향하려면 레버리지 자금이 빠져나간 자리를 새로운 수급이 채워야 한다고 본다. 김두언 하나증권 연구원은 단일종목 레버리지 상품 규제로 인해 거래 규모가 줄며 수급 변화에 영향을 주었다고 분석했다.
+허재환 유진투자증도 연구원은 신규 자금 유입 경로가 줄어든 만큼 반등 속도가 더딜 수 있으며, 기업 이익 증가세 둔화 전망과 함께 지수가 다시 박스권에 머물 가능성이 높다고 내다봤다. 한편 이러한 거래 위축은 증권사의 브로커리지 수익 감소로 이어져 3분기 실적에 부담을 줄 가능성이 크다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/001627878310' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/001627878310</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
