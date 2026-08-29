@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“월요일 삼전 주가 어떡해” CXMT 깜짝 어닝서프라이즈</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005727444' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17619" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“월요일 삼전 주가 어떡해” CXMT 깜짝 어닝서프라이즈</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">중국 메모리 기업 CXMT가 상반기 매출 31조원을 기록하며 어닝서프라이즈를 발표했습니다. D램 공급 확대 및 경쟁 심화 우려로 인해 삼성전자와 SK하이닉스의 주가에 부정적인 영향을 미칠 가능성이 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">중국 CXMT의 급격한 실적 성장과 공급 확대 소식은 국내 메모리 반도체 기업들의 시장 점유율 및 수익성 악화 우려를 유발하여 주가에 부정적인 요인으로 작용함</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">CXMT</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#CXMT</span> <span class="tag tag-hash">#삼성전자</span> <span class="tag tag-hash">#SK하이닉스</span> <span class="tag tag-hash">#어닝서프라이즈</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">제목: “월요일 삼전 주가 어떡<0xA0>때해” CXMT 깜짝 어닝서프라이즈
+상반기 매출 31조원으로 전년대비 10배 성장
+D램 판매가 상승, 높은 가동률이 실적 끌어올려
+삼성전자, SK하이닉스 CXMT 공급확대 뉴스 나올때마다 주가 약세
+
+최근 기업공개를 한 중국 메모리회사 창신메모리(CXMT)가 시장의 예상을 크게 웃도는 어닝서프라이즈를 발표했다. 그간 삼성전자와 SK하이닉스는 중국 메모리 회사의 증설과 공급 확대에 대한 우려가 커질 때마다 주가가 흔들린 바 있어 오는 31일 증시에서도 CXMT의 실적이 주가에 영향을 줄 것으로 보인다.
+
+29일 업계에 따르면 창신메모리는 전날 발표한 2026년 상반기 실적에서 매출액 1503억1000만위안(약 31조원)을 기록했다. 지난해 같은 기간보다 873.6% 급증한 규모다. 지배주주 순이익은 776억1000만위안으로 전년 동기 23억3000만위안 적자에서 대규모 흑자로 돌아섰다. 상장 전 회사가 제시했던 매출 1100억~1200억위안, 순이익 500억~570억위안의 전망치도 크게 넘어섰다.
+
+실적 서프라이즈의 가장 큰 배경은 D램 판가 상승이다. 인공지능(AI) 데이터센터 투자 확대에 따라 서버용 메모리 수요가 빠르게 늘어난 반면 삼성전자와 SK하이익닉스 등 주요 업체들이 고대역폭메무리(HBM) 등 고부가 제품으로 생산능력을 옮기면서 범용 D램 공급이 빠듯해졌다. 창신메모리는 글로벌 D램 공급 부족과 가격 상승으로 주요 제품의 매출총이익이 크게 증가했다고 설명했다.
+
+판매량 증가도 실적을 끌어올렸다. 생산능력 확대와 높은 가동률을 바탕으로 D램 출하량이 늘어나면서 가격 상승 효과가 매출 증가로 그대로 연결됐다. 여기에 상대적으로 가격과 수익성이 높은 신제품 비중이 확대된 것도 수익성 개선에 기여했다. 특히 PC와 서버 등에 사용되는 DDR 계열 매출이 상반기 694억7000만위안으로 주력 사업 매출의 46.3%를 차지한 것으로 나타났다.
+
+업계에서는 AI발 메모리 슈퍼사이클과 창신메모리의 생산 확대가 맞물리면서 중국 D램 업체의 글로벌 시장 점유율 상승 속도도 빨라질 것으로 보고 있다. 다만 삼성전자·SK하이닉스·마이크론과의 첨단 D램 및 HBM 기술 격차를 얼마나 빠르게 좁힐지가 향후 성장성을 좌우할 전망이다.
+
+창신메모리는 높은 성장성에 대한 기대로 여전히 이익 대비 높은 시총을 유지하고 있다. 블룸버그 컨센서스 기준 창신메모리의 12개월 선행 주가이익비율(PER)은 24.1배로 SK하이닉스 4배를 크게 웃돈다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005727444' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005727444</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
