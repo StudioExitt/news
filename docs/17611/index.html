@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[ETF워치]불안한 국장에 개인투자자 선택은 '서학·배당개미'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.29</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/648/0000050278' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17611" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[ETF워치]불안한 국장에 개인투자자 선택은 '서학·배당개미'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 증시 변동성 확대로 인해 개인 투자자들이 미국 지수 추종 ETF 및 배당형 커버드콜 ETF로 자금을 이동시키고 있습니다. KOSPI의 높은 변동성에 비해 상대적으로 안정적인 미국 증시와 분배금 수익을 기대할 수 있는 상품에 대한 선호가 뚜렷하게 나타나고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">국내 증시 변동성 확대에 따른 개인 투자자의 미국 지수 및 배당형 ETF로의 자금 이탈 현상 반영</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">KODEX 200</span> <span class="tag stock-tag">TIGER 미국S&P500</span> <span class="tag stock-tag">KODEX 미국나스닥100</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#서학개미</span> <span class="tag tag-hash">#배당주</span> <span class="tag tag-hash">#코스피변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">최근 일주일 개인 순매수 1~10위 ETF 중 해외지수형 6개
+4개는 커버드콜이나 배당주 기반의 배당형 ETF가 차지
+국내증시 변동성에 비교적 안정적인 미국증시와 배당 주목
+상장지수펀드(ETF) 개인투자자에게 ‘롤러코스피’라는 말은 이제 낯설지 않아요. 상반기에 쭉쭉 올랐던 코스피가 7~8월 들어서는 극심하게 출렁였으니까요. 그런 변동성에 커진 불안 때문인지 이번주 ETF 시장에서 개인은 ‘서학개미’와 ‘배당개미’ 성향을 강하게 보였어요.
+
+코스콤 ETF 정보플랫폼 ETF체크에 따르면, 국내 개인투자자가 27일 기준으로 최근 일주일 동안 가장 많이 순매수한 ETF 1~10위 중 6개가 미국증시 기반 상품이었어요. 선두인 TIGER 미국S&P500(미<0xA0>래에셋자산운용)의 경우 개인 순매수 금액이 1543억원에 이르렀어요.
+
+4위와 5위를 나란히 차지한 KODEX 미국나스닥100(873억원, 삼성자산운용)과 KODEX 미국S&P500(836억원), 6위인 TIGER 미국나스닥100(624억원)도 미국증시 지수를 기초자산 삼은 ETF이죠.
+
+개인은 일정 기간마다 분배금을 받는 커버드콜 ETF 및 배당주 관련 상품에도 많이 투자했어요. 최근 일주일간 개인 순매수 2위는 TIGER 배당커버드콜액티브(1245억원), 3위는 KODEX 200커버드콜액티브(964억원)입니다. 8위 TIGER 미국나스닥100타겟데일리커버드콜(395억원)과 9위 TIGER 미국배당다우존스(362억원)는 미국증시와 배당을 결합한 상품이에요.
+
+국내증시가 8월에 출렁이면서 불안해진 개인이 미국증시 및 배당 관련 ETF로 관심을 돌린 것으로 보여요. 미국증시는 국내증시보다 변동성이 상대적으로 작았거든요.
+
+코스피지수는 8월 들어 종가 기준으로 가장 고점(21일, 6912.95)와 저점(3일, 6257.45) 차이가 10.47%에 이르러요. 반면 미국증시 대표 지수인 S&P500은 고점(13일, 7798.99)과 저점(3일, 7600.50) 차이가 2.61%로 비교적 작은 편이에요.
+
+최근 일주일 동안 개인 순매도가 가장 많았던 ETF 1위가 KODEX 200(-1901억원), 2위가 KODEX SK하이닉스단일종목레버리지(-546억원), 3위가 KODEX 레버리지(-460억원)인 점도 국내증시를 향한 개인의 불안함이 엿보이는 대목입니다.
+
+국내 자산운용사도 미국증시 및 배당 관련 ETF를 적극 홍보하고 있는데요. 한화자산운용은 28일 PLUS 미국S&P500과 PLUS 미국S&P500(H) 총보수를 각각 연 0.0062%로 낮췄어요. PLUS 미국S&P500의 원래 총보수는 연 0.07%, PLUS 미국S&P500(H)는 0.3%였어요.
+
+KB자산운용은 미국증시 기반의 데일리고정커버드콜 ETF 4개(△RISE 미국테크100데일리고정커버드콜 △RISE 미국AI밸류체인데일리고정커버드콜 △RISE 미국배당100데일리고정커버드콜 △RISE 미국S&P500데일리고정커버드콜) 순자산총액이 24일 1조5000억원을 넘어섰다고 밝혔어요. 작년 12월 상장한 RISE 미국S&P500데일리고정커버드콜을 제외한 나머지 3개는 2\"24년 9월 시장에 나왔어요.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/648/0000050278' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/648/0000050278</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
