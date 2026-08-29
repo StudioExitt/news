@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“유증 할꺼면 보고서 똑바로 써라”...금감원, 미흡하면 공개망신 준다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005727541' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17671" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“유증 할꺼면 보고서 똑바로 써라”...금감원, 미흡하면 공개망신 준다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금감원이 증권신고서 정정요구 방식을 차등화하여 부실한 신고서에 대한 공시 문구를 강화하기로 했습니다. 성실히 작성된 신고서는 신속하게 심사하여 자금조달을 지원하는 \"당근과 채찍\" 정책을 시행합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">증권신고서 정정요구 차등화 및 부실 공시 문구 노출은 발행사와 주관사에 대한 규제 압박을 높이며, 상장 및 자금조달 과정에서의 심사 부담을 가중시키는 요인임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">미래에셋증권</span> <span class="tag stock-tag">한국금융지주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#금감원</span> <span class="tag tag-hash">#IPO</span> <span class="tag tag-hash">#유상증자</span> <span class="tag tag-hash">#증권신고서</span> <span class="tag tag-hash">#코너스톤투자자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">금융감독원. [뉴스1]금융감독원이 기업이 기업공개(IPO)나 유상증자를 위해 제출하는 증권신고서를 보다 충실히 작성하도록 \"당근과 채찍\"을 내놨다. 금감원의 정정 요구 이후에도 제대로 보완하지 않으면 앞으로 전자공시시스템(DART)에 \"정정요구 사항 반영이 미비하다\"는 사실이 표시된다. 반대로 투자위험 등을 충실하게 기재한 신고서는 신속하게 심사해 기업 자금조달을 보다 용이하도록 지원한다. 금감원은 28일 금융투자협회에서 IPO·유상증자 주관 증권사 11곳과 간담회를 열고, 증권신고서 정정요구를 2단계로 차등화하는 제도를 도입한다고 밝혔다. 현재 금감원은 부실한 증권신고서가 제출되더라도 보완해야 할 내용을 정정요구서에 상세히 적어 발행사와 주관사에 전달하고 있다. 그러나 일부 발행사와 주관사가 이 같은 관행에 의존해 최초 신고서를 부실하게 작성하거나, 정정요구를 받고도 내용을 충분히 보완하지 않아 정정과 재정정이 반복되는 사례가 나타났다는 게 금감원의 설명이다. 첫 정정요구 때는 현행처럼 보완이 필요한 사항을 비교적 상세하게 안내한다. 다만 이후 제출된 정정신고서에도 중요 정정사항 다수가 제대로 반영되지 않으면 대응 방식이 달라진다. 금감원은 구체적인 보완 방법을 다시 설명하는 대신 \"앞선 정정요구 사항의 반영이 미비했다\"는 취지만 정정요구서에 기재할 방침이다. 이 같은 심사 결과는 DART의 정정공시 안내 문구에도 표시된다. 투자자는 해당 기업이 금감원의 정정요구를 제대로 반영하지 않았다는 사실을 확인할 수 있게 된다. 반면 투자위험요소 등을 충실히 기재한 신고서는 심사 결과를 최대한 신속하게 기업에 전달한다. 정정이 불가피한 경우에도 필요한 내용을 충실히 안내해 자금조달 일정이 장기화하지 않도록 심사를 운영할 계획이다. 이승우 금감원 공시조사담당 부원장보는 \"투자자에게 충분한 정보를 제공하는 것은 증권신고서 심사의 기본 원칙\"이라면서도 \"기업이 필요한 시기에 자본시장을 통해 원활하게 자금을 조달할 수 있도록 하는 것 역시 중요하다\"고 말했다. 이어 \"선택과 집중\"을 통해 심사의 효율성을 높이겠다고 말했다. 금감원은 주관 증권사에도 충분한 기업실사와 주주 소통을 주문했다. 증자 경위와 조달자금 사용 목적 등을 신고서에 충실히 기재해 불필요한 정정과 심사 지연을 줄여야 한다는 취지다. 이날 금감원은 지난해 7월 시행한 IPO 수요예측 제도 개선의 점검 결과도 공개했다. 전체 기관투자자의 공모주 배정 물량 가운데 의무보유확약 비중은 제도 개선 전 29.0%에서 시행 후 77.7%로 48.7%포인트 높아졌다. 정책펀드의 확약 비중도 35.8%에서 95.0%로 59.2%포인트 상승했다. 다만 의무보유확약 가운데 비교적 짧은 15일 확약이 가장 큰 비중을 차지했고, 사모운용사와 투자일임사의 수요예측 참여요건을 강화한 효과도 아직 큰 것으로 나타나지 않았다. 이에 IPO시장이 기업가치에 기반한 중·장기 투자 중심으로 전환되도록 제도 운영을 보완할 예정이다. 더불어 금감원은 오는 11월 시행 예정인 사전수요예측·코너스톤투자자 제도가 시장에 안착하도록 주관사와 지속해서 소통할 계획이다. 코너스톤투자자 제도는 공모주 일부를 일정 기간 이상 장기 보유하는 기관투자자에게 사전 배정하도록 하는 제도다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005727541' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005727541</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
