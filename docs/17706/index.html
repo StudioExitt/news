@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>첫날 반짝 올랐다 '미끌'...개미 울리는 공모가 거품 여전</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/00805431748' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17706" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>첫날 반짝 올랐다 '미끌'...개미 울리는 공모가 거품 여전</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">최근 IPO 시장에서 공모가 대비 주가가 급락하는 기업이 속출하며 투자자들의 피해가 확산되고 있다. 과도한 밸류에이션 산정과 상장 직후 매도 가능한 미확약 물량으로 인한 오버행 우려가 주요 원인으로 지적된다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">IPO 기업들의 공모가 대비 주가 하락세와 과도한 밸류에이션 논란으로 인한 투자 심리 위축 및 오버행 리스크 확대</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">피스피스스튜디오</span> <span class="tag stock-tag">스트라드비젼</span> <span class="tag stock-tag">한패스</span> <span class="tag stock-tag">니어스랩</span> <span class="tag stock-tag">파두</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#IPO</span> <span class="tag tag-hash">#공모가</span> <span class="tag tag-hash">#오버행</span> <span class="tag tag-hash">#밸류에이션</span> <span class="tag tag-hash">#투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">올해 IPO 업체로 증시에 입성했다가 주가가 급락하는 현상이 비일비재해지고 있다. 공모가 밴드는 한국거래소, 주관사, 기업 등이 함께 논의해 산정하는데 비교대상으로 삼은 기업들의 기업가치가 며칠 새 급락하면서 주가 타격으로 전해지는 양상이다. 여기에 신통치 않은 시장 분위기로 미확약 물량이 여전히 많아 금융당국의 당부가 큰 힘을 발휘하지 못하면서 개미 투자자들의 피해를 양산하고 있다는 지적이 제기된다.
+
+28일 한국거래소에 따르면 올해 상장한 총 26개 기업(스팩 9개 제외)의 공모가 대비 평균 등락률은 지난 27일 종가 기준 25.62%를 기록했다. 주가 수준이 공모가를 하회한 기업은 22개, 상회한 기업은 4개(코스모로보틱스, 마키나락스, 인제니아테라퓨틱스, 리센스메디컬 등)로 집계됐다.
+
+주가가 공모를 밑도는 기업 중 낙폭이 가장 큰 업체는 지난 6월 8일 상장한 피스피스스튜디오(-76.84%)다. 회사는 공모가(2만1500원) 대비 시초가가 48.84% 높게 형성돼 추가 상승 기대감을 키웠다. 하지만 상장 첫날 하루만에 하락전형한 후 큰 낙폭을 보여 종가는 공모가보다 36.1% 떨어진 1만3730원을 기록했다. 이후에도 주가는 계속 하락했고 현재는 공모가 대비 4분의 1토막 수준에 이르렀다.
+
+피스피스스튜디오 외에도 스트라드비젼(-74.63%), 한패스(-72.89%), 에스팀(-60%), 채비(-59.80%), 에이치엘지노믹스(-58%), 레몬헬스케어(-52.50%) 등이 공모가 대비 50% 넘는 하락폭을 나타내고 있다.
+
+상황이 이렇다 보니 공모가 시장은 침체하고 있다. 시장 참여자들이 수요예측에서 공모가를 낮게 써내는 것은 물론 애초에 참여를 꺼려지고 있다는 관측이 나온다. 금융당국의 눈치를 보느라 확약을 걸어야 하는데 공모가보다 내리는 평가손실을 예상해 공무 투자에 참여하지 않는 악순환이 반복되는 것이다.
+
+이번 달 상장한 기업 5개 중에선 1개를 제외하고 모두 현재 주가가 공모가를 밑도는 상태다. 가장 최근(지난 24일) 상장한 니어스랩은 시초가(4만500원)부터 공모가(4만1200원)를 밑돌았다. 공모가 대비 낙폭은 3거래일 만에 27.91%로 집계됐다.
+
+니어스랩은 차익실현 물량이 쏟아지면서 빠른 속도로 약세 전환한 것으로 보인다. 증권발행실적 보고서에 따르면 니어스랩 IPO에서 기관투자자의 60.6%가 확약 기간을 걸지 않았다. 이런 미확약 물량은 상장과 동시에 주식을 팔아 차익을 실현할 수 있는 오버행 우려를 키운다. 특히 니어스랩을 포함해 외국 기관투자자는 최근 IPO에서 거의 모든 수량을 미확약으로 배정받고 있다.
+
+IB(투자은행) 업계에서는 수요예측과 기업가치 산정단계부터 거품이 생겨 투자피해를 양산하고 있다는 지적이 제기된다. 수요예측과 상장일까지 한 달 정도 걸리다보니 이 기간내 상황이 달라지면서 최초 산정했던 가격이 왜곡된다는 것이다. 또 기업이 주관사와 밸류에이션을 논의하는 과정에서 지분 희석을 막고 자금조달은 극대화하기 위해 지나치게 높은 수준을 요구하고 있다는 지적도 있다.
+
+데이터센터용 반도체 설계업체 파두 사태가 대표적인 사례로 꼽힌다. 파두는 2023년 8월에 1조원 넘는 몸값으로 코스닥에 입성했다가 매출 전망치와 실제 매출에서 큰 차이를 보이면서 공모가 아래로 주가가 폭락했다.
+
+자산운용사 관계자는 \"상장 전 기업가치를 책정하기 위해 비교대상으로 삼은 기업들의 상황이 급변하거나 기업의 수익성이 예상을 밑돌 경우 주식 밸류가 제자리를 찾아 급락하는 현상이 나타나고 있다\"며 \"거래소에서 기업과 주관사가 논의해온 밸류에 대해 과도하다고 제동을 걸 수는 있지만 애초에 밸류산정 과정에서 단계별 대응책을 마련하는 게 요즘과 같은 침체 상황을 잘 넘길 수 있을 것\"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/00805431748' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/00805431748</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
