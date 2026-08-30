@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“AI는 맞는데, 종목은 다르다”...월가 4人의 ‘AI 각자도생’ [GMC]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2<0xC2>026</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/025/0003547721' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17710" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“AI는 맞는데, 종목은 다르다”...월가 4人의 ‘AI 각자도생’ [GMC]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">월가 거물 투자자 4인의 2분기 13F 보고서를 분석한 결과, AI 산업에 대한 투자 의지는 공유하되 세부 종목 선정 전략은 각기 다른 \"AI 각자도생\" 양상을 보였습니다. 엔비디아 등 기존 대장주를 매도하고 TSMC나 빅테크로 이동하거나, AI 생태계 전반에 폭넓게 베팅하는 등 투자자마다 포트폴리오 재편 방향이 뚜렷하게 갈렸습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">글로벌 거물 투자자들의 포트폴리오 재편은 AI 반도체 설계 중심에서 제조(TSMC) 및 빅테크 인프라/서비스로의 시장 주도권 변화 가능성을 시사함</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">TSMC</span> <span class="tag stock-tag">엔비디아</span> <span class="tag stock-tag">알파벳</span> <span class="tag stock-tag">아마존</span> <span class="tag stock-tag">메타</span> <span class="tag stock-tag">마이크로소프트</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI투자전략</span> <span class="tag tag-hash">#월가거물</span> <span class="tag tag-hash">#13F보고서</span> <span class="tag tag-hash">#반도체순환매</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">인공지능(AI) 투자는 비슷했지만, 월가의 대표적인 거물 투자자 4명이 돈을 건 곳은 조금씩 달랐다. 최근 미국 증권거래위원회(SEC)에 제출된 2분기 13F(주식 보유 현황 보고서)를 중앙일보 GMC(글로벌머니클<0xA0>클럽)가 30일 분석한 결과다.
+
+가장 눈에 띄는 건 행동주의 투자자 댄 로브의 서드포인트다. AI 대장주 엔비디아를 비롯해, 브로드컴·KLA·램리서치 등을 전량 처분했다. 대신 TSMC 비중을 늘리고 알파벳을 대거 매수했다. 반도체와 서버 등의 성능을 시험ㆍ검증하는 키사이트와 데이터센터 전력ㆍ냉각 사업을 키우는 플렉스도 새로 담았다.
+
+겉보기엔 AI 대표주를 정리한 듯하지만, 실제로는 구조적 수요처로 이동한 셈이다. TSMC가 대표적이다. 엔비디아와 AMD가 경쟁하고 구글과 아마존이 자체 AI칩을 확대해도 누군가는 그 첨단 칩을 실제로 만들어야 한다.
+
+스탠리 드러켄밀러 듀케인패밀리오피스 회장도 AI 섹터 안에서 빠르게 갈아탔다. 브로드컴·마이크론·인텔을 전량 매도하는 한편, TSMC와 아마존 비중을 크게 늘리고, AMD를 신규 편입했다. 직전 분기 제외했던 알파벳도 3개월 만에 다시 담았다. 시장 환경 변화에 맞춰 AI 생산을 독점한 TSMC와 자체 서비스 유통망을 갖춘 빅테크로 포트폴리오를 압축했다. 이는 시장과 가격이 달라지면 포지션을 빠르게 바꾸는 드러켄밀러의 투자 스타일과 맞닿아 있다.
+
+빌 애크먼 회장의 퍼싱스퀘어캐피털은 본업의 현금창출력이 탄탄한 빅테크에 집중했다. 마이크로소프트(MS)와 메타의 비중을 확대했다. 다만 아마존은 약 25% 줄였고 알파벳은 전량 매도하는 등 빅테크 안에서도 종목을 선별했다. MS는 클라우드 애저와 오피스, 메타는 광고, 아마존은 아마존웹서비스(AWS)라는 기존 수익 기반을 갖고 있다. 본업에서 막대한 현금을 벌면서 AI에 투자하면서, 이미 확보한 고객과 서비스에 AI를 붙여 수익화할 수 있는 기업들이다.
+
+AI 생태계에 가장 폭넓게 투자한 쪽은 데이비드 테퍼다. 그가 이끄는 아팔루사는 2분기에 아마존과 TSMC·메타·엔비디아 보유량을 모두 늘렸다. 여기에 AI 클라우드 업체 코어위브와 브로드컴을 새로 편입했다. 한두 종목의 승자를 고르기보다 AI 투자의 수혜가 반도체에서 클라우드와 서비스로 확산하는 흐름에 폭넓게 베팅한 셈이다.
+
+네 사람의 투자 색깔은 AI 외 다른 분야에서도 뚜렷했다. 애크먼은 비자와 마스터카드를 새로 담았다. 거래가 늘수록 수수료 수입이 증가하는 결제 네트워크 기업으로, 강한 시장지점력과 반복적인 현금흐름을 중시하는 그의 투자 기준과 맞는다.
+
+드러켄밀러의 최대 보유 종목은 AI주가 아닌 유전자 검사기업 나테라로 공개 포트폴리오의 약 17%를 차지했다. 테퍼는 보잉과 아메리칸항공을 새로 담으며 AI 밖으로도 투자처를 넓혔다. 로브는 워너브러더스디스커버리(WBD) 2000만주를 신규 매수해 단숨에 최대 보유 종목으로 올렸다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/025/0003547721' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/025/0003547721</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
