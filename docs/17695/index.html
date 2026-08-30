@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>반도체 ETF 잘나가자 더 깊게 판다…CPU·낸드 ‘핀셋 투자’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.30</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006360425' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17695" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>반도체 ETF 잘나가자 더 깊게 판다…CPU·낸드 ‘핀셋 투자’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 반도체 투자 영역이 기존 GPU와 HBM 중심에서 CPU 및 낸드플래시로 확장되고 있음. AI 기술의 발전 단계가 학습에서 추론 및 에이전트 단계로 이동함에 따라 특정 부품을 겨냥한 ETF 출시 등 핀셋형 투자가 활발해지는 추세임.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 산업의 구조적 변화(학습에서 추론/에이전트로 이동)로 인해 기존 GPU/HBM 중심에서 CPU 및 낸드플래시로 투자 테마가 확장되는 양상을 보임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">인텔</span> <span class="tag stock-tag">AMD</span> <span class="tag stock-tag">Arm홀딩스</span> <span class="tag stock-tag">퀄컴</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#AI</span> <span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#CPU</span> <span class="tag tag-hash">#낸드플래시</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">키움·삼성 CPU 이어 KB 낸드 집중 ETF 출시 앞둬
+GPU·HBM서 확장…AI 고도화에 세부 테마 경쟁
+올해 수익률 반도체가 싹쓸이…추가 수혜 선점 노려 인공지능(AI) 반도체 투자 지형이 달라지고 있다. 과거 엔비디아를 필두로 한 그래픽처리장치(GPU)와 고대역폭메모리(HBM)에 집중됐던 투자 영역이 중앙처리장치(CPU), 낸드플래시 등으로 넓어지면서다. AI 산업이 고도화하면서 반도체 수혜 영역이 넓어지자 운용사들도 특정 영역을 겨ran한 ‘핀셋 상품’으로 투자 수요 공략에 나서는 모습이다.
+
+30일 금융투자업계에 따르면 KB자산운용은 다음 달 1일 ‘RISE 글로벌AI낸드메모리반도체’ ETF를 신규 상장한다. AI 반도체 가운데 낸드플래시와 저장용 메모리에 집중 투자하는 상품이다. 삼성전자와 SK하이닉스, 샌디스크, 키옥시아 등 낸드 핵심 기업 4곳에 각각 총 70%를 배분하고 나머지 30%는 마이크론과 낸드 공정장비·컨트롤러·저장 인프라 관련 기업으로 구성한다.
+
+이 ETF는 그동안 GPU와 HBM에 집중됐던 AI 반도체 투자를 저장용 메모리 영역으로 확장한 것이 특징이다. AI의 무게중심이 대규모 데이터를 ‘학습’시키는 단계에서 실제 서비스에 활용하는 ‘추론’으로 옮겨가면서 대규모 데이터를 저장하고 필요할 때 빠르게 불러오는 메모리의 중요성이 커지고 있다는 판단에서다.
+
+특히 AI가 스스로 여러 작업을 수행하는 ‘에이전트’ 단계로 발전하면서 저장용 메모리 수요는 더욱 커질 수 있다. 골드만삭스는 에이전트 AI 확산에 따라 토큰 소비량이 2026년부터 2030년까지 24배 증가할 것으로 전망했다. 반면 연산 성능 개선 속도에 비해 메모리 대역폭 증가 속도는 더뎌 메모리가 시스템 성능을 제한하는 이른바 ‘메모리 월(Memory Wall)’ 현상도 예상된다. HBM이 담지 못하는 데이터를 하위 계층인 낸드가 저장하는 구조가 확대될 수 있다는 분석이다.
+
+CPU를 겨냥한 독립적인 ETF 투자 경쟁도 이어지고 있다. 키움투자자산운용은 지난달 28일 ‘KIWOOM 미국CPU반도체TOP4+’를 상장했다. 인텔과 AMD, Arm홀딩스, 퀄컴 등 CPU 시장을 대표하는 4개 기업에 약 80%를 집중 투자하고 나머지는 엔비디아와 애플, TSMC, 브로드컴 등 CPU 관련 기업에 투자하는 상품이다. 삼성자산운용도 지난 4일 ‘KODEX 미국CPU반도체TOP10’을 선보이며 경쟁에 가세했다. Arm과 AMD, 인텔 등 CPU 3대 기업에 각각 25%씩 총 75%를 집중하고 퀄컴과 마벨테크놀로지 등 CPU 밸류체인 기업을 함께 담는다.
+
+이들 운용사는 AI가 에이전트 단계로 발전할수록 전체 시스템을 조율하고 데이터와 작업 흐름을 통제하는 CPU의 역할이 커질 것이란 전망을 반영했다. GPU에 연산 작업을 배분하고 입출력과 데이터 이동, 작업 순서를 관리하는 CPU의 ‘오케스트레이션’ 기능이 중요해진다는 설명이다.
+
+반도체 ETF 세분화는 최근 성장세와도 무관하지 않다. 코스콤 ETF체크에 따르면 연초 이후 국내 상장 ETF 수익률 상위 10개는 반도체 ETF와 반도체 비중이 높은 정보기술(IT) ETF가 전부 차지했다. ‘HANARO Fn K-반도체’가 162.89%로 1위에 올랐고 △IBK K-AI반도체코어테크(142.94%) △PLUS 글로벌HBM반도체(127.26%) △WON 반도체밸류체인액티브(119.78%) 등도 상위권에 이름을 올렸다. 반도체 ETF가 높은 수익률을 기록하면서 향후 AI 산업의 추가 수혜가 예상되는 반도체 영역을 선점하려는 움직임으로 풀이된다.
+
+임은혜 삼성증권 연구원은 “대표 지수에 투자해 테크 전반에 노출하는 방법도 유의미하지만, 지수 내 비중이 낮더라도 향후 기술 발전의 병목을 해결하며 비약적으로 성장할 세부 테마와 밸류에이션을 선별해내는 것이 중요하다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006360425' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006360425</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
