@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이름만 빼고 똑같다 … ETF 베끼기 논란</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.31</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005728273' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17874" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>이름만 빼고 똑같다 … ETF 베끼기 논란</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 상장 ETF가 급증하며 타사의 포트폴리오와 투자 철학을 유사하게 복제한 상품들이 늘어나 논재가 되고 있습니다. 이러한 과열 경쟁은 신상품 아이디어 보호 장치 부족과 함께 투자자에게 비용 부담을 전가할 우려가 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">ETF 시장 내 유사 상품 난립으로 인한 과열 경쟁 및 향후 비용 상승 등 투자자 부담 가중 우려</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한국투자신탁운용</span> <span class="tag stock-tag">한화자산운용</span> <span class="tag stock-tag">KB자산운용</span> <span class="tag stock-tag">미래에셋자산운용</span> <span class="tag stock-tag">신한자산운용</span> <span class="tag stock-tag">삼성자산운용</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#ETF베끼기</span> <span class="tag tag-hash">#자산운용사</span> <span class="tag tag-hash">#금융규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">ETF 인기에 경쟁 과열
+국내 상장ETF 5년새 2배↑
+포트폴리오 중복은 예사
+타사 투자철학까지 '복붙'
+"신상품 보호할 장치 없어
+먼저 출시한 상품이 손해"
+챗GPT
+
+포트폴리오 구성은 물론 상품을 설명하는 투자 논리까지 닮은 상장지수펀드(ETF) '베끼기 논란'이 지속되고 있다. 금융당국이 유사 상품 출시에 대한 업계의 자정 노력을 요구하고 있지만 실질적인 제재가 없는 경고만으로 과열 경쟁을 막기 어렵다는 지적이 나온다.
+
+31일 한국거래소에 따르면 국내 상장 ETF는 총 1163개로 2021년(533개) 이후 불과 5년 만에 두 배 가까이 증가했다. 'ETF 1000개 시대' 이후에도 운용사들은 신상품을 경쟁적으로 내놓으며 올해에만 120여 개를 선보였다. 그러다 보니 자연스레 타사의 상품 철학을 복사하다시피 만든 유사 상품이 넘쳐 나고 있다.
+
+한국투자신탁운용이 최근 판매를 시작한 \"ACE 반도체Plus전략산업\" ETF는 반도체·조선·방산·원자력을 기본 축으로 하고 시장 상황에 따라 자동차, 2차전지, 제약·바이오, 엔터 등에서 1개 산업을 추가해 5개 산업에 투자한다. 총 10개 종목에 압축 투자하며 반도체 비중은 최소 40%다. 그러나 이 상품은 앞서 지난 3월 한화자산운용이 내놓은 \"PLUS K제조업핵심기업액티브\" ETF와 상품 철학이 상당히 흡사하다. PLUS K제조업핵심기업액티브는 반도체·조선·방산·에너지 등 국가 전략산업 내 글로벌 경쟁력을 보유한 K제조업에 투자한다. 최영진 한화자산운용 최고마케팅책임자(CMO)는 \"반도체를 중심으로 전력, 원전, 에너지저약지(ESS), 로봇, 방산, 조선까지 아우르는 제조 생태계가 한국 증시를 설명하는 핵심 키워드가 될 것\"이라고 설명했다.
+
+포트폴리오 자체가 똑 닮은 사례도 흔해졌다. 한 운용사의 상품이 시장의 관심을 끌면 다른 운용사들이 '미투' 상품을 잇달아 내놓는 방식이다.
+
+KB자산운용은 지난 2월 \"RISE 삼성전자SK하이닉스채권혼합50\" ETF를 국내 최초로 상장했다. 삼성전자와 SK하이닉스를 약 25%씩 담고 나머지 약 50%를 채권으로 구성한 상품이다. '삼전닉스(삼성전자·SK하이닉스)'의 성장세와 채권의 안정성을 동시에 누릴 수 있어 투자자들이 몰렸고, 출시된 지 두 달도 지나지 않아 비슷한 상품이 줄줄이 등장했다. 기초지수와 채권 구성에는 차이가 있지만 삼성전자와 SK하이닉스에 각각 25% 안팎, 채권에 50%가량을 투자한다는 기본 구조는 사실상 같다.
+
+방산과 원자력 테마에서도 비슷한 흐름이 이어졌다. 한화자산운용은 선제적으로 'PLUS K방산' ETF와 'PLUS 글로벌방산' ETF를 출시했다. 이후 미래에셋자산운용, 신한자산운용, 삼성자산운용이 관련 상품을 각각 상장했다.
+
+업계에서는 유사 ETF가 늘어날수록 보수율 인하와 광고 경쟁이 함께 심화된다는 지적이 나온다. 신상품 아이디어를 보호할 장치가 부족해 '먼저 낸 상품이 손해를 보는 구조'라는 불만도 있다. 업계 관계자는 "법적 제재가 없는 상황에서 '베끼기 관행'이 근절되긴 어렵다"며 "비슷한 상품끼리 마케팅 경쟁을 하는 구조로 굳어지면 그 부담은 투자자에게 전가될 수밖에 없을 것"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005728273' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005728273</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
