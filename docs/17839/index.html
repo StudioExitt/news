@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상반기 날았던 증권사…거래대금 감소·금리 인상에 \"상고하저\" 경고등</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.31</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000528911' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17839" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>상반기 날았던 증권사…거래대금 감소·금리 인상에 \"상고하저\" 경고등</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금리 인상과 거래대금 감소로 인해 증권업계의 하반기 수익성 악화 우려가 커지고 있음. 상반기 역대급 실적을 기록했으나, 3분기 순이익 전망치가 전분기 대비 크게 낮아지는 등 \"상고하저\" 흐름이 예상됨.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">기준금리 인상으로 인한 유동성 위축과 주식 거래대금 감소가 증권사의 주요 수익원인 브로커리지 수익 및 IB 사업에 부정적인 영향을 미칠 것으로 전망됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한국투자증권</span> <span class="tag stock-tag">미래에셋증권</span> <span class="tag stock-tag">NH투자증권</span> <span class="tag stock-tag">메리츠증권</span> <span class="tag stock-tag">삼성증권</span> <span class="tag stock-tag">KB증<0xA0>증권</span> <span class="tag stock-tag">키움증권</span> <span class="tag stock-tag">하나증권</span> <span class="tag stock-tag">신한투자증권</span> <span class="tag stock-tag">대신증권</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증권</span> <span class="tag tag-hash">#금리인상</span> <span class="tag tag-hash">#거래대금감소</span> <span class="tag tag-hash">#상고하저</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">기준금리 3% 시대 재진입…증시 유동성 위축·거래대금 감소 부담
+5대 증권사 3분기 순익 전망치 전분기比 51.7%↓
+
+올해 상반기 역대급 실적을 거둔 증권업계가 거래대금 감소와 기준금리 인상이라는 이중고에 직면하면서 하반기 수익성 방어에 고심하고 있다.
+/더팩트DB
+올해 상반기 역대급 실적을 거둔 증권업계가 하반기 들어 달라진 영업환경과 마주하고 있다. 증시 활황을 등에 업고 급증했던
+거래대금이 빠르게 줄어드는 가운데 한국은행의 연이은 기준금리 인상까지 겹치면서다. 시중 유동성이 둔화할 경우 브로커리지(위탁매매)를
+비롯한 증권사 주요 수익원에도 부담이 불가피한 만큼 상반기와 같은 실적 성장세를 이어가기는 쉽지 않을 것이란 전망이 나온다.
+
+31일 금융투자업계에 따르면 한국은행 금융통무위원회는 지난 27일 기준금리를 연 2.75%에서 3.00%로 0.25%포인트 인상했다. 지난달
+16일 2.50%에서 2.75%로 올린 데 이은 두 달 연속 인상이다. 기준금리가 3%대로 올라선 것은 2024년 11월 이후 1년 9개월
+만이다.
+
+증권업계가 주목하는 것은 금리 인상 자체보다 이에 따른 시중 자금의 움직임이다. 금리가 오르면 예·적금과 채권 등 상대적으로 안정적인 금융상품의
+기대수익률이 높아진다. 반대로 주식 등 위험자산의 매력은 낮아질 수 있다. 증시에서 자금이 빠져나가 거래가 위축되면 증권사 입장에서는 위탁매매
+수수료 감소로 이어진다.
+
+◆ 증시 자금 빠지고 거래대금 \"뚝\"…브로커리지 수익 둔화 우려
+
+증시 주변 자금은 이미 빠르게 줄고 있다. 금융투자협회에 따르면 지난 26일
+투자자예탁금은 98조9176억원으로 집계됐다. 지난 n월 한때
+139조원까지 불어났던 것과 비교하면 두 달여 만에 약 40조원이 감소했다.
+
+거래대금도 고점에서 크게 내려왔다. 한국거래소에 따르면 지난 6월 19일 67조2551억원에 달했던 코스피 거래대금은 이달 24일
+26조1640억원으로 61.1% 감소했다. 코스닥 거래대금 역시 지난 1월 26일 25조3340억원에서 이달 24일
+4조4864억원으로 82.3% 줄었다.
+
+분기 평균으로 봐도 증시의 거래 열기는 한풀 꺾였다. 코스피와 코스닥을
+합친 일평균 거래대금은 2분기 56조5903억원에서 3분기
+37조8080억원으로 약 33% 감소했다.
+
+이는 증권사 실적에 적지 않은 변수다. 올해 상반기 증권업계의 기록적인 실적을
+만들어낸 배경 가운데 하나가 증시 활황과 거래대금 증가였기
+때문이다.
+
+자기자본 기준 10대 증권사인 한국투자증권·미래에셋증권·NH투자증권·메리츠증권·삼성증권·KB증권·키움증권·하나증권·신한투자증권·대신증권의 올해
+상반기 연결 기준 당기순이익은 10조2697억원으로 전년 동기보다 129% 증가했다.
+
+특히 2분기 실적은 이례적으로 좋았다. 미래에셋증권·한국금융지주·키움증int
+NH투자증권·삼성증권 등 주요 5개사의 2분기 지배주주 순이익은 총
+4조5497억원으로 전년 동기 대비 160.98% 급증했다. 증시 호황에 따른
+리테일 수익 확대와 투자자산 평가이익 등이 더해진 결과다.
+
+그러나 시장의 눈높이는 이미 낮아지고 있다. 금융정보업체 에프앤가이드에 따르면 이들
+5개사의 3분기 지배주주 순이익 컨센서스는 총
+2조1991억원이다. 지난해 같은 기간보다는 14.04% 많지만 직전 분기와 비교하면 51.66% 감소한 수준이다. 상반기 가파르게 높아졌던
+증권사 이익이 하반기 들어 정상화되는 흐름이 뚜렷해지고 있는 셈이다.
+
+여기에 금리 상승은 증권사 수익구조 곳곳에 부담을 줄 수 있다. 시장금리가 높아지면 회사채와 기업어음(CP) 등을 통한 자금 조달 비용이
+늘어나고 채권 운용 과정에서도 평가손익 변동성이 확대될 수 있다. 기업의 자금 조달 여건이 나빠질 경우 부동산 프로젝트파이낸싱(PF)
+을 비롯한 IB 사업 역시 위축될 가능성도 있다.
+
+금융주 가운데 증권주가 유독 힘을 쓰지 못하고 있는 것도 이 같은 우려를 반영한 것으로
+풀이된다.
+
+한국거래소에 따르면 지난 21일부터 28일까지 \"KRX 은행\" 지수는 7.90%, \"KRX 보험\" 지수는 5.89%
+상승했다. 반면
+미래에셋증권과 한국금융지주, NH투자증권 등으로 구성된 \"KRX 증권\" 지수는 같은 기간
+0.08% 하락했다. 전체 금융업종의 흐름을 보여주는
+\"KRX300 금융\" 지수가 6.49% 상승했다는 것과도 대조적이다.
+
+은행은 대출금리가 예금금리보다 빠르게 오를 경우 순이자마진(NIM) 개선을 기대할 수 있고 보험사 역시 장기적으로 신규 채권 투자수익률 상승
+효과를 누릴 수 있다. 반면 증권사는 금리 상승으로 증시 유동성이 줄어들 경우 거래대금 감소와 조달비용 상승이라는 부담을 동시에 떠안을 수
+있다.
+
+한국은행이 기준금리를 잇달아 인상하는 가운데 추가 인상 가능성까지 커지면서 증권업계의 하반기 수익성 부담이 확대될 전망이다. 사진은 신현송
+한국은행 총재. /뉴시스
+한국은행이 기준금리를 잇달아 인상하는 가운데 추가 금리 인상 가능성까지 커지면서 증권업계의 하반기 수익성 부담이 확대될 전망이다.
+한국은행 총재. /뉴시스
+
+◆ 추가 금리 인상 가능성까지…증권업계 부담 가중
+
+추가 금리 인상 가능성이 남아 있다는 점도 변수이다. 금통위원들의 향후 6개월 기준금리 전망을 보여주는 점도표에서는 총 21개 전망 가운데
+3.25%가 10개로 가장 많았다. 3.50%를 예상한 전망도 6개에 달한다. 현재 3.00%인 기준금리가 추가로 오를 가능성에 무게가 실리는
+대목이다.
+
+결국 하반기에는 증권사별 사업 포트폴리오가 실적을 좌우할 가능성이 커졌다. 상반기에는 거래대금 증가라는 공통된 호재가 증권사 전반의 실적을
+끌어올렸다면 하반기에는 브로커리지 이외에서 얼마나 안정적으로 이익을 만들어낼 수 있는지가 중요해졌다는 분석이다.
+
+한국투자증권은 비대면 거래 편의성을 높여 브로커리지 경쟁력을 유지하는 한편 WM·IB·운용 등으로 수익원을 분산한다는 방침이다. 한국투자증권
+관계자는 \"비대면 거래 편의 증진을 통해 브로커리지 수익을 유지할 계획\"이라고 말했다. 또한\nWM 영역은 주식보다 단기 시황의 영향이 제한적이고 IB나 운용
+쪽에서도 수익 창극이 가능하다\"고 덧붙였다.
+
+미래에셋증권은 WM과 연금을 중심으로 안정적인 수익 기반을 확보하는 동시에 AI·디지털 기술을 활용한 자산관리 사업 확대에 나서고 있다. 국내
+주식시장 상황에 좌우되지 않도록 전통자산과 디지털자산, 국내와 해외를 연결하는 방향으로 사업 영역을 넓히는 구상이다.
+
+메리츠증권은 상대적으로 시장 거래대금에 덜
+좌우되는 사업구조를 바탕으로 대응한다는 계획이다. 기존 IB와 운용
+경쟁력을 유지하면서 리테일 부문을
+새로운 성장축으로 키워 수익원을 넓히고 있다. 키움증권 역시 리테일 강점을 유지하되 투자정보와 플랫폼 기능을 강화하여 시장 변동성에
+대응할 방침이다.
+
+전배승 LS증권 연구원은 \"금리 인상에 따른 실질 유동성 둔화는 증권업황에 비우호적인 외부 환경으로 작용한다\"고
+분석했다. 또한 하반기 브로커리지와 자산관리
+수수료이익 감소를 기타 운용이익과 기업금융(IB) 수익이
+만회할 수 있을지가 관건이라고 덧붙였다.
+
+증권업계에서는 하반기가 증권사들의 실질적인 이익 체력을
+확인하는 시기가 될 것으로 보고 있다. 증시 활황이라는
+공통된 호재가 약해진 상황에서
+IB와 운용, WM 등 각사가 구축해온 사업 포트폴리오의 성과가 본격적으로 실적에 반영될 수 있기 때문이다.
+
+한 증권업계 관계자는 \"상반기에는 거래대금이 크게
+늘면서 증권사들이 전반적으로 증시 호황의 수혜를 누렸다면 하반기는 상황이 달라질 수 있다\"
+라고 말하며, 시장 유동성이 줄어드는 상황에서 브로커리지 이외 부문이 얼마나 이익을 뒷받받하느냐에 따라 증권사별 실적 차이가 나타날 것이라고 전망했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000528911' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000528911</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
