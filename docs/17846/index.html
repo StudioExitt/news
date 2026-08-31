@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자산가의 저력은 하락장서 나타난다…위기 속 기회 찾는 ‘힘’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.08.31</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002690574' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17846" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>자산가의 저력은 하락장서 나타난다…위기 속 기회 찾는 ‘힘’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">변동성 장세에서 자산가의 차이는 시장 예측력이 아닌 하락장에 대응할 수 있는 여력(현금 및 채권 보유)에서 결정됨. 수익률 극대화보다 어떤 상황에서도 투자 기회를 잡을 수 있는 포트폴리오 유지가 핵심임.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">시장 변동성 대응을 위한 자산 배분 및 투자 심리 관리의 중요성을 강조하는 투자 칼럼</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#자산관리</span> <span class="tag tag-hash">#투자전략</span> <span class="tag tag-hash">#포트폴리오</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">운전하다 보면 연료 게이지가 절반쯤 남아 있을 때와 경고등이 켜졌을 때의 마음이 전혀 다르다. 절반이 남아 있으면 조금 돌아가더라도 값이 싼
+주유소를 고를 수 있고, 길이 막히면 우회로를 택할 여유도 생긴다.
+
+경고등이 켜지는 순간 선택지는 하나로 줄어든다. 눈앞에 보이는 주유소에 값을 따지지 않고 들어가야 한다. 최근 증시 급등락 속에서 자산가들의
+대응을 지켜보는 동안 가장 자주 떠올린 장면이 이것이었다.
+
+최근 주식시장은 좀처럼 경험하기 어려운 장면을 연이어 보여줬다. 얼마 전까지만 해도 주요 주가지수가 빠른 속도로 오르며 추가 상승에 대한 기대가
+시장을 지배했다. 대형주를 중심으로 주가가 가파르게 오르자 이번에는 다르다는 낙관론도 확산했다.
+
+그러나 상승 속도가 빨랐던 만큼 조정도 거칠었다. 차익실현 물량에 손절매가 얹히면서
+신용융자에서 나온 반대매매까지 겹치면서 지수와 일부 대형주의
+변동성이 급격히 확대됐다.
+
+이 상승과 하락은 모두 과거의
+경험만으로는 설명하기 어렵다. 주가가 움직이는 속도도,
+투자자금이 이동하는 속도도,
+시장을 흔드는 정보가 퍼지는
+속도도 예전과는 달랐다. 과거의
+투자 경험이 앞으로의 시장을 설명해 주지 않는 ‘뉴노멀(new normal)’의 시대다.
+
+예측이 어려운 시장에서 흥미로운 것은
+자산가들의 대응 방식이다. 이들이라고
+고점과 하락을 정확히 맞히는 것은 아니다. 시장의 움직임에 심리적으로
+흔들리지 않는 것도 아니다. 고점을 바라보는 인식은 자산 규모와 관계없이 상당히 비슷하다.
+
+차이는 그 다음에 나온다.
+시장이 예상과 다르게 움직였을 때 얼마나 많은 선택지를 손에 쥐고 있느냐가 대응의 차이를 만든다.
+
+▶큰손들도 고점을 맞히진 못했다= ‘자산가들은 미리 팔았나요?’ 급락이 시작되고 가장 많이 받은 질문 가운데 하나였다. 결론부터 말하면 그렇지
+않았다. 상승장에서 주식 비중을 늘렸던 자산가 상당수도 고점 부근에서 빠져나오지 못했다.
+
+예전에는 선거나 정책 변화처럼 큰 이벤트를 앞두고 미리 주식 비중을
+줄이는 투자자들이 적지 않았다. 지금은 그렇게 단순하지 않다. 시장을
+움직이는 변수가 많아졌고, 특정 사건 하나만 보고 방향을 정했다가는 오히려 상승장에서
+일찍 내려올 수 있기 때문이다. 주가가 계속 오를 때는
+떨어질 위험보다 ‘나만 더 못 버는 것’에 대한 두려움이 더 크게 작용하기도 한다.
+
+그래서 일부 자산가는 급락이 시작된 뒤에야 움직였다. 이미 고점에서 상당 폭
+내려온 뒤였고, 그동안 쌓은 수익의 일부를 반납한 상태였다. 가장
+좋은 가격에 판 것도 아니었다. 고점에서
+팔았다면 더 많은 수익을 지킬 수 있었으니
+아쉬움이 남는 결정이었다.
+
+그런데 차이는 그 다음에 나타났다. 흐름이 달라졌다고 판단한 뒤에는 비교적
+빠르게 비중을 줄였다. 매도한 다음 날 주가가 반등해도 “하루만 더
+기다릴 걸”이라는 후회에 오래 머물지 않았다. 이미 지나간 고점을
+되찾으려다 다음 판단까지 늦추는 것이 더 위험하다고 봤기 때문이다.
+
+자산가라고 손실에 무덤덤한 것은 아니다. 고점을 ‘내 돈’으로 여기는 심리는
+누구에게나 비슷하다. 투자자산이 10억원에서 15억원으로
+늘었다가 12억원으로 줄어들면 원금보다
+여전히 2억원 많지만 심리적으로는 3억원을
+잃었다고 느끼기 쉽다. 행동경제학에서 말하는 준거점 효과와
+손실 회피가 작동하는 것이다.
+
+주식은 이러한 심리를 더 강하게 만든다.
+거래시간 내내 평가금액이 눈앞에서
+바뀐다. 어제 15억원이던 계좌가 오늘 14억원,
+며칠 뒤 12억원으로 되는 과정을 그대로
+보게 된다. 고점이 새로운 기준이 된 상태에서는
+시장을 다시 판단하기보다 사라진 평가이익을
+되찾고 싶은 마음이 앞서기 쉽다.
+
+문제는 상승장에서 주식 비중까지 지나
+치게 높아진 경우다. 처음에는 여유 자금의 일부만
+투자했더라도 주가가 계속 오르면
+자신감이 붙는다. 보유
+종목이 오르고 주변에서 큰돈을 벌었다는 이야기가 들리면 비중을 더 높이게 된다. 미리
+정해둔 자산배분 원칙이 없다면 현금으로
+남겨둔 돈까지
+시장에 들어가기 쉽다.
+
+그 상태에서 급락을 맞으면 선택지가 빠르게
+줄어든다. 더 사고 싶어도 쓸
+현금이 없고, 그렇다고 팔자니 며칠 전의
+고점이 눈에 밟힌다. 조금만
+기다리면 회복될 것 같다가도, 더 떨어지기 전에
+정리해야 한다는 불안이 밀려온다. 판단해야 할 순간에 머릿속을
+차지하는 것은 시장 전망보다
+손실
+금액이 된다.
+
+시장이 더 밀릴수록 이 문제는
+커진다. 투자자는 새로운 정보를 해석하고 다음 행동을 결정하는 데
+써야 하는 에너지를 평가손실을 견디는 데
+소진한다. 결국 결정을 미루고 또 미루다가 하락이
+상당히 진행된 뒤에야 주식을
+정리하는 경우가 생긴다.
+
+차이가 가장 선명하게 드러나는 지점도 여기다.
+자산의 많고 적음보다 중요한 것은
+시장이 예상과 다르게
+움직였을 때 다시 움직일 수 있는 여지가
+남아 있느냐다. 고점을 놓치고 평가이익을
+반납하는 심리는 비슷하지만, 투자 가능한 자산 대부분이
+이미 주식에 들어가 있다면 손실이 커질수록
+판단할 여지도 줄어든다. 반대로
+현금이나 채권 등 추가로 움직일 수 있는 자산이
+남아 있다면 시장을 다시 판단하고 행동할 수 있다.
+
+▶현금은 ‘선택권’이다=
+급락장에서 일부 자산가들이 상대적으로 차분하게 움직일 수 있었던 배경도 여기에 있었다. 이들도
+고점을 놓쳤고 평가이익이
+줄어드는 것을 아쉬워했다. 다만 상당수는 상승장에서도 투자 가능한 자산을
+주식에 모두 넣지 않았다. 예금과
+현금성 자산, 채권을 일정 부분
+남겨두면서 시장이 예상과 다르게
+움직일 때 쓸 수 있는 여지를 확보해 뒀다.
+
+이 차이는 급락장에서 드러난다. 현금과
+채권이 남아 있으면 주가가 크게 내려도
+현금을 마련하기 위해 주식을 팔아야 하는 상황에 몰리지 않는다. 시장 전망이 나쁘다고 판단되면 비중을 줄이고
+기다릴 수 있고, 반대로 투자 매력이 높아졌다고 보면 남은 자금으로
+주식을 더 살 수도 있다.
+
+‘팔지 않아도 되는 상태’는 그 자체로
+힘이 된다. 급락장에서 가장 나쁜 매도는 스스로 판단해서 하는
+매도가 아니라 팔 수밖에 없어서 하는
+매도이기 때문이다. 반대매매가 하락을 증폭시키는 구간에서 이 차이는 결정적이다.
+
+시장 하락을 새로운 기회로 활용하기도 한다. 조정으로 투자
+매력이 높아졌다고 판단되면 채권이나 현금성 자산의 일부를 줄이고
+주식을 조금씩
+늘린다. 이번 급락에서도 이런 식으로
+포트폴리오를 조정하며 하락장을 매수
+기회로 활용한 경우가 있었다.
+
+물론 자산가라고 모두 하락장에서
+주식을 사는 것은 아니다. 시장 전망에 확신이 없으면 비중을 낮춘 뒤
+상당 기간 현금을 들고 관망한다. 평소
+사고 싶었던 기업의 주가가 충분히
+내렸다고 보면 여러 차례에 걸쳐
+분할 매수에 들어간다.
+
+두 사람의 판단은 정반대처럼 보이지만
+공통점이 있다. 어느 쪽이든 고를 수 있었다는 점이다. 비중을 줄일 수도,
+그대로 둘 수도, 늘릴 수 있었다. 유동성이 남아 있는 투자자는 시장 상황에 따라
+여러 선택지 가운데 하나를 택한다. 투자 가능한 자산이 이미 주식에 대부분
+들어가 있다면 선택지는 급격히 줄어든다. 이 차이가 같은 하락률 앞에서
+전혀 다른 결과를 만든다.
+
+그래서 현금은 투자하지 않고
+놀리는 돈이 아니다. 시장이 예상과 다르게
+움직였을 때 다시 결정할 권리를 사 두는 비용에 가깝다.
+
+수익률만 놓고 보면 상승장에서 현금은 분명 불필요해 보인다. 가장 많이 오르는 곳에 전부 넣는 편이 당연히 높은 수익률을 준다. 문제는
+자산관리의 목표가 특정 기간의 수익률 극대화에만 있지 않다는 것이다.
+여러 사이클을 지나면서도 계속 투자할 수 있는 상태를 유지하는 일 역시
+그만큼 중요하다.
+
+▶‘얼마를 벌 것인가’보다 ‘계속 투자할 수 있는가’=
+급락장의 큰 손실은 자산금액이 줄어드는 것으로 끝나지 않는다. 더 오래 남는 것은 그 이후
+투자자의 행동에 미치는 영향이다.
+
+자산의 상당 부분을 주식에 넣었다가 큰 폭의 하락을 겪고 시장에서 빠져나온 투자자는 이후 주식 자체를 투기적으로 바라볼 가능성이 높다. ‘주식은 결국 위험하다는, 주도적인 테마가 아니라 기업 가치 중심의 투자가 어렵게 느껴질 수 있기 때문이다.’
+
+그렇게 되면 기업의 사업모델이나 산업의 성장 가능성,
+기업가치에는 관심을 두기 어려워진다. 주식은 기업이 만들어내는 가치에 참여하는 수단이 아니라 오르내리는 위험한 대상으로만 보이게 된다.
+
+주식투자의 본질은 기업의 미래에 대한 투자다. 기업은 오늘도 더 많은 고객을 확보하고 더 나은 상품을 만들기 위해 영업활동을 하고 있다. 새로운
+기술과 산업이 만들어지고 기업의 경쟁력도 끊임없이 달라진다. 오늘 좋은 기업이 내일 반드시 더 좋은 기업이 된다는 보장은 없지만, 반대로 지금
+주목받지 못하는 기업이 몇 년 뒤 새로운 산업을 대표할 수도 있다. 시장이 살아 움직이는 생물과 같다는 말은 그래서 나온다.
+
+한 번의 실패로 앞으로의 기회를 모두 접는 것은 또 다른 손실이다. 이번에 잃은 돈보다 큰 손실은 그 경험 때문에 앞으로 찾아올 좋은 기업과
+좋은 기회를 외면하게 되는 쪽일지 모른다. 투자 습관은 생각보다 오래간다. 시장을 어떻게 대할 것인지에 대한 태도는 본인의 다음 투자에 남고, 자녀 세대의 투자 습관에까지 이어진다. 오늘의 대응을 신중하게 설계해야 하는 이유는 수익률 때문만이 아니다.
+
+그래서 자산관리에서 가장 중요한 원도 중 하나는 크게 다치지 않는 것이다. 모든 전망이 맞을 수는 없다. 아무리 많은 정보를 모아 분석해도
+예상과 전혀 다른 결과가 나온다. 그래서 투자에서는 전망의 정확성만큼이나 전망이 틀렸을 때 무엇을 할 것인지까지 함께 준비해야 한다. 그 준비의
+이름이 포트폴리오다.
+
+주식 외에 현금성 자산과 채권을 함께 들고 있으면 예상 밖의 상황에서도 고를 수 있다. 주가가 크게 빠졌지만 그 기업의 장기 전망이 여전히
+좋다고 판단하면 더 담을 수 있고, 시장 위험이 커진다고 보면 비중을 낮추고
+기다릴 수 있다.
+이 차이가 같은 하락률 앞에서
+전혀 다른 결과를 만든다.
+
+이번 급등과 급락 과정에서 만난
+자산가들의 방식도 제각각이었다. 상승장 후반에 뒤늦게 비중을 높인 사람이 있었고, 비중이 지나치게 커진 뒤
+급락장에서 일부를 정리한 사람이 있었다. 오래 기다렸던
+조정을 기회로 보고 조금씩
+늘린 투자자도, 한동안 아무것도 하지 않고 한발
+물러선 투자자도 있었다.
+
+어느 것이 정답이라고 말하기는 어렵다. 그럼에도 이들의 포트폴리오에는 한 가지
+공통점이 있었다. 시장이 예상과 다르게
+움직였을 때 다시 판단하고
+행동할 수 있는 여유가 남아 있었다는 점이다.
+
+시장의 고점을 맞히는 일은 누구에게나
+어렵다. 자산가에게 고점을 먼저 알아채고
+빠져나오는 특별한 능력이 있는 것도 아니다. 고점의 평가
+금액을 자기 돈으로 여기고 자산이 줄어들 때
+아쉬움을 느끼는 심리 역시 크게 다르지 않다. 차이는 시장을 예측하는 능력이 아니라, 시장이 예상과 다르게
+움직였을 때 무엇을 할 수 있느냐에서
+만들어진다.
+
+좋은 기업에 투자할 기회는 앞으로도 계속 나타난다. 그러니 매번 고점과 저점을
+맞히는 것보다 중요한 것은 이번 한 번의
+투자가 자신의 투자 인생
+전체를 결정하지 않도록 하는 것이다. 상승장에서도 모든 자산을 한 방향에
+전부 걸지 않고, 하락장이 왔을 때
+다시 선택할 여유를 남겨 두는 것.
+자산관리에 필요한 것은 가장 높은 수익률을 내는 포트폴리오가 아니라 어떤 시장에서도 다음 기회를 기다릴 수 있는 포트폴리오다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002690574' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002690574</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
