@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>연결순이익 100원 중 모회사 주주 몫은 얼마…상장사 854곳 뜯어보니</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006362001' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18060" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>연결순이익 100원 중 모회사 주주 몫은 얼마…상장사 854곳 뜯어보니</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">\"연결재무제표상 순이익과 실제 모회사 주주에게 귀속되는 지배주주 귀속 순이익의 차이를 분석함. 물적분할 후 자회사 상장이 모회사 일반주주의 가치를 훼손할 수 있는 위험성을 경고하며, 기업 가치 평가 시 지배기업 소유주 귀속 이익을 우선적으로 고려해야 한다고 강조함.\"</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">연결 실적의 착시 효과와 물적분할로 인한 주주 가치 희석 위험을 경고하여 기업 가치 평가 시 주의를 당부함</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한화</span> <span class="tag stock-tag">HD현대</span> <span class="tag stock-tag">LG화학</span> <span class="tag stock-tag">LG에너지솔루션</span> <span class="tag stock-tag">다우데이타</span> <span class="tag stock-tag">드림텍</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">복합 산업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#연결재무제표</span> <span class="tag tag-hash">#지배주주귀속이익</span> <span class="tag tag-hash">#물적분석</span> <span class="tag tag-hash">#주주가치</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[스페셜리포트]②\n132억 벌었다더니 지배주주 몫은 9000만원…연결실적의 함정\n상장 자회사 실적은 전액 반영...성장 가치는 온전히 못 누려[이데일리 김경은 기자·정도진 중앙대 교수] ㈜한화는 2025년 연결 기준으로\n1조9916억원의 당기순이익을 냈다. 숫자만 보면 2조원에 가까운 이익이다. 하지만 이 가운데 ㈜한화 주주에게 실제로 귀속된 순이익은\n3725억원에 그쳤다. 연결순이익 100원 가운데 18.7원만 지배기업 주주의 몫이었고, 나머지 81.3원은 자회사 소수주주 등 비지배주주\n몫이었다.\n\n연결실적이 곧 모회사 주주의 성과를 뜻하지는 않다는 점을\n보여주는 사례다. 연결재무제표는 모회사와 자회사를 하나의 경제실체로 보고 작성한다.\n모회사가 자회사를 지배하면 지분율이 절반에 못 미쳐도 자회사의 매출·비용·영업이익은 원칙적으로 100% 반영된다.\n모회사 주주 몫과 비지배주주 몫은 최종 순이익과 자본에서 나뉜다.\n\n연결 영업이익은 기업집단 전체의 실체적 영업성과를 보여주는 유용한\n지표이다. 그러나 이를 지배기업 주주에게 귀속되는 성과로\n해석하거나 모회사\n시가총액과 단순 비교할 경우 평가가 어긋날 수 있다는 지적이 나온다.\n\n132억 벌었다더니 지배주주 몫은 9000만원\n\n1일 이데일리가 2025년 사업보고서를 기준으로 코스피·코스닥\n상장사의 연결기준 순이익과 지배주주 귀속 순이익을 분석한 결과,\n분석 대상\n854개사(코스피 304개사, 코스닥 500개사) 중 코스피 기업의 지배주주 귀속률 평균은 88.1%, 코스닥사는 91.9%였다. 연결 순이익\n100원 중 각각 평균 11.9원과 8.1원은 모회사 주주가 아닌 비지배주주\n몫이라는 의미이다.\n\n지배주주 귀속률은 연결 당기순이익 가운데 지배기업 소유주에게 귀속된 순이익의 비중이다.\n적자 기업은 제외,\n연결당기순이익이 흑자이고\n지배주주·비지배주주 귀속 순이익이 모두 0 이상인 기업을 대상으로 한정했다. 특히 코스피에서는 분석대상의 23.4%인 83개사가 지배주주\n귀속률 80% 미만이었다. 코스닥은 70개사로 14.0%였다.\n\n모회사 주주에게 연결순이익의 절반도 돌아가지 않는 기업도 코스피 23개사(6.5%), 코스닥 24개사(4.8%)에 달했다.\n\n개별기업별로 보면 HD현대는 연결순이익 3조6755억원 중 지배주\n주 귀속 순이익이 9627억원으로 귀속률이 26.2%로 낮았다. 다우데이타도\n연결순이익 1조1997억원 중 지배주주 귀속 순이익은 2188억원으로 18.2%에 불과했다. 전자 부품 제조업체인 드림텍은 연결순이익\n132억5000만원 가운데 지배주 귀속 순이익이 9000만원에 불과해 귀속률이 0.7%로 조사대상 중 가장 낮았다.\n\n물론 귀속률이 낮다고 해서 회계처리가 잘못됐거나 주주가치가\n훼손됐다고 단정할 수는 없다.\n합작법인이나 낮은 지분율로 지배하는 자회사가 많으면\n나타날 수 있는 정상적인 연결회계 결과이다. 또\n적자 자회사의 손실과 부채도 연결재무제표에는 전액 반영되기 때문에,\n연결이 항상 실적을 좋게\n보이게 만드는 장치 역시 아니다.\n\n문제는 연결 기준 숫자를 모회사 주식의 가치와 그대로 치환할 때 발생하며, 이는 귀속률이 낮은 기업일 경우 특히 주의해야한다.\n\n정도진 중앙대 경영학부\n교수는 “기업집단 전체의 매출과 영업이익을 보여주는 연결실적은 사업 규모와 경영 위험을 파악하는 데 유용하다”면서도\n“모회사 시가총액을 연결 매출이나 연결 영업이익과 단순 비교하면 자회사 소수주주 몫에 포함된 성과를 모회사\n주주의 가치로 해석할 위험이 있다”고\n지적했다.\n\nLG엔솔 물적분할했더니 거품 폭삭 ‘왜’\n\n연결실적의 범위와 지배기업 주주의 경제적 이해관계가 일치하지 않는 문제는 물적분할 후 자회사\n상장 사례에서 현실적인 쟁점으로 나타난다. 물적분할\n후 자회사는 모회사의 연결범위에 남아 실적에는 계속 반영된다. 그러나\n모회사 일반주주는 핵심 사업의 성장가치를 자회사 주식으로 직접 보유하거나\n처분할 기회를 갖기 어렵다. 분할 후\n자회사가 재상장되면 상장 자회사 지분가치가 모회사\n시가총액에 충분히 반영되지 않는 순자산가치(NAV)\n할인, 자회사 이익·현금의 이전 가능성 등에 따라\n일반주주가 누리는 경제적 가치는 줄어들 수 있다.\n\n회계저널에\n게재된 논문 ‘물적분할 후 신설\n자회사의 상장: LG에너지솔튬 사례를 중심으로’를\n참고하면, 물적분할 발표 직후 LG화학 주가가\n하락하고, 자회사 상장 이후 모회사의 PBR이 크게 낮아졌다. 권수영 고려대 경영대\n교수는 이 논문에서 “물적분할 뒤\n자회사가 상장하면 모회사\n연결실적에는 해당 사업이 계속 반영되더라도,\n기존 일반주주는 성장사업의 직접 소유와 통제권을 갖지 못하게 된다”고\n말했다.\n\n최근에는 반대 경우도 나타났다.\nLG에너지솔루션은 올해 2분기 미국 생산세액공제 효과를 반영해 영업흑자로 전환했지만, 이를 제외하면 1277억원\n영업적자였다. LG\n화학은 LG에너지솔루션 지분 81.8%를 보유하고 있어 자회사\n손실과 대규모 투자에 따른 부채 부담이 연결\n영업이익과\n재무지표에 전액 반영된다. 자회사\n호재가 모회사 주가에 반영되는 정도는 제한적일 수 있다.\n그러나 업황 부진에 따른\n손실과 재무부담은 연결실적을\n통해 모회사 실적에 고스란히 반영되면서\n주가에도 악재로 작용한다.\n\n정도진 교수는 “모회사\n주식의 가치평가에는 지배기업 소유주 귀속\n순이익과 자본을 우선 적용해야한다”며\n“비지배지분과 현금이전 제약을 함께 고려해\n평가 범위를 맞출 필요가 있다”고\n강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006362001' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006362001</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
