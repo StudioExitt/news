@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[코인 과세①] 1300만 코인족, 22% 과세가 온다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003127790' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17987" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[코인 과세①] 1300만 코인족, 22% 과세가 온다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">2027년부터 가상자산 양도·대여 소득에 대해 22%의 세율로 과세가 시행될 예정이나, 손실 이월공제 불가 및 스테이킹·에어드롭 등 다양한 수익 모델에 대한 세부 과세 기준 미비로 인해 투자자들의 혼란과 부담이 예상됨.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">가상자산 과세 시행에 따른 비용 부담 증가와 손실 이월공제 불가라는 제도적 불리함, 그리고 세부 기준 미비로 인한 투자 심리 위축 우려</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#가상자산과세</span> <span class="tag tag-hash">#코인세금</span> <span class="tag tag-hash">#스테이킹</span> <span class="tag tag-hash">#투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">2027년 발생한 양도·대여 소득부터 22% 과세
+손실 이월 막히고 스테이킹·에어드롭 기준은 ‘빈칸’
+
+기본공제 250만원을 넘는 투자소득에 22%의 세금이 부과되지만, 손실 반영과 스테이킹·에어드포 등의 세부 기준은 여전히 불분명하다. 세 차례 미뤄진 코인 과세의 쟁점과 향방을 짚어봤다. [편집자주]
+
+직장인 A씨가 내년 비트코인 투자로 1000만원의 순이익을 거두더라도 온전히 손에 쥐는 돈은 835만원이다.
+
+나머지 165만원은 이듬해인 2028년 5월 세금으로 신고·납부해야 한다.
+
+그나마 국내 거래소에서 비트코인을 사고팔았다면 세금 계산은 비교적 간단하다.
+
+매수가격과 매도가격, 거래 수수료 등의 기록을 확인할 수 있어서다.
+
+문제는 가상자산 투자가 단순 매매에 그치지 않는다는 점이다.
+
+코인을 맡기고 받은 스테이킹 보상이나 무상으로 지급받은 에어드롭은 언제 수익이 발생한 것으로 볼지부터 불분명하다.
+
+코인을 받은 시점에 세금을 매길지, 실제로 팔아 현금화했을 때 과세할지에 따라 납부 시점과 세액이 달라질 수 있다.
+
+내년 1월 과세 시행을 앞두고 있지만 1300만 가상자산 투자자가 실제 거래에 적용해야 할 세부 기준에는 여전히 빈틈이 남아 있는 셈이다.
+
+1일 금융투자업계에 따르면 과세 대상은 2027년 1월1일 이후 가상자산을 양도하거나 대여해 얻은 소득이다.
+
+연간 양도·대여 대가에서 실제 취득가액과 거래 수수료 등 필요경비를 제외하고 기본공제 250만원을 뺀 금액에 20%의 세율을 적용한다.
+
+지방소득세를 포함한 실질 세율은 22%다.
+
+다만 가상자산을 언제 취득하고 처분했는지에 따라 세금 계산 방식은 달라진다.
+
+올해 안에 양도하거나 대여해 확정한 소득에는 세금이 부과되지 않는다.
+
+올해 말까지 계속 보유한 가상자산은 실제 매수가격과 올해 12월31일 당시 시가 가운데 큰 금액을 취득가액으로 인정한다.
+
+과세 시행 전에 발생한 가격 상승분까지 세금이 붙는 것을 막기 위한 조치다.
+
+내년 이후 취wh 취득한 가상자산은 실제 매수가격을 취득가액으로 삼는다.
+
+이를 확인하기 어려운 경우에는 양도가액의 일정 비율을 필요경비로 인정하며 구체적인 비율은 최대 50% 범위에서 정해질 예정이다.
+
+이처럼 가상자산을 취득하고 처분한 시점에 따른 소득 계산 기준은 마련됐다.
+
+문제는 세금 계산이 한 해 단위로 끊긴다는 점이다.
+
+투자 기간이 여러 해에 걸치면 세법상 수익과 투자자가 실제로 체감하는 손익이 달라질 수 있다.
+
+1억원 잃고 1000만원 벌어도 세금
+
+현행 과세체계에서는 한 해 발생한 손실을 다음 해 수익에서 뺄 수 없기 때문이다.
+
+여러 가상자산을 거래해 발생한 이익과 손실은 같은 과세연도 안에서 합산할 수 있다.
+
+그러나 해당 연도의 손실을 다음 해로 넘기는 결손금 이월공제는 허용되지 않는다.
+
+한 투자자가 2027년 비트코인 투자로 1억원을 잃은 뒤 2028년 500만원을 벌었다고 가정하면 2년간 누적 손실은 여전히 9500만원이다.
+
+그럼에도 2//27년 손실은 반영되지 않아 2028년에 거둔 수익에는 별도로 세금이 붙는다.
+
+기본공제 250만원을 제외하면 납부해야 할 세금은 55만원이다.
+
+주식 등 다른 투자자산에서 발생한 손익과 가상자산 손익을 합산하는 것도 불가능하다.
+
+세금 계산에 필요한 거래 내역을 확보하는 일도 투자자가 짊어져야 할 부담이다.
+
+국내 거래소는 이용자의 거래 자료를 과세당국에 제출할 수 있지만 해외 거래소와 탈중앙화거래소(DEX), 개인지갑에서 이뤄진 거래까지 일괄적으로 파악하기는 어렵다.
+
+과세당국이 거래 내역을 확보하지 못하더라도 신고 의무는 투자자에게 있다.
+
+여러 거래소와 개인지갑을 오간 투자자는 취득가액과 양도가액, 거래 수수료 등을 직접 확인해 입증해야 한다.
+
+코인만 받았는데도 세금 낼까
+
+가상자산 거래가 단순 매매를 넘어섰다는 점도 세금 계산을 어렵게 만든다.
+
+투자자들은 가상자산을 맡기고 보상을 받는 스테이킹과 렌딩, 새로운 코인을 무상으로 받는 에어드롭, 탈중앙화금융(DeFi) 유동성 공급 등 다양한 방식으로 수익을 얻고 있다.
+
+그러나 이들 거래를 양도와 대여 중 무엇으로 볼지, 언제 소득이 발생한 것으로 판단할지는 아직 검토 단계이다.
+
+스테이킹 보상을 받은 시점에 과세하면 투자자는 코인을 팔아 현금화하기 전부터 세금을 부담할 수 있다.
+
+보상으로 받은 코인의 가격이 이후 급락하면 실제로 확정한 수익과 세금의 기준이 달라지는 문제도 발생한다.
+
+에어드#롭과 하드포크도 코인을 받은 시점에 소득으로 볼지, 향후 매도할 때 수익이 발생할지에 따라 과세 시점과 납부액이 달라진다.
+
+디파이는 더욱 복잡하다.
+
+디파이 이용자는 다른 투자자들이 코인을 교환할 수 있도록 두 종류의 가상자산을 ‘유동성풀’에 맡기고 거래 수수료 일부를 받는다.
+
+가상자산을 맡긴 이용자에게는 자신의 지분을 나타내는 LP토큰이 지급된다.
+
+이 과정에서 기존 가상자산을 LP토큰으로 교환한 것으로 볼지, 가상자산을 맡겼다가 돌려받는 대여와 유사한 거래로 볼지가 과세 쟁점이다.
+
+국회예산정책처 연구용역 보고서는 이용자가 가상자산을 맡기고 LP토큰을 받은 행위를 가상자산 간 교환으로 볼 수 있다는 의견을 제시했다.
+
+이 해석을 적용하면 코인을 현금화하지 않았더라도 세법상 양도가 발생한 것으로 판단될 수 있다.
+
+국세청은 스테이킹과 렌딩, 에어드롭, 하드포크 등의 거래 특성을 고려해 과세 여부와 소득의 성격, 취득가액 산정 방식 등을 검토하고 있다.
+
+가상자산업계 관계자는 “1300만 투자자에게 필요한 것은 22%라는 세율만이 아니다”며 “어떤 거래를 소득으로 보고 언제, 얼마를 신고해야 하는지 판단할 수 있는 구체적인 기준도 함께 제시돼야 한다”고 말했다.
+
+시행 전까지 이 같은 빈칸을 채우지 못하면 투자자가 신고해야 할 소득과 세액을 스스로 정확하게 계산하기 어려워 혼란이 불가피할 전망이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003127790' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003127790</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
