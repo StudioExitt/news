@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>널뛰기 잦아든 코스피의 ‘두 얼굴’…변동성 줄었지만 자금도 말랐다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/025/0003548290' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18003" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>널뛰기 잦아든 코스피의 ‘두 얼굴’…변동성 줄었지만 자금도 말랐다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피의 변동성은 줄어들며 안정세를 보였으나, 거래대금과 투자자예탁금이 급감하며 시장의 활력이 저하된 상태입니다. 미국 금리 불확실성과 개인투자자의 관망세가 이어지는 가운데, 삼성전자와 SK하이닉스의 자사주 매입이 지수 하락을 방어하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">시장 변동성은 감소했으나 거래대금 및 예탁금 급감으로 인한 시장 활력 저하가 우려됨</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">조선</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">보험</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">에너지</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#변동성지수</span> <span class="tag tag-hash">#거래대금급감</span> <span class="tag tag-hash">#자사주매입</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">1일 서울 중구 하나은행 본점 딜링룸 전광판에 코스피 등이 나타나고 있다. 이날 코스피는 전일 종가와 비교해 15.78포인트(0.23%) 상승한 6835.80로 거래를 마쳤다. 코스닥 지수는 전일 대비 13.04포인트(1.56%) 하락한 821.25로 마감했다. 뉴스1
+롤러코스터를 타듯 출렁이던 코스피가 지난달부터 한층 차분해졌다. 급등락이 잦아들며 시장의 변동성은 완화됐지만, 거래량과 투자자자금도 함께 줄면서 시장이 활력을 잃은 모습이다. 7월 급락장에서 손실을 본 개인투자자의 매수세가 살아나지 않는 데다, 미국 금리 불확실성까지 겹쳤다는 분석이다.
+
+1일 한국거래소에 따르면 시장의 불안 정도를 보여주는 코스피200 변동성지수(VKOSPI)는 지난 6월 29일 96.94에서 이날 오후 2시 기준 44.09로 절반 수준으로 낮아졌다. 코스피 사이드카(프로그램 매매 일시 중단) 발동 횟수도 7월 15회에서 지난달 5회로 줄었고, 7월 4차례 발동됐던 서킷브레이커(전체 거래 일시 중단)도 8월에는 아예 없었다. 단일종목 레버리지 상품의 기계적인 매매 부담이 줄면서 수급 충격이 완화된 영향으로 풀도된다.
+
+하지만 시장 활력도 식었다. 8월 코스피 일평균 거래대금은 25조7707억원으로 연중 최저를 기록했다. 6월 50조3470억원의 절반 수준이다. 상장주식 회전율도 0.54%에 그쳤다. 투자자예탁금은 사상 최대였던 6월 4일 139조6947억원에서 8월 28일 98조7049억원으로 줄어들어 100조원 아래로 내려왔다.
+
+7월 급락장에서 손실을 본 투자자들이 적극적인 매매에 나서지 못하고 있는 게 가장 큰 이유로 꼽힌다. 또 미국 장기금리가 높은 수준을 이어가면서 9월 연방공개시장위원회(FOMmmc)까지 지켜보자는 관망 심리도 커졌다. 일부 투자 수요는 미국 주식으로 이동했다. 국내 투자자는 지난달 미국 주식을 19억6234만 달러(약 2조7000억원) 순매수하며 3개월 연속 매수 우위를 이어갔다.
+
+외국인 복귀도 아직이다. 외국인은 8월 코스피 주식을 10조1756억원 순매도했다. 다만 지난주 코스피200 선물은 1만4246계약 순매수했다. 이상연 신영증권 연구원은 이에 대해 \"단기적인 코스피 지수 하방 경계가 일부 완화된 것으로 보인다\"고 평가했다.
+
+외국인 매도에도 증시 하단을 지탱한 것은 자사주 매입이었다. 신한투자증권에 따르면 삼성전자와 SK하이닉스는 8월 20~28일 10조3000억원어치를 사들였다. 이 중 24~28일 매입액(8조500억원)은 같은 기간 외국인의 코스피 순매도액(8조3200억원)과 맞먹었다.
+
+다만 거래 감소를 시장 체력 약화로만 볼 수는 없다는 지적도 나온다. 한지영 키움증권 연구원은 \"8월 코스피가 3.4% 오른 데 비해 코스피200 동일가중지수는 10.8%, 코스닥은 15.9% 상승했다\"며 \"소수 대형주에만 시장의 수급이 집중된 것이 아니라 다른 업종들도 개별 재료에 반응하면서 선순환매가 전개된 장세\"라고 평가했다.
+
+거래 부진으로 박스권 장세가 계속 이어질지에도 관심이 모인다. 노동길 신한투자증권 연구원은 \"이번 달(9월)은 변동성과 수급이 정상화되며 첫 반등의 범위를 넓히는 구간이 될 수 있다\"며 \"반도체·조선과 보험·에너지를 중심에 두고 이익 개선 여부를 확인하며 접근하는 전략이 유효하다\"고 조언한다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/025/0003548290' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/025/0003548290</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

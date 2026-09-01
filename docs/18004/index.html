@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>거래는 식었는데 ‘빚투’ 커졌다…레버리지 불씨 여전</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006361769' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18004" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>거래는 식었는데 ‘빚투’ 커졌다…레버리지 불씨 여전</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 거래 회전율과 거래대금이 연중 최저 수준으로 급감했으나, 신용거래융자 잔고는 한 달 새 6조 원 증가함. 특히 삼성전자와 SK하이닉스에 빚투가 집중되어 있어 향후 주가 조정 시 반대매매로 인한 변동성 확대 우려가 있음.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">신용융자 잔고 급증과 특정 대형주 집중으로 인한 반대매매 위험 및 시장 변동성 확대 우려</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이нк스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#빚투</span> <span class="tag tag-hash">#신용융자</span> <span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">8월 코스피 회전율 ‘연중 최저’…거래대금도 반토막\n빚투는 한 달 새 6조 늘…삼전닉스에 31% 집중\n“9월도 변동성 장세 예상되는데…조정 땐 수급 부담”코스피 거래 열기가 급격하게 식어가고 있지만 ‘빚투(빚내서 투자)’는 오히려 늘고 있다. 8월 코스피 회전율이 연중 최저 수준까지 떨어지고 증시 대기자금도 감소한 반면, 신용거래융자 잔고는 한 달 새 6조원가량 불어났다. 거래 활력이 위축됐지만 레버리지 투자 규모는 커진 만큼 증시 변동성이 다시 확대될 경우 수급 부담으로 작용할 수 있다는 우려가 나온다.\n\n1일 중구 하나은행 본점 딜링룸 전광판에 실시간 코스피가 표시돼 있다. (사진=연합뉴스)\n\n1일 한국거래소에 따르면 지난달 코스피 회전율은 0.55%로 연중 최저 수준을 기록했다. 회전율은 일정 기간 거래량을 상장주식 수와 비교한 지표로, 주식이 시장에서 얼마나 활발하게 손바뀜됐는지를 보여준다. 회전율이 낮아졌다는 것은 그만큼 투자자들의 매매가 뜸해졌다는 의미이다.\n\n코스피 회전율은 지난 3월 1.74%를 기록한 이후 5개월 연속 하락세다. 4월 1.48%, 5월 1.13%, 6월 0.81%, 7월 0.72%로 낮아진 데 이어 8월에는 0.55%까지 떨어졌다. 3월과 비교하면 약 3분의 1 수준으로 쪼그라든 셈이다.\n\n거래대금도 연중 최저 수준으로 내려앉았다. 8월 코스피 일평균 거래대금은 25조2100억원으로 월 기준 최고치를 기록했던 지난 6월 50조3471억원의 절반 수준에 그쳤다. 8월 일평균 거래량 역시 3억2392만주로 연중 최고였던 3월 11억주 수준과 비교해 크게 감소했다.\n\n이는 지난 7월 증시가 급락한 이후 투자자들의 매매 열기가 좀처럼 살아나지 못한 영향으로 풀이된다. 코스피는 지난 7월 한 달간 22.19% 급락한 뒤 8월 반등에 나섰지만 월간 상승률은 3.04%에 그쳤다. 지수가 뚜렷한 방향성을 잡지 못하면서 투자자들의 적극적인 매매도 줄어든 모습이다.\n\n증시로 언제든 유입될 수 있는 대기성 자금도 감소했다. 금융투자협회에 따르면 지난 6월 초 140조원에 육박했던 투자자예탁금은 8월 말 96조원대로 떨어졌다.\n\n반면 빚을 내 투자하는 레버리지 수요는 오히려 커지고 있다. 신용거래융자 잔고는 지난달 초 27조4439억원에서 꾸준히 증가하다 같은 달 말인 28일에는 33조3380억원까지 늘었다.\n\n신용거래융자는 투자자가 증권사에서 돈을 빌려 주식을 매수한 뒤 아직 갚지 않은 금액이다.\n\n시장 전체 거래 참여는 위축됐지만 레버리지를 활용한 투자 포지션은 오히려 확대된 엇갈린 흐름이 나타난 것이다.\n\n늘어난 빚투는 삼성전자와 SK하이닉스에 상당 부분 집중됐다. 지난달 28일 기준 두 종목의 신용융자잔고는 총 10조3878억원으로 국내 증시 전체 신용융자잔고 33조3380원의 31.2%를 차지했다. 8월 들어 두 종목에서 늘어난 신용잔고만 1조9178억원으로 같은 기간 전체 증가액의 32.5%에 달했다.\n\n단일종목 레버리지 상장지수펀드(ETF)에 대한 규제 강화 이후 단기 매매 열기는 한풀 꺾였지만, 신용융자를 통한 직접적인 레<0xA0>레버리지 투자는 다시 늘고 있어 증시 수급 측면에서 경계가 필요하다는 지적이 나온다. 향후 주가가 다시 조정받을 경우 담보비율 하락에 따른 반대매매 물량이 출회하며 변동성을 키울 수 있다는 점에서다. 증권가에서는 9월 연방공개시장위원회(FOMC)를 전후로 금리 불확실성이 이어지는 등 증시 변동성을 키울 요인이 남아 있다고 전망한다.\n\n한지영 키움증권 연구원은 \"반도체 신용잔고는 약 11조원으로 고점 대비 약 6% 감소하는 데 그쳤다\"며 \"반도체 시가총액 대비 신용잔고 금액도 0.37%로 2018년 이후 평균인 0.16%를 큰 폭으로 웃도는 등 레버리지 매물 부담이 남아 있는 상태\"라고 지적했다. 이어 \"미국의 장기금리 상승에 따른 금융시장 경계감이 높아진 상황\"이라며 \"9월 역시 증시의 높은 변동성이 예상되는 만큼 하방 안정성을 확보할 필요가 있다\"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006361769' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006361769</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
