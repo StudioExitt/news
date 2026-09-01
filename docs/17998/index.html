@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>베선트-워시 엇박자…심상찮은 엔화 약세 [마켓딥다이브]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001264431' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17998" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>베선트-워시 엇박자…심상찮은 엔화 약세 [마켓딥다이브]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미 재무부와 연준의 금리 정책에 대한 입장 차이가 드러난 가운데, 엔화 약세 지속으로 인한 미국 국채 금리 상승 압력과 한국 원화 가치 하락 우려가 커지고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">미국 통화정책 불확실성(재무부-연준 갈등) 및 엔화 약세에 따른 글로벌 금리 상승 및 환율 변동성 확대 우려</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#엔화약세</span> <span class="tag tag-hash">#미국금리</span> <span class="tag tag-hash">#환율변동성</span> <span class="tag tag-hash">#통화정책</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">마켓 딥다이브, 오늘도 김종학 기자와 함께 합니다. 김 기자, 오늘은 어떤 내용 준비했습니까? 네, 오늘은 미국 노스캐롤라이나 애슈빌에서 이틀간 열리는 주요 20개국, G20 재무장관 중앙은행 총재 회의를 바탕으로 본 미 재무부와 연준, 일본은행 사이에 벌어지는 미묘한 구도를 짚어보려고 합니다. 케빈 워시 미 연방준비제도이사회 의장의 매파적인 잭슨홀 연설로 9월 금리 인상 가능성이 높아졌지만, 스콧 베선트 미 재무장관은 금리 동결을 공개적으로 주장하는 등 두 기관의 갈등이 수면 위로 떠올랐습니다. 이런 가운데 미 장기 금리의 열쇠인 일본 엔화가 다시 약세 국면으로 접어들면서 또 다른 시장 개입의 가능성을 두고 여러 여러 전망들이 나오고 있습니다. 미 재무부와 미 연준의 갈등이 본격화되는 모습이군요. 그런데 미 재무장관이 금리를 잡겠다면서 엔화, 일본 통화정책에 신경을 쓰고 있는 걸까요? 일본이 보유한 미국 국채는 지난 6월 말 기준 1조 1167억 달러, 해외 보유 국가 가운데 가장 많습니다. 일본 엔화 약세가 심해진다면 보유하고 있던 미 국채를 시장에 내놓으려는 수요는 늘어납니다. 이렇게 되면 10년, 30년만기 금리가 자연스레 오르게 되고, 미 정부 입장에서는 앞으로 발행해야 할 장기 국채에 더 비싼 쿠폰을 얹어주어야 하니 달갑지 않은 셈이죠. 발언은 직접적이지 않더라도 일본측에서 긴축적인 발언, 돈 값을 올릴 수 있다는 신호만 꺼내도 일본은 인플레이션을 누르는 동시에 미국의 요구도 들어줄 수 있다보니 곁눈질을 주는 상황으로 볼 수 있습니다. 그런데 복병은 다름 아닌 내부에 있습니다. 지난 주말 잭슨홀에서 케빈 워시 미 연준 의장이 \"아직 할 일이 있다\"며 굉장히 매파적인 발언을 쏟아냈습니다. 이번 G20 회의를 향하는 길에 함께 사진까지 찍힌 두 사람이 사실은 상당한 입장차를 가지고 있는 것처럼 보입니다. 재무부 입장에서는 애써 누른 시중 금리가 연준 의장 한 마점의 말에 되살아나는 상황에 직면해 있단 말이죠? 연준의장의 지난 잭슨홀 연설은 완전 고용인 미국 경제 상황, 65개월째 잡히지 않고 있는 인플레이션으로 인해 현재의 금융 여건을 긴축으로 보기 어렵다는 말로 요약될 수 있습니다. JP모건은 이런 발언을 두고 이번 9월 연방공개 시장위원회가 어느 때보다 무게감이 커졌다고 평가했고, 현재까지 채권 시장은 이달 인상 확률을 지난 달 대비 2배나 오른 약 60% 수준으로 전망합니다. 베선트 장관도 이런 상황을 그냥 둘리 없습니다. 오늘 애슈빌 현지에서 미 경제매체와 가진 인터뷰를 보면 \"근원 인플레이션이 매우 매우 억제되어 있다\"면서 연준의 금리 동결이 합리적일 수 있다는 주장을 폈습니다. 동시에 일본은행의 우에다 총재를 겨냥해 \"아베노믹스는 끝났다\"면서 금리 인상 촉구 신호를 보냈는데, NHK 인터뷰에서 에린 브라운 미 재무부 차관이 밝힌 내용을 보면 베선트 장관은 우에다 총재와 가타야마 재무상에게 재정 건재성과 금리 인상 경로를 분명히 제시해야 한다며 압박을 이어갔습니다. 이런 발언들 속에 일본 엔화는 아시아 시장 월요일 거래에서 160엔을 터치했고, 오늘도 159엔 부근에 묶인 채 좀처럼 하락하지 않는 경향을 보이고 있습니다. 엔화가 이대로 무너지는 상황을 막고, 미국 국채 장기물이 추락하는 상황도 막겠다는 것이 양국의 구상입니다. 엔화 방향에 따라 미 달러화의 강세가 다시 누그러질 수 있는지도 주목할 지점입니다. 1370원대까지 내려온 우리 원화 가치는 어떻게 되는 겁습니까? 지난주 단기적으로 1340원까지 국내 증권사 전망도 짚어봤습니다만, 엔화를 따라 1400원 부근을 바라볼 가능성도 열려있는 것처럼 보이는군요? 현재 환율을 움직이는 세 가지 축, 미국 내에서 연준과 재무부의 명분 싸움이 통화 가치를 흔들고 있고, 여기에 핵심 공조를 할 일본은행의 발언에 따라 방향이 달라집니다. 현재 원화의 1360원대 또는 그 이하를 기대하는 시각은 NH투자증권의 전망치로도 짚어본대로 SK하이닉스 ADR 상장 이후 대규모 환전, 그리고 삼성전자까지 합류한 주주 환원을 통한 원화 강세 기조입니다. 그런데 7월부터 시작한 SK하이닉스의 ADR 상장에 따른 265억 달러 환전은 이번 달 마무리될 예정이라 원화를 끌어내릴 동력 하나가 줄어들게 됩니다. 이런 상황에서 지금처럼 연준의 금리인상 전망과 이란과 갈등 재확산에 따른 유가가 오르는 국면에서 엔화가 162엔 수준으로 밀리면 아시아 시장에서 원화도 약세로 다시 돌아설 가능성이 열려있습니다. SMBC 닛코는 지난 개입 수준이었던 162.9엔과 163.3엔 구간을 관문으로 보고 있습니다. 다만 이달 중순 미 연방준비제도의 기준금리 결정이 있기 때문에 FOMC가 열리는 16일 이전에 일본은행이 개입할 가능성은 낮다는 관측입니다. 일본은행의 통화정책 회의가 이튿날인 17일과 18일인데, 현재까지는 금리인상 가능성이 70%를 넘어 공격적인 발언이 나올 것으로 보여집니다. 하지만 연준이 금리를 인상한다면 일본은행이 2도 수준의 매파적 결정을 하더라도 엔화 가치를 의미있게 높이기는 어려워집니다. 또 하나 이미 인상 가능성을 반영한 채권 시장은 일본 장기국채, 10년 만기 금리를 30년만에 연 3% 수준까지 높여뒀다는 겁니다. 베선트 장관은 장기금리가 더 오르는 걸 막기 위해 조만간 시작할 바이백 전에 시장 단속에 나섰지만, 큰손인 일본의 재정 건전성 우려에 수요 약화까지 겹친다면 전세계 장기금리 상승과 시장 하락 위험을 피하기 어려워집니다. 9월 시장에 대한 월가의 경계감도 상당히 높아지고 있다고요? 시장에 다소 낙관적 전망을 유지했던 JP모건 트레이딩 데스크에서꽤 강한 신중론을 꺼내들었습니다. 앤드류 타일러 전략가는 전술적인 중립, 그러니까 약세장이 시작됐다기보다는 이번달 FOMC, 그리고 이번주 유대교 명절 등 얇은 거래량, 현재 진행된 장기금리 상승 가능성 등으로 인한 신중론을 펴고 있습니다. 전세계 시장을 움직이는 미국의 10년물 금리, 여기에 영향을 미칠 고용 지표도 다음 주 나오고 소비자물가지수도 예정되어 있습니다. 전반적 경제 지표는 견고해보이지만, 마이클 페롤리 JP모건 경제학자는 만약 3만 5천명 이상의 고용이 숫자로 찍힌다면 미 증시가 하락할 수 있다는 전망도 내놓았습니다. 고용쪽에서 9만 명 이상 신규 일자리가 생기면 1% 이상의 S&P500 지수 조정 가능성도 약 10% 확률로 전망했습니다. 9월 금리 결정에 영향을 줄 거시 지표의 영향이 커진 가운데, 미국 휴일인 노동절 이후 다시 대량의 회사채 발행이 시작한 뒤에 금리 스프레드가 벌어지면서 여러 자산을 압류하는 계절적으로 조심할 구간이라는 겁니다. 개인 투자자들의 성향으로도 9월에 다소 매수가 약해진 경향이 있고, 중간선거 이벤트가 가까워지면서 위험자산의 비중을 조절하며 시장을 지켜보는 것이 여러모로 현명한 대응일 수 있다는 조언입니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001264431' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001264431</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
