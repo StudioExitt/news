@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 떠난 개미, 코스닥서 8월 한달간 2조 순매수</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.01</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002691102' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/17978" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 떠난 개미, 코스닥서 8월 한달간 2조 순매수</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">8월 한 달간 개인 투자자들이 코스피에서 코스닥으로 이동하며 2조 원 이상의 순매수를 기록했습니다. 반도체 중심의 매수세가 엔터, 바이오, 로봇 등으로 확대되며 코스닥 지수가 코스피를 상회하는 상승률을 나타냈습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">개인 투자자의 자금이 대형주 중심의 코스피에서 성장주 중심의 코스닥으로 이동하며 업종별 순환매와 시장 주도권 변화가 나타남</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">제주반도체</span> <span class="tag stock-tag">JYP Ent.</span> <span class="tag stock-tag">하나마이크론</span> <span class="tag stock-tag">로보티즈</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">엔터테인먼트</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">로봇</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥</span> <span class="tag tag-hash">#개인투자자</span> <span class="tag tag-hash">#순매수</span> <span class="tag tag-hash">#순환매</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피에 집중됐던 개인 투자자들의 투자 열풍이 코스닥으로 옮겨가고 있다. 7월 순매도서 한달 만에 사자 전환\n코스닥 한달 16% 올라 코스피 압도\n반도체 넘어 엔터 바이오 로봇 확산\n\n코스피에 집중됐던 개인 투자자들의 투자 열풍이 코스닥으로 옮겨가고 있다. 7월엔 개인투자자들이 코스닥을 순매도했으나, 8월에는 2조원 이상 순매수한 것으로 나타났다.\n\n반도체 외에도 엔터테인먼트·바이오·로봇 등으로 매수 대상이 넓어지면서 코스닥 내 투자가 확산되는 흐름이다.\n\n1일 한국거래소에 따르면 8월 한 달간 개인은 코스닥 시장에서 2조1582억원을 순매수했다. 외국인과 기관이 각각 1조8413억원, 3647억원를 순매도하는 시장에서 개인이 코스닥 매수 주체로 부각된 것이다. 불과 7월에도 3335억원 순매도에 나섰던 개인들이 \"사자\"로 전환했다.\n\n같은 기간 코스pi에서 개인투자자는 5조원대에서 3조원 규모로 순매수가 줄었다. 코스피에서 코스닥으로 개인 투자가 옮겨갔다는 의미로 해석된다.\n\n8월 지수 상승률에서도 코스닥 강세가 두드러졌다. 7월 말 719.76이었던 코스닥지수는 8월 말 834.29로 약 16% 상승했다. 같은 기간 코스피는 6595.45에서 6820.02로 3.4% 상승하는 데에 그쳤다.\n\n반도체 편중이 심한 코스피와 비교해서도 차이를 보였다. 코스닥에서 개인 투자자들은 반도체주뿐 아니라 엔터테인먼트·바이오·로봇 등으로 매수세가 활발했다.\n\n8월 개인 순매수 상위 종목에는 제주반도체(1118억원), JYP Ent.(795억원), 하나마이크론(669억원), 브이엠(643억원), 코오롱티슈진(622억원), 대한광통신(604억원), RFHIC(588억원), 코스모로보틱스(568억원), 로보티즈(527억원), 테스(515억원) 등이 올랐다.\n\n반도체·반도체 장비주 외에도 엔터테인먼트, 바이오, 광통신·통신장비, 로봇 등으로 투자 대상이 넓어진 모습이다.\n\n개인이 사들인 종목 가운데 코스닥지수보다 높은 상승률을 기록한 종목도 나왔다. 제주반도체는 7월 말 대비 8월 말 20.1%, 하나마이크론은 19.7%, 대한광통신은 63.7% 상승했다. 같은 기간 코스닥 상승률인 15.91%를 웃도는 수준이다.\n\n코스피 개인 순매수 상위권은 삼성전자(2조381억원), 삼성전기(1조3283억원), 삼성전자우(1조1766억원), SK하이닉스(1조741억원) 등 반도체·전자 대형주 편중이 차지했다.\n\n개인 투자자의 코스닥 투자 확대는 반도체 중심의 수급에서 벗어난 순환매와 가격 매력, 정책 기대가 맞물린 결과라는 게 업계 분석이다.\n\n이승훈 IBK투자증권 리서치센터장은 \"최근 증시에서는 반도체주 낙폭이 과도해지면서 손실을 본 투자자가 많았고, 이에 따라 반도체에 대한 확신이 약해져 다른 업종으로 눈을 돌리는 움직임이 반영되는 추세\"라며 \"단기 급락에 따른 기술적 반등 구간이자 수급적으로 꼬여 있던 부분들이 해소되는 국면\"이라고 진단했다.\n\n권범석 삼성증권 연구원은 \" (8월) 코스닥 가격대가 장기 투자 관점에서 매우 매력적인 위치에 있었다\"라며 \"단일종목 레버리지 ETF 규제에 따른 수급 쏠림이 해소되는 데다 상장폐지 요건 강화, 승강제 도입 등 긍정적인 정책 모멘텀도 이어지고 있어 펀더멘털 개선을 바탕으로 한 코스닥의 반등 가능성에 주목할 시점이었다\"라고 했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002691102' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002691102</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
