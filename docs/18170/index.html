@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[코인 과세②] 밀어붙이는 여, 막아선 야…향방은?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003128341' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18170" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[코인 과세②] 밀어붙이는 여, 막아선 야…향방은?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">가상자산 과세 시행을 앞두고 국회 내에서 폐지 및 유예안이 잇따라 발의되며 정치권의 갈등이 심화되고 있습니다. 정부와 민주당은 예정대로 시행하겠다는 입장인 반면, 여당 일부와 투자자들은 제도적 기반 미비와 형평성 문제를 이유로 추가 유예 또는 폐지를 요구하고 있어 정책 불확기성이 높은 상태입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">가상자산 과세 관련 정책의 불확실성(폐지 vs 유예 vs 시행)이 정치적 쟁점으로 부상하며 가상자산 테마주의 변동성을 확대시킬 요인임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">우리기술투자</span> <span class="tag stock-tag">한화투자증권</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#가상자산과세</span> <span class="tag tag-hash">#코인세금</span> <span class="tag tag-hash">#소득세법개정안</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">가상자산 과세 시행을 넉 달 앞으로 두고 국회에서 예정대로 시행과 폐지, 2년·3년 유예 방안이 맞서고 있다. 해당 이미지는 AI로 제작됨.
+가상자산 과세 시행을 넉 달 앞으로 두고 국회에서 예정대로 시행과 폐지, 2년·3년 유예 방안이 맞서고 있다. 해당 이미지는 AI로 제작됨.[데일리안 = 김민희 기자] 1300만 코인족이 맞닥뜨릴 가상자산 과세 시행이 넉 달 앞으로 다가왔다. 내년부터 기본공제 250만원을 넘는 투자소득에 22%의 세금이 부과되지만, 손실 반영와 스테이킹·에어드롭 등의 세부 기준은 여전히 불분명하다. 세 차례 미뤄진 코인 과세의 쟁점과 향방을 짚어봤다. [편집자주]
+
+내년 1월로 예정된 가상자산 과세가 다시 갈림길에 섰다.
+
+국회의 선택지는 예정대로 2\"27년 시행하거나 2029년 또는 2030년으로 미루는 방안, 과세 자체를 폐지하는 방안까지 네 가지다.
+
+여기에 5만명 이 넘는 국민이 과세제도를 전면적으로 다시 검토해달라는 청원까지 국회로 보냈다.
+
+2일 정치권에 따르면 현재 국회에는 가상자산 과세를 폐지하거나 시행 시점을 늦추는 내용의 소득세법 개정안 3건이 발의돼 있다.
+
+과세 폐지를 요구하는 국민동의청원도 국회 재정경제기획위원회에 회부된 상태다.
+
+현행법상 2027년 1월1일 이후 가상자산을 양도하거나 대여해 얻은 소득에는 기본공제 250만원을 제외한 뒤 20%의 세율이 적용된다. 지방소득세를 포함한 실질 세율은 22%다. 국회가 올해 안에 법을 개연하지 않으면 예정대로 내년부터 과세가 시작된다.
+
+없애거나 2년·3년 미루거나
+
+국회에 발의된 세 가지 법안 가운데 송언석 국민의힘 의원이 지난 3월 내놓은 개정안은 가상자산 과세 자체를 폐지하는 방안이다. 해당 안에는 가상자산 양도·대여소득을 기타소득으로 과세하는 조항과 필요경비·분리과세 관련 규정을 삭제해 과세 근거 자체를 없애는 내용이 담겨 있다. 송 의원은 금융투자소득세가 폐지되고 일반 개인투자자의 국내 상장주식 양도차익에도 세금을 부과하지 않는 상황에서 가상자산에만 별도의 소득세를 매기는 것은 과세 형평성에 어긋난다고 주장했다.
+
+과세 근거를 없애는 대신 제도적 기반이 갖춰질 때까지 시행 시점만 늦추자는 법안도 잇따라 발의됐다. 정성국 국민의힘 의원은 과세 시행일을 2027년 1월1일에서 2030년 1월1일로 3년 연기하는 소득세법 개정안을 대표 발의했다. 디지털자산기본법과 투자자 보호 제도\" 등 가상자산 시장을 뒷받침할 제도적 기반부터 마련해야 한다는 취지다. 김상훈 국민의힘 의원은 시행일을 2029년 1월1일로 2년 미루는 개정안을 내놨다. 해외 거래소와 탈중앙화거래소(DEX), 개인 간 거래(P2P), 탈중앙화금융(DeFi) 등의 거래 내역을 파악할 과세 인프라가 충분하지 않다는 이유에서다.
+
+과세를 폐지해달라는 투자자들의 요구도 법안 발의에 앞서 국회로 전달됐다. 지난 5월 접수된 \"가상자산 과세폐지에 관한 청원\"에는 5만910명이 동의했다. 청원인은 투자자 보호 장치와 손실 반영 체계가 충분히 마련되지 않은 상황에서 가상자산에만 세금을 부과하는 것은 조세 형평성과 시장 현실에 맞지 않는다고 주장했다. 해당 청원은 지난 5월21일 국회 재정경제기획위원회에 회부되었지만 아직 상정되지 않았다.
+
+정부·민주당은 \"일단 시행\"…절충안 나올까
+
+정부는 추가 유예에 선을 긋고 있다. 구윤철 부총리 겸 재정경제부 장\"관은 지난 7월 국회 재정경제기획위원회 전체회의에서 예정대로 내년부터 과세하는 방향으로 추진하고 있으며, 시행 후 보완할 부분을 살펴보겠다고 밝혔다. 정부가 지난달 발표한 세제개편안에도 가상자산 과세를 유예하거나 폐지하는 내용은 담기지 않았다.
+
+민주당 역시 법대로 시행하는 데 무게를 두고 있다. 이미 세 차례 시행을 미룬 만큼 또다시 유예하면 과세 원칙과 정책 신뢰가 흔들일 수 있다는 판단이다.
+
+가상자산 과세의 시행 여부와 보완책은 이번 국정감사에서도 주요 쟁점으로 다뤄질 전망이다. 국회입법조사처는 \"2026 국정감사 이슈 분석\" 보고서에서 \"가상자산소득을 과세할 시점인가\"를 점검 과제로 제시했다. 보고서는 해외 거래소와 탈중앙화거래소(DEX), 개인 간 거래(P2P)의 과세자료를 확보할 수 있는지와 디지털자산기본법 제정 전에 과세하는 것이 적절한지를 따져봐야 한다고 지적했다. 스테이킹·에어드롭·하드포크 등의 거래 유형별 과세기준과 결손금 이월공제가 마련되지 않은 점도 정부에 확인해야 할 사안으로 꼽았다.
+
+연말 세법 심사에서는 폐지나 추가 유예 대신 기본공제를 높이고 결손금 이월공제를 도입하는 방안이 절충안으로 떠오를 가능성이 있다. 국회예산정책처의 연구용역 보고서는 기본공제액을 최소 600만원 이상으로 높이고 가상자산 양도손실을 최대 5년간 이월해 이후 발생한 이익에서 공제하는 방안을 제시했다. 현행 제도에서는 한 해 발생한 손실을 다음 해로 넘길 수 없어 누적 투자로 손해를 보고도 특정 연도에 수익이 나면 세금을 내야 한다. 이 같은 과세체계의 보완 과제는 3일 국회에서 열리는 \"2027년 가상자산 과세 체계 점검 토론회\"에서도 논의될 예정이다. 현재로서는 국회가 법을 개정하지 않으면 가상자산 과세는 2027년 1월1일부터 시행된다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003128341' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003128341</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
