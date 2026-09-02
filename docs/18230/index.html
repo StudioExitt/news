@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[통장잔GO] 1300원대 달러…환전할까, ETF로 굴릴까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.03</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003128460' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18230" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[통장잔GO] 1300원대 달러…환전할까, ETF로 굴릴까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">원·달러 환율이 1500원대에서 1300원대로 급락하며 달러 투자 전략의 변화가 나타나고 있습니다. 단순 외화 보유 대신 미국 단기 금융시장에 투자하여 이자 수익과 환율 변동을 동시에 추구하는 머니마켓 ETF가 대안으로 주목받고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">환율 급락에 따른 달러 투자 방식의 변화와 머니마켓 ETF 등 금융 상품으로의 자금 이동 가능성 증대</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#환율</span> <span class="tag tag-hash">#달러투자</span> <span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#머니마켓</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">환율, 13개월 만에 ‘최저’…추가 하락 가능성
+여전한 달러 수요…‘확보’ 방식에는 변화 조치
+美 단기 금융 투자 ETF ‘주목’…환노출 매력까지
+세금 체계는 고려…매매차익·분배금 각각 과세
+원·달러 환율이 1500원대에서 1300원대로 급락한 가운데 달러 투자자들의 셈법이 복잡해지고 있다.
+최근 시장 변동성까지 확대되면서 현금을 일시적으로 묶어두는 ‘파킹형’ 상품으로 활용할 수 있는 달러 투자 수단에 대한 시장 관심이 커지고 있다.
+3일 서울 외환시장에 따르면 전일(2일) 오후 3시 30분 기준 원·달러 환율은 전 거래일 대비 1.7원 내린 1368.7원으로 정규장 거래를 마쳤다.
+7월 1일 장중 1559원까지 치솟으며 17년 만에 최고치를 기록하였으나, 2개월 만에 1360원대로 내려앉은 셈이다.
+이처럼 원·달러 환율은 중동 지역의 지정학적 리스크와 국제유가 급등, 장기 국채금리 상승에도 뚜렷한 하락세를 보이고 있다.
+특히 지난해 7월 이후 약 13개월 만에 1360원대로 내려온 만큼, 추가 하락 가능성도 점쳐지고 있다.
+이러한 분위기에서 “달러 투자가 끝난 것 아니냐”는 시각이 존재하지만, 낮아진 환율을 활용해 달러 자산을 미리 확보하려는 수요도 늘어나고 있다.
+해외여행이나 유학·해외송금처럼 당장 달러가 필요한 경우에는 달러예금이나 트래블카드가 활용되고, 투자 목적이라면 미국 단기 금융시장에 투자하는 상장지수펀드(ETF)가 선택지로 떠오르고 있다.
+달러를 확보하는 방법이 원화를 달러로 환전한 뒤 달러를 직접 보유하는 외화예금에서 벗어난 것인데, 달러 대기자금을 효율적으로 관리하려는 투자자들은 미국 머니마켓 ETF를 포트폴리오에 담고 있다.
+대표적인 상품으로는 삼성자산운용의 ‘KODEX 미국머니마켓액티브’가 있다.
+해당 ETF는 달러 자산과 미국 초단기 채권 등 우량 단기 금융자산에 투자하는 상품으로, 달러 기반의 이자 수익을 추근하는 게 특징이다.
+단순히 미국 금리 수익만 추구하는 것이 아니라, 환율 변동을 그대로 반영하는 환노출 구조로 달러 가치 변동에 연동된다.
+삼성자산운용 관계자는 “ETF를 통한 투자는 별도의 환전 절차 없이 국내 증시에서 주식처럼 매수가 가능하다”며 “투자자가 직접 달러를 보관하거나 관리하지 않고, 미국 단기 금융시장에 투자하면서 달러 자산에 접근할 수 있다”고 말했다.
+다만 ETF와 외화예금의 세금 체계는 다르다는 점은 고려해야 한다.
+ETF의 매매차익과 분배금에는 각각 과세가 적용될 수 있다.
+이에 금리 수준만 놓고 외화예금과 비교하기보다 투자 기간, 환율 전망, 과세 방식 등을 함께 살펴볼 필요가 있다.
+업계 한 관계자는 “달러를 보유하려는 이유에 따라 투자 방법을 구분하는 것이 중요하다”며 “실제 사용할 달러라면 필요한 만큼 미리 확보하고, 자산 배분 차원의 달러 투자라면 금리와 환율을 고려해 달러 자산을 분산하는 전략이 요구된다”고 강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003128460' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003128460</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
