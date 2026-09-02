@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오락가락 ISA 세재개편...증권사도 혼선 우려</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000529864' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18127" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>오락가락 ISA 세재개편...증권사도 혼선 우려</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부가 ISA 세제개편안을 발표 한 달 만에 번복하면서 증권업계의 전산 시스템 개발 및 마케팅 전략 등에 혼선이 빚어지고 있습니다. 정책 변동으로 인해 기존 가입자들의 불만과 행정적 비용 발생이 우려됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">정부 정책의 단기 번복으로 인해 증권업계의 불필요한 전산 개발 비용 발생 및 고객 대응 리스크 증대</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ISA</span> <span class="tag tag-hash">#세제개편</span> <span class="tag tag-hash">#증권업계</span> <span class="tag tag-hash">#정책번복</span> <span class="tag tag-hash">#절세혜택</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">정부가 한 달 만에 ISA 규제안을 폐지하자, 자본시장 최전선에 있는 증권업계와 투자자 현장에서는 정책 번복에 따른 행정적 혼선과 피로감이 커지고 있다. 
+
+정부가 ISA 세제개편안을 불과 한 달 만에 다시 뒤집으면서 증권업계가 혼선을 빚고 있다. 애초 발표안에 맞춰 구축하던 전산 코드를 통째로 폐기하는가 하면 고객 배포용 가이드라인과 마케팅 전략을 전면 백지화하는 등 잠재적 매물 이용 발생이 우려되고 있어서다.
+
+2일 금융투자업계에 따르면 정부는 지난 1일 발표한 세법 개정안을 통해 ISA의 연간 납입 한도 이월 제한과 계약기간 제한(5년) 등 조항을 핀셋 수정하기로 가닥을 잡았다. 최종안에서는 연간 납입 한도를 다음 해 이후로 이월하는 현행 방식을 유지하고, 계약기간도 최소 3년 외 제한을 두지 않기로 했다. 청년층과 투자자를 중심으로 반발이 컸던 여론을 일부 수용하고, 국민의 자산형성 지원이라는 ISA의 목적성을 고수하려는 조치로 풀이된다.
+
+다만 증권사들은 고심에 빠지게 됐다. 정부가 앞서 내놓은 ISA 개편안에 따라 전산 시스템 개발에 착수하거나 상품 출시나 판매 전략을 다시 짜고 있는 와중에 다시 원점으로 돌아왔기 때문이다. 증권업권은 국내 ISA 가입자의 절대 다수를 차지하는 핵심 분야다. 올해 상반기 기준으로도 ISA 신규 가입자 중 99.5%가 은행이 아닌 증권사를 선택했다.
+
+그러나 정부가 ISA 관련 세제를 다시 수정하면서 증권사들은 애써 유치한 대규모 고객들의 반발과 무수한 문의를 현장에서 고스란히 감당해야 하는 부담도 안게 됐다. 정부의 섣부른 세제개편 추진과 수정 과정에서 발생한 불똥이 엉뚱하게도 개인 투자자들에게 튀었기 때문이다. 증권가에 따르면 지난달 정부가 ISA 계약기간 5년 만기 제한 규정을 발표하자 장기 절세 혜택을 누리려던 많은 ISA 가입자가 차라리 지금 손해를 보더라도 계좌를 중도 해지한 후 만기를 무기한으로 설정해 재가입하려 하는 등 문의가 속출하기도 했다. 중도 해지 시 기존 비과세 혜택이 전액 소멸하는 불이익을 감수하고 정부 발표를 믿었던 투자자들도 한 달 만의 회귀로 인해 분통을 터뜨리고 있다는 후문이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000529864' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000529864</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
