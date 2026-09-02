@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오늘 팔면 내일 입금…'속도전 필요' vs '달리는 기차 바퀴 바꾸기' 팽팽</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.02</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001264639' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18205" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>오늘 팔면 내일 입금…'속도전 필요' vs '달리는 기차 바퀴 바꾸기' 팽팽</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 증권시장 결제 주기를 T+2에서 T+1로 앞당기는 방안을 두고 시장 참가자 간 의견이 대립하고 있음. 개인투자자는 자금 효율성 향상을 기대하나, 증권업계는 시스템 개편 부담과 결제 실패 리스크 등 안정성 문제를 이유로 신중한 입장을 보임.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">결제 주기 단축에 대한 찬반 논란이 이어지고 있으며, 도입 시 증권업계의 시스템 개편 비용 및 시장 운영 리스크 발생 가능성이 존재함. 제도 확정 전까지 불확실성이 높음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한국거래소</span> <span class="tag stock-tag">한국예탁결제원</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#결제주기단축</span> <span class="tag tag-hash">#T+1</span> <span class="tag tag-hash">#증권시장</span> <span class="tag tag-hash">#금융규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">국내 증권시장 결제 주기를 현행 T+2(거래일 기준 이틀 뒤 결제)에서 T+1(하루 뒤 결제)로 앞당기는 방안을 두고 시장 참가자 간 팽팽한 의견 교환이 이뤄졌다. 결제 기간 단축이라는 글로벌 스탠다드 방향성에는 대체로 공감했으나, 시스템 개편과 안정성을 두고는 신중론이 만만치 않게 제기됐다.
+
+● \"왜 내 돈 묶이나\"…개인투자자 자금 효율성 기대감
+
+2일 서울 여의도 금융투자협회 불스홀에서 열린 '증권시장 결제주기 단축 토론회'에는 유관기관, 학계, 증권업계 관계자와 개인투자자들이 참석하여 열띤 토론을 벌였다.
+
+이날 논의의 포문은 결제 주기 단축의 속도전을 주문하는 목무소리로 시작되었다. 박용진 규제합리화위원회 부위원장은 \"이미 코인 시장 등을 통해 즉시 결제를 경험한 국민들은 주식 매도 대금이 늦게 들어오는 것에 불만을 가지고 있다\"며 \"안정성을 지키면서 얼마나 속도감 있게 바꿀 것이냐가 관건\"이라고 강조했다.
+
+개인투자자 측 패널로 참석한 박시동 유튜버 역시 현행 제도의 맹점을 지적했다. 그는 \"투자자가 매도 대금을 하루 먼저 받기 위해 증권사로부터 연 9%에 달하는 이자를 내고 돈을 빌리는 실정\"이라며 개인투자자가 겪는 기회비용과 형평성 문제를 꼬집었다.
+
+● \"주춧돌 갈아끼우는 작업\"…업계는 '속도 조절' 요청
+
+반면 제도를 직접 뒷받침해야 하는 증권업계와 유관기관은 섣부른 전환의 위험성을 경고했다. 단순히 돈을 일찍 주는 문제가 아니라, 거래 체결 이후 이뤄지는 청산, 차감, 결제, 세금 처리 등 수십년 유지된 업무 시스템을 완전히 뜯어고쳐야 하기 때문이다.
+
+강소현 자본시장연구원 연구위원은 \"하루 증시 거래대금 24조원이 다자간 차감을 거치면 1조 2000억원만 움직이면 될 정도로 상계(netting) 비율이 95%가 넘는다\"라며 \"이러한 복잡한 과정과 착오 매매 정정 등이 하루 안에 모두 끝나야 한다는 의미\"라고 설명했다.
+
+박상현 NH투자증권 차장은 \"코인 시장은 아예 백지에서 시스템을 만들었지만, 우리는 시장이 계속 굴러가는 상황에서 주춧돌을 갈아 끼워야 하는 상황\"이라고 박차며 \"일부 증권사가 결제를 불이행하면 시장 전반의 신뢰 문제가 될 수 있어 다 같이 따라올 수 있는 충분한 시간이 필요하다\"고 요청했다.
+
+● 13시간 시차 겪는 외국인 투자자도 변수
+
+가장 큰 난관은 외국인 투자자의 결제 절차가 꼽힌다. 뉴욕과 한국은 13시간 시차가 있다. 현지 투자자는 펀드별 거래 배분, 환전, 결제 지시 등을 새벽에 수작업으로 마쳐야 한다는 압박을 받는다는 주장이다.
+
+글로벌 투자자를 대변하여 참석한 김미강 SC은행 이사는 \"현재 외국인 투자자는 매매 체결 후 하위 펀드 분배, 보관 기관 간 확인, 원화 확보 등 사전 작업에 T+1일 전체를 할애하고 있다\"라며 \"단시간 내 제도가 도입될 경우 안정적인 결제 인프라가 훼손될 수 있다는 우려가 크며, 철저한 테스트 기반의 시간이 필요하다\"라고 목소리를 높였다.
+
+● 결제 실패 용인하는 '인식 전환' 필요성도 제기
+
+결제 주기 단축 시 필연적으로 증가할 '결제 실패'를 바라보는 시장의 인식 전환이 필요하다는 지적도 나왔다. 강소현 연구위원은 \"올해 T+1을 도입한 미국도 2~3% 수준의 결제 실패가 발생하고 있다\"라며 \"이를 개별 회사의 부실이나 큰 문제로 보지 않고 비용 처리나 리스크 관리의 영역으로 보는 인식이 필요한데, 한국은 결제 실패를 죄악시하는 경향이 있어 부담이 크다\"고 말했다.
+
+글로벌 자본과 시장 신뢰를 모두 지켜야 하는 상황에서 한국거래소와 한국예탁결제원은 인력 투입이 아닌 '시스템 자동화'를 해법으로 제시했다. 김진택 한국예탁결제원 부장은 \"업무 처리 시간을 절반 이상 단축하는 거래 결제 자동화 시스템을 구축할 계획\"이라고 밝혔다.
+
+금융당국과 유관기관은 시장 참가자들의 의견을 추가로 수렴해 10월 결제주기 단축을 위한 제도 개선 사항과 통합 테스트 일정을 담은 구체적인 로드맵을 발표할 예정이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001264639' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001264639</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
