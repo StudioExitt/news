@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>저점인 줄 알았는데…바이오 유증에 개미 '비명'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.03</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003128455' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18229" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>저점인 줄 알았는데…바이오 유증에 개미 '비명'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">삼성바이오로직스, 뷰노 등 주요 바이오 기업들의 대규모 유상증자 발표로 인해 주가가 급락하며 투자자들의 우려가 커지고 있습니다. 신주 발행에 따른 지분 희석과 자금 사용처에 대한 불확실성이 단기적인 주가 하락 압력으로 작용하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">바이오 대형주들의 유상증자 발표로 인한 지분 희석 우려 및 단기 주가 급락 압력 발생</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성바이오로직스</span> <span class="tag stock-tag">뷰노</span> <span class="tag stock-tag">엘앤씨바이오</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">제약</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#유상증자</span> <span class="tag tag-hash">#지분희석</span> <span class="tag tag-hash">#바이오주</span> <span class="tag tag-hash">#개미비명</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">삼바·뷰노 등 잇단 유증에 개미 '비명'
+최근 대규모 유상증자를 발표한 삼성바이오로직스와 뷰노 등의 주가는 발표 직후 급락한 뒤 좀처럼 충격에서 벗어나지 못하고 있다. 해당 이미지는
+AI로 제작됨.
+최근 대규모 유상증자를 발표한 삼성바이오로직스와 뷰노 등의 주가는 발표 직후 급락한 뒤 좀처럼 충격에서 벗어나지 못하고 있다. 해당 이미지는
+AI로 제작됨. 제약·바이오주를 사들인 개인투자자들이 예상치 못한 유상증자에 울상이다.
+
+기업들이 잇따라 대규모 신주 발행에 나서면서 주가가 또 급락하고 있어서다.
+
+3일 한국거래소에 따르면, 최근 대규모 유상증자를 발표한 삼성바이오로직스와 뷰노 등의 주가는 발표 직후 급락한 뒤 좀처럼 충격에서 벗어나지 못하고 있다.
+
+삼성바이오로직스는 전날 150만1000원에 거래를 마쳤다.
+
+유상증자 발표 직전인 지난달 27일 종가 159만4000원과 비교하면 5.8% 낮다.
+
+삼성바이오로직스는 지난달 28일 개장 전 3조9억원 규모의 주주배정 후 실권주 일반공모 방식 유상증자를 결정했다.
+
+소식이 전해지자 주가는 당일 6.78% 급락한 148만6000원에 마감했다. 하루 만에 시가총액 약 5조원이 증발했다.
+
+주주들이 민감하게 반응한 것은 3조원에 달하는 증자 규모다.
+
+회사가 새로 발행하는 주식은 227만주로 기존 발행주식의 약 4.9%다.
+
+예정 발행가는 132만2000원으로 15%의 할인율이 적용됐다.
+
+특히 삼성바이오로직스가 그동안 배당을 실시하지 않은 상황에서 대규모 유상증자까지 결정하면서 일부 소액주주 사이에서는 불만도 터져 나왔다.
+
+온라인 주주 커뮤니티에서는 유상증자 철회를 요구하거나 금융감독원에 민원을 제기했다는 글도 등장했다.
+
+회사는 이번 유상증자가 미래 성장을 위한 투자라는 입장이다.
+
+조달금액 가운데 2조7062억원은 스위스 펩타이드 위탁개발생산(CDMO) 업체 폴리펩타이드그룹 인수에, 나머지 2948억원은 인천 송도
+제2바이오캠퍼스 증설에 투입한다.
+
+회사 측은 증자 비율이 5% 수준에 그쳐 지분 희석 부담이 크지 않을 것으로 보고 있다.
+
+그러나 투자자 입장에서는 향후 M&A와 시설투자가 실제 기업가치 상승으로 이어질지는 아직 알 수 없는 반면, 유상증자에 따른 주가 충격은 당장
+현실화했다는 점이 부담이다.
+
+의료 인공지능(AI) 기업 뷰노 주주들이 받은 충격은 더 컸다.
+
+뷰노는 지난달 28일 장 마감 이후 314억원 규모의 주주배정 후 실권주 일반공모 유상증자를 결정했다.
+
+이후 첫 거래일인 지난달 31일 주가는 24.46% 급락한 5590원에 마감했다. 전날에도 6.29% 내린 5210원까지 밀렸다.
+
+유증 발표 당일 종가 7400원과 비교하면 3거래일 만에 29.6% 떨어졌다.
+
+무엇보다 기존 주주들이 우려하는 것은 신주 물량이다.
+
+뷰노가 새로 발행하는 주식은 630만주로 기존 발행주식 1400만1823주의 약 45%에 달한다.
+기존 주식 수의 절반에 가까운 신주가 추가되는 셈이다. 예정 발행가는 4980원이다.
+
+자금 사용처도 부담으로 작용했다. 조달금액 314억원 가운데 200억원을 제3회차 영구전환사채 상환에 사용한다.
+
+회사는 오는 12월부터 해당 사채의 금리가 단계적으로 높아지는 만큼 미리 상환해 이자 부담을 낮추겠다는 설명이다.
+
+나머지 자금은 연구개발과 해외사업 등에 투입한다.
+
+기업 입장에서는 비싼 이자를 부담하는 대신 자본을 확충해 재무구조를 개선할 수 있지만, 주주 입장에서는 회사의 빚을 줄이기 위해 자신들의 지분
+가치가 희석되는 것 아니냐는 불만이 나올 수 있는 대목이다.
+
+엘앤씨바이오도 상황은 비슷하다. 
+
+엘앤씨바이오는 지난 7월31일 장 마감 이후 1406억원 규모의 주주배정 후 실권주 일반공모 유상증자를 결정했다. 
+
+신주 370만주를 발행하는 방식으로 기존 발행주식의 약 13.7%에 해당한다.
+
+다만 엘앤씨바이오는 조달금액 대부분을 시설투자에 사용한다. 
+
+전체 조달액 가운데 1050억원을 경기 동탄 생산시설 구축 등에 투입할 계획이다. 
+
+회사는 유상증자와 함께 1주당 신주 1주를 지급하는 무상증자와 전환사채(CB) 소각도 추진하며 주주가치 보호책을 함께 내놨다.
+
+문제는 유상증자 목적이 성장 투자라고 해도 주주들의 부담은 사라지지 않는다는 점이다. 
+
+신주가 대규모로 발행되면 기존 주주의 지분이 희석될 수 있고, 주주가 지분율을 유지하려면 유상도증자에 참여해 추가로 돈을 넣어야 한다. 
+
+특히 주가가 이미 크게 떨어진 종목을 '저점'이라고 판단해 매수한 개인투자자라면 예상하지 못했던 유상증자 발표로 손실이 더 커질 수 있다.
+
+실제 KRX TOP 바이오 10 지수는 올해(1월2일~9월 2일) 들어 19.6%(2803.10→2253.70) 하락했다. 
+
+결국 유상증자라는 사실 자체보다 얼마나 많은 신주를 발행하는지, 주주에게 손을 벌려 마련한 돈을 어디에 쓰는지를 따져봐야 한다는 지적이다. 
+
+증권업계 관계자는 "주주 입장에서는 주가 하락을 감수한 상황에서 지분율을 유지하기 위해 추가 자금까지 넣어야 할 수 있다"며 "기업이 주주에게 자금을 조달하는 만큼 자금 사용 목적과 향후 수익으로 이어질 수 있는지를 꼼꼼히 확인해야 한다"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003128455' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003128455</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
