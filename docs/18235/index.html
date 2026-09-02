@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>홀딩스 합병으로 상폐 불 끈 휴맥스, 앞날은 첩첩산중</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.03</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/648/0000050431' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18235" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>홀딩스 합병으로 상폐 불 끈 휴맥스, 앞날은 첩첩산중</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">휴맥스홀딩스가 시가총액 미달로 인한 상장폐지 위기를 피하기 위해 휴맥스를 흡수합병하기로 결정했습니다. 하지만 내년부터 강화되는 코스닥 상장폐지 기준과 휴맥스의 불안정한 재무 구조 및 결손 상태는 향후 또 다른 경영 리스크로 작용할 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">합병을 통해 단기적인 상장폐지 위기는 넘겼으나, 내년부터 강화되는 코스닥 시총 규제 기준(300억)과 휴맥스의 불안정한 재무 상태 및 결손금 문제가 향후 또 다른 리스크로 부각될 수 있음</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">휴맥스</span> <span class="tag stock-tag">휴<0xA0>맥스홀딩스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">셋톱 박스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#휴맥스</span> <span class="tag tag-hash">#상장폐지</span> <span class="tag tag-hash">#기업합병</span> <span class="tag tag-hash">#코스닥규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">과거 코스닥 대장주였던 휴맥스홀딩스, 시총 미달로 상폐 위기
+휴맥스에서 합병으로 대처했으나 내년 시총규제 문제 또 생겨
+휴맥스도 실적·재무 문제 안아, 주주환원책 재원도 골치
+휴맥스홀딩스는 한때 코스닥을 상징하는 기업 중 한 곳이었다. 코스닥 시장이 개장한 지 1년도 안 된 1997년 4월16일 휴맥스라는 이름으로 상장했고, 2000년대 초반에는 코스닥 대장주로 불렸다. 휴맥스가 2009년 투자부문과 제조부문을 인적분할하면서 존속법인 이름이 휴맥스홀딩스로 바뀌었다. 현재의 휴맥스는 2009년 11월 코스닥에 재상장한 사업법인이다. 휴맥스홀딩스는 말 그대로 코스닥과 역사를 같이했고, 휴맥스도 업력이 깊은 상장사인 셈이다.
+
+그러나 셋톱박스 시장이 온라인동영상서비스(OTT) 유행으로 불황에 빠지면서 휴맥스홀딩스는 지나치게 낮은 시총에 상장폐지될 위기에 몰렸다. 휴맥스 역시 지금의 시총을 끌어올리지 못하면 내년에 상장페지를 피할 수 없다. 휴맥스가 휴맥스홀딩스와의 합병 결정으로 \"급한 불\" 끄기에 나선 이유다.
+
+금융감독원 전자공시시스템에 따르면 휴맥스는 10월1일자로 휴맥스홀딩스를 흡수합병하는 절차를 진행 중이다. 휴맥스홀딩스 주주들이 8월28일 임시주총에서 합병 안건을 승인했고, 주식매수청구권 행사 및 채권자 이의 제출을 거쳐 휴맥스홀딩스 주식 매매거래가 9월29일부터 10월18일까지 정지된다. 하루 뒤인 10월19일 휴맥스의 합병신주 234만1313주가 추가 상장된다.
+
+이번 합병은 휴맥스홀딩스의 상장폐지를 막기 위한 응급조치에 가깝다. 한국거래소는 정부의 상장폐지 기준 강화에 따라 7월1일부터 30거래일 연속으로 주가 1000원 또는 시가총액 200억원 미만인 코스닥 상장사를 관리종목으로 지정한다. 이렇게 지정된 기업이 90거래일 안에 45거래일 연속으로 시가총액 요건을 회복하지 못하면 즉시 상장폐지된다.
+
+휴맥스홀딩스 시총은 3월6일부터 계속 200억원을 밑돌았고, 9월1일 종가 기준으로도 129억원에 머물렀다. 관리종목 지정 이후 4<0xA0>45거래일째인 10월8일까지 시총 200억원을 회복하지 못하면 상장폐지를 면할 수 없다.
+
+휴맥스홀딩스가 상장폐지되면 최대주주인 변대규 휴맥스홀딩스 대표(35.44%)를 비롯한 주주들이 증시에서 주식을 거래할 수 없다. 게다가 휴맥스홀딩스는 휴맥스 지분 35.6%를 쥔 최대주주이고 휴맥스가 OK캐피탈에서 빌린 50억원에 채무보증 55억원을 제공했다. 휴맥스홀딩스가 상장폐지로 시장 신뢰와 재무적 안정성을 잃는다면 휴맥스에도 위험이 옮겨갈 수 있다.
+
+당장은 이번 합병 결정으로 휴맥스홀딩스 상장폐지에 따른 위험은 <0xC2>덜었다. 휴맥스홀딩스 주식매매가 9월29일부터 정지되고, 10월19일부터는 휴맥스만 그룹 내 유일한 상장사로서 주식이 거래되기 때문이다. 휴맥스 시총은 9월1일 종가 기준 236억원이다. 10월19일 합병신주가 추가 상장돼 주가가 다소 떨어지더라도 시총 200억원을 밑돌 가능성은 적다.
+
+다만 휴맥스라고 해서 안전한 상황도 아니다. 내년부터 상장폐지 조건이 코스닥 상장사의 경우 시총 200억원 미만에서 300억원 미만으로 높아지기 때문이다.
+
+휴맥스의 현재 상장주식 수에 추가 상장되는 합병신주 수, 향후 휴맥스가 휴맥스홀딩스에서 보유한 휴맥스 주식을 취득한 뒤 소각할 물량까지 합치면 연말 기준 휴맥스의 발행주식 총수는 511만3573주가 된다. 휴맥스의 9월2일 종가는 5390원인데, 여기에 511만3573주를 곱하면 시총은 276억원이 된다. 휴맥스 시총이 내년에 3</strong>30억원을 넘어서려면 주가가 5867원을 넘어서야 한다. 즉 현재 수준보다 주가가 8.9% 이상 올라야 한다는 뜻이다.
+
+당장 휴맥스의 형편이 좋지는 않다. 휴맥스는 셋톱박스 시장 불황과 모빌리티 투자 확대의 영향으로 작년 연결기준 영업손실 292억원을 봤다. 올해 상반기에는 영업이익 13억원을 거두면서 흑자전환했지만 아직 안심할 상황은 아니다. 부채비율도 상반기 말 기준 255.69%로 안정선으로 평가받는 200%를 웃돈다.
+
+배당이나 무상증자 같은 주주환원책 재원으로 쓰이는 이익잉여금 역시 마이너스(-) 2456억원인 결손 상태이다. 흡수합병하는 휴맥스홀딩스 역시 별도기준 이익잉여금이 마이너스(-) 380억원이라 휴맥스에 당장 큰 도움이 되기 힘들다.
+
+이와 관련해 휴맥스는 \"휴맥스홀딩스 합병을 통해 전반적인 경영 효율성을 제고하고, 휴맥스홀딩스에서 독자적으로 구축한 엔터프라이즈 AX(인공지능 전환)사업 역량과 전문 솔루션 브랜드 'AXNEXUS' 기술력을 우리의 모빌리티 인프라·서비스 사업과 유기적으로 결합하겠다\"고 밝혔다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/648/0000050431' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/648/0000050431</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

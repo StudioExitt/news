@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>분명 똑같은 종목 담았는데… ETF 수익률 25%P 차이 왜 났을까[재테크 풍향계]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.03</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005811128' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18238" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>분명 똑같은 종목 담았는데… ETF 수익률 25%P 차이 왜 났을까[재테크 풍향계]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">반도체 대형주 급락 시기에 시가총액 가중 방식 ETF보다 동일가중 방식 ETF의 성과가 우수했음을 분석한 내용임. 이는 특정 종목 쏠림 리스크를 줄이는 동일가중 전략의 유효성을 보여줌.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">특정 대형주(반도체) 변동성에 따른 ETF 운용 방식별 성과 차이를 명확히 제시하여 투자 전략 수립에 유용한 정보를 제공함</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#동일가중</span> <span class="tag tag-hash">#재테크</span> <span class="tag tag-hash">#반도체</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">반도체주의 변동성으로 증시가 출렁이는 사이 일반적인 시가총．．．(생략)기존 시가총액 가중 방식 ETF보다 동일가중 방식의 상품이 선방한 것으로 나타났다. 지수 구성상 특정 종목의 쏠림이 심할 경우 동일가중 ETF가 이를 보완할 수 있다는 평가가 나온다.
+
+3일 한국거래소에 따르면 지난 7월1일부터 이달 1일까지 코스피200 종목을 담은 ETF 중 동일가중 ETF가 시가총액 가중 방식 ETF보다 성과가 좋았다. KODEX 200은 이 기간 등락률이 -22.15%로 크게 하락했다. 대표적인 시가총액 가중 방식의 이 ETF는 2일 기준 삼성전자를 33.46%로 가장 많이 담고 있고, 다음으로 SK하이닉스를 26.42% 편입하고 있다.
+
+반면 KODEX 200동일가중은 이 기간 2.34% 상승했다. 구성 종목은 같은데, 편입 방식의 차이로 이 같은 결과가 나타난 셈이다. TIGER 200동일가중 역시 같은 기간 2.70% 올라 -23.10%를 기록한 TIGER 200 대비 우월한 성과를 보였다.
+
+동일가중 방식은 포트폴리오를 구성할 때 모든 종목에 똑같은 비중을 배분한다. KODEX 200 동일가중의 포트폴리오를 보면 한국콜마 0.92%, GS 0.89%, 코스맥스 0.89% 등이 상위 편입 종목이다. 뚜렷하게 비중이 높은 종목이 없고, 분기별 리밸런싱을 통해 구성종목의 시가총액 비중을 동일하게 조정한다.
+
+이들이 추종하는 지수의 성과도 구별됐다. 코스피200지수의 연간위험률은 1년 57.63%, 3년 37.38%인데, 코스피200동일가중지수의 경우 연간위험률이 1년 34.28%, 3년 25.02%로 많게는 23%포인트 차이가 났다.
+
+코스피200의 경우 삼성전자, SK하이닉스 비중이 코스피 200의 50% 이상을 차지하기 때문에 동일가중, 시총 가중 방식에 더 뚜렷한 차이가 나타났다. 지난 7월 하락장은 반도체 대형주의 급락이 뚜렷했다. 삼성전자는 7~8월 -21.86%, SK하이닉스는 -36.11% 떨어졌다.
+
+미국 S&P500지수 역시 올해 동일가중 방식의 상품이 더 좋은 성과를 낸 것으로 나타났다. 미국 CNBC는 S&P500 동일가중 대표 ETF인 \"Invesco S&P500 Equal Weight ETF(RSP)\"의 올해 상승률이 S&P500 ETF보다 높았다고 보도했다. ETF체크에 따르면 2일 기준 이 상품의 연초 이후 수익\" 수익률은 15.43%로 S&P500 ETF 대표 상품인 \"State Street SPDR S&P 500 ETF Trust(SPY)\" (13.07%)보다 2.36%포인트 높았다.
+
+현지 자산운용사인 노바디우스의 네이선 게라치 대표는 \"투자자들은 S&P500과 같은 주요 지수에 내재한 '집중도 리스크'에 점점 더 우려를 하고 있다. 상위 10개 종목이 지수의 거의 40%를 차지하고 있기 때문\"이라고 말했다. 이어 \"동시에 시장 성과는 거대 기술주를 넘어 더 넓은 범위의 업종과 시장 영역으로 확대되고 있다\"고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005811128' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005811128</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
