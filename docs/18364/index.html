@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"수수료 불만" 혜택 따져 갈아탄다...개미들의 '증권사 쇼핑'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.04</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/008/0005409319' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18364" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"수수료 불만" 혜택 따져 갈아탄다...개미들의 '증권사 쇼핑'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">개인 투자자들이 수수료와 혜택을 비교하여 증권사를 옮기는 \"지갑점유율\" 경쟁이 심화되고 있음. 이에 따라 증권사들은 자산 유치를 위해 타사대체 입고 이벤트 등 공격적인 마케팅을 펼치고 있음.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">고객의 자산 이동(타사대체 입고)이 빈번해짐에 따라 증권사 간 마케팅 비용 증가 및 시장 점유율 재편 가능성이 존재함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">키움증권</span> <span class="tag stock-tag">삼성증권</span> <span class="tag stock-tag">미래에셋증권</span> <span class="tag stock-tag">토스증권</span> <span class="tag stock-tag">한국투자증권</span> <span class="tag stock-tag">신한투자증권</span> <span class="tag stock-tag">KB증권</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#증권사쇼핑</span> <span class="tag tag-hash">#지갑점유율</span> <span class="tag tag-hash">#타사대체입고</span> <span class="tag tag-hash">#개인투자자</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">한 고객 여러 증권사 시대, 수수료·상품 마음에 안들면 주식·계좌 옮겨…증권가는 \"지갑점유율\" 경쟁으로
+투자 영역별 증권사 주요 지표/그래픽=이지혜
+개인투자자 A씨는 해외주식을 거래하던 증권사를 바꾸기로 마음먹었다. 해외주식 거래 수수료를 비교하기 시작했고, 삼성증권의 수수료 우대와 타사대체 입고 혜택이 눈에 들어왔다. 삼성증권 계좌도 이미 갖고 있었다. 다만 삼성 계좌는 국내주식 거래에만 사용하고, 해외주식은 키움증권 계좌에 넣어뒀다. 결국 A씨는 키움증권 계좌에 있던 해외주식 5종목을 삼성증권으로 옮겼다.
+
+주식을 팔고 다시 산 것도 아니었다. 보유주식 자체를 다른 증권사 계좌로 옮기는 타사대체 출고를 이용했다. 키움증권 HTS(홈트레이딩시스템)에서 상대 증권사와 계좌번호, 옮길 종목과 수량 등을 입력해 신청했다. 출고 사유를 묻는 항목에서는 여러 선택지 가운데 하나를 골랐다. \"수수료불만\".
+
+증권계좌를 여러 개 갖고 있는 투자자는 이제 낯설지 않다. 요즘엔 계좌를 여러 개 만들어두는 데 그치지 않고 투자 목적에 따라 증권사를 나눠 쓴다. 더 나은 조건이 생기면 가지고 있던 자산까지 이동시킨다.
+
+투자자 B씨는 \"주식에 집중할 때는 키움증권 MTS(모바일트레이딩시스템)를 쓰고 무지성 적립(별다른 판단 없이 정기적으로 투자)할 때는 토스를 씁니다\"라고 했다. 투자자 C씨는 연금저축은 미래에셋증<0xA0>증권, 개인종합자산관리계좌(ISA)는 신한투자증권을 이용하고, 개인형퇴직연금(IRP)은 아직 어디에 둘지 정하지 않았다고 했다. 키움증권 MTS로 차트를 보면서 실제 주문은 다른 증권사에서 낸다는 투자자도 있다.
+
+주식 잘한다고 펀드도 잘할까…키움, 국내주식 1위지만 펀드에선 16위
+왜 굳이 이렇게 복잡하게 투자할까. 답은 증권사들의 숫자에서 찾을 수 있다. 투자하는 상품을 바꾸면 강한 증권사도 바뀐다.
+
+키움증권은 올해 상반기 국내주식 리테일(개인) 시장점유율이 25.3%로 업계 1위다. 개인투자자가 국내주식을 사고팔 때 거래대금 4원 중 1원가량이 키움을 거친 셈이다.
+
+그런데 주식에서 펀드로 눈을 돌리면 순위표가 달라진다. 금융투자협회 통계를 분석한 결과 지난 7월 말 기준 키움증권이 개인에게 판매한 공모펀드 잔액은 3181억원이었다. 증권사 가운데 16위다. 한국투자증권은 6조5876억원, 삼성증권은 5조6428억원, 미래에셋증권은 4조9522억원이었다. 한국투자증권의 개인 공모펀드 판매잔액은 키움증권의 약 20.7배다. 국내 주식매매에서는 개인투자자 거래대금의 4분의 1가량을 차지하는 증권사가 개인 공모펀드 판매에서는 전혀 다른 위치에 있는 셈이다.
+
+키움증권의 전체 공모펀드 판매잔액 자체가 작은 것도 아니다. 7조6199억원에 달한다. 다만 이 가운데 개인 판매잔액은 3181억원으로 4.2% 수준이다. 키움의 공모펀드 판매 기반이 개인보다 법인·금융기관 등에 훨씬 많이 기울어 있다는 의미다. 키움의 강점과 빈틈이 동시에 드러나는 대목이다.
+
+국장은 키움, 해외주식은 토스…투자처 따라 달라지는 선택
+미래에셋증권으로 가면 또 다른 시장이 나타난다. 미래에셋증권은 해외주식과 연금에서 업계 최대 규모의 자산을 관리하고 있다. 해외주식 자산은 지난해 10월 50조원을 넘어섰고, 연금자산은 올해 6월말 80조8100억원까지 불어났다.
+
+해외투자 거래에서도 강자는 달라진다. 올해 상반기 토스증권을 통한 외화증권 위탁매매 금액은 약 367조원으로 업계 1위였다. 시장점유율은 21.6%에 달했다. 외화증권 수탁수수료에서도 토스증권은 업계 1위를 기록했다.
+
+해외주식 고객이 맡긴 자산 규모에서는 미래에셋증권이 두드러지지만, 실제 거래에서는 토스증권이 새로운 강자로 올라선 것이다. 국내 개인주식 거래의 강자가 키움증권이라면 해외주식 거래에서는 토스증권이 대형 증권사들을 제치고 존재감을 키웠다.
+
+결국 모든 투자영역에서 동시에 가장 강한 증권사는 없다. 과거라면 투자자의 질문은 단순했다. \"어느 증권사가 제일 낫나?\" 이제 질문이 달라졌다. \"무엇을 투자할 때 어느 증권사가 가장 좋나?\" 이 차이가 투자자의 돈을 여러 증권사로 흩어놓는다.
+
+계좌만 여러 개? 마음에 안들면 자산도 \"이사\"한다
+여기까지가 \"골라쓰기\"라면 한 단계 더 나아간 투자자들도 있다. \"갈아타기\"다. 개인투자자 D씨는 국내주식과 연금저축, ISA에 투자하다 자신이 내는 국내주식 거래 수평이 상대적으로 비싸다는 사실을 알게 됐다. 기존 증권사에 수수료를 낮출 수 있는지 문의했지만 어렵다는 답을 받았다. D씨는 결국 KB증권으로 옮겼다.
+
+일반계좌에 있던 주식은 타사대체 출고를 통해 다른 증권사 계좌로 옮겼다. 연금저축과 ISA도 금융회사를 바꿨다. 다만 두 계좌에서는 당시 보유 상품을 매도해 현금화한 뒤 이전 절차를 진행했다. 같은 증권사 이동이라도 자산과 계좌 종류에 따라 방식은 다르다.
+
+투자자 E씨는 세금 계산방식 때문에 증권사를 바꿀 생각까지 했다. 키움증권에서 해외주식을 거래하던 E씨는 미국주식을 일부 처분하면서 양도소득세 문제를 들여받기 시작했다. 증권사마다 해외주식 양도차익을 계산하는 방식에 차이가 있다는 점이 눈에 들어왔다. 그는 삼성증권 지점까지 찾아가 자신의 해외주식을 옮겼을 경우 세금 계산이 어떻게 되는지 문의한 뒤 타사대체 출고를 신청했다. 그러나 기존 증권사 측의 제안을 받은 뒤 당장 주식을 옮기지는 않았다. 옮길 수 있다는 사실만으로도 고객에게는 협상의 여지가 생긴 셈이다.
+
+F씨는 ISA를 옮겼다. ETF(상장지수펀드) 투자 편의성과 이벤트 혜택 등을 비교한 뒤 한국투자증권으로 이전했다. 주식매매뿐 아니라 장기간 유지하는 절세계좌도 증권사를 비교해 갈아타는 대상이 된 것이다.
+
+다른 증권사 주식 가져오세요…증권사도 이사비 준다
+투자자만 움직이는 것도 아니다. 증권사들은 경쟁사 고객의 자산에 대놓고 손짓한다. 다른 증권사에 있는 국내주식이나 해외주식을 가져오면 현금을 지급하는 이벤트가 성행한다. 이전 금액이 클수록 지급하는 보상도 커지는 방식이 일반적이다.
+
+A씨가 키움증권에서 삼성증권으로 해외주식을 옮길 때도 수수료 우대뿐 아니라 타사대체 입고 혜택이 선택에 영향을 미쳤다. 과거 증권사의 리테일 경쟁이 \"우리 회사에 계좌를 만드세요\"였다면 이제는 한 단계 더 들어간다. \"다른 회사에 있는 주식을 우리 회사로 가져오세요.\" 고객 숫자보다 고객이 실제로 들고 오는 자산이 중요해졌기 때문이다. 결국 고객의 어떤 자산을 가져오느냐의 경쟁이 되고 있다.
+
+증권사 입장에서는 까다로운 고객이 등장한 셈이다. 투자 목적에 맞춰 증권사를 나눠 쓰는 \"골라쓰기\"에, 조건이 달라졌을 때 자산과 계좌까지 옮기는 \"갈아타기\"가 더해진 \"골라타기\" 투자자들이다. 국내주식 거래는 A증권사, 미국주식은 B증권사, 연금은 C증권사에 맡길 수 있다. 공모주 청약을 위해 D증권사 계좌까지 만든다.
+
+한 증권사의 MTS에서 차트만 보고 주문은 다른 회사에서 낼 수도 있다. 수수료가 더 싸거나 환전 조건이 좋아지면 주식을 옮긴다. 원하는 상품이 더 많거나 세금 계산방식, ISA·연무 서비스, 이벤트 조건이 유리하면 장기간 쓰던 계좌도 갈아타는 대상이 된다.
+
+결국 증권사 경쟁의 기준이 달라질 수밖에 없다. 예전의 \"주거래 증권사\" 경쟁에서는 고객 한 명을 자기 회사 안에 붙잡아두는 것이 중요했다. 하지만 고객 한 명이 여러 증권사를 동시에 이용한다면 얘기가 달라진다. 그 고객이 가진 전체 투자자금 가운데 얼마를 우리 회사에 맡기게 하느냐가 중요해졌다. 금융업에서 흔히 말하는 \"지갑점유율\" 경쟁이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/008/0005409319' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/008/0005409319</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
