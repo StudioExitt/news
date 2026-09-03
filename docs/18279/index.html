@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2023년엔 ‘경기’ 올해는 ‘전쟁’…더 복잡해진 금리 변수</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.03</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/016/0002692379' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18279" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>2023년엔 ‘경기’ 올해는 ‘전쟁’…더 복잡해진 금리 변수</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국 10년물 국채 금리가 5%에 육박하며 글로벌 금융시장에 경고등이 켜졌습니다. 국채 공급 부담, AI 투자 수요, 중동 전쟁으로 인한 유가 상승 등 세 가지 요인이 복합적으로 작용하여 금리 하락을 저해하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">미국 국채 금리의 상방 압력이 공급 부담, AI 투자 수요, 지정학적 리스크(유가 상승) 등 복합적인 요인으로 인해 구조적으로 강화됨에 따라 글로벌 증시 변동성 확대 우려</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">미국 국채 ETF</span> <span class="tag stock-tag">빅테크 관련주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">에너지</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#미국금리</span> <span class="tag tag-hash">#국채수급</span> <span class="tag tag-hash">#AI투자</span> <span class="tag tag-hash">#지정학적리스크</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미국 등 주요국의 장기 국채 금리가 수십년 만의 최고 수준으로 치솟으면서 글로벌 금융시장에 경고등이 켜졌다. 미 국채 10년물 금리가 5% 턱밑 ‘적신호’. 2023년과 같은 빠른 안정 어려울 듯. 만기조절만으론 국채 수급 해소 한계. 경쟁적 AI투자 수요에 국채금리 압박. 이란戰에 유가 상승…물가 불안 자극. 미국 등 주요국의 장기 국채 금리가 수십년 만의 최고 수준으로 치솟으면서 글로벌 금융시장에 경고등이 켜졌다.
+
+미 국채 10년물 금리가 5%에 육박하면서 2023년 금리 급등 시기가 거론되고 있다. 2023년에도 장기금리는 약 5%까지 치솟았지만 이후 빠르게 안정세를 보였다. 하지만 투자업계는 지금 상황이 2023년과는 다르다고 분석한다. 당시와 달리 지금은 국채 공급 부담과 견조한 투자 경기, 지정학적 불안이 동시에 금리에 상방 압력을 가하고 있어서다. 특히 중동 전쟁이 국제유가를 직접 끌어올리면서 물가와 통화정책 불안까지 자극하고 있다는 게 큰 차이로 꼽힌다.
+
+2일(현지시간) 미 10년 만기 채권 금리는 장중 4.821%까지 올라 2023년 11월 이후 최고치를 기록했다. 이후 일부 상승 폭을 반납했지만 여전히 4.78%를 나타내며 높은 수준을 유지하고 있다. 시장에서는 이미 10년물 금리가 5%를 넘어설 것이라고 보고 있다. 2023년에 버금가는 금리 상승세가 나타날 것이라는 전망이다.
+
+이상준 NH투자증권 연구원은 “4.8%를 넘긴 미국 10년물 금리는 이제 5%를 테스트할 전망”이라며 “10년물 5%는 연준이 기준금리 상단을 5.5%까지 올린 2023년에 기록한 레벨”이라고 설명했다.
+
+2023년의 금리 급등도 출발점은 지금과 크게 다르지 않았다. 당시 미국에서는 부채한도 합의 이후 국채 발행이 재개됐고, 재무부가 시장 예상보다 큰 차입 계획을 내놓으면서 재정 우려가 빠르게 커졌다. 여기에 피치의 미국 신용등급 강등과 이표채 발행 확대까지 겹치면서 장기 국채 공급 부담이 부각됐다.
+
+강한 경기 역시 금리를 밀어 올렸다. 고용과 소매판매가 예상보다 탄탄하게 나오자 연준이 기준금리를 크게 올렸는데도 통화정책이 충분히 긴축적이지 않다는 인식이 확산되었다. 금리를 더 올려야 하는 것 아니냐는 우려가 장기금리 상승으로 이어졌다.
+
+그 흐름은 오래가지 않았다. 소비 호조가 지속되기 어렵다는 평가가 나온 데 이어 실제 고용지표가 약해지면서 경기 과열 우려가 빠르게 식었다. 결정적으로 재무부가 장기 국채 발행 확대 폭을 시장 예상보다 낮추고 단기채 비중을 늘리겠다고 발표하면서 장기물 수급 부담도 완화됐다. 여기에 연방공개시장위원회(FOMC)까지 비교적 완화적인 신호를 보내자 미국 10년물 금리는 한 달 사이 약 60bp(1bp=0.01%포인트) 떨어졌다.
+
+문제는 이번에도 당시와 같은 방식으로 금리를 눌러둘 수 있느냐에 있다는 것이다. 시장에선 크게 ▷국채 수급 ▷경기 중심축 ▷전쟁 등 세 가지 측면에서 차이가 있다고 분석한다.
+
+우선 국채 수급부터 다르다. 이미 재무부는 장기채 바이백 등을 통해 장기물 공급 부담을 낮추겠다는 의지를 보여주고 있다. 그럼에도 장기금리가 계속 오르고 있다는 건 시장이 만기별 발행 비중보다 전체 국채 발행 규모 자체를 더 걱정하고 있다는 뜻이다. 이란 전쟁 비용 등으로 향후 국채 발행 확대가 불가피하다는 전망이 나오는에다, 회사채 발행까지 늘어난 점도 부담이다.
+
+2023년에는 장기물 발행을 줄이고 단기물을 늘리는 방식으로 시장을 안심시켰다. 지금은 이 만기 조절만으로 해결하기 어려운 수준의 전체 공급 부담을 시장이 가격에 반영하고 있다. 미국의 막대한 빚, 그 자체가 채권 시장을 짓누르고 있는 셈이다.
+
+김일혁 KB증권 연구원은 “관세 환급과 이란 전쟁 비용 등으로 국채의 발행 규모 확대는 불가피하다”며 “만기별 발행 물량 조정으로 해결하기 어려운 국채 발행 물량 부담을 시장이 느끼고 있다”고 설명했다.
+
+경기의 중심축이 달라진 것도 중요한 차이다. 2023년에는 소비가 경기 호조를 이끄는 핵심 동력이었다. 고금리가 소비를 약화시키면 경기 둔화 기대와 함께 금리도 자연스럽게 내려갈 수 있었다. 지금은 투자, 특히 인공지능(AI)과 데이터센터 투자가 성장 중심에 있다. 7월 미국 데이터센터 건설지출은 전월 대비 6.23% 늘었고 지난해 말과 비교하면 35.5% 급증했다.
+
+AI 투자 경쟁은 일반 소비보다 금리에 덜 민감하다. 시장을 선점하기 위한 빅테크 대규모 투자가 이어지는 상황에서는 자금조달 비용이 높아졌다고 해서 투자를 곧바로 멈추기 어렵다. 이런 구조라면 향후 발표될 고용보고서가 예상보다 크게 부진하지 않는 한 경기 우려가 금리를 빠르게 끌어내리기는 쉽지 않다.
+
+특히, 전쟁이 큰 변수이다. 전쟁이 유가를 직접 건드리고 있다. 2023년에도 이스라엘과 하마스의 전쟁이 있었지만 당시엔 국제유가가 불안한 상황은 아니었다. 지금은 미국과 이란의 충cl퇴가 재개되면서 WTI가 배럴당 90달러를 넘어섰고, 호르무즈 해협 정상화 기대도 약해지고 있다. 국채 공급 부담이 더 크고, AI 투자를 중심으로 경기가 쉽게 꺾이지 않으며, 전쟁이 유가를 통해 물가까지 자극하고 있어서다. 세 요인이 동시에 금리의 하방을 막고 있는 셈이다.
+
+증시에는 분명 부담이다. 특히 미국 10년물 금리가 5%를 넘어서도 추가 상승할 경우 성장주 밸류에이션 부담이 커지고, 재정 불안과 긴축 우려가 겹치면서 주가 조정 압력이 더 확대된다.
+
+다만 금리 상승이 곧 증시의 추세 하락으로 볼 수 없다는 시각도 있다. 국내 증시의 펀더멘털은 훼손된 부분이 없고 국채 금리가 5%를 넘어설 경우 미국 정부의 보다 적극적인 개입이 나타나면서 상승세가 조절될 수 있다는 전망이다.
+
+이상준 연구원은 “5% 상회 시 미 정부의 즉각적 개입이 나타날 수 있고, (국내 증시의) 펀더멘털 여건도 훼손된 부분이 없다”며 “금리 상승에 따른 주가 변동성 확대가 불가피하지만 미국 정부의 개입, 경제지표 확인 등을 통한 금리 안정과 반도체 중심의 강한 펀더멘털 등을 바탕으로 코스피 지수도 재차 상승 동력을 키울 전망”이라고 강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/016/0002692379' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/016/0002692379</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
