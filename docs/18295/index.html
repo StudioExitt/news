@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>국회로 넘어간 레버리지 논란, 몸사리는 증권가는 냉가슴만</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.03</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/648/0000050443' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18295" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>국회로 넘어간 레버리지 논란, 몸사리는 증권가는 냉가슴만</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정치권에서 단일종목 레버리지 ETF 관련 이해충돌 의혹을 제기하며 국정조사 및 특검 추진 가능성을 언급함. 이로 인해 미래에셋증권을 비롯한 증권업계 전반의 규제 리스크와 투자 심리 위축이 우려됨.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">정치권의 레버리지 ETF 이해충돌 의혹 제기 및 국정조사/특검 추진 움직임으로 인한 증권업계 규제 리스크 및 투자 심리 악화 우려</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">미래에셋증권</span> <span class="tag stock-tag">한국투자증권</span> <span class="tag stock-tag">NH투자증권</span> <span class="tag stock-tag">키움증권</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#레버리지ETF</span> <span class="tag tag-hash">#이해충돌의혹</span> <span class="tag tag-hash">#국정감사</span> <span class="tag tag-hash">#증권주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">2일 미래에셋증권의 주가가 5.44% 하락 마감했다. 3일에도 소폭 반등하다 하락전환하는 등 5월 고점에서 폭락한 후 박스권을 벗어나지 못하는 모습이다. 3분기 들어 지속되는 증시침체로 증권업종 대부분이 바닥을 치고 있지만, 미래에셋증권의 하락폭은 유독 크다. 스페이스X로 대표되는 직접투자 성과로 상반기 주가가 워낙 크게 뛴 탓에 하락폭도 더 크다는 평이다.
+
+여기에 더해 시장에선 최근 정치권이 집중하고 있는 레버리지 책임론의 불똥이 미래에셋을 향하고 있다는 점도 이번 주가 하락의 원인으로 꼽는다. 야권에서 제기하고 있는 이른바 \"레버리지 ETF 게이트\"의 중심에 미래에셋이 있기 때문이다.
+
+나경원 국민의힘 의원은 지난달 30일 국회 기자회견에서 단일종목 레버리지 ETF의 투자자 손실규모가 54조원에 이른다고 언급하며 미래에셋그룹의 실적을 비교했다. 나 의원은 \"정작 이 상품을 주도한 ETF 시장 1위 운용사 미래에셋은 사상 최대 실적을 올렸다\"며 \"미래에셋증권은 2분기 1조9000억원, 미래에셋자산운용은 상반기에만 순이익 9063억원을 휩쓸어 담았다\"고 주장했다.
+
+그러면서 나 의원은 김용범 전 청와대 정책실장과 이찬도 금융감독원장의 아들이 각각 미래에셋자산운용에 재직하고 있다는 점에서 \"이해충돌\" 의혹까지 제기했다. 나 의원은 레버리지 ETF 도입과정에서 이해충돌 방지 의무를 위반한 김용범 실장과 이찬진 원장은 물론 이를 방치한 이억원 금융위원장도 모두 사퇴해야 한다고 촉구했다.
+
+그동안 도입 과정 자체에 집중됐던 단일종목 레버리지 상품 문제가 정치권의 정치쟁점으로 부상하면서 그 중심에 서게 된 미래에셋측은 당혹감을 감추지 못하고 있다. 특히 나 의원이 언급한 미래에셋증권과 미래에셋자산운용에선 자사의 실적이 실제 단일종목 레버리지 상품과 거리가 멀다는 점에서 답답함도 터져 나온다.
+
+실제로 나 의원의 말처럼 미래에셋증권은 2분기에 1조8959억원의 순이익을 올렸고, 세전이익으로는 2조5287억원을 벌었다. 그런데 미래에셋증권의 실적자료를 보면, 이 중 무려 64%인 1조6242억원이 스페이스X 투자에 따른 평가이익이다.
+
+스페이스X 성과를 제외하면 세전이익은 9044억원으로 경쟁사인 한국투자증권(1조2690억원)에도 크게 밀리는 것이 사실이다. 실적 발표 당시엔 성과의 핵심으로 자랑거리가 됐던 스페이스X 이익이 레버리지 성과로 둔갑해 오해를 사고 있는 셈이다.
+
+구체적으로 단일종목 레버리지 상품의 증권업계 위탁수수료 수익을 들여다보면, 미래에셋증권의 당혹감은 더 커진다.
+
+앞서 같은 당인 김재섭 국민의힘 의원실이 금융투자협회로부터 받은 단일종목 레버리지 16개 상품의 증\"권사별 위탁매매수수료수익 자료를 보면, 단일종목 레버리지 출시 후 수수료수익이 가장 큰 증권사는 220억원을 번 한국투자증권이다. 80억원을 번 미래에셋증권은 NH투자증권(124억원), 키움증권(123억)보다도 순위가 뒤로 밀린다.
+
+같은 의혹제기에 미래에셋자산운용도 냉가슴을 앓고 있다. 사실 미래에셋자산운용도 단일종목레버리지 도입 당시 가장 수혜를 볼 운용사 중 하나로 꼽혔지만, 실제 뚜껑을 열어보니 경쟁사인 삼성자산운용에 참패한 수준으로 성과가 미흡했기 때문이다.
+
+단일종목 레버리지 상품이 출시된 5월 27일 이후 지난 8월 3일까지 해당 상품의 운용수익은 삼성자산운용이 32억원으로 5억원의 미래에셋자산운용을 크게 앞질렀다. 운용수익 비중은 삼성자산\"자운용이 83%로 압도적이다. 삼성자산운용과 자산운용업계 1, 2위를 다투는 미래에셋자산운용에 입장에선 경쟁사에 실적으로 두들겨 맞은 뒤 업계를 향한 비난만 독식하는 상황이다.
+
+▷관련기사 : [단독]'단일종목레버리지' 삼성운용 승자 독식...운용수익 미래에셋의 6배
+
+고위직 자녀가 재직중이라는 점도 미래에셋에 화살이 향하는 이유로 꼽힌다. 나경원 의원은 \"이미 작년 9월 이찬진 원장과 김용범 실장의 아들이 미래에셋자산운용에 다닌다는 사실이 언론을 통해 보도됐다\"며 \"\" (이 원장과 김 실장은) 단일종목 레버리지 상품 심의과정에서 배제됐어야 한다\"고 주장했다.
+
+실제로 미래에셋자\"자운용에는 김용범 전 실장의 아들과 이찬진 금감원장의 아들이 각각 재직중에 있다. 그런데 이들이 공채로 입사한 시점은 2022년으로 이미 4년 전 부모들이 민간인이던 때다. 김 전 실장의 아들은 현재 글로벌 지원부서에서, 이 원장의 아들은 경영혁신 지원부서에서 각각 대리급 매니저로 일하고 있다.
+
+이 원장 아들의 미래에셋자산운용 재직사실은 지난해 9월 취임 당시 먼저 언론에 공개됐다. 이후 금융위에선 미래에셋자산운용 관련 모든 안건회의에서 이 원장을 배제하는 것으로 이해충돌 부분을 해소해 왔지만, 이번 레버리지 문제로 다시 논란의 중심에 섰다. 특히 김 실장의 경우 단일종목 레버리지 도입의 실질적인 출발점이라는 점에서 의혹이 가중된다.
+
+장동혁 국민의힘 대표는 지난 1일 김용범 실장의 사임 이후에도 이해충돌 의혹을 부각시키며 대여 공세를 강화하고 있다. 장 대표는 \"개각도 피해간 김용범 실장이 갑자기 사퇴한 이유가 미래에셋 로비의 꼬리가 밟혔기 때문이라는 의혹도 있다\"며 국정조사는 물론 특검까지 추진하겠다는 입장을 밝혔다.
+
+다만 정치권의 의혹제기가 구체적인 실적사실과 자녀들의 실질적인 취업현황을 고려하지는 않는 모습이다. 나 의원의 발언처럼 무관한 실적이 인용되기도 하고, 일부에선 증권사와 자\"산운용사를 구분하지 않고 혼용하기도 한다.
+
+해당 증권사와 자산운용사 입장에선 답답함을 호소하면서도 기업차원에서 공식적으로 해명하기를 꺼리고 있다. 이미 정치쟁점화된 사안에 자칫 잘못 휘말리면 더 큰 화를 부를수 있다는 우려 때문이다.
+
+금융투자업계 관계자는 \"정치권에서는 구체적인 팩트보다는 연결고리를 찾는데 주력하기 때문에 오해가 오해를 불러일으킬 수밖에 없는 상황\"이라며 \"개별 기업이 야당 대표나 중진의원의 발언에 적극적으로 해명하기도 쉽지 않을 것\"이라고 말했다.
+
+하지만 앞으로 이런 상황은 더욱 가중될 전망이다. 가을 국정감사 시즌이 되면서 이미 레버리지 문제의 정쟁화는 금융투자업계 전반으로 불안감을 확산시키고 있다.
+
+자녀 취업문제로 직접적인 타깃이 된 미래에셋뿐만 아니라 레버리지 관련수수료 수익을 가장 많이 올린 한국투자증권이나 삼성자산운용쪽도 불안하긴 마찬가지이다. 레버리지상품이 국내 증시 불안을 야인하게 하는 원흉으로 지목되면서 업계 대표자들이 국정감사의 증인이나 참고인 등으로 소환될 여지도 커졌기 때문이다.
+
+실제로 2023년 국감에선 부동산 프로젝트파이낸싱(PF) 문제가 화두였는데, 당시 홍원식 iM투자증권 대표가 증인으로 채택됐고, 최희문 메리츠증권 대표, 정일문 한국투자증권 부회장 등도 감사장에 출석해야만 했다.
+
+증권업계 관계자는 \"국정감사 시즌이 되면 국회에선 기업 사장들을 소환하려는 요구가 많은데, 올해는 증시가 워낙 주목받고 있어서 증권사나 자산운용사 대표들이 타깃이 될 가능성이 높다\"며 \"업계 전반적으로 최대한 몸을 사리고 있는 것으로 안다\"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/648/0000050443' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/648/0000050443</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
