@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“韓주식 오래 가라”…세제 개편이 바꿀 증시 지도</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.03</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001264678' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18267" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“韓주식 오래 가라”…세제 개편이 바꿀 증시 지도</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부의 2026년 세제개편안이 국내 증시의 체질을 바꾸는 구조적 변수로 작용할 전망입니다. ISA 비과세 확대와 자사주 소각 유인 강화 등을 통해 고배당주 및 저PBR 기업에 대한 수혜가 기대됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">정부의 세제 개편안이 ISA 비과세 확대 및 자사주 소각 유인 강화 등 국내 주식 시장에 장기적으로 유리한 구조를 형성하여 증시 체질 개선을 이끌 것으로 전망됨</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">고배당주</span> <span class="tag stock-tag">저PBR 관련 지주사</span> <span class="tag stock-tag">금융주</span> <span class="tag stock-tag">반도체</span> <span class="tag stock-tag">이차전지</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">제조업</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#세제개편</span> <span class="tag tag-hash">#ISA</span> <span class="tag tag-hash">#저PBR</span> <span class="tag tag-hash">#주주환원</span> <span class="tag tag-hash">#증시체질개선</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">증시 체질 개편 구조 변수로 작용
+ISA 신설·생산 세액 공제 등 주목
+저PBR·고배당주 수혜 전망
+
+정부가 확정한 2026년 세제개편안이 주식시장의 단기 방향을 결정하는 촉매보다는 증시 체질을 바꾸는 구조 변수로 작용할 것이라는 분석이 나왔다.
+
+대신증권은 3일 이번 세재개편안이 "국내 자본시장으로의 자금 재배치"와 "기업 밸류에이션·거버넌스 정상화"라는 두 축을 세제로 뒷받침하는 성격이 강하다고 분석했다. 정부는 이 개편안을 9월 1일 국무회의에서 확정하고 3일 정기국회에 제출했다.
+
+증시에 영향을 미칠 핵심 대표 항목으로 생산적금융 개인종합자산관리계좌(ISA) 신설을 꼽았다. 국내 상장주식·주식형 펀드·기업성장투자기구(BDC) 투자 시 이자·배당소득을 전액 비과세하며 총 납입한도는 2억원이다.
+
+이경민 대신증권 연구원은 "계약기간 상한·한도 이월 폐지 등 규제적 요소가 철회되면서 상품성이 개선됐다"고 평가하며 고배당주·국내 주식형 ETF·증권업에 긍정적이라고 평가했다.
+
+자기주식 과세체계의 자본거래 일원화도 부각된다. 올해 3월 상법 개정(자사주 1년 내 소각 의무화)과 결합해 '자사주 매입, 소각, 주식 수 감소'라는 주주환원 공식을 세제 측면에서 완성한다는 평가다. 2027년 1월 시행 예정이다.
+
+주가 누르기 방지 상장주식 평가방법 개선은 적용 대상이 지나치게 좁다는 비판 끝에 대통령 재검토 지시로 정부안에서 제외돼 국회 논의로 이관됐다. 여당의 주가순자산비율(PBR) 0.8배 하한 대안이 채택되면 저PBR 기업 약 1300개사의 주주환원 유인이 크게 강화되는 '정책 서프라이즈' 가능성이 있다는 분석이 나온다.
+
+태양광·풍력·이차전지·반도체·핵심소재·AI로봇부품 6개 분야에 생산량 기반 세액공제(2027~2036년)가 신설된 것과 가업상속공제 재설계로 승계가 어려워진 중견·중소기업의 지분 매각(M&A) 유인이 커진 점 등은 중장기 변수가 될 전망이다.
+
+이 연구원은 "수급 측면에서 단기 영향력은 제한적이지만 방향은 일관되게 국내 주식 보유·장기투자·배당·자사주 소각에 유리하다"며 "고배당주·저PBR 지주·금융·소재, 국내 주식형 ETF, 증권·자산운용, 생산세액공제 대상 제조업에 선별적으로 작용할 것"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001264678' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001264678</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
