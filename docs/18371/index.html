@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>제2의 단일종목 레버리지?…T+1, 졸속 도입 우려</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.04</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003128912' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18371" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>제2의 단일종목 레버리지?…T+1, 졸속 도입 우려</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부가 증권시장 결제주기 단축(T+1)을 추진 중이나, 전문가들은 시스템 안정성 저하와 시장 혼란에 대한 우려를 제기하고 있다. 충분한 테스트와 인프라 준비 없이 도입될 경우 금융 시장의 신뢰가 훼손될 수 있다는 지적이다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">증권 시장의 결제 인프라를 근본적으로 바꾸는 정책으로, 단기적인 혼란과 시스템 리스크 발생 가능성이 높아 시장 불확실성을 증대시킴</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한국거래소</span> <span class="tag stock-tag">한국예탁결제원</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#T+1</span> <span class="tag tag-hash">#결제주기단축</span> <span class="tag tag-hash">#증권시장</span> <span class="tag tag-hash">#금융규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">단일종목 레버리지 졸속 도입으로 도마에 오른 이재명 정부가 증권시장 결제주기 단축(T+1)의 속도전을 거듭 주문하고 있다.
+
+전문가 우려를 묵살하고 밀어붙인 단일종목 레버리지 후폭풍을 겪고도 달라진 것이 없는 모양새다.
+
+4일 한국거래소와 금융투자업계 등에 따르면, 거래소는 오는 10월 'T+1 로드맵'을 발표할 예정이다.
+
+내년 말 시행이 목표 시점으로 거론되지만, 이재\"명 대통령이 직접 조기 시행을 압박한 바 있어 앞당겨질 가능성도 있다.
+
+현재 국내 증권시장은 T+2 시스템을 기반으로 운영되고 있다. 오늘 보유 주식을 팔면, 현금은 이틀 뒤에 찾을 수 있다. T+1 시스템이 도입되면 주식을 판 다음날 현금을 손에 쥘 수 있게 된다.
+
+T+1 도입 명분은 '국민 편익 증대'와 '글로벌 스탠다드'이다. 이재명 대통령은 지난 6월 "주식 시장 참여자 입장에서 주식을 팔고 돈을 돌려받는데 요즘 같은 세상에 왜 이틀씩이나 걸리는지 납득하기 힘들 수 있다"고 말했다.
+
+T+1 공론화에 일조한 대통령 직속 규제합리화위원회 박용진 부위원장은 지난 2일 관련 토론회에서 "결제주기 단축은 세계 자본시장이 향하고 있는 글로벌 스탠다드이고 개인 투자자들의 자금이 불필요하게 묶이는 시간을 줄여 투자자들에게 기회비름을 더 가질 수 있도록 하는 일"이라고 주장했다.
+
+지난 5월 말 출시된 단일종목 레버리지도 표면적 도입 명분은 글로벌 스탠다드였다. 금융당국은 해외에선 허용되지만 한국에선 허용되지 않는 '비대칭 규제 해소' 차원에서 단일종목 레버리지를 출시한다고 했었다.
+
+실질적 정책 목표는 서학개미 환류였지만, 국민 편익 증대도 주요 명분으로 언급됐다. 금융당국은 "그간 다양한 상장지수펀드(ETF) 상품 등에 투자하려는 수요가 국내에서 충족되기 어렵다는 지적이 제기돼 왔다"고 설명했다.
+
+단일종목 레버리지와 마찬가지로 T+1 역시 제도 입안 과정에서 전문가 및 현장 우려가 쏟아지고 있다. 도입 필요성엔 공감하지만 안정적으로 시스템이 정착할 수 있는 환경을 조성하는 데 집중해야 한다는 지적이다.
+
+최훈 한국거래소 청산결제본부 부장은 "결제주기 단축은 증권사나 거래소뿐만 아니라 시장 전반이 한꺼번에 바뀌어야 하는 과정"이라며 "예탁결제원·한국은행·한국증권금융 등 인프라 기관이 제도 개편을 해야 하고, 자산운용사·연기금·수탁은행·외국인 투자자 등이 모든 기존 관행을 바꿔야 한다"고 말했다. 그러면서 "조기 이행도 중요하지만 안정적 개편이 중요하다"고 강조했다.
+
+개인 투자자와 관련된 장내 시장결제의 경우, 결제일 당일(T) 거래가 체결되면 다음날(T+1) 정정·차감·세금 관련 작업 등이 이뤄진다. 실제 주식과 돈의 교환은 이틀 뒤(T+2) 마무리된다. 관련 작업을 진행하는 시간이 하루 줄어드는 만큼, 오류 발생 가능성은 높아질 수밖에 없다.
+
+글로벌 투자자들이 연관된 기관결제는 훨씬 더 복잡하다. 아직 수작업으로 이뤄지는 과정이 있는 స다, 시차 및 환전 이슈도 얽혀있다. 최 부장은 "한국시장에서 외국인 투자자가 30% 정도를 차지하고 있다"며 "시장 유동성 측면에서 외국인 투자자 불편을 가중시키지 않고 제도를 이행하는 게 중요하다"고 강조했다.
+
+무엇보다 현장은 '찍어누르기'에 따른 속도전을 경계하는 분위기다. 백대만 금융투자협회 팀장은 "지시가 떨어지면 한국만의 빨리빨리 문화로 인해 시장 제도가 너무 빨리 벌어지다 보니 글로벌 시장 참여자들과 충분히 소통해 제도를 설계해 달라는 요청이 꽤 많다"고 전했다.
+
+박상현 NH투자증권 결제업무부 차장은 "(위에서) 하라고 해서 하면 모두가 힘들어진다"며 "결제주기를 T+2로 정한 게 1\"72년이다. 전산 결제 등 모든 제도가 (T+2 도입) 이후에 만들어져 결제주기를 변경하면 다 변경될 수밖에 없다"고 말했다. 박 차장은 결제주기를 '주춧돌'에 비유하며 "기둥보다도 근간에 깔려 있어서 변경하는 작업이 몹시 어려울 수밖에 없다"고 강조했다.
+
+특히 대형사에서 소형사까지 모든 시장 참가자들이 '새로운 문법'에 적응해야 한다는 것이 핵심 과제다. 인력 및 시스템 확충이 쉽지 않은 일부 소형사에서 결제 불이행이 빚어질 경우 전반적인 시장 신뢰도가 훼손될 수 있다는 지적이다.
+
+최 부장은 "로드맵 일정에 있어서 중요하게 생각하는 게 테스트 일정"이라며 "통합 테스트를 반복적으로 수행해 모든 시장 참가자들이 준비가 됐는지 살펴보겠다. 자칫하면 시장 신뢰 저하로 이어져 상당히 준비하고 있다"고 밝혔다.
+
+당장 내년 4분기 T+1 도입을 예고했던 홍콩조차 일정 연기 카드를 만지작거리고 있는 것으로 알려졌다. 강소현 자본시장연구원 자본시장실장은 "'나를 따르라'보다는 '같이 따라가자'는 측면에서의 접근이 필요하지 않을까 한다"며 "아시아 주요시장 일정이 어떻게 되는지, 글로벌 T+1 전환 흐름 등을 고려해 발맞춰 나갈 필요가 있다"고 설명했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003128912' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003128912</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
