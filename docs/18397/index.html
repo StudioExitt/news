@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스닥 상폐 '45일 룰'…막판 하루 미달에도 퇴출 가능성</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.04</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/648/0000050469' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18397" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스닥 상폐 '45일 룰'…막판 하루 미달에도 퇴출 가능성</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스닥 상장유지 기준인 시가총액 요건이 강화됨에 따라, 45거래일 연속으로 기준을 충족해야 하는 규정으로 인해 기업의 상장폐지 리스크가 확대되었습니다. 특히 내년부터는 기준 금액이 300억 원으로 상향되어 중소형주의 재무 부담 및 경영권 희석 우려가 커지고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">상장폐지 요건 강화 및 시가총액 기준 상향으로 인한 코스닥 중소형주의 퇴출 리스크 증대와 경영권 부담 가중</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">일정실업</span> <span class="tag stock-tag">코스닥 상장사</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥</span> <span class="tag tag-hash">#상장폐지</span> <span class="tag tag-hash">#시가총액</span> <span class="tag tag-hash">#관리종목</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[무질서한 상폐]②
+일정실업, 시총 미달 뒤 결국 상폐…강화된 기준 첫 현실화
+관리종목 뒤 90거래일 내 시총 기준 45거래일 연속 충족해야
+44일 채워도 하루 미달하면 다시…후반부엔 회복 어려워
+내년 시총 기준 300억…유증 땐 최대주주 지분 희석 부담도
+
+시가총액 미달에 따른 상장폐지가 현실화하고 있다. 유가증권시장 상장사 일정실업은 지난 3월 시가총액 미달로 관리종목에 지정된 뒤 끝내 기준을 회복하지 못하면서 지난 6월 시장에서 퇴출됐다. 강화된 시가총액 상장유지 기준이 실제 상장폐지로 이어진 첫 사례다.
+
+코스닥 시장도 남의 일이 아니다. 지난 7월 시가총액 상장유지 기준이 150억원에서 200억원으로 높아진 데 이어 내년부터는 300억원으로 다시 올라간다. 여기에 관리종목 지정 이후 상장폐지를 피하기 위한 회복 요건까지 '45거래일 연속'으로 강화되면서 기준선에 걸쳐 있는 기업들의 부담이 커지고 있다.
+
+44일 버텨도 하루 미달하면 다시…후반부엔 회복 어려워
+
+일정실업은 지난 3월16일 시가총액 미달로 관리종목에 지정됐다. 이후에도 시가총액 200억원을 회복하지 못하면서 한국거래소는 6월15일 상장폐지를 결정했다. 일정실업 주식은 같은 달 19일부터 29일까지 정리매매를 거쳐 30일 상장폐지됐다.
+
+법무법인 세종은 "시가총액 미달은 일정 기간 동안 요건을 회복하지 못하면 별도의 개선계획 심사나 장기간의 이의신청 절차 없이 상장폐지로 이어질 수 있는 매우 강력한 형식적 상장폐지 사유"라고 설명했다.
+
+코스닥에서는 관리종목 지정 이후 상장폐지를 피하기 위한 회복 요건도 이전보다 까다로워졌다. 기존에는 시가총액이 30거래일 연속 기준에 미달해 관리종목으로 지정되더라도 이후 90거래일 동안 '연속 10거래일 및 누적 30거래일' 이상 기준을 충족하면 상장폐지를 피할 수 있었다. 개정된 규정에서는 이를 '45거래일 연속'으로 바꿨다.
+
+종전에는 90거래일 안에서 기준선을 오르내리더라도 기준을 웃돌던 거래일을 누적할 수 있었다. 예컨지 20거래일간 기준을 웃돌다 하루 미달하더라도 앞서 쌓은 20거래일이 사라지는 것은 아니었다.
+
+지금은 다르다. 45거래일을 연속으로 충족해야 해 중간에 단 하루라도 기준 아래로 떨어지면 다시 처음부터 계산한다. 가령 44거래일 연속 기준을 지키다가 45번째 거래일에 다시 미달하면 앞서 쌓은 44거래일은 인정받지 못한다. 45거래일 동안 하루도 빠짐없이 기준을 웃돌아야 상장폐지를 피할 수 있고, 여기서 하루라도 더 미달하면 45거래일 연속 요건을 채우는 것은 수리적으로 불가능해진다.
+
+90거래일이라는 관리기간이 주어지지만 실질적인 회복 기회가 제한적인 이유다. 여러 차례 기준선을 오르내리며 회복할 수 있었던 종전과 달리 사실상 한 번의 긴 회복 구간을 만들어 45거래일을 연속으로 버텨야 한다.
+
+일정실업은 관리종목 지정 후 53거래일이 지나도록 단 하루도 시가총액 200억원 이상을 회복하지 못했다. 거래소는 90거래일이 끝날 때까지 기다리지 않고 해제 요건 충동이 수리적으로 불가능해진 시점에 상장폐지 절차에 들어갔다.
+
+코스닥은 기준 자체도 빠르게 높아지고 있다. 올해 7월 150억원에서 200억원으로 올라간 시가총액 기준은 내년 1월부터 300억원으로 다시 높아진다. 단순 계산으로 시가총액 200억원인 기업은 내년 기준을 맞추려면 기업가치를 50%, 250억원인 기업은 20% 끌어올려야 한다.
+
+시총 200억→300억 유증하면 최대주주 지분 30%→20%
+
+높아진 기준을 맞추기 위해 기업들이 선택할 수 있는 수단도 마땅치 않다. 유상증자와 자사주 취득, 인수합병(M&A) 등이 거론되지만 각각 자금 부담이나 지분 희석 등의 문제가 뒤따른다.
+
+특히 유상증자는 신주 발행을 통해 자본을 확충하고 시가총액을 늘릴 수 있지만 기존 주주의 지분은 희석된다. 주가가 변하지 않고 신주가 발행가액대로 시가총액에 반영된다고 단순 가정하면 시가총액 200억원인 기업이 100억원을 증자해 300억원으로 늘릴 경우 기존 주주의 지분율은 3분의 2 수준으로 낮아진다. 최대주주의 기존 지분율이 30%라고 가정하면, 증자에 참여하지 않을 때 지분율은 20%로 떨어진다.
+
+상장폐지를 피하기 위한 자본 확충이 최대주주의 경영권 부담으로 이어질 수 있는 셈이다. 세종은 "이번 개혁방안은 다수의 상장사들에게 시가총액 부양 및 재무개선에 대한 압력으로 작용할 것으로 보인다"고 분석했다.
+
+시가총액을 억지로 끌어올리는 행위가 '시세조종'으로 간주될 가능성도 나온다. 코스닥 업계 관계자는 "내년 7월까지 시가총액 200억인 기업이 300억까지 50% 가량 올리기 위해서는 사실상 최대주주가 회사 지배력을 포기하거나, 주가를 억지로 부양하는 수밖에 없다. 주가를 억지로 부양하는 것은 사실상 '시세 조종 행위'"라며 우려했다.
+
+한편 상장폐지 기준을 앞당겨 적용한 데 대한 법적 다툼도 시작됐다. 일부 상장사는 거래소를 상대로 관리종목 지정 효력정지와 상장폐지 금지를 구하는 가처분을 냈다. 시가총액 기준을 당초 계획보다 앞당겨 시행하면서 기업의 예측 가능성과 신뢰를 침해했다는 주장이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/648/0000050469' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/648/0000050469</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
