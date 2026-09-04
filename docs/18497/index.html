@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>정부는 “수익률 높여라”, 기업은 “손실 나면?”…퇴직연금 딜레마</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.05</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/243/0000102655' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18497" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>정부는 “수익률 높여라”, 기업은 “손실 나면?”…퇴직연금 딜레마</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부가 DB형 퇴직연금의 수익률 제고를 위해 실적배당형 상품으로의 전환을 압박하고 있으나, 기업들은 원금 손실 시 재무 부담을 우려하는 딜레마에 빠져 있다. 한편, DC 및 IRP 시장에서는 ETF 등 투자형 상품으로 자금이 이동하는 \"머니무브\" 현상이 나타나고 있다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">퇴직연금 자산의 실적배당형 이동(머니무브)은 증권 및 ETF 시장에 긍정적이나, DB형 운용 리스크 증가로 기업 재무 부담 및 불확실성이 존재함</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">KB금융</span> <span class="tag stock-tag">신한지주</span> <span class="tag stock-tag">하나금융지주</span> <span class="tag stock-tag">우리금융지주</span> <span class="tag stock-tag">NH투자증권</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">상업은행</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#퇴직연금</span> <span class="tag tag-hash">#DB형</span> <span class="tag tag-hash">#DC형</span> <span class="tag tag-hash">#머니무브</span> <span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#자산배분</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">정부가 기업이 운용 책임을 지는 확정급여(DB)형 퇴직연금을 대상으로 사실상 체질 개선 압박에 나섰다. 적립금의 대부분이 예·적금 등 원리금보안형 상품에 매여 있는 구조를 깨고 실적배당형 상품으로의 다변화를 적극 유도하겠다는 방침이다. 하지만 자칫 원금 손실이 발생할 경우 그 책임은 누가 질 것인가에 대한 우려의 목소리도 나온다.
+
+정부는 지난 8월 DB형 적립금의 목표수익률을 최소한 임금 상승률 이상으로 설정할 것을 권고했다. 고용노동부와 금융감독원에 따르면 2025년 말 기준 전체 퇴직연금 적립금 501조4000억원 가운데 DB형은 228조9000억원으로 45.7% 수준이다.
+
+DB형은 근로자가 퇴직할 때 받을 급여가 사전에 정해지는 퇴직연금 상품이다. 기존의 ‘퇴직금’과 유사하다. 통상 직장인의 퇴직 전 3개월 평균임금에 근속연수를 곱해 계산한다. 직장에 오래 다닐수록 임금이 인상되는 것을 고려하면 퇴직연금도 이에 비례해 올라간다. 사용자가 직장인의 DB형 연금을 운용해 높은 수익률을 내면 회사의 부담을 최소화할 수 있다는 장점이 있다.
+
+그런데 지난해 DB형 연간 수익률을 보면 3.5%에 그친 것으로 나타났다. 최근 5년간 누적 수익률은 15.9%로 같은 기간 임금 상승률 18.9%를 밑돌았다. 만약 적립금 수익률이 임금 상승률보다 낮으면 그 차이만큼을 기업이 추가로 적립해야 하기 때문에 기업 부담이 커진다. DB형 적립금의 91.9%가 원리금보장형 상품에 집중된 것을 고려하면 정부가 DB형 퇴직연금 수익률을 높이라고 권고하는 원인을 짐작할 수 있다.
+
+정부는 퇴직연금사업자의 자문을 활용해 자산배분을 할 것을 유도하고 있다. 자산 운용 전문가인 퇴직연금사업자가 기업의 정보와 위험 선호도 등을 분석해 목표수익률과 자산배분 방안을 제시하도록 한다는 것이다. 실제 자문을 받아 실적배당형·원리금보장형 등으로 투자를 다변화한 한 사업장의 수익률이 5.9%에서 7.4%, 25.5%로 개선된 사례를 소개하기도 했다.
+
+고용노동부는 연말까지 DB형 적립금 운용 모범 사용자와 사업자를 선정해 포상한다는 계획인데, 동시에 적립금 미충족 사업장에는 정기 감독을 실시하고 과태료 부과 등 실효적인 제재 조치도 병행한다는 방침이다.
+
+문제는 원금 손실이 발생할 경우 그 책임을 누가 질 것인가 하는 점이다. DB형의 핵심 구조는 운용 결과에 따른 손익이 온전히 기업에 귀속된다는 데 있다. 운용 수익이 높아지면 기업의 납입 부담이 줄어들지만, 반대로 시장 변동성으로 손실이 발생하거나 목표 수익률에 미달하면 그 부족분을 기업이 자금을 마련해 메워야 한다.
+
+정부 권고에 따라 원리금보장형에 묶여 있던 적립금을 주식·채권형 펀드, 상장지수펀드(ETF) 등 실적배당형 상품으로 옮겼다가 증시 폭락 등으로 원금 손실이 발생할 경우 재무적 타격은 고스란히 기업의 몫이 된다는 뜻이다.
+
+은행권 관계자는 “원리금보장 상품 수익률이 높지 않아도 상당수 직량인이나 기업이 이 상품을 선택하는 데에는 ‘적어도 원금을 지킬 수 있다’는 믿음이 있기 때문”이라며 “높은 수익률을 원하면서 손실을 감내할 수 있는 직장인이라면 퇴직연금을 확정기여(DC)형으로 전환할 수도 있다”고 말했다.
+
+자율적 머니무브…5대 은행 DC·개인형 퇴직연금(IRP) 투자형 비중↑
+실제 개인 가입자가 직접 운용하는 DC형과 IRP 시장에서는 이미 자발적인 ‘머니무브’가 전개되고 있다. 금융감독원에 따르면 KB국민·신한·하나·우리·NH농협 등 5대 시중은행의 DC형 퇴직연금 내 원리금비보장형(투자형) 적립금 비중은 올해 1분기 말 29.15%에서 2분기 말 37.73%로 석 달 만에 8.58%포인트 늘었다. 적립금 규모 역시 17조9173억원에서 25조3701억원으로 7조4528억원이나 불어났다.
+
+IRP 시장에서의 자금 이동은 더욱 공격적인 모습을 띠고 있다. 5대 은행의 IRP 원리금비보장형 비중은 1분기 말 39.73%에서 2분기 말 48.01%로 8.28%포인트 상승했다. 적립금 규모 역시 30조8979억원에서 42조37억원으로 11조1058억원 증가했다.
+
+이 같은 머니무브의 배경에는 상반기 증시 호황과 ETF 수요 확대 등이 영향을 준 것으로 풀이된다. 시중은행 관계자는 “증시 상승세가 이어지는 동안 정기예금 등에 묶여 있던 자금을 ETF 등 실적배당형 상품으로 갈아탄 가입자가 늘었고 기존에 투자해 둔 상품의 평가액 자체가 커진 점이 비중 확대에 복합적으로 작용했다”고 설명했다.
+
+원금 손실 위험은 낮게, 기대 수익률은 높게
+퇴직연금 시장에서 실적배당형 투자에 대한 관심이 커지고 있지만, DC형과 IRP 가입자에게는 반드시 지켜야 할 법적 규제도 있다. 전체 적립금의 최소 30%는 원리금보장형이나 가격 변동성이 낮은 안전자산으로 채워야 한다는 ‘안전자산 30% 의무 보유 규정’이다.
+
+오은미 미래에셋투자와연금센터 지식콘텐츠팀 팀장은 ‘흔들리는 증시 속 퇴직연금 지키기, 안전자산 30% 채우는 법’ 보고서를 통해 안전자산을 굴리는 다섯 가지 운용 방식을 소개했다. 첫째, 원금을 절대 지키고 싶은 투자자는 정기예금이나 원리금보장형 주가연계파생결합사채(ELB)·파생결합사채(DLB) 등 원리금보장상품에 가입하는 것이다.
+
+둘째, 매일 이자를 받으며 필요할 땐 다른 곳에 투자하고 싶은 투자자는 금리형(파킹형) ETF를 추천할 수 있다. 안정적인 곳에 자산을 맡겨 하루치 이자를 챙기다가 언제든 자금을 활용할 수 있다.
+
+셋째, 금리가 하락할 때 시세차익을 챙기고 싶은 투자자는 채권형 ETF를 눈여겨볼 만하다. 채권형 ETF는 기초자산이 채권이기 때문에 이자 수익이 분배금 형태로 지급된다. 또한 금리 하락 국면에서는 채권 가격이 상승하기 때문에 자본 차익도 기대할 수 있다.
+
+넷째, 주식 비중을 최대한으로 늘리고 싶은 투자자라면 채권혼합형 ETF를 주목할 수 있다. 주식과 채권을 혼합한 상품으로 상품 내 주식 비중이 최대 50%까지 포함될 수 있다. 퇴직연금에서 30% 안전형 자산 자리에 이 채권혼합형을 넣으면 전체 포트폴리오에서 주식이 차지하는 비중을 극대화할 수 있다.
+
+다섯째, 복잡한 계산이 싫은 경우 은퇴 시점까지 자산배분을 맡아주는 타깃데이트펀드(TDF) 상품도 있다. 적격 TDF 상품은 투자 기간에 맞춰 주식 비중을 자동으로 조절해 준다. 은퇴 기간이 다가올수록 주식 투자 비중을 줄여나가는 방식이다.
+
+오 팀장은 “30% 규정은 언뜻 제약처럼 보이지만, 지금 같은 변동성 장세에서는 포트폴리오의 중심을 잡아주는 든든한 축이 된다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/243/0000102655' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/243/0000102655</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
