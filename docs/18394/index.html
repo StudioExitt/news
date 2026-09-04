@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피, 5% 금리 레드라인 넘지 않는다면 반등 여력 충분</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.04</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006363483' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18394" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피, 5% 금리 레드라인 넘지 않는다면 반등 여력 충분</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국 10년물 국채금리가 5%를 넘지 않는다면 코스피는 반등할 가능성이 높음.\n최근 금리 상승과 지정학적 리스크로 주가가 조정받았으나, 반도체 수출 호조와 삼성전자·SK하이ness의 자사주 매입이 하단을 지지할 것으로 전망됨.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">미국 국채 금리 변동성과 반도체 수출 실적이 시장의 향방을 결정할 핵심 요소로 작용할 전망임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전력기기</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">조선</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#미국국채금리</span> <span class="tag tag-hash">#반도체수출</span> <span class="tag tag-hash">#자사주매입</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">유안타증권 보고서 유안타증권은 지난주 코스피와 코스닥이 각각 4.8%, 5.6% 하락한 것과 관련해 \"9월 시장의 핵심은 여전히 금리\"라며 미 10년물 국채금리가 5% 레드라인을 넘지 않는다면 주가-펀더멘털 괴리 축소에 따른 반등 가능성에 주목해야 한다고 4일 밝혔다.\n\n[포토] 코스피 6,562.72 마감\n\n이재원 유안타증권 연구원은 이날 보고서에서 \"잭슨홀 미팅 이후 케빈 워시 연준 의장의 매파적 발언과 미국 재정·장기금리 부담까지 중동 갈등까지 겹치며 위험회피 심리가 확대됐다\"라며 \"특히 미 10년물 금리가 4.8%를 재돌파하며 밸류에이션과 외국인 수급에 부담으로 작용했다\"고 밝혔다.\n다만 \"삼성전자·SK하이닉스의 자사주 매입이 지수 하단을 지지하며 매크로 충격 대비 낙폭은 제한됐다\"라고 설명했다.\n\n이어 \"과거 장기금리가 의미 있는 부담 구간에 도연하기 전까지 주식시장이 약세를 보였지만, 레드라인 도달 이후에는 금리 안정과 함께 반등한 경험도 반복됐다\"라며 \"따라서 현재 4.8% 도달 자체보다 이후 5%를 향한 추가 상승 여부가 중요하다\"고 강조했다.\n\n2023년 10월 미 10년물 금리가 5%에 도달했을 당시 주식시장 충격이 매우 컸으나 이후 금리 안정화와 함께 시장이 반등했던 전례가 근거로 제시됐다. 고용·물가 지표 둔화와 재무부의 장기채 수급 안정 노력이 금리를 낮출 수 있는 반면, 중동 갈등 장기화와 유가 상승은 이를 다시 자극할 변수로 꼽혔다.\n\n이익과 수급 측면에서는 하방을 지지할 근거가 유지되고 있다는 판단이다. 코스피 이익추정치는 전주 대비 5조8000억원 추가 상향됐고 IT가 이익 개선을 주도했다. 수출 호조도 지속돼 8월 반도체 수출은 전년 대비 209% 증가한 466억5000만달러로 3개월 연속 400억달러를 상회하며 사상 최대치를 기록했다. 삼성전자와 SK하이닉스의 자사주 매입도 9월에 이어질 여력이 충분한 것으로 나타났다. 2일 기준 양사 모두 예정된 매입 물량의 70% 이상이 남아 있어 당분간 기타법인 수급이 코스피 하단을 지지할 가능성이 높다는 분석이다. 8월 반도체 수출 호조와 이익 개선 흐름은 유지되는 반면 주가는 빠르게 조정돼, 최근 약세는 펀더멘털 훼손보다 금리·지정학적 불확실성이 앞서 반영된 성격이라는 설명이다.\n\n전략적으로는 반도체와 코스피 대형주에 대한 최선호 의견을 유지했다. 수출·이익·주주환원 논리가 모두 훼손되지 않은 가운데 장기금리가 안정될 경우 확대된 주가-펀더멘털 괴리의 축소 가능성이 높다는 판단이다. 다만 박스권 과정에서 업종 확산에도 대비할 필요가 있다며, 이익 대비 상대수익률이 낮은 조선·보험을 알파로 선호하고 미국 전력 인프라 투자와 탈중국 공급망 재편의 수혜가 예상되는 ESS·전력기기에 대한 중장기 시각 상향도 유지한다고 밝혔다. 미국의 전력망 정책 강화는 11월 중간선거 결과와 무관하게 지속될 가능성이 높은 초당적 정책 과제로, 실제 미국의 전력기기·리튬이온배터리 수입에서 중국산 비중은 하락하는 반면 한국산 비중은 확대되는 추세가 확인됐다.\n\n이 연구원은 \"금리가 상단을 제약하고 주주환원이 하단을 지지하는 기존 시장 구도가 유지 중\"이라며 \"고용 둔화와 물가 상승률 둔화를 기다려야 할 시간\"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006363483' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006363483</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
