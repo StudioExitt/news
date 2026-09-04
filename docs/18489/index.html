@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주식 매도 대금 빨리 받는 ‘T+1’ ... 결제 사고·미수거래 우려도</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2024.09.05</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/366/0001190513' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18489" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>주식 매도 대금 빨리 받는 ‘T+1’ ... 결제 사고·미수거래 우려도</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">한국거래소와 예탁결제원이 주식 결제주기를 T+2에서 T+1로 단축하는 로드맵을 10월 중 공개할 예정입니다. 매도 대금의 빠른 회수가 기대되는 반면, 결제 불이행 발생 가능성 상승과 미수거래 투자자의 자금 납입 부담 증가에 대한 우려가 공존합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">결제 주기 단축은 자본 회전율을 높이는 긍정적 측면이 있으나, 결제 불이행 리스크와 미수거래 매매 환경 변화라는 구조적 변동성을 야기하므로 증권 업계 및 시장 전반에 영향을 줄 수 있음</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한국거래소</span> <span class="tag stock-tag">한국예탁결제원</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#T+1</span> <span class="tag tag-hash">#주식결제주기</span> <span class="tag tag-hash">#미수거래</span> <span class="tag tag-hash">#결제불이행</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">한국거래소와 한국예탁결제원이 이르면 오는 10월 주식 결제주기를 ‘T+1일’로 단축하는 로드맵을 공개한다. 주식 매도 대금을 빠르게 회수할 수 있어 개인투자자 호응이 기대되는 데다, 정부와 정치권의 증시 활성화 정책과도 맞물려 추진에 힘이 실리고 있다.
+
+다만 이 문제가 생각처럼 단순하지 않다는 지적도 나온다. 우선 현재 국내 시장에서는 거의 발생하지 않는 결제 불이행률이 상승할 수 있다는 우려가 제기된다. 또한 개인투자자의 경우 외상으로 주식을 사는 미수거래 시 그동안 2거래일 안에 증거금을 채워 넣어야 했지만, 앞으로는 하루 만에 대금을 납입해야 할 것으로 보인다.
+
+5일 금융투자업계에 따르면 국내 주식 거래는 현재 매매 체결 이후 이틀 뒤에 결제가 완료되는 ‘T+2′ 방식을 사용하고 있다. 예를 들어 월요일에 주식을 매도하면 2거래일 후인 수요일에 주식을 판 매도 대금을 받아 출금할 수 있게 된다. T+1 체제로 바꾸게 되면 주식 매도 대금 회수와 재투자가 빨라질 수 있어 시장의 자금 흐름이 개선될 수 있다는 기대가 나온다.
+
+반면 T+1 체제가 도입되면 결제 불이행률 상승이 불가피하다는 지적도 만만치 않다. 금융투자협회가 2일 개최한 결제주기 단축 심층 토론회에서도 현재 T+2 체제인 한국에서는 결제 불이행 사고가 거의 발생하지 않고 있다는 점이 주요하게 다뤄졌다.
+
+반면 2024년 T+1 제도를 도입한 미국의 경우, 기존에도 결제 실패가 빈번했던 편이었으나 도입 이후 전체 거래의 2~3% 수준에서 결제 불이행이 발생하는 것으로 분석됐다.
+
+결제 불이행이란 금융상품 매매 계약 체결 후 약정된 결제일까지 매수 대금을 지급하지 못하거나 증권을 인도하지 못하는 상태를 뜻한다. 결제주기가 단축되면 기존 2거래일에 걸쳐 진행하던 정산 절차를 훨씬 짧은 시간 안에 처리해야 하므로, 시스템 운영상 결제 실패가 발생할 확률도 구조적으로 높아질 수밖에 없다.
+
+강소현 자본시장연구원 연구위원은 “현재는 우리나라에서 결제 불이행이 거의 나지 않기 때문에 만약 발생하면 증권사가 문제가 있다고 보는 시각이 생길 수 있다””라고 설명했다. 이어 “우리나라는 지금까지 결제 불이행을 제로로 만드는데 치중해와 이 상황이 상당히 익숙해진 상황인데 결제주기 단축이 될 경우 실패의 가능성이 올라간다””라고 말했다.
+
+여기에 미수거래를 하는 개인 투자자 역시 결제 주기에 주의해야 한다. 미수거래는 일정 비율의 담보만 현금으로 내고 외상으로 주식을 사는 것을 뜻한다. 현행 T+2 결제주기 체제에서는 이 외상값을 이틀 뒤 결제일까지만 넣으면 된다. 만약 돈을 갚지 못하면 돈을 빌려준 증권사는 결제일 다음 날 주식을 반대매매하게 된다.
+
+그러나 결제주기가 T+1로 단축되면 외상값을 변제해야 하는 시한이 1거래일 이내로 줄어든다. 결과적으로 주식을 매수한 뒤 매도해 차익을 실현할 수 있는 유예 기간이 짧아지는 셈이다.
+
+한 증권업계 관계자는 “결제주기가 짧아지면 미수거래 이용자 규모가 감소할 수밖에 없고, 레버리지를 활용한 기대 수익성 역시 낮아질 수 있다””라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/366/0001190513' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/366/0001190513</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
