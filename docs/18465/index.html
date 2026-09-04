@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>시총기준 미달땐 여전히 퇴출대상 …코스닥社 "실적도 고려해야"</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.04</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005730657' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18465" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>시총기준 미달땐 여전히 퇴출대상 …코스닥社 "실적도 고려해야"</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부의 코스닥 상장폐지 기준(시가총액) 강화로 인해 중소·벤처기업들의 경영권 위협과 연구개발 투자 위축 우려가 커지고 있음. 특히 흑자 기업을 위한 코넥스 이전상장 대안도 거래량 부족으로 실효성이 낮다는 비판이 제기됨.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">상장폐지 기준 강화로 인한 코스닥 상장사들의 경영권 위협 및 주가 변동성 확대 우려</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">코스닥 상장사</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥</span> <span class="tag tag-hash">#상장폐지</span> <span class="tag tag-hash">#시가총액</span> <span class="tag tag-hash">#기업규제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">기술특례로 코스닥에 입성한 A기업은 정부의 상장폐지 기준 강화에 대응하느라 무리하게 유상증자를 추진하다 경영권이 넘어가는 돌이킬 수 없는 피해를 봤다. A기업 대표 B씨는 매일경제와 만나 \"기술특례기업들은 5년간 재무 요건을 유예해 준다는 것을 믿고 코스닥에 상장했는데 시가총액 요건이 갑자기 강화되면서 우리를 포함해 여러 회사가 피해를 봤다.\"고 읍소했다. 그는 \"기술특례기업 일부는 당국을 대상으로 소송을 준비 중\"이라고 덧붙였다.
+
+◆ 갑자기 좁아진 상폐 잣대에 비명
+
+정부가 코스닥 활성화를 위해 \"좀비기업\" 퇴출에 나선 가운데 중소·벤처 기업을 중심으로 현장에서는 \'경직된 잣대\' 퇴출에 따른 부작용이 속속 등장하고 있다. 정부 역시 이 같은 문제점을 인지하여 흑자기업에 대해서는 상장폐지 대신 코넥스 이전상장을 허용해 주겠다는 방침을 내세웠다.
+
+하지만 현재 코넥스 시장 침체를 고려하면 이전상장 역시 상장폐지에 준한 \'유배형\'을 받는 것과 다름없다는 불만이 터져 나오고 있다. 이 때문에 상장폐지 기준을 재정의해 달라는 목소리가 나온다. 특히 상장 초기 막대한 투자자금을 소요한 기업들은 충분한 시간을 달라고 호소하고 있다.
+
+4일 매일경제가 인터뷰한 시총 200억~300억원대 코스닥 상장사 대표 5인은 손바닥 뒤집듯 바뀌는 정책과 시총 요건으로 심각한 경영 애로를 겪고 있다고 입을 모았다. 성장기에 있는 많은 코스док 기업들이 시총 방어에 급급해 정작 연구개발이나 설비 투자에 나서지 못한다는 것이다.
+
+이날 정부가 상장폐지 요건 시행 일정을 다시 유예하면서 시간은 벌었지만 부작용은 그대로라는 지적이다. 퇴출기업의 연착륙 통로로 거론되는 코넥스 시장마저 유동성 고갈에 시달리고 있어 사실상 유명무실한 정책이라는 불만이 있다. 코스닥에서 밀려난 기업이 코넥스로 이전하더라도 거래 자체가 말라붙은 시장에서는 자금조달과 가격발견이라는 증시의 기능을 기대하기 어렵다는 지적이다.
+
+모 코스닥 상장사 대표 C씨는 \"코넥스에 이전상장을 하면 이미 대외 신인도가 크게 떨어지는데 글로벌 시장을 노리는 중소기업들에 족쇄가 씌워지는 것과 마찬가지\"라며 \"눈 가리고 아웅하는 유명무실한 정책\"이라고 비판했다. 또 다른 코스닥 상장사 대표 D씨는 \"6개월 유예로 최악은 면했지만 코넥스는 접근성과 거래량이 낮아 사실상 유배나 다름없는 대안\"이라며 \"코넥스 이전상장이 효과가 있으려면 코넥스에서 시총 및 기업 실적이 상위권에 들면 코스닥 재상장이 가능한 구제책이 동반돼야 한다\"고 지적했다.
+
+◆ 코넥스 \'이전상장\' 실효성 의문
+
+한국거래소에 따르면 이달 1~3일 코넥스 하루 평균 거래대금은 3억400만원으로 지난해 같은 기간(12억610만원)보다 74.8% 급감했다. 지난 1일 거래대금은 2억7993만원에 그쳐 최근 2년 새 최저 수준까지 떨어졌다.
+
+대표들은 정책 취지에는 공감하지만 시총 요건 하나만으로 한계기업을 가리는 것은 부당하다고 호소한다. D씨는 \"저희는 이익도 내고 있고 작년보다 실적이 더 좋아졌음에도 주가가 떨어졌다. 주가가 기업가치를 반영하는 전부가 아닌데, 시총을 기준으로 퇴출 여부를 결정하는 것은 어불성설\"이라고 토로했다. 또 다른 코스닥 상장사 대표 E씨는 \"정부가 \'좀비기업\' 퇴출 정책을 발표하면서 투자자들의 매도세가 거세져 주가가 하단했다. 정부 정책이 오히려 중소형주들의 주가 하락을 부추긴 측면도 있다\"라고 밝혔다.
+
+실제 내년 상장폐지 기준선인 시총 300억원을 밑도는 종목은 지난 2월 조기 시행 발표 당시 182개(SPAC·우선주 제외)에 불과했으나 4일 종가 기준 334개로 불어났다.
+
+◆ 상장폐지 기준 재정의 필요
+
+E씨는 금융당국이 시총 기준 상장폐지 제도를 벤치마킹한 미국에서 일어난 현실을 직시하라고 말했다. 시총만을 잣대로 기업 퇴출에 나서다보니 기업이 보유자금을 투자 대신 주가 부양에 썼고, 이것이 제조업 기반을 무너뜨리는 한 원인이 됐다는 것이다. E씨는 \"미국은 주가 부양에만 매달리다 제조업 기반이 무너졌지만, 한국은 공장을 짓고 설비 투자를 이어갔기에 지금의 제조업이 있는 것\"이라고 지적했다. 그는 이어 \"한국콜마, 코스맥스 같은 제조업자개발생산(ODM) 기업들은 2002년쯤 상장했을 때부터 공모 자금으로 공장부터 대거 지었다. 그래서 아이디어는 있는데 제조 기반이 없는 인디 브랜드들의 성장 기반이 돼주고 그들도 성장하면서 지금의 K뷰티를 있게 한 것\"이라고 강조했다.
+
+시총을 통해 기계적으로 \'옥석 가리기\'에 나서면 되레 \'주가조작\'을 서슴지 않는 \'불건전기업\'만 혜택을 볼 수 있다는 지적도 나왔다. 한 상장사 대표 F씨는 \"불건전자본으로 운영되는 회사들 중 상장사를 사들이면서 몸집을 불리고 주가를 띄우면서 시총을 높게 유지하는 곳이 있다. 시총 요건으로 옥석 가리기가 제대로 되지 않는 이유\"라고 지적했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005730657' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005730657</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
