@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>'한국형 공포지수' 40선 밑으로…코스피 변동성 반년 만에 최저</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.04</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005328731' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18434" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>'한국형 공포지수' 40선 밑으로…코스피 변동성 반년 만에 최저</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피200 변동성 지수(VKOSPI)가 6개월 만에 40선 아래로 하락하며 시장의 공포 심리가 완화됨. 이는 금융당국의 단일종목 레버리지·인버스 상품 규제 강화와 반도체 업종의 가격 조정 마무리, 그리고 기업의 자사주 매입 등이 복합적으로 작용한 결과임.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">변동성 지수의 하락은 시장의 불확실성 감소와 안정화를 의미하며, 규제 효과와 업종별 순환매가 안착되는 과정임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#VKOSPI</span> <span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#변동성</span> <span class="tag tag-hash">#삼성전자</span> <span class="tag tag-hash">#SK하이닉스</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">국내 증시의 '공포지수'로 통하는 코스피200 변동성 지수(VKOSPI)가 장중 40선 아래로 떨어지며 약 6개월 만에 최저치를 찍었다. 4일 한국거래소에 따르면 이날 오후 1시 56분 기준 VKOSPI는 전 거래일 대비 3.10포인트(7.31%) 급락한 39.32를 기록했다. 장중 40선 밑으로 내려선 것은 지난 2나월 12일(장중 저점 39.13) 이후 반년여 만에 처음이다. VKOSPI는 코스피200 옵션 가격을 토대로 향후 30일간의 기대 변동성을 연율화해 산출하는 지표다. 2010년 이후 평상시 수치는 20 안팎에서 안정적인 흐름을 보여왔다. 그러나 올해 들어 급등세를 탔다. 글로벌 인공지능(AI) 및 반도체 훈풍을 타고 코스피가 5월 사상 처음 7000선을 돌파했을 당시 월평균 68.78까지 치솟았다. 이어 같은 달 15일 8000선을 뚫고, 6월 18일 이른바 '9천피(코스피 9000)'에 진입하면서 VKOSPI는 6월 29일 장중 97.99까지 치솟으며 사상 최고 수준의 과열 양상을 보였다. 극단적인 투자 과열과 함께 유가증권시장 시가총액의 절반 이상을 차지한 삼성전자와 SK하이닉스로의 극심한 쏠림, 두 반도체 대장주를 기초자산으로 한 단일종목 레버리지·인버스 상품 출시가 지수 변동폭을 키운 주원인으로 지목됐다. 이후 반도체 주가가 조정을 받으며 코스피는 7월 한 달간 20% 넘게 급락했다. 그럼에도 VKOSPI는 80선 위에서 고공행진을 거듭하다가, 금융당국이 7월 말 단일종목 레버리지·인버스 상품에 대한 고강도 안정화 대책을 내놓은 뒤에야 꺾이기 시작했다. 당국은 단일종목 고위험 파생 상품의 기본예탁금을 종전 1000만원에서 3000만원으로 올렸다. 규제 여파로 6월 24일 19조4429억원까지 치솟았던 단일종목 레버리지·인버스 일일 거래대금은 지난달 말 5000억원 안팎까지 급감했다. 반도체 업종의 급격한 가격 조정이 마무리 수순을 밟고 업종별 순환매 장세가 안착한 점도 시장 변동성을 낮추는 데 일조했다. 미국과 이란의 지정학적 무력 충돌 격화, 글로벌 주요국 국채금리 급등 등 대외 악재 속에서도 삼성전자와 SK하이닉스의 자사주 매입에 힘입어 기타법인이 매일 1조원 안팎의 순매수를 이어가며 증시 하방을 지탱하고 있다는 평가다. 한편 이날 같은 시각 코스피는 전 거래일 대비 1.89% 상승한 6703.65를 나타냈다. 코스닥 지수는 3.13% 뛴 814.93에 거래됐다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005328731' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005328731</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
