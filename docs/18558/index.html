@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피 지지부진에도…개인투자자, ETF 32개월 연속 순매수</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016292046' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18558" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피 지지부진에도…개인투자자, ETF 32개월 연속 순매수</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">개인투자자들이 코스피의 정체 국면 속에서도 ETF를 32개월 연속 순매수하고 있으나, 8월 매입 규모는 올해 최저치를 기록했습니다. 최근에는 국내 주식형보다 해외 주식형 ETF로 수요가 이동하고 있으며, 퇴직연금을 중심으로 ETF가 장기 투자 상품으로 자리 잡고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">개인투자자의 ETF 순매수세는 지속되고 있으나, 국내 증시 정체로 인해 매수 규모가 감소하고 해외 주식형으로 수요가 이동하는 양상을 보임</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#개인투자자</span> <span class="tag tag-hash">#퇴직연금</span> <span class="tag tag-hash">#해외주식형ETF</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피, 6,500대 강보합 마감...환율은 하락 (서울=연합뉴스) 최재구 기자 = 3일 서울 중구 하나은행 본점에서 직원들이 증시와 환율을 모니터 하고 있다. 이날 코스피는 전장보다 16.76포인트(0.26%) 오른 6,579.48에 거래를 종료했다. 원/달러 환율은 9.4원 내린 1,359.3원으로 장을 마쳤다. (서울=연합뉴스) 김태종 기자 = 코스피가 3개월째 지지부진한 가운데 개인투자자들은 상장지수펀드(ETF)를 32개월 연속 순매수한 것으로 나타났다. 다만, 순매수 규모는 올해 들어 최저치를 기록했다. 8월 한 달간 개인의 ETF 순매수 규모는 2조3천756억원으로 집계됐다. 2023년 12월 725억원 순매도를 기록한 이후 32개월 연속 순매수다. 32개월간 매입한 총 규모는 128조397억원이다. 지난 6월 중순 이후 코스피는 9,000선에서 6,000선까지 떨어진 뒤 횡보 흐름을 이어가고 있지만 개인들은 꾸준히 ETF를 사들이고 있다. 올해 1∼8월 순매수 규모도 73조720억원으로 불어났다. 9월 들어서도 지난 4일까지 3천577억원어치 매입했다. 지난 6월 22일 533조2천361억원까지 불어났던 전체 ETF 순자산은 지난 3일 437조6천713억원으로 100조원 가까이 줄었다. 그러나 이 기간에도 개인들은 약 18조원(17조9천156억원)어치를 순매수했다. 다만, 8월 순매수 규모는 크게 감소해 올해 들어서는 물론, 작년 8월(1조3천135억원 순매수) 이후 최저치를 기록했다. 올해 순매수 규모가 가장 낮았던 4월(3조6천660억원)보다도 적었다. 8월 순매수 규모는 전월인 7월(8조7천867억원)의 27% 수준으로, 역대 최대치를 기록했던 6월(24조6천720억원)의 10분의 1 이하 수준으로 축소됐다. 개인들은 6월뿐만 Man 아니라 1월(14조9천765억원)과 5월(10조9천866억원)에도 ETF를 10조원 이상 사들였고, 2월(9조8천657억원)과 7월(8조7천767억원), 3월(8조1천705억원)에도 대규모로 사들였었다. 8월 순매수는 코스피의 지지부진한 흐름이 장기간 이어지면서 개인들이 ETF에 대한 순매수 규모도 줄인 것으로 풀이된다. 그러나 코스피가 조정을 이어가면서 개인 순매수는 국내 주식형 ETF보다 해외 주식형 ETF에 쏠리고 있다. 금융정보업체 에프앤가이드에 따르면 국내 주식형 ETF 순자산은 지난 6월 말 248조4천414억원에서 지난 3일에는 190조3천574억원으로 23% 감소했다. 이에 반해 해외 주식형은 같은 기간 1\"144조638억원\"에서 130조4천952억원으로 9% 줄어드는 데 그쳤다. 이는 7월 이후 코스피 지수는 하락한 반면, 뉴욕 3대 지수는 2% 이상 상승하는 견조한 흐름을 이어가고 있는데 따른 것이다. 개인의 ETF 순매수가 감소했지만, 증권업계는 퇴직연금을 중심으로 순매수 기조는 계속 이어질 것으로 보고 있다. 한국투자신탁운용 남용수 ETF본부장은 \"ETF 시장의 가장 큰 수요 중 하나는 퇴직연금\"이라고 하며, \"코스피 지수 등락과 상관없이 주기적으로 꾸준히 ETF를 매수하는 개인들이 굉장히 많고, 점점 늘어나고 있는 추세\"라고 말했다. 이어 \"ETF 자체가 디지털 시대에 최적화된 상품이기 때문에 날이 갈수록 개인들에게 인기를 얻고 있다\"며 \"단기 투자나 단타 매매보다는 장기투자를 위한 상품으로 인식 변화가 많이 이뤄지고 있다\"고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016292046' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016292046</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
