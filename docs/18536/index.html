@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주식 팔고 다음날 돈 받자\" 주기 단축 어려운 이유?…핵심 변수는</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.05</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/243/0000102671' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18536" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>주식 팔고 다음날 돈 받자\" 주기 단축 어려운 이유?…핵심 변수는</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국내 주식 결제주기를 현행 T+2에서 T+1로 단축하는 논의가 본격화되고 있으나, 결제 실패 위험 증가 및 미수거래 일정 단축 등 운영상 과제가 산적해 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">결제 주기 단축은 자본 효율성 증대라는 기회와 결제 실패 리스크 및 투자 환경 변화라는 위기가 공존하는 사안임</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한국거래소</span> <span class="tag stock-tag">한국예탁결제원</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#주식결제주기</span> <span class="tag tag-hash">#T+1</span> <span class="tag tag-hash">#자본시장혁신</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">제목:   \"주식 팔고 다음날 돈 받자\" 주기 단축 어려운 이유?…핵심 변수는
+언론사: 이코노미스트
+날짜: 2026.09.05. 오후 5:27
+본문: 국내 주식시장에서 주식을 거래한 뒤 주식과 대금을 정산하는 결제주기를 현행 이틀 뒤(T+2)에서 하루 뒤(T+1)로 단축하는 논의가 본격화하고 있다. 자금 회수 기간이 단축돼 자본 효율성을 높이고 글로벌 스탠더드에 맞춘다는 긍정적 취지가 있지만, 결제 실패율 상승, 개인 미수거래 일정 단축, 외국인 환전 및 시차 부담 등 해결해야 할 과제도 만만치 않다는 지적이 나온다.
+
+5일 금융투자업계에 따르면 한국거래소와 한국예탁결제원은 이르면 오는 10월 결제주기 \"T+1일\" 단축 로드맵을 발표할 예정이다. 지난 2일 금융투자협회가 주최한 심층 토름회에서도 대통령 직속 규제합리화위원회와 거래소, 증권사 등이 모여 제도 도입 방향을 집중 논의했다.
+
+현재 국내 증시는 주식을 매도해도 현금 출금을 위해서는 2영업일을 기다려야 한다. T+1이 도입되면 매도 대금의 실제 출금과 재투자 시점이 하루 앞당겨져 개인투자자의 자금 활용도가 크게 개선되고 자본시장 전반의 유동성 흐름도 원활해진다. 2024년 미국이 T+1 체제로 전환한 이후 유럽과 아시아 주요 시장에서도 단축 논의가 잇따르고 있어, 국내 증시의 글로벌 정합성과 대외 경쟁력을 끌어올리는 효과도 기대된다.
+
+반면 결제주기 단축에 따른 부작용과 위험 요인도 뚜렷하다. 가장 큰 우려는 시스템상 결제 불이행(실패) 위험의 증가이다. 결제주기가 짧아지면 거래 체결 후 거래소의 청산·차감, 착오매매 정정, 세금 처리 등 후선 업무를 거래 당일이나 익일 새벽까지 끝내야 한다. 현재 국내 증시는 결제 실패가 사실상 전무하지만, 이미 T+1을 도입한 미국처럼 정산 촉박으로 인한 운영상 결제 불이행률이 2~3% 수준으로 올라갈 가능성이 있다.
+
+개인투자자의 레버리지 투자 환경에도 큰 변화가 불가피하다. 외상으로 주식을 매수하는 미수거래의 경우, 현행 체제에서는 이틀 뒤 결제일까지 증거금을 채워 넣으면 됐으나 앞으로는 결제 시한이 하루 만으로 줄어든다. 돈을 갚지 못할 때 증권사가 주식을 강제 처분하는 반대매매 일정도 그만큼 앞당겨져 초단기 레버리지 투자 유예 기간이 대폭 축소될 전망이다.
+
+외국인 투자자의 업무 부담 역시 핵심 변수이다. 글로벌 기관투자자는 거래 체결 후 펀드별 계좌 배분, 해외·국내 보관기관 간 결제 지시, 원화 환전 등을 시차 내에 마쳐야 한다. 국내 증시는 주요국보다 개장 시각이 빨라 시간 제약이 더욱 크다.
+
+금융투자업계는 T+1 전환이 단순히 대금을 하루 먼저 주는 문제가 아니라 청산·결제 인프라 전체를 뜯어고치는 작업인 만큼, 결제 자동화 시스템 구축과 충분한 모의 테스트를 거쳐 단계적이고 안정적인 이행 방안을 마련해야 한다고 강조하고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/243/0000102671' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/243/0000102671</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
