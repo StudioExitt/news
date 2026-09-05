@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>증시 하락 경고음 키우는 '한국의 닥터둠' 김영익 교수</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/001/0016292070' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18562" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>증시 하락 경고음 키우는 '한국의 닥터둠' 김영익 교수</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">\"코스피 이미 상승국면 지나…美증시도 4분기 큰폭의 조정\" 예상되는 상황에서 김영익 교수가 국내 증시의 하락 국면 진입과 미국 증시의 대규모 조정을 경고하며, 주식 비중을 축소하는 리스크 관리 전략을 제시함.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">전설적인 경제 예측가 김영익 교수의 국내외 증시 하락 전망 및 자산 비중 축소 경고는 시장의 투자 심리에 부정적인 영향을 줄 수 있음</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#미국증시</span> <span class="tag tag-hash">#하락장</span> <span class="tag tag-hash">#김영익</span> <span class="tag tag-hash">#리스크관리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">\"코스피 이미 상승국면 지나…美증시도 4분기 큰폭의 조정\" 예상
+\"금융자산 중 주식비중 60%에서 20%로 줄였다\"…자산 비중 조정으로 위험 관리
+
+(서울=연합뉴스) 경수현 기자 = 지난 2007년 하나대투증권(현 하나증권) 리서치센터장 겸 부사장 재직 시절 한해 뒤인 2008년 글로벌 금융위기를 예측하면서 '한국의 닥터둠'이라는 별명을 갖게 된 김영익(67) 한양대 미래인재교육원 겸임교수가 증시 하락에 대한 경고음을 최근 키우고 있다.
+
+김 교수는 지난 3일 서울 지하철 2호선 홍대입구역 부근 공유 오피스에 마련한 내일희망경제연구소 사무실에서 연합뉴스와의 인터뷰에서 "한국 증시는 이미 상승 국면을 지나서 하락세에 접어들었다"고 단언했다.
+
+김 교수는 개인적으로는 금융 자산 중 주식 비중을 이미 60%에서 20% 안팎으로 줄여놓고 리스크 관리를 하고 있다고 전했다. 미국 증시도 큰폭의 조정이 예상된다며 최소한 30% 이상 하락할 것으로 예측했다.
+
+김 교수는 작년 8월 서강대 경제대학원 겸임교수 임기를 마치고서는 한양대 미래인재교육원에 적을 걸었지만 내일희망경제연구소를 차리고 증권사 현직 애널리스트이상으로 투자자 대상 강연, 유튜브 등 다양한 활동을 이어가고 있다.
+
+평일에는 새벽 5시30분께 사무실로 출근해 외부 일이 없으면 오전 7시30분부터 약 2시간 자신이 증권사 현업 시절부터 개발, 운영해온 경제예측모델을 최신 정보로 업데이트하고 하나증권 등의 보고서도 챙겨본다고 한다.
+
+다음은 김 교수와의 주요 일문일답 내용이다.
+
+-- 한국 증시를 어떻게 전망하고 있나.
+▲ 코스피는 지난 6월 9300대까지 오르고서 이미 하락국면에 접어들었다고 본다. 최소한 내년 상반기까지는 더 어려운 시기를 맞을 수도 있다.
+
+-- 판단의 근거는.
+▲ 경기 선행지수 순환변동치가 지난 8월 정점이었을 것으로 본다. 이 분석이 맞다면 코스피는 하락하는 과정이다. 제가 선행지수를 예상해 순환변동치를 구했다. 전고점 돌파는 이번 사이클에서는 힘들다. 추가 하락 가능성도 있다. 제가 운영하는 경제예측모델에서 가장 중시하는 지표가 선행지수 순환변동치다. 순환변동치가 상승할 때는 주식 비중을 60% 이상으로 늘리는게 좋다. 하지만 하락하면 주식 비중을 20% 안팎으로 줄이고 단기 국채 같은 현금성 자산을 충분히 보유하는 게 좋다.
+
+-- 국가데이터처의 경기선행지수가 아직은 꺾이지 않았는데.
+▲ 8월말께 7월치가 발표됐다. 선행지수 순환변동치의 하락 여부는 10월에야 확인될 수 있지만 제가 운영하는 예측 모델로는 8월에 정점을 찍고 꺾였을 가능성이 매우 높다.
+
+-- 얼마전 출연한 유튜브 영상을 보니까 사상 최고 수준의 버핏지수 등을 토대로 올해 4분기 미국 증시의 상당폭 조정 가능성도 거론했는데.
+▲ 정확한 거품 붕괴시점은 알 수 없지만 미국 증시에 선행하는 엔달러 환율 등의 각종 지표를 토대로 보면 올해 4분기에 미국 주식시장이 상당 부분 조정을 보이고 우리 주식시장에도 영향을 줄 것으로 전망된다.
+
+-- 위기의 재발을 단정할 수는 없지 않나.
+▲ 그렇다. 그러나 미국 경제의 축인 소비 위축 조짐도 있다. 저는 미국 증시가 최소한 30% 이상 하락할 것으로 본다. 2000년대 나스닥은 고점에서 80%가량 떨어졌고 2008년 금융위기 때는 스탠더드앤드푸어스(S&P) 500지수가 거의 50% 하락했다.
+
+-- 투자자들에게 조언을 한다면.
+▲ 지금은 돈을 지키는 게 제일 중요한 시기라고 생각한다. 주식 투자로 돈 벌기가 그리 쉽지 않다. 주변에 많이 공부하고 투자해야 된다고 조언하고 있다. 그런데 상승 국면에서 많은 전문가가 코스피 1만피 돌파를 얘기한 상황이어서 제 또래 분들이 삼성전자를 고점에서 많이 샀고 지금 상당한 충격을 받고 있다.
+
+-- 개인적으로는 투자를 어떻게 하고 있나.
+▲ 저는 투자에서 자산 배분이 가장 중요하다고 생각한다. 저는 금융 자산 비중이 60%이고 부동산이 40%가량이다. 거기서 애초 주식 비중이 60%였는데 20% 정도로 줄여서 리스크 관리를 하고 있다. 삼성전자 주식도 갖고 있지만 인버스 ETF를 사서 위험 헤지를 했다.
+
+-- 주식 비중이라고 하면 종목만 얘기한 것이냐, 아니면 인버스 ETF까지 포함한 비중인가.
+▲ 인버스 ETF까지 다 포함한 것이다. 부동산은 서울 집이외에 강화도에 전원주택을 갖고 있다.
+
+-- 1가구 2주택인가.
+▲ 강화도에 전원주택을 지어 주말에는 강화도로 가 농사를 짓는다. 서울 집도 아주 비싼 집은 아니다. 제가 나이가 들면서 부동산은 줄여놨다.
+
+-- 증권사를 다닐 때와 현재의 차이는.
+▲ 증권사에 다닐 때는 오히려 주식투자를 거의 못했다. 증권업계를 떠나 2015년 서강대 교수로 이직하면서 본격적으로 했다.
+
+-- 투자자에게 조언을 하는 활동을 계속하고 있는데 현업에 있을 때와 차이는.
+▲ 교수는 합리적인 데이터와 이론만 있으면 여러 이야기를 해도 된다. 2015년 서강대로 옮긴 뒤로는 자유롭게 얘기할 수 있어서 좋았다.
+
+-- 나이에 비해 동안이다.
+▲ 거의 2주에 한번씩 염색한다. (양쪽 귀 윗부분을 가리키며) 여기만 하얗게 돼 이상하다. 그리고 매일 1시간 이상 운동하고 주말에는 강화도에 가서 열심히 농사일도 한다.
+
+-- 농사는 뭘 하나.
+▲ 전원주택에 딸린 150평 정도의 택지에서 조그마한 텃밭을 일군다. 꽃도 많이 심고 사과, 배, 복숭아, 감, 수박, 고추, 호박, 토마토 농사도 짓고 있다.
+
+-- 유튜브 활동은 언제부터 했나.
+▲ 교육 플랫폼 기업인 '어스얼라이언스'와 협력해 2023년 4월부터 김영익의 경제스쿨이라는 채널명으로 투자자들에게 정보를 제공하고 있다. 역시 이 회사와 협력해 김영익의 투자교실이라는 이름의 3개월짜리 유료 대면 강의 프로그램도 운영하고 있는데 매번 많은 분들이 참여해주고 있다. 증권사에 근무할 때도 회사보다는 투자자를 위해 정보를 제공해야 한다는 생각을 가지고 일했다.
+
+-- 요즘 개인 투자자들의 관심사는.
+▲ 증시가 전고점을 되찾을지 단순한 조정국면인지 여부다. 저는 고점은 지났다고 판단해 하반기부터 주식 비중을 줄이도록 조언하고 있다.
+
+-- 다른 활동은
+▲ 책을 그동안 20권 정도 저술했다. 올해는 처음으로 수필집에도 도전해 출간을 계획 중이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/001/0016292070' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/001/0016292070</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
