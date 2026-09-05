@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“퇴근길에 주식 사볼까”…거래소도 오후 8시까지 애프터 마켓, 뭐가 달라지나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.05</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005730823' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18538" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“퇴근길에 주식 사볼까”…거래소도 오후 8시까지 애프터 마켓, 뭐가 달라지나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">한국거래소(KRX)가 9월 14일부터 오후 8시까지 애프터마켓을 운영한다. 기존 단일가 매매 방식에서 실시간 체결 방식으로 변경되며, 가격제한폭도 ±30%로 확대된다. 다만 ETF와 ETN은 유동성 공급 문제로 거래 대상에서 제외된다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">거래 시간 연장 및 체결 방식 변경으로 인한 투자 편의성 증대와 시장 변동성 확대 가능성 공존</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한국거래소</span> <span class="tag stock-tag">넥스트레이드</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#애프터마켓</span> <span class="tag tag-hash">#주식거래시간연장</span> <span class="tag tag-hash">#KRX</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">4일 서울 중구 하나은행 본점 딜링룸에서 직원들이 업무를 보고 있다. [연합뉴스]
+4일 서울 중구 하나은행 본점 딜링룸에서 직원들이 업무를 보고 있다. [연합뉴스]한국거래소(KRX)가 이번달 14일부터 애프터마켓을 열면서
+퇴근길 실시간 주식거래가 확대된다. 대체거래소인 넥스트레이드(NEX)에 이어 KRX도 거래시간 연장에 뛰어들면서
+투자자의 주식거래 편의성이
+확대될 전망이다. 다만,
+정규장 대비 애프터마켓은
+거래량이 적은 시간대인 만큼
+체결 지연과 가격 변동에 유의해야 한다.
+
+5일 금융투자업계에 따르면,
+KRX는 최근 ‘유가증권시장·코스닥 업무규정 시행세칙 일부개정세칙안’을
+마련했다. 우선 기존 오후 4시에서 6시에
+이뤄지던 시간외단일가
+매매는 없어진다. 대신 오후 4시부터 8시까지 애프터마켓이
+운영된다.
+
+투자자
+입장에서 가장 달라지는 점은
+주문 체결 방식이다. 기존 시간외단일가
+매매는 10분 단위로 주문을
+모아 거래가
+이뤄졌다. 하지만,
+애프터마켓에선 정규장과 동일한 실시간
+체결로 운영된다.
+
+가격제한폭도 정규장
+수준으로 확대된다. 기존 시간외단일가매매에선
+당일 종가를 기준으로 ±10% 범위에서 거래할 수 있었지만,
+애프터마켓은 전일
+종가 기준 ±30%가 적용된다. 이는 정규장 상·하한가와 같은
+수준이다.
+
+주문 유형은 정규장보다
+제한된다. 애프터마켓에서는
+지정가와 최우선지정가, 최유리지정가만 적용가능하다. 하지만,
+시장가와 조건부지정가는
+허용되지 않는다. 대신
+주문 즉시 체결되는 물량만
+체결하고 남은 수량을
+취소하는 즉시 체결·잔량
+취소(IOC)나, 전량 체결되지 않으면
+주문 전체를
+취소하는 전량 체결·미체결 시
+취소(FOK) 조건은 이용할 수 있다
+
+미체결 주문 처리 방식도
+거래소별로 다르다.
+KRX에선
+정규장이 끝나면 미체결 주문이
+취소된다. 애프터마켓에서
+거래하려면 주문 내역을 확인한
+후
+다시 주문해야 한다. 반면,
+NXT는 프리마켓에서 정규장,
+애프터마켓까지 미체결 주문이 유지된다.
+
+특히,
+거래 대상도 확인해야 한다.
+거래소 애프터마켓에서는 상장지수펀드(ETF)와
+상장지수증권(ETN)이 거래 대상에서 제외됐다. 업계에서는
+유동성공급자(LP)의 부담이 배경으로 거론된다.
+
+정규장 이후에는
+실시간 추정순자산가치(iNAV)를 제대로 산출하기
+어려울 뿐 아니라,
+유동성공급자(LP)의 정상 작동이 불투명해 기초자산과 시장가
+간 격차가 벌어지는 괴리율 위험이 급증하기 때문이다. 여기에
+최근 단일종목 레버리지 도입 이후 증시 변동성이 커지자 보다
+신중한 입장을 취한 것으로 보인다.
+
+이 밖에서도
+당일 정규장에서
+거래되지 않은 종목과 관리종목,
+투자경고·투자위험종목,
+이상급등종목, 초저유동종목 등도
+애프터마켓 거래에서 제외된다.
+
+공매도는 애프터마켓에서도
+가능하다. 직전 가격 이하로
+호가를 내지 못하게 하는 ‘업틱룰’과
+예외 규정은 정규장과 같은 방식으로
+적용된다.
+
+거래소 애프터마켓은
+당초 지난 6월 말 도입될 예정이었으나 인력 운영부담과
+시스템 개발 등을 이유로 1차례
+연기된 바 있다. 거래소는
+애프터마켓에 이어 오전 7시부터 7시50분까지
+운영하는 프리마켓도 추진하고 있지만,
+프리마켓 도입 시점은 내년 말로
+미뤄졌다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005730823' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005730823</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
