@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“주식 팔았는데 이틀이나 걸리는 출금”…단 하루 줄이는 게 어려운 이유</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2024.09.05</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005730791' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18520" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“주식 팔았는데 이틀이나 걸리는 출금”…단 하루 줄이는 게 어려운 이유</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">글로벌 표준인 T+1 결제 주기 도입 논의가 진행 중이나, 국내 시장은 시스템 개편, 외국인 투자자 부담, 결제 실패 위험 등 복잡한 과제로 인해 단축이 쉽지 않은 상황임.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">결제 주기 단축이라는 제도적 변화는 증권 시장의 인프라 및 거래 관행에 영향을 미치는 중대한 사안임</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한국거래소</span> <span class="tag stock-tag">한국예탁결제원</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#결제주기</span> <span class="tag tag-hash">#T+1</span> <span class="tag tag-hash">#자본시장인프라</span> <span class="tag tag-hash">#증시제도</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미국 등 주요국 ‘T+1’ 전환 확산\n국내는 ‘결제 안정성’ 놓고 고심\n외국인·시스템 개편 등 관건\n\n국내 주식시장은 매매 체결일(T)로부터 2영업일 뒤 주식과 대금을 실제로 주고받는 ‘T+2’ 결제 체계를 적용하고 있다. 미국 등 주요국을 중심으로 결제주기를 하루 단축하는 흐름이 확산하는 가운데 국내에서는 ‘T+1’ 전환이 더딘 배경을 두고 투자자들의 궁금증이 커지고 있다.\n\n5일 금융투자업계에 따르면 최근 들어 국내에서도 ‘T+1’ 전환 논의가 본격화되고 있다. 지난 2일 열린 ‘증권시장 결제주기 단축(T+1일) 심층 토론회’에서는 T+1 도입에 따른 효과와 과제가 집중적으로 논의되기도 했다.\n\n현재 국내 증시는 주식을 사고판 날로부터 2영업일 뒤 실제 결제가 이뤄진다. 개인투자자는 주식을 매도한 직후 해당 금액으로 다른 주식을 살 수는 있지만, 매도대금을 실제로 출금하려면 결제일까지 기다려야 한다.\n\nT+1이 도입되면 매도대금 출금과 매수대금 결제 시점이 모두 하루씩 앞당겨진다. 자금이 계좌에 묶이는 기간이 짧아지는 만큼 투자자의 자금 활용도 역시 높아질 수 있다.\n\n박영민 규제합리화위원회 부위원장은 “결제주기 단축은 세계 자본시장이 향하고 있는 글로벌 스탠더드로, 단순히 결제 시스템 하나를 바꾸는 문제가 아니라 대한민국 자본시장의 경쟁력과 신뢰를 한 단계 높이는 문제”라고 강조했다. 중요한 것은 안정성을 지키면서 얼마나 속도감 있게 바꿀 것이냐는 점이다.\n\n하루 줄이는데…왜 이렇게 복잡할까\n문제는 결제주기를 하루 줄이는 작업이 단순히 돈을 하루 먼저 지급하는 수준이 아니라는 점이다. 현재 주식 거래가 체결된 뒤 실제 결제까지 거래소의 청산·차감과 착오매매 정정, 결제명세 작성, 세금자료 처리 등 여러 후선 업무가 진행된다. 기관투자자는 여기에 거래 배분과 매매 확인, 결제 승인 절차까지 거쳐야 한다.\n\nT+1로 전환하려면 현재 T+1까지 처리하던 상당수 업무를 거래 당일이나 T+1 새벽까지 끝내야 한다. 결국 증권사뿐 아니라 거래소와 예탁결제원, 은행, 자산운용사 등 시장 참여자 전반이 시스템과 업무 관행을 함께 바꿔야 한다.\n\n개인투자자가 유의해야 할 점도 있다. 매도대금을 하루 빨리 받을 수 있는 대신 결제일과 연동된 미수금 발생 시점과 반대매매 일정도 앞당겨질 수 있다. 배당 등 주주 권리와 관련된 매매 일정에도 변화가 생길 수 있다.\n\n결제 실패 위험이 커질 가능성도 부담이다. 결제까지 주어진 시간이 짧아지면 착오를 수정하거나 부족한 자금과 주식을 확보할 시간이 줄어들기 때문이다. 현재 국내 시장은 결제 실패가 사실상 드문 편이지만 T+1 도입 이후에는 업무 처리 지연 등에 따른 운영상 결제 실패 가능성이 지금보다 높아질 수 있다는 지적이 나왔다.\n\n시차·환전…외국인 부담도 변수\n전문가들은 특히 외국인 투자자에게는 부담이 더 크다고 입 모았다. 국내 개인투자자와 달리 글로벌 기관투자자는 거래 체결 이후 펀드별 거래 배분과 해외·국내 보관기관 간 결제 지시, 원화 환전, 주식 잔고 확인 등의 절차를 거쳐야 한다.\n\n백태만 금융투자협회 팀장은 “해외 기관과 투자자들이 기본적으로 T+1 추진 방향에 반대하는 것은 아니다”라고 했다. 한국의 T+1 추진 방식과 구무적인 로드맵에 많은 관심을 보이고 있다.\n\n여기에 시차 문제까지 겹친다. 해외 투자자들은 T+1 전환 방향 자체에는 대체로 공감하지만 한국이 어떤 방식과 일정으로 제도를 바꿀지 구적인 로드맵을 중요하게 보고 있는 것으로 나타났다.\n\n김미강 SC은행 이사는 “글로벌 투자자는 외국계 증권사의 매매 계좌와 국내 보관기관의 자산보관 계좌가 분리돼 있다”며 “개인보다 결제 과정에 더 많은 기관과 절차가 관여한다”고 전했다.\n\n예탁결제원은 외국인 투자자를 포함한 시장 참가자의 거래·결제 업무 자동화를 추진하고 있다. 다만 국내 기관의 시스템 개편만으로 끝나는 것이 아니라 해외 금융기관과 자산운용사까지 연계돼야 하는 만큼 충분한 테스트와 준비 기간이 필요하다는 설명이다.\n\n김진택 한국예탁결제원 부장은 “예상치 못한 문제가 발생하지 않도록 사전에 면밀히 제도를 설계하고 시장 참가자들과 충분한 협의를 거쳐 시스템 테스트를 충실하게 할 예정이다”라고 밝혔다. 이어 “기존 외국인 투자자 관련 업무 처리 시간을 절반 이상 단축하는 것이 목표”라고 덧붙였다.\n\n그렇다고 T+1 전환을 계속 미루기도 어렵다. 미국 등 주요 시장이 이미 T+1 체계로 이동했고 유럽과 아시아에서도 결제주기 단급 논의가 이어지고 있기 때문이다.\n\n결국 한국의 T+1 전환은 \"주식 판 돈을 하루 빨리 받는 문제\"를 넘어 시장 인프라 전반을 다시 손보는 작업이다. 글로벌 흐름에 맞춘 전환 속도와 결제 안정성을 얼마나 조화시키느냐가 향후 도입 시기를 좌우할 전망이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005730791' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005730791</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
