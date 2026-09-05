@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>요즘 미국에선 주식을 사는 밈코인을 사는 게 유행 [주末머니]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.05</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005812279' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18511" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>요즘 미국에선 주식을 사는 밈코인을 사는 게 유행 [주末머니]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">로빈후드 체인 내에서 밈코인을 매수하면 연계된 주식(예: 엔비디아)이 자동으로 함께 매수되는 '주식 연계 밈코인' 트렌드가 부상하고 있음. 이는 밈코인의 매수세가 실제 주식의 수급에 직접적인 영향을 미치는 구조임.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">밈코인의 매수세가 연계된 실제 주식의 자동 매수를 유도하여 해당 종목(엔비디아 등)의 수급 및 변동성에 직접적인 영향을 줄 수 있음</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">엔비디아</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#밈코인</span> <span class="tag tag-hash">#로빈후드</span> <span class="tag tag-hash">#주식연계</span> <span class="tag tag-hash">#엔비디아</span> <span class="tag tag-hash">#가상자산</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미국 온라인 증권사 로빈후드의 블록체인 네트워크(로빈후드 체인)에서 가상자산과 전통 주식을 연동한 '주식 연계 밈코인'이 새로운 투자 트렌드로 부상하고 있다.
+
+NH투자증권에 따르면, 최근 로빈후드 체인 내에서는 유저가 특정 밈코인을 매수할 때 연계된 주식이 자동으로 매수되는 주문 라우팅 방식의 밈코인이 유행하고 있다.
+
+예를 들어 유저가 스테이블코인으로 AI(Artificial Inu) 토큰을 매수하면 자동으로 엔비디아 주식 토큰을 매수한 뒤 엔비디아 주식 토큰으로 AI 토큰을 매수하도록 처리된다. 이러한 구조 때문에 밈코인에 대한 매수세가 늘어날수록 연계된 실제 주식의 수급에도 영향을 미치게 된다.
+
+투자자들의 참여 동기도 독특하다. NH투자증권은 유저들이 일반 주식보다 주식 연계 밈코인에 더 큰 흥미와 소속감을 느끼며 매수하는 경향이 있다고 분석했다. 특히 이들 밈코인 매수로 과거 게임스탑식 숏스퀴즈(Short Squeeze)를 연계 주식에 재현할 수 있다고 생각하는 경우도 있는 것으로 나타났다.
+
+로빈후드 입장에서는 이러한 현상이 Z세대(Gen Z)와 알파세대(Gen Alpha) 등 젊은 투자자층을 코인 또는 일반 주식 거래도 유도하는 기회가 되고 있다. 홍성욱 NH투자증권 연구원은 "로빈후드가 체인 내 실험적 활동을 용인한 결과 주식 토큰을 보유한 지갑 수가 2개월 만에 90만개를 돌파하는 등 빠르게 활성화되는 모습"이라며 "로빈후드 최고경영자(CEO) 역시 밈코인 매수 시 주식 토큰을 보상으로 전송해주는 다른 구조도 긍정적으로 언급하는 등 현 상황에 대해 고무적인 입장이며, 다양한 실험은 로빈후드 체인 생태계와 향후 수익화 가능성에 기여할 것"이라고 분석했다.
+
+다만 잠재적인 리스크에 대한 주의도 요구된다. 로빈후드는 규제가 엄격한 미국 등을 서비스 대상에서 제외하는 방식으로 법적 리스크를 일차적으로 제한했으나, 타국 당국의 제재 가능성은 여전히 상존한다. 홍성욱 NH투자증권 연구원은 "실험이 밈코인에만 머무른다면 변동성과 손실로 인해 유저들이 외면할 리스크가 존재한다"고 짚었다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005812279' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005812279</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
