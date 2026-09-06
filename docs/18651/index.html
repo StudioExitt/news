@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>지금 증시는 공포일까, 탐욕일까…투자자 '심리 온도계' 나왔다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005329267' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18651" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>지금 증시는 공포일까, 탐욕일까…투자자 '심리 온도계' 나왔다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">한경에이셀이 AI 기반 투자정보 서비스 에픽AI를 통해 한국 증시의 투자 심리를 실시간으로 보여주는 공포탐고지수를 출시했다. 종목 토론, 뉴스, 시장 데이터를 종합하여 시장의 심리적 상태를 수치화해 제공한다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">신규 AI 기반 투자 심리 지수 출시로 시장 모니터링 도구의 다변화 및 정보 접근성 확대</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#공포탐욕지수</span> <span class="tag tag-hash">#에픽AI</span> <span class="tag tag-hash">#투자심리</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">한경에이셀, 공포탐욕지수 개발
+
+종목토론·뉴스·시장 등 종합
+에픽AI 통해 실시간으로 확인유가증권시장과 코스닥시장 투자 심리가 탐욕에 가까운지, 공포에 가까운지를 매시간 숫자로 보여주는 지수가 개발됐다.
+한경에이셀이 인공지능(AI) 투자정보 서비스 에픽AI를 활용해 6일 선보인 공포탐욕지수로, ‘한국판 변동성지수(VIX)’로 자리매김할 것이란 기대가 나온다.
+
+공포탐욕지수는 쉽게 말해 한국 증시의 심리 온도계다. 투자자는 이 지수를 통해 국내 증시 투자 심리가 평소보다 얼마나 치우쳤는지 파악할 수 있다. 기본적으로 과거 3년 치 데이터와 비교한 값으로 산출하는 구조다. 김형민 한경에이셀 대표는 “다양한 비정형 데이터에서 유의미한 정보를 추출하고 시장 시그널로 해석·가공하는 분석 역량을 반영했다”고 설명했다.
+
+유가증권·코스닥시장용 공포탐욕지수는 대부분 ‘-2~2’ 사이에서 움직인다. -1과 1 사이라면 ‘중립’, 1~2에서 움직이면 투자 심리가 낙관적인 ‘탐욕’ 상태를 의미한다. 지수가 2를 넘는다면 ‘극단적 탐욕’으로 볼 수 있다. 예컨대 코스피지수가 9천피를 돌파한 지난 6월 말에는 탐욕으로, 수급 주체가 일제히 순매도에 나선 최근에는 공포로 진단됐다. 김 대표는 “탐욕이 강할 때는 시장이 과열됐을 수 있으니 신중하게 투자하고, 공포가 강할 때는 남들이 겁내는 시기이므로 기회일 수 있다”고 말했다.
+
+한경에이셀은 종목 토론(50%), 뉴스(25%), 시장(25%) 등 3개 재료를 종합해 공포탐욕지수를 산출한다. 토론 부문은 개인투자자가 소셜미디어와 온라인 커뮤니티에서 어디에 초점을 맞추고 있는지 실시간 확인하는 방식이다. 게시글 감성을 판별해 과거 동일 시각과 비교한 뒤 점수를 매긴다. 뉴스 부문은 상장기업 관련 기사 양과 논조, 기사 분출량, 긍정·부정 여부, 확산 범위, 장중 흐름 등을 종합적으로 반영한다. 시장 부문은 지수, 종목 시세를 반영한다. 장중에는 실시간 값을, 나머지 시간에는 최신 확정 값을 사용한다. 종합 점수를 산출한 뒤 다시 3년간의 원점수와 비교해 표준편차 단위로 나타낸다.
+
+재료의 점수마다 상대성을 고려한다. 예컨대 평일 오전 10시에 올라온 게시글 2000건은 조용한 편일 수 있지만 오전 3시의 같은 분량은 이례적이기 때문이다.
+
+공포탐욕지수 내 3개 재료 방향이 같을 때는 가장 신뢰할 만한 신호다. 엇갈릴 땐 이면을 들여다봐야 한다는 설명이다. ‘토론 탐욕, 시장 공포’일 때는 주가가 약하지만 개인은 낙관적인 상태다. ‘시장 탐욕, 토론 공포’라면 주가는 오르지만 개인은 믿지 못하는 상승장이다. 공포탐욕지수는 에픽AI 내 ‘실험실’ 코너에서 확인할 수 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005329267' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005329267</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
