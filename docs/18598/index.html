@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스닥 투자는 '깜깜이 투자'? 증권사 보고서 기근 심$어</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/417/0001157470' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18598" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스닥 투자는 '깜깜이 투자'? 증권사 보고서 기근 심$어</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스닥 기업에 대한 증권사 분석 리포트 발간 건수가 코스피의 3분의 1 수준에 불과해 투자자들의 정보 부족 현상이 심화되고 있습니다. 특히 기술특례 상장 기업은 분석 사각지대에 놓여 있어 정보 비대칭성 문제가 심각합니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">코스닥 시장 내 기업 분석 정보의 불균형(정보 비대칭) 심화로 인한 투자 위험 및 변동성 확대 우려</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">매드업</span> <span class="tag stock-tag">액트로</span> <span class="tag stock-tag">제이앤티씨</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥</span> <span class="tag tag-hash">#정보비대칭</span> <span class="tag tag-hash">#기술특례상장</span> <span class="tag tag-hash">#기업분석리포트</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스닥 투자자들이 정보 부족에 시달리고 있다. 코스닥 활성화를 위한 각종 정책이 추진되고 있지만 투자자들은 정보 부족에 시달리고 있다. 당장은 실적과 재무 상태가 미약하지만 미래 성장성이 우수하다는 이유로 증시에 입성한 기술특례 상장 기업들이 많다. 하지만 정작 코스피보다도 적은 기업 분석 리포트에 투자자들은 투자정보 기근을 겪고 있다.
+
+5일 에프앤가이드에 따르면 2026년 증시 개장 이후 이달 2일까지 발간된 증권사의 분석 리포트 수는 총 1만6978건이었다. 이 중 코스피 기업을 대상으로 한 리포트는 1만2620건, 코스닥 기업은 4358건으로 나타났다.
+
+월평균으로 환산하면 코스피에서는 한 달에 1564건이 나왔지만 코스닥에서는 540건이 발간됐다. 전체 발간 건수로도 월평균으로도 코스닥 기업은 코스피의 3분의 1에 불과했다. 4일 기준 코스닥 상장사 수가 1798개로 코스피의 829개 대비 2배가 넘는다는 사실을 고려하면 실질적인 정보 격차는 더 커진다.
+
+종목 분석과 투자를 위해서는 꾸준한 정보 업데이트가 중요하지만 코스닥은 이 부분에서도 코스피보다 부족했다. 연초 이후 리포트가 1건이라도 나온 종목은 코스피가 385개 사, 코스닥은 633개 사로 종목 수는 코스닥이 더 많았다. 하지만 종목당 평균 누적 리포트는 코스피가 32.8건이지만 코스닥은 6.9건으로 격차가 5배 가까이 났다.
+
+한두 번 언급되고 끝난 '누적 2건 이하'인 경우도 코스닥 종목이 더 많았다. 2026년 리포트 발간이 1~2건에 그친 종목은 코스피는 55개에 불과했지만 코스닥은 279개 종목에 달했다. 600개가 넘는 코스닥 기업 관련 리포트가 나왔지만 이 중 44%가 단발성 분석으로 끝난 셈이다.
+
+염승환 LS증권 이사는 "기업 분석을 위해서는 꾸준한 정보가 중요하다"고 지적하며 "1년 이상 지속해서 분석이 돼야 기업의 본업 판단이나 이익 추정이 어떻게 변화하는지, 신규 사업 정보가 어떤 것이 추가됐는지, 애널리스트는 어떻게 기업을 바라보고 있는지를 종합적으로 파악할 수 있기 때문"이라고 말했다.
+
+코스닥 기술특례 상장 기업들의 정보 공백도 컸다. 기술특례 상장은 당장의 실적이나 재무 상황이 요건을 충족하지 못해도 기술과 성장 잠재력을 감안해 상장을 허용하는 제도다. 이 때문에 상장 직후 실적이나 현금 흐름이 적자를 보일 수 있어 더 정밀한 분석이 필요하지만 기술특례 기업의 분석 리포트는 코스닥 평균보다도 적었다.
+
+지난 2일 기준 2025년~2026년 기술특례상장으로 코스닥에 진입한 회사는 2025년이 35개, 2026년이 16개로 총 51개사였다. 이들 대상으로 발간된 리포트는 총 2\"큼건\"으로 기업당 평균 5건 정도였다. 코스닥 전체 평균인 6.9건 대비 낮다.
+
+여기에 기술특례 기업의 33%는 실질적인 분석이 이뤄지지 않고 있는 것으로 나타났다. 51개 사 중 2026년 리포트가 아예 없거나 발간 건수가 2건 이하에 그친 회사는 17개에 달했다. 반면 알지노믹스 20건, 그래피 17건, 리브스메드 16건, 리센스메디컬 13건 등 일부 기업들에 대해서만 분석이 집중되는 편중 현상도 나타났다.
+
+정보 공백 때문일까. 간만에 리포트가 발간된 날이면 주가가 뛰는 사례도 있었다. 지난 1일 매드업은 증권사의 기업 분석이 시작되자 20.79% 급등했다. 지난 8월 26일 액트로는 분석 보고서가 발간되자 주가가 15.24% 상승했다. 제이앤티씨도 8월 12일 증권사 보고서가 나오자 22.93% 올랐다. 투자 정보에 목마른 투자자들은 종목 토상실 등지에서 리포트를 빠르게 공유했다.
+
+한 코스닥 기업 관계자는 "기업 입장에서는 제품에 대한 홍보도 중요하지만 투자자들을 위해 주가도 신경 쓰지 않을 수 없다"며 "하지만 영세한 코스닥 상장사 입장에서는 IR(투자설명)을 맡을 인력도 전문성도 부족하기 때문에 증권사의 분석 리포트 하나하나가 소중한 상황"이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/417/0001157470' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/417/0001157470</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
