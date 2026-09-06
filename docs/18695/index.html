@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>모더나, 맞춤형 암백신 넘어 ‘범용 암백신’ 만든다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004659126' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18695" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>모더나, 맞춤형 암백신 넘어 ‘범용 암백신’ 만든다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">모더나가 환자마다 제조 공정이 필요한 기존 맞춤형 암백신의 한계를 넘어, 여러 환자가 공통으로 가진 항원을 표적으로 하는 \"범용 암백신\"을 개발 중입니다. 연내 임상 2상 결과 발표가 예정되어 있으며, 이는 대량생산 가능성을 높여 바이오 산업의 새로운 패러다임을 제시할 것으로 기대됩니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">모더나의 범용 암백신 개발 소식은 기존 맞춤형 치료제의 생산성 한계를 극복할 수 있는 기술적 진보를 의미하며, 이는 모더나뿐만 아니라 mRNA 관련 기술을 보유한 국내 바이오 기업들에게도 강력한 모멘텀으로 작용할 수 있음</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">모더나</span> <span class="tag stock-tag">SK바이오사이언스</span> <span class="tag stock-tag">GC녹십자</span> <span class="tag stock-tag">앱클론</span> <span class="tag stock-tag">올릭스</span> <span class="tag stock-tag">삼성바이오로직스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">바이오</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">제약</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#모더나</span> <span class="tag tag-hash">#암백신</span> <span class="tag tag-hash">#mRNA</span> <span class="tag tag-hash">#바이오테크</span> <span class="tag tag-hash">#차세대치료제</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">암항원 표적 ‘mRNA-4359’ 연내 2상 결과
+노로 백신·인비보 카티 등 mRNA 분야 확대
+SK바사·올릭스 등도 관련 연구 개발 나서
+김희수 모더나코리아 부사장이 6일 서울 종arr 종로구 콘코디언빌딩에서 기자들과 만나 메신저 리보핵산(mRNA) 기술에 대해 설명하고 있다. 사진 제공=모더나코리아
+메신저 리보핵산(mRNA) 기술을 활용한 환자 맞춤형 ‘암백신’이 임상 3상에서 효과를 확인한 가운데, 모더나가 환자별 제조 공정이 필요 없는 ‘범용 암백신’을 개발한다.
+
+김희수 모더나코리아 부사장은 6일 서울 종로구 콘코디언빌딩에서 기자들과 만나 “암 관련 항원을 표적으로 하는 mRNA-4359를 개발 중”이라며 “개인 맞춤형 치료제와 달리 여러 환자가 공통적으로 가지고 있는 암 항원에 폭넓게 사용할 수 있을 것”이라고 밝혔다. 해당 파이프라인은 흑색종과 비소세포폐암을 대상으로 임상 2상을 진행하고 있으며 연내 결과가 발표될 예정이다.
+
+모더나는 지난달 환자 맞춤형 암백신 ‘인티스메란’과 미국 머크(MSD)의 항암제 ‘키트루다’ 병용임상 3상에서 흑색종 재발 지연 효과를 확인하며 주목받았다. 다만 인티스메란의 경우 환자마다 다른 암세포 돌연변이를 분석해 치료제를 만드는 방식으로 대량생산이 어렵다는 한계가 있다. 반면 mRNA-4359는 여러 환자가 공통적으로 가진 암 항원을 표적으로 하기에 이 같은 문제를 상당 부분 줄일 수 있을 것으로 기대된다.
+
+모더나는 mRNA 기술을 활용한 노로바이러스 백신도 개발하고 있다. 이 밖에도 환자의 면역세포를 체내에서 직접 유전적으로 변화시키는 인비보 CAR-T 치료제도 연구중이다. 김 부사장은 “단백질의 정보만 바꾸는 방식이기에 다양한 질환으로 빠르게 확장할 수 있다”면서도 “어떤 단백질을 얼마나 만들어야 하는지 이해하는 게 치료 효과 등 성공 여부를 가른다“고 설명했다.
+
+코로나19 등 감염병 백신에 주로 활용되던 기술이 다양한 치료제로 영역을 넓힐 수 있었던 것은 mRNA가 가진 정보 전달 기능 덕분이다. mRNA는 체내에 들어가 세포에 ‘특정 단백질을 만들라’는 설계도를 전달한다. 세포가 해당 단백질을 만들면 면역계가 이를 인식하고 기억해 이후 같은 특징을 가진 바이러스나 암세포가 나타났을 때 공격하도록 한다.
+
+국내 기업들도 mRNA를 활용한 치료제 개발에 속도를 내고 있다. SK바이오사이언스는 일본뇌염 백신의 글로벌 임상 1·2상을 진행하고 있으며, GC녹십자와 앱클론은 인비보 CAR-T 치료제 공동 개발에 착수했다. 올릭스는 최근 원형 mRNA 관련 특허를 출원하며 유전자 발현 억제에 초점을 맞췄던 기존 RNA 간섭(RNAi) 기술에서 단백질 발현 분야로 기술 포트폴리오를 확대했다. 이 외에도 위탁생산개발(CDMO)기업 삼성바이오로직스는 원료의약품(DS)부터 완제의약품(DP)까지 아우르는 mRNA 원스톱 서비스를 제공하고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004659126' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004659126</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
