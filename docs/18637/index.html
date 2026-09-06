@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[미국 주식 돋보기] 스페이스X AI투자 통했다…2조클럽 재입성</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005731029' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18637" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[미국 주식 돋보기] 스페이스X AI투자 통했다…2조클럽 재입성</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">스페이스X가 AI 컴퓨팅 인프라 구축에 대한 기대감으로 시가총액 2조 달러를 다시 돌파함. 주요 증권사들이 목표주가를 상향 조정하면서, 스페이스X의 편입 여부에 따라 국내 우주 관련 ETF들의 수익률이 극명하게 갈리는 양상을 보임.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 컴퓨팅 인프라 확장에 따른 기업 가치 재평가(Re-rating)와 주요 투자은행들의 목표주가 상향은 스페이스X 및 관련 우주/AI 테마주에 강력한 호재임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">스페이스X</span> <span class="tag stock-tag">TIGER 미국우주테크</span> <span class="tag stock-tag">KODEX 미국우주항공</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">우주항공</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#스페이스X</span> <span class="tag tag-hash">#AI인프라</span> <span class="tag tag-hash">#스타링크</span> <span class="tag tag-hash">#우주ETF</span> <span class="tag tag-hash">#재평가</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">AI컴퓨팅 인프라 빠르게 구축
+한달간 30% 뛰어 150弗 육박
+차세대 우주선 개발도 기대감
+국내 우주ETF는 희비 엇갈려
+보유 여부따라 수익률 차이 커
+
+일론 머스크가 이끄는 스페이스X가 인공지능(AI) 사업에 대한 기대를 등에 업고 시가총액 2조달러 고지를 다시 밟았다. 최근 월가가 스페이스X의 AI 사업 가치를 잇달아 높여 잡으면서 투자심리가 살아나는 모습이다. 스페이스X 주가 강세는 국내 우주산업 상장지수펀드(ETF)에도 영향을 미쳐 최근 한 달간 스페이스X 편입 여부에 따라 수익률이 크게 엇갈렸다.
+
+지난 4일(현대시간) 뉴욕 증시에서 스페이스X는 전 거래일보다 1.2% 하락한 147.95달러에 거래를 마쳤다. 장중에는 150달러를 넘어서기도 했다. 시총도 약 두 달 만에 다시 2조달러를 넘어섰다. 지난달 3일(114.53달러)과 비교하면 한 달 새 약 29.1% 상승했다.
+
+◆ 주요 증권사 목표가 잇달아 상향
+
+최근 주가를 밀어 올린 가장 직접적인 촉매는 AI 사업에 대한 기대다. 오펜하이머는 지난 2일 스페이스X 목표주가를 기존 250달러에서 280달러로 높이고 시장수익률 상회(Outperform) 의견을 유지했다. AI 컴퓨팅 사용량과 수익성이 당초 예상보다 빠르게 개선되고 있다는 판단에 장기 매출 추정치도 약 10% 높였다.
+
+오펜하이머만 스페이스X 몸값을 높게 보는 것은 아니다. JP모건은 지난 1일 스페이스X에 대한 매수 의견과 목표주가 240달러를 재확인했다. 번스타인은 지난달 31일 목표주가를 239달러에서 248달러로 높이는 등 주요 증권사들이 잇달아 현 주가보다 높은 목표가격을 제시하고 있다.
+
+미국 자본시장이 주목하는 것은 스페이스X의 기업 가치 산정 공식이 기존 '로켓+스타링크'에서 '로quet+위성통신+AI'로 확대되고 있다는 점이다. 오펜하이머는 스페이스X가 AI 컴퓨팅 능력을 올해 약 1.4기가와트(GW)에서 내년 최대 10GW까지 확대할 가능성에 주목했다. AI 데이터센터용 컴퓨팅 자원이 부족한 가운데 대규모 자본과 데이터, 인프라스트럭처 구축 능력을 동시에 갖춘 스페이스X가 AI 컴퓨팅 사업을 빠르게 키울 수 있다는 분석이다. JP모건도 스페이스X에 흡수된 xAI의 생성형 AI 모델 '그록(Grok)'의 기업 고객 확대 가능성을 긍정적으로 평가했다. 우주 사업뿐만 아니라 AI 모델과 컴퓨팅 인프라가 실제 매출원으로 자리 잡으면 기존보다 높은 밸류에이션을 받을 수 있다는 논리이다.
+
+차세대 우주선 스타십 개발의 진전도 투자심리를 뒷받침하고 있다. 스페이스X는 이르면 오는 15일 14번째 스타십 시험비행을 추진하는 것으로 알려졌다. 스타십은 차세대 스타링크 위성뿐만 아니라 향후 우주 기반 AI 인프라 구축에 필요한 대규모 화물을 저비용으로 궤도에 올릴 핵심 수단으로 꼽힌다.
+
+◆ 스페이스X 편입 ETF 수익률 높아
+
+한편, 스페이스X 강세는 국내 우주 ETF의 성적표도 갈라놓고 있다. 해외 주식형·해외 혼．업 우주 관련 ETF 10개를 분석한 결과, 스페이스X를 편입한 8개 상품의 최근 1개월 수익률은 단순 평균 3.82%였다. 반면 스페이스X를 보유하지 않은 2개 상품은 평균 10.80% 하락했다. 두 그룹의 수익률 격차는 14.62%포인트에 달했다.
+
+수익률 상위권은 스페이스X 편입 상품이 차지했다. 'TIGER 미국우주테크'가 최근 한 달간 8.11% 올라 가장 높은 수익률을 기록했다. 스페이스X를 24.74% 담은 'RISE 미국우주&로봇TOP2미국채혼합50'이 5.17% 올랐고 'KIWOOM 미국우주테크TOP2채권혼합50'은 4.94% 상승했다. 'KODEX 미국우주항공'은 스페이스X를 26.37% 편입해 한 달간 4.51% 올랐고, 스페이스X 비중이 32.99%로 가장 높은 'ACE 미국우주테크액티브'도 4.36% 상승했다.
+
+반면 스페이스X가 없는 상품은 큰 폭의 마이너스 수익률을 기록했다. 'WON 미국우주항공방산'은 최근 한 달간 9.85% 하락했고 'TIME 글로벌우주테크&방산액티브'는 11.75% 떨어졌다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005731029' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005731029</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
