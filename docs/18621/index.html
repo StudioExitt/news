@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엘니뇨가 사라지면 '이것' 가격이 뛴다 [주末머니]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/277/0005812431' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18621" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>엘니뇨가 사라지면 '이것' 가격이 뛴다 [주末머니]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">엘니뇨 현상이 진정됨에 따라 내년부터 미국 천연가스 가격의 본격적인 반등세가 나타날 전망입니다. 특히 유럽의 전력 수급 차질 우려가 더해지며 에너지 가격 상승 가능성이 높게 점쳐지고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">엘니뇨 종료에 따른 에너지 수요 증가 및 유럽 전력 수급 불안 전망</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">천연가스 관련주</span> <span class="tag stock-tag">에너지 인프라 기업</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">석유 및 가스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전력</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#엘니뇨</span> <span class="tag tag-hash">#천연가스</span> <span class="tag tag-hash">#에너지가격</span> <span class="tag tag-hash">#유럽전력수급</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미국 천연가스 가격이 계절적 성수기 진입에도 불구하고 약세를 보이고 있으나, 올 연말을 기점으로 엘니뇨 여파가 진정되면서 내년부터 본격적인 가격 반등세가 나타날 것이라는 전망이 나왔다. 대신증권에 따르면, 최근 미국 천연gsub 가격 선물 가격(헨리허브)이 난방 수요가 반영되는 10월물로 교체됐음에도 여전히 부진한 상황이다. 원인은 엘니뇨 현상 때문이다. 무역풍 둔화로 발생하는 엘니뇨는 북극 한파의 남하를 막아 겨울철 기온을 평년보다 높게 만든다. 즉 현재 시장 가격에는 올겨울 난방용 수요 감소에 대한 비관론이 선반영돼 있다는 분석이다. 그러나 이러한 가격 디스카운트 요인은 올 연말을 지나며 소멸할 것으로 전망된다. 컬럼비아대 국제기후사회연구소(CCSR/IRI)에 따르면 동태평양 해수면 온도는 올해 10월부터 내년 1월 사이 정점을 찍은 뒤 점차 진정될 것으로 예상된다. 최진영 대신증권 연구원은 "이는 엘니료가 내년 여름철에는 중립 상태로 전환될 것을 암시한다"면서 "천연가스 가격 상승률이 동태평양 해수면 온도와 역의 상관관계인 점을 고려하면 내년 가격 상승의 걸림돌이 사라지게 된다"고 설명했다. 대신증권은 내년 천연가스 시장의 최대 변수로 유럽의 전력 수급 차질을 꼽았다. 현재 유럽은 폭염으로 라인강 수위가 10년 만에 최저치로 떨어지면서 연료탄 운송이 정체되고 수력 발전량이 2015년 이후 최저 수준으로 추락했다. 원자력 발전 역시 하천 수온 상승과 냉각수 부족으로 프랑스 내 원전 일부가 발전량을 감축하는 등 차질을 빚고 있다. 유럽 LNG 가격이 미국 헨리허브보다 훨씬 민감하게 반응하는 이유다. 최 연구원은 "문제는 엘니뇨가 후퇴하는 내년"이라며 "엘니뇨가 중립 상태로 전환되면 서유럽과 중부 유럽 전반에 걸쳐 강수량이 급감하게 된다. 유럽 원전 대부분이 서유럽에 집중돼 있다는 점을 감안하면 내년 유럽의 전력 수급은 지금보다 한층 더 타이트해질 수밖에 없다"고 분석했다. 앞서 2020년 5~8월 엘니뇨에서 중립으로 전환됐던 시기에도 유럽의 전력 수요는 천연가스로 옮겨가며 슈퍼 사이클을 초래한 바 있다. 최 연구원은 "당장은 아니지만 내년 천연가스 가격에 대한 낙관적인 시각을 유지한다"면서 "에너지를 통한 대응을 적극 권고한다"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/277/0005812431' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/277/0005812431</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
