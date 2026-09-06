@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상폐 대신 코넥스行 길 열었지만…거래절백에 실효성은 ‘글쎄’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006364422' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18612" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>상폐 대신 코넥스行 길 열었지만…거래절백에 실효성은 ‘글쎄’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">시가총액 기준 미달 코스닥 상장사라도 재무 요건을 갖추면 정리매매 없이 코넥스로 이전할 수 있도록 제도가 개편됨. 그러나 코넥스의 낮은 유동성으로 인해 실질적인 투자자 보호 효과에 대한 우려가 존재함.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">코스닥 상장사의 퇴출 방식 변경 및 코넥스 이전 상장 허용에 따른 시장 구조 변화</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스닥</span> <span class="tag tag-hash">#코넥스</span> <span class="tag tag-hash">#상장폐지</span> <span class="tag tag-hash">#금융당국</span> <span class="tag tag-hash">#이전상장</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">시총 미달해도 재무요건 갖추면 코넥스 이전
+정리매매 없이 코스닥 최종 종가로 거래 시작
+“충격 완화 선택지”…시장 정체성·유동성은 과제 금융당국이 시가총액 기준에 미달한 코스닥 상장사라도 일정 수준의 수익성과 재무건전성을 갖췄다면 정리매매 없이 코넥스로 이전할 수 있도록 퇴로를 마련한다. 부실·한계기업의 신속한 퇴출이라는 정책 방향은 유지하면서 흑자기업이 시장 급변에 따른 주가 하락만으로 퇴출되는 부작용을 줄이기 위한 조치다.
+
+다만 코넥스는 코스닥보다 투자자 기반이 좁고 거래도 활발하지 않아 상장폐지 충격을 실질적으로 완화하는 데 한계가 있다는 지적이 나온다. 정리매매에 따른 급격한 가격 하락은 피하더라도 거래 상대방을 찾지 못해 주식이 사실상 묶일 수 있어서다.
+
+7일 금융투자업계에 따르면 금융당국은 시가총액 요건에 미달한 코스피·코스닥 상장사 가운데 일정 재무요건을 충족한 기업이 신청하면 정리매매 없이 코넥스로 이전상장할 수 있도록 제도를 개편한다.
+
+코스닥 상장사는 최근 3개 사업연도 가운데 2개 연도에 영업이익을 냈거나, 최근 3개 사업연도 중 1개 연도에 영업이익을 내면서 자기자본이 200억원 이상이면 이전을 신청할 수 있다. 자본잠식 기업은 제외된다. 지난달 26일 기준 시가총액 200억원 미만 코스닥 상장사 97곳 중 43곳(44.3%)이 요건을 충족할 것으로 추산됐다.
+
+현재 코스닥 상장사는 시가총액 200억원 미만 상태가 30거래일 연속 이어지면 관리종목으로 지정된다. 이후 90거래일의 유예기간에도 45거래일 연속 기준을 웃돌지 못하면 상장폐지 절차를 밟는다.
+
+새 제도가 시행되면 요건을 충족하는 기업은 정리매매를 거치지 않고 코넥스로 이동한다. 코스닥 최종 거래일 종가가 코넥스 신규상장 기준가격이 되는 구조다. 기존 주주도 증권사를 통해 해당 주식을 계속 거래할 수 있다.
+
+코넥스 이전기업의 지정자문인 선임 의무는 일정 기간 유예하며, 기간과 방식은 금융당국과 거래소가 협의해 확정할 계획이다. 유예기간에는 기업이 직접 공시하고 거래소가 관련 교육을 지원한다. 거래소는 이전기업은 이미 소액주주 지분 분산 요건을 갖췄을 가능성이 커 별도의 유동성 공급 의무는 없을 것으로 예상된다고 설명했다.
+
+이와 함께 내년 1월로 예정됐던 코스닥 시가총액 기준의 추가 상향도 6개월 미뤄진다. 이에 따라 상장폐지 기준은 현행 200억원에서 내년 7월 300억원으로 높아진다. 지난달 26일 기준 시가총액 200억~300억원인 코스닥 기업은 약 200곳이다.
+
+한편 전문가들은 코넥스 이전이라는 선택지를 추가한 것에 의미가 있다면서도 거래 활성화가 뒷받침돼야 한다고 지적한다. 강소현 자본시장연구원 자본시장실장은 “코넥스도 상장시장이기 때문에 상장폐지되는 것보다는 기업과 투자자가 받는 타격이 적을 것”이라면서도 “투자자군의 구성과 거래 빈도가 달라 코스닥에 있을 때만큼 거래될 수 있을지는 확언할 수 없다”고 짚였다.
+
+이준서 동국대학교 경영학과 교수는 “나름대로 합리적인 방안”이라면서도 “제대로 작동하기 위해서는 코넥스시장 활성화 방안이 전제되어야 한다”며 “현재 시장 환경에서는 의미 없는 생명 유지 기간만 연장하는 셈”이라고 지적했다.
+
+성장 초기 기업을 육성하기 위해 설계된 코넥스의 정체성이 흐려질 수 있다는 우려도 있다. 정도진 중앙대학교 경영학부 교수는 “정책 당국이 시장의 목재리를 들으려 노력하는 흔적은 보인다”면서도 “코스닥과 코넥스는 운영 목적이 다른데 이전기업이 늘어나면 두 시장의 존재 이유에 혼동을 줄 수 있다”고 말했다.
+
+이어 “시장별로 투자자의 투자 성향이 다르기 때문에 시장을 옮긴다고 곧바로 투자자를 보호할 수 있는 것은 아니다”라며 “성장 동력이 있는 기업이 불필요하게 퇴출되지 않도록 대상을 정교하게 선별하는 원칙이 더 중요하다”고 강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006364422' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006364422</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
