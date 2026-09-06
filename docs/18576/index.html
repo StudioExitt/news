@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[공모주달력]빅웨이브로보틱스 몸값 낮춰 재도전…공모주 '슈퍼위크'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.06</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/648/0000050505' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18576" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[공모주달력]빅웨이브로보틱스 몸값 낮춰 재도전…공모주 '슈퍼위크'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">이번 주 공모주 시장은 빅웨이브로보틱스의 재도전을 포함하여 글로벌테크놀로지, 덕산넵코어스, 엘리스그룹 등 다양한 산업군의 수요예측이 집중된 슈퍼위크입니다. 로봇, 반도체, AI, 방산 등 여러 테마의 기업들이 상장 절차를 진행하며 시장 변동성을 높일 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">다양한 산업군(로봇, 반도체, AI, 방산)의 공모주 수요예측과 상장이 집중된 '슈퍼위크'로 인해 IPO 시장의 거래량 및 변동성 확대가 예상됨</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">빅웨이브로보틱스</span> <span class="tag stock-tag">글로벌테크놀로지</span> <span class="tag stock-tag">덕산넵코어스</span> <span class="tag stock-tag">엘리스그룹</span> <span class="tag stock-tag">브릴스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">로봇</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">AI</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">방산</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#공모주</span> <span class="tag tag-hash">#IPO</span> <span class="tag tag-hash">#수요예측</span> <span class="tag tag-hash">#슈퍼위크</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">글로벌테크놀무로지·덕산넵코어스·엘리스그룹 등 수요예측
+네오사피엔스 등 공모가 확정…NH스팩34호 상장
+
+이번 주 공모주 시장은 수요예측 일정이 빽빽해요. 상장 절차가 수차례 미뤄졌던 빅웨이브로보틱스가 다시 시장 평가를 받을 예정이고요. 글로벌테크놀로지와 덕산넵코어스, 엘리스그룹 등도 잇달아 기관투자자 수요예측에 나서요. 지난주부터 수요예측을 진행한 네오사피엔스와 와이즈플래닛컴퍼니 등의 공모가 확정도 예정돼 있어요.
+
+몸값 낮춘 빅웨이브로보틱스 재도전…글로벌테크놀로지도 출격
+
+이번 주 공모주 시장에서 가장 눈여볼 기업 중 하나는 로봇 자동화 플랫폼 기업인 빅웨이브로보틱스예요. 빅웨이브로보틱스는 7일부터 11일까지 기관투자자를 대상으로 수요예측를 진행하는데요. 이전에 상장 절차가 여러 차례 미뤄진 끝에 진행된다는 점에서 시장의 관심이 높은 상태에요.
+
+회사는 지난 5월4일 증권신고서를 처음 제출했지만 금융감독원으로부터 두 차례 정정신고서 제출 요구를 받았어요. 이후 자진 정정까지 이어지면서 지난 3일에는 7차 정정 증권신고서를 냈어요. 최초 신고서 제출 후 수요예측을 시작하기까지 약 4개월이 걸린 셈이에요.
+
+기업가치가 지나치게 높다는 고평가 논란이 이어지면서 상장 재도전 과정에서 공모 조건도 크게 낮췄어요. 빅웨이브로보틱스는 지난달 21일 제출한 6차 정정 신고서에서 희망공모가를 기존 2만~2만4000원에서 1만5000~1만8000원으로 25% 낮췄어요. 공모주식 수도 기존 200만주에서 160만주로 20% 줄였어요. 이에 따라 예상 공모금액은 종전 400억~480억원에서 240억~288억원으로 40% 감소했어요.
+
+공모 조건을 낮춘 만큼 실적 회복 가능성에도 관심이 쏠려요. 빅웨이브로보틱스의 매출은 2023년 68억5400만원에서 2024년 138억5100만원으로 늘었고 지난해에는 207억4300만원까지 증가했어요. 다만 올해 상반기 매출은 9\"9억7800만원이었고 영업손실 8억5900만원을 기록했어요.
+
+회사는 올해 연간 매출 358억6000만원과 영업이익 18억1000만원을 예상하고 있어요. 이를 달성하려면 하반기 매출이 연간 매출의 72.2%를 차지해야 해요. 회사는 이미 인식한 매출과 확정 수주잔고에 영업 파이프라인 등을 더하면 기대할 수 있는 매출이 330억9000만원으로 연간 목표의 92.3% 수준이라고 설명했어요.
+
+회사는 이번 공모에서 총 160만주를 내놓아요. 신주 모집이 152만주로 전체의 95%를 차지하고 김민교 대표가 보유한 주식 8만주도 구주매출로 나와요. 희망공모가는 1만5000~1만8000원이에요. 이에 따른 예상 공모금액은 240억~288억원이에요. 대표주관사는 유진투자증권이고 미래에셋증권이 공동주안사를 맡았어요.
+
+기술특례 방식으로 코스닥 상장에 도전하는 글로벌테크놀로지도 7일부터 11일까지 수요예측를 진행해요. 미니·RGB 발광다이오드(LED) 백라이트 구동 IC와 마이크로 LED 구동 IC, 차량용 시스템 반도체 등을 설계하고 공급하는 <0xED><0x8C><0xB9>리스 반도체 기업이에요. 반도체를 직접 생산하기보다는 설계에 집중하고 생산은 파운드리와 패키징 업체에 맡기는 구조예요. 투명 LED 디스플레이와 마이크로 LED 모듈 등으로도 제품군을 넓히고 있어요.
+\
+이번 공모에서는 보통주 400만주를 모두 신주로 모집해요. 희망공모가는 1만3000~1만5000원이에요. 희망공모가 기준 예상 공모금액은 520억~600억원이에요. 대표주관사는 한국투자증권이에요.
+
+실적은 올해 들어 개선되는 모습을 보였어요. 매출은 2023년 129억원에서 2024년 243억원, 지난해 297억원으로 꾸준히 늘었어요. 다만 연구개발과 신규 제품 투자 등의 영향으로 2024년 20억원, 지난해 60억원의 영업손실을 냈어요. 올해 상반기에는 매출 288억원과 영업이익 12억원을 기록하며 흑자로 돌아섰어요. 당기순이익도 15억원을 기록했어요.
+
+사업 구조도 달라지고 있어요. 과거에는 반도체 상품 유통 매출 비중이 컸지만 자체 설계 제품 매출이 빠르게 늘고 있어요. 올해 상반기 제품매출은 196억원으로 전체 매출의 67.99%를 차지했어요. 2024년 26.77%, 지난해 37.80%에서 크게 높아진 수준이에요.
+
+덕산넵코어스 중복상장 변수…엘리스그룹도 공모 채비
+
+방산 부품업체인 덕산넵코어스는 8일부터 14일까지 수요예측를 진행해요. 이번 공모에서는 보통주 300만주를 일반공모 방식으로 모집해요. 희망공모가는 1만2400~1만4600원이고 이에 따른 예상 공모금액은 372억~438억원이에요. 대표주관사는 대신증권이에요.
+
+덕산넵코어스는 1996년 설립된 한양네비콤의 방산 부문을 2013년 인수해 출범했어요. 위성항법장치와 항재밍장치, 통합항법장치를 비롯한 전자전과 데이터링크 관련 장비 등을 개발하고 있어요. 글로벌테크놀로지와 마찬가지로 기술특례 방식으로 코스닥시장 상장을 추진해요.
+
+이번 상장에서는 모회사 덕산하이메탈과의 중복상장 문제가 주요 변수에요. 덕산하이메탈은 현재 덕산넵코어스 지분 61.1%를 보유한 최대주주로, 공모 이후에도 지분 51.13%를 보유하게 돼요.
+
+이에 덕산넵코어스는 지난달 27일 제출한 3차 정정 증권신고서에서 중복상장에 따른 모회사 주주 보호 방안을 추가로 보완했는데요, 덕산하이메탈이 자회사 상장으로 기존 주주들의 지분가치가 훼손될 수 있다는 우려를 고려해 현금배당과 현물배당을 병행하는 주주환원 방안을 마련한다는 게 골자에요.
+
+아울러 내년부터 5년 동안 전년 별도 영업이익의 10%를 현금배당 재원으로 활용해요. 덕산하이메탈이 보유한 덕산넵코어스 주식 15만주도 최대주주와 특수관계자를 제외한 일반주주에게 현물배당할 계획이에요.
+
+엘리스그룹도 이번 주 수요예측에 나서요. 엘리스그룹은 9일부터 15일까지 기관투자자를 대상으로 수요예측를 진행해요. 대표주관사는 미래에셋증권이고 삼성증권이 공동주관사를 맡았어요.
+
+엘리스그룹은 2015년 카이스트(KAIST) 인공지능(AI) 기술 기반 박사급 인력들이 설립한 AI 기업이에요. 처음에는 클라우드 기반 교육·실습 플랫폼 '엘리스LXP'를 중심으로 사업을 키웠어요. 이후 AI 모델 개발에 필요한 그래픽처리장치(GPU) 수요가 커지자 AI 클라우드로 사업 영역을 넓혔어요.
+
+특히 최근에는 AI 교육회사에서 AI 인프라 기업으로 빠르게 무게중심을 옮기고 있어요. AI 클라우드 매출 비중은 2023년 6.6%와 2024년 8.5%에 불과했지만 지난해 44.2%로 뛰었고 올해 상반기에는 76.2%까지 높아졌어요. 자체 개발한 모듈형 AI 데이터센터 'AI PMDC'와 GPU 가상화·운영 솔루션 등을 기반으로 GPU 클라우드 사업을 확대하고 있어요.
+
+실적도 사업 확대와 함께 빠르게 증가하는 추세예요. 올해 상반기 영업수익은 343억7200만원으로 지난해 같은 기간보다 202.2% 늘었어요. 영업이익은 103억4300만원으로 지난해 상반기 35억5500만원 적자에서 흑자로 돌아섰고 당기순이익은 91억900만원을 기록했어요.
+
+엘리스그룹은 이번 공모에서 2\"2만2000주를 모두 신주로 모집해요. 희망공모가는 7만400~9만500원으로 예상 공모금액은 1564억~2011억원이에요. 이번 IPO에서 조달한 자금은 대부분 AI 인프라에 다시 투입할 계획이에요. 순수입금 약 1549억원을 수도권과 호남권 AI PMDC 구축에 사용할 예정이에요.
+
+브릴스·한국스팩17호도 수요예측…공모 일정 줄줄이
+
+브릴스도 같은 기간 기관투자자를 대상으로 수요예측를 진행해요. 브릴스는 로봇 자동화 솔루션의 설계부터 제작과 제어, 설치, 시운전, 유지보수까지 전 과정을 수행하는 로봇 자동화 기업이에요. 고정밀 검사 로봇을 시작으로 물류와 제조, 식품가공 로봇 등으로 사업 영역을 넓히고 있어요. 자동차와 이차전지, 조선, 의료·헬스케어 등으로 적용 산업도 확대하고 있어요.
+
+외형 성장과 함께 실적도 흑자 기조를 이어오고 있어요. 매출은 2023년 157억원에서 2024년 187억원, 지난해 238억원으로 늘었어요. 2024년에는 14억원의 영업손실을 냈지만 지난해 24억원의 영업이익을 기록하며 흑자로 돌아섰어요. 올해 상반기에는 매출 137억원과 영업이익 8억원, 당기순이익 9억원을 기록했어요.
+
+공모자금은 연구개발과 생산능력 확대에 투입해요. 공모가 하단 기준 시설자금 167억원과 운영자\"자 29억원을 사용할 계획이에요. 대구 알파시티 R&D센터와 연구설비 구축, 인천 송도 연구단지와 아산 둔포 산업단지 증설 등에 시설자금을 투입하고 미국법인 운영에도 일부 자금을 사용할 예정이에요.
+
+브릴스는 이번 공모에서 120만주를 모두 신주로 모집해요. 희망공모가는 1만6500~1만9500원이에요. 예상 공모금액은 198억~234억원이에요. 대표주관사는 IBK투자증권이에요.
+
+한국스팩17호도 이번 주 기관투자자 대상 수요예측에 들어가요. 한국스팩17호는 7일부터 8일까지 이틀간 수요예측를 진행하고 9일 공모가를 확정할 예정이에요. 일반투자자 청약은 10~11일 진행해요. 대표주관사는 한국투자증권이에요. 이번 공모에서는 보통주 700만주를 신주로 모집해요. 희망공모가는 주당 2000원으로 공모 규모는 140억원이에요.
+
+한국스팩17호는 다른 기업과의 합병을 목적으로 설립된 기업인수목적회사(SPAC·스팩)이에요. 스팩은 상장 후 합병할 비상상 기업을 찾는 게 사업 목적이에요. 공모를 통해 조\"조한 자금은 전액 한국증권금융에 예치한 뒤 향후 합병에 사용해요.
+
+네오사피엔스 공모가 확정…NH스팩34호 상장도
+
+지난주 수요예측에 들어간 기업들도 이번 주 공모 일정을 이어가요. 네오사피엔스는 8일까지 수요예측를 진행한 뒤 9일 공모가를 확정해요. 일반투자자 청약은 10~11일 예정돼 있어요. 생성형 AI 기반 음성합성 기술을 보유한 AI 미디어 기술기업으로 희망공모가는 1만3800~1만5800원이에요. 대표주관사는 대신증권이에요.
+
+와이즈플래닛컴퍼니는 10일까지 수요예측를 이어가요. 데이터 기반 브랜드 마케\"마케팅과 미디어 커머스 사업을 하는 기업으로 '닥터피엘'과 '누잠' 등 자체 브랜드를 운영하고 있어요. 희망공모가는 1만~1만2000원이며 11일 공모가를 확정할 예정이에요.
+
+KB스팩34호는 7일 수요예측를 마무리하고 8일 공모가를 확정해요. 일반투자자 청약은 \"10~11일 진행해요. 총 700만주를 주당 2000원에 공모해 140억원을 조달할 계획이며 대표주관사는 KB증권이에요.
+
+NH스팩34호는 오는 10일 코스닥시장에 상장해요. 공모가는 2000원으로 총 850만주를 모집해 170억원을 조달했어요. 대표주관사는 NH투자증권이에요. 앞서 기관투자자 수요예측에는 2050곳이 참여해 1160.70대 1의 경쟁률을 기록했어요. 지난 1~2일 진행한 일반투자자 청약 경쟁률도 356.99대 1로 집계됐어요.
+
+의무보유확약 물량도 시장에 풀려요. 의무보유확약은 기관투자자가 배정받은 공모주를 일정 기간 팔지 않겠다고 약속하는 제도예요. 확약 기간이 끝나면 해당 물량이 시장에 나올 수 있어 주가 변동성이 커질 수 있어요. 지난달 24일 코스닥 시장에 상장한 니어스랩은 8일 기관투자자의 15일 확약 물량 5만7049주가 해제돼요. 또 지난달 25일 상장한 해치텍도 이달 9일 확약 물량이 풀릴 예정이에요.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/648/0000050505' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/648/0000050505</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
