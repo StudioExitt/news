@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“KTX서 시간 다 버린다”…지방 이전에 뿔난 금융맨들</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006365260' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18844" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“KTX서 시간 다 버린다”…지방 이전에 뿔난 금융맨들</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">금융기관의 지방 이전 이후에도 서울 중심의 업무 의존도가 높아 인력 유출 및 구인난 등 경영 리스크가 발생하고 있음. 단순 소재지 이전을 넘어선 실효성 있는 금융 생태계 구축이 필요함.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">금융기관 지방 이전 정책의 실효성 저하 및 인력 유출 등 운영 리스크 부각으로 금융권 전반의 경영 불확실성 증대</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">주요 금융지주</span> <span class="tag stock-tag">은행업</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#금융기관이전</span> <span class="tag tag-hash">#지역균형발전</span> <span class="tag tag-hash">#인력유출</span> <span class="tag tag-hash">#금융클러스터</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">지방으로 내려간 금융기관들은 여전히 길 위에서 시간을 보낸다. 금융기관의 추가 지방 이전을 둘러싼 논의가 가열되고 있지만 정작 먼저 이전을 마친 현장에서조차 실효성 의문은 끊이지 않고 있다. 단순히 본점을 지방으로 옮기는 방식을 벗어나, 정보와 사람이 모이는 금융 생태계와 통합 거점을 구축하는 방식의 현실적인 정책 마련이 시급하다는 지적이 나온다.
+
+이데일리가 지난 8월 26일부터 31일까지 금융기관 종사자 2642명을 대상으로 진행한 설문조사 결과(유효응답자 2368명 중 1차 이전 완료 기관 종사자 43명 분석) 이전을 마친 기관 구성원 다수는 여전히 업무의 상당 부분을 수도권에 의존하고 있는 것으로 나타났다.
+
+1차 이전 기관 응답자의 절반이 넘는 51.2%(22명)는 본인 또는 부서의 주요 인력이 \"월 4회 이상\" 수도권으로 출장을 간다고 답했다. 사실상 일주일에 한 번 이상 서울 출장길에 오르는 셈이다. 특히 \"월 7회 이상\" 출장을 다닌다는 응답도 25.6%(11명)에 달해, 1차 이전 기관 종사자 4명 중 1명은 일주일의 절반 가까이를 길 위에서 보내고 있는 실정이다.
+
+이들이 고단한 서울 출장을 반복할 수밖에 없는 이유는 금융업의 특성과 직결돼 있다. 출장 목적을 묻는 질문(복수응답)에 응답자의 37.2%(16명)가 국회·금융위원회·기획재t부 등 \"정부 및 국회 대관 업무\"를 꼽았다. 30.2%(13명)는 금융회사·기관투자자(LP)·발행사 등 \"시장 참여자와의 대면 미팅\"을 서울행의 이유로 선택했다. 두 항목이 전체 출장 이유의 67.4%를 차지한다.
+
+금융은 무형의 정보와 대면 네트워크를 기반으로 작동한다. 시장과 규제 당국이 모두 수도권에 밀집한 상황에서 개별 기관만 지방으로 이전하다 보니, 정보 교류와 의사결정을 위해 끊임없이 서울을 왕복해야 하는 물리적 한계에 봉착한 셈이다. 1차 이전 기관 종사자 A씨는 \"지역만 이전해두고 업무와 의사결정 구조는 그대로 진행되면서 KTX 탑승 횟수만 늘었다\"라고 토로했다.
+
+현지 업무 완결도 11% 불과…인력 이탈·구인난 이중고
+
+상황이 이렇다보니 지방 본사에서의 업무 완결성은 극히 저조하다. 핵심 업무를 지방 근무지에서 80% 이상 완료한다는 응답은 11.6%(5명)에 그쳤다. 반면 주요 업무 처리를 위해 서울 출장이 필수적이라는 응답이 39.5%(17명)에 달했고, 서울사무소나 출장에 전적으로 의존한다는 응답(25.6%)과 현지 처리 비율이 50% 미만이라는 응답(23.3%)이 뒤를 이었다.
+
+업무 이원화는 조직 경쟁력 약화와 인력 유출로 이어지고 있다. 1차 이전 기관 응답자의 53.5%(23명)는 지방 이전 이후 실무진 및 전문인력의 이탈과 구인난이 심각하다고 평가했다. 거의 영향이 없다는 응답은 7.0%(3명)에 불며, 숙련된 인재가 빠져나가고 신규 우수 인력 채용마저 난항을 겪으면서 기관의 장기적인 역량이 저하되고 있다는 현장의 경고다.
+
+설문 참여자들은 \"기관만 지방으로 내려갔을 뿐 유관 민간 기업이나 인프라가 따라오지 않아 금융 생태계 조성이 전혀 이뤄지지 않았다\", \"지역 균형발전이라는 명목으로 기관 소재지만 옮기는 방식은 무의미하다\", \"지방이전 취지는 공감하지만 너무 많은 곳에 이전하게 되면 효과가 전무하다\"라며 현장의 고충을 전달했다.
+
+추가 이전 성공하려면…“획일적 분산 탈피해야”
+
+1차 이전에서 드러난 한계는 향후 추진될 2차 이전 정책이 넘어야 할 과제를 명확히 보여준다. 현장 종사자들은 과거의 획일적인 기관 분산 배치를 되풀이해서는 안 된다고 입을 모은다. 단순히 이전 대상 기관의 수나 지역 안배에만 연연하는 방식으로는 정책적 목표를 달도할 수 없다는 비판이 나온다.
+
+1차 이전 기관 종사자 B씨는 \"금융이 자발적으로 지방으로 내려갈 수 있는 요인이 있어야 생태계도 자연스럽게 조성된다\"라고 지적했다. 전문가들과 현장 관계자들은 성공적인 이전을 위한 대안으로 △특정 광역시에 민간 금융사와 유관기관을 함께 몰아주는 특화 금융 클러스터 조성 △서울사무소와 지방 본사가 효율적으로 기능을 분담하는 듀얼 허브(Dual Hub) 체계 마련 △정부·국회와의 원격 의사결정 시스템 구축 등을 제안하고 있다.
+
+결국 정부가 추가 지방 이전을 성과로 이어가려면 이전 대상 기관과 지역을 지정하는 물리적 수순에 앞서, 해당 지역에서 어떤 금융 기능을 완결적으로 수행하게 할 것인지에 대한 금융 생류 설계가 선행되어야 한다는 지적이다. 정주 여건 지원을 넘어 금융 산업 본연의 네트워크가 작동할 수 있는 판을 깔아주는 것이야말로 2차 이전의 성공을 가르는 열쇠가 될 전망이다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006365260' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006365260</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
