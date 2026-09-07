@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>환율 추가하락 전망에 도미노 달러 매도…당국, 당분간 속도조절</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004659408' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18810" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>환율 추가하락 전망에 도미노 달러 매도…당국, 당분간 속도조절</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">원·달러 환율이 연중 최저점인 1334.7원까지 급락하며 달러 매도세가 이어지고 있습니다. 엔화 강세와 수출 대금의 원화 환전, 국민연금의 환헤지 전략 조정 등이 주요 원인으로 분석되며, 전문가들은 중장기적인 하락세를 전망하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">원·달러 환율 급락에 따른 원화 강세는 외국인 투자자의 국내 증시 유입(환차익 기대)을 촉진할 수 있는 요인이지만, 수출 기업들의 환차손 우려를 동반하므로 시장 영향력이 복합적임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">무역</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#환율</span> <span class="tag tag-hash">#원달러환율</span> <span class="tag tag-hash">#외환시장</span> <span class="tag tag-hash">#국민연금</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■원·달러 연중 최저점 터치
+엔화 강세·수출대금 환전 맞물려
+두달 전 고점 대비 220원 이상 급락
+국민연금 환헤지 조정해 쏠림 완화
+무역수지 흑자 등 달러 수요 여전
+전문가들 “중장기 하락 방향 예상”
+7일 서울 중구 하나은행 딜링룸 현황판에 원·달러 환율과 코스피·코스닥 종가가 표시돼 있다. 성형주기자
+7일 서울 중구 하나은행 딜링룸 현황판에 원·달러 환율과 코스피·코스닥 종가가 표시돼 있다. 성형주기자7일 서울 외환시장에서 원·달러 환율이 장중 1334.7원까지 떨어지며 연중 최저점을 갈아치웠다. 장 개장 직후부터 달러 매도 주문이 쏟아지며 환율 내림세를 이끌었다. 외환시장의 한 관계자는 “달러로 받은 수출 대금의 원화 환전을 미루던 기업들도 본격적으로 매도에 나선 것으로 보인다”고 설명했다.
+
+최근 환율은 가파른 하락세를 보이고 있다. 6월 5일 장중 1561.5원까지 치솟았던 것과 비교하면 두 달여 만에 220원 넘게 떨어졌다.
+2024년 10월 4일(1331.3원) 이후 가장 낮은 수준이다. 환율이 1330원대까지 급락하자 국민연금이 전략적 환 헤지를 중단하고 달러 재매수에 나선 것으로 알려지면서 환율 하단에 대한 인식도 한층 강화됐다.
+
+엔화 강세도 환율 하락에 영향을 미쳤다. 일본은행의 금리 인상 기대가 커지면서 엔·달러 환율이 155엔대까지 내려왔다. 엔화 강세가 원화 강세로 이어지며 원·달러 환율의 하락 압력을 키운 것이다. 여기에 반도체 수출 호조에 따른 달러 공급과 수출기업의 달류 매도 등이 겹치면서 원화 강세가 가팔라졌다.
+
+특히 환율이 더 떨어질 것이라는 전망이 달러 매도를 다시 부르는 양상까지 나타났다. 1400원 아래로 내려온 뒤 1390원, 1380원대가 차례로 무너지면서 달러 매도가 한쪽으로 쏠렸고 환율 하락이 다시 달러 매도를 부르는 이른바 도미노 매도가 나타났다는 것이다.
+
+외환 당국도 국민연금의 달러 매수 가능성을 인정했다. 외환 당국의 한 고위 관계자는 “오늘 환율이 1334원대까지 많이 내려간 만큼 국민연금이 일부 매수를 했을 수 있다”고 말했다. 구체적인 매수 여부나 환 헤지 운용에 대해서는 확인하지 않았지만 시장에서는 이 같은 언급이 1330원대에서 국민연금이 달러를 받아줄 수 있다는 기대를 키우며 추가적인 달러 투매를 제한한 것으로 보고 있다.
+
+국민연금의 움직임은 불과 몇 달 전과 정반대다. 환율이 1500원대까지 치솟았던 당시에는 원화 약세에 대응해 환 헤지를 확대하며 달러를 매도했지만 최근에는 추가적인 환 헤지 확대를 멈추는 데 이어 일부 달러 매수 가능성까지 거론되고 있다. 실제 시장에서는 원·달러 환율이 1390원 아래로 내려가면서 국민연금이 전략적 환 헤지 비율을 더 높이지 않을 것이라는 전망이 이미 제기됐다. 씨티는 환율이 1390원 이하에서 안정될 경우 환 헤지 비율 상향을 중단할 가능성이 있다고 분석했고 기존 환 헤지도 외환스와프 만기가 돌아오는 과정에서 점진적으로 축소될 수 있다고 봤다.
+
+국민연금의 환 헤지 조정은 이 같은 원화 강세 쏠림을 완화하는 역할을 할 수 있다. 국민연금은 6월 말 기준 약 770조 원의 해외 주식·채권 자산을 보유하고 있으며 전략적 환 헤지 최대 비율인 15%를 적용하면 이론적으로 약 115조 원까지 환 헤지가 가능하다. 다만 환 헤지 비율을 낮춘다고 115조 원 규모의 달러 매수가 새로 발생하는 것은 아니며 기존 달러 매도 물량이 줄어드는 효과가 핵심이다. 환 헤지도 통상 6개월 또는 12개월 만기로 운용돼 점진적으로 조정될 가능성이 크다.
+
+위재현 교보증권 이코노미스트는 “최근 원화 강세가 단순한 달러 약세를 넘어 아시아 통화 가운데서도 강하게 나타나고 있다”고 분석했다. 이는 엔화 강세와 국내 수급이 함께 작용한 것이다.
+
+다만 국민연금의 움직임만으로 원화 강세 흐름 자체를 되돌리기는 어렵다는 분석이다. 상반기 외국인 투자자들의 국내 주식 순매도와 수출기업의 무역수지 흑자가 각각 약 170조 원, 200조 원에 달하는 등 시장의 달러 수요가 워낙 큰 데다 반도체 수출 호조까지 이어지고 있어서다. 국민연금은 환율의 방향을 바꾸는 반전 카드라기보다 원화 강세의 속도를 늦추는 브레이크에 가깝다는 것이다.
+
+이민혁 KB국민은행 연구원은 “국민연금 매수는 환율 상단을 높이는 요인보다는 최근 하락 쏠림을 완화하는 요인”이라며 “경상수지 흑자에 따른 달러 공급이 우세해 중장기적으로 환율은 하락 방향”이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004659408' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004659408</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
