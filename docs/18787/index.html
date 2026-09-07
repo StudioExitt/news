@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2차전지 전성기 주가 되찾나…반도체 다음 주도주설 '솔솔'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006365101' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18787" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>2차전지 전성기 주가 되찾나…반도체 다음 주도주설 '솔솔'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 데이터센터 전력 수요 확대에 따른 ESS(에너지저장장치) 수요 증가가 2차전지 업황의 새로운 모멘텀으로 부상하고 있음. 북미 시장 내 한국 기업 점유율 확대와 정책적 우호 신호가 확인되며, 최근 2차전지 관련 지수 및 주요 종목이 강세를 보임.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 데이터센터 수요 확대라는 새로운 성장 동력(ESS) 발견 및 북미 시장 내 한국 기업의 점유율 상승세 확인</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">엘앤에\"F\"</span> <span class="tag stock-tag">SK이노베이션</span> <span class="tag stock-tag">삼성SDI</span> <span class="tag stock-tag">포스코퓨처엠</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">화학</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전기장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#2차전지</span> <span class="tag tag-hash">#ESS</span> <span class="tag tag-hash">#AI데이터센터</span> <span class="tag tag-hash">#주도주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">한 달 새 두 자릿수 급등...고점 대비 여전히 반토막
+2차전지 주도주 조건 갖춰 VS 미국 점유율·실적 확인해야 한동안 부진했던 2차전지가 인공지능(AI) 데이터센터 전력수요
+확대에 따른 에너지저장장치(ESS) 수요 증가를 기반으로 최근 한 달 뚜렷한 강세를 보이고 있다.
+
+7일 한국거래소에 따르면 최근 한 달간 \"KRX K-AI 2차전지 지수\"는 15.84% 올랐고, \"KRX 2차전지 TOP 10 지수\"도 13.06% 상승했다.
+
+지수가 박스권에서 주춤한 사이 개별 종목 수익률은 더 두드러진다. 같은 기간 엘앤에프가 43.48% 급등했고, SK이노베이션과 삼성SDI도 각각 26.98%, 26.70% 상승했다. 포스코퓨처엠(23.80%), 롯데에너지머티리얼즈(21.12%) 등 소재주도 두 자릿수 상승률을 기록했다.
+
+반면 에코프로(-1.32%), 엔켐(1.43%), 에코프로머티(2.96%), LG에너지솔루션(5.07%), 에코프로비엠(5.76%) 등은 상대적으로 부진해 종목별 온도차가 뚜렷했다.
+
+전기차 캐즘(일시적 수요 정체) 여파로 오랫동안 눌려 있던 2차전지주가 다시 움직이는 배경에는 인공지능(AI) 데이터센터발 전력 수요 확대가 주목을 받는다. 에너지저장장치(ESS)가 새로운 배터리 수요처로 부연하면서 업황 인식이 달라졌다는 것이다.
+
+노우호 메리츠증권 연구원은 \"올해 하반기 배터리 업황과 관련해 ESS의 계통 연계(BESS) 수주 모멘텀이 유효하다\"며 \"미국 내 제조 기반을 갖춘 국내 셀 3사가 ESS 사업에서 추가 상승 여력을 확보하고 있다\"고 짚였다.
+
+증권가에서는 이번 강세를 단순한 순환매 이상으로 해석하는 시각도 나온다. 나정환 NH투자증권 연구원은 \"반도체가 이끌어온 반등은 실적 개선보다는 청산 압력 해소에 따른 디레이팅 회복 성격이 강했다\"며 \"이제 시장의 관심이 ‘얼마나 더 떨어지는가’에서 ‘무엇이 오르는가’로 옮겨갈 시점\"이라고 진단하였다.
+
+이어 과거 주도주 확산이 할인율 하락, 실적 턴어라운드, 정책 모멘텀이라는 세 경로를 통해 이뤄졌다는 점에서 2차전지를 주목해야 한다는 설명이다.
+
+실제 2차전지 업종의 12개월 선행 순이익 전망치는 2023년 이후 3년 가까이 하향 조정을 거듭했지만, 올 들어 장기 하향 추세를 마치고 상향 전환하고 있다. 전기차(EV) 수요가 둔화한 국면에서 ESS가 본업으로 자리 잡았고, 미국 내 설치 용량이 2026년 들어 전년 대비 크게 늘며 셀 수요의 하방을 지점하고 있다는 설명이다.
+
+북미 ESS 시장은 작년 상반기 41.5기가와트시(GWh)에서 올 상반기 75.9GWh로 83% 성장했는데, 이 기간 한국 2개사의 점유율은 13.9%에서 19.7%로 뛰었다.
+
+정책 측면의 우호적 신호도 거론된다. 유럽에서는 EU 산업가속화법(IAA)의 원산지 요건이 폴란드·헝가리에서 이미 셀을 양산 중인 국내 3사에 유리하게 작용할 전망이고, 미국에서도 캘리포니아 등을 중심으로 전기차 지원 정책이 복원되는 흐름이 확인된다. 장기금리가 하향 안정화될 경우 2차전지처럼 듀레이션이 긴 성장주의 상대 매력이 커질 수 있다는 점도 우호적 요인으로 꼽인다.
+
+그러나 지수와 대장주 중심의 반등을 곧바로 업종 전체의 주도주 복귀로 읽는 데는 신중해야 한다는 지적도 나온다. 삼성SDI를 제외한 나머지 종목들은 여전히 지난 2020년대 초반 활황기 고점의 절반 안팎 수준에 머물러 있다. 이번 반등을 온전한 밸류에이션 정상화나 실적 턴어라운드의 결과로 단정하기보다는 저점 매수세 유입에 따른 반사적 반등의 성격이 짙다는 신중론도 높다.
+
+최보영 교보증권 연구위원은 \"지금은 정책 프리미엄과 실적 턴어라운드 기대가 동시에 반영되는 구간\"이라며 \"향후 2차전지의 추가 상승 여부는 ESS 정책 기대가 실제 수주와 가동률 회복, 그리고 분기 실적 개선으로 이어지는지에 달려 있다\"고 짚었다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006365101' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006365101</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
