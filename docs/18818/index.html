@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>\"하루 거래대금 10억인데\"…퇴출 대신 코넥스?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.07</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001265166' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18818" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>\"하루 거래대금 10억인데\"…퇴출 대신 코넥스?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">정부가 상장폐지 기업에 대해 코넥스 이전상장을 허용하는 방안을 발표했으나, 거래량이 매우 적은 코넥스 시장의 특성상 기업의 재기와 투자자 보호라는 목적을 달성하기 어렵다는 실효성 논란이 일고 있음.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">상장폐지 기업의 코넥스 이전 정책이 발표되었으나, 코넥스 시장의 극심한 유동성 부족으로 인해 시장 품질 저하 및 실효성 논란이 제기됨</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코넥스</span> <span class="tag tag-hash">#상장폐지</span> <span class="tag tag-hash">#이전상장</span> <span class="tag tag-hash">#주식시장</span> <span class="tag tag-hash">#유동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">제목: \"하루 거래대금 10억인데\"…퇴출 대신 코넥스?\n언론사: 한국경제TV\n날짜: 2026.09.07. 오후 5:36\n앵커\n정부가 지난주 시가총액 기준에 미달해 상장폐지되는 기업에 대해 코넥스 시장으로 이전상장할 수 있는 방안을 발표했습니다.\n\n투자자 피해를 줄이고, 퇴출 기업에는 다시 복귀할 수 있는 기회를 열어주겠다는 취진데요.\n\n하지만 거래가 사실상 말라붙은 코넥스 시장으로 옮기는 것을 두고 실효성에 대한 의문도 나옵니다.\n\n세종 주재기자 연결합니다. 김다빈 기자. 우선 지난주 발표된 방안부터 설명해주시죠.\n\n기자\n구윤철 부총리 겸 재정경제부 장관은 지난주 금요일 상장폐지 기업의 코넥스 이전상장을 허용하는 방안을 발표했습니다.\n\n현재 상장사들은 시가총액 기준에 30거래일 연속 미달하면 관리종목으로 지정되고, 이후에도 일정 기간 기준을 회복하지 못하면 상장폐지 절차에\n\n들어 가는데요.\n\n정부는 이 가운데 일정 요건을 갖춘 기업이 희망할 경우, 정리매매를 거치지 않고 코넥스로 이전할 수 있도록 했습니다.\n\n상장폐지에 따른 정리매매 과정에서 주가가 급락하는 상황을 피해 투자자 피해를 줄이고, 기업에는 코넥스에서 경영을 이어가며 향후 코스닥이나\n\n코스피에 재진입할 수 있는 기회를 주겠다는 취지입니다.\n\n앵커\n말하자면 곧바로 시장에서 퇴출시키지 않고 재기의 기회를 주겠다는 건데요.\n\n정작 기업들은 코넥스로 가는 것을 놓고 고민이 많다고요?\n\n기자\n관련되는 기업들에 직접 문의를 해봤는데요.\n\n주주 보호 측\n측면에서 이전상장을 검토할 수 있지만, 가장 큰 고민은 코넥스 시장의 낮은 유동성이었습니다.\n\n한 상장사 관계자는 \"코넥스는 유동성 자체가 작아 기업의 노력만으로 해결할 수 있는 시장이 아니다\"라며 시장 활성화 방안 없이 단순히 이전하라고\n\n한다면 실익이 있는지 고민된다는 입장입니다.\n\n또 다른 상장사도 \"이전상장이 끝이 아니기 때문에 유동성을 포함해 종합적으로 고려하고 있다\"고\n\n전했습니다.\n\n실제로 현재 코넥스 시장은 거래가 사실상 말라붙은 상황인데요.\n\n일평균 거래대금은 지난달 기준 9억 4천만 원으로 10억 원이 채 안 됩니다. 이는 2024년 당시의\n\n절반 수준이고, 코스닥의 0.015%\n\n수준에 불과합니다.\n\n기업이 다시 가치를 평가받고 재도약하려고 해도 제대로 된 가격을 형성할 수 있겠냐는 의문이 나오는 겁니다.\n\n여기에 코스닥에서 퇴출된 기업들이 대거 유입될 경우 시장 전체의 투자 매력도가 떨어질 수 있다는 우려도 있습니다\n\n이에 따라 코넥스에 모든 기업을 일률적으로 담기보다는 기업의 경쟁력과 성장 가능성에 따라 시장을 나눠야 한다는 의견도 나옵니다.\n\n이준서 / 동국대학교 경영학부 교수\n\"코넥스 시장의 정상화를 위해서는 1부 리그는 코스닥으로 이전상향 시키고, 2부 리그에 해당하는 애들은\n\nK-OTC로 돌리는 것이 가장 현실적인 대안이 될 수 있을 것 같아요.\"\n\n결국 코넥스 시장의 유동성을 높일 추가 대책을 마련하는 한편, 시장의 역할과 존속 필요성 자체를 다시 들여다볼 필요가 있다는 목소리도 나옵니다.\n\n지금까지 세종스튜디오에서 한국경제TV 김다빈입니다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001265166' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001265166</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
