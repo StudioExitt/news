@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[코인 과세⑤] 코인 대신 ETF 택하면…세금 달라진다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 202<0xA0>0</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003129943' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18783" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[코인 과세⑤] 코인 대신 ETF 택하면…세금 달라진다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">가상자산 직접 투자와 코인 ETF는 세율은 동일하나 손익통산 여부에서 결정적 차이가 발생함. 해외주식 양도소득으로 분류되는 ETF는 타 자산의 손실을 합산할 수 있어, 고액 자산가의 투자 경로가 증권계좌로 이동하며 국내 가상자산 거래소의 수수료 수익이 감소할 우려가 있음.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">가상자산 과세 시행에 따라 손익통산이 가능한 ETF로 자금이 이동할 경우 국내 가상자산 거래소의 수수료 수익 감소 및 증권사로의 투자 자금 유입 우려가 있음</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">두나무</span> <span class="tag stock-tag">미래에셋증권</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">가상자산</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코인가세</span> <span class="tag tag-hash">#손익통산</span> <span class="tag tag-hash">#가상자산ETF</span> <span class="tag tag-hash">#해외주식양도소득세</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">가상자산 직접투자와 코인 ETF는 세율은 같지만 손익통산 여부가 달라 투자자 선택과 국내 거래소 수익에 영향을 미칠 수 있다. 해외 상장지수펀드(ETF)는 해외주식과 손익 합산이 가능하지만, 직접투자는 불가능하다. 가상자산 직접투자와 코인 ETF는 세율은 같지만 손익통산 여부가 달라 투자자 선택과 국내 거래소 수익에 영향을 미칠 수 있다. 1300만 코인족이 맞닥뜨릴 가상자산 과세 시행이 넉 달 앞으로 다가왔다. 내년부터 기본공제 250만원을 넘는 투자소득에 2<0xA0>2%의 세금이 부과되지만, 손실 반영과 스테이킹·에어드롭 등의 세부 기준은 여전히 불분명하다. 가상자산 거래소에서 비트코인을 직접 매매했다면 2027년부터 기타소득으로 과세된다. 반면 증권계좌에서 비트코인 가격과 연계된 해외 상장지수펀드(ETF)를 거래했다면 해외주식 양도소득으로 분류된다. 같은 비트코인 가격에 투자해 수익을 내더라도 어떤 상품을 선택했느냐에 따라 소득의 종류와 세금 계산 방식이 달라지는 것이다. 해외 비트코인 현물 ETF의 국내 증권사 중개는 제한돼 있지만 BITO와 EETH 등 선물형 ETF, BITX와 ETHU 등 선물 레버리지 ETF는 일부 국내 증권사의 해외주식 계좌에서 거래할 수 있다. 세율 같아도 소득 분류 따라 달라 직접투자와 ETF에 적용되는 세율과 기본공제액만 보면 차이가 없다. 해외 상장 ETF의 연간 매매차익 가운데 기본공제 250만원을 넘는 금액에는 양도소득세와 지방소득세를 합해 22%의 세율이 적용된다. 2027년부터 시행되는 가상자산 과세도 연간 소득에서 기본공제 250만원을 뺀 금액에 22%의 세금을 매긴다. 그러나 세법이 두 투자 수익을 분류하는 방식은 완전히 다르다. 가상자산 직접 투자 수익은 별도로 분리과세 되는 기타소득에 들어간다. 이에 따라 해외주식이나 ETF에서 발생한 손실을 가상자산 이익에서 뺄 수 없다. 반면 해외 상장 가상자산 연계 ETF의 매매차익은 해외주식 양도소득으로 분류된다. 같은 해 다른 해외주식이나 ETF에서 발생한 손실까지 합산해 순이익을 계산할 수 있다. 이러한 소득 분류의 차이는 투자자가 실제로 내는 세금까지 바꾼다. 가령 BITX로 1000만원을 벌고 같은 해 다른 미국 주식에서 800만원을 잃었다면 과세 대상이 되는 해외주식 순이익은 200만원이다. 기본공제 250만원보다 적어 양도소득세를 내지 않는다. 반대로 비트코인을 직접 매매해 1000만원을 벌고 미국 주식에서 800만원을 잃었다면 두 손익은 합산되지 않는다. 비트코인 소득에서 기본공제 250만원을 제외한 750만원에 22%가 적용돼 165만원을 내야 한다. 결국 다른 해외주식에서 손실을 본 투자자라면 가상자산을 직접 매매할 때보다 가상자산 연계 ETF를 거래할 때 세 부담이 줄어들 수 있다. 윤승식 타이거리서치 센터장은 "해외주식 등 다른 자산의 거래 규모가 큰 고액자산가일수록 손익통산이 가능한 코인 ETF를 선호할 것으로 보인다"고 내다봤다. 세금뿐 아니라 투자 편의성도 ETF를 선택할 유인으로 꼽힌다. 증권계좌에서 투자자금을 한꺼번에 관리할 수 있고, ETF를 매도한 뒤 같은 계좌에서 다른 미국 주식이나 ETF에 투자하기 쉽다. 달러 자산에 노출되는 효과도 얻을 수 있다. 20대 투자자 정 모씨는 국내 증권사의 해외주식 계좌를 통해 BITX와 ETHU를 거래하고 있다. 정씨는 "두 배 레버리지를 활용할 수 있고 달러 자산에도 투자할 수 있다는 점이 장점이다. 매도한 자금을 같은 계좌에서 미국 주식에 다시 투자하기도 편하다"고 말했다. ETF로 자금 이동…거래소 ‘부담’될까 물론 가상자산 직접투자만의 장점도 있다. 거래소에서는 24시간 매매할 수 있고 매수한 가상자산을 외부 지갑으로 보내거나 온체인 서비스에 활용할 수 있다. 해외 ETF는 미국 증시 거래시간에 맞춰야 하고 가상자산을 직접 인출하거나 전송할 수도 없다. 다만 손익통산과 계좌 관리 편의성을 중시한다면 직접투자 대신 ETF를 선택할 수 있다. 이는 거래 수수료가 핵심 수익원인 국내 가상자산 거래소에 부담으로 이어질 수 있다. 투자자가 비트코인을 직접 매매하지 않고 ETF에 투자하면 국내 거래소에는 그만큼 거래대금이 잡히지 않고 매매 수무료도 발생하지 않기 때문이다. 업비트를 운영하는 두나무는 올해 상반기 전체 영업수익의 96.9%를 거래 플랫폼 수수료로 벌어들였다. 일부 투자금이 증권계좌로 이동하는 것만으로도 거래소의 핵심 수익원이 영향을 받을 수 있는 구조다. 다만 ETF가 국내 가상자산 거래소의 거래를 모두 대체하기는 어렵다는 분석도 나온다. 윤 센터장은 "국내 거래소 거래대금의 상당 부분은 비트코인과 이더리움이 아닌 알트코인 매매에서 발생한다. ETF는 상품 특성상 대형 코인에 국한되기 때문에 알트코인 투자자는 세제와 관계없이 국내 거래소에 남을 수밖에 없다"고 설명했다. 그럼에도 2027년 가상자산 과세가 시작되면 세금도 투자 경로를 선택하는 변수로 떠오를 수 있다. 현재도 BITX와 ETHU 같은 선물 레버리지 ETF를 거래할 수 있어 해외주식 투자 규모가 큰 투자자는 손익통산 여부와 계좌 관리 편의성을 따져 직접투자와 ETF 가운데 하나를 선택할 수 있기 때문이다. 향후 해외 현물 ETF의 국내 중개가 허용되거나 국내 가상자산 현물 ETF까지 출시되면 비트코인과 이더리움 투자자의 선택지는 더욱 넓어질 전망이다. 반면 국내 거래소는 이에 대응할 여력이 크지 않다. 수익 대부분을 거래 수수료에 의존하고 있지만 새로운 사업과 서비스를 뒷받침할 디지털자산기본법은 아직 통합안이 확정되지 않았기 때문이다. 법인의 가상자산시장 참여도 단계적으로 이뤄지고 있어 시장의 외연을 넓히는 데 시간이 필요한 상황이다. 이처럼 거래소의 수익 다각화와 시장 확대가 더딘 가운데 투자 경로에 따른 과세 차이는 투자자의 선택은 물론 거래소의 거래량과 수수료 수익에도 영향을 미칠 수 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003129943' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003129943</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
