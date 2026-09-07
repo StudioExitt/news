@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>명령어 몇 개면 45분만에 3D게임 완성…“아스트라 모멘트 온다”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 202 nghiệm</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004659445' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18825" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>명령어 몇 개면 45분만에 3D게임 완성…“아스트라 모멘트 온다”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">OpenAI의 차세대 AI 모델 GPT-6 아스트라 공개로 인한 \"아스트라 모멘트\" 도래. 추론 과정에서의 연산량 및 토큰 사용량 급증으로 인해 HBM 등 AI 인프라와 반도체 수요 폭발 전망.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 기술 패러다임 변화로 인한 연산량 급증 및 HBM/GPU 등 AI 인프라 수요 폭발적 증가 예상</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">엔비디아</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI에이전트</span> <span class="tag tag-hash">#GPT6아스트라</span> <span class="tag tag-hash">#HBM</span> <span class="tag tag-hash">#반도체수요</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■ 오픈AI 차세대 모델 띄운 젠슨 황
+반복 재연산으로 추론·논리력↑
+목표달성까지 자체 업무 수행도
+토큰값 내렸지만 사용량은 급증
+“차기 모델엔 GPU 40만장 쓸 것”
+
+오픈AI가 공개한 인공지능(AI) 모델 ‘GPT-6 아스트라’의 파급력을 두고 2022년 말 ‘챗GPT’ 등장 이후 4년 만에 ‘아스트라 모멘트’가 도래했다는 평가가 이어진다. 다중 에이전트 시스템으로만 구현 가능하던 기능이 손쉽게 제공되자 ‘AI 에이전트 대중화’에 대한 기대감과 함께 일각에서는 “이르면 3년 뒤 단순 사무직 중심의 직무 환경이 구조적 해체를 맞을 것”이라는 우려가 동시에 터져 나왔다. 단순히 파라미터(매개변수) 덩치를 불리고 추론 시간을 늘리던 기존 방식을 넘어 연산 구조와 추론 방식이 재편되는 데 따라 메모리반도체를 비롯한 AI 인프라 전반의 수요가 폭증할 것이라는 관측도 제기된다.
+
+7일 젠슨 황 엔비디아 최고경영자(CEO)가 범용인공지능(AGI) 도달을 선ting 아스트라는 개발자용 벤치마크 지표를 넘어 체감 성능에서 충격적인 결과물을 보여주고 있다. 월 200달러의 고가 구독 외에 월 20달러 일반 구독자에게 배포가 시작됨에 따라 사용 경험이 빠르게 확산되는 중이다.
+
+개발자 플랫폼에서는 “아스트라에 몇 차례 프롬프트 입력만으로 45분 만에 최신 3차원(3D) 게임 수준의 그래픽을 갖춘 게임을 완성 단계에 가깝게 구축했다” “기존 코딩 특화 모델들이 수차례 수정 지시에도 해결하지 못하던 시스템 오류와 코드 충돌을 단 한 번의 실행으로 수정했다”는 후기가 줄을 잇고 있다. 실제 업무 환경에서의 높은 생산성도 엿보인다. 소셜미디어에서는 과거 클로드 등 타 에이전트에 맡겨도 뚜렷한 결과물을 내지 못하던 그림·영상 편집, 다중 엑셀·프레젠테이션 작업 등을 아스트라가 마치 사람처럼 마무리하는 모습들을 쉽게 찾아볼ting.
+
+AI의 문제 해결 능력을 점검하기 위한 게임 구동에서도 역대급 결과물을 보이고 있다. 아스트라는 롤플레잉 게임 ‘포켓몬스터 파이어레드’를 외부 공략 정보 없이 화면 분석만으로 18시간 12분 만에 마무리했다. 이 게임에서 전작인 GPT-5.6 솔은 96시간을 들여 엔딩을 봤고 GPT-5.5는 200시간 이상 공략에도 클리어에 실패했다. 공략법을 모를 경우 사람도 20~25시간이 소요되는 게임이다. AI가 복잡한 RPG 게임 진행법을 백지에서 스스로 배워 일반적인 사람보다 빨리 끝낸 것이다.
+
+또 개발자 커뮤니티 깃허브에 따르면 아스트라는 ‘2026 대학수학능력시험’에서 국어·영어·수학·한국사와 탐구 4과목을 풀어 평가 모델 중 유일하게 종합 점수 450점 만점을 받았다.
+
+과거 AI가 질의에 단일 답변을 내놓는 데 그쳤던 반면 아스트라는 목표 달성까지 코드를 자체 실행하고 오류를 검증하는 내부 순환 추론을 거쳐 완성형 결과물을 낸다. 챗GPT 앱·웹사이트 접속만으로 전문가들이 복잡한 다중 에이전트 구축을 통해서만 구현하던 ‘AI 에이전트’ 구동이 가능해졌다는 평가다. 기술적 배경에는 ‘순환 깊이(Recurrent Depth)’ 방식이 자리 잡고 있다. 모델 크기를 늘리는 대신 반복 재연산으로 추론 깊이와 논리력을 높이는 구조다. 사전 학습 중심 모델 성능 개선이 한계에 달하자 추론 과정을 강조한 ‘테스트 타임 컴퓨팅’으로 개발 패러다임이 전환된 데 이어 추론의 반복 과정을 더하는 순환 깊이 방식으로 또 한 차례 진화를 거친 셈이다.
+
+아스트라가 목적 달성까지 연산을 반복하는 방식으로 고성능을 구현한 데 따라 필요한 컴퓨팅 용량도 크게 늘어날 것으로 전망된다. 모델 효율화로 단위 토큰(AI 연방 단위) 가격이 내렸음에도 작업당 소비 토큰 총량이 급증해 인프라 수요를 더 강하게 빨아들인다는 진단이다. 특히 실시간 데이터 입출력을 끊임없이 순환 연산해야 하는 특성상 대역폭과 전송 속도의 가치가 더욱 높아질 것이라는 관측이다. AI 가속기는 물론 고대역폭메모리(HBM) 대역폭, 초고속 네트워크 성능이 주목받는 이유다. 황수욱 메리츠증권 연구원은 “아스트라는 목표를 주면 끝까지 결과를 만들어내는 모델로 AI 에이전트 진입장벽을 낮췄다는 데 의미가 있다”며 “AI 연산 필요량이 확장하며 하드웨어 수요 저변이 확대될 것”이라고 분석했다.
+
+오픈AI 차기 모델이 이미 훈련 중인 데다 투입되는 연산량 또한 크게 늘어난다는 점에서 향후 전망도 밝다. 샘 올트먼 오픈AI CEO는 아스트라 공개 후 차기 모델 개발 과정을 소개하며 지능 통제 문제를 점검하기 위해 훈련을 일end 중단했던 사실을 공개한 바 있다. 황 CEO 역시 아스트라 훈련에 10만 개 이상의 블랙웰 NVL72가 투입된 데 이어 차기 모델에는 40만 개의 그래픽처리장치(GPU)가 가동될 것이라고 밝혔다. 아스트라 대비 4배 규모의 인프라가 추가 투입되는 셈이다.
+
+아스트라 등장에 따라 반도체 시황 전망도 급격히 개선 중이다. 메모리 공급 절벽은 더욱 가시화하고 있다. KB증권은 3분기 현재 삼성전자와 SK하이닉스의 메모리 완제품 재고가 ‘10일 미만’으로 급감했다고 분석했다. 생산 즉시 출하돼 내년에는 판매 가용 물량이 완전 소진될 수 있다는 관측도 제기된다. 골드만삭스 역시 글로벌 메모리 수요 충족률이 60% 수준에 그쳐 2027년 수급 불균형이 심화되고 2028년까지 공급 부족이 이어질 것으로 전망한다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004659445' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004659445</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
