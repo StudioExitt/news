@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>환율 추가하락 전망에 연쇄 달러 매도 [Pick코노미]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/011/0004659497' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18847" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>환율 추가하락 전망에 연쇄 달러 매도 [Pick코노미]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">원·달러 환율이 연중 최저점인 1334.7원까지 급락하며 \"도미노 매도\" 현상이 나타나고 있음. 엔화 강세와 반도체 수출 호조에 따른 달러 공급 증가가 주요 원인으로 분석됨.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">환율의 급격한 하락(원화 강세)은 반도체 등 수출 주도 기업들의 원화 환산 실적 감소 및 수익성 악화를 초래할 수 있어 주식 시장에 부정적인 변동성을 유발함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#환율하락</span> <span class="tag tag-hash">#원화강세</span> <span class="tag tag-hash">#달러매도</span> <span class="tag tag-hash">#반도체수출</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">■원·달러 연중 최저점 찍어
+엔화 강세·수출기업 달러 매도 영향
+두달 전 고점 대비 220원 이상 급락
+코스피가 4.6% 넘게 급등 마감한 7일 서울 중구 하나은행 딜링룸 현황판에 코스피와 코스닥, 원/달러 환율 등이 표시되어 있다. 이날 코스피는 전 거래일 대비 308.18포인트(4.61%) 오른 6,995.39에 장을 마쳤다. 7,000선 탈환까지 단 4.61포인트 남겨뒀다. 코스닥은 8.69포인트(1.07%) 오른 822.19에 마감했다.
+
+7일 서울 외환시장에서 원·달러 환율이 장중 1334.7원까지 떨어지며 연중 최저점을 갈아치웠다. 장 개장 직후부터 달러 매도 주문이 쏟아지며 환율 하락을 이끌었다. 외환시장의 한 관계자는 “달러로 받은 수출대금의 원화 환전을 미루던 기업들도 본격적으로 매도에 나선 것으로 보인다”고 설명했다.
+
+최근 환율은 가파른 하락세를 보이고 있다. 6월 5일 장중 1561.5원까지 치솟았던 환율은 두 달여 만에 220원 넘게 떨어졌다. 2024년 10월 4일(1331.3원) 이후 가장 낮은 수준이다. 환율이 1330원대까지 급락하면서 국민연금이 전략적 환헤지를 추가로 확대하지 않고 달러 매수에 나선 것 아니냐는 관측이 나오면서 환율 하단에 대한 인식도 한층 강해졌다.
+
+다만 시장에서는 이날 포착된 것으로 알려진 국민연금의 달러 매수가 실제로 어느 정도 규모였는지는 확인하기 어렵다는 분석이 나온다. 손범기 바클레이즈 이코노미스트는 “기존 환헤지 물량이 한국은행과 스와프를 통해 이뤄졌다면 6개월 또는 12개월 구조이고 조기 상안이 어려운 만큼 한꺼번에 물량이 나오는 것은 아닐 것”이라고 말했다.
+
+오히려 기존 환헤지 물량이 만기를 맞을 때 이를 연장하지 않고 청산하는 방식으로 환헤지 비중이 점진적으로 낮아질 가능성이 있다는 설명이다. 손 이코노미스트는 “유지되는 부분이 큰 가운데 만기가 돌아올수록 롤오버를 하지 않고 청산하는 방법이 더 그럴듯해 보인다”고 분석했다.
+
+시장에서는 국민연금의 환헤지 비율이 뉴 프레임워크 시행 이후 기존보다 5~10%포인트가량 높아졌을 것으로 예상해왔다. 손 이코노미스트는 “시장에서는 국민연금의 환헤지 비중을 약 5~10% 정도로 예상했을 것”이라고 말했다.
+
+국민연금의 환헤지 조정은 원화 강세의 속도를 늦추는 요인으로 작용할 수 있다. 국민연금은 6월 말 기준 약 770조원의 해외 주식·채권 자산을 보유하고 있다. 전략적 환헤지 최대 비율인 15%를 단순 적용하면 이론적으로 약 115조원 규모까지 환헤지가 가능하다. 다만 환헤지 비율을 낮춘다고 해서 115조원 규모의 달러 매수가 새로 발생하는 것은 아니다. 기존 환헤지 과정에서 발생했던 달러 매도 물량이 줄어드는 효과가 핵심이다.
+
+특히 기존 환헤지가 6개월 또는 12개월 만기로 운용된다면 환헤지 축소 역시 시차를 두고 점진적으로 진행될 가능성이 크다. 이에 따라 국민연금이 당장 대규모 달러 매수에 나서기보다는 향후 만기 도래 물량의 롤오버 여부를 통해 시장 수급에 영향을 줄 가능성이 있다는 분석이다.
+
+엔화 강세도 환율 하락에 영향을 미쳤다. 일본은행의 금리 인상 기대가 커지면서 엔·달러 환율이 155엔대까지 내려왔다. 엔화 강세가 원화 강세로 이어지며 원·달러 환율의 하락 압력을 키운 것이다. 여기에 반도체 수출 호조에 따른 달러 공급과 수출기업의 달러 매도가 겹치면서 원화 강세가 가팔라졌다.
+
+특히 환율이 더 떨어질 것이라는 전망이 달러 매도를 다시 부르는 양상까지 나타났다. 1400원 아래로 내려온 뒤 1390원, 1380원대가 차례로 무너지면서 달러 매도가 한쪽으로 쏠렸고, 환율 하락이 다시 달러 매도를 부르는 이른바 ‘도미노 매도’가 나타났다는 것이다.
+
+외환 당국도 국민연금의 달러 매수 가능성을 인정했다. 외환 당국의 한 고위 관계자는 “오늘 환율이 1334원대까지 많이 내려간 만큼 국민연금이 일부 매수를 했을 수 있다”고 말했다. 구체적인 매수 여부나 환헤지 운용에 대해서는 확인하지 않았지만, 시장에서는 이른 언급이 1330원대에서 국민연금이 달러를 받아줄 수 있다는 기대를 키우며 추가적인 달러 투매를 제한한 것으로 보고 있다.
+
+국민연금의 움직임은 불과 몇 달 전과 정반대다. 환율이 1500원대까지 치솟았던 당시에는 원화 약세에 대응해 환헤지를 확대하며 달러를 매도했지만, 최근에는 추가적인 환헤지 확대를 멈추는 데 이어 일부 달러 매수 가능성까지 거론되고 있다.
+
+씨티는 앞서 원·달러 환율이 1390원 이하에서 안정될 경우 국민연금이 환헤지 비율 상향을 중단할 가능성이 있다고 분석했다. 기존 환헤지도 외환스와프 만기가 돌아오는 과정에서 점진적으로 축소될 수 있다고 봤다.
+
+다만 국민연금의 움직임만으로 원화 강세 흐름 자체를 되돌리기는 어렵다는 분석이다. 수출업체의 달러 매도 규모가 전년보다 큰 폭으로 늘어난 데다 반도체 수출 호조가 이어지고 있어 전체적인 외환 수급은 여전히 달러 공급 우위에 가까갈 가능성이 높기 때문이다.
+
+위재현 교보증권 이코노미스트는 “최근 원화 강세가 단순한 달러 약세를 넘어 아시아 통화 가운데서도 강하게 나타나고 있다”고 분석했다. 이민혁 KB국민은행 연구원은 “경상수지 흑자에 따른 달러 공급이 우세해 중장기적으로 환율은 하락 방향”이라고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/011/0004659497' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/011/0004659497</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
