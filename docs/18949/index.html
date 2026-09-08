@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스닥서 코넥스로 ‘당일 환승’…1년 내 자문인 못 구하면 상폐</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006365709' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18949" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스닥서 코넥스로 ‘당일 환승’…1년 내 자문인 못 구하면 상폐</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">시가총액 미달로 관리종목에 지정된 코스피·코스달 기업이 정리매매 없이 즉시 코넥스로 이전할 수 있는 절차가 마련됨. 다만, 이전 후 1년 내 지정자문인을 선임하지 못하면 코넥스에서도 상장폐지될 위험이 있음.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">상장 폐지 절차의 완화와 새로운 상장 유지 리스크(지정자문인 선임)가 동시에 존재하는 제도 변경임.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코넥스</span> <span class="tag tag-hash">#상장폐지</span> <span class="tag tag-hash">#거래소규정</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">거래소, 코넥스시장 상장규정 개정 예고
+시총 미달 기업 코넥스 이전 관련 요건·절차 등 마련
+관리종목 지정 후 20거래일 내 협의·30거래일 내 신청
+지정자문인 선임 1년 유예…미선임 땐 코넥스서 퇴출
+시가총액 미달로 관리종목에 지정된 코스피·코스닥 기업이 정리매매와 거래 공백 없이 코넥스로 이전할 수 있는 구체적인 절차가 마련됐다. 이전기업은 코넥스 상장 후 1년 동안 지정자문인 선임 의무를 유예받지만, 기한 내 증권사와 계약하지 못하면 코넥스에서도 상장폐지된다.
+8일 금융투자업계에 따르면 한국거래소는 이 같은 내용을 담은 코넥스시장 상장규정 개정을 예고했다. 오는 14일까지 시장 의견을 수렴하고 금융위원회 승인을 거쳐 이달 23일부터 시행할 예정이다.
+개정규정안에 따르면 시가총액 미달로 관리종목에 지정된 기업은 지정일부터 20거래일 이내 거래소와 이전상장을 위한 사전협의를 시작해, 지정일부터 30거래일 이내 코넥스 신규상장을 신청해야 한다. 거래소는 신청일부터 15일 이내 심사 결과를 통보한다.
+코스피·코스닥 상장폐지일과 코넥스 신규상장일은 같은 날로 정한다. 기존 시장에서 정리매매를 거치지 않고 곧바로 코넥스로 옮겨 거래 단절을 막기 위해서다. 종전 시장의 최종 거래일 종가가 코넥스 최초 기준가격으로 적용된다.
+코넥스로 이전한 기업은 새로 만들어지는 ‘시장이전기업부’에 편\"편입된다.\" 기존 코넥스 기업과 구분해 관리하기 위한 별도 소속부다. 지정자문인 선임 전까지는 해당 기업이 공시 업무를 직접 수행한다.
+이번 개정은 금융당국이 지난 4일 발표한 코스닥 상장폐지 제도 보완책의 후속 조치다. 부실·한계기업의 신속한 퇴출 기조는 유지하면서도 수익성과 재무건전성을 갖춘 기업이 시가총액 하락만으로 퇴출되는 문제를 완화하려는 취지다.
+이전 대상은 시가총액 미달만을 사유로 관리종목에 지정된 국내 코스피·코스닥 상장사다. 최근 3개 사업연도 중 2개 연도에 영업이익을 냈거나, 1개 연도에 영업이익을 내고 자기자본이 200억원 이상이어야 한다. 자본잠식이 없어야 하며 거래소의 공익·투자자 보호 심사도 통과해야 한다. 금융당국은 지난달 26일 기준 시가총액 200억원 미만 코스닥 기업 97곳 중 43곳이 재무요건을 충족할 것으로 추산했다.
+코넥스로 이전한 기업의 거래 유동성이 보장되는 것은 아니다. 지정자문인 선임 의무가 유예되는 동안 유동성 공급 의무도 함께 유예된다. 관리종목 지정 우려 상태인 한 코스닥 기업 관계자는 \"정리매매 없이 상장 지위를 유지하고 나중에 코스닥 재진입을 준비할 수 있다는 점은 장점이지만, (코넥스가) 코스닥보다 유동성이나 투자자 접근성이 낮다 보니 이전상장만으로 기업가치 제고나 자금조달 여건이 크게 좋아지기는 어려울 것\"이라며 \"사업이나 재무구조를 정상화할 가능성이 있는 기업이 시간을 좀 더 확보할 수 있는 완충장치 정도로 이해하고 있다\"고 설명했다.
+지정자문인 확보 역시 코넥스 상장을 유지하기 위한 관문이다. 이전기업이 상장일부터 1년 안에 지정자문인을 선임하지 못하면 상장폐지 대상이 된다. 코넥스의 거래 부진과 제한적인 투자자 기반을 고려하면 성장성이나 코스피 재이전 가능성이 낮은 기업은 계약을 맡을 증권사를 구하기 어려울 수 있다는 전망이 나오는 배경이다.
+IB업계 관계자는 \"지정자문인은 코넥스 상장 기업의 공시와 상장 유지 업무를 계속 관리해야 하므로 증권사 입장에서는 수익보다 책임 부담이 클 수 있다\"며 \"특히 코스닥 재진입 가능성이 뚜렷하지 않은 기업까지 적극적으로 계약할 유인은 크지 않을 것\"이라고 전했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006365709' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006365709</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>

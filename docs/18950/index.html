@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>증권가도 \"이유를 모르겠다\"…악재 없이 15% 내린 NHN</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/014/0005572760' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18950" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>증권가도 \"이유를 모르겠다\"…악재 없이 15% 내린 NHN</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">NHN 주가가 특별한 악재 없이 하루 만에 15.40% 급락했습니다. 증권가는 최근 급등에 따른 밸류에이션 조정으로 분석하며, 데이터센터 등 핵심 사업의 성장 모멘텀은 여전히 유효하다고 전망하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">특별한 악재가 확인되지 않은 상태에서 발생한 15% 이상의 대규모 급락은 단기적인 투자 심리 위축을 초래하며, 최근 상승분에 대한 밸류에이션 재평가 과정으로 판단됨.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">NHN</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">인공지능</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#NHN</span> <span class="tag tag-hash">#주가급락</span> <span class="tag tag-hash">#AI데이터센터</span> <span class="tag tag-hash">#밸류에이션조정</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">NHN 사옥 '플레이뮤지엄'. NHN 제공
+NHN 사옥 '플레이뮤지엄'. NHN 제공
+[파이낸셜뉴스] NHN의 상승세가 크게 꺾였다. 뚜렷한 악재 없이 최근 들어 가장 큰 낙폭을 보인 것이다. 증권가에서는 최근 들어 강세를 보인 만큼 밸류에이션 조정이 이뤄진 것으로 해석하면서도, 정확한 원인을 단정 짓기 어렵다고 분석했다. 다만 이익 모멘텀 훼손으로 보긴 어렵다며 중장기적인 상승이 가능하다는 관측이다.
+
+8일 한국거래소에 따르면 NHN은 이날 전일 대비 15.40% 하락한 5만9900원에 장을 마쳤다. 올해 들어 가장 큰 낙폭이다. NHN은 이날 전 거래일 대비 0.42% 하락한 7만500원에 개장한 뒤 낙폭을 키워 장중 17.37% 하락한 5만8500원까지 내리기도 했다.
+
+특히 이날 유가증권시장에서 상장폐지를 앞두고 정리매매에 들어간 카프로(-94.95%)를 제외하고 가장 크게 하락했다.
+
+이날 큰 이슈 없이 주가가 빠지자 증권가에서도 혼란스러운 반응이다. 한 연구원은 \"파악할 수 있는 범위에서는 NHN 관련 큰 악재가 없다\"며 \"이날 하락 이유를 분석 중이지만 뚜렷하게는 알기가 힘들다\"고 답했다.
+
+일각에선 NHN이 그동안 강세를 보였던 만큼 밸류에이션 조정 차원에서 이날 하락이 이뤄졌다고 보고 있다. 앞서 NHN은 국내 인공지능(AI) 데이터센터 사업의 대표주로 꼽히면서 강세를 보였다. 지난달 11일 2\%9.82% 상승한 것을 시작으로 지난달 18일 7만8200원까지 오르며 52주 신고가를 경신했다. 지난달 11일부터 전날까지 NHN의 상승률은 69.58%다.
+
+특히 이날 외국인과 기관이 각각 78억원, 22억원 팔아치운 것이 결정적이었다. 외국인과 기관은 NHN이 급등하기 시작한 지난달 11일부터 전날까지 각각 256억원, 156억원 순매수하며 상승을 견인했다.
+
+익명을 요구한 한 증권사 연구원은 \"목표주가를 6만원대로 보고 있었기 때문에, 최근 급격하게 오르며 7만원대까지 상승했을 때 \"오버슈팅\"으로 보이긴 했었다\"며 \"주가가 하향 조정을 받으면서 밸류에이션 안정화 단계에 들어선 것으로 보고 있다\"고 말했다.
+
+다만 데이터센터 관련 모멘텀 훼손으로 보기 어렵다는 것이 증권가의 중론이다. 데이터센터 관련 실적은 이미 2\cdot4분기부터 반영되고 있으며, 추가 계획도 정상적으로 진행 중이기 때문에 중장기적으로 상승 국면이 이어질 것이라는 전망이다.
+
+실제로 NHN의 2\cdot4분기 연결기준 매출과 영업이익은 7579억원, 579억원으로 각각 전년 동기 대비 25.3%, 164.1% 늘었다. 이중 기술 부문의 매출이 52.9% 성장한 1598억원을 기록했는데, 엔비디아 B200 기반의 서비스형 GPU 공급이 본격화된 서울 양평 리전에서 안정적인 매출이 발생한 영향으로 풀이된다.
+
+또 다른 연구원은 \"이미 2\cdot4분기 실적에 데이터센터 관련 모멘텀이 반영됐고, 추가 용량 확보도 진행이 잘 되고 있는 것으로 보인다\"며 \"당장의 악재는 없다. 추정치가 잡혀 있는 대로만 실적에 반영된다고 해도 내후년까지는 이익 성장이 가능할 것으로 보인다\"고 내다봤다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/014/0005572760' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/014/0005572760</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
