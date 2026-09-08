@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>레인보우로보 주춤할 때 30% 뛴 로보티즈…로봇주 판도 바뀌나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/031/0001056387' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18915" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>레인보우로보 주춤할 때 30% 뛴 로보티즈…로봇주 판도 바뀌나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국의 대중국 로봇 규제 강화로 인해 휴머노이드 로봇 공급망 재편이 예상됨에 따라, 핵심 부품인 엑추에이터를 생산하는 로보티즈가 수혜주로 주목받으며 주가가 급등했습니다. 반면 완성형 로봇 중심의 레인보우로보틱스는 실적 부진과 투자심리 이동으로 인해 상대적인 약세를 보이고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">미국의 대중국 로봇 규제(탈중국 공급망)로 인해 핵심 부품사인 로보티즈의 수혜 가능성이 높아졌으며, 실적 흑자 전환 및 해외 매출 확대가 기대됨</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">로보티 즈</span> <span class="tag stock-tag">레인보우로보틱스</span> <span class="tag stock-tag">하이젠알앤엠</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">기계</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">자동차부품</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#로봇</span> <span class="tag tag-hash">#로보티즈</span> <span class="tag tag-hash">#탈중국</span> <span class="tag tag-hash">#엑추에이터</span> <span class="tag tag-hash">#공급망재편</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">미, 중국 로봇산업 규제 움직임⋯국내 부품주 먼저 반응
+레인보우로보틱스 3년 연속 적자⋯로보티s '흑자 전환'
+코스닥 로봇 종목 시가총액 2위인 부품사 로보티즈가 주목받고 받고 있다. 미국의 '탈중국' 공급망 전략 최대 수혜주로 부각되면서 한 달 만에 주가가 30% 넘게 뛰었다. 반면 로봇 '대장주'인 레인보우로보틱스는 소폭 하락했다.
+투자자들의 관심이 완성품인 휴머노이드주에서 핵심 부품주로 옮겨가는 모습이다.
+
+'대장' 레인보우 내릴 때 로보티즈 '우뚝'
+
+8일 한국거래소에 따르면 로보티즈는 이날 오후 1시 32분 현재 전 거래일 대비 7500원(2.49%) 내린 29만4000원에 거래되고 있다.
+
+이날 반락하고 있지만 로보티즈는 최근 한 달간 주가가 가파르게 치솟았다. 종가 기준 지난 1개월간(8월7일~9월7일) 31.37% 올랐다.
+23만원 전후에 머물던 주가가 단기간에 30만원을 넘어섰다.
+
+반면 레인보우로보틱스는 부진한 주가 흐름을 보이고 있다. 레인보우로보틱스는 코스닥 내 로봇 종목 중 시가총액 비중이 가장 큰 종목이다. 같은 기간 로보티즈 주가가 가파르게 오를 때 오히려 46만원대에서 44만원대로 주가가 3.65% 밀렸다.
+
+양사 간 시총 격차도 그만큼 좁혀졌다. 한 달 전까지 만 해도 레인보우로보틱스 시총은 약 9조210억원로 로보티즈 3조3650억원 대비 약 3배 가까운 수준이었다. 그러나 로보티즈 시총이 1조원 넘게 불어나는 동안 레인보우로보틱스는 약 3300억원 증발하면서 격차를 2배 이하로 좁혔다. 전날 종가 기준 코스닥 시총 순위는 레인보우로보틱스가 5위, 로보티즈가 10위다.
+
+美 로봇 '탈중국' 전략에 최대 수혜 기대
+
+로보티즈 주가가 상승한 주요 배경은 미국의 대중국 로봇 규제 가속화다. 지난 7월 미 연방통신위원회(FCC)는 국가안보를 이유로 신규 외국산 휴머노이드 로봇의 신규 장비 인증을 금지했다. 앞으로 휴머노이드 제품을 미국에서 수며하거나 판매하려면 별도의 조건부 승인 절차를 거쳐야 한다. 휴머노이드 로봇 내 미국산 부품 원가 비중도 내년까지 65%로 상향하기로 했다. 2029년엔 75% 이상으로 확대할 방침이다. 중국이 로봇 시장에서 저가 경쟁력을 내세우고 있는 상황에서 중국산 로봇 산업에 대한 견제로 읽힌다.
+
+김혜빈 IBK투자증권 연구원은 \"휴머노이드 대량 양산의 주요 이슈는 안정적인 공급망 확보\"라며 \"기존 휴머노이드 생태계는 원가 경쟁력과 생산 인프라를 갖춘 중국을 중심으로 형성돼 왔다\"고 짚었다. 이어 \"미중 갈등으로 주요 휴머노이드 기업들이 공급망을 재편하면서 비중국 생산 체계의 중요성이 부각된 상황\"이라고 덧붙였다.
+
+미국의 대중국 규제 반사이익이 국내 로봇 부품 업체가 누릴 것이란 전망에 무게가 실린다. 휴머노이드 양산이 임박한 상황에서 비중국 공급망으로 한국이 부상할 가능성이 크단 이유에서다. 골드만삭스에 따르면 한국 공급망이 직간도 관여하는 휴머노이드 생산량은 2035년 기준 약 41만대에 이를 것으로 예상된다.
+
+휴머노이드 로봇 시장의 공급망 재편이 예고되면서 국내 증시에서는 완성 로봇 업체보다 핵심 부품 업체의 주가가 상대적으로 강한 흐름을 보이고 있다.
+
+레인보우로보틱스는 삼성전자의 로봇 사업 핵심 협력사로 휴머노이드 등 완성 로봇 개발에 강점을 가진 업체다. 반면 최근 매수세는 휴머노이드 양산 확대에 따라 수요 증가가 예상되는 핵심 부품 업체로 몰리는 모습이다.
+
+로보티즈는 휴머노이드의 핵심 부품인 엑추에이터를 주력으로 생산한다는 점에서 수혜주로 부각되고 있다. 엑추에이터는 로봇의 움직임을 정밀하게 제어하고 동력을 발생시키는 '관절'과 같은 역할을 한다. 충전 모듈 등과 비교해 가장 중요한 핵심 부품으로 꼽힌다. 업계에선 향후 휴머노이드 로봇 원가에서 엑추에이터가 차지하는 비중이 최대 60~70%에 달할 것이란 전망도 나오고 있다.
+
+박선영 미래에셋증권 연구원은 \"로보티즈는 다양한 산업군에서 해외 고객사를 보유하고 있어 해외 매출 비중이 약 70%로 매우 높다\"라고 분석했다. \"특히 작년엔 미국 방산 기업향 물량이 증가해 북미 매출 비중이 38%를 기록했다\"라고 덧붙였다.
+
+이어 \"휴머노이드 시장 개화를 앞두고 엑추에이터의 수요 성장률은 더욱 가속화될 것으로 예상된다\"라고 하며 \"국내 엑추에이터 기업의 대표 격인 로보티즈의 수혜가 기대된다\"라고도 전했다.
+
+엇갈린 실적도 주가 방향을 가르고 있다.
+
+로보티즈는 2분기 53억원, 2024년 30억원의 영업적자를 냈으나 지난해 33억원의 흑자를 기록했다. 북미향 물량 수요가 늘어난 점이 주효했다.
+
+반면 레인보우로보틱스는 최근 3년 연속 적자를 기록하고 있다. 직접 경쟁사인 다른 엑추에이터 전문 업체 하이젠알앤엠은 2024년 4억원 적자에서 지난해 89억원으로 오히려 적자 폭이 확대된 상태다.
+
+한화투자증권은 지난달 리포트를 통해 로보티즈가 업종 내 차별화된 수익 성장성을 실현할 것이라고 전망했다. 그러면서 목표주가도 기존 32만원에서 35만원으로 9.6% 높여 잡았다.
+
+김성래 연구원은 \"4분기부터 우즈벡 공장 가동이 시작되면 로보티즈의 내년 매출액은 큰 폭으로 성장할 것\"이라고 전망했다. 그러면서 \"로보티즈의 내년 출하량은 올해 대비 76% 증가한 88만5000대로 추정한다\"라고 하며 \"현지 생산 규모 증가에 따라 수익성 개선 폭이 확대될 것\"이라고 했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/031/0001056387' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/031/0001056387</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
