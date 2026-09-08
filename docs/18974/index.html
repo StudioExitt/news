@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>심상찮은 엔화…”한국도 예int예외 아니다" 경고 나온 이유 [분석+]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005330234' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18974" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>심상찮은 엔화…”한국도 예int예외 아니다" 경고 나온 이유 [분석+]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">일본은행(BOJ)의 금리 인상 가능성과 미·일 당국의 엔화 약세 방지 의지로 인해 엔화 강세 흐름이 나타나고 있습니다. 이로 인한 엔 캐리 트래이드 청산 우려가 한국 자본시장의 수급 부담으로 이어질 수 있다는 경고가 나오고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">일본의 금리 인상 기대감에 따른 엔화 강세가 엔 캐리 트레이드 청산을 유도하여 국내 증시로의 자금 유출 및 수급 악화를 초래할 리스크 존재</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#엔화강세</span> <span class="tag tag-hash">#일본은행</span> <span class="tag tag-hash">#엔캐리트레이드</span> <span class="tag tag-hash">#환율변동</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">달러 당 152엔 찍은 엔화
+
+일본은행 9월 추가 금리인상 가능성 짙어
+"美·日, 엔저 놔두지 않을 거라는 인식 시장에 번져"
+서울 하나은행 위변조대응센터에서 직원이 엔화를 보이고 있다. 사진=연합뉴스
+서울 하나은행 위변조대응센터에서 직원이 엔화를 보이고 있다. 사진=연합뉴스
+달러·엔 환율이 일본 기준금리 추가 인상 가능성에 8일 장중 152엔대까지 떨어졌다(엔화 가치 상승). 시장에선 엔화 약세에 베팅하는 포스션을 일부 정리하는 움직임이 나타나면서 추가 하락(엔화 강세) 가능성도 나온다.
+
+니혼게이자이신문 등에 따르면 이날 오전 장중 달러·엔 환율은 152엔대 후반(152.89엔)까지 떨어졌다. 이는 7개월 만에 가장 낮은 수준이다. 지난 7월23일 달러·엔 환율이 164엔대에서 등락했다는 점을 고려하면 불과 한 달 반 만에 11엔가량 내린 것이다.
+
+금융투자업계에선 일본은행(이하 BOJ)이 오는 18일 금융정책결정회의에서 기준금리를 인상할 것이란 예상이 확산하고 있는 것이 엔화 강세를 촉발한 것으로 해석하고 있다.
+
+시장에서는 BOJ가 현재 연 1.0%인 정책금리를 연 1.25%로 0.25%포인트 올릴 가능성을 높게 보고 있다. 일본의 지난 2분기 국내총생산(GDP) 증가율이 연율 1.4%로 상향 조정되고, 7월 실질임금이 전년 동월보다 2.4% 증가하는 등 추가 긴축을 뒷받침하는 지표가 잇따르고 있어서다. 앞서 BOJ는 지난 6월 정책금리를 연 0.75%에서 연 1.0%로 올렸다. 이는 1995년 이후 가장 높은 수준이다.
+
+미·일 당국이 엔화 약세를 더 이상 방치하지 않을 것이란 인식도 엔화 가치를 끌어올리는 요인으로 작용하고 있다.
+
+일본 재정 당국은 지난 7월 말부터 8월까지 엔화 가치를 방어하기 위해 역대 최대 규모인 15조4000억엔어치 시장 개입에 나선 것으로 추정된다.
+
+미국도 일본의 엔화 가치 상승 움직임을 힘을 실으면서 시장에서는 엔화가 다시 급격히 약해질 경우 추가 대응할 가능성을 의식하고 있다.
+
+스콧 베선트 미국 재무장관은 이달 초 G20 재무장관 회의에서 엔화 가치가 저평가돼 있다며 일본의 기준금리 인상을 압박하는 발언을 내놨다.
+
+그는 "엔화의 대규모 저평가에 대처하기 위해 일본이 단호한 시장 및 금융정책적 조치를 취하는 것을 강력히 지지한다"고 말했다.
+
+베선트 장관은 앞서 지난달 31일 CNBC방송 인터뷰에서도 "엔화 가치가 저평가돼 있다"며 일본 정부와 BOJ가 엔화 강세로 이어질 조치를 취할 것으로 믿는다고 밝혔다. 금리 인상을 뜻하느냐는 질문에는 "시장이 이미 그것을 가격에 반영하고 있다고 본다"고 답했다.
+
+그는 로이터통신과의 문답에서도 우에다 일본은행 총재가 통화정책과 관련해 "올바른 일을 할 것"이라고 얘기하며 기준금리 인상 조치를 기대했다.
+
+미쓰비시UFJ파이낸셜그룹(MUFG)은 이날 보고서에서 "엔화 약세 포지션 청산이 지속될 경우 지난 1월 저점인 152.5엔을 밑돌 수 있다"며 "50% 되돌림 수준인 151.50엔선까지 추가 하락할 가능성이 열려 있다"고 전망했다.
+
+급격한 엔화 강세 흐름이 나오면서 시장 일각에선 엔 캐리 트레이드 청산에 대한 우려가 지속적으로 불거지고 있다.
+
+엔 캐리는 저금리의 \"값싼 엔화\"를 빌려 상대적으로 금리가 높은 해외 채권과 주식 등에 투자하는 것을 말한다. 그러나 일본 기준금리가 오르고 엔화가 강세로 돌아서면 더 비싼 값에 돈을 빌리는 셈이라 투자 수익률이 떨어지기 때문에 해당 자산을 팔아 자금 회수에 나설 수 있다.
+
+국내 자본시장도 예외는 아니다. 엔화가 저렴하던 국면에서 늘어\"엔 투자자의 한국 자산이 엔화 강세를 계기로 일부 회수될 경우 국내 증시의 수급 부담으로 이어질 수 있어서다.
+
+다만 현시점에서 엔 캐리 트레이드 청산 가능성은 제한적이란 분석이 많다.
+
+문다운 한국투자증권 연구원은 "엔 캐리 투자 자금의 청산 유인이 확대되는 구간이 맞지만 시장이 걱정하는 급격한 청산은 위험 회피를 자극할 만한 리스크 이벤트가 동반돼야 한다"며 "급격한 청산은 아직"이라고 봤다.
+
+그러면서도 "남은 기간 BOJ 및 미국 연방공개시장위원회(FOMC) 통화정책회의에서 예상치 못한 충격이 발생할 경우 주요 자산 가격 하락과 함께 급격한 엔 캐리 청산 및 엔화 강세가 나타날 수 있다"고 부연했다.
+
+현재는 엔화의 급격한 강세 전환으로 과도하던 불균형이 일부 조정되고 있으며, 연말 기준 달러·엔 환율은 150엔 부근까지 점진적으로 하락할 것으로 예상된다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005330234' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005330234</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
