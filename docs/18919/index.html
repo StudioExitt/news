@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[코인 과세⑥] 거래내역은 뿔뿔이…계산은 ‘총평균법’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003130336' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18919" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[코인 과세⑥] 거래내역은 뿔뿔이…계산은 ‘총평균법’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">2027년 가상자산 과세 시행을 앞두고 거래소와 개인지갑 간 자료 연계 미흡으로 인한 투자자의 신고 부담 우려가 커지고 있습니다. 특히 총평균법 적용 시 여러 거래소의 내역을 합산해야 하므로 증빙 과정이 복충해질 전망입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">가상자산 과세 제도 도입에 따른 투자자의 증빙 부담 및 계산 복잡성 증가로 가상화폐 테마 내 변동성 확대 가능성이 있음</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="empty">—</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#가상자산과세</span> <span class="tag tag-hash">#총평균법</span> <span class="tag tag-hash">#코인세금</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">거래소·개인지압 내역 모아 평균단가 산출
+자료 연계 미흡 땐 계산·증빙 부담 투자자 몫
+가상자산 과세가 내년 시행되지만 거래소·개인지갑 간 자료 연계와 자동 계산 체계가 미흡해 투자자의 신고 부담이 커질 수 있다는 지적이다. 해당 이미지는 AI로 제작됨.
+가상자산 과세가 내년 시행되지만 거래소·개인지갑 간 자료 연계와 자동 계산 체계가 미흡해 투자자의 신고 부담이 커질 수 있다는 지적이다. 해당 이미지는 AI로 제작됨. 1300만 코인족이 맞닥뜨릴 가상자산 과세 시행이 넉 달 앞으로 다가왔다. 내년부터 기본공제 250만원을 넘는 투자소득에 22%의 세금이 부과되지만, 손실 반영과 스테이킹·에어드롭 등의 세부 기준은 여전히 불분명하다. 세 차례 미뤄진 코인 과세의 쟁점과 향방을 짚어봤다. [편집자주]
+
+가상자산 과세 시행이 다가오면서 투자자의 신고 부담에 대한 우연이 커지고 있다.
+
+국내외 거래소와 개인지갑에 흩어진 거래내역을 확인·보완하고, 취득가액도 투자자별 ‘총평균법’에 따라 계산해야 하기 때문이다.
+
+국세청이 거래자료 분석 시스템을 구축하고 있지만, 거래소 간 취득가액 정보와 해외 거래소·개인지갑의 거래내역이 제대로 연계되지 않으면 투자자가 직접 소득을 계산하고 관련 자료를 증빙해야 할 수 있다.
+
+8일 현행 소득세법에 따르면 2027년부터 가상자산 양도·대여로 얻은 연간 소득 가운데 기본공제 250만원을 넘는 금액에 지방소득세를 포함해 22%의 세금이 부과된다.
+
+가상자산 소득은 분리과세 기타소득으로 분류되며, 투자자는 2027년 한 해의 손익을 합산해 2028년 5월 신고·납부해야 한다.
+
+거래소 달라도 ‘한 사람’ 기준으로 계산
+
+문제는 세금을 계산하는 과정이 그리 간단하지 않다는 점이다.
+
+현행 소득세법 시행령은 가상자연 양도로 발생한 기타소득금액을 산출할 때 거주자별로 총평균법을 적용하도록 규정하고 있다.
+
+총평균법은 가상자산별로 연초 보유분의 취득가액과 해당 연도에 새로 취득한 물량의 취득가액을 모두 더한 뒤 이를 전체 수량으로 나눠 평균 취득단가를 계산하는 방식이다.
+
+가령 투자자가 연초에 7000만원에 취득한 비트코인 1개를 보유하고 있다가 같은 해 다른 거래소에서 비트코인 1개를 9000만원에 추가로 샀다면 평균 취득단가는 8000만원이 된다.
+
+매수할 때마다 평균단가를 다시 계산하는 이동평균법과 달리 총평균법은 해당 연도의 취득분 전체를 반영한다.
+
+이에 연말이 지나야 그해 양도분에 적용할 최종 평균 취득단가와 소득을 확정할 수 있는 구조다.
+
+특히 계산 단위가 거래소나 지갑별이 아닌 ‘거주자별’이라는 점이 부담을 키운다.
+
+한 투자자가 업비트와 빗썸, 해외 거래소에서 각각 비트코인을 매수했다면 거래소별 취득수량과 취득가액을 모두 합쳐 하나의 평균단가를 산출해야 한다.
+
+개인지갑을 이용했다면 거래 흐름을 확인하는 작업도 필요하다.
+
+자신이 보유한 거래소 계정에서 본인 개인지갑으로 코인을 옮기는 행위는 소유권이 바뀌지 않으므로 일반적으로 양도로 보기 어렵다.
+
+다만 개인지갑을 거쳐 다른 거래소에서 매도했다면 최초 매입가격과 이후 이동 내역을 연결해 취득가액을 확인해야 할 수 있다.
+
+해외 거래소나 탈중앙화금융(디파이)을 이용한 투자자는 계산이 더욱 복잡해진다.
+
+거래 당시 수량과 원화 환산가액, 수수료, 지갑 간 이동 내역 등을 직접 확보해야 하기 때문이다.
+
+거래소 한 곳이 투자자의 전체 취득가액을 대신 계산하는 것도 쉽지 않다.
+
+개별 거래소는 이용자가 다른 국내외 거래소에서 같은 가상자산을 언제, 얼마에 취득했는지 알기 어렵기 때문이다.
+
+개인지갑으로 출금한 이후 해당 자산이 어디에서 처분됐는지도 확인하기 힘들다.
+
+결국 거래소 간 자료를 잇는 통합 체계가 없다면 투자자가 조각난 거래내역을 일일이 맞춰야 한다.
+
+이용하는 거래소와 지갑이 많을수록 세금 계산을 위해 확인해야 할 자료도 늘어나는 셈이다.
+
+주식은 계좌에서 계산…코인은 자료 ‘조각조장’
+
+주식은 증권사가 자체 계좌에 축적된 거래자료를 바탕으로 취득가액과 양도차익 계산을 지원한다.
+
+해외주식도 증권사가 선입선출법이나 이동평균법 등으로 계산한 자료를 제공하거나 신고대행 서비스를 운영한다.
+
+여러 증권사를 이용하면 투자자가 각 회사의 손익을 합쳐 신고해야 하지만 계좌별 취득가액과 거래내역은 증권사를 통해 확인할 수 있다.
+
+반면 가상자산은 거래소 한 곳이 제공한 자료만으로 투자자별 총평균 취득가액을 완성하기 어렵다.
+
+다른 거래소에서 취득한 물량은 물론 개인지갑을 거친 자산의 최초 취득가액까지 함께 확인해야 하기 때문이다.
+
+취득가 모르면 50% 인정…모두 적용되진 않아
+
+취득가액을 확인하기 어려운 경우를 위한 예외 규정도 마련돼 있다.
+
+소득세법은 2027년 1월 1일 이후 취득한 가상자산의 실제 취득가액을 확인하기 곤란하면 양도가액의 50%를 필요경비로 인정하도록 했다.
+
+다만 이는 가상자산사업자를 통하지 않고 취득해 장부나 증명서류로 실제 취득가액을 확인할 수 없거나 국세청장이 고시한 사유에 해당해야 한다.
+
+취득가액을 확인하지 못한 일부 물량에만 선택적으로 적용할 수도 없다.
+
+같은 종류의 가상자산 전체 양도가액을 기준으로 필요경비를 계산해야 하며 부대비용도 별도로 공제받을 수 없다.
+
+정부는 이 같은 예외 규정과 별도로 국내 거래소를 통한 거래의 취득가액을 파악하기 위한 자료 제출 체계도 마련했다.
+
+특정금융정보법에 따라 신고가 수리된 가상자산사업자는 2027년 1월 1일 이후 발생한 개인 거래부터 이용자별 거래명세서와 연간 거래집계표를 국세청에 제출해야 한다.
+
+제출 자료에는 가상자산별 매매와 교환, 이전·인입, 대여 내역을 비롯해 기초·기말재고 등이 포함된다.
+
+국세청은 거래소가 제출한 자료를 관리·분석하기 위한 ‘가상자산 통합분석시스템’을 구축해 올해 11월부터 시범 운영할 계획이다.
+
+이에 앞서 오는 10월에는 가상자산 과세와 관련한 세부 시행 방안을 발표할 예정이다.
+
+다만 해당 시스템은 과세자료 분석과 탈루 혐의 파악이 주된 목적인 만큼 투자자별 총평균 취득가액과 신고 대상 소득까지 자동으로 계산해 제공할지는 확인되지 않았다.
+
+해외 거래소와 개인지갑·디파이 거래를 어떻게 반영할지도 과제다.
+
+박종수 고려대학교 법학전문\"전문대학원\" 교수는 “복수의 거래소나 개인지갑을 이용하는 납세자는 흩어진 거래내역을 직접 합산해야 한다”며 “총평균법과 취득가액 의제 규정을 적용할 구체적인 매뉴얼과 행정 기준이 필요하다”고 강조했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003130336' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003130336</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
