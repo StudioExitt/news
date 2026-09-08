@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"코스피 더 오를 줄 알았는데"…증권가서 나온 '뜻밖의 경고' [한경우의 케이스스터디]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.08</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005329962' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/18905" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>"코스피 더 오를 줄 알았는데"…증권가서 나온 '뜻밖의 경고' [한경우의 케이스스터디]</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 상장사들의 12개월 선행 EPS 증가율이 97.3%에서 49.6%로 급감하며 지수 상승세 둔화 우려가 제기되었습니다. 이에 따라 단순히 이익 규모가 커지는 종목보다는 영업이익률이 개선되는 한미약품, 이수페\"페타시스\", HD현대중공업 등 수익성 중심의 종목에 주목해야 한다는 분석입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">코스피의 이익 성장률(EPS 증가율)이 정점을 지나 하락 국면에 진입함에 따라 시장 전체의 지수 상승 모멘텀 약화가 우려됨. 다만 영업이익률 개선 종목을 통한 선별적 투자 전략 제시로 특정 업종에는 기회가 될 수 있음.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">한미약품</span> <span class="tag stock-tag">이수페타시스</span> <span class="tag stock-tag">삼성전기</span> <span class="tag stock-tag">HD현대중공업</span> <span class="tag stock-tag">HD한국조선해양</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">제약</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">조선</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#EPS증가율</span> <span class="tag tag-hash">#영업이익률</span> <span class="tag tag-hash">#한미약품</span> <span class="tag tag-hash">#투자전략</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피 순이익 증가율 \"반토막\"…\"한미약품 '잭팟' 다시 볼 때\"
+
+코스피 12개월 선행 EPS 증가율 97%→50%
+\"이익증가율 꺾여 지수 상승세도 둔화 가능성\"
+
+\"과거 이익 증가 둔화 국면서 '영업이익률' 지표 성과 부각\"
+
+유가증권시장(코스피) 상장사들의 이익 증가에 대한 기대가 정점을 찍고 꺾이고 있다. 성장에 대한 기대가 꺾이면서 지수 상승세도 둔화할 가능성이 크다는 분석이 증권가에서 나온다. 한미약품, 이수페타시스, HD현대중공업 등처럼 수익성이 향상될 것으로 기대되는 종목에 관심을 두라는 조언도 나왔다.
+
+8일 금융정보업체 에프앤가이드에 따르면 유가증권시장 상장사들의 12개월 선행 주당순이익(EPS)의 후행 지표 대비 증가율은 49.6%였다. 지난 5월 7일 97.3%로 정점을 찍은 뒤 반토막 수준으로 떨어졌다.
+
+이재만 하나증권 연구원은 \"코스피의 이익 증가율은 코스피 변화율과 비슷한 흐름을 보인다는 측면을 감안할 때 이익 증가율 하락 국면에서 지수 상승세도 둔화할 가능성이 높다\"고 분석했다.
+
+하나증권이 2007년 이후 코스피 상장사들의 합산 순이익 증가율이 고점을 찍고 하락한 4개 국면을 분석한 결과, 정점 형성 이후 3개월간 코스피 지수는 평균 2.9% 하락한 것으로 나타났다.
+
+다만 지수가 하락하는 국면에서도 투자 수익을 챙길 방법은 있다고 이 연구원은 덧붙였다. 지수 하락기에도 전년 동기 대비 및 전월 대비 12개월 예상 순이익 증가율이 상승세를 유지한 업종은 3개월 누적 기준 각각 3.8%, 3.9%의 주가 상승률을 기록했다는 분석이다.
+
+특히 이익 증가율 자체보다 '영업이익률 개선 여부'가 종목별 주가 차별화에 결정적인 영향을 미친 것으로 집계됐다. 과거 이익 증가율 하락 초기 3개월간 12개월 예상 영업이익률이 개선된 업종의 주가는 평균 4.3% 올랐으나, 영업이익률이 하락한 업종은 7.4% 급락한 것으로 하나증권은 분석했다. 특히 전년 대비 순이익 증가율이 둔화되더라도 영업이익률이 높아진 업종은 3개월간 4.1~4.3% 수준의 견조한 수익률을 유지했다.
+
+한경닷컴은 에프앤가이드 데이터가이드 서비스를 활용해 △올해와 내년 영업이익률이 모두 10% 이상이며 △한달 전과 비교해 올해와 내년 영업이익률 컨센서스가 각각 0.1%포인트 이상 상향된 종목 중 △최근 한 달간 주가 상승률이 높은 종목 등을 추렸다.
+
+추려진 종목 중 올해 영업이익률 컨센서스 상향 폭이 가장 큰 종목은 한미약품이다. 기존 17.83%에서 20.84%로 3.01%포인트 높아졌다. 이는 다국적 제약사 로슈그룹 산하의 제넨텍에 차세대 비만 치료 후보물질의 개발·상업화 권리를 이전한 덕이다.
+
+이호철 신한투자증권 연구원은 \"한미약품의 선급금 비율은 국내 제약사가 빅파마로 기술이전할 때의 평균을 2배 이상 웃도는 압도적 수치이며, 해당 선급금은 4분기 실적에 반영될 것\"이라고 예상했다.
+
+올해 수익성 전망이 두 번째로 많이 높아진 종목은 지역난방공사이다. 인공지능(AI) 투자 관련으로는 이수페타시스, 삼성전기 등이, 조선 분야에서는 HD한국조선해양, HD현대중공업, HD현대마린솔루션, 한국카본 등이 수익성 개선 기대 종목으로 꼽혔다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005329962' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005329962</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
