@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이런 가격은 처음"...주가 폭등에도 전망 엇갈려</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/215/0001265476' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/19128" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>이런 가격은 처음"...주가 폭등에도 전망 엇갈려</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국과 이란의 갈등으로 국제 유가가 상승하며 석유화학 기업들의 주가가 급등했으나, 고유가에 따른 소비 위축 및 수요 저항 가능성으로 인해 낙관론과 비관론이 엇갈리고 있음</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">유가 상승에 따른 화학제품 스프레드 확대 기대감과 고유가로 인한 소비 위축 우려가 공존하며 업황 전망이 불투명함</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">롯데케미칼</span> <span class="tag stock-tag">대한유화</span> <span class="tag stock-tag">LG화학</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">화학</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">석유 및 가스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#석유화학</span> <span class="tag tag-hash">#국제유가</span> <span class="tag tag-hash">#주가전망</span> <span class="tag tag-hash">#스프레드</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">석유화학기업들 주가가 급등한 가운데 낙관론과 비관론이 엇갈리고 있다고 한경닷컴이 10일 보도했다.
+
+전쟁 중인 미국과 이란간의 갈등이 다시 격화하자 국제 유가가 급등했고, 화학제품 가격도 더 오른 것이란 기대 때문에 석유화학기업 주가가 치솟았다.
+
+9일 롯데케미칼은 18.12% 상승한 6만7800원에, 대한유화는 13.59% 오른 11만300원에, LG화학은 5.56% 뛴 28만5000원에 거래를 마쳤다.
+
+화학주가 이달 들어 지지부진한 주가 흐름을 보이다 급등한 것이다. 이는 미국과 이란 사이의 군사적 충돌이 격화한 뒤로 국제 유가가 배럴당 100달러 선을 넘보고 있어서다.
+
+8일(현지시간) 11월 인도분 브렌트유 가격은 배럴당 97.92달러를 기록했다. 서부텍사스산원유(WTI) 10월 인도분 가격도 배럴당 93.03달러였다.
+
+보통 국제 유가가 오르면 원가 부담이 커져 화학주에 악재로 여겨진다. 그러나 8월에는 주요 화학제품 가격 상승폭이 국제 유가 상승폭을 넘어섰다. 이에 유가 상승이 화학제품 스프레드(원재료와 완제품 가격 차) 확대로 이어질 수 있다는 기대감이 나온 것이다.
+
+이진명 신한투자증권 수석연구원은 \"8월 28일부터 9월7일까지 중국의 주요 화학제품 선물 가격은 에틸렌글리콜(EG) 19%, 폴리염화비닐(PVC) 12%, 폴리프로필렌(PP) 9% 상승한 반면, 나프타 현물가는 4% 오르는 데 그쳐 제품 상승폭이 원가를 웃돌았다\"고 전했다.
+
+그는 \"3분기 말 가격 반등은 재고평가손실을 줄여 3분기 실적 우려를 완화하고, 판매가 전가가 본격화하는 4분기에는 래깅 스프레드 개선으로 이어질 것\"이라고 분석했다.
+
+반면 비관론도 나온다. 정제마진과 유류 가격이 급등해 사회 전반의 소비 여력이 부족해져 실수요가 꺾일 수 있다고 한국투자증권은 경고했다. 미국 경유 소매 가격은 9월 7일 기준 갤런당 5.9달러, 배럴 환산 시 248달러를 기록해 2022년 6월의 직전 최고치를 경신했다. 1년 새 60%의 상승률을 기록했다.
+
+이충재 한국투자증권 연구원은 \"가계 소비에서 연료비 비중이 커지며 나타나는 소비 감소는 결국 경유 수요 위축으로 이어질 수밖에 없다\"고 지적했다.
+
+또 \"지금은 아무도 겪어보지 못한 사상 최고 수준의 가격과 정제마진 구간\"이라며 \"향후 정제마진의 방향을 결정할 궁극적인 요인은 공급 차질이 아니라 수요 저항\"이라고 짚었다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/215/0001265476' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/215/0001265476</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
