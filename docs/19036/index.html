@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>삼전닉스만 있는게 아닙니다…AI 인프라 밸류체인 확장</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005330376' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/19036" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>삼전닉스만 있는게 아닙니다…AI 인프라 밸류체인 확장</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">AI 인프라 투자 열기가 GPU와 메모리를 넘어 CPU, 광통신, 전력 섹터로 확산되고 있음. AMD의 서버 CPU 시장 전망 상향 및 AI 에이전트 도입에 따른 자원 할당 필요성 증대로 관련 국내외 밸류체인 기업들의 주가 강세가 나타남.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">AI 인프라의 중심축이 GPU에서 CPU, 광통신, 전력으로 확산되는 구조적 변화를 보여줌. 특히 AMD의 시장 전망 상향과 메타의 에이전트 전략은 관련 섹터의 장기 성장 모멘텀을 시사함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">AMD</span> <span class="tag stock-tag">인텔</span> <span class="tag stock-tag">RF머티리얼즈</span> <span class="tag stock-tag">라이콤</span> <span class="tag stock-tag">대한광통신</span> <span class="tag stock-tag">가온전선</span> <span class="tag stock-tag">ISC</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">통신장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">전력</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#AI인프라</span> <span class="tag tag-hash">#CPU</span> <span class="tag tag-hash">#광통신</span> <span class="tag tag-hash">#전력망</span> <span class="tag tag-hash">#에이전틱AI</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">CPU, 광통신, 전력 섹터 강세
+
+AMD, 서버 CPU 시장 전망 대폭 상향
+코닝, 퀄컴 등 광 솔루션 계약 따내
+국내서도 관련 밸류체인 기업 급등
+가온전선, 캐나다 전력시장 첫 진출
+
+17주 만의 7000 탈환을 눈앞에 두고 막판 퇴각했던 코스피지수가 9일 다시 상승 출발했다. 다시 100달러에 육박한 국제유가와 금리·엔화 변동성을 둘러싼 불확실성에도 오픈AI ‘아스트라’가 되살린 AI 인프라 수요 확대 기대감이 강세를 견인하고 있다.
+
+삼성전자·SK하이닉스와 소수 대형주만 웃는 '쏠림 장세'와는 다르다. 다시 시동이 걸린 AI 인프라 랠리는 GPU·메모리를 넘어 광 연결과 CPU, 전력 섹터 등으로 번지고 있다. AI가 더 똑똑해질수록 에이전트를 실행할 CPU, 데이터 이동을 더 빠르게 해줄 광통신, 데이터센터를 돌릴 전기가 더 많이 필요하다는 인식이 확산하면서다.
+
+CPU, 빛, 전기
+이날 오전 11시께 유가증권시장에서 코스피지수는 전일 대비 1.63% 상승한 7068.06에 거래됐다. 지난 이틀간 10조원을 팔아치운 개인(-6995억원)은 이날도 순매도를 이어갔고, 외국인(-1905억원)도 순매도로 돌아섰지만 기관이 3262억원 순매수하며 지수를 지탱했다.
+
+코스닥지수는 상승 탄력이 더 컸다. 개인(-1973억원)의 순매도에도 외국인(1808억원)과 기관(171억원)이 나란히 순매수에 나섰다. 덕분에 코스닥지수는 2.12% 오른 829.09에 거래됐다.
+
+삼성전자(+1.3%)와 SK하이닉스(3.3%), 삼성전기(3.6%) 등 대장주 주도로 AI 인프라 전반이 강세를 보였지만, 그중에서도 섹터별 온도차가 감지됐다. 특히 급등이 두드러진 것은 광통신주였다. RF머티리얼즈는 23%, 라이콤은 18% 급등했고 오이솔루션(16%), 대한광통신(+8%) 등 전반적으로 상승폭이 컸다.
+
+전력 인프라 관련주의 강세도 이어졌다. 캐나다 전력시장 첫 진출을 알린 가온전선이 16% 급등했고, 두산퓨얼셀(12%), 미코(9%) 등 고체산화물 연료전지(SOFC) 관련주도 블룸에너지의 S&P500 입성 소식 이후 모멘텀을 이어가고 있다. 국내 데이터센터용 비상발전기 시장점유율 1위 지엔씨에너지는 IBK투자증권이 "예상보다 빠른 오버 러시로 신규수주, 증설, 수익성이 모두 상승하고 있다"며 목표주가 7만원으로 커버리지를 개시하면서 7% 뛰어올랐다. 현재 주가는 4만8000원 안팎에서 거래되고 있다.
+
+주성엔지니어링, 심텍, 삼화콘덴서, 대덕전자 등 기판 밸류체인에 노출된 반도체 소부장도 8% 안팎 강세를 보였다. 국내에서 CPU 관련 수혜가 가장 또렷한 ISC도 4% 상승했다.
+
+간밤 뉴욕증시의 흐름을 이어받았다. 8일(미국 동부시간) 미국 3대 지수는 유가 급등과 금리 인상 우려로 일제히 하락했고, 엔비디아와 마이크론도 각각 2%, 1.6% 밀렸다. 그럼에도 인텔(+9.1%), AMD(+5.9%) 등은 CPU 수요 기대감에 크게 상승해 필라델피아반도체지수 상승을 이끌었다.
+
+미국 광통신 대장주 루멘텀(+11%)과 코히어런트(+7%), SOFC 관련주 퓨얼셀에너지(+18.8%), 블룸에너지(+9.6%)도 크게 뛰었다. AI 인프라 섹터 내 차별화가 컸다는 뜻이다.
+
+"에이전트 하나당 CPU 별도 배재"
+AMD는 이날 씨티 글로벌 TMT 컨퍼런스에서 2030년 서버 CPU 시장 전망을 기존 600억달러에서 2200억달러 이상으로 네 배 가까이 높였다. 현재 약 250억달러 규모인 이 시장이 5년 만에 9배 커진다는 전망이다. AMD는 "데이터 검색과 작업 실행, 에이전트 간 조율을 담당하는 ‘에이전틱 AI 샌드박스’가 시장 절반 이상을 차지할 것"이라고 했다.
+
+AI 에이전트의 급성장은 CPU에 대한 기대감으로 이어진다. 짧은 답변을 생성하는 게 주된 업무였던 기존 챗봇 형태 AI와 달리, 에이전트는 데이터를 찾고 이메일을 보내며 프로그램을 직접 실행하는 등 사람의 지적 업무를 대신한다. 이 과정에서 GPU뿐 아니라 CPU·메모리·스토리지·네트워크 이용이 폭증한다.
+
+메타가 이날 공개한 개인 AI 에이전트 '뮤즈'가 단적인 사례다. 메타는 이메일·캘린더·결제·헬스·스마트홈과 연결되는 뮤즈 에이전트 하나당 CPU와 메모리, 저장공간을 갖춘 별도의 클라우드 가상머신을 배정한다. 에이전트가 늘어날수록 CPU 수요도 비례해 늘어난다는 뜻이다.
+
+진 후 AMD CFO는 서버 CPU 매출이 올 하반기 80% 이상, 내년 70% 이상 증가할 것으로 예상하면서도 "공급이 충분하지 않다"고 말했다. CPU 판매량과 단가는 모두 상승하고 있다. 인텔은 오는 10월부터 PC용 CPU 가격을 약 10% 추가 인상하는 방안을 검토 중인 것으로 알려졌다. 올 들어 세 번째 인상이다.
+
+빛으로 데이터 옮긴다
+광통신 섹터에서도 호재가 쏟아졌다. AI 시스템 고도화에 따라 데이터 이동 속도·효율 개선 필요성이 높아지면서 전기 신호 대신 빛을 이용한 연결 솔루션이 각광받고 있다. 골드만삭스는 최근 글로벌 광모듈 시장 전망을 2028년 1485억달러로 기존 대비 115% 상향했다. 올해(약 677억달러) 대비 두 배 이상 늘어날 것이라는 예상이다.
+
+이날 버라이즌은 코닝으로부터 2나서 2027~2032년간 8000만 마일 이상의 고밀도 광섬유를 공급받는 내용의 장기계약을 발표했다. 계약 규모는 수십억달러에 이른다. 아마존과 퀄컴은 AI 추론용 맞춤형 반도체와 최대 1.6Tbps급 광 연결 솔루션을 공동 개발하는 파트너십을 맺었다. 아마존의 구매 실적에 따라 최대 600억달러 규모로 커질 수 있는 협력 구조다.
+
+국내 광통신 기업 주가도 연일 강세다. 김정찬 한국투자증권 연구원은 "공급 부족이 심화하는 과정에서 국내 기업들의 비중국 벤더 경쟁력이 부각되고 있다"며 "최근 주요 국내 밸류체인의 광학 부품 수주가 급증하고 있으며, 이는 단발성이 아닌 반복 수주로 이어질 가능성이 높다"고 했다.
+
+김 연구원은 루멘텀에 펌프레이저 패키지를 공급하는 RF머티리얼즈를 최선호주로, 라이콤과 대한광통신을 관심종목으로 제시했다. 라이콤은 데이터센터 간 연결에 필요한 광증폭기를 만들고, 대한광통신은 기존 제품보다 광섬유가 세 배 많은 864심 초고다심 케이블을 북미 AI 데이터센터에 공급한다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005330376' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005330376</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
