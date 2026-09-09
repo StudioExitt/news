@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“내 곳간 어디가 비었지?”…기관들, 이제 ‘포트폴리오 의사’ 찾는다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006366523' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/19119" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“내 곳간 어디가 비었지?”…기관들, 이제 ‘포트폴리오 의사’ 찾는다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">long-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">자산운용업계의 경쟁 방식이 단순 상품 판매에서 기관의 전체 포트폴리오를 진단하고 부족한 부분을 채워주는 \"솔루션 비즈니스\"로 진화하고 있음. 국민연금의 사례처럼 특정 팩터나 자산의 빈틈을 찾아 보완하는 능력이 운용사의 핵심 경쟁력으로 부상 중임.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">자산운용업계의 비즈니스 모델이 단순 상품 판매에서 포트폴리오 진단 및 맞춤형 솔루션 제공(Solution Business)으로 변화하고 있으며, 이는 운용사의 경쟁력 기준을 근본적으로 바꾸는 구조적 변화를 시사함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성증권</span> <span class="tag stock-tag">미래에셋증권</span> <span class="tag stock-tag">한국금융지주</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#자산운용</span> <span class="tag tag-hash">#컴플리션포트폴리오</span> <span class="tag tag-hash">#솔루션비즈니스</span> <span class="tag tag-hash">#기관투자자</span> <span class="tag tag-hash">#포트폴리오전략</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">[대체투자 솔루션 경쟁]①
+자산군 아닌 '포트폴리오 전체' 진단한다
+국민연금 '컴플리\"션 포트폴리오\" 활용 중
+부족한 자산·팩터·전략에 '맞춤 보완' 제공
+운용사, 상품 판매 넘어 '맞춤 처방' 경쟁
+이 기사는 2026년09월09일 17시26분에 마켓인 프리미엄 콘텐츠로 선공개 되었습니다.
+
+ 자산운용업계의 경쟁 방식이 달라지고 있다. 과거에는 ‘해외주식은 어디가 잘하나’, ‘부동산은 어디가 잘하나’처럼 자산군별로 운용사를 찾는 게 일반적이었다. 반면 이제는 기관투자자의 전체 포트폴리오를 들여다보고 부족한 부분을 찾아 채우는 이른바 ‘솔루션 비즈니스’가 새로운 경쟁력으로 떠오르고 있다.
+
+단순히 상품을 만들어 파는 데서 그치지 않고 기관의 포트폴리오를 ‘진단’한 뒤 필요한 전략을 처방하는 방식이다. 운용사 입장에서는 특정 자산을 얼마나 잘 굴리느냐를 넘어 기관의 포트폴리오에 어떤 부분이 비어 있는지를 찾아내는 역량이 중요해진 셈이다.
+
+“해외주식 잘 합니다”보다 “여기가 비었습니다”
+
+9일 금융투자업계에 따르면 자산운용업계 비즈니스 모델이 과거의 단순 상품 판매에서 벗어나, 기관 투자자의 구체적 필요(니즈)를 해결해주는 '솔루션 비즈니스'로 진화하고 있다.
+
+특히 해외 투자시장에서 이런 변화가 두드러진다. 기관투자자가 운용사를 선정할 때 단순히 개별 운용사의 트랙 레코드(실적 기록)나 특정 자산군의 경쟁력만 보는 게 아니라, 전체 포트폴리오에서 발생하는 위험과 부족한 영역까지 함께 따지기 시작하면서다.
+
+예를 들어 기관이 해외주식 포트폴리오 대부분을 성장주 중심으로 운용하고 있다고 가정해보자. 성장주가 시장을 주도할 때는 문제가 없지만 시장의 무게중심이 가치주로 이동하면 상대적으로 수익률을 놓칠 가능성이 커진다.
+
+이 경우 기관은 기존 성장주 운용사를 바꾸는 대신 부족한 가치(Value) 팩터를 별도의 포트폴리오로 채우는 전략을 택할 수 있다. 전체 포트폴리오의 약한 고리를 찾아 별도의 운용 전략으로 보완하는 것이다.
+
+대표적인 사례가 국민연금의 ‘컴플리션 포트폴리오(Completion Portfolio)’다.
+
+'컴플리션 포트폴리오'(보완 전략)란 국민연금과 같은 대형 연기금 자산배분 전략에서 여러 외부 운용사(액티브 매니저)에게 자금을 위탁했을 때 발생하는 의도치 않은 리스크나 스타일 쏠림을 보완하고 조정하는 포트폴리오를 말한다.
+
+국민연금이 도입한 ‘컴플리션 포트폴리오’
+
+컴플리션 포트폴리오가 없다면 기관투자자가 다수 매니저들을 통한 위탁운용을 실시할 경우 개별 위탁 매니저들이 서로의 보유 종목을 공유하지 않고, 그들의 특화된 전략으로 초과 수익을 달성하는 데 집중한다. 
+
+이 개별 위탁매니저들의 익스포져가 결합되면서 섹터, 지역, 팩터 관련 특정 리스크로 치우치는 편향(bias)이 발생할 수 있다. 이 경우 기관투자자의 장단기 투자 기회 및 위험 배분을 고려한 포트폴리오 포지셔닝과 괴리될 수 있다.
+
+컴플리션 포트폴리오의 역할은 기관이 보유한 전체 포트폴리오를 분석해서 부족한 자산이나 팩터, 투자전략 등을 찾아 이를 보완하는 것이다. 단순히 새로운 자산을 추가하는 것이 아니라 기존 포트폴리오의 구조적 빈틈을 찾아 시장 환경 변화에 대응하고 위험조정수익률을 높이는 데 목적이 있다.
+
+가령 성장주 비중이 높은 해외주식 포트폴리오라면 가치주나 특정 팩터를 추가하는 식이다. 국민연금은 자체적으로 포트폴리오를 분석해 부족한 영역을 제시하고, 운용사는 해당 영역을 채울 수 있는 전략을 제안하고 운용하는 구조를 활용하고 있다.
+
+이 같은 변화는 해외 투자시장의 경쟁 구도에도 영향을 미치고 있다.
+
+기관투자자 입장에서는 글로벌 대형 운용사라는 이유만으로 자금을 맡길 이유가 줄어든다. 이미 보유한 자산과 전략을 분석한 뒤 자신의 포고트폴리오에 어떤 조합이 필요한지를 제시하는 운용사가 오히려 매력적인 선택지가 될 수 있다.
+
+“누가 유명한가”보다 “누가 내 빈틈을 채우나”
+
+운용사들도 이에 맞춰 상품 자체의 경쟁력 뿐 아니라 기관별 맞춤형 솔루션을 제시하는 역량을 강화하고 있다. 투자자의 요구가 점점 세분화되면서 운용사의 역할은 ‘상품 공급자’에서 ‘포트폴리오 설계자’로 확대되는 모습이다.
+
+특히 시장 변동성이 커질수록 이러한 솔루션의 필요성은 커진다. 특정 스타일이나 자산에 대한 쏠림이 강할 경우 시장을 주도하는 테마가 바뀌었을 때 포트폴리오 전체가 영향을 받을 수 있기 때문이다.
+
+국민연금에서 시작된 컴플리션 포트폴리오 방식은 다른 기관으로도 확산되는 분위기다. 우정사업본부도 유사한 컴플리션 포트폴리오 도입을 시작한 것으로 전해졌다. 기관투자자들이 점차 자신의 포트폴리오를 직접 진단하고, 그 결과에 맞춰 외부 운용사에 구체적인 역할을 요구하는 방향으로 움직이고 있는 것이다.
+
+즉 이제는 기관투자자들이 특정 자산군 자체의 수익률만 놓고 운용사를 평가하는 것이 아니라, 전체 포트폴리오 안에서 해당 전략이 어떤 역할을 할 수 있는지를 보는 방향으로 바뀌고 있다.
+
+업계에서는 이를 두고 기관투자자의 운용 방식 자체가 한 단계 진화했다고 보고 있다. 과거처럼 여러 자산군에 운용사를 각각 배치하는 데서 나아가, 전체 자산을 하나의 포트폴리오로 보고 그 안에서 부족한 부분을 찾아내는 방식으로 자산운용의 관점이 바뀌고 있어서다.
+
+금융투자업계 관계자는 “기관 입장에서는 이제 단순히 특정 자산을 잘 운용하는 것만으로 충분하지 않다”며 “전체 포트폴리오에서 어떤 부분을 보완해야 하는지 진단하고 그에 맞는 해법을 제시하는 능력이 운용사의 중요한 경쟁력이 되고 있다”고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006366523' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006366523</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
