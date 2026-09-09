@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[재테크 풍향계]원화 강세에 주목받는 ETF는</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article_277/0005814260' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/19131" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>[재테크 풍향계]원화 강세에 주목받는 ETF는</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">원·달러 환율 하락(원화 강세) 국면에서 해외 자산 환노출형 ETF와 수출주(화장품 등) 관련 ETF의 수익률은 악화된 반면, 환헤지형 상품과 달러 인버스 ETF는 상대적인 방어 및 상승세를 보임.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">원·달러 환율 하락세 지속에 따라 해외 자산 환노출형 ETF 및 수출 중심의 화장품 섹터 기업들의 수익성 악화 우려가 커지며 주가에 부정적 영향 전망</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">TIGER 미국S&P500</span> <span class="tag stock-tag">KODEX 미국달러선물인버스2X</span> <span class="tag stock-tag">SOL 화장품TOP3플러스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">화장품</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#환율</span> <span class="tag tag-hash">#ETF</span> <span class="tag tag-hash">#원화강세</span> <span class="tag tag-hash">#수출주</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">환율 변동에 美 지수 추종 ETF 수익률 엇갈려
+환노출형과 환헤지형 수익률 5%P 격차
+달러 약세에 달러 인버스 ETF 강세…곱버스 12%↑
+수출주 ETF들은 약세…화장품 ETF 수익률 부진글로벌 통화정책 변화 기류와 외환시장 수급 변동 속에 원·달러 환율이 등락을 거듭하면서\n상장지수펀드(ETF) 투자자들의 셈법도 복잡해지고 있다. 환율 변동은 투자 대상과 환헤지 여부, 자산군에 따라 ETF 수익률에 극명한 차이를\n만들어내기 때문이다. 증권가에서는 환율 변동성 국면에서 해외 환노출 상품이나 수출주 비중을 조절하고 환헤지형 상품이나 달러 인버스 ETF로\n포트폴리오를 다변화할 필요가 있다고 조언한다.\n\n10일 서울 외환시장에서 원·달러 환율은 주간 거래(오후 3시 반)에서 전 거래일 대비 9.5원 내린 1336.1원에 거래를 마쳤다. 원·달러 환율은 지난 7일 약 2년만에 1un 1330원대로 내려오는 등 최근 하락세가 이어지고 있다. 지난 7월 고점 1559.2원 대비 14.31% 내렸다.\n\n환노출형 vs 환헤지형…환율 흐름에 수익률 희비\n\n해외 자산에 투자하는 ETF는 환율 변동 위험을 포트폴리오에 반영하는 방식에 따라 크게 환노출형과 환헤지형으로 나뉜다. 환노출형 (Unhedged)은 상품명 뒤에 별도의 표기가 없는 일반적인 해외 ETF로, 투자 대상 자산(주식·채권)의 가격 변동뿐만 아니라 원·달러 환율 변동이 수익률에 그대로 연동된다. 원·달러 환율 상승(달러 강세) 시 기초자산 가격에 환차익이 더해져 수익률이 극대화된다. 반면 환율 하락(원화 강세) 시 기초자산 가격이 오르더라도 환차손이 발생해 원화 환산 최종 수익률이 깎이거나 손실로 전환된다.\n\n환헤지형(Hedged)은 상품명 끝에 (H)가 붙어있는 ETF다. 환헤지형 상품은 환율 흐름과 관계없이 오직 기초자산의 가격 변동에만 수익률이 연동된다.\n\n실제 환율 하락이 ETF 성과에 미치는 영향은 동일한 지수를 추종하는 대표 상품들의 수익률에서 뚜렷하게 나타난다. 최근 1개월간 미국 대표 지수를 추종하는 주요 ETF의 수익률은 환노출 여부에 따라 5%포인트 이상의 격차를 보였다. 미국 S&P500 지수 추종 ETF의 경우 TIGER 미국S&P500(-5.74%), KODEX 미국S&P500(-5.79%), ACE 미국S&P500(-5.72%), RISE 미국S&P500(-5.73%) 등 환노출형은 5% 넘게 하락했다. 반면 같은 기간 KODEX 미국S&P500(H)(-0.49%), TIGER 미국S&P500(H)(-0.<0xC2>70%), RISE 미국S&P500(H)(-0.49%) 등 환헤지형은 환율 하락에 따른 영향을 방어해내는 모습을 보였다. 미국 나스닥100 지수 추종 ETF도 마찬가지이다. TIGER 미국나스닥100(-5.15%), KODEX 미국나스닥100(-5.13%), ACE 미국나스닥100(-5.14%), RISE 미국나스닥100(-5.08%) 등 환노출형은 5% 넘게 하락했으나 KODEX 미국나스닥100(H)(0.09%), TIGER 미국나스닥100(H)(0.02%) 등 환헤지형은 보합세였다.\n\nS&P500과 나스닥100 모두 환노출형 ETF는 원·달러 환율 하락에 따른 환차손이 더해지며 손실폭이 5%대까지 확대된 반면 환헤지형(H) ETF는 환율 하락의 영향을 차단하며 지수 고유의 성과를 그대로 보존해냈다.\n\n환율 하락 국면에서 가장 확실한 수혜를 누린 상품은 달러 가치 하락에 직접 베팅하는 ETF다. 달러 약세가 가시화되면서 주요 달러 인버스 ETF는 최근 1개월간 약 6%대의 수익률을 기록했다. KIWOOM 미국달러선물인버스 6.19%, KODEX 미국달러선물인버스 6.12%, RISE 미국달러선물인버스 6.01% 등이었다. 여기에 하락률을 2배로 추종하는 '곱버스' ETF의 경우 12%대 수익률을 기록했다. KIWOOM 미국달러선물인버스2X는 12.16% 올랐고 KODEX 미국달러선물인버스2X는 12.02%, TIGER 미국달러선물인버스2X는 11.92% 상승했다.\n\n반면 미국달러선물 ETF는 5% 넘게 하락했고 2배로 추종하는 레버리지 상품들은 10%대 하락률을 기록했다.\n\n원화 강세에 잘나가던 화장품 등 수출 테마 ETF '약세 전환'\n\n환율 하락은 해외 시장 비중이 높은 수출주와 관련 ETF에도 영향을 미치고 있다. 특히 최근 조정장에서 강세를 보였던 화장품 ETF들이 최근 환율 영향으로 부진한 모습이다.\n\nETF체크에 따르면 SOL 화장품TOP3플러스는 최근 한 주간 10.08% 하락하며 레버리지와 인버스 ETF를 제외한 전체 ETF 중 가장 큰 폭의 하락률을 기록했다. TIGER 화장품(-8.23%), HANARO K-뷰티(-8.12%)가 뒤를 이었다.\n\n원화 가치가 오르면(환율 하락) 해외에서 벌어들인 달러 매출을 원화로 환산할 때 장부상 매출과 영업이익이 감소하는 환산 손실이 발생하기 때문에\n원화 강세는 수출주에 불리하다. 원자재 수입 단가 절감 효과는 시차를 두고 나타나는 반면 환율 하락에 따른 해외 실적 착시 제거와 차익실현 매물\n출회는 즉각적으로 주가 하락 압력을 가했다.\n\n김명주 한국투자증권 연구원은 \"원화 강세가 이어지면서 대표적인 수출주인 화장품 섹터의 실적에 대한 시장 우려가 커지고 있다\"면서 \"올해 7월\n전체 화장품 수출에서 미국향 수출의 비중은 21.8%다. 원·달러 환율이 5% 하락할 경우 화장품 섹터의 영업이익률은 0.7~0.8%포인트\n내외로 하락할 수 있다\"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article_277/0005814260' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article_277/0005814260</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
