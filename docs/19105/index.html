@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>유가 150달러 ‘최악’ 경고음도…뉴욕증시 ‘화들짝’</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/029/0003047191' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/19105" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>유가 150달러 ‘최악’ 경고음도…뉴욕증시 ‘화들짝’</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국과 이란 간의 군사적 충돌 심화 및 호르무즈 해협 봉쇄 위기로 인해 국제 유가가 배럴당 100달러를 돌파했습니다. 에너지 인프라 타격으로 인한 공급 쇼크 우려가 커지며 글로벌 경제와 뉴욕 증시에 부정적인 영향을 미치고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">중동 지정학적 리스크 확산으로 인한 국제 유가의 급격한 상승 및 에너지 공급망 불확실성 증대</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">S-Oil</span> <span class="tag stock-tag">SK이노베이션</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">석유 및 가스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">화학</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#유가급등</span> <span class="tag tag-hash">#중동전쟁</span> <span class="tag tag-hash">#에너지쇼크</span> <span class="tag tag-hash">#호르무즈해협</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">국제유가가 결국 다시 배럴당 100달러선을 돌파했다.
+
+미국과 이란 간의 군사적 충돌은 서로의 원유 유통망과 에너지 핵심 인프라를 직접 타격하는 정면 대결 양상으로 치닫고 있다.
+
+여기에 세계 주요 원유 수송로인 호르무즈 해협의 실질적 봉쇄 위기감이 고조되면서 유가를 끌어 올리고 있다.
+
+중동발 공급 쇼크가 글로벌 경제를 다시 압박하고 있는 것이다.
+
+9일(현지시간) 개장한 뉴욕증시는 일제히 약세로 출발했다.
+
+CNBC보도에 따르면 글로벌 원자재 시장에 따르면 글로벌 벤치마크인 브렌트유 선물 가격은 전일 대비 2.8%가량 급등하며 배럴당 100.66달러에 거래되고 있다. 서부텍사스산원유(WTI) 역시 3.0% 이상 오른 배럴당 95.85달러를 기록해 지난 6월초 이후 3개월 만에 최고치를 경신했다.
+
+이번 유가 폭등은 양국 군 당국이 상대국의 원유 수송 자산을 직접 파괴하기 시작하면서 불이 붙었다.
+
+미 중부사령부(CENTCOM)는 이란 혁명수비대(IRGC)의 미 해군 군함 공격 시도에 대한 응징 조치로, 이란 최대 원유 수출 거점인 카르크섬 인근과 오만만에서 이란 측 원유 운반선 5척을 정밀 타격해 무력화했다고 밝혔다.
+
+이에 맞서 이란 측 역시 걸프해역 내 미국 관련 선박 2척과 유조선 8척을 공격했다고 주장하는 한편, 쿠웨이트와 바레인 항구 인근의 모든 민간 선박에 즉시 대피령을 내리며 호르무즈 해협 일대의 통항 차단을 경고하고 나섰다.
+
+사태는 역내 친(親)이란 세력의 에너지 시설 공격으로 확장되는 양상이다. 예멘의 후티 반군은 사우디아라비아 남부 주요 도시를 향해 미사일 공격을 감행, 하루 40만 배럴의 정제 능력을 갖춘 자잔 정유공장 등 핵심 에너지 인프라에 화재 및 운영 차질을 유발했다.
+
+시장 전문가들은 호르무즈 해협의 물리적 통항량이 대폭 감소한 상황에서 중국의 원유 수요 회복세까지 맞아떨어져 대체유를 확보하려는 글로벌 정유사들의 매수세가 가열되고 있다고 분석한다.
+
+자원 공급망 전문가는 “미국의 이란 그림자 유조선망 물리적 제거와 이란의 해협 봉쇄 위협이 동시 가발적으로 발생하면서 시장 내 심리적 저항선이었던 100달러 선이 무너졌다”며 “중동발 에너지 물류 대란이 장기화될 경우 국내 석유화학 및 정유 업계는 물론 고물가·고환율에 직면한 국내 산업 전반에 막대한 비용 부담으로 작용할 것”이라고 전망했다.
+
+해외 투자은행(IB)들은 원유 공급 차질의 장기화 가능성을 반영해 유가 전망치를 잇달아 상향하고 있다.
+
+골드만삭스는 중동 지역의 해상 운송 차격이 내년까지 이어질 것으로 보고 올해 말과 2027년 브렌트유 및 WTI 전망치를 각각 배럴당 5달러씩 상향했다. 걸프 지역 원유 생산이 전쟁 이전보다 하루 평균 400만배럴 낮은 수준에 머물 경우 브렌트유가 배럴당 120달러를 웃돌 수 있다고 봤다.
+
+뱅크오브아메리카(BofA)는 원유 공급을 제한하는 충돌이 연말까지 계속될 경우 브렌트유가 배럴당 95∼120달러 범위에서 거래될 수 있다고 전망했다. 특히 주요 에너지 인프라가 훼손되는 광범위한 충돌로 번질 경우 최고 150달러까지 치솟을 수 있다고 예상했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/029/0003047191' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/029/0003047191</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
