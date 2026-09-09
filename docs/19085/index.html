@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7100만 가면 미끄러지는 코스피…증권가는 어디까지 보나</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/629/0000532365' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/19085" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>7100만 가면 미끄러지는 코스피…증권가는 어디까지 보나</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 7100선 저항에 부딪히며 상승세가 둔화된 가운데, 9월 상단 전망치가 7400에서 8500까지 증권사별로 큰 차이를 보이고 있습니다. 금리 및 수급 변수와 함께 기업의 실적 개선 여부가 향후 추가 상승의 핵심 변수로 꼽힙니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">증권사별 코스피 전망치 격차가 매우 크며(1100P), 금리 및 환율 등 거시경제 변수에 따른 불확실성이 상존함</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#증시전망</span> <span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#자사주매입</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">9월 코스피 상단 7400~8500…보수·낙관 전망 1100P 격차
+7200~7500 두꺼운 매물대…금리·외국인 수급이 추가 상승 변수
+
+증권가의 9월 코스피 상단 전망은 7400부터 8500까지 열려 있다.
+코스피가 7000선을 회복했지만 7100선에서는 이틀째 상승세가 꺾였다. 증권가의 9월 상단 전망은 7400~8500으로, 7000을 넘어선 뒤 추가 상승 폭을 두고 온도차가 크다.
+
+한국거래소에 따르면 9일 코스피는 전 거래일보다 97.12포인트(1.40%) 오른 7051.64에 거래를 마쳤다. 장중에는 7112.48까지 올랐다. 전날에도 장중 7171.52를 찍었지만 종가는 6954.52였다. 이틀 연속 7100선을 넘은 뒤 상승폭을 반납하면서 지수가 7000위에 쌓인 물량을 소화하는 모습이 나타났다.
+
+증권가도 7000 자체보다는 그 위의 수급을 보고 있다. 키움증권은 9월 코스피 범위를 6300~7600으로 제시하면서 지수가 추가로 올라가려면 개인 매물을 받아낼 외국인과 기관의 힘이 필요하다고 봤다. 한지영 키움증권 연구원은 "향후 지수의 추가 레벨업을 위해서는 실적 개선 지속뿐 아니라, 이 구간에 누적된 개인 매물을 소화해낼 수 있는 외국인과 기관의 수급 모멘텀 생성이 필요하다"고 짚었다. 7000선을 넘어선 뒤 상승 속도가 둔해질 수 있다는 설명이다.
+
+그렇다고 7000을 이번 반등의 끝으로 보는 분위기는 아니다. 최근 9월 전망을 내놓은 증권사 가운데 한국투자증권은 상단을 7400, 키움증권은 7600을 잡았다. 신한투자증권은 8000, 유안타증권은 8100까지 열어뒀고 삼성증권은 8500을 제시했다. 이날 종가와 비교하면 가장 보수적인 전망에도 약 5%, 가장 높은 전망에는 20% 넘게 여력이 남아 있다.
+
+상단을 낮게 보는 쪽은 코스피가 싸다는 사실만으로 추가 랠리를 장담하기 어렵다고 본다. 김대준 한국투자증권 연구원은 9월 범위를 6200~7400으로 제시했다. 지난 2일 기준 코스피 12개월 선행 주가수익비율(PER)은 5.2배까지 내려왔지만 실적과 거시환경이 발목을 잡을 수 있다는 판단이다. 김 연구원은 "9월은 수요 둔화, 원화 강세, 금리 상승이란 삼중고에 노출돼 있다"며 "실적 눈높이를 낮춰야 하는 점도 불리하다"고 설명했다.
+
+반대로 8000 이상을 보는 증권사는 현재 주가가 기업 이익에 비해 지나치게 눌려 있다고 판단한다. 신한투자증권은 12개월 선행 주당순이익(EPS) 1205.9포인트에 금리를 보정한 적정 PER 8.5배를 적용하면 코스피가 이익 전망을 온전히 반영한 수준은 1만250이라고 계산했다. 노동길 신한투자증권 연구원은 "8000포인트에서도 컨센서스 대비 22%의 할인이 남는다"고 말했다. 8000선도 고평가 영역이 아니라는 얘기다.
+
+유안타증권 역시 6700~8100을 제시하며 지수가 한 번에 치고 올라가기보다 단계적으로 높아지는 흐름을 예상했다. 김용구 유안건증권은 9월 중심선을 7300, 10월에는 8200으로 높아지는 '계단식 정상화'를 전망했다. 장기금리가 정점을 지나고 불확실성이 완화되면 7월 급락 과정에서 벌어진 주가와 펀더멘털의 간극을 메울 수 있다는 시각이다.
+
+외국인의 빈자리를 메우고 있는 자사주도 7000 이후의 변수다. 신한투자증권에 따르면 삼성전자와 SK하이닉스는 지난달 20~28일 10조3000억원어치의 자사주를 실제 취득했고 계획상 남은 매입액은 44조7000억원이다. 노동길 연구원은 두 회사의 자사주 매입에 대해 "외국인 공백을 즉시 메우는 매수 주체"라며 시장이 그 효과를 충분히 반영하지 않았다고 분석했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/629/0000532365' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/629/0000532365</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
