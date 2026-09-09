@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피, '아스트라' 타고 7000선 탈환…8000선 넘어 1만피 갈까</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/003/0014180914' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/19116" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피, '아스트라' 타고 7000선 탈환…8000선 넘어 1만피 갈까</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">오픈AI의 차세대 AI 모델 "GPT-6 아스트라" 공개로 인한 반도체 및 인프라 수요 확대 기대감에 코스피가 7000선을 탈환했습니다. 삼성전자와 SK하이닉스가 AI 모델 고도화에 따른 HBM 등 메모리 수요 증가의 최대 수혜주로 주목받으며, 글로벌 투자은행들의 낙관적인 전망이 이어지고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">차세대 AI 모델 GPT-6 아스트라 공개에 따른 AI 인프라 및 HBM/GPU 수요 폭발 기대감과 글로벌 IB들의 코스피 목표주가 상향 전망이 결합된 매우 강력한 호재</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">엔비디아</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">IT 서비스</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#GPT6</span> <span class="tag tag-hash">#아스트라</span> <span class="tag tag-hash">#AI반도체</span> <span class="tag tag-hash">#HBM</span> <span class="tag tag-hash">#삼성전자</span> <span class="tag tag-hash">#SK하이닉스</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">제목: 코스피, '아스트라' 타고 7000선 탈환…8000선 넘어 1만피 갈까
+언론사: 뉴시스
+날짜: 2026.09.10. 오전 6:00
+본문: 골드만삭스, 목표지수 1만2000포인트 유지
+국내 증권가도 코스피 상단 1만선 열어둬
+"AI모델 성능 경쟁 최대 수혜는 삼전·닉스"
+[서울=뉴시스] 조성우 기자 = 코스피가 전 거래일보다 97.12포인트(1.4%) 오른 7051.64에 마감한 9일 서울 중구 하나은행 딜링룸
+전광판에 지수가 표시되고 있다. 코스닥 지수는 18.49포인트(2.28%
+[서울=뉴시스] 조성우 기자 = 코스피가 전 거래일보다 97.12포인트(1.4%) 오른 7051.64에 마감한 9일 서울 중구 하나은행 딜링룸
+전광판에 지수가 표시되고 있다. 코스닥 지수는 18.49포인트(2.28%) 오른 830.37에 장을 마쳤다. 2026.09.09.
+xconfind@newsis.com[서울=뉴시스] 박주연 기자 = 코스피가 오픈AI의 차세대 인공지능(AI) 'GPT-6 아스트라(Astra)'
+공개를 계기로 다시 상승 탄력을 받고 있다.
+
+아스트라를 계기로 범용인공지능(AGI)을 둘러싼 빅테크 간 경쟁이 한층 치열해지면서 AI 데이터센터 투자가 확대되고, 제한적인 공급 증가와
+맞물려 지금까지 경험하지 못한 수준의 병목이 나타날 수 있다는 분석이다. 코스피지수가 한 달 반 만에 박스권을 뚫고 7000선을 탈환하며
+낙관론에도 힘이 실린다.
+
+10일 한국거래소에 따르면 지난 9일 코스피지수는 전 거래일보다 1.40% 오른 7051.64로 장을 마감했다. 코스피가 종가 기준 7000선을
+넘어선 것은 지난 7월 23일(7096.89) 이후 33거래일 만이다.
+
+상승 동력은 단연 오픈AI의 GPT-6 아스트라다. 지난 3일 공개된 아스트라는 컴퓨터 사용, 소프트웨어 엔지니어링, 사이버보안, 과학 및 전문
+업무 등에서 이전 모델을 뛰어넘는 성능을 내세운 차세대 AI 모델이다. 인터넷에서 로봇이 아님을 증명하는 '인간 테스트'를 통과하고, 2026
+대학수능시험에서 만점을 받아 화제가 됐다.
+
+오픈AI는 아스트라가 자사의 가장 강력하고 정렬된 모델이며, 범용인공지능(AGI) 시대를 향한 중요한 진전이라고 설명했다.
+
+엔비디아 최고경영자(CEO) 갱슨 황 역시 아스트라 공개 이후 자신의 X에 'AGI가 도착했다'는 글을 올렸다. 아스트라가 엔비디아의 반도체를
+기반으로 학습됐다는 점이 부각되면서 AI 모델 고도화가 GPU와 고대역폭메모리(HBM) 등 AI 반도체 수요 확대로 이어질 것이라는 기대도
+커지고 있다.
+
+지난 8~9일 열린 시티 글로벌 TMT(기술·미디어·통신) 콘퍼런스, 골드만삭스 기술콘퍼런스에서도 AI 성장성과 반도체 수요 모멘텀이 부각됐다.
+
+이런 가운데 증권가는 코스피가 박스권에서 벗어나 8000선을 돌파하고, 다시 1만피를 향할 것이라는 낙관론이 힘을 얻고 있다. 아스트라를 계기로
+반도체랠리에 다시 불이 붙고, 원달러 환율 하락으로 외국인 투자자들이 다시 유입되면서 코스피가 회복국면에 들어설 것이라는 기대다.
+
+골드만삭스는 지난 6월 코스피 목표지수를 기존 9000포인트에서 1만2000포인트로 상향한 후 현재까지 이 전망을 유지하고 있다.
+
+글로벌 투자은행 노무라는 지난 4일 강력한 메모리 수요와 제한적인 공급 증가라는 펀더멘털에 비해 삼성전자와 SK하이닉스 등 메모리 업체들의
+주가가 심각하게 저평가돼있다며 삼성전자 목표가 67만원, SK하이닉스 목표가 470만원을 기존대로 유지했다.
+
+국내 증권사들도 코스피가 단기적으로 8000선을 회복하고 연말께 1만선까지 도달할 수 있다는 관측을 내놓고 있다. 한국투자증권은 코스피 상단을
+1만1000으로, 삼성증권은 1만2600까지 열어둔 상태이다.
+
+김동원 KB증권 리서치본부장은 "GPT-6 아스트라는 초기 AGI 단계로 진입하는 변곡점"이라며 "올해 4분기 제미나이 4 신규 모델 출시가
+예상되고, 내년 상반기에는 오픈AI와 앤트로픽의 차세대 모델 출시도 이어질 것"이라고 설명했다. 이어 "AI모델 성능 경쟁이 심화될수록 메모리의
+구조적 수요 증가가 더욱 가속화될 것"이라며 삼성전자와 SK하이닉스가 최대 수혜를 입을 것으로 전망했다.
+
+김 본부장에 따르면 미국 하이퍼스케일러의 잉여현금흐름(FCF)은 향후 3년간 클라우드 가동률 상승과 가격 인상, 수익성 개선이 본격화되면서
+2028년부터는 의미 있는 반등 국면에 진입할 전망이다. 2028년에는 아마존과 구글의 클라우드 사업이 전체 영업이익에서 차지하는 비중이 각각
+61%, 45%에 이를 것으로 추정된다.
+
+김 본부장은 "클라우드 영업이익률이 35~39%의 높은 수준을 유지하는 가운데 수익성 개선이 지속되고 있으며, 2028년까지 클라우드 캐파가
+사실상 선예약된 상태"라며 "대규모 AI 투자가 단순한 비용 증가를 넘어 중장기적으로 클라우드 매출과 이익 확대로 전환되는 시점이 임박했다"고
+설명했다.
+
+김 본부장은 "제한적인 신규 공급과 전체 캐파의 70%가 할당된 장기공급계약(LTA) 중심의 생산능력 배분으로 인해 과거 경험하지 못한 가장 타이트한
+메모리 공급이 나타날 것"이라며 "AI 모델 성능 경쟁이 심화될수록 메모리의 구조적 수요 증가는 더욱 가속화될 것"이라고 내다봤다.
+
+최보영 교보증권 연구위원은 "아스트라가 반도체의 불씨를 되살렸다"고 분석했다. 빅테크의 고래싸움이 인프라 수요를 다시 자극할 것이라는 기대가 반영되며
+반도체업종이 상승세를 타고 있다.
+
+최 연구위원은 "장기 상승을 뒷받침하려면 AI의 성과가 데이터센터를 넘어, 이를 사용하는 기업들의 생산성과 이익 개선으로 확산돼야 한다"고
+설명하였다. 다행히 AI 도입 효과를 수치로 제시한 S&P500 기업 비중이 전년 14%에서 2026년 2분기 25%로 증가하는 등 기업 단위에서는 초기
+성과가 나타나고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/003/0014180914' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/003/0014180914</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
