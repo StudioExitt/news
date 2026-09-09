@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7000이 코스피 저항선?…증권사마다 엇갈리는 코스피 상단</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #d97706; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/018/0006366316' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/19061" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>7000이 코스피 저항선?…증권사마다 엇갈리는 코스피 상단</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">중립 (Neutral)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피 7000선 안착 여부를 두고 증권사별 전망이 엇갈리는 가운데, 일부는 추가 상승 가능성을 제시하고 일부는 매물 부담에 따른 저항 구간을 경고하고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">코스피 주요 저항선인 7000선 안착 여부와 관련하여 증권사별 상단 전망이 엇갈리고 있으며, 매물 소화 과정에 따른 변동성 확대가 예상됨</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#주식시장</span> <span class="tag tag-hash">#저항선</span> <span class="tag tag-hash">#증권가전망</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">신한 “7150~7220선 실질적 저<0xA0>저항선”
+개인 2조5000억 순매도, 기관 9000억 순매수
+삼성 상단 8500 제시…추가 상승 가능성 제기 코스피가 이틀 연속 장중 7100선을 넘어섰지만, 9일 종가는 7000선
+안팎에 머물면서 7000선이 단기 저항선으로 작용할지 관심이 커지고 있다. 코스피지수가 종가 기준으로 7000선을 넘어선 것은 지난 7월 23일
+이후 33거래일만이다. 증권가에서는 7000선 전후를 실제 매물 부담이 나타나는 저항 구간으로 보는 시각이다. 그러나 일각에서는 8000선
+이상까지 상승 여력이 있다는 전망도 내놓는 등 코스피 상단을 둘러싼 의견이 엇갈리고 있다.
+
+하나은행 딜링룸.(사진=연합뉴스)
+
+9일 코스피는 전 거래일보다 97.12포인트(1.4%) 오른 7051.64에 거래를 마쳤다. 지수는 6972.87로 출발해 장중
+7112.48까지 오르며 7100선을 넘어섰지만 이후 상승 폭을 줄였다. 개인은 2조 4971억원을 순매도했고 외국인도 1702억원을 팔았다.
+기관은 9005억원을 순매수하며 지수를 받쳤다.
+
+전날에도 비슷한 흐름이 나타났다. 8일 코스피는 7045.79로 출발해 장중 7171.52까지 상승하며 7100선을 넘어섰지만 오후 들어 상승
+탄력이 둔화되면서 6954.52로 마감했다. 이틀 연속 장중 7100선을 넘어선 뒤 상승 폭을 줄이면서 7000선 위에서 추가 상승을 시도하는
+과정에서 매물 부담이 나타나는 모습이다.
+
+증권가에서는 7000선을 바라보는 시각부터 엇갈린다. 윤창용 신한투자증권 리서치본부장은 코스피 7000선을 심리적 관문으로 보고 실질적인
+저항선은 7150~7220선으로 제시했다. 윤 본부장은 “최근 고점과 60일 이동평균선이 7200선 부근에 있어 이 구간에서 돌파와 안착 여부를
+확인할 필요가 있다”고 설명했다. 7200선을 넘어선 이후에는 7500선이 첫 의미 있는 저항선이 될 수 있다고 봤다.
+
+한지영 키움증권 연구위원은 7000선 전후를 1차 저항 구간이라고 판단했다. 한 연구위원은 “7000선은 추세의 상단이라기보다 그동안 누적된 개인
+매수 물량의 본전 매도와 차익실현 물량을 소화하는 구간”이라고 설명했다. 이후에도 7200~7500선에서 추가적인 매물 소화 과정이 나타날 수
+있다고 전망했다.
+
+고태봉 iM증권 리서치센터장도 7000선 자체를 저항 구간으로 봤다. 고 센터장은 “7000선에서는 매물이 나올 수밖에 없고
+7200~7500선은 두꺼운 공급 물량이 있는 구간”이라며 “현재 흐름을 추세 전환으로 보기보다는 상승 과정에서 매물을 소화하면서 상승 기울기를
+재정의하는 과정으로 봐야 한다”고 말했다.
+
+코스피의 향후 전망에 대해선 밸류에이션상 추가 상승 여력이 남아 있다는 시각이 우세했다. 윤석모 삼성증권 리서치센터장은 12개월 선행
+주가수익비율(PER) 8배를 적용하면 코스피가 9500포인트 수준까지 가능하다고 분석했다. 빅테크 투자 지속 가능성에 대한 우려를 반영해 약
+10% 할인하더라도 8500선까지는 단기적으로 열어둘 수 있다고 봤다.
+
+KB증권은 9월 코스피 전망 범위를 6000~8300선으로 제시했다. 공식적인 저항선을 제시하지는 않았지만 최근 급등 이후 7000선에서는
+차익실현 매물이 집중될 수 있는 만큼 장중 돌파만으로는 부족하고 거래량을 동반한 종가 기준 안착과 며칠간의 7000선 유지가 중요하다고 봤다.
+
+증권가에서는 7000선 부근의 매물 부담이 곧바로 상승 추세의 종료를 의미하는 것은 아니라는 분석도 나온다. 반도체 실적과 인공지능(AI)
+투자에 대한 기대가 유지되는 가운데 외국인 수급이 개선될 경우 7명에서 출회되는 매물을 소화하면서 추가 상승을 시도할 수 있다는 것이다. 
+반도체 이익과 미국 장기금리 등이 향후 코스피 방향을 가를 핵심 변수라는 분석도 나온다.
+
+미국 장기금리와 유가, 중동발 지정학적 위험 등은 추가 상승 과정에서 부담 요인으로 꼽힌다. 높은 금리가 이어지거나 유가 상승으로 물가 부담이 커질 경우 위험자산 선호가 약해질 수 있기 때문이다. 외국인 현물 매수가 꾸준히 이어지는지와 반도체 실적 기대가 유지되는지도
+7000선 이후 추가 상승 여부를 가를 변수로 거론된다.
+
+결국 현재 코스피의 관건은 7000선을 넘느냐보다 7000선 위에서 매물을 얼마나 소화하느냐에 달렸다는 분석이다. 증권업계 관계자는 “7000선 안착에 성공할 경우 7150~7220선에 대한 돌파 시도가 이어질 수 있고,
+이 구간을 넘어선 뒤에는 7200~7500선의 매물 부담을 확인해야 한다”며 “반대로 7000선 안착에 실패하고 장중 고점 대비 밀리는 흐름이 반복된다면 7000선의 저항 성격이 더욱 뚜렷해질 수 있다”고
+덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/018/0006366316' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/018/0006366316</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
