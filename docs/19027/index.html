@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPO 호황, 증시엔 경고등?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/015/0005330387' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/19027" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>IPO 호황, 증시엔 경고등?</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">대규모 IPO 열풍이 증시 하락의 전조가 될 수 있다는 경고가 나오고 있습니다. 홍콩은 이미 신규 물량 과다로 지수가 부진하며, 미국 또한 대형 기술주들의 상장 대기로 인한 주식 공급 증가와 시장 조정 우려가 커지고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">과도한 IPO 물량 출회와 순주식 공급 증가로 인한 증시 조정 우려</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SpaceX</span> <span class="tag stock-tag">Anthropic</span> <span class="tag stock-tag">OpenAI</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">증권</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#IPO</span> <span class="tag tag-hash">#미국증시</span> <span class="tag tag-hash">#홍콩증시</span> <span class="tag tag-hash">#버블경고</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">늘 고점에 몰리는 IPO...학술 근거도
+홍콩선 이미 '소화불량' 시작돼
+미국 증시에도 경고등
+
+\"IPO(기업공개) 열풍 뒤엔 주식 수익률이 낮아진다\"
+증권가에선 유명한 속설이다. 실제로 그런 전례가 많아서다. 2000년 닷컴버블 시기엔 인터넷 기업이 쏟아져 상장한 직후 증시가 무너졌고, 2021년 코로나19 국면에서도 IPO가 사상 최대 규모로 몰린 뒤 이듬해 기술주가 급락했다. 최근 글로벌 IPO 붐이 다시 거세지면서 이런 상황이 반복될 거란 경계심이 커지고 있다.
+
+이런 속설엔 학술적 근거도 있다. 맬컴 베이커 하버드대 경영대학원 교수 연구팀은 1928년부터 1997년까지의 미국 증시를 분석한 결과 기업들은 증시 수익률이 낮아지기 직전에 주식을 더 많이 발행하는 경향을 보였다. 루보스 파스토르 시카고대 경영대학원 교수가 2005년 발표한 논문에서도 비슷한 결과가 나타났다.
+
+기업의 ‘상장 타이밍’이 원인으로 지목된다. 기업 입장에선 밸류에이션이 높고 투자심리가 좋은 ‘고점’에 주식을 신규로 발행하는 게 합리적이라서다. 그러다 보니 IPO가 증시 호황기 후반부에 집중되고, 그 뒤에는 증시가 불황에 접어드는 일이 잦았다는 설명이다.
+
+최근 IPO 붐을 맞은 홍콩에선 이미 조짐이 나타났다. 8일 이코노미스트에 따르면 올해 1~7월 홍콩증권거래소에서는 104건의 IPO가 이뤄졌으며, 이를 통해 지난해 같은 기간의 두 배가 넘는 액수인 420억달러를 조달했다. 반면 홍콩 증시는 침울하다. 홍콩의 대형 기업들로 구성된 항셍지수는 올해 약 1% 하락했다. 세계 주요 증시 가운데 다섯 번째로 저조한 성적이다.
+
+이런 엇박자가 이토록 빨리 나타난 데는 홍콩의 지정학적 특수성이 작용했다. 중국 당국이 본토 증시의 신주 발행 규제를 강화하자 일부 중국 기업은 시장 여건이 좋지 않은데도 홍콩행을 택했다. 미중 갈등이 격화되면서 최근엔 미국 증시에 상장한 중국 기업까지 홍콩 2차 상장에 나섰다. 이렇게 신규 물량이 몰리면서 기존 상장 종목으로 갈 투자 수요를 신규 IPO가 빨아들인 것이다.
+
+다음 차례는 미국일까
+투자자들의 우려는 이제 미국 증시를 향하고 있다. 미국도 스페이스X의 초대형 상장에 이어 앤스로픽·오픈AI가 줄줄이 대기하는 등 유례없는 IPO 호황을 맞았다. 골드만삭스는 2\"26년 미국 IPO 조달액 전망을 기존 1600억달러에서 2250억달러로 상향했다. 전고점인 2021년의 1150억달러를 크게 웃도는 규모다.
+
+이에 미국 증시의 순주식 공급은 올해 거의 0에 가까워질 전망이다. 순주식 공급이란 시장에 새로 나오는 주식에서 자사주 매입 등으로 시장에서 사라지는 주식을 뺀 값인데, 2003년 이후 계속 마이너스였던 해당 수치가 처음으로 플러스 전환되는 것이다. 적은 주식 공급 규모는 지난 10년간 미국 증시 상승을 떠받쳐온 주요 요인 가운데 하나였는데, 여기서 오는 순풍이 줄어들면 미국 증시의 기술주 주도 랠리도 동력을 잃을 수 있다고 투자자들은 보고 있다.
+
+상장 이후 풀리는 물량은 더욱 문제이다. 골드만삭스는 IPO 기업들이 처음에는 지분의 일부만 상장하더라도 이후 락업(보호예수) 해제 등을 거치면서 올해 약 5000억달러의 추가 주식이 시장에 풀릴 것으로 추산한다. 대형 IPO가 몰린 해 이후 큰 폭의 시장 조정이 나타났던 전례가 있었만큼 미국 증시가 이만한 물량을 소화하지 못할 거라는 우려가 제기된다.
+
+리처드 번스타인 야누스헨더슨 글로벌 매크로 투자 책임자는 \"기록적인 신규 주식 발행은 버블의 전형적인 신호 중 하나\"라고 경고했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/015/0005330387' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/015/0005330387</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
