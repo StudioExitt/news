@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>장 열리자마자 20% 치솟았다…줄줄이 폭등한 '이 종목들'</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.09</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.com/mnews/article/015/0005330349' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/19023" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>장 열리자마자 20% 치솟았다…줄줄이 폭등한 '이 종목들'</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">미국 코닝의 버라이즌 대상 대규모 광섬유 공급 계약 체결 소식에 국내 광통신 관련주들이 급등함. AI 인프라 확장에 따른 광통신 제품 수요 증가 기대감이 반영된 결과임.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">미국 코닝의 대규모 수주 계약이 AI 인프라 확충과 맞물려 국내 광통신 부품 및 장비 섹터 전반에 강력한 상승 모멘텀을 제공함</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">RF머트리얼즈</span> <span class="tag stock-tag">라이콤</span> <span class="tag stock-tag">오이솔루션</span> <span class="tag stock-tag">대한광통신</span> <span class="tag stock-tag">빛과전자</span> <span class="tag stock-tag">파이버프로</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">통신장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#광통신</span> <span class="tag tag-hash">#AI인프라</span> <span class="tag tag-hash">#코닝</span> <span class="tag tag-hash">#버라이즌</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">버라이즌이 8000만마일 베팅하자
+한국장에서 튀어오른 종목은?
+광·통신 관련 종목들이 급등하고 있다. 미국의 광섬유 기업 코닝이 통신업체 버라이즌에 대규모 광섬유를 공급하기로 하는 계약을 맺었다는 소식이, 인공지능(AI) 인프라를 깔기 위한 광통신 제품 수요 증가 기대감을 자극한 모습이다.
+
+9일 오전 9시56분 현재 RF머트리얼즈는 전일 대비 7700원(22.32%) 오른 4만2200원에, 라이콤은 685원(16.23%) 상승한 4905원에, 오이솔루션은 3000원(14.22%) 뛴 2만4100원에 각각 거래되고 있다.
+
+이외에도 대한광통신(9.56%), 빛과전자(7\.%83%), 파이버프로(5\.%92%) 등도 강세다.
+
+간밤 뉴욕증시에서 코닝이 버라이즌에 2023년까지 8000만마일 이상의 고밀도 광섬유를 공급하기로 하는 계약을 맺었다고 발표하며 주가가 7.56\% 상승한 훈풍이 국내 주식시장에서 영향을 줬다.
+
+서상영 미래에셋증권 상무는 코닝과 버라이즌의 계약에 대해 \"단순히 데이터센터 내에 들어갈 광케이블을 공급하는 계약이 아니라, 버라이즌의 유\·무선망과 장거리 AI 네트워크를 하나로 연결하기 위한 공급 계약이라는 점이 긍정적 영향을 줬다\"며 \"더불어 데이터센터 건설 관련해서 전력망을 먼저 구축해야 한다는 점도 우호적\"이라고 설명했다.
+
+이날 국내 주식시장에서 상승률이 가장 두드러지는 RF머트리얼즈는 광통신 모듈 및 파워 트랜지스터에 적용되는 화합물 반도체용 세라믹 패키지와 방열 기판 소재를 제조하는 기업이다. 고속 광통신 장비와 고출력 레이저 모듈에서 발생하는 열을 제어하는 핵심 패키징 솔루션을 공급하며 광통신 하드웨어 밸류체인의 필수 후방 산업군에 속한다.
+
+라이콤은 광신호의 전송 거리를 늘려주는 광증폭기(EDFA)와 초소형 광모듈을 전문적으로 제조·개발하는 기업이다. 글로벌 네트워크 트래픽 증가에 대응하는 광통신 전송망 구축 프로젝트 및 데이터센터 간 광케이블 연결(Optical Interconnect) 확대와 연동되는 기술적 레퍼런스를 보유하고 있다.
+
+오이솔루션은 대용량 전기신호와 광신호를 상호 변환하는 유무선 통신용 광트랜시버를 주력으로 설계·제조하는 업체다. 5G 및 차세대 통신망 프론트홀에 탑재되는 초고속 광송수신 모듈 기술력을 보유하고 있어 통신사업자의 네트워크 고도화와 데이터 트래픽 증가 국면에서 광통신 핵심 장비주로 꼽은다.
+
+대한광통신은 국내에서 유일하게 광섬유 모재(Pre\%form)부터 완제품 광케이블까지 수직계열화된 일관 생산 체제를 갖춘 광통신 전문 소재 기업이다. 통신 인프라 구축의 핵심 기초 원자재인 광섬유 생산 기술을 기반으로 글로벌 광케이블 수급 동향 및 각국 초고속 통신망 투자 사이클의 수혜주로 분류된다.
+
+빛과전자는 레이저 다이오드(LD), 포토 다이오드(PD) 등 광통신 핵심 광소자와 서브어셈블리(OSA), 광트랜시버 완제품을 일괄 공급하는 광부품 전문 기업이다. 초고속 광인터넷망 및 이동통신 기지국 전송 장비에 필수적인 광통신 모듈을 생산하고 있어 관련 인프라 테마 형성 시 주가 민감도가 높은 종목이다.
+
+파이버프로는 광섬유 기반 정밀 광센서·관성항법 전문업체다. 고도화된 광학 신호 제어 기술을 기반으로 차세대 광네트워크 시험 계측 장비와 방위산업·우주항공 분야 광센서를 공급하고 있어 고부가가치 광학 테마로 평가받는다.</div><div class='news-src'>원문링크: <a href='https://n.com/mnews/article/015/0005330349' style='color:#64748b;word-break:break-all'>https://n.com/mnews/article/015/0005330349</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
