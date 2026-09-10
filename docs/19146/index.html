@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스피, 7000선 공방 끝 약세 전환…삼전·하닉 상승폭 축소</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/029/0003047231' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/19146" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>코스피, 7000선 공방 끝 약세 전환…삼전·하닉 상승폭 축소</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">코스피가 7000선 돌파 후 국제유가 및 국채금리 상승 부담으로 인해 약세로 전환되었습니다. 선물·옵션 동시만기일과 CPI 발표를 앞두고 시장의 변동성 확대가 우려되는 상황입니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">국제유가 및 미국 국채금리 상승이라는 거시경제적 압박과 선물·옵션 만기일에 따른 수급 변동성 확대 우려</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">삼성전자</span> <span class="tag stock-tag">SK하이닉스</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">거시경제</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#반도체</span> <span class="tag tag-hash">#변동성</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">코스피가 7000선을 웃돈 채 약보합 출발했다. 국제유가와 미국 장기 국채금리 상승 부담, 선물·옵션 동기만기일에 따른 수급 변동성이 지수 상단을 제한하고 있지만 외국인 순매수와 반도체주 강세가 하단을 지지하는 모습이다.
+
+10일 한국거래소에 따르면 코스피는 전 거래일보다 0.18% 내린 7038.85에 개장했다. 이후 장 초반 낙폭을 확대하며 7000선 안팎에서 약세를 보이고 있다.
+
+오전 9시 6분 기준 외국인은 956억원을 순매수하고 있으며 기관과 개인은 각각 742억원, 466억원를 순매도 중이다.
+
+시가총액 상위 종목은 혼조세이다. SK하이닉스는 1%대 상승하고 있으며 삼성전자도 강보합권에서 거래되고 있다. SK스퀘어도 1%대 오르고 있다. 삼성생명은 2%대, SK는 1%대 강세이다.
+
+반면 두산에너빌리티는 2%대 하락하고 있으며 한화에어로스페이스와 삼성SDI는 1%대 약세를 나타내고 있다. 삼성바이오로직스와 HD현대중공업도 1% 안팎 밀리고 있다.
+
+업종별로는 보험이 1%대 오르며 가장 강한 흐름을 보이고 있다. 전기·전자와 금융, 대형주, 제조도 상승 중이다. 반면 건설과 전기가스는 2%대, 기계·장비는 1%대 하락하고 있으며 증권, 운송장비·부품, 오락·문화 등도 약세다.
+
+간밤 미국 뉴욕증시는 3거래일 연속 하락했다. 다우존스30산업평균지수는 전 거래일보다 405.41포인트(0.77%) 내린 5만2380.66에 거래를 마쳤다. 스탠더드앤드푸어스(S&P)500지수는 37.16포인트(0.48%) 하락한 7636.36, 나스닥지수는 168.07포인트(0.64%) 밀린 2만6253.34를 기록했다.
+
+간밤 미국 뉴욕증시는 3거래일 연속 하락했다. 메타의 에이전트 인공지능(AI) \"뮤즈\" 공개 효과로 마이크론 등 반도체주는 강세를 보였지만 중동발 불확실성이 다시 커지면서 국제유가가 급등한 점이 부담으로 작용했다. 서부텍사스산원유(WTI)는 배럴당 95달러, 브렌트유는 100달러를 넘어섰고 미국 10년물 국채금리도 4.83%를 돌파했다.
+
+시장의 시선은 이날 선물·옵션 동시만기와 8월 소비자물가지수(CPI) 발표로 향하고 있다. 수급 변동성이 확대될 경우 코스피가 장중 다시 7000선을 밑돌 가능성도 있지만, 증권가에서는 전날 종가 기준 7000선 돌파 자체에 의미를 두고 있다.
+
+전날 코스피는 33거래일 만에 종가 기준 7000선에 진입했다. 특히 반도체뿐 아니라 IT가전과 화학, 기계 등 여타 업종이 함께 상승하면서 지수 상승의 온기가 확종됐다는 점이 긍정적으로 평가된다.
+
+한지영 키움증권 연구원은 "이전에는 7000선 저항선 돌파 여부가 과제였다면 이제는 7000선이 실제 지지선으로 전환될 수 있는지를 확인하는 단계로 나아갔다"며 "선물·옵션 동시만기와 CPI 경계심리로 변동성이 높아지더라도 이를 증시 추세 훼손으로 해석할 필요는 없다"고 말했다.
+
+이어 "삼성전자와 SK하이닉스 자사주 매입, 외국인의 9월 순매수 전환 등으로 수급상 하방 경직성도 강화되고 있다"며 "반도체뿐 아니라 전력기기, 원전, MLCC 등 AI 인프라 밸류체인으로 상승 동력이 확산되는 흐름에 주목할 필요가 있다"고 덧붙였다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/029/0003047231' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/029/0003047231</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
