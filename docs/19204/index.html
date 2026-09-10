@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>“기름값 100달러 뚫자 주가도 출렁”…정유 뜨고 항공 울었다</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/009/0005733398' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/19204" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>“기름값 100달러 뚫자 주가도 출렁”…정유 뜨고 항공 울었다</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">국제유가가 배럴당 100달러를 돌파하며 지정학적 긴장이 고조됨에 따라, 정유주는 재고 가치 상승 및 정제마진 개선 기대감으로 강세를 보인 반면 항공주는 연료비 부담으로 약세를 나타냈습니다. 또한 유가 상승이 물가와 금리 상승을 유발하여 코스피 전체의 변동성을 키울 수 있다는 우려가 커지고 있습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">국제 유가 급등에 따른 업종별(정유 vs 항공) 수익성 양극화 및 거시경제적 변동성 확대 우려</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">흥구석유</span> <span class="tag stock-tag">한국석유</span> <span class="tag stock-tag">중앙에너비스</span> <span class="tag stock-tag">S-Oil</span> <span class="tag stock-tag">SK이노베이션</span> <span class="tag stock-tag">대한항공</span> <span class="tag stock-tag">아시아나항공</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">석유 및 가스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">항공운수</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#국제유가</span> <span class="tag tag-hash">#정유주</span> <span class="tag tag-hash">#항공주</span> <span class="tag tag-hash">#금리상승</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">석유株 두자릿수 급등세
+항공株는 연료비 부담에 약세
+유가·금리 동반상승 증시 부담
+
+미국과 이란 간 지정학적 긴장 고조로 국제유가가 100달러를 돌파한 가운데 10일 서울 시내 한 주유소에 유가 정보가 표시되어 있다.
+[연합뉴스]
+미국과 이란 간 지정학적 긴장 고조로 국제유가가 100달러를 돌파한 가운데 10일 서울 시내 한 주유소에 유가 정보가 표시되어 있다.
+[연합뉴스]국제유가가 다시 배럴당 100달러(약 13만4050원)를 돌파하면서 국내 증시에서도 파장이 일고 있다. 공급 차질 우려와 정제마진 개선 기대가 맞물리며 석유·정유 관련주가 수혜 업종으로 떠오른 반면 연료비 부담을 안아야 하는 항공주는 약세를 보이고 있다. 여기에 고유가가 물가를 자극해 시장금리까지 끌어올릴 경우 코스피 전반의 밸류에이션 부담으로 번질 수 있다는 경계감도 커지고 있다.
+
+10일 한국거래소에 따르면 대표적인 국내 석유·정유 관련주로 꼽히는 흥구석유는 이날 전일 대비 2420원(20.02%) 오른 1만4510원에 거래를 마쳤다. 한국석유(11.08%), 중앙에너비스(9.89%) 등 다른 석유 관련주도 일제히 강세를 나타냈다.
+
+반면 최근 정제마진 개선 기대를 선반영하며 주가가 크게 올랐던 S-Oil(-7.11%)과 SK이노베이션(-0.59%)는 이날 차익실현 매물이 나오며 숨고르기에 들어갔다.
+
+정유 관련주가 들썩인 것은 국제유가가 다시 세 자릿수에 진입하면서다. 지난 9일(현지시간) 뉴욕상업거래소에서 서부텍사스산원유(WTI)는 전 거래일보다 3.25% 오른 배럴당 96.05달러에 거래를 마쳤다. 브렌트유는 배럴당 100달러를 넘어섰다. 미국과 이란의 군사적 충돌이 이어지는 가운데 호르무즈 해협 인겨 선박 공격과 예멘 후티 반군의 사우디아라비아 공격까지 겹치면서 원유 공급 차질 우려가 유가를 밀어올렸다.
+
+국제유가 상승은 국내 석유·정유업체에는 단기적으로 호재가 될 수 있다. 낮은 가격에 들여온 원유와 석유제품의 재고 가치가 높아지면서 재고평가이익을 기대할 수 있기 때문이다.
+
+다만 증권가에서는 최근 정유주의 투자 포인트를 단순히 \"유가 상승\"에서만 찾아서는 안 된다는 조언이 나온다. 원유 가격 자체보다 휘발유·경유·항공유 등 석유제품 가격이 얼마나 빠르게 오르는지, 이에 따라 정제마진이 높은 수준을 얼마나 오래 유지할지가 실적을 좌우하는 핵심 변수라는 설명이다.
+
+이동욱 IBK투자증권 연구원은 \"정유업종은 낮은 제품 재고와 제한된 공급 여력으로 작은 공급 충격에도 정제마진이 크게 움직일 수 있는 환경\"이라며 \"정제마진의 고점보다는 높은 수준이 얼마나 오래 지속되는지가 중요하다\"고 말했다.
+
+고유가와 함께 나타나고 있는 금리 상승도 기존 정유사에는 반드시 악재로만 볼 수 없다는 분석도 나온다.
+
+통상 금리 상승은 경기 둔화와 석유제품 수요 감소 가능성을 높인다는 점에서 정유주에 부담으로 작용한다. 하지만 고금리가 장기화하면 막대한 자금이 필요한 신규 정유시설 투자가 위축돼 이미 대규모 설비를 갖춘 기존 정유사의 경쟁력이 상대적으로 높아질 수 있다. 공급 확대가 제한될수록 기존 정제설비의 희소가치가 부각될 수 있다는 것이다.
+
+이 연구원은 \"고금리는 신규 설비에는 높은 할인율을 적용하지만 이미 구축된 경쟁력 있는 기존 설비에는 희소가치를 부여한다\"며 \"최근 정유주를 유가의 방향성만으로 설명하기 어려운 이유\"라고 설명했다.
+
+정유업종과 달리 항공업계에는 고유가가 곧바로 비용 부담으로 돌아온다.
+
+이날 대한항공은 전일 대비 250원(0.84%) 내린 2만9550원에 거래를 마쳤다. 트리니티항공(-0.73%), 아시아나항공(-0.38%) 등 항공주도 동반 약세를 보였다.
+
+항공사는 영업비용에서 연료비가 차지하는 비중이 큰 대표적인 유가 민감 업종이다. 국제유가 상승이 항공유 가격 상승으로 이어지면 운항 비용이 늘어나 수익성이 악화될 수 있다.
+
+유류할증료를 통해 비용 증가분의 일부를 운임에 반영할 수 있지만 유가가 단기간 급등할 경우 비용 상승분을 즉각 상쇄하기는 어렵다. 특히 고유가가 장기화하면 항공권 가격 상승으로 여행 수요까지 위축될 수 있어 항공사 입장에서는 비용과 수요 양쪽에서 부담을 받을 수 있다.
+
+더 큰 문제는 \"유가→물가→금리\"
+코스피가 전일보다 1001.89포인트(17.91%) 오른 6,95.45로 장을 마감하며 역대 최대 상승률과 상승폭을 기록했던 지난 금요일(31일) 서울 하나은행 본점 딜링룸에 주가 지수가 표시되어 있다.
+
+시장의 시선은 개별 업종의 희비를 넘어 고유가가 국내 증시 전체에 미칠 파장으로 향하고 있다. 유가 상승이 물가를 다시 자극하고 이것이 시장금리 상승으로 이어지는 경로에 투자자들의 이목이 쏠린다.
+
+실제 국제유가가 급등한 지난 9일 미국 채권시장에서는 국채금리가 일제히 뛰었다. 미국 10년물 국채금리는 전 거래일보다 약 5bp 오른 연 4.84%를 기록해 2\"023년 가을 이후 최고치를 경신했다. 30년물 금리는 5.29%, 통화정책 전망에 민감한 2년물 금리도 4.43%까지 올랐다.
+
+유가와 금리가 동시에 뛰자 뉴욕증시도 압박을 받았다. 9일 다우지수는 0.77%, S&P500지수는 0.48%, 나스닥지수는 0.64% 각각 하락했다. 특히 S&P500 11개 업종 가운데 에너지 업종만 1.09% 상승하고 나머지 10개 업종은 모두 하락했다. 고유가가 에너지주에는 호재로 작용했지만 증시 전반에는 부담을 준 셈이다.
+
+한지영 키움증권 연구원은 \"유가와 금리 부담으로 지속적인 하방 압력을 받을 경우 증시 체력 저하, 즉 악재에 대한 민감도 상승에 빠질 수 있다\"며 \"물가 지표에 대한 경계심리가 단기적 증시 변동성을 키울 수 있다\"고 제언했다.
+
+국내 증시도 고유가와 고금리의 동시 상승에서 자유롭지 않다. 전날 코스피가 33거래일 만에 종가 기준 7000선을 넘어섰지만 국제유가와 미국 장기금리가 함께 오르면서 추가 상승을 제약할 변수가 하나 더 늘었다.
+
+정희찬 삼성선물 연구원은 \"야간 코스피 선물이 국제유가와 미국 국채금리의 동반 상승을 반영해 하락 전환했다며 높아진 매크로 부담이 국내 증시의 상단을 제한할 수 있다\"고 전망했다.
+
+다만 고유가가 곧바로 국내 증시의 추세 하락으로 이어질 것이라고 단정하기는 이르다는 분석도 나온다.
+
+한지영 키움증권 연구원은 \"최근 삼성전자와 SK하이닉스의 자사주 매입 효과와 외국인의 9월 순매수 전환 등으로 국내 증시의 수급상 하방 경직성이 강화됐다\"며 \"물가 지표와 연방공개시장위원회(FOMC), 중동 정세 등에 따라 단기 변동성이 확대될 수 있지만 이를 곧바로 증시 추세 훼손으로 해석할 필요는 없다\"고 말했다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/009/0005733398' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/009/0005733398</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
