@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK하이닉스 ADR, 7%대 급등 최고가 마감…코스피는 하락 출발</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #16a34a; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/020/0003747117' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/19163" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>SK하이닉스 ADR, 7%대 급등 최고가 마감…코스피는 하락 출발</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">긍정 (Positive)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">medium-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">low</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">SK하이닉스가 상반기 사상 최대 실적을 기록한 가운데, 미국 ADR이 7%대 급등하며 최고가를 경신했습니다. 반면 코스피는 미국의 금리 상승과 국제 유가 급등 여파로 하락 출발하였습니다.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">SK하이닉스의 역대급 실적 발표와 반도체 공급 부족 전망이 ADR 급등을 견인하며 기업 가치를 높였으나, 미국 금리 및 유가 상승이라는 거시경제 악재로 인해 시장 전반의 하락 압력도 공존함.</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">SK하이닉스</span> <span class="tag stock-tag">엔비디아</span> <span class="tag stock-tag">마이크론</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">반도체 및 관련장비</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">에너지</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#SK하이닉스</span> <span class="tag tag-hash">#반도체업황</span> <span class="tag tag-hash">#ADR</span> <span class="tag tag-hash">#코스피</span> <span class="tag tag-hash">#공급부족</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">SK하이닉스가 올해 2분기 영업이익 60조 원을 넘어서며 또다시 사상 최대 실적을 경신했다. 상반기 누적 기준 매출액 13ey2조 원에 달했고, 영업익은 100조 원에 육박했다. SK하이닉스는 연결 기준 올해 2분기 SK하이닉스가 올해 2분기 영업이익이 60조 5,426억 원으로 지난해 동기보다 557.2% 증가한 것으로 잠정 집계됐다고 29일 공시했다. 사진은 이날 경기 이천시 SK하이닉스 본사 모습. 2026.07.29 [이천=뉴시스]SK하이닉스의 미국 주식예탁증서(ADR) 7% 넘게 급등하며 상장 후 가장 높은 가격으로 거래를 마쳤다.
+
+9일(현지 시간) 미국 뉴욕증시에서 SK하이닉스 미국예탁주식(ADS)은 전 거래일보다 7.05% 오른 198.63달러에 마감했다. 공모가인 149달러와 지난달 10일 상장 시초가인 170달러도 크게 웃도는 수치로, 지난달 14일 종전 최고가였던 193.92달러도 넘어섰다.
+
+SK하이닉스 ADS는 코스피에 상장된 본주를 담보로 발행한 ADR을 미국 나스닥에 상장한 것으로 SK하이닉스 10주가 국내 본주 1주와 동일한 내재 가치를 지닌다. SK하이닉스 ADS는 4일부터 3거래일 연속 오름세를 보이고 있다.
+
+이 같은 상승세는 오픈AI의 새 모델 아틀라스 출시와, 엔비디아의 수주 소식 등이 이어지며 메모리 반도체 업황 호조가 당분간 계속될 것이라는 기대감이 반영된 것으로 보인다. 같은날 메모리반도체사인 마이크론도 2.75% 상승했고, 반도체 종목으로 구성된 필라델피아 반도체 지수도 5거래일 연속 올랐다.
+
+시장에서는 메모리 반도체 공급 부족이 당분간 지속될 것이라는 분석이 나왔다. 글로벌 투자은행(IB) UBS의 티머시 아커리 애널리스트는 \"D램과 낸드 플래시 모두 202<0xC2>7년까지 공급 부족 상태가 지속될 것\"라고 전망했다. 리서치업체 테크인사이츠 댄 김 최고전략책임자(CSO)도 현재 메모리 시장 과열 수준을 \"10점 만점에 8점\"이라고 평가하면서 \"최소 2027년 말까지 이 수준에 머물 것\"이라고 진단했다. 뱅크오브아메리카(BoA)는 SK하이닉스 ADR 투자 의견을 \"매수\"로 상향 조정하고 목표주가는 250달러를 제시했다.
+
+10일 오전 서울 중구 하나은행 딜링룸 전광판에 코스피 지수 등 시황이 표시되고 있다. 이날 코스피는 전일 대비 0.18% 내린 7038.85로 하락 출발했다. 2026.9.10 10일 오전 서울 중구 하나은행 딜링룸 전광판에 코스피 지수 등 시황이 표시되고 있다. 2026.9.10 
+코스닥은 0.64% 내린 825.06에 개장했다. 오전 9시35분 기준 SK하이닉스는 전장보다 0.3% 하락한 185만원에 거래 중이다. 선물·옵션 동시 만기일인 \"네 마녀의 날\"을 맞아 코스피가 장 초반 하락 출발한 가운데 국제유가와 미국 국채금리 상승 여파로 뉴욕증시가 약세를 보인 영향으로 분석된다. 한지영 키움증권 연구원은 \"미국의 소비자, 생산가 물가지수 발표를 앞두고 오전 증시는 관망세를 보이고 있는 것으로 이해된다\"라고 진단했다.
+
+한편 미국의 10년만기 국채 금리가 연 4.8%를 다시 돌파하면서 간밤 뉴욕 증시는 하락 마감했다. 9일(현지 시간) 뉴욕 증시에서 다우존스산업평균지수는 전일 대비 0.77%, 스탠더드앤푸어스(S&P)500지수는 0.48%, 나스닥지수는 0.64%씩 각각 하락했다. 이로써 뉴욕 증시는 사흘 연속 하락했다. 중동 분쟁이 격해지면서 국제 유가의 벤치마크인 브렌트유 11월물 가격이 배럴당 101달러를 뚫은 점이 증시 하락을 부추긴 요인이었다. 같은 날 서부텍사스산원유(WTI) 10월물 가격도 3% 넘게 오르며 96달러에 거래를 마쳤다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/020/0003747117' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/020/0003747117</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
