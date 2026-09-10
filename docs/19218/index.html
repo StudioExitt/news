@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>기본법 없는데 코인세부터?…업계 “순서 바뀌었다”</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", sans-serif;
+      background: #f0f2f5;
+      color: #1e293b;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      margin-bottom: .65rem;
+      flex-wrap: wrap;
+    }
+    .src-link {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    .src-link:hover { text-decoration: underline; }
+    .more-btn {
+      margin-left: auto;
+      color: #3b82f6;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .more-btn:hover { text-decoration: underline; }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.45;
+    }
+    .info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .info-cell {
+      padding: .8rem .9rem;
+      border-right: 1px solid #f1f5f9;
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-label {
+      font-size: .65rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .info-value {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .sentiment-value { color: #dc2626; }
+    .body { padding: 1.25rem 1.5rem; }
+    .section { margin-bottom: 1.4rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: .65rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .box {
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      font-size: .875rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+    .sub-label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin: .75rem 0 .35rem;
+    }
+    .tag {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .18rem .6rem;
+      border-radius: 6px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin: .12rem .08rem;
+    }
+    .tag-hash {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #1e293b;
+    }
+    .stock-tag {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .empty { color: #cbd5e1; font-size: .875rem; }
+    .news-wrap { padding: 0 1.5rem 1.25rem; }
+    .news-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1e293b;
+      color: #fff;
+      padding: .8rem 1.1rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+    }
+    .arrow {
+      display: inline-block;
+      transition: transform .2s;
+    }
+    .news-toggle.open .arrow { transform: rotate(180deg); }
+    .news-body {
+      display: none;
+      font-size: .85rem;
+      color: #475569;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 1rem 1.1rem;
+      border: 1px solid #e2e8f0;
+      border-top: none;
+      line-height: 1.8;
+    }
+    .news-body.open { display: block; }
+    .news-src {
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: .45rem 1.1rem .6rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 1px solid #f1f5f9;
+      border-radius: 0 0 8px 8px;
+    }
+    .footer {
+      text-align: center;
+      font-size: .72rem;
+      color: #94a3b8;
+      padding: 1rem;
+      line-height: 1.7;
+    }
+    @media (max-width: 540px) {
+      .info-bar { grid-template-columns: repeat(2, 1fr); }
+      .info-cell:nth-child(2) { border-right: none; }
+      .info-cell:nth-child(3) { border-right: 1px solid #f1f5f9; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <div class="header-top">
+        <span>📅 2026.09.10</span>
+        <span style='color:#e2e8f0'>|</span><a class='src-link' href='https://n.news.naver.com/mnews/article/119/0003131438' target='_blank' rel='noopener'>🔗 원문 보기</a>
+        <a class="more-btn" href="https://studioexitt.net/news/19218" target="_blank" rel="noopener">More ↗</a>
+      </div>
+      <h1>기본법 없는데 코인세부터?…업계 “순서 바뀌었다”</h1>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-cell">
+        <div class="info-label">↑ AI 감성 분석</div>
+        <div class="info-value sentiment-value">부정 (Negative)</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">≡ 감성 스코어</div>
+        <div class="info-value">—</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⏱ 영향력 기간 (HORIZON)</div>
+        <div class="info-value">short-term</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">⚡ 불확실성 (UNCERTAINTY)</div>
+        <div class="info-value">high</div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="section"><div class="section-title"><span class="dot" style="background:#3b82f6"></span>핵심 요약</div><div class="box" style="background:#eff6ff">가상자산 거래소 업계(DAXA)가 취득가액 검증 및 해외 거래 추적 체계 미비 등을 이유로 내년 예정된 가상자산 과세의 추가 유예를 주장함. 디지털자산기본법 마련과 인프라 구축이 선행되어야 한다는 입장임.</div></div>
+      <div class="section"><div class="section-title"><span class="dot" style="background:#16a34a"></span>감성 판단 근거</div><div class="box" style="background:#f0fdf4">가상자산 과세 관련 제도적 불확실성 증대 및 해외 거래소로의 자금 이탈 우려에 따른 국내 시장 위축 가능성</div></div>
+      <div class="section">
+        <div class="section-title">
+          <span class="dot" style="background:#f59e0b"></span>
+          관련 항목 분석
+        </div>
+        <div class="sub-label">관련 종목</div>
+        <div><span class="tag stock-tag">우리기술투자</span> <span class="tag stock-tag">한화투자증권</span></div>
+        <div class="sub-label">관련 섹터</div>
+        <div><span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">인터넷 서비스</span> <span class="tag" style="background:#3b82f620;color:#3b82f6;border-color:#3b82f640">금융</span></div>
+        <div class="sub-label">해시태그</div>
+        <div><span class="tag tag-hash">#가상자산</span> <span class="tag tag-hash">#코인과세</span> <span class="tag tag-hash">#DAXA</span></div>
+      </div>
+    </div>
+
+    <div class="news-wrap"><div class="news-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')"><span>🗃 뉴스 원문 보기</span><span class="arrow">∧</span></div><div class="news-body open">스테이킹·에어드롭 등 과세 기준 아직 불분명
+취득가 산정·해외 거래 추적 기반 마련 후 시행 주장
+가상자산 거래소업계가 취득가액 검증과 해외 거래 추적 체계가 미비하다며 내년 시행 예정인 가상자산 과세의 추가 유예를 주장했다.
+가상자산 거래소업계가 취득가액 검증과 해외 거래 추적 체계가 미비하다며 내년 시행 예정인 가상자산 과세의 추가 유예를 주장했다. 내년 시행 예정인 가상자산소득 과세를 다시 미뤄야 한다는 목소리가 국내 거래소업계에서 나오고 있다.
+
+취득가액을 검증할 체계와 해외 거래소 정보를 확보할 수단이 충분히 마련되지 않은 상황에서 과세를 강행하면 국내 거래소 이용자만 불리해지고 자금의 해외 이탈을 부추길 수 있다는 우려에서다.
+
+10일 가상자산업계에 따르면 디지털자산거래소 공동협의체(DAXA·닥사)는 최근 회원사 등 가상자산사업자를 대상으로 관련 의견을 수렴해 ‘가상자산소득 과세 관련 가상자산업권 의견서’를 마련했다.
+
+의견서에는 가상자산의 법적 성격과 거래 유형별 과세 기준을 먼저 확립하고, 취득가액 산정과 해외 거래정보 확인에 필요한 인프라를 구축한 뒤 과세 시기를 다시 검토해야 한다는 내용이 담겼다.
+
+현행 소득세법에 따르면 내년 1월 1일부터 가상자산을 양도하거나 대여해 얻은 연간 소득 가운데 기본공제 250만원을 초과한 금액에 20%의 세금이 부과된다. 지방소득세를 포함한 실효세율은 22%다.
+
+거래소업계는 과세 필요성에는 동의하면서도 현재 제도와 인프라만으로는 투자자의 소득을 정확하게 계산하기 어렵다고 보고 있다.
+
+가장 큰 문제는 취득가액 산정이다. 가상자산 소득을 계산하려면 최초 취득 시점과 가격을 확인해야 한다. 그러나 해외 거래소나 개인지갑에서 국내 거래소로 들어온 가상자산은 이를 검증할 공적 체계가 없다. 국내 거래소도 외부에서 들어온 자산의 취득가격을 자체적으로 파악하기 어렵다.
+
+현행 거래명세서 역시 실제 거래 유형을 충분히 반영하지 못한다는 지적이다. 외부에서 들어오거나 상속으로 취득한 가상자산은 취득원가가 공란으로 남고, 실제 취득이 아닌 커스터디·스테이킹의 예치와 해지도 이전이나 인입으로 기록될 수 있다. 이 경우 취득원가가 실제보다 낮게 계산돼 투자자의 세 부담이 늘어날 가능성이 있다.
+
+해외 거래소에 대한 정보 접근이 제한된 점도 문제로 꼽힌다. 국내 신고 사업자는 국세청의 자료 조회와 조사에 응해야 하지만 해외 거래소에는 국내 과세당국의 조사권이 실질적으로 미치기 어렵기 때문이다. 국가 간 가상자산 거래정보를 교환하는 암호자산 자동정보교환체계(CARF)도 과세 시행 시점부터 온전히 작동하기 어렵다. 우리나라는 2027년부터 CARF를 적용할 예정이지만 주요 해외 거래소 소재국 가운데 상당수는 2028년부터 참여한다. 이에 따라 최소 1년 동안 해외 거래정보를 충분히 확보하지 못하는 공백이 생길 수 있다.
+
+국내 거래소 이용 내역만 포착되면 국내외 거래소 이용자 간 과세 형평성이 흔들리고 투자자의 해외 거래소·개인지갑 이동이 늘어날 수 있다는 게 업계의 판단이다.
+
+과세 대상이 되는 거래의 범위도 여전히 불분명하다. 스테이킹·렌딩·에어드롭·하드포크는 국세청 연구용역을 통해 과세 기준의 윤곽만 제시됐을 뿐 법령이나 고시에 반영되지 않았다. 탈중앙화금융(DeFi)과 실물연계자산(RWA), 대체불가능토큰(NFT), 토큰스왑 등에 대한 세부 기준도 마련되지 않았다. 특히 소득세법은 가상자산을 ‘대여’해 얻은 소득을 과세 대상으로 정하면서 대여의 범위를 별도로 정의하지 않고 있다. 스테이킹이 대여에 포함되는지, 에어드롭이나 하드포크로 받은 자산은 언제 소득으로 봐야 하는지 명확하지 않은 셈이다.
+
+거래소업계는 이러한 불확실성을 해소하려면 디지털자산기본법을 통해 가상자산의 법적 성격과 분류체계를 먼저 확립해야 한다고 주장한다. 이후 거래 유형별 과수 기준과 취득가액 산출 방식을 확정하고 전산 시스템을 충분히 검증한 뒤 과세해야 한다는 입장이다.
+
+공제 제도의 개선도 요구했다. 현행 250만원인 기본공제 한도를 높이고 한 해 발생한 투자 손실을 이후 수익에서 차감할 수 있도록 최소 5년의 손실 이월공제를 도입해야 한다는 것이다. 업계는 과세 기반이 갖춰지지 않은 채 제도를 시행하면 세수 확대보다 국내 거래 위축과 자금의 해외 이탈이 더 크게 나타날 수 있다고 우려한다. 이에 과세당국과 사업자가 세부 산출 기준을 먼저 확정하고 시스템 보완과 테스트를 위한 충분한 계도기간을 둬야 한다고 보고 있다.</div><div class='news-src'>원문링크: <a href='https://n.news.naver.com/mnews/article/119/0003131438' style='color:#64748b;word-break:break-all'>https://n.news.naver.com/mnews/article/119/0003131438</a></div></div>
+
+  </div>
+
+  <div class="footer">
+    자료제공: AI 및 알고리즘에 의한 본 자료는 스튜디오엑싯에 의해 제공되었습니다.<br>
+    <a href="https://studioexitt.net" target="_blank" rel="noopener" style="color:#3b82f6;text-decoration:underline;">https://studioexitt.net</a>
+  </div>
+</div>
+</body>
+</html>
